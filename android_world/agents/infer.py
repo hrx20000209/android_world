@@ -28,6 +28,7 @@ from google.generativeai.types import generation_types
 from google.generativeai.types import safety_types
 import numpy as np
 from PIL import Image
+from openai import OpenAI
 import requests
 
 
@@ -339,3 +340,59 @@ class Gpt4Wrapper(LlmWrapper, MultimodalLlmWrapper):
         print('Error calling LLM, will retry soon...')
         print(e)
     return ERROR_CALLING_LLM, None, None
+
+
+class DeepseekWrapper(LlmWrapper, MultimodalLlmWrapper):
+  """DeepSeek wrapper using OpenAI SDK interface."""
+
+  RETRY_WAITING_SECONDS = 10
+
+  def __init__(
+      self,
+      model_name: str = "deepseek-chat",
+      max_retry: int = 3,
+      temperature: float = 0.0,
+  ):
+    # api_key = os.getenv("DEEPSEEK_API_KEY")
+    # if not api_key:
+    #   raise RuntimeError("DeepSeek API key not set.")
+    api_key = 'sk-d645153259c2492c91893c07f6e72b7a'
+    self.client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
+    self.model = model_name
+    self.temperature = temperature
+    self.max_retry = max(1, min(max_retry, 5))
+
+  @classmethod
+  def encode_image(cls, image: np.ndarray) -> str:
+    return base64.b64encode(array_to_jpeg_bytes(image)).decode("utf-8")
+
+  def predict(self, text_prompt: str):
+    return self.predict_mm(text_prompt, [])
+
+  def predict_mm(self, text_prompt: str, images: list[np.ndarray]):
+    # DeepSeek (OpenAI compatible) doesn't yet support image input officially
+    messages = [
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": text_prompt},
+    ]
+    counter = self.max_retry
+    wait = self.RETRY_WAITING_SECONDS
+
+    while counter > 0:
+      try:
+        response = self.client.chat.completions.create(
+            model=self.model,
+            messages=messages,
+            temperature=self.temperature,
+            max_tokens=1000,
+            stream=False,
+        )
+        return response.choices[0].message.content, None, response
+      except Exception as e:
+        print("Error calling DeepSeek, retrying...", e)
+        counter -= 1
+        time.sleep(wait)
+        wait *= 2
+
+    return "Error calling LLM", None, None
+

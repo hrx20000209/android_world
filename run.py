@@ -178,6 +178,9 @@ def _get_agent(
   # SeeAct.
   elif _AGENT_NAME.value == 'seeact':
     agent = seeact.SeeAct(env)
+  # DeepSeek.
+  elif _AGENT_NAME.value == 'deepseek':
+    agent = t3a.T3A(env, infer.DeepseekWrapper())
 
   if not agent:
     raise ValueError(f'Unknown agent: {_AGENT_NAME.value}')
