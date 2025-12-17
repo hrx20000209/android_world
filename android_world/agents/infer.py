@@ -58,7 +58,7 @@ class LlmWrapper(abc.ABC):
       self,
       text_prompt: str,
   ) -> tuple[str, Optional[bool], Any]:
-    """Calling multimodal LLM with a prompt and a list of images.
+    """Calling text-only LLM with a prompt.
 
     Args:
       text_prompt: Text prompt.
@@ -122,7 +122,7 @@ class GeminiGcpWrapper(LlmWrapper, MultimodalLlmWrapper):
         if enable_safety_checks
         else SAFETY_SETTINGS_BLOCK_NONE,
         generation_config=generation_types.GenerationConfig(
-            temperature=temperature, top_p=top_p, max_output_tokens=1000
+            temperature=temperature, top_p=top_p
         ),
     )
     if max_retry <= 0:
