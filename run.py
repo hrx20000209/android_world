@@ -46,19 +46,19 @@ os.environ['GRPC_TRACE'] = 'none'  # Disable tracing
 
 
 def _find_adb_directory() -> str:
-  """Returns the directory where adb is located."""
-  potential_paths = [
-      os.path.expanduser('~/Library/Android/sdk/platform-tools/adb'),
-      os.path.expanduser('~/Android/Sdk/platform-tools/adb'),
-  ]
-  for path in potential_paths:
-    if os.path.isfile(path):
-      return path
-  raise EnvironmentError(
-      'adb not found in the common Android SDK paths. Please install Android'
-      " SDK and ensure adb is in one of the expected directories. If it's"
-      ' already installed, point to the installed location.'
-  )
+    """Returns the directory where adb is located."""
+    potential_paths = [
+        os.path.expanduser('~/Library/Android/sdk/platform-tools/adb'),
+        os.path.expanduser('~/Android/Sdk/platform-tools/adb'),
+    ]
+    for path in potential_paths:
+        if os.path.isfile(path):
+            return path
+    raise EnvironmentError(
+        'adb not found in the common Android SDK paths. Please install Android'
+        " SDK and ensure adb is in one of the expected directories. If it's"
+        ' already installed, point to the installed location.'
+    )
 
 
 _ADB_PATH = flags.DEFINE_string(
@@ -128,7 +128,7 @@ _OUTPUT_PATH = flags.DEFINE_string(
 )
 
 # Agent specific.
-_AGENT_NAME = flags.DEFINE_string('agent_name', 'm3a_gpt4v', help='Agent name.')
+_AGENT_NAME = flags.DEFINE_string('agent_name', 't3a_llamacpp', help='Agent name.')
 
 _FIXED_TASK_SEED = flags.DEFINE_boolean(
     'fixed_task_seed',
@@ -136,7 +136,6 @@ _FIXED_TASK_SEED = flags.DEFINE_boolean(
     'Whether to use the same task seed when running multiple task combinations'
     ' (n_task_combinations > 1).',
 )
-
 
 # MiniWoB is very lightweight and new screens/View Hierarchy load quickly.
 _MINIWOB_TRANSITION_PAUSE = 0.2
@@ -151,105 +150,124 @@ _MINIWOB_ADDITIONAL_GUIDELINES = [
 
 
 def _get_agent(
-    env: interface.AsyncEnv,
-    family: str | None = None,
+        env: interface.AsyncEnv,
+        family: str | None = None,
 ) -> base_agent.EnvironmentInteractingAgent:
-  """Gets agent."""
-  print('Initializing agent...')
-  agent = None
-  if _AGENT_NAME.value == 'human_agent':
-    agent = human_agent.HumanAgent(env)
-  elif _AGENT_NAME.value == 'random_agent':
-    agent = random_agent.RandomAgent(env)
-  # Gemini.
-  elif _AGENT_NAME.value == 'm3a_gemini_gcp':
-    agent = m3a.M3A(
-        env, infer.GeminiGcpWrapper(model_name='gemini-1.5-pro-latest')
-    )
-  elif _AGENT_NAME.value == 't3a_gemini_gcp':
-    agent = t3a.T3A(
-        env, infer.GeminiGcpWrapper(model_name='gemini-1.5-pro-latest')
-    )
-  # GPT.
-  elif _AGENT_NAME.value == 't3a_gpt4':
-    agent = t3a.T3A(env, infer.Gpt4Wrapper('gpt-4-turbo-2024-04-09'))
-  elif _AGENT_NAME.value == 'm3a_gpt4v':
-    agent = m3a.M3A(env, infer.Gpt4Wrapper('gpt-4-turbo-2024-04-09'))
-  # SeeAct.
-  elif _AGENT_NAME.value == 'seeact':
-    agent = seeact.SeeAct(env)
-  # DeepSeek.
-  elif _AGENT_NAME.value == 'deepseek':
-    agent = t3a.T3A(env, infer.DeepseekWrapper())
+    """Gets agent."""
+    print('Initializing agent...')
+    agent = None
+    if _AGENT_NAME.value == 'human_agent':
+        agent = human_agent.HumanAgent(env)
+    elif _AGENT_NAME.value == 'random_agent':
+        agent = random_agent.RandomAgent(env)
+    # Gemini.
+    elif _AGENT_NAME.value == 'm3a_gemini_gcp':
+        agent = m3a.M3A(
+            env, infer.GeminiGcpWrapper(model_name='gemini-1.5-pro-latest')
+        )
+    elif _AGENT_NAME.value == 't3a_gemini_gcp':
+        agent = t3a.T3A(
+            env, infer.GeminiGcpWrapper(model_name='gemini-1.5-pro-latest')
+        )
+    # GPT.
+    elif _AGENT_NAME.value == 't3a_gpt4':
+        agent = t3a.T3A(env, infer.Gpt4Wrapper('gpt-4-turbo-2024-04-09'))
+    elif _AGENT_NAME.value == 'm3a_gpt4v':
+        agent = m3a.M3A(env, infer.Gpt4Wrapper('gpt-4-turbo-2024-04-09'))
+    # SeeAct.
+    elif _AGENT_NAME.value == 'seeact':
+        agent = seeact.SeeAct(env)
+    # DeepSeek.
+    elif _AGENT_NAME.value == 'deepseek':
+        agent = t3a.T3A(env, infer.DeepseekWrapper())
+    # UI-TARS.
+    elif _AGENT_NAME.value == 'm3a_llamacpp':
+        agent = m3a.M3A(
+            env,
+            infer.LlamaCppWrapper(
+                api_url="http://localhost:8081/v1/chat/completions",
+                temperature=0.0,
+                max_tokens=512,
+            ),
+        )
+    elif _AGENT_NAME.value == 't3a_llamacpp':
+        agent = t3a.T3A(
+            env,
+            infer.LlamaCppTextWrapper(
+                api_url="http://localhost:8080/v1/chat/completions",
+                temperature=0.0,
+                max_tokens=512,
+            ),
+        )
 
-  if not agent:
-    raise ValueError(f'Unknown agent: {_AGENT_NAME.value}')
+    if not agent:
+        raise ValueError(f'Unknown agent: {_AGENT_NAME.value}')
 
-  if (
-      agent.name in ['M3A', 'T3A', 'SeeAct']
-      and family
-      and family.startswith('miniwob')
-      and hasattr(agent, 'set_task_guidelines')
-  ):
-    agent.set_task_guidelines(_MINIWOB_ADDITIONAL_GUIDELINES)
-  agent.name = _AGENT_NAME.value
+    if (
+            agent.name in ['M3A', 'T3A', 'SeeAct']
+            and family
+            and family.startswith('miniwob')
+            and hasattr(agent, 'set_task_guidelines')
+    ):
+        agent.set_task_guidelines(_MINIWOB_ADDITIONAL_GUIDELINES)
+    agent.name = _AGENT_NAME.value
 
-  return agent
+    return agent
 
 
 def _main() -> None:
-  """Runs eval suite and gets rewards back."""
-  env = env_launcher.load_and_setup_env(
-      console_port=_DEVICE_CONSOLE_PORT.value,
-      emulator_setup=_EMULATOR_SETUP.value,
-      adb_path=_ADB_PATH.value,
-  )
+    """Runs eval suite and gets rewards back."""
+    env = env_launcher.load_and_setup_env(
+        console_port=_DEVICE_CONSOLE_PORT.value,
+        emulator_setup=_EMULATOR_SETUP.value,
+        adb_path=_ADB_PATH.value,
+    )
 
-  n_task_combinations = _N_TASK_COMBINATIONS.value
-  task_registry = registry.TaskRegistry()
-  suite = suite_utils.create_suite(
-      task_registry.get_registry(family=_SUITE_FAMILY.value),
-      n_task_combinations=n_task_combinations,
-      seed=_TASK_RANDOM_SEED.value,
-      tasks=_TASKS.value,
-      use_identical_params=_FIXED_TASK_SEED.value,
-  )
-  suite.suite_family = _SUITE_FAMILY.value
+    n_task_combinations = _N_TASK_COMBINATIONS.value
+    task_registry = registry.TaskRegistry()
+    suite = suite_utils.create_suite(
+        task_registry.get_registry(family=_SUITE_FAMILY.value),
+        n_task_combinations=n_task_combinations,
+        seed=_TASK_RANDOM_SEED.value,
+        tasks=_TASKS.value,
+        use_identical_params=_FIXED_TASK_SEED.value,
+    )
+    suite.suite_family = _SUITE_FAMILY.value
 
-  agent = _get_agent(env, _SUITE_FAMILY.value)
+    agent = _get_agent(env, _SUITE_FAMILY.value)
 
-  if _SUITE_FAMILY.value.startswith('miniwob'):
-    # MiniWoB pages change quickly, don't need to wait for screen to stabilize.
-    agent.transition_pause = _MINIWOB_TRANSITION_PAUSE
-  else:
-    agent.transition_pause = None
+    if _SUITE_FAMILY.value.startswith('miniwob'):
+        # MiniWoB pages change quickly, don't need to wait for screen to stabilize.
+        agent.transition_pause = _MINIWOB_TRANSITION_PAUSE
+    else:
+        agent.transition_pause = None
 
-  if _CHECKPOINT_DIR.value:
-    checkpoint_dir = _CHECKPOINT_DIR.value
-  else:
-    checkpoint_dir = checkpointer_lib.create_run_directory(_OUTPUT_PATH.value)
+    if _CHECKPOINT_DIR.value:
+        checkpoint_dir = _CHECKPOINT_DIR.value
+    else:
+        checkpoint_dir = checkpointer_lib.create_run_directory(_OUTPUT_PATH.value)
 
-  print(
-      f'Starting eval with agent {_AGENT_NAME.value} and writing to'
-      f' {checkpoint_dir}'
-  )
-  suite_utils.run(
-      suite,
-      agent,
-      checkpointer=checkpointer_lib.IncrementalCheckpointer(checkpoint_dir),
-      demo_mode=False,
-  )
-  print(
-      f'Finished running agent {_AGENT_NAME.value} on {_SUITE_FAMILY.value}'
-      f' family. Wrote to {checkpoint_dir}.'
-  )
-  env.close()
+    print(
+        f'Starting eval with agent {_AGENT_NAME.value} and writing to'
+        f' {checkpoint_dir}'
+    )
+    suite_utils.run(
+        suite,
+        agent,
+        checkpointer=checkpointer_lib.IncrementalCheckpointer(checkpoint_dir),
+        demo_mode=False,
+    )
+    print(
+        f'Finished running agent {_AGENT_NAME.value} on {_SUITE_FAMILY.value}'
+        f' family. Wrote to {checkpoint_dir}.'
+    )
+    env.close()
 
 
 def main(argv: Sequence[str]) -> None:
-  del argv
-  _main()
+    del argv
+    _main()
 
 
 if __name__ == '__main__':
-  app.run(main)
+    app.run(main)

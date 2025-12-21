@@ -22,24 +22,23 @@ from android_world.env import interface
 from android_world.env.setup_device import setup
 from android_world.utils import datetime_utils
 
-
 # AndroidWorld is tested and developed on Pixel 6 with API 33. Other
 # configurations may be supported, but are not yet tested.
 _ANDROID_WORLD_API_LEVEL = 33
 
 
 def _get_env(
-    console_port: int, adb_path: str, grpc_port: int
+        console_port: int, adb_path: str, grpc_port: int
 ) -> interface.AsyncEnv:
-  """Creates an AsyncEnv by connecting to an existing Android environment."""
-  controller = android_world_controller.get_controller(
-      console_port, adb_path, grpc_port
-  )
-  return interface.AsyncAndroidEnv(controller)
+    """Creates an AsyncEnv by connecting to an existing Android environment."""
+    controller = android_world_controller.get_controller(
+        console_port, adb_path, grpc_port
+    )
+    return interface.AsyncAndroidEnv(controller)
 
 
 def _increase_file_descriptor_limit(limit: int = 32768):
-  """Increases the file descriptor limit to the given limit.
+    """Increases the file descriptor limit to the given limit.
 
   This helps with different platforms having different limits, which can result
   from too many open files, sockets, or pipes, resulting in "OSError: [Errno 24]
@@ -51,56 +50,56 @@ def _increase_file_descriptor_limit(limit: int = 32768):
     limit: The new file descriptor limit. The default value was determined
       experimentally to not raise too many open files error.
   """
-  system_name = platform.system()
-  if system_name == 'Windows':
-    return
+    system_name = platform.system()
+    if system_name == 'Windows':
+        return
 
-  try:
-    import resource  # pylint: disable=g-import-not-at-top
+    try:
+        import resource  # pylint: disable=g-import-not-at-top
 
-    _, hard = resource.getrlimit(resource.RLIMIT_NOFILE)
-    if limit > hard:
-      logging.warning(
-          (
-              "Requested limit %d exceeds the system's hard limit %d. Setting"
-              ' to the maximum allowed value.'
-          ),
-          limit,
-          hard,
-      )
-      limit = hard
+        _, hard = resource.getrlimit(resource.RLIMIT_NOFILE)
+        if limit > hard:
+            logging.warning(
+                (
+                    "Requested limit %d exceeds the system's hard limit %d. Setting"
+                    ' to the maximum allowed value.'
+                ),
+                limit,
+                hard,
+            )
+            limit = hard
 
-    current_soft_limit, _ = resource.getrlimit(resource.RLIMIT_NOFILE)
-    if current_soft_limit < limit:
-      resource.setrlimit(resource.RLIMIT_NOFILE, (limit, hard))
-      logging.info('File descriptor limit set to %d.', limit)
-  except ValueError as e:
-    logging.exception('Failed to set file descriptor limit: %s', e)
+        current_soft_limit, _ = resource.getrlimit(resource.RLIMIT_NOFILE)
+        if current_soft_limit < limit:
+            resource.setrlimit(resource.RLIMIT_NOFILE, (limit, hard))
+            logging.info('File descriptor limit set to %d.', limit)
+    except ValueError as e:
+        logging.exception('Failed to set file descriptor limit: %s', e)
 
 
 def setup_env(
-    env: interface.AsyncEnv,
-    emulator_setup: bool = False,
-    freeze_datetime: bool = True,
+        env: interface.AsyncEnv,
+        emulator_setup: bool = False,
+        freeze_datetime: bool = True,
 ) -> None:
-  """Performs environment setup and validation."""
-  _increase_file_descriptor_limit()
-  if emulator_setup:
-    logging.info('Setting up apps on the emulator.')
-    setup.setup_apps(env)
-  if freeze_datetime:
-    logging.info('Freezing datetime.')
-    datetime_utils.setup_datetime(env.controller)
+    """Performs environment setup and validation."""
+    _increase_file_descriptor_limit()
+    if emulator_setup:
+        logging.info('Setting up apps on the emulator.')
+        setup.setup_apps(env)
+    if freeze_datetime:
+        logging.info('Freezing datetime.')
+        datetime_utils.setup_datetime(env.controller)
 
 
 def load_and_setup_env(
-    console_port: int = 5554,
-    emulator_setup: bool = False,
-    freeze_datetime: bool = True,
-    adb_path: str = android_world_controller.DEFAULT_ADB_PATH,
-    grpc_port: int = 8554,
+        console_port: int = 5554,
+        emulator_setup: bool = False,
+        freeze_datetime: bool = True,
+        adb_path: str = android_world_controller.DEFAULT_ADB_PATH,
+        grpc_port: int = 8554,
 ) -> interface.AsyncEnv:
-  """Create environment with `get_env()` and perform env setup and validation.
+    """Create environment with `get_env()` and perform env setup and validation.
 
   Before running this, an emulator must be launched. For example:
 
@@ -122,6 +121,6 @@ def load_and_setup_env(
   Returns:
     An interactable Android environment.
   """
-  env = _get_env(console_port, adb_path, grpc_port)
-  setup_env(env, emulator_setup, freeze_datetime)
-  return env
+    env = _get_env(console_port, adb_path, grpc_port)
+    setup_env(env, emulator_setup, freeze_datetime)
+    return env

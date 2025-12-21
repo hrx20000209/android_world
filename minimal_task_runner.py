@@ -41,19 +41,19 @@ os.environ['GRPC_TRACE'] = 'none'  # Disable tracing
 
 
 def _find_adb_directory() -> str:
-  """Returns the directory where adb is located."""
-  potential_paths = [
-      os.path.expanduser('~/Library/Android/sdk/platform-tools/adb'),
-      os.path.expanduser('~/Android/Sdk/platform-tools/adb'),
-  ]
-  for path in potential_paths:
-    if os.path.isfile(path):
-      return path
-  raise EnvironmentError(
-      'adb not found in the common Android SDK paths. Please install Android'
-      " SDK and ensure adb is in one of the expected directories. If it's"
-      ' already installed, point to the installed location.'
-  )
+    """Returns the directory where adb is located."""
+    potential_paths = [
+        os.path.expanduser('~/Library/Android/sdk/platform-tools/adb'),
+        os.path.expanduser('~/Android/Sdk/platform-tools/adb'),
+    ]
+    for path in potential_paths:
+        if os.path.isfile(path):
+            return path
+    raise EnvironmentError(
+        'adb not found in the common Android SDK paths. Please install Android'
+        " SDK and ensure adb is in one of the expected directories. If it's"
+        ' already installed, point to the installed location.'
+    )
 
 
 _ADB_PATH = flags.DEFINE_string(
@@ -85,49 +85,51 @@ _TASK = flags.DEFINE_string(
 
 
 def _main() -> None:
-  """Runs a single task."""
-  env = env_launcher.load_and_setup_env(
-      console_port=_DEVICE_CONSOLE_PORT.value,
-      emulator_setup=_EMULATOR_SETUP.value,
-      adb_path=_ADB_PATH.value,
-  )
-  env.reset(go_home=True)
-  task_registry = registry.TaskRegistry()
-  aw_registry = task_registry.get_registry(task_registry.ANDROID_WORLD_FAMILY)
-  if _TASK.value:
-    if _TASK.value not in aw_registry:
-      raise ValueError('Task {} not found in registry.'.format(_TASK.value))
-    task_type: Type[task_eval.TaskEval] = aw_registry[_TASK.value]
-  else:
-    task_type: Type[task_eval.TaskEval] = random.choice(
-        list(aw_registry.values())
+    """Runs a single task."""
+    env = env_launcher.load_and_setup_env(
+        console_port=_DEVICE_CONSOLE_PORT.value,
+        emulator_setup=_EMULATOR_SETUP.value,
+        adb_path=_ADB_PATH.value,
     )
-  params = task_type.generate_random_params()
-  task = task_type(params)
-  task.initialize_task(env)
-  # agent = t3a.T3A(env, infer.Gpt4Wrapper('gpt-4.1'))
-  # agent = t3a.T3A(env, infer.DeepseekWrapper())
-  agent = m3a.M3A(env, infer.DeepseekWrapper())
+    env.reset(go_home=True)
+    task_registry = registry.TaskRegistry()
+    aw_registry = task_registry.get_registry(task_registry.ANDROID_WORLD_FAMILY)
+    if _TASK.value:
+        if _TASK.value not in aw_registry:
+            raise ValueError('Task {} not found in registry.'.format(_TASK.value))
+        task_type: Type[task_eval.TaskEval] = aw_registry[_TASK.value]
+    else:
+        task_type: Type[task_eval.TaskEval] = random.choice(
+            list(aw_registry.values())
+        )
+    params = task_type.generate_random_params()
+    task = task_type(params)
+    task.initialize_task(env)
+    # agent = t3a.T3A(env, infer.Gpt4Wrapper('gpt-4.1'))
+    # agent = t3a.T3A(env, infer.DeepseekWrapper())
+    # agent = m3a.M3A(env, infer.DeepseekWrapper())
+    # agent = m3a.M3A(env, infer.LlamaCppWrapper())
+    agent = t3a.T3A(env, infer.LlamaCppTextWrapper())
 
-  print('Goal: ' + str(task.goal))
-  is_done = False
-  for _ in range(int(task.complexity * 10)):
-    response = agent.step(task.goal)
-    if response.done:
-      is_done = True
-      break
-  agent_successful = is_done and task.is_successful(env) == 1
-  print(
-      f'{"Task Successful ✅" if agent_successful else "Task Failed ❌"};'
-      f' {task.goal}'
-  )
-  env.close()
+    print('Goal: ' + str(task.goal))
+    is_done = False
+    for _ in range(int(task.complexity * 10)):
+        response = agent.step(task.goal)
+        if response.done:
+            is_done = True
+            break
+    agent_successful = is_done and task.is_successful(env) == 1
+    print(
+        f'{"Task Successful ✅" if agent_successful else "Task Failed ❌"};'
+        f' {task.goal}'
+    )
+    env.close()
 
 
 def main(argv: Sequence[str]) -> None:
-  del argv
-  _main()
+    del argv
+    _main()
 
 
 if __name__ == '__main__':
-  app.run(main)
+    app.run(main)

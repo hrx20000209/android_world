@@ -77,7 +77,6 @@ PROMPT_PREFIX = (
     '- Wait for the screen to update: `{{"action_type": "wait"}}`\n'
 )
 
-
 GUIDANCE = (
     'Here are some useful guidelines you need to follow:\n'
     'General:\n'
@@ -147,64 +146,62 @@ GUIDANCE = (
     ' in the list.\n'
 )
 
-
 ACTION_SELECTION_PROMPT_TEMPLATE = (
-    PROMPT_PREFIX
-    + '\nThe current user goal/request is: {goal}\n\n'
-    'Here is a history of what you have done so far:\n{history}\n\n'
-    'The current screenshot and the same screenshot with bounding boxes'
-    ' and labels added are also given to you.\n'
-    'Here is a list of detailed'
-    ' information for some of the UI elements (notice that some elements in'
-    ' this list may not be visible in the current screen and so you can not'
-    ' interact with it, can try to scroll the screen to reveal it first),'
-    ' the numeric indexes are'
-    ' consistent with the ones in the labeled screenshot:\n{ui_elements}\n'
-    + GUIDANCE
-    + '{additional_guidelines}'
-    + '\nNow output an action from the above list in the correct JSON format,'
-    ' following the reason why you do that. Your answer should look like:\n'
-    'Reason: ...\nAction: {{"action_type":...}}\n\n'
-    'Your Answer:\n'
+        PROMPT_PREFIX
+        + '\nThe current user goal/request is: {goal}\n\n'
+          'Here is a history of what you have done so far:\n{history}\n\n'
+          'The current screenshot and the same screenshot with bounding boxes'
+          ' and labels added are also given to you.\n'
+          'Here is a list of detailed'
+          ' information for some of the UI elements (notice that some elements in'
+          ' this list may not be visible in the current screen and so you can not'
+          ' interact with it, can try to scroll the screen to reveal it first),'
+          ' the numeric indexes are'
+          ' consistent with the ones in the labeled screenshot:\n{ui_elements}\n'
+        + GUIDANCE
+        + '{additional_guidelines}'
+        + '\nNow output an action from the above list in the correct JSON format,'
+          ' following the reason why you do that. Your answer should look like:\n'
+          'Reason: ...\nAction: {{"action_type":...}}\n\n'
+          'Your Answer:\n'
 )
 
-
 SUMMARY_PROMPT_TEMPLATE = (
-    PROMPT_PREFIX
-    + '\nThe (overall) user goal/request is: {goal}\n'
-    'Now I want you to summerize the latest step.\n'
-    'You will be given the screenshot before you performed the action (which'
-    ' has a text label "before" on the bottom right), the action you chose'
-    ' (together with the reason) and the screenshot after the action was'
-    ' performed (which has a text label "after" on the bottom right).\n'
-    'Also here is the list of detailed information for some UI elements'
-    ' in the before screenshot:\n{before_elements}\n'
-    'Here is the list for the after screenshot:\n{after_elements}\n'
-    'This is the action you picked: {action}\n'
-    'Based on the reason: {reason}\n\n'
-    'By comparing the two screenshots (plus the UI element lists) and the'
-    ' action performed, give a brief summary of this step. This summary'
-    ' will be added to action history and used in future action selection,'
-    ' so try to include essential information you think that will be most'
-    ' useful for future action selections like what you'
-    ' intended to do, why, if it worked as expected, if not'
-    ' what might be the reason (be critical, the action/reason might be'
-    ' wrong), what should/should not be done next and so on. Some more'
-    ' rules/tips you should follow:\n'
-    '- Keep it short (better less than 50 words) and in a single line\n'
-    "- Some actions (like `answer`, `wait`) don't involve screen change,"
-    ' you can just assume they work as expected.\n'
-    '- Given this summary will be added into action history, it can be used as'
-    ' memory to include information that needs to be remembered, or shared'
-    ' between different apps.\n\n'
-    'Summary of this step: '
+        PROMPT_PREFIX
+        + '\nThe (overall) user goal/request is: {goal}\n'
+          'Now I want you to summerize the latest step.\n'
+          'You will be given the screenshot before you performed the action (which'
+          ' has a text label "before" on the bottom right), the action you chose'
+          ' (together with the reason) and the screenshot after the action was'
+          ' performed (which has a text label "after" on the bottom right).\n'
+          'Also here is the list of detailed information for some UI elements'
+          ' in the before screenshot:\n{before_elements}\n'
+          'Here is the list for the after screenshot:\n{after_elements}\n'
+          'This is the action you picked: {action}\n'
+          'Based on the reason: {reason}\n\n'
+          'By comparing the two screenshots (plus the UI element lists) and the'
+          ' action performed, give a brief summary of this step. This summary'
+          ' will be added to action history and used in future action selection,'
+          ' so try to include essential information you think that will be most'
+          ' useful for future action selections like what you'
+          ' intended to do, why, if it worked as expected, if not'
+          ' what might be the reason (be critical, the action/reason might be'
+          ' wrong), what should/should not be done next and so on. Some more'
+          ' rules/tips you should follow:\n'
+          '- Keep it short (better less than 50 words) and in a single line\n'
+          "- Some actions (like `answer`, `wait`) don't involve screen change,"
+          ' you can just assume they work as expected.\n'
+          '- Given this summary will be added into action history, it can be used as'
+          ' memory to include information that needs to be remembered, or shared'
+          ' between different apps.\n\n'
+          'Summary of this step: '
 )
 
 
 def _generate_ui_element_description(
-    ui_element: representation_utils.UIElement, index: int
+        ui_element: representation_utils.UIElement, index: int
 ) -> str:
-  """Generate a description for a given UI element with important information.
+    """Generate a description for a given UI element with important information.
 
   Args:
     ui_element: UI elements for the current screen.
@@ -213,45 +210,45 @@ def _generate_ui_element_description(
   Returns:
     The description for the UI element.
   """
-  element_description = f'UI element {index}: {{"index": {index}, '
-  if ui_element.text:
-    element_description += f'"text": "{ui_element.text}", '
-  if ui_element.content_description:
+    element_description = f'UI element {index}: {{"index": {index}, '
+    if ui_element.text:
+        element_description += f'"text": "{ui_element.text}", '
+    if ui_element.content_description:
+        element_description += (
+            f'"content_description": "{ui_element.content_description}", '
+        )
+    if ui_element.hint_text:
+        element_description += f'"hint_text": "{ui_element.hint_text}", '
+    if ui_element.tooltip:
+        element_description += f'"tooltip": "{ui_element.tooltip}", '
     element_description += (
-        f'"content_description": "{ui_element.content_description}", '
+        f'"is_clickable": {"True" if ui_element.is_clickable else "False"}, '
     )
-  if ui_element.hint_text:
-    element_description += f'"hint_text": "{ui_element.hint_text}", '
-  if ui_element.tooltip:
-    element_description += f'"tooltip": "{ui_element.tooltip}", '
-  element_description += (
-      f'"is_clickable": {"True" if ui_element.is_clickable else "False"}, '
-  )
-  element_description += (
-      '"is_long_clickable":'
-      f' {"True" if ui_element.is_long_clickable else "False"}, '
-  )
-  element_description += (
-      f'"is_editable": {"True" if ui_element.is_editable else "False"}, '
-  )
-  if ui_element.is_scrollable:
-    element_description += '"is_scrollable": True, '
-  if ui_element.is_focusable:
-    element_description += '"is_focusable": True, '
-  element_description += (
-      f'"is_selected": {"True" if ui_element.is_selected else "False"}, '
-  )
-  element_description += (
-      f'"is_checked": {"True" if ui_element.is_checked else "False"}, '
-  )
-  return element_description[:-2] + '}'
+    element_description += (
+        '"is_long_clickable":'
+        f' {"True" if ui_element.is_long_clickable else "False"}, '
+    )
+    element_description += (
+        f'"is_editable": {"True" if ui_element.is_editable else "False"}, '
+    )
+    if ui_element.is_scrollable:
+        element_description += '"is_scrollable": True, '
+    if ui_element.is_focusable:
+        element_description += '"is_focusable": True, '
+    element_description += (
+        f'"is_selected": {"True" if ui_element.is_selected else "False"}, '
+    )
+    element_description += (
+        f'"is_checked": {"True" if ui_element.is_checked else "False"}, '
+    )
+    return element_description[:-2] + '}'
 
 
 def _generate_ui_elements_description_list(
-    ui_elements: list[representation_utils.UIElement],
-    screen_width_height_px: tuple[int, int],
+        ui_elements: list[representation_utils.UIElement],
+        screen_width_height_px: tuple[int, int],
 ) -> str:
-  """Generate concise information for a list of UIElement.
+    """Generate concise information for a list of UIElement.
 
   Args:
     ui_elements: UI elements for the current screen.
@@ -260,20 +257,20 @@ def _generate_ui_elements_description_list(
   Returns:
     Concise information for each UIElement.
   """
-  tree_info = ''
-  for index, ui_element in enumerate(ui_elements):
-    if m3a_utils.validate_ui_element(ui_element, screen_width_height_px):
-      tree_info += _generate_ui_element_description(ui_element, index) + '\n'
-  return tree_info
+    tree_info = ''
+    for index, ui_element in enumerate(ui_elements):
+        if m3a_utils.validate_ui_element(ui_element, screen_width_height_px):
+            tree_info += _generate_ui_element_description(ui_element, index) + '\n'
+    return tree_info
 
 
 def _action_selection_prompt(
-    goal: str,
-    history: list[str],
-    ui_elements: str,
-    additional_guidelines: list[str] | None = None,
+        goal: str,
+        history: list[str],
+        ui_elements: str,
+        additional_guidelines: list[str] | None = None,
 ) -> str:
-  """Generate the prompt for the action selection.
+    """Generate the prompt for the action selection.
 
   Args:
     goal: The current goal.
@@ -284,33 +281,33 @@ def _action_selection_prompt(
   Returns:
     The text prompt for action selection that will be sent to gpt4v.
   """
-  if history:
-    history = '\n'.join(history)
-  else:
-    history = 'You just started, no action has been performed yet.'
+    if history:
+        history = '\n'.join(history)
+    else:
+        history = 'You just started, no action has been performed yet.'
 
-  extra_guidelines = ''
-  if additional_guidelines:
-    extra_guidelines = 'For The Current Task:\n'
-    for guideline in additional_guidelines:
-      extra_guidelines += f'- {guideline}\n'
+    extra_guidelines = ''
+    if additional_guidelines:
+        extra_guidelines = 'For The Current Task:\n'
+        for guideline in additional_guidelines:
+            extra_guidelines += f'- {guideline}\n'
 
-  return ACTION_SELECTION_PROMPT_TEMPLATE.format(
-      goal=goal,
-      history=history,
-      ui_elements=ui_elements if ui_elements else 'Not available',
-      additional_guidelines=extra_guidelines,
-  )
+    return ACTION_SELECTION_PROMPT_TEMPLATE.format(
+        goal=goal,
+        history=history,
+        ui_elements=ui_elements if ui_elements else 'Not available',
+        additional_guidelines=extra_guidelines,
+    )
 
 
 def _summarize_prompt(
-    action: str,
-    reason: str,
-    goal: str,
-    before_elements: str,
-    after_elements: str,
+        action: str,
+        reason: str,
+        goal: str,
+        before_elements: str,
+        after_elements: str,
 ) -> str:
-  """Generate the prompt for the summarization step.
+    """Generate the prompt for the summarization step.
 
   Args:
     action: Action picked.
@@ -322,26 +319,26 @@ def _summarize_prompt(
   Returns:
     The text prompt for summarization that will be sent to gpt4v.
   """
-  return SUMMARY_PROMPT_TEMPLATE.format(
-      goal=goal,
-      before_elements=before_elements,
-      after_elements=after_elements,
-      action=action,
-      reason=reason,
-  )
+    return SUMMARY_PROMPT_TEMPLATE.format(
+        goal=goal,
+        before_elements=before_elements,
+        after_elements=after_elements,
+        action=action,
+        reason=reason,
+    )
 
 
 class M3A(base_agent.EnvironmentInteractingAgent):
-  """M3A which stands for Multimodal Autonomous Agent for Android."""
+    """M3A which stands for Multimodal Autonomous Agent for Android."""
 
-  def __init__(
-      self,
-      env: interface.AsyncEnv,
-      llm: infer.MultimodalLlmWrapper,
-      name: str = 'M3A',
-      wait_after_action_seconds: float = 2.0,
-  ):
-    """Initializes a M3A Agent.
+    def __init__(
+            self,
+            env: interface.AsyncEnv,
+            llm: infer.MultimodalLlmWrapper,
+            name: str = 'M3A',
+            wait_after_action_seconds: float = 2.0,
+    ):
+        """Initializes a M3A Agent.
 
     Args:
       env: The environment.
@@ -350,259 +347,259 @@ class M3A(base_agent.EnvironmentInteractingAgent):
       wait_after_action_seconds: Seconds to wait for the screen to stablize
         after executing an action
     """
-    super().__init__(env, name)
-    self.llm = llm
-    self.history = []
-    self.additional_guidelines = None
-    self.wait_after_action_seconds = wait_after_action_seconds
+        super().__init__(env, name)
+        self.llm = llm
+        self.history = []
+        self.additional_guidelines = None
+        self.wait_after_action_seconds = wait_after_action_seconds
 
-  def set_task_guidelines(self, task_guidelines: list[str]) -> None:
-    self.additional_guidelines = task_guidelines
+    def set_task_guidelines(self, task_guidelines: list[str]) -> None:
+        self.additional_guidelines = task_guidelines
 
-  def reset(self, go_home_on_reset: bool = False):
-    super().reset(go_home_on_reset)
-    # Hide the coordinates on screen which might affect the vision model.
-    self.env.hide_automation_ui()
-    self.history = []
+    def reset(self, go_home_on_reset: bool = False):
+        super().reset(go_home_on_reset)
+        # Hide the coordinates on screen which might affect the vision model.
+        self.env.hide_automation_ui()
+        self.history = []
 
-  def step(self, goal: str) -> base_agent.AgentInteractionResult:
-    step_data = {
-        'raw_screenshot': None,
-        'before_screenshot_with_som': None,
-        'before_ui_elements': [],
-        'after_screenshot_with_som': None,
-        'action_prompt': None,
-        'action_output': None,
-        'action_output_json': None,
-        'action_reason': None,
-        'action_raw_response': None,
-        'summary_prompt': None,
-        'summary': None,
-        'summary_raw_response': None,
-    }
-    logging.info('----------step %s----------', str(len(self.history) + 1))
+    def step(self, goal: str) -> base_agent.AgentInteractionResult:
+        step_data = {
+            'raw_screenshot': None,
+            'before_screenshot_with_som': None,
+            'before_ui_elements': [],
+            'after_screenshot_with_som': None,
+            'action_prompt': None,
+            'action_output': None,
+            'action_output_json': None,
+            'action_reason': None,
+            'action_raw_response': None,
+            'summary_prompt': None,
+            'summary': None,
+            'summary_raw_response': None,
+        }
+        logging.info('----------step %s----------', str(len(self.history) + 1))
 
-    state = self.get_post_transition_state()
-    logical_screen_size = self.env.logical_screen_size
-    orientation = self.env.orientation
-    physical_frame_boundary = self.env.physical_frame_boundary
+        state = self.get_post_transition_state()
+        logical_screen_size = self.env.logical_screen_size
+        orientation = self.env.orientation
+        physical_frame_boundary = self.env.physical_frame_boundary
 
-    before_ui_elements = state.ui_elements
-    step_data['before_ui_elements'] = before_ui_elements
-    before_ui_elements_list = _generate_ui_elements_description_list(
-        before_ui_elements, logical_screen_size
-    )
-    step_data['raw_screenshot'] = state.pixels.copy()
-    before_screenshot = state.pixels.copy()
-    for index, ui_element in enumerate(before_ui_elements):
-      if m3a_utils.validate_ui_element(ui_element, logical_screen_size):
-        m3a_utils.add_ui_element_mark(
-            before_screenshot,
-            ui_element,
-            index,
-            logical_screen_size,
-            physical_frame_boundary,
-            orientation,
+        before_ui_elements = state.ui_elements
+        step_data['before_ui_elements'] = before_ui_elements
+        before_ui_elements_list = _generate_ui_elements_description_list(
+            before_ui_elements, logical_screen_size
         )
-    step_data['before_screenshot_with_som'] = before_screenshot.copy()
+        step_data['raw_screenshot'] = state.pixels.copy()
+        before_screenshot = state.pixels.copy()
+        for index, ui_element in enumerate(before_ui_elements):
+            if m3a_utils.validate_ui_element(ui_element, logical_screen_size):
+                m3a_utils.add_ui_element_mark(
+                    before_screenshot,
+                    ui_element,
+                    index,
+                    logical_screen_size,
+                    physical_frame_boundary,
+                    orientation,
+                )
+        step_data['before_screenshot_with_som'] = before_screenshot.copy()
 
-    action_prompt = _action_selection_prompt(
-        goal,
-        [
-            'Step ' + str(i + 1) + '- ' + step_info['summary']
-            for i, step_info in enumerate(self.history)
-        ],
-        before_ui_elements_list,
-        self.additional_guidelines,
-    )
-    step_data['action_prompt'] = action_prompt
-    action_output, is_safe, raw_response = self.llm.predict_mm(
-        action_prompt,
-        [
-            step_data['raw_screenshot'],
-            before_screenshot,
-        ],
-    )
+        action_prompt = _action_selection_prompt(
+            goal,
+            [
+                'Step ' + str(i + 1) + '- ' + step_info['summary']
+                for i, step_info in enumerate(self.history)
+            ],
+            before_ui_elements_list,
+            self.additional_guidelines,
+        )
+        step_data['action_prompt'] = action_prompt
+        action_output, is_safe, raw_response = self.llm.predict_mm(
+            action_prompt,
+            [
+                step_data['raw_screenshot'],
+                before_screenshot,
+            ],
+        )
 
-    if is_safe == False:  # pylint: disable=singleton-comparison
-      #  is_safe could be None
-      action_output = f"""Reason: {m3a_utils.TRIGGER_SAFETY_CLASSIFIER}
+        if is_safe == False:  # pylint: disable=singleton-comparison
+            #  is_safe could be None
+            action_output = f"""Reason: {m3a_utils.TRIGGER_SAFETY_CLASSIFIER}
 Action: {{"action_type": "status", "goal_status": "infeasible"}}"""
 
-    if not raw_response:
-      raise RuntimeError('Error calling LLM in action selection phase.')
-    step_data['action_output'] = action_output
-    step_data['action_raw_response'] = raw_response
+        if not raw_response:
+            raise RuntimeError('Error calling LLM in action selection phase.')
+        step_data['action_output'] = action_output
+        step_data['action_raw_response'] = raw_response
 
-    reason, action = m3a_utils.parse_reason_action_output(action_output)
+        reason, action = m3a_utils.parse_reason_action_output(action_output)
 
-    # If the output is not in the right format, add it to step summary which
-    # will be passed to next step and return.
-    if (not reason) or (not action):
-      logging.info('Action prompt output is not in the correct format.')
-      step_data['summary'] = (
-          'Output for action selection is not in the correct format, so no'
-          ' action is performed.'
-      )
-      self.history.append(step_data)
+        # If the output is not in the right format, add it to step summary which
+        # will be passed to next step and return.
+        if (not reason) or (not action):
+            logging.info('Action prompt output is not in the correct format.')
+            step_data['summary'] = (
+                'Output for action selection is not in the correct format, so no'
+                ' action is performed.'
+            )
+            self.history.append(step_data)
 
-      return base_agent.AgentInteractionResult(
-          False,
-          step_data,
-      )
+            return base_agent.AgentInteractionResult(
+                False,
+                step_data,
+            )
 
-    logging.info('Action: %s', action)
-    logging.info('Reason: %s', reason)
-    step_data['action_reason'] = reason
+        logging.info('Action: %s', action)
+        logging.info('Reason: %s', reason)
+        step_data['action_reason'] = reason
 
-    try:
-      converted_action = json_action.JSONAction(
-          **agent_utils.extract_json(action),
-      )
-      step_data['action_output_json'] = converted_action
-    except Exception as e:  # pylint: disable=broad-exception-caught
-      logging.info('Failed to convert the output to a valid action.')
-      logging.info(str(e))
-      step_data['summary'] = (
-          'Can not parse the output to a valid action. Please make sure to pick'
-          ' the action from the list with required parameters (if any) in the'
-          ' correct JSON format!'
-      )
-      self.history.append(step_data)
+        try:
+            converted_action = json_action.JSONAction(
+                **agent_utils.extract_json(action),
+            )
+            step_data['action_output_json'] = converted_action
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            logging.info('Failed to convert the output to a valid action.')
+            logging.info(str(e))
+            step_data['summary'] = (
+                'Can not parse the output to a valid action. Please make sure to pick'
+                ' the action from the list with required parameters (if any) in the'
+                ' correct JSON format!'
+            )
+            self.history.append(step_data)
 
-      return base_agent.AgentInteractionResult(
-          False,
-          step_data,
-      )
+            return base_agent.AgentInteractionResult(
+                False,
+                step_data,
+            )
 
-    action_index = converted_action.index
-    num_ui_elements = len(before_ui_elements)
-    if (
-        converted_action.action_type
-        in ['click', 'long_press', 'input_text', 'scroll']
-        and action_index is not None
-    ):
-      if action_index >= num_ui_elements:
-        logging.info(
-            'Index out of range, prediction index is %s, but the'
-            ' UI element list only has %d elements.',
-            action_index,
-            num_ui_elements,
+        action_index = converted_action.index
+        num_ui_elements = len(before_ui_elements)
+        if (
+                converted_action.action_type
+                in ['click', 'long_press', 'input_text', 'scroll']
+                and action_index is not None
+        ):
+            if action_index >= num_ui_elements:
+                logging.info(
+                    'Index out of range, prediction index is %s, but the'
+                    ' UI element list only has %d elements.',
+                    action_index,
+                    num_ui_elements,
+                )
+                step_data['summary'] = (
+                    'The parameter index is out of range. Remember the index must be in'
+                    ' the UI element list!'
+                )
+                self.history.append(step_data)
+                return base_agent.AgentInteractionResult(False, step_data)
+
+            # Add mark to the target element.
+            m3a_utils.add_ui_element_mark(
+                step_data['raw_screenshot'],
+                before_ui_elements[action_index],
+                action_index,
+                logical_screen_size,
+                physical_frame_boundary,
+                orientation,
+            )
+
+        if converted_action.action_type == 'status':
+            if converted_action.goal_status == 'infeasible':
+                logging.info('Agent stopped since it thinks mission impossible.')
+            step_data['summary'] = 'Agent thinks the request has been completed.'
+            self.history.append(step_data)
+            return base_agent.AgentInteractionResult(
+                True,
+                step_data,
+            )
+
+        if converted_action.action_type == 'answer':
+            logging.info('Agent answered with: %s', converted_action.text)
+
+        try:
+            self.env.execute_action(converted_action)
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            logging.info('Failed to execute action.')
+            logging.info(str(e))
+            step_data['summary'] = (
+                'Can not execute the action, make sure to select the action with'
+                ' the required parameters (if any) in the correct JSON format!'
+            )
+            return base_agent.AgentInteractionResult(
+                False,
+                step_data,
+            )
+
+        time.sleep(self.wait_after_action_seconds)
+
+        state = self.env.get_state(wait_to_stabilize=False)
+        logical_screen_size = self.env.logical_screen_size
+        orientation = self.env.orientation
+        physical_frame_boundary = self.env.physical_frame_boundary
+        after_ui_elements = state.ui_elements
+        after_ui_elements_list = _generate_ui_elements_description_list(
+            after_ui_elements, logical_screen_size
         )
-        step_data['summary'] = (
-            'The parameter index is out of range. Remember the index must be in'
-            ' the UI element list!'
+        after_screenshot = state.pixels.copy()
+        for index, ui_element in enumerate(after_ui_elements):
+            if m3a_utils.validate_ui_element(ui_element, logical_screen_size):
+                m3a_utils.add_ui_element_mark(
+                    after_screenshot,
+                    ui_element,
+                    index,
+                    logical_screen_size,
+                    physical_frame_boundary,
+                    orientation,
+                )
+
+        m3a_utils.add_screenshot_label(
+            step_data['before_screenshot_with_som'], 'before'
         )
+        m3a_utils.add_screenshot_label(after_screenshot, 'after')
+        step_data['after_screenshot_with_som'] = after_screenshot.copy()
+
+        summary_prompt = _summarize_prompt(
+            action,
+            reason,
+            goal,
+            before_ui_elements_list,
+            after_ui_elements_list,
+        )
+        summary, is_safe, raw_response = self.llm.predict_mm(
+            summary_prompt,
+            [
+                before_screenshot,
+                after_screenshot,
+            ],
+        )
+
+        if is_safe == False:  # pylint: disable=singleton-comparison
+            #  is_safe could be None
+            summary = """Summary triggered LLM safety classifier."""
+
+        if not raw_response:
+            logging.info(
+                'Error calling LLM in summarization phase. This should not'
+                ' happen: %s',
+                summary,
+            )
+            step_data['summary'] = (
+                    'Some error occurred calling LLM during summarization phase: %s'
+                    % summary
+            )
+            self.history.append(step_data)
+            return base_agent.AgentInteractionResult(
+                False,
+                step_data,
+            )
+
+        step_data['summary_prompt'] = summary_prompt
+        step_data['summary'] = f'Action selected: {action}. {summary}'
+        logging.info('Summary: %s', summary)
+        step_data['summary_raw_response'] = raw_response
+
         self.history.append(step_data)
-        return base_agent.AgentInteractionResult(False, step_data)
-
-      # Add mark to the target element.
-      m3a_utils.add_ui_element_mark(
-          step_data['raw_screenshot'],
-          before_ui_elements[action_index],
-          action_index,
-          logical_screen_size,
-          physical_frame_boundary,
-          orientation,
-      )
-
-    if converted_action.action_type == 'status':
-      if converted_action.goal_status == 'infeasible':
-        logging.info('Agent stopped since it thinks mission impossible.')
-      step_data['summary'] = 'Agent thinks the request has been completed.'
-      self.history.append(step_data)
-      return base_agent.AgentInteractionResult(
-          True,
-          step_data,
-      )
-
-    if converted_action.action_type == 'answer':
-      logging.info('Agent answered with: %s', converted_action.text)
-
-    try:
-      self.env.execute_action(converted_action)
-    except Exception as e:  # pylint: disable=broad-exception-caught
-      logging.info('Failed to execute action.')
-      logging.info(str(e))
-      step_data['summary'] = (
-          'Can not execute the action, make sure to select the action with'
-          ' the required parameters (if any) in the correct JSON format!'
-      )
-      return base_agent.AgentInteractionResult(
-          False,
-          step_data,
-      )
-
-    time.sleep(self.wait_after_action_seconds)
-
-    state = self.env.get_state(wait_to_stabilize=False)
-    logical_screen_size = self.env.logical_screen_size
-    orientation = self.env.orientation
-    physical_frame_boundary = self.env.physical_frame_boundary
-    after_ui_elements = state.ui_elements
-    after_ui_elements_list = _generate_ui_elements_description_list(
-        after_ui_elements, logical_screen_size
-    )
-    after_screenshot = state.pixels.copy()
-    for index, ui_element in enumerate(after_ui_elements):
-      if m3a_utils.validate_ui_element(ui_element, logical_screen_size):
-        m3a_utils.add_ui_element_mark(
-            after_screenshot,
-            ui_element,
-            index,
-            logical_screen_size,
-            physical_frame_boundary,
-            orientation,
+        return base_agent.AgentInteractionResult(
+            False,
+            step_data,
         )
-
-    m3a_utils.add_screenshot_label(
-        step_data['before_screenshot_with_som'], 'before'
-    )
-    m3a_utils.add_screenshot_label(after_screenshot, 'after')
-    step_data['after_screenshot_with_som'] = after_screenshot.copy()
-
-    summary_prompt = _summarize_prompt(
-        action,
-        reason,
-        goal,
-        before_ui_elements_list,
-        after_ui_elements_list,
-    )
-    summary, is_safe, raw_response = self.llm.predict_mm(
-        summary_prompt,
-        [
-            before_screenshot,
-            after_screenshot,
-        ],
-    )
-
-    if is_safe == False:  # pylint: disable=singleton-comparison
-      #  is_safe could be None
-      summary = """Summary triggered LLM safety classifier."""
-
-    if not raw_response:
-      logging.info(
-          'Error calling LLM in summarization phase. This should not'
-          ' happen: %s',
-          summary,
-      )
-      step_data['summary'] = (
-          'Some error occurred calling LLM during summarization phase: %s'
-          % summary
-      )
-      self.history.append(step_data)
-      return base_agent.AgentInteractionResult(
-          False,
-          step_data,
-      )
-
-    step_data['summary_prompt'] = summary_prompt
-    step_data['summary'] = f'Action selected: {action}. {summary}'
-    logging.info('Summary: %s', summary)
-    step_data['summary_raw_response'] = raw_response
-
-    self.history.append(step_data)
-    return base_agent.AgentInteractionResult(
-        False,
-        step_data,
-    )
