@@ -1,0 +1,12 @@
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [155, 827]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [500, 899]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [557, 676], "explain": "I need to click the 'Cancel' button to close this dialog and return to the main Phone app interface, where I can then proceed to add a new contact."}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [500, 899], "explain": "I need to click the 'Set as default' button to dismiss this prompt and access the phone app's main features, which is necessary to create a new contact."}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [557, 676]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [500, 899], "explain": "I need to click the 'Set as default' button to dismiss this prompt and gain access to the phone app's main features, which is necessary to proceed with creating a new contact."}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [557, 676]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [500, 899]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [557, 676]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [500, 899]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [557, 676]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [500, 899]}}

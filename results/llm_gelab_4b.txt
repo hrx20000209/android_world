@@ -1,0 +1,57 @@
+                                      task_num  num_complete_trials  mean_success_rate  mean_episode_length  total_runtime_s  num_fail_trials
+task
+AudioRecorderRecordAudio                     0                  1.0               0.00                12.00            35.60              0.0
+AudioRecorderRecordAudioWithFileName         1                  1.0               0.00                20.00            97.80              0.0
+BrowserDraw                                  2                  1.0               0.00                20.00           107.70              0.0
+BrowserMaze                                  3                  1.0               0.00                20.00            88.20              0.0
+BrowserMultiply                              4                  1.0               0.00                22.00            93.30              0.0
+CameraTakePhoto                              5                  1.0               0.00                 3.00            26.50              0.0
+CameraTakeVideo                              6                  1.0               0.00                10.00           103.70              0.0
+ClockStopWatchPausedVerify                   7                  1.0               1.00                 4.00            22.70              0.0
+ClockStopWatchRunning                        8                  1.0               0.00                 5.00            33.50              0.0
+ClockTimerEntry                              9                  1.0               0.00                10.00            59.20              0.0
+ContactsAddContact                          10                  1.0               0.00                12.00            77.50              0.0
+ContactsNewContactDraft                     11                  1.0               0.00                12.00            64.90              0.0
+ExpenseAddSingle                            12                  1.0               0.00                12.00            66.20              0.0
+ExpenseDeleteDuplicates                     13                  1.0               0.00                12.00            77.30              0.0
+ExpenseDeleteMultiple                       14                  1.0               0.00                20.00            99.40              0.0
+ExpenseDeleteSingle                         15                  1.0               1.00                 6.00            36.30              0.0
+FilesDeleteFile                             16                  1.0               1.00                13.00            74.10              0.0
+FilesMoveFile                               17                  1.0               0.00                20.00           168.70              0.0
+MarkorAddNoteHeader                         18                  1.0               0.00                12.00            50.10              0.0
+MarkorChangeNoteContent                     19                  1.0               0.00                12.00            55.80              0.0
+MarkorCreateFolder                          20                  1.0               0.00                10.00            60.60              0.0
+MarkorCreateNote                            21                  1.0               0.00                16.00            51.80              0.0
+MarkorDeleteAllNotes                        22                  1.0               0.00                14.00            57.00              0.0
+MarkorDeleteNewestNote                      23                  1.0               0.00                10.00            42.80              0.0
+MarkorDeleteNote                            24                  1.0               0.00                10.00            41.80              0.0
+MarkorEditNote                              25                  1.0               0.00                 7.00            34.10              0.0
+MarkorMoveNote                              26                  1.0               0.00                11.00            63.30              0.0
+MarkorTranscribeReceipt                     27                  1.0               0.00                18.00           107.90              0.0
+OpenAppTaskEval                             28                  1.0               1.00                 2.00            11.50              0.0
+OsmAndFavorite                              29                  1.0               0.00                13.00            81.70              0.0
+SystemBluetoothTurnOff                      30                  1.0               0.00                10.00            69.50              0.0
+SystemBluetoothTurnOn                       31                  1.0               0.00                10.00            40.70              0.0
+SystemWifiTurnOff                           32                  1.0               1.00                 8.00            45.00              0.0
+SystemWifiTurnOn                            33                  1.0               1.00                 6.00            30.50              0.0
+========= Average =========                  0                  1.0               0.18                11.82            64.02              0.0
+
+
+                         mean_success_rate
+difficulty                            easy medium hard
+tags
+complex_ui_understanding               0.0    0.0    -
+data_edit                              0.0    0.5    -
+data_entry                             0.0    0.0    -
+game_playing                           0.0      -    -
+math_counting                            -      -  0.0
+memorization                           0.0    0.0  0.0
+multi_app                              0.0    0.0    -
+parameterized                         0.14   0.11    -
+repetition                             0.0      -    -
+requires_setup                         0.0    0.0    -
+screen_reading                         0.6    0.0  0.0
+search                                 0.0    0.0    -
+transcription                          0.0    0.0    -
+untagged                               0.0    0.0    -
+verification                           1.0      -    -

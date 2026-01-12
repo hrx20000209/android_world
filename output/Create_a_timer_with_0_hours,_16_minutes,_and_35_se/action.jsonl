@@ -1,0 +1,10 @@
+{"name": "mobile_use", "arguments": {"action": "open", "text": "Clock"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [500, 930]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [245, 337]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [754, 454]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [754, 337]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [754, 687]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [754, 337]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [754, 687]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [754, 337]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [754, 687]}}

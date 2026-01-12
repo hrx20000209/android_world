@@ -1,0 +1,12 @@
+{"name": "mobile_use", "arguments": {"action": "open", "text": "Markor"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [500, 441]}}
+{"name": "type", "text": "inNqu8UNNtyXBHCZpYp7"}
+{"name": "click", "arguments": {"action": "click", "coordinate": [950, 77]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [760, 77]}}
+{"name": "click", "arguments": {"action": "click", "coordinate": [500, 441]}}
+{"name": "click", "arguments": {"action": "click", "coordinate": [950, 77]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [751, 77]}}
+{"name": "click", "arguments": {"action": "click", "coordinate": [500, 441]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [950, 77]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [751, 77]}}
+{"name": "click", "arguments": {"action": "click", "coordinate": [751, 396]}}

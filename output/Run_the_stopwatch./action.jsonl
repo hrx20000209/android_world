@@ -1,0 +1,4 @@
+{"name": "mobile_use", "arguments": {"action": "open", "text": "Clock"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [701, 930]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [500, 820]}}
+{"name": "mobile_use", "arguments": {"action": "terminate", "status": "success", "response": "The stopwatch is now running."}}

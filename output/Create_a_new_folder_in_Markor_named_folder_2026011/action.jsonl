@@ -1,0 +1,5 @@
+{"name": "mobile_use", "arguments": {"action": "open", "text": "Markor"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [892, 868]}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "folder_20260112_120203"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [156, 668]}}
+{"name": "mobile_use", "arguments": {"action": "terminate", "status": "success"}}

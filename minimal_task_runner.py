@@ -108,8 +108,8 @@ def _main() -> None:
     # agent = t3a.T3A(env, infer.Gpt4Wrapper('gpt-4.1'))
     # agent = t3a.T3A(env, infer.DeepseekWrapper())
     # agent = m3a.M3A(env, infer.DeepseekWrapper())
-    # agent = m3a.M3A(env, infer.LlamaCppWrapper())
-    agent = t3a.T3A(env, infer.LlamaCppTextWrapper())
+    agent = m3a.M3A(env, infer.LlamaCppWrapper())
+    # agent = t3a.T3A(env, infer.LlamaCppTextWrapper())
 
     print('Goal: ' + str(task.goal))
     is_done = False

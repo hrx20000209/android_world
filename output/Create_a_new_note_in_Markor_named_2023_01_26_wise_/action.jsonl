@@ -1,0 +1,16 @@
+{"name": "mobile_use", "arguments": {"action": "open", "text": "Markor"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [892, 866]}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "2023_01_26_wise_yacht"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [853, 668]}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "Ignorance is bliss."}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [655, 77], "explain": "Click the save icon to save the note."}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [655, 77]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [655, 77]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [655, 77]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [655, 77]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [655, 77]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [655, 77]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [655, 77]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [655, 77]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [655, 77]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [655, 77]}}

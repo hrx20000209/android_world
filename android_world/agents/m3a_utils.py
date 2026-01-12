@@ -19,7 +19,7 @@ import base64
 import json
 import math
 import re
-from typing import Any, Optional
+from typing import Any, Optional, Tuple, Union
 from android_world.env import representation_utils
 import cv2
 import numpy as np
@@ -272,6 +272,52 @@ def parse_reason_action_output(raw_reason_action_output: str, ) -> tuple[Optiona
             action = json.dumps(extracted)
 
     return reason, action
+
+
+def parse_thought_action_output(
+    raw_output: Union[str, dict],
+) -> Tuple[Optional[str], Optional[str]]:
+    """
+    Parse LLM output to extract Thought and Action.
+
+    Supports:
+    - raw string
+    - OpenAI-style response dict
+    """
+
+    # 1. Extract text content
+    if isinstance(raw_output, dict):
+        try:
+            content = raw_output["choices"][0]["message"]["content"]
+        except Exception:
+            print("[DEBUG] Failed to extract content from raw_output dict")
+            return None, None
+    else:
+        content = raw_output
+
+    if not isinstance(content, str):
+        return None, None
+
+    # 2. Parse Thought
+    thought_match = re.search(
+        r"Thought:(.*?)(?:\nAction:|\Z)",
+        content,
+        flags=re.DOTALL,
+    )
+    thought = thought_match.group(1).strip() if thought_match else None
+
+    # 3. Parse Action
+    action_match = re.search(
+        r"Action:(.*)",
+        content,
+        flags=re.DOTALL,
+    )
+    action = action_match.group(1).strip() if action_match else None
+
+    print(f"[DEBUG] Thought: {thought}")
+    print(f"[DEBUG] Action: {action}")
+
+    return thought, action
 
 
 def extract_json(s: str) -> Optional[dict[str, Any]]:

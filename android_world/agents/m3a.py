@@ -77,6 +77,72 @@ PROMPT_PREFIX = (
     '- Wait for the screen to update: `{{"action_type": "wait"}}`\n'
 )
 
+
+FUSED_ACTION_SELECTION_PROMPT = """You are a GUI agent. You are given a task and your action history, 
+with screenshots. You need to perform the next action to complete the task.
+
+---
+
+## Output Format
+
+Thought: ...
+Action: {{...}}
+
+---
+
+## Action Space (JSON only)
+
+Click on an element:
+{{"action_type": "click", "index": <element_index>}}
+
+Long press on an element:
+{{"action_type": "long_press", "index": <element_index>}}
+
+Type text into a text field:
+{{"action_type": "input_text", "index": <element_index>, "text": "<text>"}}
+
+Scroll the screen or an element:
+{{"action_type": "scroll", "direction": "up|down|left|right"}}
+
+Open an app:
+{{"action_type": "open_app", "app_name": "<app_name>"}}
+
+Navigate:
+{{"action_type": "navigate_home"}}
+{{"action_type": "navigate_back"}}
+
+Finish the task:
+{{"action_type": "status", "goal_status": "complete"}}
+{{"action_type": "status", "goal_status": "infeasible"}}
+
+Answer a question:
+{{"action_type": "answer", "text": "<answer_text>"}}
+
+---
+
+## Note
+- Use English in `Thought` part.
+- Write a small plan and finally summarize your next action (with its target element) in one sentence in `Thought` part.
+
+---
+
+## User Task
+{goal}
+
+---
+
+## Action History
+{history}
+
+---
+
+## Guideline
+{guideline}
+
+"""
+
+
+
 GUIDANCE = (
     'Here are some useful guidelines you need to follow:\n'
     'General:\n'
@@ -145,6 +211,29 @@ GUIDANCE = (
     ' should try to select the best match by clicking the corresponding one'
     ' in the list.\n'
 )
+
+
+EXTRA_UI_GUIDELINE = (
+    "- The screenshot may contain text, icons, and layout cues that indicate "
+    "the function of UI elements. Use visual appearance and spatial context "
+    "to infer which element to interact with.\n"
+    "- Numeric indexes correspond to visible UI elements on the screen. "
+    "Choose an index only if you can clearly see and identify the element "
+    "in the screenshot.\n"
+    "- Do not assume the function of an element unless it is visually evident "
+    "from the screen.\n"
+    "\n"
+    # === Failure-aware behavior (IMPORTANT) ===
+    "- If your previous action does not change the screen or does not make progress, "
+    "you MUST try a different type of action.\n"
+    "- Do NOT repeat the same action with the same parameters if the screen remains unchanged.\n"
+    "- If scrolling does not help, prefer system navigation actions such as "
+    "`navigate_back` or `navigate_home`.\n"
+    "- When stuck, avoid gesture-based actions and switch to explicit navigation "
+    "or app-level actions.\n"
+)
+
+
 
 ACTION_SELECTION_PROMPT_TEMPLATE = (
         PROMPT_PREFIX
@@ -279,7 +368,7 @@ def _action_selection_prompt(
     additional_guidelines: Task specific guidelines.
 
   Returns:
-    The text prompt for action selection that will be sent to gpt4v.
+    The text prompt for action selection that will be sent to gpt-4v.
   """
     if history:
         history = '\n'.join(history)
@@ -292,11 +381,16 @@ def _action_selection_prompt(
         for guideline in additional_guidelines:
             extra_guidelines += f'- {guideline}\n'
 
-    return ACTION_SELECTION_PROMPT_TEMPLATE.format(
+    # return ACTION_SELECTION_PROMPT_TEMPLATE.format(
+    #     goal=goal,
+    #     history=history,
+    #     ui_elements=ui_elements if ui_elements else 'Not available',
+    #     additional_guidelines=extra_guidelines,
+    # )
+    return FUSED_ACTION_SELECTION_PROMPT.format(
         goal=goal,
         history=history,
-        ui_elements=ui_elements if ui_elements else 'Not available',
-        additional_guidelines=extra_guidelines,
+        guideline=EXTRA_UI_GUIDELINE,
     )
 
 
@@ -317,7 +411,7 @@ def _summarize_prompt(
     after_elements: Information for UI elements on the after screenshot.
 
   Returns:
-    The text prompt for summarization that will be sent to gpt4v.
+    The text prompt for summarization that will be sent to gpt-4v.
   """
     return SUMMARY_PROMPT_TEMPLATE.format(
         goal=goal,
@@ -409,19 +503,21 @@ class M3A(base_agent.EnvironmentInteractingAgent):
                 'Step ' + str(i + 1) + '- ' + step_info['summary']
                 for i, step_info in enumerate(self.history)
             ],
-            before_ui_elements_list,
+            # before_ui_elements_list,
             self.additional_guidelines,
         )
+        # print(f"XML: {before_ui_elements_list}")
+
         step_data['action_prompt'] = action_prompt
         action_output, is_safe, raw_response = self.llm.predict_mm(
             action_prompt,
             [
                 step_data['raw_screenshot'],
-                before_screenshot,
+                # before_screenshot,
             ],
         )
 
-        if is_safe == False:  # pylint: disable=singleton-comparison
+        if not is_safe:  # pylint: disable=singleton-comparison
             #  is_safe could be None
             action_output = f"""Reason: {m3a_utils.TRIGGER_SAFETY_CLASSIFIER}
 Action: {{"action_type": "status", "goal_status": "infeasible"}}"""
@@ -431,10 +527,17 @@ Action: {{"action_type": "status", "goal_status": "infeasible"}}"""
         step_data['action_output'] = action_output
         step_data['action_raw_response'] = raw_response
 
-        reason, action = m3a_utils.parse_reason_action_output(action_output)
+        print(f"Raw Output: {raw_response}")
+
+        # reason, action = m3a_utils.parse_reason_action_output(action_output)
+
+        reason, action = m3a_utils.parse_thought_action_output(action_output)
 
         # If the output is not in the right format, add it to step summary which
         # will be passed to next step and return.
+
+        # print(f"[DEBUG] m3a.py Reason: {reason}, Action: {action}")
+
         if (not reason) or (not action):
             logging.info('Action prompt output is not in the correct format.')
             step_data['summary'] = (
@@ -453,11 +556,32 @@ Action: {{"action_type": "status", "goal_status": "infeasible"}}"""
         step_data['action_reason'] = reason
 
         try:
-            converted_action = json_action.JSONAction(
-                **agent_utils.extract_json(action),
-            )
+            # converted_action = json_action.JSONAction(
+            #     **agent_utils.extract_json(action),
+            # )
+            action_dict = agent_utils.extract_json(action)
+
+            if action_dict is None:
+                action_dict = agent_utils.parse_function_action(action)
+
+            # 1. 统一干掉坐标
+            action_dict = agent_utils.sanitize_coordinate_actions(action_dict)
+
+            # 2. click → 用 Thought 选 element
+            if action_dict["action_type"] == "click" and "index" not in action_dict:
+                idx = agent_utils.match_click_element(reason, before_ui_elements_list)
+                if idx is None:
+                    raise ValueError("Cannot find clickable element from thought")
+                action_dict["index"] = idx
+
+            if action_dict is None:
+                raise ValueError(f"Cannot parse action: {action}")
+
+            converted_action = json_action.JSONAction(**action_dict)
+
             step_data['action_output_json'] = converted_action
         except Exception as e:  # pylint: disable=broad-exception-caught
+            print(f'[DEBUG]: Error: {e}')
             logging.info('Failed to convert the output to a valid action.')
             logging.info(str(e))
             step_data['summary'] = (
@@ -472,13 +596,11 @@ Action: {{"action_type": "status", "goal_status": "infeasible"}}"""
                 step_data,
             )
 
+        print(f"[DEBUG] converted action: {converted_action}")
+
         action_index = converted_action.index
         num_ui_elements = len(before_ui_elements)
-        if (
-                converted_action.action_type
-                in ['click', 'long_press', 'input_text', 'scroll']
-                and action_index is not None
-        ):
+        if converted_action.action_type in ['click', 'long_press', 'input_text', 'scroll'] and action_index is not None:
             if action_index >= num_ui_elements:
                 logging.info(
                     'Index out of range, prediction index is %s, but the'
@@ -573,7 +695,7 @@ Action: {{"action_type": "status", "goal_status": "infeasible"}}"""
             ],
         )
 
-        if is_safe == False:  # pylint: disable=singleton-comparison
+        if not is_safe:  # pylint: disable=singleton-comparison
             #  is_safe could be None
             summary = """Summary triggered LLM safety classifier."""
 

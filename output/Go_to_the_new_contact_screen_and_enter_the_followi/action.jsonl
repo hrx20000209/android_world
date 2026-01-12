@@ -1,0 +1,10 @@
+{"name": "mobile_use", "arguments": {"action": "open", "text": "Contacts"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [872, 840]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [498, 448]}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "Grace"}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "Taylor"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [420, 699]}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "799-802-1530"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [459, 778]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [193, 340]}}
+{"name": "mobile_use", "arguments": {"action": "COMPLETE", "value": "I have entered the contact details as requested: First Name: Grace, Last Name: Taylor, Phone: 799-802-1530, Phone Label: Work. The contact has not been saved as instructed."}}

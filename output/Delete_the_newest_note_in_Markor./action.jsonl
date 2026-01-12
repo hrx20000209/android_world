@@ -1,0 +1,5 @@
+{"name": "mobile_use", "arguments": {"action": "open", "text": "Markor"}}
+{"name": "long_press", "coordinate": [375, 197], "explain": "Long-press the newest note to select it for deletion."}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [853, 76], "explain": "Tap the trash can icon at the top right corner to delete the selected note."}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [853, 560]}}
+{"name": "mobile_use", "arguments": {"action": "terminate", "status": "success"}}

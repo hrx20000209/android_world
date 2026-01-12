@@ -1,0 +1,10 @@
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [868, 926]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [500, 832]}}
+{"name": "mobile_use", "arguments": {"action": "system_button", "button": "back"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [500, 832]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [689, 815], "explain": "I need to click the 'Try again' button to dismiss the error message and continue with the task of taking a photo."}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [687, 815], "explain": "I need to click the 'Try again' button to dismiss the error message and return to the camera interface."}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [687, 815], "explain": "Click the Try again button."}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [687, 815]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [687, 815]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [687, 815]}}

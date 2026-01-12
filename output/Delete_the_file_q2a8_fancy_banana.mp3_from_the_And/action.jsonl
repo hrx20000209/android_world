@@ -1,0 +1,22 @@
+{"name": "mobile_use", "arguments": {"action": "open", "text": "Files"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [67, 72], "explain": "I need to click the menu icon to open the navigation drawer, which will allow me to select the correct storage area and navigate to the Notifications folder."}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [329, 543], "explain": "Click sdk_gphone64_arm64 to display the contents."}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [261, 559]}}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "down", "coordinate": [500, 500], "explain": "I need to scroll down to find the file 'q2a8_fancy_banana.mp3' which is not currently visible on the screen."}}
+{"action": "swipe", "direction": "down", "coordinate": [500, 100], "explain": "I need to close the quick settings panel to return to the file manager and continue with the task of deleting the file."}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "down", "coordinate": [500, 100]}}
+{"action": "swipe", "direction": "down", "coordinate": [500, 100], "explain": "I need to close the quick settings panel to return to the file manager and continue with the task of deleting the file."}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "down", "coordinate": [500, 100]}}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "down", "coordinate": [500, 100]}}
+{"action": "swipe", "direction": "up", "coordinate": [500, 743], "explain": "I need to close the quick settings panel to return to the file manager and continue with the task of deleting the file."}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "down", "coordinate": [500, 100]}}
+{"action": "swipe", "direction": "down", "coordinate": [500, 100], "explain": "I need to close the quick settings panel to return to the file manager and continue with the task of deleting the file."}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "down", "coordinate": [500, 100]}}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "down", "coordinate": [500, 100]}}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "down", "coordinate": [500, 100]}}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "down", "coordinate": [500, 100]}}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "down", "coordinate": [500, 100]}}
+{"action": "swipe", "direction": "down", "coordinate": [500, 100], "explain": "I need to close the quick settings panel to return to the file manager and continue with the task of deleting the file."}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "down", "coordinate": [500, 100]}}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "down", "coordinate": [500, 100]}}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "down", "coordinate": [500, 100]}}

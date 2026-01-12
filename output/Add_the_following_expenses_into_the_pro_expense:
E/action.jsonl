@@ -1,0 +1,12 @@
+{"name": "mobile_use", "arguments": {"action": "open", "text": "Pro Expense"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [892, 912]}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "Therapy Sessions"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [500, 267]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [500, 267]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [500, 267]}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "307.01"}}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "left", "coordinate": [842, 337], "explain": "Swipe left on the category list to find the 'Health Care' category."}}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "left", "coordinate": [842, 337], "explain": "Swipe left on the category list to find the 'Health Care' category."}}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "left", "coordinate": [842, 337], "explain": "Swipe left to find the 'Health Care' category."}}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "left", "coordinate": [842, 337], "explain": "Swipe left on the category list to find the 'Health Care' category."}}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "left", "coordinate": [842, 337], "explain": "Swipe left on the category list to find the 'Health Care' category."}}

@@ -1,0 +1,5 @@
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "up", "coordinate": [500, 743], "explain": "I need to open the app drawer to find the Contacts app, so I will swipe up from the bottom of the screen."}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [616, 731]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [168, 942]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [300, 82]}}
+{"name": "mobile_use", "arguments": {"action": "terminate", "status": "success"}}

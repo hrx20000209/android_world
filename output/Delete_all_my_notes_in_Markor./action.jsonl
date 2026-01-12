@@ -1,0 +1,7 @@
+{"name": "mobile_use", "arguments": {"action": "open", "text": "Markor"}}
+{"name": "mobile_use", "arguments": {"action": "long_press", "coordinate": [500, 191]}}
+{"name": "mobile_use", "arguments": {"action": "long_press", "coordinate": [500, 257]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [500, 317]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [853, 76], "explain": "Tap the delete icon at the top right corner to delete the selected notes."}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [853, 615]}}
+{"name": "mobile_use", "arguments": {"action": "terminate", "status": "success", "summary": "Successfully deleted all notes in Markor. The app's main screen is now empty."}}

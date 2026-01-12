@@ -749,7 +749,7 @@ def launch_app(
 
     activity = get_adb_activity(app_name)
     if activity is None:
-        if app_name == "File Manager":
+        if app_name == "File Manager" or app_name == "file manager":
             app_name = "com.google.android.documentsui"
         #  If the app name is not in the mapping, assume it is a package name.
         response = issue_generic_request(

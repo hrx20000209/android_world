@@ -1,0 +1,5 @@
+{"name": "mobile_use", "arguments": {"action": "open", "text": "Markor"}}
+{"name": "long_press", "coordinate": [323, 195], "explain": "Long press on the bold_king_edited note to select it for deletion."}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [853, 76], "explain": "Tap on the trash bin icon at the top right corner to delete the selected note."}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [853, 560]}}
+{"name": "mobile_use", "arguments": {"action": "terminate", "status": "success", "response": "The note named bold_king_edited has been successfully deleted."}}

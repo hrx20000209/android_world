@@ -1,0 +1,18 @@
+{"name": "mobile_use", "arguments": {"action": "open", "text": "Simple Gallery Pro"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [250, 266]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [161, 191]}}
+{"name": "mobile_use", "arguments": {"action": "system_button", "button": "home"}}
+{"name": "mobile_use", "arguments": {"action": "open", "text": "Markor"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [892, 866]}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "receipt"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [853, 668]}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "Date,Item,Amount"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [100, 140]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [100, 140]}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "2024-05-20,Shoes,99.99"}}
+{"name": "long_press", "arguments": {"action": "click", "coordinate": [500, 140]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [100, 140]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [100, 140]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [100, 140]}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": ","}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [655, 76]}}

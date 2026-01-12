@@ -1,0 +1,7 @@
+{"name": "mobile_use", "arguments": {"action": "open", "text": "Pro Expense"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [67, 77], "explain": "I need to open the main menu to find the full list of expenses, which is necessary for identifying and deleting duplicates."}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [355, 313]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [337, 615]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [897, 694]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [500, 930]}}
+{"name": "mobile_use", "arguments": {"action": "terminate", "status": "success"}}

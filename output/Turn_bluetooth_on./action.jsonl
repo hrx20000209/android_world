@@ -1,0 +1,2 @@
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "down", "coordinate": [500, 743], "explain": "I need to swipe down from the top of the screen to open the notification shade and access the quick settings panel, where I can find the Bluetooth toggle."}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [692, 79]}}

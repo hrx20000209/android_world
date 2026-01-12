@@ -1,0 +1,20 @@
+{"name": "open", "arguments": {"app_name": "Files", "text": "Files"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [67, 72], "explain": "I need to click the menu icon to open the navigation drawer, which will allow me to browse to the correct storage location and find the source folder for the file I need to move."}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [305, 543]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [255, 622]}}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "down", "coordinate": [500, 818], "explain": "I need to scroll down to find the 'holiday_photos.jpg' file in the current folder."}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [500, 804]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [500, 804]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [500, 804]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [500, 804]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [500, 804]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [500, 804]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [500, 804]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [500, 804]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [500, 804]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [500, 804]}}
+{"name": "mobile_use", "arguments": {"action": "system_button", "button": "HOME"}}
+{"name": "mobile_use", "arguments": {"action": "open", "text": "Files"}}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "down", "coordinate": [500, 804], "explain": "I need to scroll down to find the 'holiday_photos.jpg' file in the Podcasts folder."}}
+{"name": "mobile_use", "arguments": {"action": "open", "value": "Files", "explain": "I need to open the Files app to access the file system and begin the process of moving the specified file."}}
+{"name": "mobile_use", "arguments": {"action": "open", "value": "Files", "explain": "I need to open the Files app to access the file system and begin the process of moving the specified file."}}

@@ -1,0 +1,8 @@
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "down", "coordinate": [500, 7], "explain": "I need to swipe down from the top of the screen to open the quick settings panel, which contains the Wi-Fi toggle."}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [213, 79]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [802, 507]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [802, 430]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [802, 507]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [802, 430]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [802, 507]}}
+{"name": "mobile_use", "arguments": {"action": "terminate", "status": "success"}}

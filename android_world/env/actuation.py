@@ -172,15 +172,15 @@ def execute_adb_action(
         direction = action.direction
         if direction == 'down':
             start_x, start_y = mid_x, 0
-            end_x, end_y = mid_x, screen_height
+            end_x, end_y = mid_x, screen_height // 2
         elif direction == 'up':
-            start_x, start_y = mid_x, screen_height
+            start_x, start_y = mid_x, screen_height // 2
             end_x, end_y = mid_x, 0
         elif direction == 'left':
             start_x, start_y = 0, mid_y
-            end_x, end_y = screen_width, mid_y
+            end_x, end_y = screen_width // 2, mid_y
         elif direction == 'right':
-            start_x, start_y = screen_width, mid_y
+            start_x, start_y = screen_width // 2, mid_y
             end_x, end_y = 0, mid_y
         else:
             print('Invalid direction')
@@ -188,6 +188,7 @@ def execute_adb_action(
         command = adb_utils.generate_swipe_command(
             int(start_x), int(start_y), int(end_x), int(end_y), 500
         )
+        print(f"[DEBUG] command: {command}")
         adb_utils.issue_generic_request(command, env)
 
     elif action.action_type == 'open_app':

@@ -29,13 +29,7 @@ from absl import logging
 from android_world import checkpointer as checkpointer_lib
 from android_world import registry
 from android_world import suite_utils
-from android_world.agents import base_agent
-from android_world.agents import human_agent
-from android_world.agents import infer
-from android_world.agents import m3a
-from android_world.agents import random_agent
-from android_world.agents import seeact
-from android_world.agents import t3a
+from android_world.agents import base_agent, human_agent, infer, m3a, random_agent, seeact, t3a, mai_ui
 from android_world.env import env_launcher
 from android_world.env import interface
 
@@ -100,9 +94,19 @@ _TASK_RANDOM_SEED = flags.DEFINE_integer(
     'task_random_seed', 30, 'Random seed for task randomness.'
 )
 
+selected_tasks = ("AudioRecorderRecordAudio, AudioRecorderRecordAudioWithFileName, BrowserDraw, BrowserMaze, "
+                  "BrowserMultiply, CameraTakePhoto, CameraTakeVideo, ClockStopWatchPausedVerify, "
+                  "ClockStopWatchRunning, ClockTimerEntry, ContactsAddContact, ContactsNewContactDraft, "
+                  "ExpenseAddSingle, ExpenseDeleteSingle, ExpenseDeleteDuplicates, ExpenseDeleteMultiple, "
+                  "FilesDeleteFile, FilesMoveFile, MarkorAddNoteHeader, MarkorChangeNoteContent, MarkorCreateFolder, "
+                  "MarkorCreateNote, MarkorDeleteAllNotes, MarkorDeleteNewestNote, MarkorDeleteNote, MarkorEditNote, "
+                  "MarkorMoveNote, MarkorTranscribeReceipt, OpenAppTaskEval, OsmAndFavorite, SystemBluetoothTurnOff, "
+                  "SystemBluetoothTurnOn, SystemWifiTurnOff, SystemWifiTurnOn")
+# selected_tasks = ("SystemWifiTurnOff")
+
 _TASKS = flags.DEFINE_list(
     'tasks',
-    None,
+    selected_tasks,
     'List of specific tasks to run in the given suite family. If None, run all'
     ' tasks in the suite family.',
 )
@@ -128,7 +132,9 @@ _OUTPUT_PATH = flags.DEFINE_string(
 )
 
 # Agent specific.
-_AGENT_NAME = flags.DEFINE_string('agent_name', 't3a_llamacpp', help='Agent name.')
+_AGENT_NAME = flags.DEFINE_string('agent_name', 'mai-ui', help='Agent name.')
+
+# m3a_llamacpp, t3a_llamacpp, mai-ui
 
 _FIXED_TASK_SEED = flags.DEFINE_boolean(
     'fixed_task_seed',
@@ -181,23 +187,42 @@ def _get_agent(
     elif _AGENT_NAME.value == 'deepseek':
         agent = t3a.T3A(env, infer.DeepseekWrapper())
     # UI-TARS.
-    elif _AGENT_NAME.value == 'm3a_llamacpp':
-        agent = m3a.M3A(
+    elif _AGENT_NAME.value == 'mai-ui':
+        # agent = m3a.M3A(
+        #     env,
+        #     infer.LlamaCppWrapper(
+        #         api_url="http://localhost:8081/v1/chat/completions",
+        #         temperature=0.0,
+        #         max_tokens=512,
+        #     ),
+        # )
+        agent = mai_ui.MAIUIAgent(
             env,
             infer.LlamaCppWrapper(
                 api_url="http://localhost:8081/v1/chat/completions",
                 temperature=0.0,
                 max_tokens=512,
             ),
+            "qwen-vl",
+            output_path="./output"
         )
     elif _AGENT_NAME.value == 't3a_llamacpp':
         agent = t3a.T3A(
             env,
             infer.LlamaCppTextWrapper(
                 api_url="http://localhost:8080/v1/chat/completions",
-                temperature=0.0,
-                max_tokens=512,
+                temperature=1.0,
+                max_tokens=2048,
             ),
+        )
+    elif _AGENT_NAME.value == 'm3a_llamacpp':
+        agent = m3a.M3A(
+            env,
+            infer.LlamaCppWrapper(
+                api_url="http://localhost:8081/v1/chat/completions",
+                temperature=1.0,
+                max_tokens=512,
+            )
         )
 
     if not agent:

@@ -406,7 +406,7 @@ class LlamaCppWrapper(LlmWrapper, MultimodalLlmWrapper):
             api_url: str = "http://localhost:8081/v1/chat/completions",
             max_retry: int = 3,
             temperature: float = 0.0,
-            max_tokens: int = 200,
+            max_tokens: int = 16384,
     ):
         self.api_url = api_url
         self.temperature = temperature
@@ -419,40 +419,17 @@ class LlamaCppWrapper(LlmWrapper, MultimodalLlmWrapper):
         b64 = base64.b64encode(array_to_jpeg_bytes(image)).decode("utf-8")
         return f"data:image/jpeg;base64,{b64}"
 
-    def predict(
-            self,
-            text_prompt: str,
-    ) -> tuple[str, Optional[bool], Any]:
-        # text-only fallback
-        return self.predict_mm(text_prompt, [])
-
-    def predict_mm(
-            self,
-            text_prompt: str,
-            images: list[np.ndarray],
-    ) -> tuple[str, Optional[bool], Any]:
+    def call_llama(self, messages):
         headers = {"Content-Type": "application/json"}
-
-        # 构造 OpenAI-compatible message
-        content = [{"type": "text", "text": text_prompt}]
-
-        for image in images:
-            content.append({
-                "type": "image_url",
-                "image_url": {
-                    "url": self.encode_image(image)
-                },
-            })
-
         payload = {
-            "messages": [
-                {
-                    "role": "user",
-                    "content": content,
-                }
-            ],
-            "temperature": self.temperature,
-            "max_tokens": self.max_tokens,
+            "messages": messages,
+            # "temperature": self.temperature,
+            # "max_tokens": self.max_tokens,
+            "history_n": 3,
+            "temperature": 0.0,
+            "top_k": -1,
+            "top_p": 1.0,
+            "max_tokens": 2048,
             "stream": False,
         }
 
@@ -461,34 +438,58 @@ class LlamaCppWrapper(LlmWrapper, MultimodalLlmWrapper):
 
         while counter > 0:
             try:
-                response = requests.post(
+                resp = requests.post(
                     self.api_url,
                     headers=headers,
                     json=payload,
-                    timeout=60,
+                    timeout=180,
                 )
-
-                if response.status_code != 200:
-                    print("[LlamaCppWrapper] Server error:", response.text)
+                if resp.status_code != 200:
+                    print("[LlamaCppWrapper] Server error:", resp.text)
                     counter -= 1
                     time.sleep(wait)
                     wait *= 2
                     continue
 
-                js = response.json()
-                return (
-                    js["choices"][0]["message"]["content"],
-                    True,  # llama.cpp 无 safety signal
-                    js,
-                )
+                js = resp.json()
+                return js["choices"][0]["message"]["content"], True, js
 
             except Exception as e:
-                print("[LlamaCppWrapper] Error calling llama.cpp:", e)
+                print("[LlamaCppWrapper] llama.cpp error:", e)
                 counter -= 1
                 time.sleep(wait)
                 wait *= 2
 
         return ERROR_CALLING_LLM, None, None
+
+    def predict(self, text_prompt):
+        # fallback to text-only mode
+        messages = [
+            {"role": "user", "content": [{"type": "text", "text": text_prompt}]}
+        ]
+        return self.call_llama(messages)
+
+    def predict_mm(self, text_prompt, images, messages=None):
+        """
+        AndroidWorld-compatible interface
+        Case A: messages provided  -> pass-through (recommended)
+        Case B: fallback -> build from (text_prompt, images)
+        """
+
+        # ---------- Case A: new pipeline  ----------
+        if messages is not None:
+            return self.call_llama(messages)
+
+        # ---------- Case B: legacy behavior ----------
+        content = [{"type": "text", "text": text_prompt}]
+        for img in images:
+            content.append({
+                "type": "image_url",
+                "image_url": {"url": self.encode_image(img)},
+            })
+
+        messages = [{"role": "user", "content": content}]
+        return self.call_llama(messages)
 
 
 class LlamaCppTextWrapper(LlmWrapper):

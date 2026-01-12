@@ -340,7 +340,7 @@ class T3A(base_agent.EnvironmentInteractingAgent):
         )
 
         print(f"[DEBUG] raw response: {raw_response}")
-        # print(f"[DEBUG] action_output: {action_output}")
+        print(f"[DEBUG] action_output: {action_output}")
 
         if not is_safe:  # pylint: disable=singleton-comparison
             #  is_safe could be None

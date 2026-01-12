@@ -1,0 +1,5 @@
+{"name": "mobile_use", "arguments": {"action": "open", "text": "Markor"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [892, 864]}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "folder_20260109_234206"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [156, 665]}}
+{"name": "mobile_use", "arguments": {"action": "terminate", "status": "success", "response": "The folder named folder_20260109_234206 has been successfully created in Markor."}}

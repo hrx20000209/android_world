@@ -1,0 +1,10 @@
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [868, 926]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [882, 20], "explain": "I need to click the video camera icon to switch from the current Google Lens mode to the video recording mode."}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [67, 77]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [868, 926]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [882, 20]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [67, 77]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [868, 926]}}
+{"name": "mobile_use", "arguments": {"action": "system_button", "button": "back"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [868, 926]}}
+{"name": "mobile_use", "arguments": {"action": "system_button", "button": "back"}}

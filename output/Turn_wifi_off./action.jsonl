@@ -1,0 +1,4 @@
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "down", "coordinate": [500, 7], "explain": "Swipe down from the top of the screen to open the quick settings panel."}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [213, 79]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [802, 431]}}
+{"name": "mobile_use", "arguments": {"action": "terminate", "status": "success"}}

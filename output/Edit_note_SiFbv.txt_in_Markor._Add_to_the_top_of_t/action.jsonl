@@ -1,0 +1,9 @@
+{"name": "mobile_use", "arguments": {"action": "open", "text": "Markor"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [500, 402]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [10, 137]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [27, 137]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [10, 137]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [24, 137]}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "Hello, World!"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [655, 77], "explain": "Click the save icon to save the note."}}
+{"name": "mobile_use", "arguments": {"action": "COMPLETE", "value": "task completed"}}
