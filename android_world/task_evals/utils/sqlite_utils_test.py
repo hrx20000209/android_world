@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import os
-import sqlite3
+import pysqlite3 as sqlite3
 from unittest import mock
 
 from absl.testing import absltest

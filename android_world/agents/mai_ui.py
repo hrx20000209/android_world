@@ -152,16 +152,16 @@ def safe_json_loads(s: str):
 
         return [-1, -1]  # fallback，不算有效坐标
 
-    name  = extract(r'"name"\s*:\s*"([^"]+)"', "mobile_use")
-    act   = extract(r'"action"\s*:\s*"([^"]+)"', "click")
-    text  = extract(r'"text"\s*:\s*"([^"]*)"')
+    name = extract(r'"name"\s*:\s*"([^"]+)"', "mobile_use")
+    act = extract(r'"action"\s*:\s*"([^"]+)"', "click")
+    text = extract(r'"text"\s*:\s*"([^"]*)"')
     button = extract(r'"button"\s*:\s*"([^"]+)"')
     direction = extract(r'"direction"\s*:\s*"([^"]+)"')
 
     args = {"action": act}
 
     # ---------- click / long_press ----------
-    if act in ("click", "long_press"):
+    if act in ("click", "long_press", "tap"):
         args["coordinate"] = extract_coord("coordinate")
 
     # ---------- type ----------
@@ -183,6 +183,10 @@ def safe_json_loads(s: str):
     # ---------- system button ----------
     elif act == "system_button":
         args["button"] = button or "back"
+
+    elif act == "back":
+        args["action"] = "system_button"
+        args["button"] = "back"
 
     # ---------- answer ----------
     elif act == "answer":
@@ -210,11 +214,11 @@ def pil_to_base64(image):
     return base64.b64encode(buffer.getvalue()).decode("utf-8")
 
 
-def fetch_resized_image(screenshot_file):
+def fetch_resized_image(screenshot_file, scale=1):
     screenshot = Image.open(screenshot_file)
     width, height = screenshot.size
     current_image_ele = update_image_size_(
-        {"image": screenshot_file, "width": width, "height": height}
+        {"image": screenshot_file, "width": width // scale, "height": height // scale}
     )
     resized_width = current_image_ele["resized_width"]
     resized_height = current_image_ele["resized_height"]
@@ -456,6 +460,8 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
             "action_description": None,
         }
 
+        start_time = time.time()
+
         step_idx = len(self._screenshots)
         state = self.get_post_transition_state()
         result["ui_elements"] = state.ui_elements
@@ -501,14 +507,32 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
                     + "; "
                 )
 
+        scale = 1
+
         screenshot, resized_width, resized_height, current_image_ele = fetch_resized_image(
-            screenshot_file
+            screenshot_file, scale
         )
 
-        print("[DEBUG] resize→abs mapping test", resized_width, resized_height, current_image_ele)
+        # ===== Save resized screenshot =====
+        # screenshot_file like ".../screenshot_12.png"
+        # -> resized file ".../screenshot_resized_12.png"
+        resized_screenshot_file = re.sub(
+            r"screenshot_(\d+)\.png$",
+            r"screenshot_resized_\1.png",
+            screenshot_file,
+        )
+
+        # fallback (in case path format is unexpected)
+        if resized_screenshot_file == screenshot_file:
+            resized_screenshot_file = screenshot_file.replace(
+                ".png", f"_resized_scale{scale}.png"
+            )
+
+        screenshot.save(resized_screenshot_file)
+        print(f"[DEBUG] resized screenshot saved to: {resized_screenshot_file}, size: {resized_width, resized_height}")
 
         # Build messages for MAI-UI-2B
-        messages = build_mai_messages(goal, stage2_history, screenshot_file)
+        messages = build_mai_messages(goal, stage2_history, resized_screenshot_file)
 
         # Call model
         action_response, _, _ = self.vllm.predict_mm(
@@ -550,6 +574,7 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
                     current_image_ele,
                     src_format=self.src_format,
                     tgt_format="abs_origin",
+                    scale=scale
                 )
             )
 
@@ -640,6 +665,9 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
                 for item in self._actions:
                     json_line = json.dumps(item, ensure_ascii=False)
                     f.write(json_line + "\n")
+
+        end_time = time.time()
+        print(f"[INFO] Step Latency: {end_time - start_time:.2f} seconds")
 
         return base_agent.AgentInteractionResult(
             done=action.action_type == json_action.STATUS,

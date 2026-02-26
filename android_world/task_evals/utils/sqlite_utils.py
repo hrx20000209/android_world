@@ -15,7 +15,7 @@
 """Utility functions for interacting with SQLite database on an Android device."""
 
 import os
-import sqlite3
+import pysqlite3 as sqlite3
 import time
 from typing import Optional, Type
 from android_world.env import adb_utils
@@ -25,9 +25,9 @@ from android_world.utils import file_utils
 
 
 def execute_query(
-    query: str, db_path: str, row_type: Type[sqlite_schema_utils.RowType]
+        query: str, db_path: str, row_type: Type[sqlite_schema_utils.RowType]
 ) -> list[sqlite_schema_utils.RowType]:
-  """Retrieves all rows from the given SQLite database path.
+    """Retrieves all rows from the given SQLite database path.
 
   Args:
     query: The query to issue.
@@ -37,28 +37,32 @@ def execute_query(
   Returns:
       A list of tuples, each representing an row from the database.
   """
-  conn = sqlite3.connect(db_path)
-  conn.row_factory = sqlite3.Row
-  cursor = conn.cursor()
-  raw_rows = cursor.execute(query).fetchall()
-  conn.close()
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    raw_rows = cursor.execute(query).fetchall()
+    conn.close()
 
-  rows = []
-  for row in raw_rows:
-    row = dict(row)
-    rows.append(row_type(**row))  # pytype: disable=bad-return-type
-  return rows
+    rows = []
+    for row in raw_rows:
+        row = dict(row)
+        import dataclasses
+
+        valid = {f.name for f in dataclasses.fields(row_type)}
+        row = {k: v for k, v in row.items() if k in valid}
+        rows.append(row_type(**row))  # pytype: disable=bad-return-type
+    return rows
 
 
 def get_rows_from_remote_device(
-    table_name: str,
-    remote_db_file_path: str,
-    row_type: Type[sqlite_schema_utils.RowType],
-    env: interface.AsyncEnv,
-    timeout_sec: Optional[float] = None,
-    n_retries: int = 3,
+        table_name: str,
+        remote_db_file_path: str,
+        row_type: Type[sqlite_schema_utils.RowType],
+        env: interface.AsyncEnv,
+        timeout_sec: Optional[float] = None,
+        n_retries: int = 3,
 ) -> list[sqlite_schema_utils.RowType]:
-  """Retrieves rows from a table in a SQLite database located on a remote Android device.
+    """Retrieves rows from a table in a SQLite database located on a remote Android device.
 
   This function first copies the database from the remote device to a
   temporary local directory.
@@ -81,34 +85,34 @@ def get_rows_from_remote_device(
   Raises:
     ValueError: If cannot query table.
   """
-  with env.controller.pull_file(
-      remote_db_file_path, timeout_sec
-  ) as local_db_directory:
-    local_db_path = file_utils.convert_to_posix_path(
-        local_db_directory, os.path.split(remote_db_file_path)[1]
-    )
-    for _ in range(n_retries):
-      try:
-        return execute_query(
-            f"SELECT * FROM {table_name};",
-            local_db_path,
-            row_type,
+    with env.controller.pull_file(
+            remote_db_file_path, timeout_sec
+    ) as local_db_directory:
+        local_db_path = file_utils.convert_to_posix_path(
+            local_db_directory, os.path.split(remote_db_file_path)[1]
         )
-      except sqlite3.OperationalError:
-        time.sleep(1.0)
-  raise ValueError(
-      f"Failed to retrieve rows from {table_name} from"
-      f" {remote_db_file_path} after {n_retries} retries. Try increasing the "
-      "number of retries."
-  )
+        for _ in range(n_retries):
+            try:
+                return execute_query(
+                    f"SELECT * FROM {table_name};",
+                    local_db_path,
+                    row_type,
+                )
+            except sqlite3.OperationalError:
+                time.sleep(1.0)
+    raise ValueError(
+        f"Failed to retrieve rows from {table_name} from"
+        f" {remote_db_file_path} after {n_retries} retries. Try increasing the "
+        "number of retries."
+    )
 
 
 def table_exists(
-    table_name: str,
-    remote_db_file_path: str,
-    env: interface.AsyncEnv,
+        table_name: str,
+        remote_db_file_path: str,
+        env: interface.AsyncEnv,
 ) -> bool:
-  """Checks if a table exists in a SQLite database on a remote Android device.
+    """Checks if a table exists in a SQLite database on a remote Android device.
 
   Args:
     table_name: The name of the table from which to retrieve rows.
@@ -118,26 +122,26 @@ def table_exists(
   Returns:
     True if the table exists in the database.
   """
-  try:
-    get_rows_from_remote_device(
-        table_name,
-        remote_db_file_path,
-        sqlite_schema_utils.GenericRow,
-        env,
-    )
-    return True
-  except (FileNotFoundError, ValueError):
-    return False
+    try:
+        get_rows_from_remote_device(
+            table_name,
+            remote_db_file_path,
+            sqlite_schema_utils.GenericRow,
+            env,
+        )
+        return True
+    except (FileNotFoundError, ValueError):
+        return False
 
 
 def delete_all_rows_from_table(
-    table_name: str,
-    remote_db_file_path: str,
-    env: interface.AsyncEnv,
-    app_name: str,
-    timeout_sec: Optional[float] = None,
+        table_name: str,
+        remote_db_file_path: str,
+        env: interface.AsyncEnv,
+        app_name: str,
+        timeout_sec: Optional[float] = None,
 ) -> None:
-  """Deletes all rows from a specified table in a SQLite database on a remote Android device.
+    """Deletes all rows from a specified table in a SQLite database on a remote Android device.
 
   Args:
     table_name: Deletes all rows from the table.
@@ -146,40 +150,40 @@ def delete_all_rows_from_table(
     app_name: The name of the app that owns the database.
     timeout_sec: Timeout in seconds.
   """
-  if not table_exists(table_name, remote_db_file_path, env):
-    # If the database was never created, opening the app may create it.
-    adb_utils.launch_app(app_name, env.controller)
-    time.sleep(7.0)
+    if not table_exists(table_name, remote_db_file_path, env):
+        # If the database was never created, opening the app may create it.
+        adb_utils.launch_app(app_name, env.controller)
+        time.sleep(7.0)
 
-  with env.controller.pull_file(
-      remote_db_file_path, timeout_sec
-  ) as local_db_directory:
-    local_db_path = file_utils.convert_to_posix_path(
-        local_db_directory, os.path.split(remote_db_file_path)[1]
-    )
+    with env.controller.pull_file(
+            remote_db_file_path, timeout_sec
+    ) as local_db_directory:
+        local_db_path = file_utils.convert_to_posix_path(
+            local_db_directory, os.path.split(remote_db_file_path)[1]
+        )
 
-    conn = sqlite3.connect(local_db_path)
-    cursor = conn.cursor()
-    delete_command = f"DELETE FROM {table_name}"
-    cursor.execute(delete_command)
-    conn.commit()
-    conn.close()
-    env.controller.push_file(local_db_path, remote_db_file_path, timeout_sec)
-    adb_utils.close_app(
-        app_name, env.controller
-    )  # Close app to register the changes.
+        conn = sqlite3.connect(local_db_path)
+        cursor = conn.cursor()
+        delete_command = f"DELETE FROM {table_name}"
+        cursor.execute(delete_command)
+        conn.commit()
+        conn.close()
+        env.controller.push_file(local_db_path, remote_db_file_path, timeout_sec)
+        adb_utils.close_app(
+            app_name, env.controller
+        )  # Close app to register the changes.
 
 
 def insert_rows_to_remote_db(
-    rows: list[sqlite_schema_utils.RowType],
-    exclude_key: str | None,
-    table_name: str,
-    remote_db_file_path: str,
-    app_name: str,
-    env: interface.AsyncEnv,
-    timeout_sec: Optional[float] = None,
+        rows: list[sqlite_schema_utils.RowType],
+        exclude_key: str | None,
+        table_name: str,
+        remote_db_file_path: str,
+        app_name: str,
+        env: interface.AsyncEnv,
+        timeout_sec: Optional[float] = None,
 ) -> None:
-  """Inserts rows into a SQLite database located on a remote Android device.
+    """Inserts rows into a SQLite database located on a remote Android device.
 
   Args:
     rows: The rows to insert into the remote database.
@@ -191,22 +195,22 @@ def insert_rows_to_remote_db(
     env: The environment.
     timeout_sec: Optional timeout in seconds for the database copy operation.
   """
-  with env.controller.pull_file(
-      remote_db_file_path, timeout_sec
-  ) as local_db_directory:
-    local_db_path = file_utils.convert_to_posix_path(
-        local_db_directory, os.path.split(remote_db_file_path)[1]
-    )
+    with env.controller.pull_file(
+            remote_db_file_path, timeout_sec
+    ) as local_db_directory:
+        local_db_path = file_utils.convert_to_posix_path(
+            local_db_directory, os.path.split(remote_db_file_path)[1]
+        )
 
-    conn = sqlite3.connect(local_db_path)
-    cursor = conn.cursor()
-    for row in rows:
-      insert_command, values = sqlite_schema_utils.insert_into_db(
-          row, table_name, exclude_key
-      )
-      cursor.execute(insert_command, values)
-    conn.commit()
-    conn.close()
+        conn = sqlite3.connect(local_db_path)
+        cursor = conn.cursor()
+        for row in rows:
+            insert_command, values = sqlite_schema_utils.insert_into_db(
+                row, table_name, exclude_key
+            )
+            cursor.execute(insert_command, values)
+        conn.commit()
+        conn.close()
 
-    env.controller.push_file(local_db_path, remote_db_file_path, timeout_sec)
-    adb_utils.close_app(app_name, env.controller)
+        env.controller.push_file(local_db_path, remote_db_file_path, timeout_sec)
+        adb_utils.close_app(app_name, env.controller)

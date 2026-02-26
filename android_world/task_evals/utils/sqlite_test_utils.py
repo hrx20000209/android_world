@@ -14,7 +14,7 @@
 
 """Utils for testing database logic."""
 
-import sqlite3
+import pysqlite3 as sqlite3
 import tempfile
 
 from android_world.env import device_constants

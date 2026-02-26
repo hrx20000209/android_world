@@ -177,7 +177,7 @@ def build_system_messages(instruction, resized_width, resized_height, add_info='
 
 
 def convert_mobile_agent_action_to_json_action(
-        dummy_action, img_ele, src_format='abs_origin', tgt_format='abs_resized'
+        dummy_action, img_ele, src_format='abs_origin', tgt_format='abs_resized', scale=1
 ) -> json_action.JSONAction:
     """Converts a SeeActAction object to a JSONAction object.
 
@@ -197,6 +197,7 @@ def convert_mobile_agent_action_to_json_action(
 
     """
     action_type_mapping = {
+        "tap": json_action.CLICK,
         "CLICK": json_action.CLICK,
         "click": json_action.CLICK,
         "COMPLETE": json_action.STATUS,
@@ -205,6 +206,7 @@ def convert_mobile_agent_action_to_json_action(
         "long_press": json_action.LONG_PRESS,
         "type": json_action.INPUT_TEXT,
         "swipe": json_action.SWIPE,
+        "scroll": json_action.SWIPE,
         "slide": json_action.SWIPE,
         "wait": json_action.WAIT,
         "system_button": "system_button",
@@ -258,8 +260,9 @@ def convert_mobile_agent_action_to_json_action(
         direction = arguments['direction']
 
     elif action_type == json_action.CLICK:
+        print(f"[DEBUG] Click Action arguments: {arguments}")
         x, y = arguments['coordinate']
-        x, y = convert_point_format([x, y], img_ele, src_format=src_format, tgt_format=tgt_format)
+        x, y = convert_point_format([x, y], img_ele, src_format=src_format, tgt_format=tgt_format, scale=scale)
         dummy_action_translated['arguments']['coordinate'] = [x, y]
 
     elif action_type == json_action.LONG_PRESS:

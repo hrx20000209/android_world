@@ -14,7 +14,7 @@
 
 import dataclasses
 import os
-import sqlite3
+import pysqlite3 as sqlite3
 import tempfile
 from unittest import mock
 

@@ -340,7 +340,7 @@ class T3A(base_agent.EnvironmentInteractingAgent):
         )
 
         print(f"[DEBUG] raw response: {raw_response}")
-        print(f"[DEBUG] action_output: {action_output}")
+        # print(f"[DEBUG] action_output: {action_output}")
 
         if not is_safe:  # pylint: disable=singleton-comparison
             #  is_safe could be None
@@ -392,7 +392,9 @@ Action: {{"action_type": "status", "goal_status": "infeasible"}}"""
             )
 
         if converted_action.action_type in ['click', 'long-press', 'input-text']:
-            if converted_action.index is not None and converted_action.index >= len(ui_elements):
+            if converted_action.index is not None and converted_action.index >= len(
+                    ui_elements
+            ):
                 print('Index out of range.')
                 step_data['summary'] = (
                     'The parameter index is out of range. Remember the index must be in'

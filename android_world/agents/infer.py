@@ -442,7 +442,7 @@ class LlamaCppWrapper(LlmWrapper, MultimodalLlmWrapper):
                     self.api_url,
                     headers=headers,
                     json=payload,
-                    timeout=180,
+                    timeout=3000,
                 )
                 if resp.status_code != 200:
                     print("[LlamaCppWrapper] Server error:", resp.text)

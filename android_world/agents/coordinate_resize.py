@@ -190,7 +190,7 @@ def _convert_point_format_from_abs_origin(point, image_ele: dict, *, tgt_format:
     return new_point
 
 
-def _convert_point_format_to_abs_origin(point, image_ele: dict, *, src_format: str):
+def _convert_point_format_to_abs_origin(point, image_ele: dict, *, src_format: str, scale: int):
     x, y = point
     if src_format == "abs_origin":
         new_point = [int(x), int(y)]
@@ -201,8 +201,8 @@ def _convert_point_format_to_abs_origin(point, image_ele: dict, *, src_format: s
         ]
     elif src_format == "qwen-vl":
         new_point = [
-            int(x / 999 * image_ele["width"]),
-            int(y / 999 * image_ele["height"]),
+            int(x / 999 * image_ele["width"]) * scale,
+            int(y / 999 * image_ele["height"]) * scale,
         ]
     elif src_format == "rel":
         new_point = [
@@ -219,8 +219,8 @@ def _convert_point_format_to_abs_origin(point, image_ele: dict, *, src_format: s
     return new_point
 
 
-def convert_point_format(point, image_ele: dict, *, src_format: str, tgt_format: str):
-    point_abs_origin = _convert_point_format_to_abs_origin(point, image_ele, src_format=src_format)
+def convert_point_format(point, image_ele: dict, *, src_format: str, tgt_format: str, scale: int = 1):
+    point_abs_origin = _convert_point_format_to_abs_origin(point, image_ele, src_format=src_format, scale=scale)
     point_tgt_format = _convert_point_format_from_abs_origin(point_abs_origin, image_ele, tgt_format=tgt_format)
     return point_tgt_format
 
