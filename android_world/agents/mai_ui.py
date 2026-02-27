@@ -32,7 +32,9 @@ import re
 import time
 import traceback
 
-from android_world.agents.coordinate_resize import update_image_size_
+from android_world.agents.coordinate_resize import convert_point_format, update_image_size_
+
+MAX_AGENT_STEPS = 40
 
 
 ###############################################################################
@@ -99,16 +101,65 @@ def _safe_get_text(action_dict):
     return ""
 
 
+def _format_ui_element_list(ui_elements, image_ele, coordinate_format: str, limit: int = 12) -> str:
+    lines = []
+    for idx, element in enumerate(ui_elements or []):
+        if len(lines) >= max(1, int(limit)):
+            break
+        bbox = getattr(element, "bbox_pixels", None)
+        if bbox is None:
+            continue
+        clickable = bool(getattr(element, "is_clickable", False))
+        editable = bool(getattr(element, "is_editable", False))
+        long_clickable = bool(getattr(element, "is_long_clickable", False))
+        if not any([clickable, editable, long_clickable]):
+            continue
+        center = [int((bbox.x_min + bbox.x_max) / 2), int((bbox.y_min + bbox.y_max) / 2)]
+        center = convert_point_format(
+            center,
+            image_ele,
+            src_format="abs_origin",
+            tgt_format=coordinate_format,
+            scale=1,
+        )
+        text = str(getattr(element, "text", "") or "").strip()
+        desc = str(getattr(element, "content_description", "") or "").strip()
+        rid = str(getattr(element, "resource_id", "") or getattr(element, "resource_name", "") or "").strip()
+        label = text or desc or rid or f"element_{idx}"
+        flags = []
+        if clickable:
+            flags.append("click")
+        if editable:
+            flags.append("edit")
+        if long_clickable:
+            flags.append("long")
+        lines.append(
+            f"- element_id={idx}, label='{label[:80]}', center=[{int(center[0])}, {int(center[1])}], flags={flags}"
+        )
+    return "\n".join(lines) if lines else "None."
+
+
 def safe_json_loads(s: str):
     import json, re
 
     s = s.strip()
+
+    # ---------- ⓪ 先尝试原样解析 ----------
+    try:
+        return json.loads(s)
+    except Exception:
+        pass
 
     # ---------- ① 去掉 ```json 包裹 ----------
     if s.startswith("```"):
         s = s.strip("`").strip()
         if s.startswith("json"):
             s = s[len("json"):].lstrip()
+
+    try:
+        return json.loads(s)
+    except Exception:
+        pass
 
     # ---------- ② 常见畸形修复 ----------
     # 例如 ]}} , }}] , 多余右括号
@@ -155,45 +206,55 @@ def safe_json_loads(s: str):
     name = extract(r'"name"\s*:\s*"([^"]+)"', "mobile_use")
     act = extract(r'"action"\s*:\s*"([^"]+)"', "click")
     text = extract(r'"text"\s*:\s*"([^"]*)"')
+    content = extract(r'"content"\s*:\s*"([^"]*)"')
+    value = extract(r'"value"\s*:\s*"([^"]*)"')
+    return_text = extract(r'"return"\s*:\s*"([^"]*)"')
     button = extract(r'"button"\s*:\s*"([^"]+)"')
     direction = extract(r'"direction"\s*:\s*"([^"]+)"')
+    act_low = str(act or "click").strip().lower()
 
     args = {"action": act}
 
     # ---------- click / long_press ----------
-    if act in ("click", "long_press", "tap"):
-        args["coordinate"] = extract_coord("coordinate")
+    if act_low in ("click", "long_press", "tap"):
+        coord = extract_coord("coordinate")
+        if coord != [-1, -1]:
+            args["coordinate"] = coord
 
     # ---------- type ----------
-    elif act == "type":
+    elif act_low == "type":
         args["text"] = text or ""
+        coord = extract_coord("coordinate")
+        if coord != [-1, -1]:
+            args["coordinate"] = coord
 
     # ---------- swipe ----------
-    elif act == "swipe":
+    elif act_low == "swipe":
         args["direction"] = direction or "down"
         coord = extract_coord("coordinate")
         if coord != [-1, -1]:
             args["coordinate"] = coord   # coordinate 是可选
 
     # ---------- drag ----------
-    elif act == "drag":
+    elif act_low == "drag":
         args["start_coordinate"] = extract_coord("start_coordinate")
         args["end_coordinate"] = extract_coord("end_coordinate")
 
     # ---------- system button ----------
-    elif act == "system_button":
+    elif act_low == "system_button":
         args["button"] = button or "back"
 
-    elif act == "back":
+    elif act_low == "back":
         args["action"] = "system_button"
         args["button"] = "back"
 
     # ---------- answer ----------
-    elif act == "answer":
-        args["text"] = text or ""
+    elif act_low in ("answer", "respond", "response", "reply", "read"):
+        args["action"] = "answer"
+        args["text"] = text or content or value or return_text or ""
 
     # ---------- terminate ----------
-    elif act == "terminate":
+    elif act_low == "terminate":
         status = extract(r'"status"\s*:\s*"([^"]+)"', "fail")
         args["status"] = status
 
@@ -238,7 +299,7 @@ For each function call, return a json object with function name and arguments wi
 ## Action Space
 
 {"action": "click", "coordinate": [x, y]} {"action": "long_press", "coordinate": [x, y]} 
-{"action": "type", "text": ""} 
+{"action": "type", "text": "", "coordinate": [x, y]} 
 {"action": "swipe", "direction": "up or down or left or right", "coordinate": [x, y]} # "coordinate" is 
 optional. Use the "coordinate" if you want to swipe a specific UI element. 
 {"action": "open", "text": "app_name"} 
@@ -273,17 +334,25 @@ For each function call, return the thinking process in <thinking> </thinking> ta
 
 {"action": "click", "coordinate": [x, y]}
 {"action": "long_press", "coordinate": [x, y]}
-{"action": "type", "text": ""}
+{"action": "type", "text": "", "coordinate": [x, y]}
 {"action": "swipe", "direction": "up or down or left or right", "coordinate": [x, y]} # "coordinate" is optional. Use the "coordinate" if you want to swipe a specific UI element.
 {"action": "open", "text": "app_name"}
 {"action": "drag", "start_coordinate": [x1, y1], "end_coordinate": [x2, y2]}
 {"action": "system_button", "button": "button_name"} # Options: back, home, menu, enter
 {"action": "wait"}
 {"action": "terminate", "status": "success or fail"}
+{"action": "answer", "text": "xxx"}
+Fallback only when exact coordinates are unavailable:
+{"action": "click", "element_id": 3}
+{"action": "long_press", "element_id": 3}
+{"action": "type", "text": "xxx", "element_id": 3}
 
 
 ## Note
 - Write a small plan and finally summarize your next action (with its target element) in one sentence in <thinking></thinking> part.
+- Use the `answer` action for question-answer tasks that only require returning a final value.
+- For `click`, `long_press`, and `type`, prefer coordinate-based actions. Do not invent keys like `button`, `label`, `target`, or `content_description` for these actions.
+- If a coordinate is not reliable, use one of the provided `element_id` values instead of inventing another schema.
 - Available Apps: `["Camera","Chrome","Clock","Contacts","Dialer","Files","Settings","Markor","Tasks","Simple Draw Pro","Simple Gallery Pro","Simple SMS Messenger","Audio Recorder","Pro Expense","Broccoli APP","OSMand","VLC","Joplin","Retro Music","OpenTracks","Simple Calendar Pro"]`.
 You should use the `open` action to open the app as possible as you can, because it is the fast way to open the app.
 - You must follow the Action Space strictly, and return the correct json object within <thinking> </thinking> and <tool_call></tool_call> XML tags.
@@ -296,7 +365,7 @@ def image_to_data_url(path):
     return f"data:image/png;base64,{b64}"
 
 
-def build_mai_messages(goal, history, screenshot_path):
+def build_mai_messages(goal, history, screenshot_path, ui_element_text="None."):
     """Build messages for MAI-UI-2B."""
     system_msg = {
         "role": "system",
@@ -311,6 +380,7 @@ def build_mai_messages(goal, history, screenshot_path):
     user_text = (
         f"Task:\n{goal}\n\n"
         f"Action History:\n{history if history else 'None yet.'}\n\n"
+        f"Visible UI elements:\n{ui_element_text}\n\n"
         "Now output the next action as a JSON function call for `mobile_use` "
         "inside <tool_call></tool_call>."
     )
@@ -408,6 +478,14 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
         self._thoughts.clear()
         self._response.clear()
 
+    def set_max_steps(self, max_steps: int) -> None:
+        super().set_max_steps(min(MAX_AGENT_STEPS, int(max_steps)))
+
+    def _effective_max_steps(self) -> int:
+        if self._max_steps is None:
+            return MAX_AGENT_STEPS
+        return min(MAX_AGENT_STEPS, int(self._max_steps))
+
     def initialize_chrome(self):
         print("Running additional chrome initialization...")
         adb_utils.launch_app("chrome", self.env.controller)
@@ -461,6 +539,23 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
         }
 
         start_time = time.time()
+        if len(self._actions) >= self._effective_max_steps():
+            action = json_action.JSONAction(
+                action_type=json_action.STATUS,
+                goal_status="infeasible",
+            )
+            summary = f"Reached the maximum step limit ({self._effective_max_steps()})."
+            result["action"] = action
+            result["dummy_action"] = {
+                "name": "mobile_use",
+                "arguments": {"action": "terminate", "status": "fail"},
+            }
+            result["action_description"] = summary
+            print(f"[INFO] {summary}")
+            return base_agent.AgentInteractionResult(
+                done=True,
+                data=result,
+            )
 
         step_idx = len(self._screenshots)
         state = self.get_post_transition_state()
@@ -532,7 +627,18 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
         print(f"[DEBUG] resized screenshot saved to: {resized_screenshot_file}, size: {resized_width, resized_height}")
 
         # Build messages for MAI-UI-2B
-        messages = build_mai_messages(goal, stage2_history, resized_screenshot_file)
+        ui_element_text = _format_ui_element_list(
+            xml_tree,
+            current_image_ele,
+            coordinate_format=self.src_format,
+            limit=12,
+        )
+        messages = build_mai_messages(
+            goal,
+            stage2_history,
+            resized_screenshot_file,
+            ui_element_text=ui_element_text,
+        )
 
         # Call model
         action_response, _, _ = self.vllm.predict_mm(
@@ -574,7 +680,8 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
                     current_image_ele,
                     src_format=self.src_format,
                     tgt_format="abs_origin",
-                    scale=scale
+                    scale=scale,
+                    ui_elements=xml_tree,
                 )
             )
 
@@ -599,11 +706,36 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
             result["dummy_action_translated"] = dummy_action_translated
             result["action"] = action
 
-        except seeact_utils.ParseActionError as e:
-            print("Failed to parse MAI tool_call:", e)
-            action = json_action.JSONAction(action_type=json_action.UNKNOWN)
+        except (
+            seeact_utils.ParseActionError,
+            ValueError,
+            KeyError,
+            NotImplementedError,
+            json.JSONDecodeError,
+        ) as e:
+            print("Failed to parse/normalize MAI tool_call:", e)
+            dummy_action = {
+                "name": "mobile_use",
+                "arguments": {"action": "wait"},
+            }
+            dummy_action_translated = dummy_action
+            action = json_action.JSONAction(action_type=json_action.WAIT)
             result["seeact_action"] = None
+            result["dummy_action"] = dummy_action
+            result["dummy_action_translated"] = dummy_action_translated
             result["action"] = action
+            actuation.execute_adb_action(
+                action,
+                xml_tree,
+                self.env.logical_screen_size,
+                self.env.controller,
+            )
+            summary = "wait"
+            self._text_actions.append(summary)
+            self._actions.append(dummy_action)
+            self._summarys.append(summary)
+            self._thoughts.append(None)
+            self._response.append(action_response)
         except Exception:
             traceback.print_exc()
             print(action_response)
@@ -612,7 +744,7 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
             # 真正执行 adb 动作
             actuation.execute_adb_action(
                 action,
-                [],
+                xml_tree,
                 self.env.logical_screen_size,
                 self.env.controller,
             )

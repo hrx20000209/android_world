@@ -326,6 +326,80 @@ def _scale_coordinate_by_mode(
     return _clamp_coordinate_to_screen((int(round(x)), int(round(y))), screen_size)
 
 
+def _nearest_interactive_distance(
+    point: tuple[int, int],
+    ui_elements: list[Any],
+) -> float | None:
+    best: float | None = None
+    for element in ui_elements:
+        if not bool(
+            getattr(element, "is_clickable", False)
+            or getattr(element, "is_long_clickable", False)
+            or getattr(element, "is_editable", False)
+            or getattr(element, "is_scrollable", False)
+        ):
+            continue
+        bbox = getattr(element, "bbox_pixels", None)
+        if bbox is None:
+            continue
+        center_x = float(bbox.x_min + bbox.x_max) / 2.0
+        center_y = float(bbox.y_min + bbox.y_max) / 2.0
+        dist = ((float(point[0]) - center_x) ** 2 + (float(point[1]) - center_y) ** 2) ** 0.5
+        if best is None or dist < best:
+            best = dist
+    return best
+
+
+def _resolve_coordinate_by_mode(
+    coordinate: tuple[int, int],
+    screen_size: tuple[int, int] | None,
+    mode: str,
+    ui_elements: list[Any],
+) -> tuple[int, int]:
+    m = (mode or "auto").strip().lower()
+    if m != "auto":
+        return _scale_coordinate_by_mode(coordinate, screen_size, m)
+    if not screen_size:
+        return _scale_coordinate_by_mode(coordinate, screen_size, "auto")
+
+    x = float(coordinate[0])
+    y = float(coordinate[1])
+    width = float(screen_size[0])
+    height = float(screen_size[1])
+    if width <= 1.0 or height <= 1.0:
+        return _scale_coordinate_by_mode(coordinate, screen_size, "auto")
+
+    if 0.0 <= x <= 1.0 and 0.0 <= y <= 1.0:
+        return _scale_coordinate_by_mode(coordinate, screen_size, "1")
+
+    in_absolute = 0.0 <= x <= width and 0.0 <= y <= height
+    in_1000 = 0.0 <= x <= 1000.0 and 0.0 <= y <= 1000.0
+    if not in_absolute:
+        return _scale_coordinate_by_mode(coordinate, screen_size, "auto")
+    if not in_1000:
+        return _clamp_coordinate_to_screen((int(round(x)), int(round(y))), screen_size)
+    if width <= 1000.0 and height <= 1000.0:
+        return _clamp_coordinate_to_screen((int(round(x)), int(round(y))), screen_size)
+
+    absolute_xy = _clamp_coordinate_to_screen((int(round(x)), int(round(y))), screen_size)
+    scaled_1000_xy = _scale_coordinate_by_mode(coordinate, screen_size, "1000")
+    if scaled_1000_xy == absolute_xy:
+        return absolute_xy
+
+    abs_dist = _nearest_interactive_distance(absolute_xy, ui_elements)
+    scaled_dist = _nearest_interactive_distance(scaled_1000_xy, ui_elements)
+    if abs_dist is None or scaled_dist is None:
+        return absolute_xy
+
+    # Prefer 1000-space mapping when it is clearly closer to interactive targets.
+    if scaled_dist + 24.0 < abs_dist:
+        return scaled_1000_xy
+    diag = (width**2 + height**2) ** 0.5
+    if abs_dist > 0.35 * diag and scaled_dist < 0.2 * diag:
+        return scaled_1000_xy
+    return absolute_xy
+
+
 def _infer_swipe_direction_from_coordinates(
     start_xy: tuple[int, int] | None,
     end_xy: tuple[int, int] | None,
@@ -396,7 +470,12 @@ def _to_json_action(
         if "coordinate" in args and coordinate is None:
             return json_action.JSONAction(action_type=json_action.UNKNOWN)
         if coordinate is not None:
-            x, y = _scale_coordinate_by_mode(coordinate, logical_screen_size, coordinate_mode)
+            x, y = _resolve_coordinate_by_mode(
+                coordinate,
+                logical_screen_size,
+                coordinate_mode,
+                ui_elements,
+            )
             return json_action.JSONAction(action_type=json_action.CLICK, x=x, y=y)
         idx = pick_index(allow_fallback=False)
         if idx is None:
@@ -408,7 +487,12 @@ def _to_json_action(
         if "coordinate" in args and coordinate is None:
             return json_action.JSONAction(action_type=json_action.UNKNOWN)
         if coordinate is not None:
-            x, y = _scale_coordinate_by_mode(coordinate, logical_screen_size, coordinate_mode)
+            x, y = _resolve_coordinate_by_mode(
+                coordinate,
+                logical_screen_size,
+                coordinate_mode,
+                ui_elements,
+            )
             return json_action.JSONAction(action_type=json_action.LONG_PRESS, x=x, y=y)
         idx = pick_index(allow_fallback=False)
         if idx is None:
@@ -420,7 +504,12 @@ def _to_json_action(
         if "coordinate" in args and coordinate is None:
             return json_action.JSONAction(action_type=json_action.UNKNOWN)
         if coordinate is not None:
-            x, y = _scale_coordinate_by_mode(coordinate, logical_screen_size, coordinate_mode)
+            x, y = _resolve_coordinate_by_mode(
+                coordinate,
+                logical_screen_size,
+                coordinate_mode,
+                ui_elements,
+            )
             return json_action.JSONAction(
                 action_type=json_action.INPUT_TEXT,
                 x=x,

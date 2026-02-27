@@ -1,0 +1,20 @@
+{
+  "total_steps": 948,
+  "action_distribution": {
+    "click": 529,
+    "input_text": 115,
+    "status": 54,
+    "long_press": 37,
+    "open_app": 54,
+    "wait": 5,
+    "scroll": 84,
+    "navigate_back": 34,
+    "keyboard_enter": 3,
+    "answer": 24,
+    "navigate_home": 1
+  },
+  "screen_change_stats": {
+    "large_change": 668,
+    "small_change": 273
+  }
+}
