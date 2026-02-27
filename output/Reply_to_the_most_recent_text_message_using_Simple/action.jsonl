@@ -1,0 +1,9 @@
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "up", "coordinate": [500, 800]}}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "up", "coordinate": [500, 800]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [614, 850]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [350, 172]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [294, 951]}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "A quick brown fox."}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [930, 605]}}
+{"name": "mobile_use", "arguments": {"action": "answer", "text": "The task has been completed successfully."}}
+{"name": "mobile_use", "arguments": {"action": "terminate", "status": "success"}}

@@ -1,0 +1,10 @@
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "up", "coordinate": [500, 800]}}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "up", "coordinate": [500, 800]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [832, 585]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [877, 846]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [877, 846]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [725, 87]}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "skiing"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [725, 87]}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "October 12 2023", "coordinate": [318, 88]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [725, 87]}}

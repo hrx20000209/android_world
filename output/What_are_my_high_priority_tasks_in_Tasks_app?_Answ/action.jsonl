@@ -1,0 +1,10 @@
+{"name": "mobile_use", "arguments": {"action": "open", "text": "Tasks"}}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "up", "coordinate": [500, 800]}}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "up", "coordinate": [500, 800]}}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "up", "coordinate": [500, 800]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [168, 773]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [168, 773]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [168, 773]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [168, 773]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [168, 773]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [164, 770]}}

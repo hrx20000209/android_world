@@ -1,0 +1,12 @@
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "up", "coordinate": [500, 800]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [834, 469]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [785, 738]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [357, 738]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [313, 208]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [725, 87]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [778, 550]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [804, 88]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [162, 394]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [67, 165]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [930, 161]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [243, 88]}}

@@ -1,0 +1,40 @@
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "up", "coordinate": [500, 800]}}
+{"name": "mobile_use", "arguments": {"action": "system_button", "button": "home"}}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "up", "coordinate": [500, 800]}}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "up", "coordinate": [500, 800]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [839, 453]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [499, 259]}}
+{"name": "mobile_use", "arguments": {"action": "long_press", "coordinate": [303, 146]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [222, 98]}}
+{"name": "mobile_use", "arguments": {"action": "long_press", "coordinate": [303, 146]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [222, 98]}}
+{"name": "mobile_use", "arguments": {"action": "system_button", "button": "home"}}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "up", "coordinate": [500, 800]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [834, 338]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [891, 924]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [205, 382]}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "Spaghetti Carbonara"}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "Ingredients: spaghetti, eggs, pecorino cheese, black pepper, butter. Instructions: Cook spaghetti, mix eggs with cheese, fold in pasta, add pepper and butter."}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [888, 83]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [67, 83]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [891, 925]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [205, 382]}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "Spaghetti Carbonara", "coordinate": [169, 382]}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "Ingredients: spaghetti, eggs, pecorino cheese, black pepper"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [888, 83]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [67, 83]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [891, 925]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [205, 382]}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "Spaghetti Carbonara"}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "Ingredients: spaghetti, eggs, pecorino romano, black pepper"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [888, 83]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [67, 83]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [891, 925]}}
+{"name": "mobile_use", "arguments": {"action": "system_button", "button": "home"}}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "up", "coordinate": [500, 800]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [834, 338]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [205, 382]}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "Spaghetti Carbonara"}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "Ingredients: spaghetti, bacon, eggs, Parmesan"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [887, 83]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [67, 83]}}

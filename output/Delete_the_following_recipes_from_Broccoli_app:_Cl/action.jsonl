@@ -1,0 +1,10 @@
+{"name": "mobile_use", "arguments": {"action": "open", "text": "Broccoli APP"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [943, 146]}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "Classic Margherita Pizza", "coordinate": [397, 146]}}
+{"name": "mobile_use", "arguments": {"action": "long_press", "coordinate": [518, 222]}}
+{"name": "mobile_use", "arguments": {"action": "long_press", "coordinate": [949, 83]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [949, 83]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [610, 252]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [795, 543]}}
+{"name": "mobile_use", "arguments": {"action": "answer", "text": "task finished"}}
+{"name": "mobile_use", "arguments": {"action": "terminate", "status": "success"}}

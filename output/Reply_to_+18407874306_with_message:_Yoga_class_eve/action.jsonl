@@ -1,0 +1,9 @@
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "up", "coordinate": [500, 800]}}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "up", "coordinate": [500, 800]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [614, 843]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [347, 267]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [294, 952]}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "Yoga class every Tuesday and Thursday at 6 PM."}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [936, 594]}}
+{"name": "mobile_use", "arguments": {"action": "answer", "text": "The message \"Yoga class every Tuesday and Thursday at 6 PM.\" has been sent to +18407874306."}}
+{"name": "mobile_use", "arguments": {"action": "terminate", "status": "success"}}

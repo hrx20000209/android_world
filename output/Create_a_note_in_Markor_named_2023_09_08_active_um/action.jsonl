@@ -1,0 +1,14 @@
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "up", "coordinate": [500, 800]}}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "up", "coordinate": [500, 800]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [839, 443]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [894, 868]}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "2023_09_08_active_umbrella"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [866, 292]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [181, 360]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [857, 637]}}
+{"name": "mobile_use", "arguments": {"action": "long_press", "coordinate": [303, 360]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [123, 97]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [755, 83]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [755, 83]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [755, 83]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [755, 83]}}

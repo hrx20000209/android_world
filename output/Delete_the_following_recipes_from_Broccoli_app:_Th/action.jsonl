@@ -1,0 +1,8 @@
+{"name": "mobile_use", "arguments": {"action": "open", "text": "Broccoli APP"}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [633, 222]}}
+{"name": "mobile_use", "arguments": {"action": "long_press", "coordinate": [949, 83]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [949, 83]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [610, 253]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [801, 544]}}
+{"name": "mobile_use", "arguments": {"action": "answer", "text": "The recipe 'Thai Peanut Noodle Salad' has been successfully deleted."}}
+{"name": "mobile_use", "arguments": {"action": "terminate", "status": "success"}}

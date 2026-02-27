@@ -1,0 +1,16 @@
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "up", "coordinate": [500, 800]}}
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "up", "coordinate": [500, 800]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [387, 318]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [251, 313]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [327, 88]}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "receipt_2023_01_22_sure_frog.jpg", "coordinate": [328, 88]}}
+{"name": "mobile_use", "arguments": {"action": "long_press", "coordinate": [166, 198]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [950, 88]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [611, 291]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [287, 851]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [211, 236]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [331, 607]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [422, 239]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [422, 239]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [422, 239]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [422, 239]}}

@@ -1,0 +1,34 @@
+{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "up", "coordinate": [500, 800]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [610, 469]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [213, 607]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [894, 928]}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "Call with the Team", "coordinate": [499, 156]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [499, 287]}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "We will prepare for team roles."}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [908, 452]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [385, 576]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [499, 645]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [780, 700]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [908, 452]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [780, 700]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [908, 452]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [499, 486]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [690, 595]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [604, 345]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [604, 345]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [604, 345]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [604, 345]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [604, 345]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [604, 345]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [604, 345]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [604, 345]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [604, 345]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [198, 698]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [229, 542]}}
+{"name": "mobile_use", "arguments": {"action": "type", "text": "20", "coordinate": [229, 395]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [330, 371]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [330, 395]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [878, 855]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [878, 855]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [878, 858]}}
+{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [878, 855]}}
