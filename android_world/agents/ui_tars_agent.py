@@ -1,17 +1,24 @@
 from absl import flags
+import io
 import json
 import logging
 import os
 from pathlib import Path
 import re
+import time
 from typing import Dict, Optional
 from android_world.agents import base_agent
 from android_world.env import interface, json_action
-from android_world.agents.ui_tars import ui_tars15_work_loop
+from android_world.agents.ui_tars import UITARS15Agent
+from android_world.agents.ui_tars_utils import (
+    execute_ui_tars_response,
+    take_screenshot_adb,
+)
 
 
 # UI_TARS_MAX_LOOP = 100
 logger = logging.getLogger(__name__)
+UI_TARS_DEFAULT_MAX_STEPS = 20
 
 def _extract_task_info(goal: str) -> Optional[Dict]:
     """从goal中提取对应的任务信息。
@@ -123,6 +130,19 @@ class UiTarsAgent(base_agent.EnvironmentInteractingAgent):
         self.task_name = flags.FLAGS.tasks[0] if flags.FLAGS.tasks else "unknown_task"
         self.exp_name = os.environ.get("EXP_NAME") or "default_exp"
         self.process_id = os.environ.get("PROCESS_ID") or "0"
+        self._serial = f"emulator-{self.serial_port}"
+        self._image_resize_factor = 1.0
+        self._ui_tars_agent: UITARS15Agent | None = None
+        self._ui_tars_step_index = 0
+        self._current_goal = ""
+        self._img_save_dir: Path | None = None
+
+    def reset(self, go_home: bool = False) -> None:
+        super().reset(go_home)
+        self._ui_tars_agent = None
+        self._ui_tars_step_index = 0
+        self._current_goal = ""
+        self._img_save_dir = None
 
     def step(self, goal: str) -> base_agent.AgentInteractionResult:
         """See base class."""
@@ -131,60 +151,87 @@ class UiTarsAgent(base_agent.EnvironmentInteractingAgent):
             task_name_for_dir = task_info["task_name"]
         else:
             task_name_for_dir = self.task_name
+        max_allowed_steps = min(
+            self._max_steps if self._max_steps is not None else UI_TARS_DEFAULT_MAX_STEPS,
+            UI_TARS_DEFAULT_MAX_STEPS,
+        )
 
-        # get_ui_tars_response = init_get_ui_tars_response(
-        #     base_url='http://127.0.0.1:8888',
-        #     api_key=''
-        # )
-        def run_task(task_description: str):
+        if self._ui_tars_agent is None or self._current_goal != goal:
             meta_info_dir = Path(f"ui_tars/{self.exp_name}_{self.process_id}/{task_name_for_dir}")
             meta_info_dir.mkdir(parents=True, exist_ok=True)
-            img_save_dir = meta_info_dir / "images"
-            img_save_dir.mkdir(parents=True, exist_ok=True)
-            max_loop_time = self._max_steps if self._max_steps is not None else 50
-            return ui_tars15_work_loop(
-                instruction=task_description,
-                serial=f"emulator-{self.serial_port}",
-                max_loop_time=max_loop_time,
-                img_save_dir=img_save_dir,
-                meta_info_dir=meta_info_dir,
+            self._img_save_dir = meta_info_dir / "images"
+            self._img_save_dir.mkdir(parents=True, exist_ok=True)
+            self._ui_tars_agent = UITARS15Agent(
+                use_thinking=False,
+                meta_info_dir=str(meta_info_dir),
+            )
+            self._ui_tars_step_index = 0
+            self._current_goal = goal
+
+        if self._ui_tars_step_index >= max_allowed_steps:
+            step_data = {
+                "ui_tars_finished": False,
+                "ui_tars_content": "",
+                "ui_tars_error_info": f"Reached max steps ({max_allowed_steps}).",
+                "ui_tars_step_index": self._ui_tars_step_index,
+            }
+            return base_agent.AgentInteractionResult(True, step_data)
+
+        step_start = time.perf_counter()
+        try:
+            screenshot = take_screenshot_adb(serial=self._serial)
+            screenshot = screenshot.resize(
+                (
+                    round(screenshot.width * self._image_resize_factor),
+                    round(screenshot.height * self._image_resize_factor),
+                )
+            )
+            screenshot.save(f"current_screenshot-{self._serial}.png")
+            if self._img_save_dir is not None:
+                screenshot.save(self._img_save_dir / f"step_{self._ui_tars_step_index}.png")
+
+            screenshot_bytes_io = io.BytesIO()
+            screenshot.save(screenshot_bytes_io, format="PNG")
+            screenshot_bytes = screenshot_bytes_io.getvalue()
+
+            if self._ui_tars_agent is None:
+                raise RuntimeError("ui_tars core agent is not initialized")
+            self._ui_tars_agent.history_images.append(screenshot_bytes)
+            obs = {"screenshot": screenshot_bytes, "accessibility_tree": ""}
+            parsed_response = self._ui_tars_agent._predict_uitars15(goal, obs)
+            execution_result = execute_ui_tars_response(
+                parsed_response,
+                self._image_resize_factor,
+                self._serial,
             )
 
-        #         instruction = f'''
-        # You are asked to complete the following task on the current device: {task_description}.
-        # Note:
-        # 1. You should use `open_app(app_name)` to open the specific app. For example, use `open_app('contacts')` to start the `contacts` app.
-        # '''
-        # return ui_tars_work_loop(
-        #     local_mode=True,
-        #     get_ui_tars_response=get_ui_tars_response,
-        #     get_ui_tars_mobile_prompt=get_ui_tars_mobile_prompt_api,
-        #     instruction=instruction
-        # )
+            self._ui_tars_step_index += 1
+            done = bool(execution_result.finished)
+            if not done and self._ui_tars_step_index >= max_allowed_steps:
+                done = True
 
-        # 还需要加上这个功能
-        # if exec_res.answer:
-        #   action_details = {'action_type': 'answer', 'text': exec_res.answer}
-        #   self.env.execute_action(json_action.JSONAction(**action_details))
-        try:
-            result = run_task(goal)
-            print(result)
-            if result.content:
-                action_details = {'action_type': 'answer', 'text': result.content}
+            if done and execution_result.content:
+                action_details = {'action_type': 'answer', 'text': execution_result.content}
                 self.env.execute_action(json_action.JSONAction(**action_details))
+
             step_data = {
-                "ui_tars_finished": bool(result.finished),
-                "ui_tars_content": result.content,
-                "ui_tars_error_info": result.error_info,
+                "ui_tars_finished": bool(execution_result.finished),
+                "ui_tars_content": execution_result.content,
+                "ui_tars_error_info": execution_result.error_info,
+                "ui_tars_step_index": self._ui_tars_step_index,
+                "step_latency_sec": max(0.0, float(time.perf_counter() - step_start)),
             }
         except Exception as e:  # pylint: disable=broad-exception-caught
             logger.exception("UiTarsAgent step failed: %s", e)
+            self._ui_tars_step_index += 1
+            done = self._ui_tars_step_index >= max_allowed_steps
             step_data = {
                 "ui_tars_finished": False,
                 "ui_tars_content": "",
                 "ui_tars_error_info": repr(e),
+                "ui_tars_step_index": self._ui_tars_step_index,
+                "step_latency_sec": max(0.0, float(time.perf_counter() - step_start)),
             }
-        done = True
         return base_agent.AgentInteractionResult(
             done,
             step_data,

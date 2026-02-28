@@ -105,9 +105,11 @@ selected_tasks = ("AudioRecorderRecordAudio, AudioRecorderRecordAudioWithFileNam
                   "SystemBluetoothTurnOn, SystemWifiTurnOff, SystemWifiTurnOn")
 # selected_tasks = ("SystemWifiTurnOff")
 
+success_tasks = ()
+
 _TASKS = flags.DEFINE_list(
     'tasks',
-    "NotesMeetingAttendeeCount",
+    None,
     'List of specific tasks to run in the given suite family. If None, run all'
     ' tasks in the suite family.',
 )
@@ -133,7 +135,7 @@ _OUTPUT_PATH = flags.DEFINE_string(
 )
 
 # Agent specific.
-_AGENT_NAME = flags.DEFINE_string('agent_name', 'ui_tars_agent', help='Agent name.')
+_AGENT_NAME = flags.DEFINE_string('agent_name', 'mai-ui', help='Agent name.')
 
 # m3a_llamacpp, t3a_llamacpp, mai-ui, mm_agent, t3a_profiling, explore_agent, gelab_agent
 
