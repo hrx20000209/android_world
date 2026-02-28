@@ -59,12 +59,12 @@ class MAIParserTest(absltest.TestCase):
 
 class MAIStepLimitTest(absltest.TestCase):
 
-  def test_step_limit_is_capped_at_40(self):
+  def test_step_limit_is_capped_at_20(self):
     env = test_utils.FakeAsyncEnv()
     vllm = mock.Mock()
     agent = mai_ui.MAIUIAgent(env=env, vllm=vllm, src_format="abs_origin")
     agent.set_max_steps(200)
-    agent._actions = [{} for _ in range(40)]
+    agent._actions = [{} for _ in range(20)]
 
     result = agent.step("do something")
 

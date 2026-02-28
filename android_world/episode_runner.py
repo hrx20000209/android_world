@@ -15,6 +15,8 @@
 """Runs an agent on the environment."""
 
 import dataclasses
+import math
+import time
 from typing import Any, Callable, Optional
 from android_world import constants
 from android_world.agents import base_agent
@@ -77,22 +79,44 @@ def run_episode(
   agent.set_max_steps(max_n_steps)
 
   output = []
+  step_latencies_sec: list[float] = []
   for step_n in range(max_n_steps):
+    step_start = time.perf_counter()
     result = agent.step(goal)
+    runner_latency = float(max(0.0, time.perf_counter() - step_start))
+    reported_latency = _extract_step_latency_sec(result.data)
+    step_latency = (
+        reported_latency if reported_latency is not None else runner_latency
+    )
+    step_latencies_sec.append(step_latency)
+    avg_step_latency = float(sum(step_latencies_sec) / len(step_latencies_sec))
+    print_fn(
+        'Step {:d}: latency={:.3f}s (avg={:.3f}s)'.format(
+            step_n + 1, step_latency, avg_step_latency
+        )
+    )
     print_fn('Completed step {:d}.'.format(step_n + 1))
     assert constants.STEP_NUMBER not in result.data
-    output.append(result.data | {constants.STEP_NUMBER: step_n})
+    output.append(
+        result.data
+        | {
+            constants.STEP_NUMBER: step_n,
+            'runner_step_latency_sec': runner_latency,
+        }
+    )
     if termination_fn(agent.env):
       print_fn('Environment ends episode.')
       return EpisodeResult(
           done=True,
           step_data=_transpose_lod_to_dol(output),
+          aux_data=_build_latency_aux_data(step_latencies_sec),
       )
     elif result.done:
       print_fn('Agent indicates task is done.')
       return EpisodeResult(
           done=result.done,
           step_data=_transpose_lod_to_dol(output),
+          aux_data=_build_latency_aux_data(step_latencies_sec),
       )
   print_fn(
       termcolor.colored(
@@ -101,8 +125,46 @@ def run_episode(
       )
   )
   return EpisodeResult(
-      done=result.done, step_data=_transpose_lod_to_dol(output)  # pylint: disable=undefined-variable
+      done=result.done,  # pylint: disable=undefined-variable
+      step_data=_transpose_lod_to_dol(output),  # pylint: disable=undefined-variable
+      aux_data=_build_latency_aux_data(step_latencies_sec),
   )
+
+
+def _to_finite_float(value: Any) -> float | None:
+  try:
+    val = float(value)
+  except (TypeError, ValueError):
+    return None
+  if math.isnan(val) or math.isinf(val):
+    return None
+  return val
+
+
+def _extract_step_latency_sec(step_data: dict[str, Any]) -> float | None:
+  if not isinstance(step_data, dict):
+    return None
+  for key in ('latency_sec', 'step_latency_sec'):
+    value = _to_finite_float(step_data.get(key))
+    if value is not None and value >= 0.0:
+      return value
+  return None
+
+
+def _build_latency_aux_data(step_latencies_sec: list[float]) -> dict[str, Any]:
+  if not step_latencies_sec:
+    return {
+        'step_latencies_sec': [],
+        'mean_step_latency_sec': 0.0,
+        'total_step_latency_sec': 0.0,
+    }
+  total = float(sum(step_latencies_sec))
+  mean = float(total / len(step_latencies_sec))
+  return {
+      'step_latencies_sec': [float(x) for x in step_latencies_sec],
+      'mean_step_latency_sec': mean,
+      'total_step_latency_sec': total,
+  }
 
 
 def _transpose_lod_to_dol(data: list[dict[str, Any]]) -> dict[str, list[Any]]:

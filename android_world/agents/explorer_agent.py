@@ -22,7 +22,6 @@ from PIL import Image, ImageDraw
 from android_world.agents import base_agent
 from android_world.agents import seeact_utils
 from android_world.agents.explorer_agent_constants import (
-    SYSTEM_PROMPT,
     _CHOICE_HINT_TOKENS,
     _DIALOG_HINT_TOKENS,
     _DISMISS_ACTION_KEYWORDS,
@@ -62,7 +61,47 @@ try:
 except Exception:  # pylint: disable=broad-exception-caught
     SentenceTransformer = None
 
-MAX_AGENT_STEPS = 40
+MAX_AGENT_STEPS = 20
+
+EXPLORER_MAI_SYSTEM_PROMPT = """You are a GUI agent. You are given a task, action history, execution feedback, explorer clues, explorer hints, and the current screenshot.
+
+## Output Format
+For each function call, return the thinking process in <thinking> </thinking> tags, and one json object with function name and arguments within <tool_call></tool_call> XML tags:
+```
+<thinking>
+...
+</thinking>
+<tool_call>
+{"name":"mobile_use","arguments":{...}}
+</tool_call>
+```
+
+## Action Space
+{"action":"click","coordinate":[x,y]}
+{"action":"long_press","coordinate":[x,y]}
+{"action":"type","text":"...","coordinate":[x,y]}
+{"action":"swipe","direction":"up|down|left|right"}
+{"action":"swipe","start_coordinate":[x1,y1],"end_coordinate":[x2,y2]}
+{"action":"open","text":"app_name"}
+{"action":"open_app","text":"app_name"}
+{"action":"system_button","button":"back|home|enter"}
+{"action":"wait"}
+{"action":"answer","text":"..."}
+{"action":"terminate","status":"success|fail"}
+
+Fallback only when coordinate is unavailable:
+{"action":"click","element_id":int}
+{"action":"long_press","element_id":int}
+{"action":"type","element_id":int,"text":"..."}
+
+## Note
+- Prefer coordinate-based actions for click/long_press/type. Do not invent keys like button/label/target for those actions.
+- For click/long_press/type, output `coordinate:[x,y]` directly whenever possible.
+- If coordinate is unavailable, use element_id from explorer hints.
+- Avoid repeating no-effect actions.
+- For task completion, prefer {"action":"terminate","status":"success"}.
+  If you output {"action":"answer", ...}, it will be treated as task completion.
+""".strip()
 
 
 
@@ -117,6 +156,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         save_explore_masks: bool = True,
         trace_output_dir: str = "explorer_traces",
         prompt_ui_element_limit: int | None = None,
+        enable_parallel_exploration: bool = True,
         explore_warmup_timeout_sec: float = 0.0,
         explore_min_actions_before_reasoning: int = 0,
         explore_budget_boost_per_zero_step: int = 2,
@@ -144,6 +184,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self.reasoning_preview_chars = max(60, int(reasoning_preview_chars))
         self.log_full_ui_tree_every_n_steps = max(0, int(log_full_ui_tree_every_n_steps))
         self.model_coordinate_mode = str(model_coordinate_mode or "auto").strip().lower()
+        self.enable_parallel_exploration = bool(enable_parallel_exploration)
         self.save_explore_masks = bool(save_explore_masks)
         self.explore_mask_output_dir = str(explore_mask_output_dir or "explore_k1_masks").strip()
         if self.save_explore_masks and self.explore_mask_output_dir:
@@ -508,8 +549,12 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         clues_text: str,
         source_step: int,
     ) -> None:
+        if not self.enable_parallel_exploration:
+            self._clear_explore_root_baseline()
+            return
         self._stop_explorer_thread()
         if not self._explore_thread_stop_clean:
+            self._clear_explore_root_baseline()
             self._emit_log(
                 f"step={source_step} explorer_thread_start_skipped reason=previous_thread_not_stopped",
                 tag="EXPLORE",
@@ -540,6 +585,11 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             daemon=True,
         )
         self._explore_thread.start()
+
+    def _clear_explore_root_baseline(self) -> None:
+        self._explore_root_hash = None
+        self._explore_root_pixels = None
+        self._explore_root_activity = None
 
     def _compute_explore_budget(self) -> tuple[int, int, int, int]:
         max_depth = max(1, int(self.explore_max_depth))
@@ -1330,6 +1380,59 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         want = max(1, int(k))
         return scored[:want], n_candidates
 
+    def _pick_topk_relaxed(
+        self,
+        ui_elements: list[Any],
+        goal_queries: list[str],
+        runtime_queries: list[str],
+        k: int,
+        intent_flags: dict[str, bool] | None = None,
+    ) -> tuple[list[CandidateScore], int]:
+        """Fallback picker used when strict similarity-only filtering returns nothing."""
+        picked, n_candidates = self._pick_topk(
+            ui_elements=ui_elements,
+            goal_queries=goal_queries,
+            runtime_queries=runtime_queries,
+            k=k,
+            avoid_keys=None,
+            hard_avoid=False,
+            intent_flags=intent_flags,
+        )
+        if picked:
+            return picked, n_candidates
+
+        fallback_scored: list[CandidateScore] = []
+        for idx, element in enumerate(ui_elements):
+            if not self._is_valid_element(element):
+                continue
+            if getattr(element, "bbox_pixels", None) is None:
+                continue
+            text = _normalize_space(getattr(element, "text", ""))
+            desc = _normalize_space(getattr(element, "content_description", ""))
+            rid = _normalize_space(
+                getattr(element, "resource_id", "") or getattr(element, "resource_name", "")
+            )
+            # Keep weakly semantic nodes as a last resort when interactive metadata is sparse.
+            if not self._is_interactive(element) and not (text or desc or rid):
+                continue
+            try:
+                cand_score = self._score_candidate(
+                    idx,
+                    element,
+                    goal_queries,
+                    runtime_queries,
+                    intent_flags=intent_flags,
+                )
+            except Exception:  # pylint: disable=broad-exception-caught
+                continue
+            fallback_scored.append(cand_score)
+
+        if not fallback_scored:
+            return [], 0
+        fallback_scored.sort(key=lambda item: item.score, reverse=True)
+        want = max(1, int(k))
+        return fallback_scored[:want], len(fallback_scored)
+
     def _decay_visit_counts(self, decay: float = 0.92) -> None:
         if not self._bound_visit_count:
             return
@@ -2042,6 +2145,26 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                     tag="EXPLORE",
                 )
             if not root_candidates:
+                root_candidates, n_candidates = self._pick_topk_relaxed(
+                    ui_elements=root_state.ui_elements,
+                    goal_queries=goal_queries,
+                    runtime_queries=runtime_queries,
+                    k=max(branch_depth_topk, max_branches + 2),
+                    intent_flags=intent_flags,
+                )
+                if root_candidates:
+                    self._emit_log(
+                        f"step={source_step} branch={branch_id} root_relaxed_candidates={len(root_candidates)}",
+                        tag="EXPLORE",
+                    )
+                    root_filter_stats = dict(self._last_filter_stats or {})
+                    if root_filter_stats:
+                        self._emit_log(
+                            f"step={source_step} branch={branch_id} root_relaxed_filter_mode="
+                            f"{root_filter_stats.get('filter_level')}",
+                            tag="EXPLORE",
+                        )
+            if not root_candidates:
                 self._emit_log(
                     f"step={source_step} branch={branch_id} no_root_candidates remaining",
                     tag="EXPLORE",
@@ -2136,6 +2259,20 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                     hard_avoid=True,
                     intent_flags=intent_flags,
                 )
+                if not depth_candidates:
+                    depth_candidates, n_candidates = self._pick_topk_relaxed(
+                        ui_elements=state.ui_elements,
+                        goal_queries=goal_queries,
+                        runtime_queries=runtime_queries,
+                        k=branch_depth_topk,
+                        intent_flags=intent_flags,
+                    )
+                    if depth_candidates:
+                        self._emit_log(
+                            f"step={source_step} branch={branch_id} depth={current_depth + 1} "
+                            f"relaxed_candidates={len(depth_candidates)}",
+                            tag="EXPLORE",
+                        )
                 if not depth_candidates:
                     self._emit_log(
                         f"step={source_step} branch={branch_id} depth={current_depth + 1} no_candidates",
@@ -2983,6 +3120,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                     "clue_debug": [],
                     "explore_candidates_count": 0,
                     "explore_action_count": self._get_explore_action_count(),
+                    "latency_sec": 0.0,
                     "step_latency_sec": 0.0,
                     "task_elapsed_sec": (
                         float(max(0.0, time.time() - float(self._task_start_ts)))
@@ -3001,6 +3139,9 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         step_start_perf = time.perf_counter()
         # Defensive: ensure no stale explorer thread leaks into next reasoning step.
         self._stop_explorer_thread()
+        if not self.enable_parallel_exploration:
+            # Prevent stale root baseline from triggering rollback guards when exploration is off.
+            self._clear_explore_root_baseline()
         step_no = len(self.actions) + 1
         self._step_separator(step_no=step_no, phase="start", goal=goal)
         state = self.get_post_transition_state()
@@ -3059,12 +3200,13 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             content=clues or "None.",
             tag="REASON",
         )
-        # self._start_explorer_thread(
-        #     goal=goal,
-        #     history_tail=self.history[-3:],
-        #     clues_text=clues,
-        #     source_step=step_no,
-        # )
+        if self.enable_parallel_exploration:
+            self._start_explorer_thread(
+                goal=goal,
+                history_tail=self.history[-3:],
+                clues_text=clues,
+                source_step=step_no,
+            )
 
         prompt_history = self._history_prompt_text(max_items=8)
         user_text = (
@@ -3076,7 +3218,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         )
         prompt_log_text = (
             "[VLM text input | system]\n"
-            + SYSTEM_PROMPT
+            + EXPLORER_MAI_SYSTEM_PROMPT
             + "\n\n[VLM text input | user]\n"
             + user_text
         )
@@ -3087,7 +3229,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         )
 
         messages = [
-            {"role": "system", "content": [{"type": "text", "text": SYSTEM_PROMPT}]},
+            {"role": "system", "content": [{"type": "text", "text": EXPLORER_MAI_SYSTEM_PROMPT}]},
             {
                 "role": "user",
                 "content": [
@@ -3168,28 +3310,36 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         }
 
         if not explore_thread_clean:
-            source = "thread_guard_wait"
+            source = f"{source}_thread_guard_soft"
             parse_error = "explorer_thread_not_stopped_cleanly"
-            action = json_action.JSONAction(action_type=json_action.WAIT)
-            tool_call = {"name": "mobile_use", "arguments": {"action": "wait"}}
+            self._clear_explore_root_baseline()
             self._emit_log(
-                f"step={step_no} thread_guard_failed -> force wait",
+                f"step={step_no} thread_guard_failed -> soft_continue",
                 tag="REASON",
             )
         elif self._has_explore_root_baseline() and not bool(rollback_info.get("verified")):
-            source = "rollback_guard_wait"
+            source = f"{source}_rollback_guard_soft"
             parse_error = "rollback_guard_failed_not_at_root"
-            action = json_action.JSONAction(action_type=json_action.WAIT)
-            tool_call = {"name": "mobile_use", "arguments": {"action": "wait"}}
             self._emit_log(
-                f"step={step_no} rollback_guard_failed -> force wait",
+                f"step={step_no} rollback_guard_failed -> soft_continue",
                 tag="REASON",
             )
 
+        force_explore_due_to_uncertainty = bool(
+            action.action_type == json_action.WAIT
+            or (
+                parse_error is not None
+                and parse_error
+                not in {
+                    "rollback_guard_failed_not_at_root",
+                    "explorer_thread_not_stopped_cleanly",
+                }
+            )
+        )
         if (
             self._no_effect_repeat >= self.force_explore_after_repeats
             and (explore_action_count > 0 or bool(explore_candidates))
-            and source not in {"rollback_guard_wait", "thread_guard_wait"}
+            and force_explore_due_to_uncertainty
             and action.action_type not in {json_action.STATUS, json_action.ANSWER}
         ):
             source = "forced_explore"
@@ -3344,6 +3494,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                         "clue_debug": self.get_last_clue_debug_lines(),
                         "explore_candidates_count": len(explore_candidates),
                         "explore_action_count": explore_action_count,
+                        "latency_sec": step_latency_sec,
                         "step_latency_sec": step_latency_sec,
                         "task_elapsed_sec": task_elapsed_sec,
                         "avg_step_latency_sec": avg_step_sec,
@@ -3385,6 +3536,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 "clue_debug": self.get_last_clue_debug_lines(),
                 "explore_candidates_count": len(explore_candidates),
                 "explore_action_count": explore_action_count,
+                "latency_sec": step_latency_sec,
                 "step_latency_sec": step_latency_sec,
                 "task_elapsed_sec": task_elapsed_sec,
                 "avg_step_latency_sec": avg_step_sec,

@@ -208,16 +208,26 @@ class CreateFile(task_eval.TaskEval):
       logging.info("%s not found", file_name)
       return 0.0
 
-    # Check the contents of the new file
-    res = adb_utils.issue_generic_request(
-        [
-            "shell",
-            "cat",
-            file_utils.convert_to_posix_path(self.data_directory, file_name),
-        ],
-        env.controller,
-    )
-    file_contents = res.generic.output.decode().replace("\r", "").strip()
+    # Check the contents of the new file.
+    # Some failures produce a directory with the target name; treat that as
+    # "not successful" instead of raising and skipping the whole task run.
+    try:
+      res = adb_utils.issue_generic_request(
+          [
+              "shell",
+              "cat",
+              file_utils.convert_to_posix_path(self.data_directory, file_name),
+          ],
+          env.controller,
+      )
+      file_contents = res.generic.output.decode().replace("\r", "").strip()
+    except Exception as exc:  # pylint: disable=broad-exception-caught
+      logging.info(
+          "Failed reading %s via cat (likely not a regular file): %s",
+          file_name,
+          exc,
+      )
+      return 0.0
     match = fuzzy_match_lib.fuzzy_match(file_contents, self.params["text"])
     if not match:
       logging.info("%s does not match %s", file_contents, self.params["text"])

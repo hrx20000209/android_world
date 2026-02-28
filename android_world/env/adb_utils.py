@@ -29,6 +29,8 @@ import immutabledict
 T = TypeVar('T')
 
 _DEFAULT_TIMEOUT_SECS = 10
+_CLIPPER_TIMEOUT_SECS = 4
+_CLIPBOARD_CMD_TIMEOUT_SECS = 4
 
 # pylint: disable=line-too-long
 # Maps app names to the activity that should be launched to open the app.
@@ -1262,20 +1264,51 @@ def set_clipboard_contents(
     RuntimeError: If the adb command does not successfully execute or if the
     app is not in the foreground.
   """
-    if launch_app('clipper', env) is None:
-        raise RuntimeError(
-            'Clipper app must be in the foreground to access clipboard. You may'
-            ' need to install clipper app.'
+    clipper_opened = False
+    raw_content = content
+    try:
+        if launch_app('clipper', env) is not None:
+            clipper_opened = True
+            time.sleep(0.5)
+            response = issue_generic_request(
+                [
+                    'shell',
+                    'am',
+                    'broadcast',
+                    '-a',
+                    'clipper.set',
+                    '-e',
+                    'text',
+                    _adb_text_format(raw_content),
+                ],
+                env,
+                timeout_sec=_CLIPPER_TIMEOUT_SECS,
+            )
+            check_ok(response, 'Failed to set clipboard content via clipper.')
+            output_str = response.generic.output.decode('utf-8')
+            _extract_clipper_output(output_str)
+            return
+    except (errors.AdbControllerError, RuntimeError, ValueError) as exc:
+        logging.warning(
+            'Clipper clipboard set failed, trying cmd clipboard fallback: %r', exc
         )
+    finally:
+        if clipper_opened:
+            try:
+                press_back_button(env, timeout_sec=2)
+            except errors.AdbControllerError:
+                logging.warning(
+                    'Failed to close clipper after clipboard operation.',
+                    exc_info=True,
+                )
 
-    time.sleep(0.5)
-    content = _adb_text_format(content)
-    output_str = issue_generic_request(
-        ['shell', 'am', 'broadcast', '-a', 'clipper.set', '-e', 'text', content],
+    # Fallback path: system clipboard command does not require Clipper app.
+    response = issue_generic_request(
+        ['shell', 'cmd', 'clipboard', 'set', 'text', raw_content],
         env,
-    ).generic.output.decode('utf-8')
-    _extract_clipper_output(output_str)
-    press_back_button(env)
+        timeout_sec=_CLIPBOARD_CMD_TIMEOUT_SECS,
+    )
+    check_ok(response, 'Failed to set clipboard content via cmd clipboard.')
 
 
 def grant_permissions(

@@ -413,7 +413,7 @@ class ExplorerStatusPolicyTest(absltest.TestCase):
 
 class ExplorerStepLimitTest(absltest.TestCase):
 
-  def test_step_limit_is_capped_at_40(self):
+  def test_step_limit_is_capped_at_20(self):
     env = test_utils.FakeAsyncEnv()
     vllm = mock.Mock()
     agent = explorer_agent.ExplorerElementAgent(
@@ -422,7 +422,7 @@ class ExplorerStepLimitTest(absltest.TestCase):
         verbose_step_logs=False,
     )
     agent.set_max_steps(200)
-    agent.actions = [{} for _ in range(40)]
+    agent.actions = [{} for _ in range(20)]
 
     result = agent.step("do something")
 

@@ -58,7 +58,7 @@ AVAILABLE_APPS = [
     "Simple Calendar Pro",
 ]
 
-MAX_AGENT_STEPS = 40
+MAX_AGENT_STEPS = 20
 
 
 GELAB_SYSTEM_PROMPT = """You are a mobile GUI agent for AndroidWorld.

@@ -42,7 +42,7 @@ from android_world.env import tools
 
 
 SCALE_FACTOR = 999
-MAX_AGENT_STEPS = 40
+MAX_AGENT_STEPS = 20
 
 AVAILABLE_APPS = [
     "Camera",

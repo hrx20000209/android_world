@@ -259,6 +259,18 @@ def _run_task(
         )
     else:
         agent_successful = task_successful if interaction_results.done else 0.0
+        latency_aux = _extract_latency_aux_data(interaction_results)
+        task_avg_step_latency = _to_finite_float(
+            latency_aux.get('mean_step_latency_sec')
+        )
+        task_step_count = int(latency_aux.get('num_steps') or 0)
+        if task_avg_step_latency is not None and task_step_count > 0:
+            _log_and_print(
+                'Task latency: avg_step=%.3fs over %d steps (total=%.3fs)',
+                task_avg_step_latency,
+                task_step_count,
+                float(latency_aux.get('total_step_latency_sec') or 0.0),
+            )
         _log_and_print(
             '%s; %s',
             'Task Successful ✅' if agent_successful > 0.5 else 'Task Failed ❌',
@@ -278,7 +290,7 @@ def _run_task(
             constants.EpisodeConstants.EPISODE_LENGTH: len(
                 interaction_results.step_data[constants.STEP_NUMBER]
             ),
-            constants.EpisodeConstants.AUX_DATA: interaction_results.aux_data,
+            constants.EpisodeConstants.AUX_DATA: latency_aux,
             constants.EpisodeConstants.SCREEN_CONFIG: _get_screen_config(task),
             constants.EpisodeConstants.EXCEPTION_INFO: None,
             constants.EpisodeConstants.SEED: task.params[
@@ -558,6 +570,77 @@ def _create_failed_result(
     }
 
 
+def _to_finite_float(value: Any) -> float | None:
+    try:
+        parsed = float(value)
+    except (TypeError, ValueError):
+        return None
+    if np.isnan(parsed) or np.isinf(parsed):
+        return None
+    return parsed
+
+
+def _extract_latency_aux_data(
+        episode_result: episode_runner.EpisodeResult,
+) -> dict[str, Any]:
+    """Builds normalized latency stats for a single episode."""
+    aux: dict[str, Any] = {}
+    if isinstance(episode_result.aux_data, dict):
+        aux.update(episode_result.aux_data)
+    step_latencies = aux.get('step_latencies_sec')
+    if not isinstance(step_latencies, list) or not step_latencies:
+        step_data = episode_result.step_data
+        if isinstance(step_data, dict):
+            for key in ('latency_sec', 'step_latency_sec', 'runner_step_latency_sec'):
+                values = step_data.get(key)
+                if isinstance(values, list) and values:
+                    step_latencies = values
+                    break
+    numeric = []
+    if isinstance(step_latencies, list):
+        for value in step_latencies:
+            parsed = _to_finite_float(value)
+            if parsed is not None and parsed >= 0.0:
+                numeric.append(parsed)
+    total = float(sum(numeric)) if numeric else 0.0
+    mean = float(total / len(numeric)) if numeric else 0.0
+    aux['step_latencies_sec'] = numeric
+    aux['num_steps'] = len(numeric)
+    aux['total_step_latency_sec'] = total
+    aux['mean_step_latency_sec'] = mean
+    return aux
+
+
+def _episode_mean_step_latency(episode: dict[str, Any]) -> float:
+    aux = episode.get(constants.EpisodeConstants.AUX_DATA)
+    if isinstance(aux, dict):
+        value = _to_finite_float(aux.get('mean_step_latency_sec'))
+        if value is not None:
+            return value
+
+    episode_data = episode.get(constants.EpisodeConstants.EPISODE_DATA)
+    if isinstance(episode_data, dict):
+        for key in ('latency_sec', 'step_latency_sec', 'runner_step_latency_sec'):
+            values = episode_data.get(key)
+            if not isinstance(values, list):
+                continue
+            numeric = []
+            for value in values:
+                parsed = _to_finite_float(value)
+                if parsed is not None and parsed >= 0.0:
+                    numeric.append(parsed)
+            if numeric:
+                return float(np.mean(numeric))
+
+    run_time = _to_finite_float(episode.get(constants.EpisodeConstants.RUN_TIME))
+    episode_len = _to_finite_float(
+        episode.get(constants.EpisodeConstants.EPISODE_LENGTH)
+    )
+    if run_time is not None and episode_len is not None and episode_len > 0.0:
+        return float(run_time / episode_len)
+    return float('nan')
+
+
 def _display_success_overlay(
         env: env_interface.AndroidEnvInterface, success: float
 ) -> None:
@@ -677,6 +760,9 @@ def process_episodes(
             constants.EpisodeConstants.EXCEPTION_INFO, np.nan
         )
     })
+    df = df.assign(
+        mean_step_latency_s=df.apply(_episode_mean_step_latency, axis=1)
+    )
 
     result_df = df.groupby(
         constants.EpisodeConstants.TASK_TEMPLATE, dropna=True
@@ -684,6 +770,7 @@ def process_episodes(
         constants.EpisodeConstants.IS_SUCCESSFUL: ['count', 'mean'],
         constants.EpisodeConstants.EPISODE_LENGTH: 'mean',
         constants.EpisodeConstants.RUN_TIME: 'sum',
+        'mean_step_latency_s': 'mean',
         constants.EpisodeConstants.EXCEPTION_INFO: [
             ('none_count', lambda x: x.notnull().sum())
         ],
@@ -694,10 +781,14 @@ def process_episodes(
         'mean_success_rate',
         'mean_episode_length',
         'total_runtime_s',
+        'mean_step_latency_s',
         'num_fail_trials',
     ]
     result_df['total_runtime_s'] = result_df['total_runtime_s'].map(
         lambda x: float('{:.1f}'.format(x))
+    )
+    result_df['mean_step_latency_s'] = result_df['mean_step_latency_s'].map(
+        lambda x: float('{:.3f}'.format(x)) if pd.notnull(x) else np.nan
     )
 
     # Extract metadata and merge with the results table.
@@ -723,5 +814,14 @@ def process_episodes(
         tags_df = _print_results_by_tag(tagged_result_df)
         pd.set_option('display.precision', 2)
         _log_and_print('\n\n%s', tags_df)
+        global_step_latency = pd.to_numeric(
+            df['mean_step_latency_s'], errors='coerce'
+        ).dropna()
+        if not global_step_latency.empty:
+            _log_and_print(
+                'Global mean step latency: %.3fs across %d episodes',
+                float(global_step_latency.mean()),
+                int(global_step_latency.shape[0]),
+            )
 
     return tagged_result_df
