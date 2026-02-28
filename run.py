@@ -20,16 +20,17 @@ tasks or all tasks in the suite and customize various settings using the
 command-line flags.
 """
 
-from collections.abc import Sequence
 import os
+from collections.abc import Sequence
 
 from absl import app
 from absl import flags
 from absl import logging
+
 from android_world import checkpointer as checkpointer_lib
 from android_world import registry
 from android_world import suite_utils
-from android_world.agents import base_agent, human_agent, infer, m3a, random_agent, seeact, t3a, mai_ui
+from android_world.agents import base_agent, human_agent, infer, m3a, random_agent, seeact, t3a, mai_ui, mm_agent, t3a_profiling, explorer_agent, gelab_agent
 from android_world.env import env_launcher
 from android_world.env import interface
 
@@ -106,7 +107,7 @@ selected_tasks = ("AudioRecorderRecordAudio, AudioRecorderRecordAudioWithFileNam
 
 _TASKS = flags.DEFINE_list(
     'tasks',
-    selected_tasks,
+    "NotesMeetingAttendeeCount",
     'List of specific tasks to run in the given suite family. If None, run all'
     ' tasks in the suite family.',
 )
@@ -132,9 +133,9 @@ _OUTPUT_PATH = flags.DEFINE_string(
 )
 
 # Agent specific.
-_AGENT_NAME = flags.DEFINE_string('agent_name', 'mai-ui', help='Agent name.')
+_AGENT_NAME = flags.DEFINE_string('agent_name', 'ui_tars_agent', help='Agent name.')
 
-# m3a_llamacpp, t3a_llamacpp, mai-ui
+# m3a_llamacpp, t3a_llamacpp, mai-ui, mm_agent, t3a_profiling, explore_agent, gelab_agent
 
 _FIXED_TASK_SEED = flags.DEFINE_boolean(
     'fixed_task_seed',
@@ -188,14 +189,6 @@ def _get_agent(
         agent = t3a.T3A(env, infer.DeepseekWrapper())
     # UI-TARS.
     elif _AGENT_NAME.value == 'mai-ui':
-        # agent = m3a.M3A(
-        #     env,
-        #     infer.LlamaCppWrapper(
-        #         api_url="http://localhost:8081/v1/chat/completions",
-        #         temperature=0.0,
-        #         max_tokens=512,
-        #     ),
-        # )
         agent = mai_ui.MAIUIAgent(
             env,
             infer.LlamaCppWrapper(
@@ -205,6 +198,25 @@ def _get_agent(
             ),
             "qwen-vl",
             output_path="./output"
+        )
+    elif _AGENT_NAME.value == 'gelab_agent':
+        agent = gelab_agent.GELABAgent(
+            env,
+            infer.LlamaCppWrapper(
+                api_url="http://localhost:8081/v1/chat/completions",
+                temperature=0.0,
+            ),
+            "qwen-vl",
+            output_path="./output"
+        )
+    elif _AGENT_NAME.value == 'mm_agent':
+        agent = mm_agent.ElementTextAgent(
+            env,
+            infer.LlamaCppWrapper(
+                api_url="http://localhost:8081/v1/chat/completions",
+                temperature=0.0,
+                max_tokens=512,
+            )
         )
     elif _AGENT_NAME.value == 't3a_llamacpp':
         agent = t3a.T3A(
@@ -224,6 +236,20 @@ def _get_agent(
                 max_tokens=512,
             )
         )
+    elif _AGENT_NAME.value == 't3a_profiling':
+        agent = t3a_profiling.T3AExecProfilingAgent(env, infer.DeepseekWrapper())
+    elif _AGENT_NAME.value == 'explore_agent':
+        agent = explorer_agent.ExplorerElementAgent(
+            env,
+            infer.LlamaCppWrapper(
+                api_url="http://localhost:8081/v1/chat/completions",
+                temperature=1.0,
+                max_tokens=512,
+            )
+        )
+    elif _AGENT_NAME.value == 'ui_tars_agent':
+        from android_world.agents import ui_tars_agent
+        agent = ui_tars_agent.UiTarsAgent(env)
 
     if not agent:
         raise ValueError(f'Unknown agent: {_AGENT_NAME.value}')
@@ -286,6 +312,8 @@ def _main() -> None:
         f'Finished running agent {_AGENT_NAME.value} on {_SUITE_FAMILY.value}'
         f' family. Wrote to {checkpoint_dir}.'
     )
+    agent.save_summary()
+
     env.close()
 
 
