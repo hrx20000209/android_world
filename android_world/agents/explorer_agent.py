@@ -163,6 +163,12 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         explore_min_actions_before_reasoning: int = 0,
         explore_budget_boost_per_zero_step: int = 2,
         explore_budget_boost_max: int = 8,
+        targeted_exploration: bool = True,
+        explore_bootstrap_steps: int = 2,
+        explore_periodic_interval: int = 4,
+        explore_read_task_step_cap: int = 2,
+        explore_stuck_action_repeat: int = 2,
+        explore_cooldown_after_safe_mode: int = 1,
     ):
         super().__init__(env, name)
         # Backward-compatible arg retained to avoid breaking older configs.
@@ -256,11 +262,18 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self._task_start_ts: float | None = None
         self._task_trace_dir: str | None = None
         self._task_step_latencies: list[float] = []
-        # Kept for backward compatibility in configs; similarity-only explorer ignores these.
-        _ = explore_warmup_timeout_sec
-        _ = explore_min_actions_before_reasoning
-        _ = explore_budget_boost_per_zero_step
-        _ = explore_budget_boost_max
+        self.targeted_exploration = bool(targeted_exploration)
+        self.explore_bootstrap_steps = max(0, int(explore_bootstrap_steps))
+        self.explore_periodic_interval = max(0, int(explore_periodic_interval))
+        self.explore_read_task_step_cap = max(0, int(explore_read_task_step_cap))
+        self.explore_stuck_action_repeat = max(2, int(explore_stuck_action_repeat))
+        self.explore_cooldown_after_safe_mode = max(0, int(explore_cooldown_after_safe_mode))
+        self.explore_warmup_timeout_sec = max(0.0, float(explore_warmup_timeout_sec))
+        self.explore_min_actions_before_reasoning = max(0, int(explore_min_actions_before_reasoning))
+        self.explore_budget_boost_per_zero_step = max(0, int(explore_budget_boost_per_zero_step))
+        self.explore_budget_boost_max = max(0, int(explore_budget_boost_max))
+        self._explore_trigger_reason: str = ""
+        self._explore_cooldown_steps: int = 0
 
     def set_max_steps(self, max_steps: int) -> None:
         super().set_max_steps(min(MAX_AGENT_STEPS, int(max_steps)))
@@ -656,6 +669,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self._task_start_ts = None
         self._task_trace_dir = None
         self._task_step_latencies = []
+        self._explore_trigger_reason = ""
+        self._explore_cooldown_steps = 0
 
     def _start_explorer_thread(
         self,
@@ -663,6 +678,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         history_tail: list[str],
         clues_text: str,
         source_step: int,
+        trigger_reason: str = "unknown",
     ) -> None:
         if not self.enable_parallel_exploration:
             self._clear_explore_root_baseline()
@@ -680,6 +696,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         with self._explore_action_count_lock:
             self._explore_action_count = 0
         self._explore_iteration_candidates = []
+        self._explore_trigger_reason = str(trigger_reason or "unknown")
         self._clicked_bounds = set()
         self._branch_action_history = []
         self._replay_action_history = list(self._reasoning_action_history)
@@ -690,7 +707,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self._explore_root_hash = _phash_pixels(root_state.pixels)
         self._explore_root_activity = self._foreground_activity_name() or None
         self._emit_log(
-            f"step={source_step} explorer_thread_started root_page=({self._state_page_hint(root_state)})",
+            f"step={source_step} explorer_thread_started trigger={self._explore_trigger_reason} "
+            f"root_page=({self._state_page_hint(root_state)})",
             tag="EXPLORE",
         )
 
@@ -706,11 +724,40 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self._explore_root_pixels = None
         self._explore_root_activity = None
 
-    def _compute_explore_budget(self) -> tuple[int, int, int, int]:
+    def _compute_explore_budget(self, trigger_reason: str | None = None) -> tuple[int, int, int, int]:
         max_depth = max(1, int(self.explore_max_depth))
         max_steps = max(1, int(self.explore_max_steps))
         depth_topk = max(2, int(self.explore_leaf_width) + 3)
-        return max_depth, depth_topk, max_steps, 0
+        targeted = bool(getattr(self, "targeted_exploration", False))
+        if not targeted:
+            return max_depth, depth_topk, max_steps, 0
+
+        reason = str(trigger_reason or getattr(self, "_explore_trigger_reason", "") or "default").strip().lower()
+        compact_depth = 1
+        compact_topk = max(2, min(depth_topk, 3))
+        compact_steps = max(2, min(max_steps, 3))
+
+        if reason in {"bootstrap", "read_only_bootstrap", "periodic_probe"}:
+            return compact_depth, compact_topk, compact_steps, 0
+
+        if reason in {
+            "no_effect_repeat",
+            "repeat_loop",
+            "page_loop",
+            "fallback_recovery",
+            "safe_mode_recovery",
+            "parse_uncertain",
+        }:
+            repeats = max(1, int(getattr(self, "_no_effect_repeat", 0)))
+            boost_per = max(0, int(getattr(self, "explore_budget_boost_per_zero_step", 0)))
+            boost_cap = max(0, int(getattr(self, "explore_budget_boost_max", 0)))
+            boost = min(boost_cap, boost_per * repeats)
+            stressed_steps = min(max_steps, max(4, compact_steps + boost))
+            stressed_depth = min(max_depth, 2)
+            stressed_topk = max(compact_topk, min(depth_topk, max(4, int(self.explore_leaf_width) + 1)))
+            return stressed_depth, stressed_topk, stressed_steps, boost
+
+        return compact_depth, compact_topk, compact_steps, 0
 
     def _has_explore_root_baseline(self) -> bool:
         return bool(self._explore_root_hash is not None and self._explore_root_pixels is not None)
@@ -732,9 +779,11 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 self._emit_log("explorer_thread_still_alive_after_stop", tag="EXPLORE")
                 clean = False
         self._explore_thread_stop_clean = clean
+        candidates = list(self._explore_iteration_candidates)
         if clean:
             self._explore_thread = None
-        return list(self._explore_iteration_candidates)
+        self._explore_iteration_candidates = []
+        return candidates
 
     # -----------------------------
     # Embedding / scoring
@@ -965,6 +1014,201 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             "txt_information",
         }
         return any(token in text for token in tokens)
+
+    @staticmethod
+    def _goal_is_read_only_query(goal: str) -> bool:
+        text = _normalize_space(goal).lower()
+        if not text:
+            return False
+        query_markers = {
+            "what",
+            "which",
+            "where",
+            "when",
+            "how many",
+            "do i have",
+            "is there",
+            "is the",
+            "answer",
+            "verify",
+            "check whether",
+            "check if",
+        }
+        action_markers = {
+            "create",
+            "add",
+            "delete",
+            "remove",
+            "record",
+            "turn ",
+            "enable",
+            "disable",
+            "toggle",
+            "set ",
+            "rename",
+            "move",
+            "edit",
+            "write",
+            "type",
+            "send",
+        }
+        has_query = bool("?" in text or any(token in text for token in query_markers))
+        has_action = bool(any(token in text for token in action_markers))
+        return bool(has_query and not has_action)
+
+    @staticmethod
+    def _coord_bucket(value: Any, bucket: int = 10) -> str:
+        num = _safe_int(value)
+        if num is None:
+            return "na"
+        step = max(1, int(bucket))
+        return str(int(round(float(num) / float(step)) * step))
+
+    @staticmethod
+    def _action_signature_from_dict(action_dict: dict[str, Any] | None) -> str:
+        data = dict(action_dict or {})
+        action_type = str(data.get("action_type") or data.get("action") or "").strip().lower()
+        if not action_type:
+            return ""
+        if action_type in {"click", "tap", "long_press", "input_text", "type"}:
+            x = ExplorerElementAgent._coord_bucket(data.get("x"))
+            y = ExplorerElementAgent._coord_bucket(data.get("y"))
+            idx = _safe_int(data.get("index"))
+            text = _normalize_space(data.get("text", ""))
+            text_key = text.lower()[:16] if text else ""
+            return f"{action_type}@{x}:{y}#{idx}:{text_key}"
+        if action_type in {"swipe", "scroll"}:
+            direction = _normalize_space(data.get("direction", "")).lower()
+            return f"{action_type}:{direction}"
+        if action_type in {"open_app", "open"}:
+            app_name = _normalize_space(data.get("app_name") or data.get("text") or "").lower()
+            return f"{action_type}:{app_name[:20]}"
+        if action_type in {"navigate_back", "navigate_home", "keyboard_enter", "wait"}:
+            return action_type
+        return action_type
+
+    @staticmethod
+    def _action_signature_from_action(action: json_action.JSONAction) -> str:
+        if action is None:
+            return ""
+        try:
+            action_dict = action.as_dict(skip_none=True)
+        except Exception:  # pylint: disable=broad-exception-caught
+            return ""
+        return ExplorerElementAgent._action_signature_from_dict(action_dict)
+
+    def _has_repeated_recent_action_signature(self, signature: str, repeats: int = 2) -> bool:
+        if not signature:
+            return False
+        need = max(2, int(repeats))
+        if len(self.actions) < need:
+            return False
+        tail = self.actions[-need:]
+        for entry in tail:
+            if not isinstance(entry, dict):
+                return False
+            sig = self._action_signature_from_dict(entry.get("action_dict") or {})
+            if sig != signature:
+                return False
+        return True
+
+    def _recent_page_hash_stable(self, repeats: int = 2, max_hash_diff: int = 2) -> bool:
+        need = max(2, int(repeats))
+        if len(self._reasoning_page_records) < need:
+            return False
+        hashes: list[int] = []
+        for record in self._reasoning_page_records[-need:]:
+            if not isinstance(record, dict):
+                return False
+            end_page = record.get("end_page") or {}
+            value = end_page.get("hash")
+            try:
+                hashes.append(int(value))
+            except Exception:  # pylint: disable=broad-exception-caught
+                return False
+        latest = hashes[-1]
+        threshold = max(0, int(max_hash_diff))
+        for prev in hashes[:-1]:
+            if int(_hash_diff(latest, prev)) > threshold:
+                return False
+        return True
+
+    def _should_start_exploration(self, step_no: int, goal: str) -> tuple[bool, str]:
+        if not bool(self.enable_parallel_exploration):
+            return False, "disabled"
+        if not bool(getattr(self, "targeted_exploration", False)):
+            return True, "always_on"
+
+        cooldown = max(0, int(getattr(self, "_explore_cooldown_steps", 0)))
+        if cooldown > 0:
+            self._explore_cooldown_steps = max(0, cooldown - 1)
+            return False, "cooldown"
+
+        read_only = self._goal_is_read_only_query(goal)
+        if int(step_no) <= max(0, int(getattr(self, "explore_bootstrap_steps", 0))):
+            return True, "read_only_bootstrap" if read_only else "bootstrap"
+        if int(getattr(self, "_no_effect_repeat", 0)) >= 1:
+            return True, "no_effect_repeat"
+
+        last_source = ""
+        if self.actions and isinstance(self.actions[-1], dict):
+            last_source = str(self.actions[-1].get("source") or "").lower()
+        if "fallback" in last_source:
+            return True, "fallback_recovery"
+        if "parse" in last_source:
+            return True, "parse_uncertain"
+        if "safe_mode" in last_source:
+            return True, "safe_mode_recovery"
+
+        last_signature = ""
+        if self.actions and isinstance(self.actions[-1], dict):
+            last_signature = self._action_signature_from_dict(self.actions[-1].get("action_dict") or {})
+        repeat_need = max(2, int(getattr(self, "explore_stuck_action_repeat", 2)))
+        if last_signature and self._has_repeated_recent_action_signature(last_signature, repeats=repeat_need):
+            if self._recent_page_hash_stable(repeats=2, max_hash_diff=2):
+                return True, "page_loop"
+            return True, "repeat_loop"
+
+        read_cap = max(0, int(getattr(self, "explore_read_task_step_cap", 0)))
+        if read_only and int(step_no) > read_cap:
+            return False, "read_only_skip"
+
+        periodic = max(0, int(getattr(self, "explore_periodic_interval", 0)))
+        if periodic > 0 and int(step_no) % periodic == 0:
+            return True, "periodic_probe"
+        return False, "not_triggered"
+
+    def _should_apply_loop_guard(self, action: json_action.JSONAction) -> bool:
+        if action is None:
+            return False
+        if action.action_type in {
+            json_action.STATUS,
+            json_action.ANSWER,
+            json_action.WAIT,
+            json_action.UNKNOWN,
+            json_action.NAVIGATE_BACK,
+            json_action.NAVIGATE_HOME,
+        }:
+            return False
+        signature = self._action_signature_from_action(action)
+        if not signature:
+            return False
+        repeats = max(2, int(getattr(self, "explore_stuck_action_repeat", 2)))
+        if not self._has_repeated_recent_action_signature(signature, repeats=repeats):
+            return False
+        if int(getattr(self, "_no_effect_repeat", 0)) >= 1:
+            return True
+        if len(self.actions) < repeats:
+            return False
+        tail = self.actions[-repeats:]
+        unchanged = 0
+        for entry in tail:
+            if not isinstance(entry, dict):
+                continue
+            effect = entry.get("action_effect") or {}
+            if not bool(effect.get("changed")):
+                unchanged += 1
+        return bool(unchanged >= repeats)
 
     # -----------------------------
     # Candidate collection / scoring
@@ -1350,11 +1594,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         allow_back_navigation: bool = False,
     ) -> tuple[list[tuple[int, Any]], dict[str, Any]]:
         _ = safe
-        _ = query_keywords
-        _ = avoid_keys
-        _ = hard_avoid
-        _ = allow_back_navigation
         intent_flags = intent_flags or {"input": False, "select": False, "nav": False}
+        query_keywords = list(query_keywords or [])
 
         stats: dict[str, Any] = {
             "total": len(ui_elements),
@@ -1406,6 +1647,24 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             if fallback_candidates:
                 stats["filter_level"] = "similarity_with_noninteractive_fallback"
                 candidates = fallback_candidates
+        if len(candidates) > 1 and query_keywords:
+            intent_filtered: list[tuple[int, Any]] = []
+            for idx, element in candidates:
+                merged = self._element_merged_text(element)
+                overlap = self._query_overlap_score(query_keywords, merged)
+                nav_bonus = self._navigation_helpfulness(element)
+                keep_back = bool(allow_back_navigation and self._is_back_navigation_element(element))
+                keep_common_control = bool(self._is_submit_or_dismiss_control(element))
+                keep = bool(overlap >= 0.12 or nav_bonus >= 0.22 or keep_back or keep_common_control)
+                if keep:
+                    if keep_back:
+                        stats["kept_back_escape"] = int(stats.get("kept_back_escape", 0)) + 1
+                    intent_filtered.append((idx, element))
+                else:
+                    stats["removed_intent_mismatch"] = int(stats.get("removed_intent_mismatch", 0)) + 1
+            if intent_filtered:
+                candidates = intent_filtered
+                stats["filter_level"] = "targeted_similarity"
         if len(candidates) <= 1:
             stats["candidates"] = len(candidates)
             return candidates, stats
@@ -1442,13 +1701,14 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         intent_flags: dict[str, bool] | None = None,
         query_keywords: list[str] | None = None,
     ) -> CandidateScore:
-        _ = intent_flags
-        _ = query_keywords
+        intent_flags = intent_flags or {"input": False, "select": False, "nav": False}
+        query_keywords = list(query_keywords or [])
         key = self._element_key(index, element)
         cand_text, _ = self._element_text(index, element)
         task_similarity = float(self._semantic_similarity(goal_queries, cand_text))
         runtime_similarity = float(self._semantic_similarity(runtime_queries, cand_text)) if runtime_queries else 0.0
-        similarity = float(max(task_similarity, runtime_similarity))
+        query_overlap = float(self._query_overlap_score(query_keywords, self._element_merged_text(element)))
+        similarity = float(max(task_similarity, runtime_similarity, min(1.0, query_overlap * 0.92)))
         visits = float(self._bound_visit_count.get(key, 0.0))
         effect_ema = self._bound_effect_ema.get(key)
         low_effect_penalty = 0.0
@@ -1456,6 +1716,13 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             low_effect_penalty = 0.10
         repeat_penalty = min(0.35, float(visits) * 0.07)
         score = max(0.0, float(similarity) - repeat_penalty - low_effect_penalty)
+        if query_overlap > 0.0:
+            score += min(0.18, query_overlap * 0.18)
+        if bool(intent_flags.get("nav")):
+            score += float(self._navigation_helpfulness(element)) * 0.35
+        if self._is_submit_or_dismiss_control(element):
+            score += 0.05
+        score = min(1.0, float(score))
         is_clickable = bool(getattr(element, "is_clickable", False))
 
         return CandidateScore(
@@ -1480,8 +1747,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         hard_avoid: bool = False,
         intent_flags: dict[str, bool] | None = None,
     ) -> tuple[list[CandidateScore], int]:
-        query_keywords = None
-        allow_back_navigation = False
+        query_keywords = self._query_keywords(goal_queries, runtime_queries, limit=24)
+        allow_back_navigation = self._task_wants_back_navigation(goal_queries, runtime_queries)
         candidates, filter_stats = self._collect_candidates(
             ui_elements,
             safe=True,
@@ -2136,7 +2403,6 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         avoid_keys: set[str] | None = None,
         hard_avoid: bool = False,
     ) -> tuple[CandidateScore | None, int]:
-        _ = semantic_low
         _ = intent_flags
         if not candidates:
             return None, 0
@@ -2155,6 +2421,10 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             pool.append(cand)
         if not pool:
             pool = list(candidates)
+        semantic_floor = max(0.0, float(semantic_low))
+        semantic_pool = [cand for cand in pool if float(cand.similarity) >= semantic_floor]
+        if semantic_pool:
+            pool = semantic_pool
 
         recent_keys = set(list(self._recent_clicked_bounds)[-int(self._recent_clicked_window) :])
         best: CandidateScore | None = None
@@ -2260,12 +2530,13 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             tag="EXPLORE",
         )
 
-        max_depth, depth_topk, max_steps, budget_boost = self._compute_explore_budget()
+        budget_reason = str(getattr(self, "_explore_trigger_reason", "") or "default")
+        max_depth, depth_topk, max_steps, budget_boost = self._compute_explore_budget(trigger_reason=budget_reason)
         max_branches = self.explore_max_branches
         if max_branches is None:
             max_branches = max(1, max_steps // max_depth)
         self._emit_log(
-            f"step={source_step} explore_budget depth={max_depth} topk={depth_topk} "
+            f"step={source_step} explore_budget reason={budget_reason} depth={max_depth} topk={depth_topk} "
             f"max_steps={max_steps} boost={budget_boost}",
             tag="EXPLORE",
         )
@@ -3428,13 +3699,28 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             content=clues or "None.",
             tag="REASON",
         )
+        explore_gate_reason = "disabled"
+        should_explore = False
         if self.enable_parallel_exploration:
-            self._start_explorer_thread(
-                goal=goal,
-                history_tail=self.history[-3:],
-                clues_text=clues,
-                source_step=step_no,
+            should_explore, explore_gate_reason = self._should_start_exploration(step_no=step_no, goal=goal)
+            self._emit_log(
+                f"step={step_no} explore_gate should_explore={should_explore} reason={explore_gate_reason}",
+                tag="EXPLORE",
             )
+        if not should_explore:
+            with self._explore_action_count_lock:
+                self._explore_action_count = 0
+            self._explore_iteration_candidates = []
+            self._clear_explore_root_baseline()
+        if self.enable_parallel_exploration:
+            if should_explore:
+                self._start_explorer_thread(
+                    goal=goal,
+                    history_tail=self.history[-3:],
+                    clues_text=clues,
+                    source_step=step_no,
+                    trigger_reason=explore_gate_reason,
+                )
 
         prompt_history = self._history_prompt_text(max_items=8)
         user_text = (
@@ -3527,6 +3813,22 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             else:
                 source = "fallback_parse"
                 action, tool_call = self._fallback_explore(hints, ui_elements)
+        if self._should_apply_loop_guard(action):
+            loop_guard_action, loop_guard_tool = self._fallback_explore(hints, ui_elements)
+            prev_sig = self._action_signature_from_action(action)
+            alt_sig = self._action_signature_from_action(loop_guard_action)
+            if (
+                loop_guard_action.action_type not in {json_action.UNKNOWN, json_action.WAIT}
+                and alt_sig
+                and alt_sig != prev_sig
+            ):
+                source = "loop_guard_fallback"
+                action = loop_guard_action
+                tool_call = loop_guard_tool
+                self._emit_log(
+                    f"step={step_no} loop_guard_applied prev={prev_sig} alt={alt_sig}",
+                    tag="REASON",
+                )
 
         explore_candidates = self._stop_explorer_thread()
         explore_action_count = self._get_explore_action_count()
@@ -3555,6 +3857,10 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             source = f"{source}_thread_guard"
             parse_error = safety_mode_reason
             self._clear_explore_root_baseline()
+            self._explore_cooldown_steps = max(
+                int(self._explore_cooldown_steps),
+                int(self.explore_cooldown_after_safe_mode),
+            )
             self._emit_log(
                 f"step={step_no} thread_guard_failed -> enable_safe_mode",
                 tag="REASON",
@@ -3563,6 +3869,10 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             safety_mode_reason = "rollback_guard_failed_not_at_root"
             source = f"{source}_rollback_guard"
             parse_error = safety_mode_reason
+            self._explore_cooldown_steps = max(
+                int(self._explore_cooldown_steps),
+                int(self.explore_cooldown_after_safe_mode),
+            )
             self._emit_log(
                 f"step={step_no} rollback_guard_failed -> enable_safe_mode",
                 tag="REASON",

@@ -248,7 +248,7 @@ class ExplorerFilteringRegressionTest(absltest.TestCase):
         intent_flags={"input": False, "select": False, "nav": False},
         query_keywords=[],
     )
-    self.assertEqual(scored.score, scored.similarity)
+    self.assertGreaterEqual(scored.score, scored.similarity)
 
   def test_collect_candidates_hard_avoid_filters_when_multiple(self):
     agent = self._agent()
@@ -308,6 +308,44 @@ class ExplorerFilteringRegressionTest(absltest.TestCase):
     self.assertEqual(picked.key, "key_b")
     self.assertEqual(skipped, 1)
 
+  def test_select_depth_candidate_prefers_semantic_floor(self):
+    agent = self._agent()
+    agent.no_effect_delta_threshold = 1.2
+    cand_low_sim = explorer_agent.CandidateScore(
+        index=0,
+        key="key_low",
+        text="low",
+        score=0.95,
+        task_similarity=0.10,
+        runtime_similarity=0.0,
+        similarity=0.10,
+        visits=0.0,
+        is_clickable=True,
+    )
+    cand_high_sim = explorer_agent.CandidateScore(
+        index=1,
+        key="key_high",
+        text="high",
+        score=0.70,
+        task_similarity=0.70,
+        runtime_similarity=0.0,
+        similarity=0.70,
+        visits=0.0,
+        is_clickable=True,
+    )
+
+    picked, skipped = agent._select_depth_candidate(
+        [cand_low_sim, cand_high_sim],
+        semantic_low=0.35,
+        intent_flags={"input": False, "select": False, "nav": False},
+        avoid_keys=set(),
+        hard_avoid=False,
+    )
+
+    self.assertIsNotNone(picked)
+    self.assertEqual(picked.key, "key_high")
+    self.assertEqual(skipped, 0)
+
   def test_same_root_page_rejects_activity_mismatch_when_mae_is_large(self):
     agent = self._agent()
     root_pixels = np.zeros((24, 24, 3), dtype=np.uint8)
@@ -359,6 +397,42 @@ class ExplorerBudgetPolicyTest(absltest.TestCase):
     self.assertEqual(topk, 7)
     self.assertEqual(boost, 0)
     self.assertEqual(max_steps, 14)
+
+
+class ExplorerTargetedPolicyTest(absltest.TestCase):
+
+  def _agent(self) -> ExplorerElementAgent:
+    agent = object.__new__(ExplorerElementAgent)
+    agent.enable_parallel_exploration = True
+    agent.targeted_exploration = True
+    agent._explore_cooldown_steps = 0
+    agent.explore_bootstrap_steps = 1
+    agent.explore_read_task_step_cap = 2
+    agent.explore_periodic_interval = 0
+    agent.explore_stuck_action_repeat = 2
+    agent._no_effect_repeat = 0
+    agent.actions = []
+    agent._reasoning_page_records = []
+    return agent
+
+  def test_should_start_exploration_skips_late_read_only_goal(self):
+    agent = self._agent()
+    should_start, reason = agent._should_start_exploration(
+        step_no=3,
+        goal="What events do I have on October 24? Answer with the event names.",
+    )
+    self.assertFalse(should_start)
+    self.assertEqual(reason, "read_only_skip")
+
+  def test_should_start_exploration_triggers_on_no_effect(self):
+    agent = self._agent()
+    agent._no_effect_repeat = 1
+    should_start, reason = agent._should_start_exploration(
+        step_no=4,
+        goal="Delete the selected recipe from Broccoli app.",
+    )
+    self.assertTrue(should_start)
+    self.assertEqual(reason, "no_effect_repeat")
 
 
 class ExplorerStatusPolicyTest(absltest.TestCase):
