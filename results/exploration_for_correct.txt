@@ -1,0 +1,35 @@
+                                           task_num  num_complete_trials  mean_success_rate  mean_episode_length  total_runtime_s  mean_step_latency_s  num_fail_trials
+task
+NotesIsTodo                                       0                  1.0               0.00                10.00           329.20                31.80              0.0
+RecipeDeleteMultipleRecipesWithConstraint         1                  1.0               1.00                 4.00           108.80                25.66              0.0
+RecipeDeleteSingleRecipe                          2                  1.0               1.00                 7.00           189.00                26.39              0.0
+RecipeDeleteSingleWithRecipeWithNoise             3                  1.0               0.00                19.00           528.30                27.40              0.0
+SimpleCalendarAnyEventsOnDate                     4                  1.0               1.00                 5.00           123.00                23.80              0.0
+SimpleCalendarEventsInTimeRange                   5                  1.0               0.00                 3.00            88.20                28.22              0.0
+SimpleCalendarEventsOnDate                        6                  1.0               0.00                10.00           263.80                25.93              0.0
+SimpleCalendarFirstEventAfterStartTime            7                  1.0               0.00                10.00           256.40                25.17              0.0
+SimpleCalendarLocationOfEvent                     8                  1.0               0.00                10.00           255.90                25.16              0.0
+SystemBluetoothTurnOffVerify                      9                  1.0               0.00                10.00           280.10                27.59              0.0
+SystemBluetoothTurnOnVerify                      10                  1.0               0.00                10.00           269.60                26.52              0.0
+SystemBrightnessMaxVerify                        11                  1.0               0.00                10.00           291.10                28.47              0.0
+SystemBrightnessMinVerify                        12                  1.0               0.00                10.00           262.00                25.74              0.0
+SystemWifiTurnOff                                13                  1.0               0.00                10.00           290.60                28.53              0.0
+SystemWifiTurnOffVerify                          14                  1.0               0.00                10.00           329.50                29.89              0.0
+SystemWifiTurnOn                                 15                  1.0               1.00                 9.00           242.10                23.64              0.0
+SystemWifiTurnOnVerify                           16                  1.0               1.00                 9.00           248.20                27.04              0.0
+========= Average =========                       0                  1.0               0.29                 9.18           256.22                26.88              0.0
+
+
+                         mean_success_rate
+difficulty                            easy medium hard
+tags
+complex_ui_understanding               0.0      -    -
+data_edit                              0.5      -    -
+information_retrieval                 0.33    0.0    -
+parameterized                         0.29    0.0  1.0
+repetition                               -      -  1.0
+screen_reading                         0.2      -  1.0
+search                                0.25      -    -
+transcription                          0.0      -    -
+verification                          0.17      -    -
+Global mean step latency: 26.879s across 17 episodes
