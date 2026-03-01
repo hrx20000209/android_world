@@ -244,9 +244,10 @@ def _get_agent(
             env,
             infer.LlamaCppWrapper(
                 api_url="http://localhost:8081/v1/chat/completions",
-                temperature=1.0,
+                temperature=0.2,
                 max_tokens=512,
-            )
+            ),
+            reasoning_sleep_sec=20.0,
         )
     elif _AGENT_NAME.value == 'ui_tars_agent':
         from android_world.agents import ui_tars_agent
