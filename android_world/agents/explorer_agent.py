@@ -88,6 +88,7 @@ For each function call, return the thinking process in <thinking> </thinking> ta
 {"action":"wait"}
 {"action":"answer","text":"..."}
 {"action":"terminate","status":"success|fail"}
+{"action":"status","goal_status":"complete|infeasible"}
 
 Fallback only when coordinate is unavailable:
 {"action":"click","element_id":int}
@@ -97,10 +98,11 @@ Fallback only when coordinate is unavailable:
 ## Note
 - Prefer coordinate-based actions for click/long_press/type. Do not invent keys like button/label/target for those actions.
 - For click/long_press/type, output `coordinate:[x,y]` directly whenever possible.
+- Coordinates must use 0-1000 space for both axes (not absolute pixels).
 - If coordinate is unavailable, use element_id from explorer hints.
 - Avoid repeating no-effect actions.
-- For task completion, prefer {"action":"terminate","status":"success"}.
-  If you output {"action":"answer", ...}, it will be treated as task completion.
+- For task completion, prefer {"action":"status","goal_status":"complete"} (or {"action":"terminate","status":"success"}).
+- For question-answer tasks, use {"action":"answer","text":"..."}; it will be treated as task completion.
 """.strip()
 
 
@@ -146,12 +148,12 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         explore_max_branches: int | None = None,
         rollback_backtrack_limit: int = 2,
         explore_action_pause_sec: float = 0.25,
-        reasoning_sleep_sec: float = 0.0,
+        reasoning_sleep_sec: float = 20.0,
         embed_model_name: str = "sentence-transformers/paraphrase-MiniLM-L6-v2",
         verbose_step_logs: bool = True,
         reasoning_preview_chars: int = 180,
         log_full_ui_tree_every_n_steps: int = 0,
-        model_coordinate_mode: str = "auto",
+        model_coordinate_mode: str = "1000",
         explore_mask_output_dir: str = "explore_k1_masks",
         save_explore_masks: bool = True,
         trace_output_dir: str = "explorer_traces",
@@ -177,13 +179,17 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self.explore_max_branches = explore_max_branches
         self.rollback_backtrack_limit = max(1, int(rollback_backtrack_limit))
         self.explore_action_pause_sec = max(0.05, float(explore_action_pause_sec))
-        # Disable simulated reasoning sleep; exploration should be event-driven.
-        self.reasoning_sleep_sec = 0.0
+        # Simulate slow reasoning so parallel exploration can accumulate signal.
+        self.reasoning_sleep_sec = max(0.0, float(reasoning_sleep_sec))
         self.embed_model_name = embed_model_name
         self.verbose_step_logs = bool(verbose_step_logs)
         self.reasoning_preview_chars = max(60, int(reasoning_preview_chars))
         self.log_full_ui_tree_every_n_steps = max(0, int(log_full_ui_tree_every_n_steps))
-        self.model_coordinate_mode = str(model_coordinate_mode or "auto").strip().lower()
+        requested_mode = str(model_coordinate_mode or "1000").strip().lower()
+        # Avoid ambiguous absolute-vs-1000 guessing by default.
+        if requested_mode == "auto":
+            requested_mode = "1000"
+        self.model_coordinate_mode = requested_mode
         self.enable_parallel_exploration = bool(enable_parallel_exploration)
         self.save_explore_masks = bool(save_explore_masks)
         self.explore_mask_output_dir = str(explore_mask_output_dir or "explore_k1_masks").strip()
@@ -201,9 +207,11 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
 
         self.actions: list[dict[str, Any]] = []
         self.history: list[str] = []
+        self._reasoning_page_records: list[dict[str, Any]] = []
         self._recent_indices: deque[int] = deque(maxlen=50)
         self._last_pixels: np.ndarray | None = None
         self._last_action_text: str = ""
+        self._last_action_effect: dict[str, Any] = {}
         self._no_effect_repeat = 0
         self._execution_feedback = ""
 
@@ -216,6 +224,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self._explore_thread_stop_clean: bool = True
         self._explore_action_count = 0
         self._explore_action_count_lock = threading.Lock()
+        self._last_explore_action_ts: float = 0.0
 
         self._explore_iteration_candidates: list[dict[str, Any]] = []
         self._pending_explore_payload: dict[str, Any] | None = None
@@ -266,16 +275,35 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             return
         stamp = time.strftime("%H:%M:%S")
         with self._log_lock:
-            print(f"[{tag} {stamp}] {message}")
+            print(f"[{tag} {stamp}] {self._humanize_log_message(message)}")
 
     def _emit_log_block(self, title: str, content: str, tag: str = "REASON") -> None:
         if not self.verbose_step_logs:
             return
         stamp = time.strftime("%H:%M:%S")
         with self._log_lock:
-            print(f"[{tag} {stamp}] {title} BEGIN")
+            print(f"[{tag} {stamp}] {self._humanize_log_message(title)} BEGIN")
             print(content if content else "<EMPTY>")
-            print(f"[{tag} {stamp}] {title} END")
+            print(f"[{tag} {stamp}] {self._humanize_log_message(title)} END")
+
+    @staticmethod
+    def _humanize_log_message(message: str) -> str:
+        """Convert compact key=value fragments into easier-to-read text."""
+        text = _normalize_space(message)
+        if not text or "=" not in text:
+            return text
+
+        out_tokens: list[str] = []
+        for tok in text.split(" "):
+            if "=" not in tok:
+                out_tokens.append(tok)
+                continue
+            key, value = tok.split("=", 1)
+            if re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", key):
+                out_tokens.append(f"{key.replace('_', ' ')}: {value}")
+            else:
+                out_tokens.append(tok)
+        return " ".join(out_tokens)
 
     def _step_separator(
         self,
@@ -290,9 +318,10 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         with self._log_lock:
             print(sep)
             if phase == "start":
-                print(f"[STEP {step_no:03d} START] goal={goal}")
+                print(f"[STEP {step_no:03d} START] Goal: {goal}")
             else:
-                print(f"[STEP {step_no:03d} END] {summary or ''}".rstrip())
+                end_text = self._humanize_log_message(summary or "")
+                print(f"[STEP {step_no:03d} END] {end_text}".rstrip())
             print(sep)
 
     @staticmethod
@@ -322,9 +351,92 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         except Exception as exc:  # pylint: disable=broad-exception-caught
             self._emit_log(f"write_json_failed path={path} error={exc}", tag="TRACE")
 
+    def _append_jsonl(self, path: str, payload: dict[str, Any]) -> None:
+        try:
+            with open(path, "a", encoding="utf-8") as f:
+                f.write(json.dumps(self._json_safe(payload), ensure_ascii=False))
+                f.write("\n")
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            self._emit_log(f"append_jsonl_failed path={path} error={exc}", tag="TRACE")
+
     @staticmethod
     def _save_png(path: str, pixels: np.ndarray) -> None:
         Image.fromarray(np.array(pixels, copy=True)).save(path)
+
+    @staticmethod
+    def _element_brief_label(element: Any, max_len: int = 36) -> str:
+        text = _normalize_space(getattr(element, "text", ""))
+        desc = _normalize_space(getattr(element, "content_description", ""))
+        rid = _normalize_space(
+            getattr(element, "resource_id", "") or getattr(element, "resource_name", "")
+        )
+        cls = _normalize_space(getattr(element, "class_name", ""))
+        label = text or desc or rid or cls or "unnamed"
+        if len(label) > max(12, int(max_len)):
+            label = label[: max(12, int(max_len))].rstrip(" ,.;:") + "..."
+        return label
+
+    def _compact_page_record(self, state: Any, max_cues: int = 3) -> dict[str, Any]:
+        try:
+            page_hash = int(_phash_pixels(state.pixels))
+        except Exception:  # pylint: disable=broad-exception-caught
+            page_hash = -1
+
+        activity = self._foreground_activity_name()
+        cues: list[str] = []
+        seen: set[str] = set()
+        for idx, element in enumerate(list(getattr(state, "ui_elements", None) or [])):
+            if not self._is_valid_element(element):
+                continue
+            label = self._element_brief_label(element)
+            key = label.lower()
+            if key in seen:
+                continue
+            seen.add(key)
+            cues.append(f"{idx}:{label}")
+            if len(cues) >= max(1, int(max_cues)):
+                break
+        return {
+            "activity": activity,
+            "hash": page_hash,
+            "cues": cues,
+        }
+
+    @staticmethod
+    def _hash_distance(lhs_hash: Any, rhs_hash: Any) -> int | None:
+        try:
+            lhs = int(lhs_hash)
+            rhs = int(rhs_hash)
+        except Exception:  # pylint: disable=broad-exception-caught
+            return None
+        if lhs < 0 or rhs < 0:
+            return None
+        return int(_hash_diff(lhs, rhs))
+
+    def _page_alignment_summary(
+        self,
+        start_page: dict[str, Any],
+        current_page: dict[str, Any],
+    ) -> dict[str, Any]:
+        diff = self._hash_distance(start_page.get("hash"), current_page.get("hash"))
+        start_activity = self._normalize_activity_name(start_page.get("activity"))
+        current_activity = self._normalize_activity_name(current_page.get("activity"))
+        same_activity = bool(start_activity and current_activity and start_activity == current_activity)
+        # Same activity allows a looser hash threshold; cross-activity requires stronger evidence.
+        matched = bool(diff is not None and ((same_activity and diff <= 18) or diff <= 10))
+        return {
+            "matched": matched,
+            "hash_diff": diff,
+            "same_activity": same_activity,
+        }
+
+    @staticmethod
+    def _page_brief_text(page: dict[str, Any]) -> str:
+        activity = _normalize_space(page.get("activity") or "")
+        page_hash = page.get("hash")
+        cues = page.get("cues") or []
+        cue_text = ", ".join([str(x) for x in cues[:2]]) if cues else "no cues"
+        return f"{activity} (hash {page_hash}; {cue_text})"
 
     def _ensure_task_context(self, goal: str) -> None:
         if self._task_goal == goal and self._task_start_ts is not None:
@@ -484,7 +596,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         for idx, element in enumerate(all_elements):
             if not self._is_valid_element(element):
                 continue
-            label = f"index={idx}, {self._element_short_label(element)}"
+            label = f"#{idx}: {self._element_short_label(element)}"
             key = label.lower()
             if key in seen:
                 continue
@@ -495,8 +607,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
 
         cue_text = "; ".join(cues) if cues else "no_semantic_nodes"
         return (
-            f"activity={foreground_activity}, logical_size={logical_size}, orientation={orientation}, "
-            f"ui_elements_total={len(all_elements)}, hash={page_hash}, cues={cue_text}"
+            f"Activity {foreground_activity}; screen {logical_size}; orientation {orientation}; "
+            f"{len(all_elements)} UI elements; hash {page_hash}; cues: {cue_text}"
         )
 
     # -----------------------------
@@ -508,9 +620,11 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         super().reset(go_home)
         self.actions.clear()
         self.history.clear()
+        self._reasoning_page_records.clear()
         self._recent_indices.clear()
         self._last_pixels = None
         self._last_action_text = ""
+        self._last_action_effect = {}
         self._no_effect_repeat = 0
         self._execution_feedback = ""
 
@@ -521,6 +635,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self._explore_root_pixels = None
         self._explore_root_activity = None
         self._explore_thread_stop_clean = True
+        self._last_explore_action_ts = 0.0
         self._replay_action_history = []
         self._reasoning_action_history = []
         self._branch_action_history = []
@@ -728,17 +843,39 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             seen.add(key)
             queries.append(text)
 
+        # Prefer structured action records over free-form history text.
+        for entry in (self.actions or [])[-4:]:
+            if not isinstance(entry, dict):
+                continue
+            tool_call = entry.get("tool_call") or {}
+            args = tool_call.get("arguments") if isinstance(tool_call, dict) else {}
+            if not isinstance(args, dict):
+                continue
+            action_name = _normalize_space(args.get("action") or args.get("action_type") or "")
+            if action_name:
+                _add_query(action_name, max_len=28)
+            for key in ("text", "app_name", "button", "direction", "status", "goal_status"):
+                value = _normalize_space(args.get(key) or "")
+                if value:
+                    _add_query(value, max_len=64)
+            if len(queries) >= 12:
+                return queries[:12]
+
         if history_tail:
             for item in history_tail[-4:]:
                 text = _normalize_space(item)
                 if not text:
                     continue
                 action_match = re.search(r"action=([a-zA-Z_]+)", text, flags=re.IGNORECASE)
+                if not action_match:
+                    action_match = re.search(r"\[(?:llm|fallback[^\]]*)\]\s*([a-zA-Z_]+)", text, flags=re.IGNORECASE)
                 action_name = _normalize_space(action_match.group(1)) if action_match else ""
                 if action_name:
                     _add_query(action_name, max_len=28)
                 for key in ("text", "app_name", "button", "direction", "status", "goal_status"):
                     field_match = re.search(rf"{key}=([^|]+)", text, flags=re.IGNORECASE)
+                    if not field_match:
+                        field_match = re.search(rf"{key}\s*:\s*([^|;]+)", text, flags=re.IGNORECASE)
                     if not field_match:
                         continue
                     value = _normalize_space(field_match.group(1)).strip("[]")
@@ -751,6 +888,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         if clues_text:
             clues = str(clues_text)
             keyword_matches = re.findall(r"candidate_keywords=([^\n]+)", clues, flags=re.IGNORECASE)
+            if not keyword_matches:
+                keyword_matches = re.findall(r"candidate keywords:\s*([^\n]+)", clues, flags=re.IGNORECASE)
             for keyword_line in keyword_matches[:2]:
                 for token in keyword_line.split(","):
                     token = _normalize_space(token).lower()
@@ -761,6 +900,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                         return queries[:12]
             if not keyword_matches:
                 trunk_match = re.search(r"trunk_text=([^,\n]+)", clues, flags=re.IGNORECASE)
+                if not trunk_match:
+                    trunk_match = re.search(r"text:\s*([^\n]+)", clues, flags=re.IGNORECASE)
                 if trunk_match:
                     trunk_text = self._clean_clue_text(trunk_match.group(1))
                     if trunk_text:
@@ -1725,7 +1866,9 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             reasons: list[str] = []
             for idx in range(max(1, int(checks))):
                 with self._ui_lock:
-                    state = self.env.get_state(wait_to_stabilize=False)
+                    state = self.env.get_state(
+                        wait_to_stabilize=bool(idx + 1 == max(1, int(checks)))
+                    )
                 same_root, same_reason = self._same_root_page(
                     state.pixels,
                     curr_activity=self._foreground_activity_name(),
@@ -1814,6 +1957,60 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self.env.execute_action(action)
         return "env_execute_action"
 
+    @staticmethod
+    def _is_high_risk_interaction_action(action: json_action.JSONAction) -> bool:
+        """Actions that can drift UI significantly when exploration did not stop cleanly."""
+        return action.action_type in {
+            json_action.CLICK,
+            json_action.LONG_PRESS,
+            json_action.INPUT_TEXT,
+            json_action.SCROLL,
+            json_action.SWIPE,
+            json_action.OPEN_APP,
+        }
+
+    @staticmethod
+    def _build_safe_mode_back_action() -> tuple[json_action.JSONAction, dict[str, Any]]:
+        return (
+            json_action.JSONAction(action_type=json_action.NAVIGATE_BACK),
+            {
+                "name": "mobile_use",
+                "arguments": {"action": "system_button", "button": "back"},
+            },
+        )
+
+    def _action_effect_summary(
+        self,
+        before_pixels: np.ndarray | None,
+        after_pixels: np.ndarray | None,
+        before_activity: str | None,
+        after_activity: str | None,
+    ) -> dict[str, Any]:
+        pixel_delta = _pixel_delta(before_pixels, after_pixels)
+        hash_diff = None
+        try:
+            if before_pixels is not None and after_pixels is not None:
+                hash_diff = int(_hash_diff(_phash_pixels(before_pixels), _phash_pixels(after_pixels)))
+        except Exception:  # pylint: disable=broad-exception-caught
+            hash_diff = None
+
+        before_norm = self._normalize_activity_name(before_activity)
+        after_norm = self._normalize_activity_name(after_activity)
+        activity_changed = bool(before_norm and after_norm and before_norm != after_norm)
+        changed = bool(
+            activity_changed
+            or (hash_diff is not None and hash_diff >= 3)
+            or (pixel_delta is not None and pixel_delta > self.no_effect_delta_threshold)
+        )
+        return {
+            "changed": changed,
+            "pixel_delta": pixel_delta,
+            "hash_diff": hash_diff,
+            "activity_changed": activity_changed,
+            "before_activity": before_activity,
+            "after_activity": after_activity,
+        }
+
     def _click_and_record(
         self,
         cand: CandidateScore,
@@ -1841,6 +2038,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             return None
         with self._explore_action_count_lock:
             self._explore_action_count += 1
+        self._last_explore_action_ts = time.time()
         self._explore_progress_event.set()
 
         time.sleep(self.explore_action_pause_sec)
@@ -2590,15 +2788,16 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         lines = [
             "[Parallel Exploration Clues]",
             (
-                f"- matched_branch_ids={branch_ids or [best.get('branch_id')]}, page_hash_diff={best_diff}, "
-                f"previous_action_overlap={best_action_hit}, confidence={confidence}"
+                f"- Matched branches: {branch_ids or [best.get('branch_id')]}; "
+                f"page hash diff {best_diff}; overlap with previous action {best_action_hit}; "
+                f"confidence {confidence}."
             ),
             (
-                f"- trunk_action_type={trunk.get('action_type')}, trunk_region={self._region_from_record(trunk)}, "
-                f"trunk_coordinate={trunk.get('coordinate')}, trunk_bounds={trunk.get('bounds')}, "
-                f"trunk_text={trunk_text}, trunk_resource_id={trunk.get('node_resource_id')}"
+                f"- Entry action {trunk.get('action_type')} at {self._region_from_record(trunk)} "
+                f"(coord {trunk.get('coordinate')}, bounds {trunk.get('bounds')}). "
+                f"Text: {trunk_text}. Resource: {trunk.get('node_resource_id')}."
             ),
-            "- candidate_next_actions:",
+            "- Possible next actions:",
         ]
 
         goal_text = _normalize_space(self._task_goal or "")
@@ -2656,10 +2855,10 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             text = self._clue_text_snippet(text, max_chars=140)
             lines.append(
                 (
-                    f"{added + 1}. branch_id={leaf.get('branch')}, action_type={leaf.get('action_type')}, "
-                    f"coordinate={leaf.get('coordinate')}, "
-                    f"bounds={leaf.get('bounds')}, region={pos}, text={text}, effect={effect}, "
-                    f"semantic_relevance={rel:.3f}, explore_score={prior:.3f}"
+                    f"{added + 1}. Branch {leaf.get('branch')}: {leaf.get('action_type')} at {pos} "
+                    f"(coord {leaf.get('coordinate')}, bounds {leaf.get('bounds')}). "
+                    f"Text: {text}. Likely effect: {effect}. "
+                    f"Relevance {rel:.3f}, explore score {prior:.3f}."
                 )
             )
             k2_texts.append(text)
@@ -2674,7 +2873,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
 
         keywords = self._extract_keywords(" ".join(k2_texts), limit=6)
         if keywords:
-            lines.append(f"- candidate_keywords={', '.join(keywords)}")
+            lines.append(f"- Candidate keywords: {', '.join(keywords)}")
         lines.append("")
         out = "\n".join(lines)
         if len(out) > 1400:
@@ -2684,9 +2883,15 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
     def get_last_clue_debug_lines(self) -> list[str]:
         d = self._last_clue_debug or {}
         return [
-            f"[ClueDebug] status={d.get('status')}",
-            f"[ClueDebug] n_candidates={d.get('n_candidates')} n_leaves={d.get('n_leaves')} selected={d.get('n_selected')}",
-            f"[ClueDebug] best_diff={d.get('best_diff')} action_hit={d.get('best_action_hit')} confidence={d.get('confidence')}",
+            f"[ClueDebug] Status: {d.get('status')}",
+            (
+                f"[ClueDebug] Candidates {d.get('n_candidates')}, "
+                f"Leaves {d.get('n_leaves')}, Selected {d.get('n_selected')}"
+            ),
+            (
+                f"[ClueDebug] Best diff {d.get('best_diff')}, "
+                f"Action overlap {d.get('best_action_hit')}, Confidence {d.get('confidence')}"
+            ),
         ]
 
     # -----------------------------
@@ -2734,21 +2939,31 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
 
         action = "wait"
         action_match = re.search(r"action=([a-zA-Z_]+)", text, flags=re.IGNORECASE)
+        if not action_match:
+            action_match = re.search(r"\[(?:llm|fallback[^\]]*)\]\s*([a-zA-Z_]+)", text, flags=re.IGNORECASE)
         if action_match:
             action = action_match.group(1).strip().lower()
 
         coord_match = re.search(r"coordinate=\[\s*(-?\d+)\s*,\s*(-?\d+)\s*\]", text)
+        if not coord_match:
+            coord_match = re.search(r"at\s*\[\s*(-?\d+)\s*,\s*(-?\d+)\s*\]", text, flags=re.IGNORECASE)
         coord_text = ""
         if coord_match:
             coord_text = f"[{coord_match.group(1)}, {coord_match.group(2)}]"
 
         element_match = re.search(r"element_id=(\d+)", text)
+        if not element_match:
+            element_match = re.search(r"element\s*#(\d+)", text, flags=re.IGNORECASE)
         element_text = f"#{element_match.group(1)}" if element_match else ""
 
         text_match = re.search(r"text=([^|]+)", text, flags=re.IGNORECASE)
+        if not text_match:
+            text_match = re.search(r"text\s*\"([^\"]*)\"", text, flags=re.IGNORECASE)
         arg_text = _normalize_space(text_match.group(1)) if text_match else ""
         if not arg_text:
             app_match = re.search(r"app_name=([^|]+)", text, flags=re.IGNORECASE)
+            if not app_match:
+                app_match = re.search(r"app\s*\"([^\"]*)\"", text, flags=re.IGNORECASE)
             arg_text = _normalize_space(app_match.group(1)) if app_match else ""
         if len(arg_text) > 28:
             arg_text = arg_text[:28].rstrip(" ,.;:") + "..."
@@ -2767,6 +2982,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             return "type"
         if action in {"swipe", "scroll"}:
             direction_match = re.search(r"direction=([^|,]+)", text, flags=re.IGNORECASE)
+            if not direction_match:
+                direction_match = re.search(r"direction\s+([a-zA-Z]+)", text, flags=re.IGNORECASE)
             direction = _normalize_space(direction_match.group(1)) if direction_match else ""
             start_match = re.search(
                 r"start_coordinate=\[\s*(-?\d+)\s*,\s*(-?\d+)\s*\]",
@@ -2931,9 +3148,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             return "None."
         lines = []
         for rank, hint in enumerate(hints, start=1):
-            lines.append(
-                f"- rank={rank}, element_id={hint.index}, score={hint.score:.2f}, {hint.label}"
-            )
+            lines.append(f"- #{rank}: element {hint.index}, score {hint.score:.2f}. {hint.label}")
         return "\n".join(lines)
 
     @staticmethod
@@ -3031,33 +3246,39 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
     @staticmethod
     def _tool_call_text(tool_call: dict[str, Any], source: str) -> str:
         args = dict(tool_call.get("arguments") or {})
-        action = str(args.get("action") or args.get("action_type") or "unknown")
+        action = str(args.get("action") or args.get("action_type") or "unknown").strip().lower()
         idx = _target_index(args)
-        parts = [f"[{source}] action={action}"]
-        if idx is not None:
-            parts.append(f"element_id={idx}")
-        if "coordinate" in args:
-            parts.append(f"coordinate={args.get('coordinate')}")
-        if "x" in args or "y" in args:
-            parts.append(f"x={args.get('x')}")
-            parts.append(f"y={args.get('y')}")
-        if "start_coordinate" in args:
-            parts.append(f"start_coordinate={args.get('start_coordinate')}")
-        if "end_coordinate" in args:
-            parts.append(f"end_coordinate={args.get('end_coordinate')}")
+        detail_bits: list[str] = []
+
+        coordinate = args.get("coordinate")
+        if coordinate is not None:
+            detail_bits.append(f"at {coordinate}")
+        elif "x" in args or "y" in args:
+            detail_bits.append(f"at [{args.get('x')}, {args.get('y')}]")
+
+        if "start_coordinate" in args and "end_coordinate" in args:
+            detail_bits.append(
+                f"from {args.get('start_coordinate')} to {args.get('end_coordinate')}"
+            )
         if "direction" in args:
-            parts.append(f"direction={args.get('direction')}")
+            detail_bits.append(f"direction {args.get('direction')}")
         if "text" in args:
-            parts.append(f"text={args.get('text')}")
+            detail_bits.append(f'text "{args.get("text")}"')
         if "button" in args:
-            parts.append(f"button={args.get('button')}")
+            detail_bits.append(f"button {args.get('button')}")
         if "status" in args:
-            parts.append(f"status={args.get('status')}")
+            detail_bits.append(f"status {args.get('status')}")
         if "goal_status" in args:
-            parts.append(f"goal_status={args.get('goal_status')}")
+            detail_bits.append(f"goal status {args.get('goal_status')}")
         if "app_name" in args:
-            parts.append(f"app_name={args.get('app_name')}")
-        return ", ".join(parts)
+            detail_bits.append(f'app "{args.get("app_name")}"')
+        if idx is not None:
+            detail_bits.append(f"element #{idx}")
+
+        detail = ", ".join([x for x in detail_bits if _normalize_space(x)])
+        if detail:
+            return f"[{source}] {action} ({detail})"
+        return f"[{source}] {action}"
 
     @staticmethod
     def _normalize_goal_status(goal_status: Any) -> str:
@@ -3120,6 +3341,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                     "clue_debug": [],
                     "explore_candidates_count": 0,
                     "explore_action_count": self._get_explore_action_count(),
+                    "reasoning_page_record": None,
+                    "return_failed_suspected": False,
                     "latency_sec": 0.0,
                     "step_latency_sec": 0.0,
                     "task_elapsed_sec": (
@@ -3148,6 +3371,11 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         step_start_pixels = np.array(state.pixels, copy=True)
         ui_elements = state.ui_elements
         hints = self._build_hints(ui_elements)
+        reasoning_start_page = self._compact_page_record(state)
+        reasoning_pre_action_page: dict[str, Any] | None = None
+        reasoning_end_page: dict[str, Any] | None = None
+        return_alignment: dict[str, Any] | None = None
+        reasoning_page_record: dict[str, Any] | None = None
         self._emit_log(
             f"step={step_no} current_page=({self._state_page_hint(state)})",
             tag="STEP",
@@ -3191,7 +3419,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             )
             if clue_text:
                 clues = (
-                    f"[Clue Source] exploration_step={source_step} -> reasoning_step={len(self.actions) + 1}\n"
+                    f"[Clue Source] Exploration step {source_step} prepared hints for reasoning step {len(self.actions) + 1}.\n"
                     + clue_text
                 )
 
@@ -3239,7 +3467,19 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             },
         ]
 
+        reasoning_start_perf = time.perf_counter()
         response, _, _ = self.vllm.predict_mm("", [], messages=messages)
+        reasoning_elapsed = float(max(0.0, time.perf_counter() - reasoning_start_perf))
+        if self.reasoning_sleep_sec > reasoning_elapsed:
+            sleep_sec = float(self.reasoning_sleep_sec - reasoning_elapsed)
+            self._emit_log(
+                (
+                    f"step={step_no} simulate_reasoning_sleep={sleep_sec:.3f}s "
+                    f"(elapsed={reasoning_elapsed:.3f}s target={self.reasoning_sleep_sec:.3f}s)"
+                ),
+                tag="REASON",
+            )
+            time.sleep(sleep_sec)
         self._emit_log_block(
             title=f"step={step_no} llm_response",
             content=str(response),
@@ -3309,19 +3549,22 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             "candidates": explore_candidates,
         }
 
+        safety_mode_reason = None
         if not explore_thread_clean:
-            source = f"{source}_thread_guard_soft"
-            parse_error = "explorer_thread_not_stopped_cleanly"
+            safety_mode_reason = "explorer_thread_not_stopped_cleanly"
+            source = f"{source}_thread_guard"
+            parse_error = safety_mode_reason
             self._clear_explore_root_baseline()
             self._emit_log(
-                f"step={step_no} thread_guard_failed -> soft_continue",
+                f"step={step_no} thread_guard_failed -> enable_safe_mode",
                 tag="REASON",
             )
         elif self._has_explore_root_baseline() and not bool(rollback_info.get("verified")):
-            source = f"{source}_rollback_guard_soft"
-            parse_error = "rollback_guard_failed_not_at_root"
+            safety_mode_reason = "rollback_guard_failed_not_at_root"
+            source = f"{source}_rollback_guard"
+            parse_error = safety_mode_reason
             self._emit_log(
-                f"step={step_no} rollback_guard_failed -> soft_continue",
+                f"step={step_no} rollback_guard_failed -> enable_safe_mode",
                 tag="REASON",
             )
 
@@ -3352,6 +3595,64 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             if answer_text:
                 self.env.interaction_cache = answer_text
 
+        explore_thread_alive = bool(self._explore_thread and self._explore_thread.is_alive())
+        last_explore_age_sec = None
+        if self._last_explore_action_ts > 0.0:
+            last_explore_age_sec = max(0.0, float(time.time() - self._last_explore_action_ts))
+        self._emit_log(
+            (
+                f"step={step_no} pre_action_thread_state alive={explore_thread_alive} "
+                f"stop_event={self._explore_stop_event.is_set()} last_explore_age_sec={last_explore_age_sec}"
+            ),
+            tag="CHECK",
+        )
+
+        if safety_mode_reason and self._is_high_risk_interaction_action(action):
+            source = f"safe_mode_{safety_mode_reason}"
+            action, tool_call = self._build_safe_mode_back_action()
+            tool_args = tool_call.get("arguments") if isinstance(tool_call.get("arguments"), dict) else {}
+            self._emit_log(
+                f"step={step_no} safe_mode_applied reason={safety_mode_reason} replace_with=back",
+                tag="CHECK",
+            )
+
+        model_coord = tool_args.get("coordinate") if isinstance(tool_args, dict) else None
+        parsed_coord = (
+            [int(action.x), int(action.y)]
+            if getattr(action, "x", None) is not None and getattr(action, "y", None) is not None
+            else None
+        )
+        if model_coord is not None or parsed_coord is not None:
+            try:
+                screen_size = self.env.logical_screen_size
+            except Exception:  # pylint: disable=broad-exception-caught
+                screen_size = None
+            self._emit_log(
+                (
+                    f"step={step_no} coord_check model={model_coord} parsed={parsed_coord} "
+                    f"screen={screen_size} mode={self.model_coordinate_mode}"
+                ),
+                tag="CHECK",
+            )
+
+        pre_action_pixels = np.array(step_start_pixels, copy=True)
+        post_state = None
+        action_effect: dict[str, Any] = {}
+        action_retry_attempted = False
+        action_retry_succeeded = False
+
+        try:
+            with self._ui_lock:
+                pre_action_state = self.env.get_state(wait_to_stabilize=False)
+            pre_action_pixels = np.array(pre_action_state.pixels, copy=True)
+            reasoning_pre_action_page = self._compact_page_record(pre_action_state)
+        except Exception:  # pylint: disable=broad-exception-caught
+            reasoning_pre_action_page = dict(reasoning_start_page)
+        return_alignment = self._page_alignment_summary(
+            reasoning_start_page,
+            reasoning_pre_action_page,
+        )
+
         try:
             with self._ui_lock:
                 execution_path = self._execute_action_with_coordinate_priority(action)
@@ -3365,6 +3666,57 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 execution_error = None
             except Exception as exc2:  # pylint: disable=broad-exception-caught
                 execution_error = f"{execution_error}; fallback_failed={exc2}"
+
+        try:
+            with self._ui_lock:
+                post_state = self.env.get_state(wait_to_stabilize=False)
+        except Exception:  # pylint: disable=broad-exception-caught
+            post_state = None
+
+        after_activity = self._foreground_activity_name()
+        action_effect = self._action_effect_summary(
+            before_pixels=pre_action_pixels,
+            after_pixels=(post_state.pixels if post_state is not None else None),
+            before_activity=reasoning_pre_action_page.get("activity"),
+            after_activity=after_activity,
+        )
+
+        # One retry for click-like actions when nothing appears to change.
+        if (
+            not bool(action_effect.get("changed"))
+            and action.action_type in {json_action.CLICK, json_action.LONG_PRESS}
+            and post_state is not None
+        ):
+            retry_idx = _safe_int(getattr(action, "index", None))
+            if retry_idx is None:
+                retry_idx = self._index_from_coordinate(
+                    ui_elements=ui_elements,
+                    x=_safe_int(getattr(action, "x", None)),
+                    y=_safe_int(getattr(action, "y", None)),
+                )
+            if retry_idx is not None and 0 <= retry_idx < len(ui_elements):
+                retry_center = self._safe_center_from_element(ui_elements[retry_idx])
+                if retry_center is not None:
+                    action_retry_attempted = True
+                    retry_action = json_action.JSONAction(
+                        action_type=action.action_type,
+                        x=retry_center[0],
+                        y=retry_center[1],
+                    )
+                    try:
+                        with self._ui_lock:
+                            self._execute_action_with_coordinate_priority(retry_action)
+                            post_state = self.env.get_state(wait_to_stabilize=False)
+                        action_retry_succeeded = True
+                        execution_path = f"{execution_path}+retry_center"
+                        action_effect = self._action_effect_summary(
+                            before_pixels=pre_action_pixels,
+                            after_pixels=post_state.pixels,
+                            before_activity=reasoning_pre_action_page.get("activity"),
+                            after_activity=self._foreground_activity_name(),
+                        )
+                    except Exception:  # pylint: disable=broad-exception-caught
+                        action_retry_succeeded = False
 
         idx = _target_index(tool_call.get("arguments", {}))
         if idx is None:
@@ -3380,18 +3732,29 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
 
         action_text = self._tool_call_text(tool_call, source=source)
         if parse_error:
-            action_text += f" | parse_error={parse_error}"
+            action_text += f"; parse error: {parse_error}"
         if execution_error:
-            action_text += f" | execution_error={execution_error}"
+            action_text += f"; execution error: {execution_error}"
         if execution_path:
-            action_text += f" | execution_path={execution_path}"
-        action_text += f" | coordinate_mode={coord_mode_used}"
+            action_text += f"; executed via {execution_path}"
+        if action_effect:
+            changed_text = "yes" if bool(action_effect.get("changed")) else "no"
+            action_text += (
+                f"; effect changed: {changed_text}"
+                f" (delta={action_effect.get('pixel_delta')}, hash_diff={action_effect.get('hash_diff')})"
+            )
+        if action_retry_attempted:
+            action_text += f"; retry attempted: {action_retry_succeeded}"
+        action_text += f"; coordinate mode: {coord_mode_used}"
         self._emit_log(
-            f"step={step_no} final_decision={action_text}",
+            f"step={step_no} Final decision: {action_text}",
             tag="STEP",
         )
 
         self._last_action_text = action_text
+        self._last_action_effect = dict(action_effect or {})
+        if action_effect and not bool(action_effect.get("changed")):
+            self._execution_feedback = "Last action likely had no visible effect; avoid repeating same target."
         self._last_pixels = np.array(state.pixels, copy=True)
         self.history.append(action_text)
 
@@ -3409,18 +3772,72 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 "parse_error": parse_error,
                 "execution_error": execution_error,
                 "execution_path": execution_path,
+                "action_effect": action_effect,
+                "action_retry_attempted": action_retry_attempted,
+                "action_retry_succeeded": action_retry_succeeded,
                 "coordinate_mode": coord_mode_used,
                 "clues": clues,
                 "clue_debug": self.get_last_clue_debug_lines(),
                 "explore_candidates_count": len(explore_candidates),
+                "reasoning_page_record": reasoning_page_record,
             }
         )
 
         task_status = self._task_status_from_action(action)
         done = task_status is not None
         task_completed = bool(task_status == "completed")
-        with self._ui_lock:
-            post_state = self.env.get_state(wait_to_stabilize=False)
+        if post_state is None:
+            with self._ui_lock:
+                post_state = self.env.get_state(wait_to_stabilize=False)
+        reasoning_end_page = self._compact_page_record(post_state)
+        action_summary = self._simplify_action_entry(
+            {"tool_call": tool_call, "action_dict": action_dict},
+            fallback=action_text,
+        )
+        start_to_end_alignment = self._page_alignment_summary(
+            reasoning_start_page,
+            reasoning_end_page,
+        )
+        reasoning_page_record = {
+            "step": step_no,
+            "action": action_summary,
+            "source": source,
+            "explore_return_verified": bool(rollback_info.get("verified")),
+            "pre_action_thread_alive": explore_thread_alive,
+            "last_explore_age_sec": last_explore_age_sec,
+            "safety_mode_reason": safety_mode_reason,
+            "start_page": reasoning_start_page,
+            "before_action_page": reasoning_pre_action_page,
+            "end_page": reasoning_end_page,
+            "start_to_before_action": return_alignment,
+            "start_to_end": start_to_end_alignment,
+            "return_failed_suspected": bool(
+                (not bool(rollback_info.get("verified")))
+                or (return_alignment is not None and not bool(return_alignment.get("matched")))
+            ),
+            "action_effect": action_effect,
+            "action_retry_attempted": action_retry_attempted,
+            "action_retry_succeeded": action_retry_succeeded,
+        }
+        if self.actions:
+            self.actions[-1]["reasoning_page_record"] = reasoning_page_record
+        self._reasoning_page_records.append(reasoning_page_record)
+        if self._task_trace_dir:
+            self._append_jsonl(
+                os.path.join(self._task_trace_dir, "reasoning_page_records.jsonl"),
+                reasoning_page_record,
+            )
+        self._emit_log(
+            (
+                f"Step {step_no} reasoning record. Action {action_summary}. "
+                f"Start page: {self._page_brief_text(reasoning_start_page)}. "
+                f"Before action: {self._page_brief_text(reasoning_pre_action_page or {})}. "
+                f"Return match: {bool((return_alignment or {}).get('matched'))}, "
+                f"rollback verified: {bool(rollback_info.get('verified'))}. "
+                f"End page: {self._page_brief_text(reasoning_end_page)}."
+            ),
+            tag="CHECK",
+        )
         step_latency_sec = float(max(0.0, time.perf_counter() - step_start_perf))
         self._task_step_latencies.append(step_latency_sec)
         avg_step_sec = float(sum(self._task_step_latencies) / max(1, len(self._task_step_latencies)))
@@ -3463,6 +3880,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 },
                 "llm_response_raw": str(response),
                 "rollback_info": rollback_info,
+                "reasoning_page_record": reasoning_page_record,
                 "decision": {
                     "source": source,
                     "tool_call": tool_call,
@@ -3472,6 +3890,9 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                     "parse_error": parse_error,
                     "execution_error": execution_error,
                     "execution_path": execution_path,
+                    "action_effect": action_effect,
+                    "action_retry_attempted": action_retry_attempted,
+                    "action_retry_succeeded": action_retry_succeeded,
                     "coordinate_mode": coord_mode_used,
                 },
                 "return": {
@@ -3485,6 +3906,9 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                         "parse_error": parse_error,
                         "execution_error": execution_error,
                         "execution_path": execution_path,
+                        "action_effect": action_effect,
+                        "action_retry_attempted": action_retry_attempted,
+                        "action_retry_succeeded": action_retry_succeeded,
                         "coordinate_mode": coord_mode_used,
                         "goal_status": getattr(action, "goal_status", None),
                         "task_status": task_status,
@@ -3494,6 +3918,10 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                         "clue_debug": self.get_last_clue_debug_lines(),
                         "explore_candidates_count": len(explore_candidates),
                         "explore_action_count": explore_action_count,
+                        "reasoning_page_record": reasoning_page_record,
+                        "return_failed_suspected": bool(
+                            (reasoning_page_record or {}).get("return_failed_suspected", False)
+                        ),
                         "latency_sec": step_latency_sec,
                         "step_latency_sec": step_latency_sec,
                         "task_elapsed_sec": task_elapsed_sec,
@@ -3527,6 +3955,9 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 "parse_error": parse_error,
                 "execution_error": execution_error,
                 "execution_path": execution_path,
+                "action_effect": action_effect,
+                "action_retry_attempted": action_retry_attempted,
+                "action_retry_succeeded": action_retry_succeeded,
                 "coordinate_mode": coord_mode_used,
                 "goal_status": getattr(action, "goal_status", None),
                 "task_status": task_status,
@@ -3536,6 +3967,10 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 "clue_debug": self.get_last_clue_debug_lines(),
                 "explore_candidates_count": len(explore_candidates),
                 "explore_action_count": explore_action_count,
+                "reasoning_page_record": reasoning_page_record,
+                "return_failed_suspected": bool(
+                    (reasoning_page_record or {}).get("return_failed_suspected", False)
+                ),
                 "latency_sec": step_latency_sec,
                 "step_latency_sec": step_latency_sec,
                 "task_elapsed_sec": task_elapsed_sec,

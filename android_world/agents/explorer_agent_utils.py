@@ -109,7 +109,7 @@ def _safe_json_loads(payload: str) -> dict[str, Any]:
     text = _extract(r'"text"\s*:\s*"([^"]*)"', "")
     button = _extract(r'"button"\s*:\s*"([^"]+)"')
     direction = _extract(r'"direction"\s*:\s*"([^"]+)"')
-    status = _extract(r'"status"\s*:\s*"([^"]+)"', "fail")
+    status = _extract(r'"status"\s*:\s*"([^"]+)"')
     goal_status = _extract(r'"goal_status"\s*:\s*"([^"]+)"')
     app_name = _extract(r'"app_name"\s*:\s*"([^"]+)"')
     open_text = _extract(r'"text"\s*:\s*"([^"]+)"')
@@ -145,7 +145,12 @@ def _safe_json_loads(payload: str) -> dict[str, Any]:
     elif act_low == "answer":
         args["text"] = text or ""
     elif act_low in {"terminate", "status"}:
-        args["status"] = status
+        if status:
+            args["status"] = status
+        elif goal_status:
+            args["status"] = goal_status
+        else:
+            args["status"] = "fail" if act_low == "terminate" else "infeasible"
         if goal_status:
             args["goal_status"] = goal_status
     else:
@@ -356,6 +361,7 @@ def _resolve_coordinate_by_mode(
     mode: str,
     ui_elements: list[Any],
 ) -> tuple[int, int]:
+    _ = ui_elements
     m = (mode or "auto").strip().lower()
     if m != "auto":
         return _scale_coordinate_by_mode(coordinate, screen_size, m)
@@ -369,35 +375,29 @@ def _resolve_coordinate_by_mode(
     if width <= 1.0 or height <= 1.0:
         return _scale_coordinate_by_mode(coordinate, screen_size, "auto")
 
+    # Deterministic auto policy:
+    # 1) 0-1 values => normalized ratio
+    # 2) ambiguous 0-1000 values on large screens => 1000-space
+    # 3) otherwise absolute pixels
     if 0.0 <= x <= 1.0 and 0.0 <= y <= 1.0:
         return _scale_coordinate_by_mode(coordinate, screen_size, "1")
 
     in_absolute = 0.0 <= x <= width and 0.0 <= y <= height
     in_1000 = 0.0 <= x <= 1000.0 and 0.0 <= y <= 1000.0
-    if not in_absolute:
-        return _scale_coordinate_by_mode(coordinate, screen_size, "auto")
-    if not in_1000:
+    if in_1000 and not in_absolute:
+        return _scale_coordinate_by_mode(coordinate, screen_size, "1000")
+    if in_absolute and not in_1000:
         return _clamp_coordinate_to_screen((int(round(x)), int(round(y))), screen_size)
+    if not in_absolute and not in_1000:
+        return _scale_coordinate_by_mode(coordinate, screen_size, "auto")
+
+    # Ambiguous case: point is valid in both spaces.
+    # Prefer 1000-space for typical tall Android screens.
+    if height > 1200.0 or width > 1200.0:
+        return _scale_coordinate_by_mode(coordinate, screen_size, "1000")
     if width <= 1000.0 and height <= 1000.0:
         return _clamp_coordinate_to_screen((int(round(x)), int(round(y))), screen_size)
-
-    absolute_xy = _clamp_coordinate_to_screen((int(round(x)), int(round(y))), screen_size)
-    scaled_1000_xy = _scale_coordinate_by_mode(coordinate, screen_size, "1000")
-    if scaled_1000_xy == absolute_xy:
-        return absolute_xy
-
-    abs_dist = _nearest_interactive_distance(absolute_xy, ui_elements)
-    scaled_dist = _nearest_interactive_distance(scaled_1000_xy, ui_elements)
-    if abs_dist is None or scaled_dist is None:
-        return absolute_xy
-
-    # Prefer 1000-space mapping when it is clearly closer to interactive targets.
-    if scaled_dist + 24.0 < abs_dist:
-        return scaled_1000_xy
-    diag = (width**2 + height**2) ** 0.5
-    if abs_dist > 0.35 * diag and scaled_dist < 0.2 * diag:
-        return scaled_1000_xy
-    return absolute_xy
+    return _clamp_coordinate_to_screen((int(round(x)), int(round(y))), screen_size)
 
 
 def _infer_swipe_direction_from_coordinates(
@@ -608,7 +608,10 @@ def _element_hint_compact_label(element: Any) -> str:
     if bool(getattr(element, "is_long_clickable", False)):
         flags.append("long")
     key_text = text or desc or rid or "unnamed"
-    return f"text='{text}', desc='{desc}', key='{key_text}', id='{rid}', center={center}, flags={flags}"
+    return (
+        f"label \"{key_text}\", text \"{text}\", desc \"{desc}\", "
+        f"id \"{rid}\", center {center}, flags {flags}"
+    )
 
 
 def _extract_task_queries(text: str) -> list[str]:

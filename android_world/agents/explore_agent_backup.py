@@ -609,10 +609,10 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self._explore_progress_event.set()
         clean = True
         if self._explore_thread and self._explore_thread.is_alive():
-            self._explore_thread.join(timeout=6.0)
+            self._explore_thread.join(timeout=10.0)
             if self._explore_thread.is_alive():
                 self._emit_log("explorer_thread_join_timeout waiting_extra=2s", tag="EXPLORE")
-                self._explore_thread.join(timeout=2.0)
+                self._explore_thread.join(timeout=10.0)
             if self._explore_thread.is_alive():
                 self._emit_log("explorer_thread_still_alive_after_stop", tag="EXPLORE")
                 clean = False
