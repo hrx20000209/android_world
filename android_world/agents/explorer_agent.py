@@ -1057,6 +1057,86 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         return bool(has_query and not has_action)
 
     @staticmethod
+    def _goal_has_delete_intent(goal: str) -> bool:
+        text = _normalize_space(goal).lower()
+        if not text:
+            return False
+        tokens = {
+            "delete",
+            "remove",
+            "clear",
+            "discard",
+            "erase",
+            "trash",
+        }
+        return any(token in text for token in tokens)
+
+    @staticmethod
+    def _goal_has_share_intent(goal: str) -> bool:
+        text = _normalize_space(goal).lower()
+        if not text:
+            return False
+        tokens = {
+            "share",
+            "send",
+            "export",
+            "attach",
+            "forward",
+        }
+        return any(token in text for token in tokens)
+
+    @staticmethod
+    def _infer_target_app(goal: str) -> tuple[str | None, list[str]]:
+        text = _normalize_space(goal).lower()
+        if not text:
+            return None, []
+        mappings = [
+            ("joplin", "Joplin", ["net.cozic.joplin", "joplin"]),
+            ("broccoli", "Broccoli", ["com.flauschcode.broccoli", "broccoli"]),
+            ("simple calendar", "Simple Calendar Pro", ["com.simplemobiletools.calendar.pro", "calendar"]),
+            ("calendar pro", "Simple Calendar Pro", ["com.simplemobiletools.calendar.pro", "calendar"]),
+            ("audio recorder", "Audio Recorder", ["com.dimowner.audiorecorder", "audiorecorder"]),
+        ]
+        for marker, app_name, hints in mappings:
+            if marker in text:
+                return app_name, list(hints)
+        return None, []
+
+    @staticmethod
+    def _is_launcher_activity(activity: str | None) -> bool:
+        value = _normalize_space(activity).lower()
+        if not value:
+            return False
+        return bool("launcher" in value or "nexuslauncher" in value or "quickstep" in value)
+
+    @staticmethod
+    def _is_in_target_app(activity: str | None, package_hints: list[str]) -> bool:
+        value = _normalize_space(activity).lower()
+        if not value or not package_hints:
+            return False
+        return any(_normalize_space(hint).lower() in value for hint in package_hints if _normalize_space(hint))
+
+    @staticmethod
+    def _is_android_chooser_activity(activity: str | None) -> bool:
+        value = _normalize_space(activity).lower()
+        return bool(value and "chooseractivity" in value)
+
+    @staticmethod
+    def _build_open_app_action(app_name: str) -> tuple[json_action.JSONAction, dict[str, Any]]:
+        safe_name = _normalize_space(app_name)
+        return (
+            json_action.JSONAction(action_type=json_action.OPEN_APP, app_name=safe_name),
+            {
+                "name": "mobile_use",
+                "arguments": {
+                    "action": "open_app",
+                    "text": safe_name,
+                    "app_name": safe_name,
+                },
+            },
+        )
+
+    @staticmethod
     def _coord_bucket(value: Any, bucket: int = 10) -> str:
         num = _safe_int(value)
         if num is None:
@@ -1133,7 +1213,12 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 return False
         return True
 
-    def _should_start_exploration(self, step_no: int, goal: str) -> tuple[bool, str]:
+    def _should_start_exploration(
+        self,
+        step_no: int,
+        goal: str,
+        current_activity: str | None = None,
+    ) -> tuple[bool, str]:
         if not bool(self.enable_parallel_exploration):
             return False, "disabled"
         if not bool(getattr(self, "targeted_exploration", False)):
@@ -1171,7 +1256,9 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
 
         read_cap = max(0, int(getattr(self, "explore_read_task_step_cap", 0)))
         if read_only and int(step_no) > read_cap:
-            return False, "read_only_skip"
+            _, target_hints = self._infer_target_app(goal)
+            if self._is_in_target_app(current_activity, target_hints):
+                return False, "read_only_skip"
 
         periodic = max(0, int(getattr(self, "explore_periodic_interval", 0)))
         if periodic > 0 and int(step_no) % periodic == 0:
@@ -1209,6 +1296,43 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             if not bool(effect.get("changed")):
                 unchanged += 1
         return bool(unchanged >= repeats)
+
+    def _should_force_open_target_app(
+        self,
+        step_no: int,
+        goal: str,
+        current_activity: str | None,
+        action: json_action.JSONAction,
+    ) -> tuple[bool, str | None]:
+        target_name, target_hints = self._infer_target_app(goal)
+        if not target_name or not target_hints:
+            return False, None
+        if self._is_in_target_app(current_activity, target_hints):
+            return False, target_name
+        if action.action_type in {json_action.STATUS, json_action.ANSWER, json_action.OPEN_APP}:
+            return False, target_name
+        if not self._is_launcher_activity(current_activity):
+            return False, target_name
+        if int(step_no) <= max(3, int(getattr(self, "explore_bootstrap_steps", 0)) + 1):
+            return True, target_name
+        signature = self._action_signature_from_action(action)
+        if signature and self._has_repeated_recent_action_signature(signature, repeats=2):
+            return True, target_name
+        return False, target_name
+
+    def _should_force_back_from_chooser(
+        self,
+        goal: str,
+        current_activity: str | None,
+        action: json_action.JSONAction,
+    ) -> bool:
+        if not self._is_android_chooser_activity(current_activity):
+            return False
+        if self._goal_has_share_intent(goal):
+            return False
+        if not self._goal_has_delete_intent(goal):
+            return False
+        return action.action_type != json_action.NAVIGATE_BACK
 
     # -----------------------------
     # Candidate collection / scoring
@@ -1707,6 +1831,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         cand_text, _ = self._element_text(index, element)
         task_similarity = float(self._semantic_similarity(goal_queries, cand_text))
         runtime_similarity = float(self._semantic_similarity(runtime_queries, cand_text)) if runtime_queries else 0.0
+        merged_goal = " ".join([*(goal_queries or []), *(runtime_queries or [])]).lower()
+        delete_intent = bool(any(token in merged_goal for token in {"delete", "remove", "clear", "erase", "trash"}))
         query_overlap = float(self._query_overlap_score(query_keywords, self._element_merged_text(element)))
         similarity = float(max(task_similarity, runtime_similarity, min(1.0, query_overlap * 0.92)))
         visits = float(self._bound_visit_count.get(key, 0.0))
@@ -1722,6 +1848,12 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             score += float(self._navigation_helpfulness(element)) * 0.35
         if self._is_submit_or_dismiss_control(element):
             score += 0.05
+        if delete_intent:
+            merged_text = self._element_merged_text(element)
+            if any(token in merged_text for token in {"delete", "remove", "trash", "bin", "discard"}):
+                score += 0.24
+            if any(token in merged_text for token in {"share", "export", "send", "chooser"}):
+                score -= 0.36
         score = min(1.0, float(score))
         is_clickable = bool(getattr(element, "is_clickable", False))
 
@@ -3702,7 +3834,11 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         explore_gate_reason = "disabled"
         should_explore = False
         if self.enable_parallel_exploration:
-            should_explore, explore_gate_reason = self._should_start_exploration(step_no=step_no, goal=goal)
+            should_explore, explore_gate_reason = self._should_start_exploration(
+                step_no=step_no,
+                goal=goal,
+                current_activity=reasoning_start_page.get("activity"),
+            )
             self._emit_log(
                 f"step={step_no} explore_gate should_explore={should_explore} reason={explore_gate_reason}",
                 tag="EXPLORE",
@@ -3813,6 +3949,34 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             else:
                 source = "fallback_parse"
                 action, tool_call = self._fallback_explore(hints, ui_elements)
+        force_open_app, app_name = self._should_force_open_target_app(
+            step_no=step_no,
+            goal=goal,
+            current_activity=reasoning_start_page.get("activity"),
+            action=action,
+        )
+        if force_open_app and app_name:
+            source = "target_app_bootstrap"
+            action, tool_call = self._build_open_app_action(app_name)
+            self._emit_log(
+                f"step={step_no} target_app_bootstrap force_open_app={app_name}",
+                tag="REASON",
+            )
+        if self._should_force_back_from_chooser(
+            goal=goal,
+            current_activity=reasoning_start_page.get("activity"),
+            action=action,
+        ):
+            source = "chooser_guard_back"
+            action = json_action.JSONAction(action_type=json_action.NAVIGATE_BACK)
+            tool_call = {
+                "name": "mobile_use",
+                "arguments": {"action": "system_button", "button": "back"},
+            }
+            self._emit_log(
+                f"step={step_no} chooser_guard applied -> navigate_back",
+                tag="REASON",
+            )
         if self._should_apply_loop_guard(action):
             loop_guard_action, loop_guard_tool = self._fallback_explore(hints, ui_elements)
             prev_sig = self._action_signature_from_action(action)

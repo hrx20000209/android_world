@@ -419,7 +419,8 @@ class ExplorerTargetedPolicyTest(absltest.TestCase):
     agent = self._agent()
     should_start, reason = agent._should_start_exploration(
         step_no=3,
-        goal="What events do I have on October 24? Answer with the event names.",
+        goal="What events do I have on October 24 in Simple Calendar Pro? Answer with the event names.",
+        current_activity="com.simplemobiletools.calendar.pro/com.simplemobiletools.calendar.pro.activities.MainActivity",
     )
     self.assertFalse(should_start)
     self.assertEqual(reason, "read_only_skip")
@@ -433,6 +434,36 @@ class ExplorerTargetedPolicyTest(absltest.TestCase):
     )
     self.assertTrue(should_start)
     self.assertEqual(reason, "no_effect_repeat")
+
+  def test_force_open_target_app_on_launcher(self):
+    agent = self._agent()
+    action = explorer_agent.json_action.JSONAction(
+        action_type=explorer_agent.json_action.SWIPE,
+        direction="up",
+    )
+    force_open, app_name = agent._should_force_open_target_app(
+        step_no=1,
+        goal="Is the note titled To-Do List in the Joplin app marked as a todo item?",
+        current_activity="com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity",
+        action=action,
+    )
+    self.assertTrue(force_open)
+    self.assertEqual(app_name, "Joplin")
+
+  def test_force_back_from_chooser_for_delete_goal(self):
+    agent = self._agent()
+    action = explorer_agent.json_action.JSONAction(
+        action_type=explorer_agent.json_action.CLICK,
+        x=100,
+        y=100,
+    )
+    self.assertTrue(
+        agent._should_force_back_from_chooser(
+            goal="Delete the selected recipe from Broccoli app.",
+            current_activity="android/com.android.internal.app.ChooserActivity",
+            action=action,
+        )
+    )
 
 
 class ExplorerStatusPolicyTest(absltest.TestCase):
