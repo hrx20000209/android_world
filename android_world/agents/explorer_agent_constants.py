@@ -17,7 +17,6 @@ Action space:
 {"action":"swipe","start_coordinate":[x1,y1],"end_coordinate":[x2,y2]}
 {"action":"open_app","text":"app_name"}
 {"action":"system_button","button":"back|home|enter"}
-{"action":"wait"}
 {"action":"answer","text":"..."}
 {"action":"terminate","status":"success|fail"}
 Compatibility fallback:

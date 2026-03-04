@@ -104,7 +104,7 @@ def _safe_json_loads(payload: str) -> dict[str, Any]:
     act = _extract(r'"action"\s*:\s*"([^"]+)"')
     if not act:
         act = _extract(r'"action_type"\s*:\s*"([^"]+)"')
-    act = (act or "wait").strip()
+    act = (act or "unknown").strip()
 
     text = _extract(r'"text"\s*:\s*"([^"]*)"', "")
     button = _extract(r'"button"\s*:\s*"([^"]+)"')
@@ -116,18 +116,26 @@ def _safe_json_loads(payload: str) -> dict[str, Any]:
 
     args: dict[str, Any] = {"action": act}
     act_low = act.lower()
+
+    def _extract_any_coord() -> list[int] | None:
+        for key in ("coordinate", "point", "xy", "tap_point"):
+            coord_val = _extract_coord(key)
+            if coord_val is not None:
+                return coord_val
+        return _extract_coord(None)
+
     if act_low in {"click", "long_press", "tap"}:
-        coord = _extract_coord("coordinate")
+        coord = _extract_any_coord()
         if coord is not None:
             args["coordinate"] = coord
     elif act_low in {"type", "input_text"}:
         args["text"] = text or ""
-        coord = _extract_coord("coordinate")
+        coord = _extract_any_coord()
         if coord is not None:
             args["coordinate"] = coord
     elif act_low in {"swipe", "scroll"}:
         args["direction"] = direction or "down"
-        coord = _extract_coord("coordinate")
+        coord = _extract_any_coord()
         if coord is not None:
             args["coordinate"] = coord
         start_coord = _extract_coord("start_coordinate")
@@ -154,7 +162,7 @@ def _safe_json_loads(payload: str) -> dict[str, Any]:
         if goal_status:
             args["goal_status"] = goal_status
     else:
-        args["action"] = "wait"
+        args["action"] = "unknown"
 
     fixed_obj = {"name": name or "mobile_use", "arguments": args}
     print("[safe_json_loads] recovered ->", fixed_obj)
@@ -219,6 +227,76 @@ def parse_tool_call(response_text: str) -> dict[str, Any]:
             return {"name": "mobile_use", "arguments": args}
 
     raise seeact_utils.ParseActionError("unsupported tool_call schema")
+
+
+def _strip_code_fences(text: str) -> str:
+    value = str(text or "").strip()
+    if value.startswith("```"):
+        value = value.strip("`").strip()
+        if value.lower().startswith("json"):
+            value = value[4:].lstrip()
+    return value.strip()
+
+
+def parse_tool_call_strict(
+    response_text: str,
+    require_tool_tag: bool = False,
+) -> dict[str, Any]:
+    """Strict parser: only JSON tool-call schema, no legacy text fallback."""
+    if not response_text:
+        raise seeact_utils.ParseActionError("empty response")
+    text = str(response_text)
+
+    block = None
+    if "<tool_call>" in text and "</tool_call>" in text:
+        try:
+            block = text.split("<tool_call>", 1)[1].split("</tool_call>", 1)[0].strip()
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            raise seeact_utils.ParseActionError(f"malformed tool_call: {exc}") from exc
+    elif not require_tool_tag:
+        block = _extract_first_json_block(text)
+
+    if block is None:
+        if require_tool_tag:
+            raise seeact_utils.ParseActionError("missing <tool_call> JSON block")
+        raise seeact_utils.ParseActionError("cannot find strict action JSON")
+
+    payload = _strip_code_fences(block)
+    try:
+        obj = json.loads(payload)
+    except Exception as exc:  # pylint: disable=broad-exception-caught
+        raise seeact_utils.ParseActionError(f"strict json decode failed: {exc}") from exc
+
+    if not isinstance(obj, dict):
+        raise seeact_utils.ParseActionError("strict tool_call is not a dict")
+
+    args: dict[str, Any]
+    name = str(obj.get("name") or "mobile_use").strip().lower()
+    if isinstance(obj.get("arguments"), dict):
+        args = dict(obj.get("arguments") or {})
+    elif isinstance(obj.get("action"), str):
+        args = dict(obj)
+        args.pop("name", None)
+    elif isinstance(obj.get("action_type"), str):
+        args = dict(obj)
+        args.pop("name", None)
+        args["action"] = args.get("action_type")
+    else:
+        raise seeact_utils.ParseActionError("strict schema requires action JSON object")
+
+    if "action" not in args and "action_type" in args:
+        args["action"] = args.get("action_type")
+    if "action" not in args and name != "mobile_use":
+        args["action"] = name
+
+    action_name = _normalize_space(args.get("action"))
+    if not action_name:
+        raise seeact_utils.ParseActionError("strict action missing 'action'")
+    args["action"] = action_name
+    if "arguments" in args:
+        raise seeact_utils.ParseActionError("nested 'arguments' is not allowed in strict mode")
+
+    return {"name": "mobile_use", "arguments": args}
 
 
 def _safe_int(value: Any) -> int | None:
@@ -552,15 +630,15 @@ def _to_json_action(
             return json_action.JSONAction(action_type=json_action.NAVIGATE_HOME)
         if btn == "enter":
             return json_action.JSONAction(action_type=json_action.KEYBOARD_ENTER)
-        return json_action.JSONAction(action_type=json_action.WAIT)
+        return json_action.JSONAction(action_type=json_action.NAVIGATE_BACK)
 
     if action == "wait":
-        return json_action.JSONAction(action_type=json_action.WAIT)
+        return json_action.JSONAction(action_type=json_action.UNKNOWN)
 
     if action == "answer":
         return json_action.JSONAction(
-            action_type=json_action.STATUS,
-            goal_status="complete",
+            action_type=json_action.ANSWER,
+            text=str(args.get("text") or ""),
         )
 
     if action in {"terminate", "status", "finish", "done"}:

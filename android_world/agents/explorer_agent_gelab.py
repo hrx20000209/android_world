@@ -21,6 +21,9 @@ from PIL import Image, ImageDraw
 
 from android_world.agents import base_agent
 from android_world.agents import seeact_utils
+from android_world.agents.gelab_agent import GELAB_SYSTEM_PROMPT
+from android_world.agents.gelab_agent import gelab_action_to_json_action
+from android_world.agents.gelab_agent import parse_gelab_response
 from android_world.agents.explorer_agent_constants import (
     _CHOICE_HINT_TOKENS,
     _DIALOG_HINT_TOKENS,
@@ -39,7 +42,6 @@ from android_world.agents.explorer_agent_utils import (
     _element_hint_compact_label,
     _extract_task_queries,
     _hash_diff,
-    _looks_like_back_intent,
     _mae_small,
     _normalize_space,
     _phash_pixels,
@@ -50,6 +52,7 @@ from android_world.agents.explorer_agent_utils import (
     _to_json_action,
     _tokenize,
     parse_tool_call,
+    parse_tool_call_strict,
 )
 from android_world.env import adb_utils
 from android_world.env import actuation
@@ -61,46 +64,37 @@ try:
 except Exception:  # pylint: disable=broad-exception-caught
     SentenceTransformer = None
 
-MAX_AGENT_STEPS = 20
+MAX_AGENT_STEPS = 15
+EXPLORER_MAI_SYSTEM_PROMPT = """
+你是一个手机 GUI-Agent 操作专家。你会收到：任务目标、历史动作、执行反馈、探索线索、当前截图。
+请输出“下一步唯一动作”，坐标使用 0-1000 归一化空间（左上角原点，x 向右，y 向下）。
 
-EXPLORER_MAI_SYSTEM_PROMPT = """You are a GUI agent. You are given a task, action history, execution feedback, explorer clues, explorer hints, and the current screenshot.
+动作空间（GELAB）：
+1. CLICK：action:CLICK\tpoint:x,y
+2. TYPE：action:TYPE\tvalue:输入文本\tpoint:x,y
+3. COMPLETE：action:COMPLETE\treturn:最终回复
+4. WAIT：action:WAIT\tvalue:秒数
+5. AWAKE：action:AWAKE\tvalue:应用名
+6. INFO：action:INFO\tvalue:提问内容
+7. ABORT：action:ABORT\tvalue:原因
+8. SLIDE：action:SLIDE\tpoint1:x1,y1\tpoint2:x2,y2
+9. LONGPRESS：action:LONGPRESS\tpoint:x,y
 
-## Output Format
-For each function call, return the thinking process in <thinking> </thinking> tags, and one json object with function name and arguments within <tool_call></tool_call> XML tags:
-```
-<thinking>
-...
-</thinking>
+首选输出格式（推荐）：
+<THINK>简短思考</THINK>
+explain:本步目的\taction:动作名\t...参数...\tsummary:本步后简短进展
+
+兼容格式（可选）：
 <tool_call>
-{"name":"mobile_use","arguments":{...}}
+{"name":"mobile_use","arguments":{"action":"click","coordinate":[x,y]}}
 </tool_call>
-```
 
-## Action Space
-{"action":"click","coordinate":[x,y]}
-{"action":"long_press","coordinate":[x,y]}
-{"action":"type","text":"...","coordinate":[x,y]}
-{"action":"swipe","direction":"up|down|left|right"}
-{"action":"swipe","start_coordinate":[x1,y1],"end_coordinate":[x2,y2]}
-{"action":"open","text":"app_name"}
-{"action":"open_app","text":"app_name"}
-{"action":"system_button","button":"back|home|enter"}
-{"action":"wait"}
-{"action":"answer","text":"..."}
-{"action":"terminate","status":"success|fail"}
-
-Fallback only when coordinate is unavailable:
-{"action":"click","element_id":int}
-{"action":"long_press","element_id":int}
-{"action":"type","element_id":int,"text":"..."}
-
-## Note
-- Prefer coordinate-based actions for click/long_press/type. Do not invent keys like button/label/target for those actions.
-- For click/long_press/type, output `coordinate:[x,y]` directly whenever possible.
-- If coordinate is unavailable, use element_id from explorer hints.
-- Avoid repeating no-effect actions.
-- For task completion, prefer {"action":"terminate","status":"success"}.
-  If you output {"action":"answer", ...}, it will be treated as task completion.
+强约束：
+- 只输出一个动作，不要输出多个候选。
+- 不要把 point/value/summary 拼进 action 字段。
+- action 字段只能是纯动作名（如 CLICK 或 click）。
+- 若使用 tool_call JSON，坐标必须放在 coordinate 数组，不要写成 "action":"CLICK\\tpoint:..."
+- 优先推动任务完成，避免无效重复动作。
 """.strip()
 
 
@@ -146,12 +140,12 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         explore_max_branches: int | None = None,
         rollback_backtrack_limit: int = 2,
         explore_action_pause_sec: float = 0.25,
-        reasoning_sleep_sec: float = 0.0,
+        reasoning_sleep_sec: float = 20.0,
         embed_model_name: str = "sentence-transformers/paraphrase-MiniLM-L6-v2",
         verbose_step_logs: bool = True,
         reasoning_preview_chars: int = 180,
         log_full_ui_tree_every_n_steps: int = 0,
-        model_coordinate_mode: str = "auto",
+        model_coordinate_mode: str = "1000",
         explore_mask_output_dir: str = "explore_k1_masks",
         save_explore_masks: bool = True,
         trace_output_dir: str = "explorer_traces",
@@ -161,6 +155,15 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         explore_min_actions_before_reasoning: int = 0,
         explore_budget_boost_per_zero_step: int = 2,
         explore_budget_boost_max: int = 8,
+        targeted_exploration: bool = True,
+        explore_bootstrap_steps: int = 2,
+        explore_periodic_interval: int = 4,
+        explore_read_task_step_cap: int = 2,
+        explore_stuck_action_repeat: int = 2,
+        explore_cooldown_after_safe_mode: int = 1,
+        strict_json_reprompt_retries: int = 1,
+        text_verify_retry_limit: int = 2,
+        structured_edit_disable_explore: bool = True,
     ):
         super().__init__(env, name)
         # Backward-compatible arg retained to avoid breaking older configs.
@@ -177,13 +180,17 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self.explore_max_branches = explore_max_branches
         self.rollback_backtrack_limit = max(1, int(rollback_backtrack_limit))
         self.explore_action_pause_sec = max(0.05, float(explore_action_pause_sec))
-        # Disable simulated reasoning sleep; exploration should be event-driven.
-        self.reasoning_sleep_sec = 0.0
+        # Simulate slow reasoning so parallel exploration can accumulate signal.
+        self.reasoning_sleep_sec = max(0.0, float(reasoning_sleep_sec))
         self.embed_model_name = embed_model_name
         self.verbose_step_logs = bool(verbose_step_logs)
         self.reasoning_preview_chars = max(60, int(reasoning_preview_chars))
         self.log_full_ui_tree_every_n_steps = max(0, int(log_full_ui_tree_every_n_steps))
-        self.model_coordinate_mode = str(model_coordinate_mode or "auto").strip().lower()
+        requested_mode = str(model_coordinate_mode or "1000").strip().lower()
+        # Avoid ambiguous absolute-vs-1000 guessing by default.
+        if requested_mode == "auto":
+            requested_mode = "1000"
+        self.model_coordinate_mode = requested_mode
         self.enable_parallel_exploration = bool(enable_parallel_exploration)
         self.save_explore_masks = bool(save_explore_masks)
         self.explore_mask_output_dir = str(explore_mask_output_dir or "explore_k1_masks").strip()
@@ -201,9 +208,11 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
 
         self.actions: list[dict[str, Any]] = []
         self.history: list[str] = []
+        self._reasoning_page_records: list[dict[str, Any]] = []
         self._recent_indices: deque[int] = deque(maxlen=50)
         self._last_pixels: np.ndarray | None = None
         self._last_action_text: str = ""
+        self._last_action_effect: dict[str, Any] = {}
         self._no_effect_repeat = 0
         self._execution_feedback = ""
 
@@ -216,6 +225,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self._explore_thread_stop_clean: bool = True
         self._explore_action_count = 0
         self._explore_action_count_lock = threading.Lock()
+        self._last_explore_action_ts: float = 0.0
 
         self._explore_iteration_candidates: list[dict[str, Any]] = []
         self._pending_explore_payload: dict[str, Any] | None = None
@@ -247,11 +257,24 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self._task_start_ts: float | None = None
         self._task_trace_dir: str | None = None
         self._task_step_latencies: list[float] = []
-        # Kept for backward compatibility in configs; similarity-only explorer ignores these.
-        _ = explore_warmup_timeout_sec
-        _ = explore_min_actions_before_reasoning
-        _ = explore_budget_boost_per_zero_step
-        _ = explore_budget_boost_max
+        self.targeted_exploration = bool(targeted_exploration)
+        self.explore_bootstrap_steps = max(0, int(explore_bootstrap_steps))
+        self.explore_periodic_interval = max(0, int(explore_periodic_interval))
+        self.explore_read_task_step_cap = max(0, int(explore_read_task_step_cap))
+        self.explore_stuck_action_repeat = max(2, int(explore_stuck_action_repeat))
+        self.explore_cooldown_after_safe_mode = max(0, int(explore_cooldown_after_safe_mode))
+        self.explore_warmup_timeout_sec = max(0.0, float(explore_warmup_timeout_sec))
+        self.explore_min_actions_before_reasoning = max(0, int(explore_min_actions_before_reasoning))
+        self.explore_budget_boost_per_zero_step = max(0, int(explore_budget_boost_per_zero_step))
+        self.explore_budget_boost_max = max(0, int(explore_budget_boost_max))
+        self.strict_json_reprompt_retries = max(0, int(strict_json_reprompt_retries))
+        self.text_verify_retry_limit = max(1, int(text_verify_retry_limit))
+        self.structured_edit_disable_explore = bool(structured_edit_disable_explore)
+        self._explore_trigger_reason: str = ""
+        self._explore_cooldown_steps: int = 0
+        self._structured_recovery_used: bool = False
+        self._title_edit_retry_failures: int = 0
+        self.rollback_fail_explore_cooldown_steps: int = 3
 
     def set_max_steps(self, max_steps: int) -> None:
         super().set_max_steps(min(MAX_AGENT_STEPS, int(max_steps)))
@@ -266,16 +289,35 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             return
         stamp = time.strftime("%H:%M:%S")
         with self._log_lock:
-            print(f"[{tag} {stamp}] {message}")
+            print(f"[{tag} {stamp}] {self._humanize_log_message(message)}")
 
     def _emit_log_block(self, title: str, content: str, tag: str = "REASON") -> None:
         if not self.verbose_step_logs:
             return
         stamp = time.strftime("%H:%M:%S")
         with self._log_lock:
-            print(f"[{tag} {stamp}] {title} BEGIN")
+            print(f"[{tag} {stamp}] {self._humanize_log_message(title)} BEGIN")
             print(content if content else "<EMPTY>")
-            print(f"[{tag} {stamp}] {title} END")
+            print(f"[{tag} {stamp}] {self._humanize_log_message(title)} END")
+
+    @staticmethod
+    def _humanize_log_message(message: str) -> str:
+        """Convert compact key=value fragments into easier-to-read text."""
+        text = _normalize_space(message)
+        if not text or "=" not in text:
+            return text
+
+        out_tokens: list[str] = []
+        for tok in text.split(" "):
+            if "=" not in tok:
+                out_tokens.append(tok)
+                continue
+            key, value = tok.split("=", 1)
+            if re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", key):
+                out_tokens.append(f"{key.replace('_', ' ')}: {value}")
+            else:
+                out_tokens.append(tok)
+        return " ".join(out_tokens)
 
     def _step_separator(
         self,
@@ -290,9 +332,10 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         with self._log_lock:
             print(sep)
             if phase == "start":
-                print(f"[STEP {step_no:03d} START] goal={goal}")
+                print(f"[STEP {step_no:03d} START] Goal: {goal}")
             else:
-                print(f"[STEP {step_no:03d} END] {summary or ''}".rstrip())
+                end_text = self._humanize_log_message(summary or "")
+                print(f"[STEP {step_no:03d} END] {end_text}".rstrip())
             print(sep)
 
     @staticmethod
@@ -322,9 +365,92 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         except Exception as exc:  # pylint: disable=broad-exception-caught
             self._emit_log(f"write_json_failed path={path} error={exc}", tag="TRACE")
 
+    def _append_jsonl(self, path: str, payload: dict[str, Any]) -> None:
+        try:
+            with open(path, "a", encoding="utf-8") as f:
+                f.write(json.dumps(self._json_safe(payload), ensure_ascii=False))
+                f.write("\n")
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            self._emit_log(f"append_jsonl_failed path={path} error={exc}", tag="TRACE")
+
     @staticmethod
     def _save_png(path: str, pixels: np.ndarray) -> None:
         Image.fromarray(np.array(pixels, copy=True)).save(path)
+
+    @staticmethod
+    def _element_brief_label(element: Any, max_len: int = 36) -> str:
+        text = _normalize_space(getattr(element, "text", ""))
+        desc = _normalize_space(getattr(element, "content_description", ""))
+        rid = _normalize_space(
+            getattr(element, "resource_id", "") or getattr(element, "resource_name", "")
+        )
+        cls = _normalize_space(getattr(element, "class_name", ""))
+        label = text or desc or rid or cls or "unnamed"
+        if len(label) > max(12, int(max_len)):
+            label = label[: max(12, int(max_len))].rstrip(" ,.;:") + "..."
+        return label
+
+    def _compact_page_record(self, state: Any, max_cues: int = 3) -> dict[str, Any]:
+        try:
+            page_hash = int(_phash_pixels(state.pixels))
+        except Exception:  # pylint: disable=broad-exception-caught
+            page_hash = -1
+
+        activity = self._foreground_activity_name()
+        cues: list[str] = []
+        seen: set[str] = set()
+        for idx, element in enumerate(list(getattr(state, "ui_elements", None) or [])):
+            if not self._is_valid_element(element):
+                continue
+            label = self._element_brief_label(element)
+            key = label.lower()
+            if key in seen:
+                continue
+            seen.add(key)
+            cues.append(f"{idx}:{label}")
+            if len(cues) >= max(1, int(max_cues)):
+                break
+        return {
+            "activity": activity,
+            "hash": page_hash,
+            "cues": cues,
+        }
+
+    @staticmethod
+    def _hash_distance(lhs_hash: Any, rhs_hash: Any) -> int | None:
+        try:
+            lhs = int(lhs_hash)
+            rhs = int(rhs_hash)
+        except Exception:  # pylint: disable=broad-exception-caught
+            return None
+        if lhs < 0 or rhs < 0:
+            return None
+        return int(_hash_diff(lhs, rhs))
+
+    def _page_alignment_summary(
+        self,
+        start_page: dict[str, Any],
+        current_page: dict[str, Any],
+    ) -> dict[str, Any]:
+        diff = self._hash_distance(start_page.get("hash"), current_page.get("hash"))
+        start_activity = self._normalize_activity_name(start_page.get("activity"))
+        current_activity = self._normalize_activity_name(current_page.get("activity"))
+        same_activity = bool(start_activity and current_activity and start_activity == current_activity)
+        # Same activity allows a looser hash threshold; cross-activity requires stronger evidence.
+        matched = bool(diff is not None and ((same_activity and diff <= 18) or diff <= 10))
+        return {
+            "matched": matched,
+            "hash_diff": diff,
+            "same_activity": same_activity,
+        }
+
+    @staticmethod
+    def _page_brief_text(page: dict[str, Any]) -> str:
+        activity = _normalize_space(page.get("activity") or "")
+        page_hash = page.get("hash")
+        cues = page.get("cues") or []
+        cue_text = ", ".join([str(x) for x in cues[:2]]) if cues else "no cues"
+        return f"{activity} (hash {page_hash}; {cue_text})"
 
     def _ensure_task_context(self, goal: str) -> None:
         if self._task_goal == goal and self._task_start_ts is not None:
@@ -333,6 +459,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self._task_goal = str(goal)
         self._task_start_ts = time.time()
         self._task_step_latencies = []
+        self._structured_recovery_used = False
+        self._title_edit_retry_failures = 0
         self._task_trace_dir = None
         if self.trace_output_dir:
             stamp = time.strftime("%Y%m%d_%H%M%S")
@@ -376,6 +504,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self._task_start_ts = None
         self._task_trace_dir = None
         self._task_step_latencies = []
+        self._structured_recovery_used = False
+        self._title_edit_retry_failures = 0
 
     def _save_explore_trace(
         self,
@@ -484,7 +614,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         for idx, element in enumerate(all_elements):
             if not self._is_valid_element(element):
                 continue
-            label = f"index={idx}, {self._element_short_label(element)}"
+            label = f"#{idx}: {self._element_short_label(element)}"
             key = label.lower()
             if key in seen:
                 continue
@@ -495,8 +625,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
 
         cue_text = "; ".join(cues) if cues else "no_semantic_nodes"
         return (
-            f"activity={foreground_activity}, logical_size={logical_size}, orientation={orientation}, "
-            f"ui_elements_total={len(all_elements)}, hash={page_hash}, cues={cue_text}"
+            f"Activity {foreground_activity}; screen {logical_size}; orientation {orientation}; "
+            f"{len(all_elements)} UI elements; hash {page_hash}; cues: {cue_text}"
         )
 
     # -----------------------------
@@ -508,9 +638,11 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         super().reset(go_home)
         self.actions.clear()
         self.history.clear()
+        self._reasoning_page_records.clear()
         self._recent_indices.clear()
         self._last_pixels = None
         self._last_action_text = ""
+        self._last_action_effect = {}
         self._no_effect_repeat = 0
         self._execution_feedback = ""
 
@@ -521,6 +653,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self._explore_root_pixels = None
         self._explore_root_activity = None
         self._explore_thread_stop_clean = True
+        self._last_explore_action_ts = 0.0
         self._replay_action_history = []
         self._reasoning_action_history = []
         self._branch_action_history = []
@@ -541,6 +674,10 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self._task_start_ts = None
         self._task_trace_dir = None
         self._task_step_latencies = []
+        self._explore_trigger_reason = ""
+        self._explore_cooldown_steps = 0
+        self._structured_recovery_used = False
+        self._title_edit_retry_failures = 0
 
     def _start_explorer_thread(
         self,
@@ -548,6 +685,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         history_tail: list[str],
         clues_text: str,
         source_step: int,
+        trigger_reason: str = "unknown",
     ) -> None:
         if not self.enable_parallel_exploration:
             self._clear_explore_root_baseline()
@@ -565,17 +703,24 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         with self._explore_action_count_lock:
             self._explore_action_count = 0
         self._explore_iteration_candidates = []
+        self._explore_trigger_reason = str(trigger_reason or "unknown")
         self._clicked_bounds = set()
         self._branch_action_history = []
         self._replay_action_history = list(self._reasoning_action_history)
 
-        with self._ui_lock:
-            root_state = self.env.get_state(wait_to_stabilize=False)
-        self._explore_root_pixels = np.array(root_state.pixels, copy=True)
-        self._explore_root_hash = _phash_pixels(root_state.pixels)
-        self._explore_root_activity = self._foreground_activity_name() or None
+        root_state = self._capture_explore_root_baseline(
+            trigger=f"step_{source_step}_{self._explore_trigger_reason}"
+        )
+        if root_state is None:
+            self._emit_log(
+                f"step={source_step} explorer_thread_start_skipped reason=root_baseline_capture_failed",
+                tag="EXPLORE",
+            )
+            self._clear_explore_root_baseline()
+            return
         self._emit_log(
-            f"step={source_step} explorer_thread_started root_page=({self._state_page_hint(root_state)})",
+            f"step={source_step} explorer_thread_started trigger={self._explore_trigger_reason} "
+            f"root_page=({self._state_page_hint(root_state)})",
             tag="EXPLORE",
         )
 
@@ -591,11 +736,66 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self._explore_root_pixels = None
         self._explore_root_activity = None
 
-    def _compute_explore_budget(self) -> tuple[int, int, int, int]:
+    def _capture_explore_root_baseline(self, trigger: str = "") -> Any | None:
+        try:
+            with self._ui_lock:
+                root_state = self.env.get_state(wait_to_stabilize=False)
+            self._explore_root_pixels = np.array(root_state.pixels, copy=True)
+            self._explore_root_hash = _phash_pixels(root_state.pixels)
+            self._explore_root_activity = self._foreground_activity_name() or None
+            self._emit_log(
+                (
+                    f"trigger={trigger or 'unspecified'} root_baseline_captured "
+                    f"activity={self._explore_root_activity} hash={self._explore_root_hash}"
+                ),
+                tag="ROLLBACK",
+            )
+            return root_state
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            self._clear_explore_root_baseline()
+            self._emit_log(
+                (
+                    f"trigger={trigger or 'unspecified'} root_baseline_capture_failed "
+                    f"error={exc}"
+                ),
+                tag="ROLLBACK",
+            )
+            return None
+
+    def _compute_explore_budget(self, trigger_reason: str | None = None) -> tuple[int, int, int, int]:
         max_depth = max(1, int(self.explore_max_depth))
         max_steps = max(1, int(self.explore_max_steps))
         depth_topk = max(2, int(self.explore_leaf_width) + 3)
-        return max_depth, depth_topk, max_steps, 0
+        targeted = bool(getattr(self, "targeted_exploration", False))
+        if not targeted:
+            return max_depth, depth_topk, max_steps, 0
+
+        reason = str(trigger_reason or getattr(self, "_explore_trigger_reason", "") or "default").strip().lower()
+        compact_depth = 1
+        compact_topk = max(2, min(depth_topk, 3))
+        compact_steps = max(2, min(max_steps, 3))
+
+        if reason in {"bootstrap", "read_only_bootstrap", "periodic_probe"}:
+            return compact_depth, compact_topk, compact_steps, 0
+
+        if reason in {
+            "no_effect_repeat",
+            "repeat_loop",
+            "page_loop",
+            "fallback_recovery",
+            "safe_mode_recovery",
+            "parse_uncertain",
+        }:
+            repeats = max(1, int(getattr(self, "_no_effect_repeat", 0)))
+            boost_per = max(0, int(getattr(self, "explore_budget_boost_per_zero_step", 0)))
+            boost_cap = max(0, int(getattr(self, "explore_budget_boost_max", 0)))
+            boost = min(boost_cap, boost_per * repeats)
+            stressed_steps = min(max_steps, max(4, compact_steps + boost))
+            stressed_depth = min(max_depth, 2)
+            stressed_topk = max(compact_topk, min(depth_topk, max(4, int(self.explore_leaf_width) + 1)))
+            return stressed_depth, stressed_topk, stressed_steps, boost
+
+        return compact_depth, compact_topk, compact_steps, 0
 
     def _has_explore_root_baseline(self) -> bool:
         return bool(self._explore_root_hash is not None and self._explore_root_pixels is not None)
@@ -609,17 +809,19 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self._explore_progress_event.set()
         clean = True
         if self._explore_thread and self._explore_thread.is_alive():
-            self._explore_thread.join(timeout=10.0)
+            self._explore_thread.join(timeout=6.0)
             if self._explore_thread.is_alive():
                 self._emit_log("explorer_thread_join_timeout waiting_extra=2s", tag="EXPLORE")
-                self._explore_thread.join(timeout=10.0)
+                self._explore_thread.join(timeout=2.0)
             if self._explore_thread.is_alive():
                 self._emit_log("explorer_thread_still_alive_after_stop", tag="EXPLORE")
                 clean = False
         self._explore_thread_stop_clean = clean
+        candidates = list(self._explore_iteration_candidates)
         if clean:
             self._explore_thread = None
-        return list(self._explore_iteration_candidates)
+        self._explore_iteration_candidates = []
+        return candidates
 
     # -----------------------------
     # Embedding / scoring
@@ -728,17 +930,39 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             seen.add(key)
             queries.append(text)
 
+        # Prefer structured action records over free-form history text.
+        for entry in (self.actions or [])[-4:]:
+            if not isinstance(entry, dict):
+                continue
+            tool_call = entry.get("tool_call") or {}
+            args = tool_call.get("arguments") if isinstance(tool_call, dict) else {}
+            if not isinstance(args, dict):
+                continue
+            action_name = _normalize_space(args.get("action") or args.get("action_type") or "")
+            if action_name:
+                _add_query(action_name, max_len=28)
+            for key in ("text", "app_name", "button", "direction", "status", "goal_status"):
+                value = _normalize_space(args.get(key) or "")
+                if value:
+                    _add_query(value, max_len=64)
+            if len(queries) >= 12:
+                return queries[:12]
+
         if history_tail:
             for item in history_tail[-4:]:
                 text = _normalize_space(item)
                 if not text:
                     continue
                 action_match = re.search(r"action=([a-zA-Z_]+)", text, flags=re.IGNORECASE)
+                if not action_match:
+                    action_match = re.search(r"\[(?:llm|fallback[^\]]*)\]\s*([a-zA-Z_]+)", text, flags=re.IGNORECASE)
                 action_name = _normalize_space(action_match.group(1)) if action_match else ""
                 if action_name:
                     _add_query(action_name, max_len=28)
                 for key in ("text", "app_name", "button", "direction", "status", "goal_status"):
                     field_match = re.search(rf"{key}=([^|]+)", text, flags=re.IGNORECASE)
+                    if not field_match:
+                        field_match = re.search(rf"{key}\s*:\s*([^|;]+)", text, flags=re.IGNORECASE)
                     if not field_match:
                         continue
                     value = _normalize_space(field_match.group(1)).strip("[]")
@@ -751,6 +975,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         if clues_text:
             clues = str(clues_text)
             keyword_matches = re.findall(r"candidate_keywords=([^\n]+)", clues, flags=re.IGNORECASE)
+            if not keyword_matches:
+                keyword_matches = re.findall(r"candidate keywords:\s*([^\n]+)", clues, flags=re.IGNORECASE)
             for keyword_line in keyword_matches[:2]:
                 for token in keyword_line.split(","):
                     token = _normalize_space(token).lower()
@@ -761,6 +987,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                         return queries[:12]
             if not keyword_matches:
                 trunk_match = re.search(r"trunk_text=([^,\n]+)", clues, flags=re.IGNORECASE)
+                if not trunk_match:
+                    trunk_match = re.search(r"text:\s*([^\n]+)", clues, flags=re.IGNORECASE)
                 if trunk_match:
                     trunk_text = self._clean_clue_text(trunk_match.group(1))
                     if trunk_text:
@@ -824,6 +1052,330 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             "txt_information",
         }
         return any(token in text for token in tokens)
+
+    @staticmethod
+    def _goal_is_read_only_query(goal: str) -> bool:
+        text = _normalize_space(goal).lower()
+        if not text:
+            return False
+        query_markers = {
+            "what",
+            "which",
+            "where",
+            "when",
+            "how many",
+            "do i have",
+            "is there",
+            "is the",
+            "answer",
+            "verify",
+            "check whether",
+            "check if",
+        }
+        action_markers = {
+            "create",
+            "add",
+            "delete",
+            "remove",
+            "record",
+            "turn ",
+            "enable",
+            "disable",
+            "toggle",
+            "set ",
+            "rename",
+            "move",
+            "edit",
+            "write",
+            "type",
+            "send",
+        }
+        has_query = bool("?" in text or any(token in text for token in query_markers))
+        has_action = bool(any(token in text for token in action_markers))
+        return bool(has_query and not has_action)
+
+    @staticmethod
+    def _goal_has_delete_intent(goal: str) -> bool:
+        text = _normalize_space(goal).lower()
+        if not text:
+            return False
+        tokens = {
+            "delete",
+            "remove",
+            "clear",
+            "discard",
+            "erase",
+            "trash",
+        }
+        return any(token in text for token in tokens)
+
+    @staticmethod
+    def _goal_has_share_intent(goal: str) -> bool:
+        text = _normalize_space(goal).lower()
+        if not text:
+            return False
+        tokens = {
+            "share",
+            "send",
+            "export",
+            "attach",
+            "forward",
+        }
+        return any(token in text for token in tokens)
+
+    @staticmethod
+    def _infer_target_app(goal: str) -> tuple[str | None, list[str]]:
+        text = _normalize_space(goal).lower()
+        if not text:
+            return None, []
+        mappings = [
+            ("joplin", "Joplin", ["net.cozic.joplin", "joplin"]),
+            ("broccoli", "Broccoli", ["com.flauschcode.broccoli", "broccoli"]),
+            ("simple calendar", "Simple Calendar Pro", ["com.simplemobiletools.calendar.pro", "calendar"]),
+            ("calendar pro", "Simple Calendar Pro", ["com.simplemobiletools.calendar.pro", "calendar"]),
+            ("audio recorder", "Audio Recorder", ["com.dimowner.audiorecorder", "audiorecorder"]),
+        ]
+        for marker, app_name, hints in mappings:
+            if marker in text:
+                return app_name, list(hints)
+        return None, []
+
+    @staticmethod
+    def _is_launcher_activity(activity: str | None) -> bool:
+        value = _normalize_space(activity).lower()
+        if not value:
+            return False
+        return bool("launcher" in value or "nexuslauncher" in value or "quickstep" in value)
+
+    @staticmethod
+    def _is_in_target_app(activity: str | None, package_hints: list[str]) -> bool:
+        value = _normalize_space(activity).lower()
+        if not value or not package_hints:
+            return False
+        return any(_normalize_space(hint).lower() in value for hint in package_hints if _normalize_space(hint))
+
+    @staticmethod
+    def _is_android_chooser_activity(activity: str | None) -> bool:
+        value = _normalize_space(activity).lower()
+        return bool(value and "chooseractivity" in value)
+
+    @staticmethod
+    def _build_open_app_action(app_name: str) -> tuple[json_action.JSONAction, dict[str, Any]]:
+        safe_name = _normalize_space(app_name)
+        return (
+            json_action.JSONAction(action_type=json_action.OPEN_APP, app_name=safe_name),
+            {
+                "name": "mobile_use",
+                "arguments": {
+                    "action": "open_app",
+                    "text": safe_name,
+                    "app_name": safe_name,
+                },
+            },
+        )
+
+    @staticmethod
+    def _coord_bucket(value: Any, bucket: int = 10) -> str:
+        num = _safe_int(value)
+        if num is None:
+            return "na"
+        step = max(1, int(bucket))
+        return str(int(round(float(num) / float(step)) * step))
+
+    @staticmethod
+    def _action_signature_from_dict(action_dict: dict[str, Any] | None) -> str:
+        data = dict(action_dict or {})
+        action_type = str(data.get("action_type") or data.get("action") or "").strip().lower()
+        if not action_type:
+            return ""
+        if action_type in {"click", "tap", "long_press", "input_text", "type"}:
+            x = ExplorerElementAgent._coord_bucket(data.get("x"))
+            y = ExplorerElementAgent._coord_bucket(data.get("y"))
+            idx = _safe_int(data.get("index"))
+            text = _normalize_space(data.get("text", ""))
+            text_key = text.lower()[:16] if text else ""
+            return f"{action_type}@{x}:{y}#{idx}:{text_key}"
+        if action_type in {"swipe", "scroll"}:
+            direction = _normalize_space(data.get("direction", "")).lower()
+            return f"{action_type}:{direction}"
+        if action_type in {"open_app", "open"}:
+            app_name = _normalize_space(data.get("app_name") or data.get("text") or "").lower()
+            return f"{action_type}:{app_name[:20]}"
+        if action_type in {"navigate_back", "navigate_home", "keyboard_enter", "wait"}:
+            return action_type
+        return action_type
+
+    @staticmethod
+    def _action_signature_from_action(action: json_action.JSONAction) -> str:
+        if action is None:
+            return ""
+        try:
+            action_dict = action.as_dict(skip_none=True)
+        except Exception:  # pylint: disable=broad-exception-caught
+            return ""
+        return ExplorerElementAgent._action_signature_from_dict(action_dict)
+
+    def _has_repeated_recent_action_signature(self, signature: str, repeats: int = 2) -> bool:
+        if not signature:
+            return False
+        need = max(2, int(repeats))
+        if len(self.actions) < need:
+            return False
+        tail = self.actions[-need:]
+        for entry in tail:
+            if not isinstance(entry, dict):
+                return False
+            sig = self._action_signature_from_dict(entry.get("action_dict") or {})
+            if sig != signature:
+                return False
+        return True
+
+    def _recent_page_hash_stable(self, repeats: int = 2, max_hash_diff: int = 2) -> bool:
+        need = max(2, int(repeats))
+        if len(self._reasoning_page_records) < need:
+            return False
+        hashes: list[int] = []
+        for record in self._reasoning_page_records[-need:]:
+            if not isinstance(record, dict):
+                return False
+            end_page = record.get("end_page") or {}
+            value = end_page.get("hash")
+            try:
+                hashes.append(int(value))
+            except Exception:  # pylint: disable=broad-exception-caught
+                return False
+        latest = hashes[-1]
+        threshold = max(0, int(max_hash_diff))
+        for prev in hashes[:-1]:
+            if int(_hash_diff(latest, prev)) > threshold:
+                return False
+        return True
+
+    def _should_start_exploration(
+        self,
+        step_no: int,
+        goal: str,
+        current_activity: str | None = None,
+    ) -> tuple[bool, str]:
+        if not bool(self.enable_parallel_exploration):
+            return False, "disabled"
+        if not bool(getattr(self, "targeted_exploration", False)):
+            return True, "always_on"
+        if bool(getattr(self, "structured_edit_disable_explore", True)) and self._is_structured_edit_activity(
+            current_activity,
+            goal=goal,
+        ):
+            return False, "structured_edit_mode"
+
+        cooldown = max(0, int(getattr(self, "_explore_cooldown_steps", 0)))
+        if cooldown > 0:
+            self._explore_cooldown_steps = max(0, cooldown - 1)
+            return False, "cooldown"
+
+        read_only = self._goal_is_read_only_query(goal)
+        if int(step_no) <= max(0, int(getattr(self, "explore_bootstrap_steps", 0))):
+            return True, "read_only_bootstrap" if read_only else "bootstrap"
+        if int(getattr(self, "_no_effect_repeat", 0)) >= 1:
+            return True, "no_effect_repeat"
+
+        last_source = ""
+        if self.actions and isinstance(self.actions[-1], dict):
+            last_source = str(self.actions[-1].get("source") or "").lower()
+        if "fallback" in last_source:
+            return True, "fallback_recovery"
+        if "parse" in last_source:
+            return True, "parse_uncertain"
+        if "safe_mode" in last_source:
+            return True, "safe_mode_recovery"
+
+        last_signature = ""
+        if self.actions and isinstance(self.actions[-1], dict):
+            last_signature = self._action_signature_from_dict(self.actions[-1].get("action_dict") or {})
+        repeat_need = max(2, int(getattr(self, "explore_stuck_action_repeat", 2)))
+        if last_signature and self._has_repeated_recent_action_signature(last_signature, repeats=repeat_need):
+            if self._recent_page_hash_stable(repeats=2, max_hash_diff=2):
+                return True, "page_loop"
+            return True, "repeat_loop"
+
+        read_cap = max(0, int(getattr(self, "explore_read_task_step_cap", 0)))
+        if read_only and int(step_no) > read_cap:
+            _, target_hints = self._infer_target_app(goal)
+            if self._is_in_target_app(current_activity, target_hints):
+                return False, "read_only_skip"
+
+        periodic = max(0, int(getattr(self, "explore_periodic_interval", 0)))
+        if periodic > 0 and int(step_no) % periodic == 0:
+            return True, "periodic_probe"
+        return False, "not_triggered"
+
+    def _should_apply_loop_guard(self, action: json_action.JSONAction) -> bool:
+        if action is None:
+            return False
+        if action.action_type in {
+            json_action.STATUS,
+            json_action.ANSWER,
+            json_action.WAIT,
+            json_action.UNKNOWN,
+            json_action.NAVIGATE_BACK,
+            json_action.NAVIGATE_HOME,
+        }:
+            return False
+        signature = self._action_signature_from_action(action)
+        if not signature:
+            return False
+        repeats = max(2, int(getattr(self, "explore_stuck_action_repeat", 2)))
+        if not self._has_repeated_recent_action_signature(signature, repeats=repeats):
+            return False
+        if int(getattr(self, "_no_effect_repeat", 0)) >= 1:
+            return True
+        if len(self.actions) < repeats:
+            return False
+        tail = self.actions[-repeats:]
+        unchanged = 0
+        for entry in tail:
+            if not isinstance(entry, dict):
+                continue
+            effect = entry.get("action_effect") or {}
+            if not bool(effect.get("changed")):
+                unchanged += 1
+        return bool(unchanged >= repeats)
+
+    def _should_force_open_target_app(
+        self,
+        step_no: int,
+        goal: str,
+        current_activity: str | None,
+        action: json_action.JSONAction,
+    ) -> tuple[bool, str | None]:
+        target_name, target_hints = self._infer_target_app(goal)
+        if not target_name or not target_hints:
+            return False, None
+        if self._is_in_target_app(current_activity, target_hints):
+            return False, target_name
+        if action.action_type in {json_action.STATUS, json_action.ANSWER, json_action.OPEN_APP}:
+            return False, target_name
+        if not self._is_launcher_activity(current_activity):
+            return False, target_name
+        if int(step_no) <= max(3, int(getattr(self, "explore_bootstrap_steps", 0)) + 1):
+            return True, target_name
+        signature = self._action_signature_from_action(action)
+        if signature and self._has_repeated_recent_action_signature(signature, repeats=2):
+            return True, target_name
+        return False, target_name
+
+    def _should_force_back_from_chooser(
+        self,
+        goal: str,
+        current_activity: str | None,
+        action: json_action.JSONAction,
+    ) -> bool:
+        if not self._is_android_chooser_activity(current_activity):
+            return False
+        if self._goal_has_share_intent(goal):
+            return False
+        if not self._goal_has_delete_intent(goal):
+            return False
+        return action.action_type != json_action.NAVIGATE_BACK
 
     # -----------------------------
     # Candidate collection / scoring
@@ -908,6 +1460,54 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         if not merged:
             return False
         return any(token in merged for token in (_SUBMIT_ACTION_KEYWORDS | _DISMISS_ACTION_KEYWORDS))
+
+    @staticmethod
+    def _is_dialog_secondary_action(element: Any) -> bool:
+        merged = ExplorerElementAgent._element_merged_text(element)
+        if not merged:
+            return False
+        secondary_tokens = {
+            "detail",
+            "details",
+            "more",
+            "learn more",
+            "info",
+            "information",
+            "help",
+            "settings",
+            "advanced",
+            "详情",
+            "更多",
+            "帮助",
+        }
+        return any(token in merged for token in secondary_tokens)
+
+    @staticmethod
+    def _is_dialog_primary_ack_action(element: Any) -> bool:
+        merged = ExplorerElementAgent._element_merged_text(element)
+        if not merged:
+            return False
+        primary_tokens = {
+            "ok",
+            "okay",
+            "confirm",
+            "allow",
+            "continue",
+            "got it",
+            "yes",
+            "accept",
+            "agree",
+            "close",
+            "dismiss",
+            "确定",
+            "允许",
+            "继续",
+            "同意",
+            "好的",
+            "关闭",
+            "我知道了",
+        }
+        return any(token in merged for token in primary_tokens)
 
     @staticmethod
     def _is_keyboard_key_like_element(element: Any) -> bool:
@@ -1209,11 +1809,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         allow_back_navigation: bool = False,
     ) -> tuple[list[tuple[int, Any]], dict[str, Any]]:
         _ = safe
-        _ = query_keywords
-        _ = avoid_keys
-        _ = hard_avoid
-        _ = allow_back_navigation
         intent_flags = intent_flags or {"input": False, "select": False, "nav": False}
+        query_keywords = list(query_keywords or [])
 
         stats: dict[str, Any] = {
             "total": len(ui_elements),
@@ -1238,6 +1835,31 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             stats["valid_interactive"] += 1
             candidates.append((idx, element))
         stats["interactive_total"] = stats["valid_interactive"]
+        screen_flags = self._screen_mode_flags(ui_elements)
+        stats["screen_flags"] = dict(screen_flags or {})
+        if bool(screen_flags.get("dialog")) and candidates:
+            dialog_primary: list[tuple[int, Any]] = []
+            dialog_controls: list[tuple[int, Any]] = []
+            for idx, element in candidates:
+                if self._is_critical_risky_element(element):
+                    continue
+                if self._is_dialog_primary_ack_action(element):
+                    dialog_primary.append((idx, element))
+                    continue
+                if (
+                    self._is_submit_or_dismiss_control(element)
+                    and not self._is_dialog_secondary_action(element)
+                ):
+                    dialog_controls.append((idx, element))
+            if dialog_primary:
+                stats["filter_level"] = "dialog_primary_button"
+                stats["dialog_candidates"] = len(dialog_primary)
+                candidates = dialog_primary
+            elif dialog_controls:
+                stats["filter_level"] = "dialog_control_button"
+                stats["dialog_candidates"] = len(dialog_controls)
+                candidates = dialog_controls
+
         if not candidates:
             fallback_candidates: list[tuple[int, Any]] = []
             for idx, element in enumerate(ui_elements):
@@ -1265,6 +1887,24 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             if fallback_candidates:
                 stats["filter_level"] = "similarity_with_noninteractive_fallback"
                 candidates = fallback_candidates
+        if len(candidates) > 1 and query_keywords:
+            intent_filtered: list[tuple[int, Any]] = []
+            for idx, element in candidates:
+                merged = self._element_merged_text(element)
+                overlap = self._query_overlap_score(query_keywords, merged)
+                nav_bonus = self._navigation_helpfulness(element)
+                keep_back = bool(allow_back_navigation and self._is_back_navigation_element(element))
+                keep_common_control = bool(self._is_submit_or_dismiss_control(element))
+                keep = bool(overlap >= 0.12 or nav_bonus >= 0.22 or keep_back or keep_common_control)
+                if keep:
+                    if keep_back:
+                        stats["kept_back_escape"] = int(stats.get("kept_back_escape", 0)) + 1
+                    intent_filtered.append((idx, element))
+                else:
+                    stats["removed_intent_mismatch"] = int(stats.get("removed_intent_mismatch", 0)) + 1
+            if intent_filtered:
+                candidates = intent_filtered
+                stats["filter_level"] = "targeted_similarity"
         if len(candidates) <= 1:
             stats["candidates"] = len(candidates)
             return candidates, stats
@@ -1301,13 +1941,16 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         intent_flags: dict[str, bool] | None = None,
         query_keywords: list[str] | None = None,
     ) -> CandidateScore:
-        _ = intent_flags
-        _ = query_keywords
+        intent_flags = intent_flags or {"input": False, "select": False, "nav": False}
+        query_keywords = list(query_keywords or [])
         key = self._element_key(index, element)
         cand_text, _ = self._element_text(index, element)
         task_similarity = float(self._semantic_similarity(goal_queries, cand_text))
         runtime_similarity = float(self._semantic_similarity(runtime_queries, cand_text)) if runtime_queries else 0.0
-        similarity = float(max(task_similarity, runtime_similarity))
+        merged_goal = " ".join([*(goal_queries or []), *(runtime_queries or [])]).lower()
+        delete_intent = bool(any(token in merged_goal for token in {"delete", "remove", "clear", "erase", "trash"}))
+        query_overlap = float(self._query_overlap_score(query_keywords, self._element_merged_text(element)))
+        similarity = float(max(task_similarity, runtime_similarity, min(1.0, query_overlap * 0.92)))
         visits = float(self._bound_visit_count.get(key, 0.0))
         effect_ema = self._bound_effect_ema.get(key)
         low_effect_penalty = 0.0
@@ -1315,6 +1958,19 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             low_effect_penalty = 0.10
         repeat_penalty = min(0.35, float(visits) * 0.07)
         score = max(0.0, float(similarity) - repeat_penalty - low_effect_penalty)
+        if query_overlap > 0.0:
+            score += min(0.18, query_overlap * 0.18)
+        if bool(intent_flags.get("nav")):
+            score += float(self._navigation_helpfulness(element)) * 0.35
+        if self._is_submit_or_dismiss_control(element):
+            score += 0.05
+        if delete_intent:
+            merged_text = self._element_merged_text(element)
+            if any(token in merged_text for token in {"delete", "remove", "trash", "bin", "discard"}):
+                score += 0.24
+            if any(token in merged_text for token in {"share", "export", "send", "chooser"}):
+                score -= 0.36
+        score = min(1.0, float(score))
         is_clickable = bool(getattr(element, "is_clickable", False))
 
         return CandidateScore(
@@ -1339,8 +1995,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         hard_avoid: bool = False,
         intent_flags: dict[str, bool] | None = None,
     ) -> tuple[list[CandidateScore], int]:
-        query_keywords = None
-        allow_back_navigation = False
+        query_keywords = self._query_keywords(goal_queries, runtime_queries, limit=24)
+        allow_back_navigation = self._task_wants_back_navigation(goal_queries, runtime_queries)
         candidates, filter_stats = self._collect_candidates(
             ui_elements,
             safe=True,
@@ -1725,7 +2381,9 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             reasons: list[str] = []
             for idx in range(max(1, int(checks))):
                 with self._ui_lock:
-                    state = self.env.get_state(wait_to_stabilize=False)
+                    state = self.env.get_state(
+                        wait_to_stabilize=bool(idx + 1 == max(1, int(checks)))
+                    )
                 same_root, same_reason = self._same_root_page(
                     state.pixels,
                     curr_activity=self._foreground_activity_name(),
@@ -1814,6 +2472,974 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self.env.execute_action(action)
         return "env_execute_action"
 
+    @staticmethod
+    def _is_high_risk_interaction_action(action: json_action.JSONAction) -> bool:
+        """Actions that can drift UI significantly when exploration did not stop cleanly."""
+        return action.action_type in {
+            json_action.CLICK,
+            json_action.LONG_PRESS,
+            json_action.INPUT_TEXT,
+            json_action.SCROLL,
+            json_action.SWIPE,
+            json_action.OPEN_APP,
+        }
+
+    @staticmethod
+    def _build_safe_mode_back_action() -> tuple[json_action.JSONAction, dict[str, Any]]:
+        return (
+            json_action.JSONAction(action_type=json_action.NAVIGATE_BACK),
+            {
+                "name": "mobile_use",
+                "arguments": {"action": "system_button", "button": "back"},
+            },
+        )
+
+    @staticmethod
+    def _is_calendar_or_contact_goal(goal: str) -> bool:
+        low = _normalize_space(goal).lower()
+        return bool(
+            any(token in low for token in ("calendar", "event", "schedule"))
+            or any(token in low for token in ("contact", "phone number", "address book"))
+        )
+
+    def _is_structured_edit_activity(self, activity: str | None, goal: str = "") -> bool:
+        value = self._normalize_activity_name(activity)
+        if not value:
+            return False
+        edit_markers = (
+            "editeventactivity",
+            "eventeditactivity",
+            "editactivity",
+            "contacteditor",
+            "insertcontactactivity",
+            "createcontactactivity",
+        )
+        if any(marker in value for marker in edit_markers):
+            return True
+        if not self._is_calendar_or_contact_goal(goal):
+            return False
+        if any(token in value for token in ("calendar", "contact")) and "edit" in value:
+            return True
+        return False
+
+    @staticmethod
+    def _recover_tool_call_from_malformed_response(response_text: str) -> dict[str, Any] | None:
+        text = str(response_text or "")
+        if not text:
+            return None
+        match = re.search(
+            r"<tool_call>\s*(.*?)(?:</tool_call>|$)",
+            text,
+            flags=re.IGNORECASE | re.DOTALL,
+        )
+        payload = match.group(1).strip() if match else text.strip()
+        if not payload:
+            return None
+
+        def _extract_action_token() -> str:
+            patterns = [
+                r'"action(?:_type)?"\s*:\s*"([^"]*)',
+                r"\baction(?:_type)?\s*[:=]\s*([A-Za-z_]+)",
+                (
+                    r"\b("
+                    r"click|tap|longpress|long_press|type|input_text|inputtext|swipe|scroll|slide|"
+                    r"open_app|openapp|open|awake|system_button|systembutton|back|home|enter|"
+                    r"answer|info|complete|terminate|status|abort|wait"
+                    r")\b"
+                ),
+            ]
+            for pattern in patterns:
+                action_match = re.search(pattern, payload, flags=re.IGNORECASE | re.DOTALL)
+                if not action_match:
+                    continue
+                raw_value = str(action_match.group(1) or "").strip()
+                if not raw_value:
+                    continue
+                word_match = re.search(r"[A-Za-z_]+", raw_value)
+                if word_match:
+                    return word_match.group(0).lower()
+                return raw_value.lower()
+            return ""
+
+        def _extract_coord() -> list[int] | None:
+            patterns = [
+                r"(?:point|coordinate|tap_point|xy)\s*[:=]\s*\[\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)",
+                r"(?:point|coordinate|tap_point|xy)\s*['\"]?\s*[:=]\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)",
+                r"\[\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*\]",
+            ]
+            for pattern in patterns:
+                coord_match = re.search(pattern, payload, flags=re.IGNORECASE)
+                if not coord_match:
+                    continue
+                try:
+                    return [
+                        int(round(float(coord_match.group(1)))),
+                        int(round(float(coord_match.group(2)))),
+                    ]
+                except Exception:  # pylint: disable=broad-exception-caught
+                    continue
+            return None
+
+        def _extract_text_value(*keys: str) -> str:
+            for key in keys:
+                key_patterns = [
+                    rf"{re.escape(key)}\s*[:=]\s*\"([^\"]*)\"",
+                    rf"{re.escape(key)}\s*[:=]\s*([^\t\r\n,}}]+)",
+                ]
+                for pattern in key_patterns:
+                    value_match = re.search(pattern, payload, flags=re.IGNORECASE | re.DOTALL)
+                    if not value_match:
+                        continue
+                    value = _normalize_space(value_match.group(1))
+                    if value:
+                        return value
+            return ""
+
+        action_token = _extract_action_token()
+        if not action_token:
+            return None
+        normalized_token = re.sub(r"[^a-z_]+", "", action_token)
+        alias_map = {
+            "tap": "click",
+            "click": "click",
+            "longpress": "long_press",
+            "long_press": "long_press",
+            "type": "type",
+            "inputtext": "type",
+            "input_text": "type",
+            "swipe": "swipe",
+            "slide": "swipe",
+            "scroll": "scroll",
+            "openapp": "open_app",
+            "open_app": "open_app",
+            "open": "open_app",
+            "awake": "open_app",
+            "systembutton": "system_button",
+            "system_button": "system_button",
+            "back": "back",
+            "home": "home",
+            "enter": "enter",
+            "answer": "answer",
+            "info": "answer",
+            "complete": "terminate",
+            "terminate": "terminate",
+            "status": "terminate",
+            "abort": "terminate",
+            "wait": "wait",
+        }
+        action_name = alias_map.get(normalized_token, "")
+        if not action_name:
+            return None
+
+        coord = _extract_coord()
+        args: dict[str, Any] = {"action": action_name}
+        if action_name in {"click", "long_press"}:
+            if coord is None:
+                return None
+            args["coordinate"] = coord
+        elif action_name == "type":
+            args["text"] = _extract_text_value("text", "value", "content")
+            if coord is not None:
+                args["coordinate"] = coord
+        elif action_name in {"swipe", "scroll"}:
+            direction = _extract_text_value("direction").lower() or "down"
+            args["direction"] = direction
+            if coord is not None:
+                args["coordinate"] = coord
+        elif action_name == "open_app":
+            app_name = _extract_text_value("text", "value", "app_name")
+            if app_name:
+                args["text"] = app_name
+                args["app_name"] = app_name
+        elif action_name in {"back", "home", "enter"}:
+            args["action"] = "system_button"
+            args["button"] = action_name
+        elif action_name == "answer":
+            args["text"] = _extract_text_value("text", "value", "return", "content")
+        elif action_name == "terminate":
+            status_value = _extract_text_value("status", "goal_status").lower()
+            args["status"] = "fail" if status_value in {"fail", "failed", "infeasible"} else "complete"
+            final_text = _extract_text_value("text", "value", "return", "content")
+            if final_text:
+                args["text"] = final_text
+        return {"name": "mobile_use", "arguments": args}
+
+    @staticmethod
+    def _strict_json_retry_prompt(previous_response: str, parse_error: str) -> str:
+        return (
+            "格式错误：上一次输出无法解析。\n"
+            "请只返回一个动作，并严格使用以下两种格式之一：\n"
+            "A) GELAB键值格式（优先）：\n"
+            "<THINK>...</THINK>\n"
+            "explain:...\taction:CLICK|TYPE|COMPLETE|WAIT|AWAKE|INFO|ABORT|SLIDE|LONGPRESS\t...参数...\tsummary:...\n"
+            "B) tool_call JSON 格式：\n"
+            "<tool_call>\n"
+            "{\"name\":\"mobile_use\",\"arguments\":{\"action\":\"click|type|swipe|open_app|system_button|answer|terminate\",\"coordinate\":[x,y]}}\n"
+            "</tool_call>\n"
+            "注意：不要把 point/value/summary 拼接到 action 字段里。\n"
+            f"解析错误: {parse_error}\n"
+            f"你上一次输出:\n{previous_response}"
+        )
+
+    def _reprompt_for_strict_json(
+        self,
+        messages: list[dict[str, Any]],
+        response_text: str,
+        parse_error: str,
+        step_no: int,
+    ) -> str:
+        reprompt_messages = list(messages)
+        reprompt_messages.append(
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": self._strict_json_retry_prompt(response_text, parse_error),
+                    }
+                ],
+            }
+        )
+        self._emit_log(
+            f"step={step_no} strict_json_reprompt_triggered error={parse_error}",
+            tag="REASON",
+        )
+        retry_response, _, _ = self.vllm.predict_mm("", [], messages=reprompt_messages)
+        self._emit_log_block(
+            title=f"step={step_no} strict_json_retry_response",
+            content=str(retry_response),
+            tag="REASON",
+        )
+        return str(retry_response)
+
+    def _extract_expected_strings_from_goal(self, goal: str) -> dict[str, str]:
+        text = _normalize_space(goal)
+        low = text.lower()
+        expected: dict[str, str] = {}
+
+        title_match = re.search(
+            r"(?:title(?:d)?|named|name(?:d)?)\s+['\"]([^'\"]{2,120})['\"]",
+            text,
+            flags=re.IGNORECASE,
+        )
+        if not title_match:
+            title_match = re.search(
+                r"(?:title(?:d)?|named|name(?:d)?)\s+([A-Za-z0-9][^.,;]{2,80})",
+                text,
+                flags=re.IGNORECASE,
+            )
+        if title_match:
+            expected["title"] = _normalize_space(title_match.group(1))
+
+        date_match = re.search(r"\b\d{4}-\d{2}-\d{2}\b", text)
+        if date_match:
+            expected["date"] = date_match.group(0)
+
+        time_match = re.search(r"\b\d{1,2}:\d{2}\s*(?:am|pm)?\b", low)
+        if not time_match:
+            time_match = re.search(r"\b\d{1,2}\s*h\b", low)
+        if time_match:
+            expected["time"] = _normalize_space(time_match.group(0))
+
+        duration_match = re.search(r"\b(?:duration|for)\s+(\d+\s*(?:min|mins|minutes|hour|hours|h))\b", low)
+        if duration_match:
+            expected["duration"] = _normalize_space(duration_match.group(1))
+
+        desc_match = re.search(r"(?:description|notes?)\s+['\"]([^'\"]{2,160})['\"]", text, flags=re.IGNORECASE)
+        if desc_match:
+            expected["description"] = _normalize_space(desc_match.group(1))
+        return expected
+
+    def _state_flat_text(self, state: Any, limit: int = 80) -> str:
+        parts: list[str] = []
+        for element in list(getattr(state, "ui_elements", None) or [])[: max(1, int(limit))]:
+            merged = self._element_merged_text(element)
+            if merged:
+                parts.append(merged)
+        return " | ".join(parts).lower()
+
+    def _completion_checkpoint(self, goal: str, state: Any) -> dict[str, Any]:
+        activity = self._foreground_activity_name()
+        expected = self._extract_expected_strings_from_goal(goal)
+        flat = self._state_flat_text(state)
+        required_matches: dict[str, bool] = {}
+        for key, value in expected.items():
+            required_matches[key] = bool(_normalize_space(value).lower() in flat)
+        save_action = self._build_save_action_from_state(state)
+        in_edit = self._is_structured_edit_activity(activity, goal=goal)
+        return {
+            "enabled": self._is_calendar_or_contact_goal(goal),
+            "activity": activity,
+            "in_edit_activity": in_edit,
+            "expected_fields": expected,
+            "required_matches": required_matches,
+            "save_visible": bool(save_action is not None),
+            "can_finish": bool((not in_edit) and (save_action is None)),
+        }
+
+    def _build_save_action_from_state(
+        self, state: Any
+    ) -> tuple[json_action.JSONAction, dict[str, Any]] | None:
+        tokens = {"save", "done", "ok", "confirm", "apply", "update", "保存", "完成", "确定"}
+        ui_elements = list(getattr(state, "ui_elements", None) or [])
+        for idx, element in enumerate(ui_elements):
+            if not self._is_valid_element(element):
+                continue
+            if not self._is_interactive(element):
+                continue
+            merged = self._element_merged_text(element)
+            if not merged:
+                continue
+            if self._is_critical_risky_element(element):
+                continue
+            if not any(token in merged for token in tokens):
+                continue
+            center = self._safe_center_from_element(element)
+            if center is not None:
+                return (
+                    json_action.JSONAction(action_type=json_action.CLICK, x=center[0], y=center[1]),
+                    {
+                        "name": "mobile_use",
+                        "arguments": {"action": "click", "element_id": idx, "coordinate": [center[0], center[1]]},
+                    },
+                )
+            return (
+                json_action.JSONAction(action_type=json_action.CLICK, index=idx),
+                {"name": "mobile_use", "arguments": {"action": "click", "element_id": idx}},
+            )
+        return None
+
+    def _resolve_input_target_snapshot(
+        self,
+        state: Any,
+        action: json_action.JSONAction,
+        fallback_ui_elements: list[Any] | None = None,
+    ) -> dict[str, Any]:
+        ui_elements = list(getattr(state, "ui_elements", None) or [])
+        if not ui_elements and fallback_ui_elements is not None:
+            ui_elements = list(fallback_ui_elements or [])
+
+        x = _safe_int(getattr(action, "x", None))
+        y = _safe_int(getattr(action, "y", None))
+        idx = _safe_int(getattr(action, "index", None))
+        if idx is not None and not (0 <= idx < len(ui_elements)):
+            idx = None
+
+        def _is_editable_index(index: int | None) -> bool:
+            if index is None or index < 0 or index >= len(ui_elements):
+                return False
+            return bool(getattr(ui_elements[index], "is_editable", False))
+
+        if not _is_editable_index(idx):
+            candidate = self._index_from_coordinate(ui_elements=ui_elements, x=x, y=y)
+            if _is_editable_index(candidate):
+                idx = candidate
+
+        if not _is_editable_index(idx) and x is not None and y is not None:
+            nearest_idx = None
+            nearest_dist = None
+            for i, element in enumerate(ui_elements):
+                if not bool(getattr(element, "is_editable", False)):
+                    continue
+                center = self._safe_center_from_element(element)
+                if center is None:
+                    continue
+                dist = float((center[0] - x) ** 2 + (center[1] - y) ** 2)
+                if nearest_dist is None or dist < nearest_dist:
+                    nearest_dist = dist
+                    nearest_idx = i
+            if nearest_idx is not None:
+                idx = nearest_idx
+
+        if not _is_editable_index(idx):
+            for i, element in enumerate(ui_elements):
+                if bool(getattr(element, "is_editable", False)):
+                    idx = i
+                    break
+
+        element = ui_elements[idx] if idx is not None and 0 <= idx < len(ui_elements) else None
+        center = self._safe_center_from_element(element) if element is not None else None
+        field_text = _normalize_space(getattr(element, "text", "")) if element is not None else ""
+        field_desc = _normalize_space(getattr(element, "content_description", "")) if element is not None else ""
+        merged = self._element_merged_text(element) if element is not None else ""
+
+        return {
+            "index": idx,
+            "center": center,
+            "text": field_text,
+            "desc": field_desc,
+            "merged": merged,
+            "ui_elements": ui_elements,
+        }
+
+    @staticmethod
+    def _detect_text_concatenation_or_no_effect(
+        old_text: str,
+        observed_text: str,
+        target_text: str,
+    ) -> tuple[bool, str]:
+        old_norm = _normalize_space(old_text).lower()
+        observed_norm = _normalize_space(observed_text).lower()
+        target_norm = _normalize_space(target_text).lower()
+        if not target_norm:
+            return False, ""
+        if not observed_norm:
+            return True, "empty_after_input"
+        if observed_norm == target_norm:
+            return False, ""
+        if old_norm and observed_norm == old_norm:
+            return True, "no_effect"
+        if old_norm and old_norm != target_norm and old_norm in observed_norm and target_norm in observed_norm:
+            return True, "contains_old_and_new"
+        if observed_norm.count(target_norm) > 1:
+            return True, "target_repeated"
+        if old_norm and old_norm in observed_norm and len(observed_norm) > max(len(target_norm), len(old_norm)) + 2:
+            return True, "length_growth_unexpected"
+        return False, ""
+
+    def _click_context_action_token(
+        self,
+        state: Any,
+        tokens: set[str],
+        avoid_tokens: set[str] | None = None,
+    ) -> dict[str, Any]:
+        ui_elements = list(getattr(state, "ui_elements", None) or [])
+        avoid_tokens = avoid_tokens or set()
+        for idx, element in enumerate(ui_elements):
+            if not self._is_interactive(element):
+                continue
+            merged = self._element_merged_text(element)
+            if not merged:
+                continue
+            if any(token in merged for token in avoid_tokens):
+                continue
+            if not any(token in merged for token in tokens):
+                continue
+            center = self._safe_center_from_element(element)
+            try:
+                with self._ui_lock:
+                    if center is not None:
+                        self._execute_action_with_coordinate_priority(
+                            json_action.JSONAction(action_type=json_action.CLICK, x=center[0], y=center[1])
+                        )
+                    else:
+                        self._execute_action_with_coordinate_priority(
+                            json_action.JSONAction(action_type=json_action.CLICK, index=idx)
+                        )
+                return {"clicked": True, "index": idx, "label": merged}
+            except Exception as exc:  # pylint: disable=broad-exception-caught
+                return {"clicked": False, "index": idx, "error": str(exc)}
+        return {"clicked": False}
+
+    def _issue_delete_keyevents(self, count: int) -> dict[str, Any]:
+        adb_target = getattr(self.env, "controller", self.env)
+        requested = max(1, min(int(count), 48))
+        pressed = 0
+        first_error = None
+        for _ in range(requested):
+            try:
+                adb_utils.issue_generic_request(
+                    ["shell", "input", "keyevent", "67"],
+                    adb_target,
+                    timeout_sec=2,
+                )
+                pressed += 1
+            except Exception as exc:  # pylint: disable=broad-exception-caught
+                if first_error is None:
+                    first_error = str(exc)
+                break
+            time.sleep(0.02)
+        return {"requested": requested, "pressed": pressed, "error": first_error}
+
+    def replace_text_in_focused_field(
+        self,
+        action: json_action.JSONAction,
+        target_text: str,
+        target_snapshot: dict[str, Any],
+        attempt_no: int = 1,
+    ) -> tuple[str | None, Any, dict[str, Any], str | None]:
+        expected_text = str(target_text or "")
+        snapshot = dict(target_snapshot or {})
+        target_idx = _safe_int(snapshot.get("index"))
+        center = snapshot.get("center")
+        old_text = _normalize_space(snapshot.get("text", ""))
+        info: dict[str, Any] = {
+            "mode": "replace_text",
+            "attempt": int(attempt_no),
+            "target_index": target_idx,
+            "old_text": old_text,
+            "target_text": expected_text,
+            "select_all_clicked": False,
+        }
+        execution_path: str | None = None
+        post_state = None
+        error: str | None = None
+
+        def _focus_action() -> json_action.JSONAction | None:
+            if isinstance(center, (list, tuple)) and len(center) >= 2:
+                return json_action.JSONAction(action_type=json_action.CLICK, x=int(center[0]), y=int(center[1]))
+            if target_idx is not None:
+                return json_action.JSONAction(action_type=json_action.CLICK, index=int(target_idx))
+            if action.x is not None and action.y is not None:
+                return json_action.JSONAction(action_type=json_action.CLICK, x=int(action.x), y=int(action.y))
+            return None
+
+        def _long_press_action() -> json_action.JSONAction | None:
+            if isinstance(center, (list, tuple)) and len(center) >= 2:
+                return json_action.JSONAction(action_type=json_action.LONG_PRESS, x=int(center[0]), y=int(center[1]))
+            if target_idx is not None:
+                return json_action.JSONAction(action_type=json_action.LONG_PRESS, index=int(target_idx))
+            if action.x is not None and action.y is not None:
+                return json_action.JSONAction(action_type=json_action.LONG_PRESS, x=int(action.x), y=int(action.y))
+            return None
+
+        try:
+            focus_action = _focus_action()
+            if focus_action is not None:
+                with self._ui_lock:
+                    self._execute_action_with_coordinate_priority(focus_action)
+                time.sleep(0.08)
+
+            long_action = _long_press_action()
+            if long_action is not None:
+                with self._ui_lock:
+                    self._execute_action_with_coordinate_priority(long_action)
+                time.sleep(0.12)
+
+            with self._ui_lock:
+                menu_state = self.env.get_state(wait_to_stabilize=False)
+            select_res = self._click_context_action_token(
+                menu_state,
+                tokens={"select all", "全选"},
+                avoid_tokens={"delete", "remove", "discard"},
+            )
+            info["select_all"] = select_res
+            info["select_all_clicked"] = bool(select_res.get("clicked"))
+            if bool(select_res.get("clicked")):
+                time.sleep(0.10)
+
+            delete_count = max(8, len(old_text) + 10)
+            delete_info = self._issue_delete_keyevents(delete_count)
+            info["delete_keyevents"] = delete_info
+
+            input_action = json_action.JSONAction(
+                action_type=json_action.INPUT_TEXT,
+                index=(
+                    int(target_idx)
+                    if target_idx is not None
+                    and (action.x is None or action.y is None)
+                    else None
+                ),
+                x=(
+                    int(action.x)
+                    if action.x is not None
+                    else (int(center[0]) if isinstance(center, (list, tuple)) and len(center) >= 2 else None)
+                ),
+                y=(
+                    int(action.y)
+                    if action.y is not None
+                    else (int(center[1]) if isinstance(center, (list, tuple)) and len(center) >= 2 else None)
+                ),
+                text=expected_text,
+                clear_text=False,
+            )
+            with self._ui_lock:
+                execution_path = self._execute_action_with_coordinate_priority(input_action)
+                post_state = self.env.get_state(wait_to_stabilize=False)
+
+            verify = self._verify_input_text_match(post_state, input_action, expected_text)
+            info["verify"] = verify
+            info["matched"] = bool(verify.get("matched"))
+            self._emit_log(
+                (
+                    f"replace_text attempt={attempt_no} idx={target_idx} "
+                    f"old_len={len(old_text)} verify={bool(verify.get('matched'))}"
+                ),
+                tag="CHECK",
+            )
+            if not bool(verify.get("matched")):
+                error = "replace_text_verify_mismatch"
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            error = str(exc)
+            info["error"] = error
+        return execution_path, post_state, info, error
+
+    def _verify_input_text_match(
+        self,
+        state: Any,
+        action: json_action.JSONAction,
+        expected_text: str,
+    ) -> dict[str, Any]:
+        expected_norm = _normalize_space(expected_text)
+        if not expected_norm:
+            return {"matched": True, "expected": "", "observed": []}
+
+        ui_elements = list(getattr(state, "ui_elements", None) or [])
+        index = _safe_int(getattr(action, "index", None))
+        if index is None:
+            index = self._index_from_coordinate(
+                ui_elements=ui_elements,
+                x=_safe_int(getattr(action, "x", None)),
+                y=_safe_int(getattr(action, "y", None)),
+            )
+
+        observed: list[str] = []
+        candidate_indices: list[int] = []
+        if index is not None:
+            candidate_indices.extend([index - 1, index, index + 1])
+        for idx, element in enumerate(ui_elements):
+            if bool(getattr(element, "is_editable", False)):
+                candidate_indices.append(idx)
+
+        seen_idx: set[int] = set()
+        for idx in candidate_indices:
+            if idx in seen_idx or idx < 0 or idx >= len(ui_elements):
+                continue
+            seen_idx.add(idx)
+            element = ui_elements[idx]
+            text = _normalize_space(getattr(element, "text", ""))
+            desc = _normalize_space(getattr(element, "content_description", ""))
+            if text:
+                observed.append(text)
+            if desc:
+                observed.append(desc)
+            merged = self._element_merged_text(element)
+            if merged and merged not in observed:
+                observed.append(merged)
+
+        normalized_observed = [_normalize_space(item) for item in observed if _normalize_space(item)]
+        exact_count = sum(1 for item in normalized_observed if item == expected_norm)
+        contains_once_count = sum(
+            1
+            for item in normalized_observed
+            if expected_norm in item and item.count(expected_norm) == 1
+        )
+        primary_observed = ""
+        if index is not None and 0 <= index < len(ui_elements):
+            element = ui_elements[index]
+            primary_observed = (
+                _normalize_space(getattr(element, "text", ""))
+                or _normalize_space(getattr(element, "content_description", ""))
+                or self._element_merged_text(element)
+            )
+        matched = bool(exact_count > 0 or contains_once_count > 0)
+        return {
+            "matched": bool(matched),
+            "expected": expected_norm,
+            "observed": normalized_observed[:12],
+            "target_index": index,
+            "exact_count": exact_count,
+            "contains_once_count": contains_once_count,
+            "primary_observed": _normalize_space(primary_observed),
+        }
+
+    def _execute_verified_text_input(
+        self,
+        action: json_action.JSONAction,
+        ui_elements: list[Any],
+    ) -> tuple[str | None, Any, dict[str, Any], str | None]:
+        expected_text = str(getattr(action, "text", "") or "")
+        attempts: list[dict[str, Any]] = []
+        execution_path: str | None = None
+        post_state = None
+        error: str | None = None
+
+        if not expected_text:
+            try:
+                with self._ui_lock:
+                    execution_path = self._execute_action_with_coordinate_priority(action)
+                    post_state = self.env.get_state(wait_to_stabilize=False)
+                return execution_path, post_state, {"attempts": attempts, "skipped": "empty_text"}, None
+            except Exception as exc:  # pylint: disable=broad-exception-caught
+                return None, None, {"attempts": attempts, "skipped": "empty_text"}, str(exc)
+
+        target_idx = _safe_int(getattr(action, "index", None))
+        title_target = False
+
+        attempt_cap = max(1, min(2, int(self.text_verify_retry_limit)))
+        for attempt in range(1, attempt_cap + 1):
+            attempt_info: dict[str, Any] = {"attempt": attempt}
+            try:
+                with self._ui_lock:
+                    pre_state = self.env.get_state(wait_to_stabilize=False)
+                target_snapshot = self._resolve_input_target_snapshot(
+                    state=pre_state,
+                    action=action,
+                    fallback_ui_elements=ui_elements,
+                )
+                target_idx = _safe_int(target_snapshot.get("index"))
+                target_text_before = _normalize_space(target_snapshot.get("text", ""))
+                target_merged = _normalize_space(target_snapshot.get("merged", ""))
+                attempt_info["target_index"] = target_idx
+                attempt_info["before_text"] = target_text_before
+                if "title" in target_merged:
+                    title_target = True
+
+                if _normalize_space(target_text_before) == _normalize_space(expected_text):
+                    attempt_info["skip_reason"] = "already_matched"
+                    attempts.append(attempt_info)
+                    if title_target:
+                        self._title_edit_retry_failures = 0
+                    self._emit_log(
+                        f"text_edit_skip already_matched idx={target_idx}",
+                        tag="CHECK",
+                    )
+                    return execution_path, pre_state, {"attempts": attempts, "matched": True, "skipped": "already_matched"}, None
+
+                # Never type directly into a non-empty mismatched EditText.
+                if target_text_before and _normalize_space(target_text_before) != _normalize_space(expected_text):
+                    execution_path, post_state, replace_info, replace_error = self.replace_text_in_focused_field(
+                        action=action,
+                        target_text=expected_text,
+                        target_snapshot=target_snapshot,
+                        attempt_no=attempt,
+                    )
+                    attempt_info["replace"] = replace_info
+                    attempts.append(attempt_info)
+                    if bool((replace_info.get("verify") or {}).get("matched")):
+                        if title_target:
+                            self._title_edit_retry_failures = 0
+                        return execution_path, post_state, {"attempts": attempts, "matched": True}, None
+                    error = replace_error or "replace_text_failed"
+                    if title_target:
+                        self._title_edit_retry_failures += 1
+                    continue
+
+                focus_action = None
+                if action.x is not None and action.y is not None:
+                    focus_action = json_action.JSONAction(action_type=json_action.CLICK, x=int(action.x), y=int(action.y))
+                elif target_idx is not None:
+                    focus_action = json_action.JSONAction(action_type=json_action.CLICK, index=int(target_idx))
+
+                with self._ui_lock:
+                    if focus_action is not None:
+                        self._execute_action_with_coordinate_priority(focus_action)
+                    input_action = json_action.JSONAction(
+                        action_type=json_action.INPUT_TEXT,
+                        index=(
+                            int(target_idx)
+                            if target_idx is not None and (action.x is None or action.y is None)
+                            else None
+                        ),
+                        x=(int(action.x) if action.x is not None else None),
+                        y=(int(action.y) if action.y is not None else None),
+                        text=expected_text,
+                        clear_text=True,
+                    )
+                    execution_path = self._execute_action_with_coordinate_priority(input_action)
+                    post_state = self.env.get_state(wait_to_stabilize=False)
+                verify = self._verify_input_text_match(post_state, input_action, expected_text)
+                attempt_info["verify"] = verify
+                observed_now = _normalize_space(
+                    verify.get("primary_observed")
+                    or (verify.get("observed") or [""])[0]
+                )
+                concat_fail, concat_reason = self._detect_text_concatenation_or_no_effect(
+                    old_text=target_text_before,
+                    observed_text=observed_now,
+                    target_text=expected_text,
+                )
+                if concat_fail:
+                    attempt_info["concat_detected"] = concat_reason
+                    replace_exec_path, replace_post_state, replace_info, replace_error = self.replace_text_in_focused_field(
+                        action=action,
+                        target_text=expected_text,
+                        target_snapshot=target_snapshot,
+                        attempt_no=attempt,
+                    )
+                    if replace_exec_path is not None:
+                        execution_path = replace_exec_path
+                    if replace_post_state is not None:
+                        post_state = replace_post_state
+                    attempt_info["replace_after_direct"] = replace_info
+                    attempts.append(attempt_info)
+                    if bool((replace_info.get("verify") or {}).get("matched")):
+                        if title_target:
+                            self._title_edit_retry_failures = 0
+                        return execution_path, post_state, {"attempts": attempts, "matched": True}, None
+                    error = replace_error or f"concat_detected:{concat_reason}"
+                    if title_target:
+                        self._title_edit_retry_failures += 1
+                    continue
+
+                attempts.append(attempt_info)
+                if bool(verify.get("matched")):
+                    if title_target:
+                        self._title_edit_retry_failures = 0
+                    return execution_path, post_state, {"attempts": attempts, "matched": True}, None
+                error = "text_verify_mismatch"
+                if title_target:
+                    self._title_edit_retry_failures += 1
+                    if self._title_edit_retry_failures >= 2:
+                        break
+            except Exception as exc:  # pylint: disable=broad-exception-caught
+                error = str(exc)
+                attempt_info["error"] = error
+                attempts.append(attempt_info)
+
+        if title_target and self._title_edit_retry_failures >= 2:
+            self._execution_feedback = (
+                "Title field remains unstable after retries; proceed with other required fields first."
+            )
+        return execution_path, post_state, {"attempts": attempts, "matched": False, "title_target": title_target}, error
+
+    def _handle_unexpected_delete_dialog(self, goal: str, state: Any) -> tuple[Any, dict[str, Any]]:
+        info: dict[str, Any] = {"handled": False}
+        if self._goal_has_delete_intent(goal):
+            return state, info
+        ui_elements = list(getattr(state, "ui_elements", None) or [])
+        if not ui_elements:
+            return state, info
+
+        merged_page = " ".join(self._element_merged_text(element) for element in ui_elements)
+        danger_tokens = {
+            "delete",
+            "remove",
+            "discard",
+            "proceed with deletion",
+            "are you sure",
+            "confirm deletion",
+        }
+        if not any(token in merged_page for token in danger_tokens):
+            return state, info
+        flags = self._screen_mode_flags(ui_elements)
+        if not bool(flags.get("dialog")):
+            return state, info
+
+        cancel_tokens = {
+            "cancel",
+            "no",
+            "keep",
+            "not now",
+            "back",
+            "dismiss",
+            "取消",
+            "返回",
+            "否",
+            "保留",
+        }
+        cancel_idx = None
+        cancel_center = None
+        for idx, element in enumerate(ui_elements):
+            merged = self._element_merged_text(element)
+            if not merged:
+                continue
+            if not any(token in merged for token in cancel_tokens):
+                continue
+            if not self._is_interactive(element):
+                continue
+            cancel_idx = idx
+            cancel_center = self._safe_center_from_element(element)
+            break
+
+        try:
+            with self._ui_lock:
+                if cancel_center is not None:
+                    self._execute_action_with_coordinate_priority(
+                        json_action.JSONAction(action_type=json_action.CLICK, x=cancel_center[0], y=cancel_center[1])
+                    )
+                elif cancel_idx is not None:
+                    self._execute_action_with_coordinate_priority(
+                        json_action.JSONAction(action_type=json_action.CLICK, index=cancel_idx)
+                    )
+                else:
+                    self.env.execute_action(json_action.JSONAction(action_type=json_action.NAVIGATE_BACK))
+                recovered_state = self.env.get_state(wait_to_stabilize=False)
+            rollback_info = None
+            if self._has_explore_root_baseline():
+                same_root, _ = self._same_root_page(
+                    recovered_state.pixels,
+                    curr_activity=self._foreground_activity_name(),
+                )
+                if not same_root:
+                    rollback_info = self._rollback_to_root(
+                        max_depth=self.rollback_backtrack_limit,
+                        enable_replay=False,
+                        trigger="unexpected_delete_dialog_restore",
+                    )
+                    try:
+                        with self._ui_lock:
+                            recovered_state = self.env.get_state(wait_to_stabilize=False)
+                    except Exception:  # pylint: disable=broad-exception-caught
+                        pass
+            info = {
+                "handled": True,
+                "reason": "unexpected_delete_dialog_cancelled",
+                "cancel_index": cancel_idx,
+                "restore_rollback": rollback_info,
+            }
+            return recovered_state, info
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            info = {"handled": False, "error": str(exc)}
+            return state, info
+
+    def _attempt_structured_recovery_before_infeasible(
+        self,
+        goal: str,
+        state: Any,
+        step_no: int,
+    ) -> tuple[json_action.JSONAction, dict[str, Any], dict[str, Any]] | None:
+        if self._structured_recovery_used:
+            return None
+        if not self._is_calendar_or_contact_goal(goal):
+            return None
+
+        recovery_meta: dict[str, Any] = {"attempted": True, "step": step_no}
+        current_state = state
+        current_activity = self._foreground_activity_name()
+
+        if not self._is_structured_edit_activity(current_activity, goal):
+            try:
+                with self._ui_lock:
+                    self.env.execute_action(json_action.JSONAction(action_type=json_action.NAVIGATE_BACK))
+                    current_state = self.env.get_state(wait_to_stabilize=False)
+                recovery_meta["pre_back"] = True
+            except Exception as exc:  # pylint: disable=broad-exception-caught
+                recovery_meta["pre_back_error"] = str(exc)
+
+        save_pair = self._build_save_action_from_state(current_state)
+        self._structured_recovery_used = True
+        if save_pair is not None:
+            action, tool_call = save_pair
+            recovery_meta["recovery_action"] = "save"
+            return action, tool_call, recovery_meta
+
+        action, tool_call = self._build_safe_mode_back_action()
+        recovery_meta["recovery_action"] = "back"
+        return action, tool_call, recovery_meta
+
+    def _action_effect_summary(
+        self,
+        before_pixels: np.ndarray | None,
+        after_pixels: np.ndarray | None,
+        before_activity: str | None,
+        after_activity: str | None,
+    ) -> dict[str, Any]:
+        pixel_delta = _pixel_delta(before_pixels, after_pixels)
+        hash_diff = None
+        try:
+            if before_pixels is not None and after_pixels is not None:
+                hash_diff = int(_hash_diff(_phash_pixels(before_pixels), _phash_pixels(after_pixels)))
+        except Exception:  # pylint: disable=broad-exception-caught
+            hash_diff = None
+
+        before_norm = self._normalize_activity_name(before_activity)
+        after_norm = self._normalize_activity_name(after_activity)
+        activity_changed = bool(before_norm and after_norm and before_norm != after_norm)
+        changed = bool(
+            activity_changed
+            or (hash_diff is not None and hash_diff >= 3)
+            or (pixel_delta is not None and pixel_delta > self.no_effect_delta_threshold)
+        )
+        return {
+            "changed": changed,
+            "pixel_delta": pixel_delta,
+            "hash_diff": hash_diff,
+            "activity_changed": activity_changed,
+            "before_activity": before_activity,
+            "after_activity": after_activity,
+        }
+
     def _click_and_record(
         self,
         cand: CandidateScore,
@@ -1841,6 +3467,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             return None
         with self._explore_action_count_lock:
             self._explore_action_count += 1
+        self._last_explore_action_ts = time.time()
         self._explore_progress_event.set()
 
         time.sleep(self.explore_action_pause_sec)
@@ -1938,7 +3565,6 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         avoid_keys: set[str] | None = None,
         hard_avoid: bool = False,
     ) -> tuple[CandidateScore | None, int]:
-        _ = semantic_low
         _ = intent_flags
         if not candidates:
             return None, 0
@@ -1957,6 +3583,10 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             pool.append(cand)
         if not pool:
             pool = list(candidates)
+        semantic_floor = max(0.0, float(semantic_low))
+        semantic_pool = [cand for cand in pool if float(cand.similarity) >= semantic_floor]
+        if semantic_pool:
+            pool = semantic_pool
 
         recent_keys = set(list(self._recent_clicked_bounds)[-int(self._recent_clicked_window) :])
         best: CandidateScore | None = None
@@ -2062,12 +3692,13 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             tag="EXPLORE",
         )
 
-        max_depth, depth_topk, max_steps, budget_boost = self._compute_explore_budget()
+        budget_reason = str(getattr(self, "_explore_trigger_reason", "") or "default")
+        max_depth, depth_topk, max_steps, budget_boost = self._compute_explore_budget(trigger_reason=budget_reason)
         max_branches = self.explore_max_branches
         if max_branches is None:
             max_branches = max(1, max_steps // max_depth)
         self._emit_log(
-            f"step={source_step} explore_budget depth={max_depth} topk={depth_topk} "
+            f"step={source_step} explore_budget reason={budget_reason} depth={max_depth} topk={depth_topk} "
             f"max_steps={max_steps} boost={budget_boost}",
             tag="EXPLORE",
         )
@@ -2590,15 +4221,16 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         lines = [
             "[Parallel Exploration Clues]",
             (
-                f"- matched_branch_ids={branch_ids or [best.get('branch_id')]}, page_hash_diff={best_diff}, "
-                f"previous_action_overlap={best_action_hit}, confidence={confidence}"
+                f"- Matched branches: {branch_ids or [best.get('branch_id')]}; "
+                f"page hash diff {best_diff}; overlap with previous action {best_action_hit}; "
+                f"confidence {confidence}."
             ),
             (
-                f"- trunk_action_type={trunk.get('action_type')}, trunk_region={self._region_from_record(trunk)}, "
-                f"trunk_coordinate={trunk.get('coordinate')}, trunk_bounds={trunk.get('bounds')}, "
-                f"trunk_text={trunk_text}, trunk_resource_id={trunk.get('node_resource_id')}"
+                f"- Entry action {trunk.get('action_type')} at {self._region_from_record(trunk)} "
+                f"(coord {trunk.get('coordinate')}, bounds {trunk.get('bounds')}). "
+                f"Text: {trunk_text}. Resource: {trunk.get('node_resource_id')}."
             ),
-            "- candidate_next_actions:",
+            "- Possible next actions:",
         ]
 
         goal_text = _normalize_space(self._task_goal or "")
@@ -2656,10 +4288,10 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             text = self._clue_text_snippet(text, max_chars=140)
             lines.append(
                 (
-                    f"{added + 1}. branch_id={leaf.get('branch')}, action_type={leaf.get('action_type')}, "
-                    f"coordinate={leaf.get('coordinate')}, "
-                    f"bounds={leaf.get('bounds')}, region={pos}, text={text}, effect={effect}, "
-                    f"semantic_relevance={rel:.3f}, explore_score={prior:.3f}"
+                    f"{added + 1}. Branch {leaf.get('branch')}: {leaf.get('action_type')} at {pos} "
+                    f"(coord {leaf.get('coordinate')}, bounds {leaf.get('bounds')}). "
+                    f"Text: {text}. Likely effect: {effect}. "
+                    f"Relevance {rel:.3f}, explore score {prior:.3f}."
                 )
             )
             k2_texts.append(text)
@@ -2674,7 +4306,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
 
         keywords = self._extract_keywords(" ".join(k2_texts), limit=6)
         if keywords:
-            lines.append(f"- candidate_keywords={', '.join(keywords)}")
+            lines.append(f"- Candidate keywords: {', '.join(keywords)}")
         lines.append("")
         out = "\n".join(lines)
         if len(out) > 1400:
@@ -2684,9 +4316,15 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
     def get_last_clue_debug_lines(self) -> list[str]:
         d = self._last_clue_debug or {}
         return [
-            f"[ClueDebug] status={d.get('status')}",
-            f"[ClueDebug] n_candidates={d.get('n_candidates')} n_leaves={d.get('n_leaves')} selected={d.get('n_selected')}",
-            f"[ClueDebug] best_diff={d.get('best_diff')} action_hit={d.get('best_action_hit')} confidence={d.get('confidence')}",
+            f"[ClueDebug] Status: {d.get('status')}",
+            (
+                f"[ClueDebug] Candidates {d.get('n_candidates')}, "
+                f"Leaves {d.get('n_leaves')}, Selected {d.get('n_selected')}"
+            ),
+            (
+                f"[ClueDebug] Best diff {d.get('best_diff')}, "
+                f"Action overlap {d.get('best_action_hit')}, Confidence {d.get('confidence')}"
+            ),
         ]
 
     # -----------------------------
@@ -2734,21 +4372,31 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
 
         action = "wait"
         action_match = re.search(r"action=([a-zA-Z_]+)", text, flags=re.IGNORECASE)
+        if not action_match:
+            action_match = re.search(r"\[(?:llm|fallback[^\]]*)\]\s*([a-zA-Z_]+)", text, flags=re.IGNORECASE)
         if action_match:
             action = action_match.group(1).strip().lower()
 
         coord_match = re.search(r"coordinate=\[\s*(-?\d+)\s*,\s*(-?\d+)\s*\]", text)
+        if not coord_match:
+            coord_match = re.search(r"at\s*\[\s*(-?\d+)\s*,\s*(-?\d+)\s*\]", text, flags=re.IGNORECASE)
         coord_text = ""
         if coord_match:
             coord_text = f"[{coord_match.group(1)}, {coord_match.group(2)}]"
 
         element_match = re.search(r"element_id=(\d+)", text)
+        if not element_match:
+            element_match = re.search(r"element\s*#(\d+)", text, flags=re.IGNORECASE)
         element_text = f"#{element_match.group(1)}" if element_match else ""
 
         text_match = re.search(r"text=([^|]+)", text, flags=re.IGNORECASE)
+        if not text_match:
+            text_match = re.search(r"text\s*\"([^\"]*)\"", text, flags=re.IGNORECASE)
         arg_text = _normalize_space(text_match.group(1)) if text_match else ""
         if not arg_text:
             app_match = re.search(r"app_name=([^|]+)", text, flags=re.IGNORECASE)
+            if not app_match:
+                app_match = re.search(r"app\s*\"([^\"]*)\"", text, flags=re.IGNORECASE)
             arg_text = _normalize_space(app_match.group(1)) if app_match else ""
         if len(arg_text) > 28:
             arg_text = arg_text[:28].rstrip(" ,.;:") + "..."
@@ -2767,6 +4415,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             return "type"
         if action in {"swipe", "scroll"}:
             direction_match = re.search(r"direction=([^|,]+)", text, flags=re.IGNORECASE)
+            if not direction_match:
+                direction_match = re.search(r"direction\s+([a-zA-Z]+)", text, flags=re.IGNORECASE)
             direction = _normalize_space(direction_match.group(1)) if direction_match else ""
             start_match = re.search(
                 r"start_coordinate=\[\s*(-?\d+)\s*,\s*(-?\d+)\s*\]",
@@ -2931,9 +4581,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             return "None."
         lines = []
         for rank, hint in enumerate(hints, start=1):
-            lines.append(
-                f"- rank={rank}, element_id={hint.index}, score={hint.score:.2f}, {hint.label}"
-            )
+            lines.append(f"- #{rank}: element {hint.index}, score {hint.score:.2f}. {hint.label}")
         return "\n".join(lines)
 
     @staticmethod
@@ -3031,33 +4679,39 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
     @staticmethod
     def _tool_call_text(tool_call: dict[str, Any], source: str) -> str:
         args = dict(tool_call.get("arguments") or {})
-        action = str(args.get("action") or args.get("action_type") or "unknown")
+        action = str(args.get("action") or args.get("action_type") or "unknown").strip().lower()
         idx = _target_index(args)
-        parts = [f"[{source}] action={action}"]
-        if idx is not None:
-            parts.append(f"element_id={idx}")
-        if "coordinate" in args:
-            parts.append(f"coordinate={args.get('coordinate')}")
-        if "x" in args or "y" in args:
-            parts.append(f"x={args.get('x')}")
-            parts.append(f"y={args.get('y')}")
-        if "start_coordinate" in args:
-            parts.append(f"start_coordinate={args.get('start_coordinate')}")
-        if "end_coordinate" in args:
-            parts.append(f"end_coordinate={args.get('end_coordinate')}")
+        detail_bits: list[str] = []
+
+        coordinate = args.get("coordinate")
+        if coordinate is not None:
+            detail_bits.append(f"at {coordinate}")
+        elif "x" in args or "y" in args:
+            detail_bits.append(f"at [{args.get('x')}, {args.get('y')}]")
+
+        if "start_coordinate" in args and "end_coordinate" in args:
+            detail_bits.append(
+                f"from {args.get('start_coordinate')} to {args.get('end_coordinate')}"
+            )
         if "direction" in args:
-            parts.append(f"direction={args.get('direction')}")
+            detail_bits.append(f"direction {args.get('direction')}")
         if "text" in args:
-            parts.append(f"text={args.get('text')}")
+            detail_bits.append(f'text "{args.get("text")}"')
         if "button" in args:
-            parts.append(f"button={args.get('button')}")
+            detail_bits.append(f"button {args.get('button')}")
         if "status" in args:
-            parts.append(f"status={args.get('status')}")
+            detail_bits.append(f"status {args.get('status')}")
         if "goal_status" in args:
-            parts.append(f"goal_status={args.get('goal_status')}")
+            detail_bits.append(f"goal status {args.get('goal_status')}")
         if "app_name" in args:
-            parts.append(f"app_name={args.get('app_name')}")
-        return ", ".join(parts)
+            detail_bits.append(f'app "{args.get("app_name")}"')
+        if idx is not None:
+            detail_bits.append(f"element #{idx}")
+
+        detail = ", ".join([x for x in detail_bits if _normalize_space(x)])
+        if detail:
+            return f"[{source}] {action} ({detail})"
+        return f"[{source}] {action}"
 
     @staticmethod
     def _normalize_goal_status(goal_status: Any) -> str:
@@ -3120,6 +4774,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                     "clue_debug": [],
                     "explore_candidates_count": 0,
                     "explore_action_count": self._get_explore_action_count(),
+                    "reasoning_page_record": None,
+                    "return_failed_suspected": False,
                     "latency_sec": 0.0,
                     "step_latency_sec": 0.0,
                     "task_elapsed_sec": (
@@ -3148,6 +4804,11 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         step_start_pixels = np.array(state.pixels, copy=True)
         ui_elements = state.ui_elements
         hints = self._build_hints(ui_elements)
+        reasoning_start_page = self._compact_page_record(state)
+        reasoning_pre_action_page: dict[str, Any] | None = None
+        reasoning_end_page: dict[str, Any] | None = None
+        return_alignment: dict[str, Any] | None = None
+        reasoning_page_record: dict[str, Any] | None = None
         self._emit_log(
             f"step={step_no} current_page=({self._state_page_hint(state)})",
             tag="STEP",
@@ -3191,7 +4852,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             )
             if clue_text:
                 clues = (
-                    f"[Clue Source] exploration_step={source_step} -> reasoning_step={len(self.actions) + 1}\n"
+                    f"[Clue Source] Exploration step {source_step} prepared hints for reasoning step {len(self.actions) + 1}.\n"
                     + clue_text
                 )
 
@@ -3200,13 +4861,32 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             content=clues or "None.",
             tag="REASON",
         )
+        explore_gate_reason = "disabled"
+        should_explore = False
         if self.enable_parallel_exploration:
-            self._start_explorer_thread(
+            should_explore, explore_gate_reason = self._should_start_exploration(
+                step_no=step_no,
                 goal=goal,
-                history_tail=self.history[-3:],
-                clues_text=clues,
-                source_step=step_no,
+                current_activity=reasoning_start_page.get("activity"),
             )
+            self._emit_log(
+                f"step={step_no} explore_gate should_explore={should_explore} reason={explore_gate_reason}",
+                tag="EXPLORE",
+            )
+        if not should_explore:
+            with self._explore_action_count_lock:
+                self._explore_action_count = 0
+            self._explore_iteration_candidates = []
+            self._clear_explore_root_baseline()
+        if self.enable_parallel_exploration:
+            if should_explore:
+                self._start_explorer_thread(
+                    goal=goal,
+                    history_tail=self.history[-3:],
+                    clues_text=clues,
+                    source_step=step_no,
+                    trigger_reason=explore_gate_reason,
+                )
 
         prompt_history = self._history_prompt_text(max_items=8)
         user_text = (
@@ -3239,7 +4919,19 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             },
         ]
 
+        reasoning_start_perf = time.perf_counter()
         response, _, _ = self.vllm.predict_mm("", [], messages=messages)
+        reasoning_elapsed = float(max(0.0, time.perf_counter() - reasoning_start_perf))
+        if self.reasoning_sleep_sec > reasoning_elapsed:
+            sleep_sec = float(self.reasoning_sleep_sec - reasoning_elapsed)
+            self._emit_log(
+                (
+                    f"step={step_no} simulate_reasoning_sleep={sleep_sec:.3f}s "
+                    f"(elapsed={reasoning_elapsed:.3f}s target={self.reasoning_sleep_sec:.3f}s)"
+                ),
+                tag="REASON",
+            )
+            time.sleep(sleep_sec)
         self._emit_log_block(
             title=f"step={step_no} llm_response",
             content=str(response),
@@ -3252,41 +4944,248 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         execution_path = None
         coord_mode_used = self.model_coordinate_mode
         fallback_index = hints[0].index if hints else None
+        strict_retry_count = 0
+        strict_reject = False
+        completion_checkpoint: dict[str, Any] = {}
+        structured_recovery_info: dict[str, Any] | None = None
+        text_edit_info: dict[str, Any] = {}
 
-        try:
-            tool_call = parse_tool_call(response)
-            self._emit_log_block(
-                title=f"step={step_no} parsed_tool_call",
-                content=json.dumps(tool_call, ensure_ascii=False, indent=2),
-                tag="REASON",
+        response_text_for_parse = str(response)
+        last_parse_exc: Exception | None = None
+        for attempt in range(max(0, int(self.strict_json_reprompt_retries)) + 1):
+            try:
+                parsed_action = parse_gelab_response(response_text_for_parse)
+                self._emit_log_block(
+                    title=f"step={step_no} parsed_gelab_action",
+                    content=json.dumps(dict(parsed_action), ensure_ascii=False, indent=2),
+                    tag="REASON",
+                )
+                action, tool_call, _ = gelab_action_to_json_action(
+                    parsed_action=parsed_action,
+                    screen_size=self.env.logical_screen_size,
+                )
+                self._emit_log_block(
+                    title=f"step={step_no} parsed_tool_call",
+                    content=json.dumps(tool_call, ensure_ascii=False, indent=2),
+                    tag="REASON",
+                )
+                self._emit_log_block(
+                    title=f"step={step_no} normalized_action",
+                    content=repr(action),
+                    tag="REASON",
+                )
+                if action.action_type == json_action.UNKNOWN:
+                    raise seeact_utils.ParseActionError("unknown action")
+                if (
+                    action.action_type == json_action.INPUT_TEXT
+                    and action.x is None
+                    and action.y is None
+                    and action.index is None
+                ):
+                    raise seeact_utils.ParseActionError("input_text missing target (coordinate/index)")
+                response = response_text_for_parse
+                strict_retry_count = attempt
+                parse_error = None
+                break
+            except Exception as exc:  # pylint: disable=broad-exception-caught
+                last_parse_exc = exc
+                parse_error = str(exc)
+                self._emit_log(
+                    f"step={step_no} strict_parse_failed attempt={attempt + 1} error={parse_error}",
+                    tag="REASON",
+                )
+                repaired_tool_call = self._recover_tool_call_from_malformed_response(response_text_for_parse)
+                if repaired_tool_call is not None:
+                    repaired_action = _to_json_action(
+                        repaired_tool_call,
+                        ui_elements=ui_elements,
+                        fallback_index=fallback_index,
+                        logical_screen_size=self.env.logical_screen_size,
+                        coordinate_mode=self.model_coordinate_mode,
+                    )
+                    if repaired_action.action_type != json_action.UNKNOWN:
+                        tool_call = repaired_tool_call
+                        action = repaired_action
+                        response = response_text_for_parse
+                        strict_retry_count = attempt
+                        parse_error = None
+                        source = "malformed_tool_call_repair"
+                        self._emit_log_block(
+                            title=f"step={step_no} malformed_tool_call_repaired",
+                            content=json.dumps(tool_call, ensure_ascii=False, indent=2),
+                            tag="REASON",
+                        )
+                        break
+                try:
+                    # MAI-UI-style robust fallback parser: tolerant to minor JSON/tag defects.
+                    tool_call = parse_tool_call(response_text_for_parse)
+                    self._emit_log_block(
+                        title=f"step={step_no} fallback_parsed_tool_call",
+                        content=json.dumps(tool_call, ensure_ascii=False, indent=2),
+                        tag="REASON",
+                    )
+                    action = _to_json_action(
+                        tool_call,
+                        ui_elements=ui_elements,
+                        fallback_index=fallback_index,
+                        logical_screen_size=self.env.logical_screen_size,
+                        coordinate_mode=self.model_coordinate_mode,
+                    )
+                    if action.action_type == json_action.UNKNOWN:
+                        repaired_tool_call = self._recover_tool_call_from_malformed_response(
+                            response_text_for_parse
+                        )
+                        if repaired_tool_call is not None:
+                            repaired_action = _to_json_action(
+                                repaired_tool_call,
+                                ui_elements=ui_elements,
+                                fallback_index=fallback_index,
+                                logical_screen_size=self.env.logical_screen_size,
+                                coordinate_mode=self.model_coordinate_mode,
+                            )
+                            if repaired_action.action_type != json_action.UNKNOWN:
+                                tool_call = repaired_tool_call
+                                action = repaired_action
+                                source = "malformed_tool_call_repair"
+                                response = response_text_for_parse
+                                strict_retry_count = attempt
+                                self._emit_log_block(
+                                    title=f"step={step_no} malformed_tool_call_repaired",
+                                    content=json.dumps(tool_call, ensure_ascii=False, indent=2),
+                                    tag="REASON",
+                                )
+                    if action.action_type != json_action.UNKNOWN:
+                        response = response_text_for_parse
+                        strict_retry_count = attempt
+                        parse_error = None
+                        if source != "malformed_tool_call_repair":
+                            source = "mai_compatible_parse"
+                        self._emit_log_block(
+                            title=f"step={step_no} fallback_normalized_action",
+                            content=repr(action),
+                            tag="REASON",
+                        )
+                        break
+                except Exception as fallback_exc:  # pylint: disable=broad-exception-caught
+                    self._emit_log(
+                        f"step={step_no} mai_compatible_parse_failed error={fallback_exc}",
+                        tag="REASON",
+                    )
+                    repaired_tool_call = self._recover_tool_call_from_malformed_response(response_text_for_parse)
+                    if repaired_tool_call is not None:
+                        repaired_action = _to_json_action(
+                            repaired_tool_call,
+                            ui_elements=ui_elements,
+                            fallback_index=fallback_index,
+                            logical_screen_size=self.env.logical_screen_size,
+                            coordinate_mode=self.model_coordinate_mode,
+                        )
+                        if repaired_action.action_type != json_action.UNKNOWN:
+                            tool_call = repaired_tool_call
+                            action = repaired_action
+                            response = response_text_for_parse
+                            strict_retry_count = attempt
+                            parse_error = None
+                            source = "malformed_tool_call_repair"
+                            self._emit_log_block(
+                                title=f"step={step_no} malformed_tool_call_repaired",
+                                content=json.dumps(tool_call, ensure_ascii=False, indent=2),
+                                tag="REASON",
+                            )
+                            break
+                    try:
+                        # Keep strict parser as second fallback for clean <tool_call> JSON.
+                        tool_call = parse_tool_call_strict(response_text_for_parse, require_tool_tag=False)
+                        action = _to_json_action(
+                            tool_call,
+                            ui_elements=ui_elements,
+                            fallback_index=fallback_index,
+                            logical_screen_size=self.env.logical_screen_size,
+                            coordinate_mode=self.model_coordinate_mode,
+                        )
+                        if action.action_type != json_action.UNKNOWN:
+                            response = response_text_for_parse
+                            strict_retry_count = attempt
+                            parse_error = None
+                            source = "strict_tool_call_parse"
+                            self._emit_log_block(
+                                title=f"step={step_no} strict_fallback_normalized_action",
+                                content=repr(action),
+                                tag="REASON",
+                            )
+                            break
+                    except Exception as strict_fallback_exc:  # pylint: disable=broad-exception-caught
+                        self._emit_log(
+                            f"step={step_no} strict_fallback_parse_failed error={strict_fallback_exc}",
+                            tag="REASON",
+                        )
+                if attempt < max(0, int(self.strict_json_reprompt_retries)):
+                    response_text_for_parse = self._reprompt_for_strict_json(
+                        messages=messages,
+                        response_text=response_text_for_parse,
+                        parse_error=parse_error,
+                        step_no=step_no,
+                    )
+                    continue
+                strict_reject = True
+                source = "rejected_non_json"
+                action = json_action.JSONAction(action_type=json_action.WAIT)
+                tool_call = {
+                    "name": "mobile_use",
+                    "arguments": {
+                        "action": "wait",
+                        "reason": "strict_json_parse_failed",
+                    },
+                }
+                break
+
+        if strict_reject and last_parse_exc is not None:
+            parse_error = str(last_parse_exc)
+        if not strict_reject:
+            force_open_app, app_name = self._should_force_open_target_app(
+                step_no=step_no,
+                goal=goal,
+                current_activity=reasoning_start_page.get("activity"),
+                action=action,
             )
-            action = _to_json_action(
-                tool_call,
-                ui_elements=ui_elements,
-                fallback_index=fallback_index,
-                logical_screen_size=self.env.logical_screen_size,
-                coordinate_mode=self.model_coordinate_mode,
-            )
-            self._emit_log_block(
-                title=f"step={step_no} normalized_action",
-                content=repr(action),
-                tag="REASON",
-            )
-            if action.action_type == json_action.UNKNOWN:
-                raise seeact_utils.ParseActionError("unknown action")
-        except Exception as exc:  # pylint: disable=broad-exception-caught
-            parse_error = str(exc)
-            self._emit_log(
-                f"step={step_no} parse_or_normalize_failed error={parse_error}",
-                tag="REASON",
-            )
-            if _looks_like_back_intent(response):
-                source = "fallback_parse_back_intent"
+            if force_open_app and app_name:
+                source = "target_app_bootstrap"
+                action, tool_call = self._build_open_app_action(app_name)
+                self._emit_log(
+                    f"step={step_no} target_app_bootstrap force_open_app={app_name}",
+                    tag="REASON",
+                )
+            if self._should_force_back_from_chooser(
+                goal=goal,
+                current_activity=reasoning_start_page.get("activity"),
+                action=action,
+            ):
+                source = "chooser_guard_back"
                 action = json_action.JSONAction(action_type=json_action.NAVIGATE_BACK)
-                tool_call = {"name": "mobile_use", "arguments": {"action": "navigate_back"}}
-            else:
-                source = "fallback_parse"
-                action, tool_call = self._fallback_explore(hints, ui_elements)
+                tool_call = {
+                    "name": "mobile_use",
+                    "arguments": {"action": "system_button", "button": "back"},
+                }
+                self._emit_log(
+                    f"step={step_no} chooser_guard applied -> navigate_back",
+                    tag="REASON",
+                )
+        if not strict_reject and self._should_apply_loop_guard(action):
+            loop_guard_action, loop_guard_tool = self._fallback_explore(hints, ui_elements)
+            prev_sig = self._action_signature_from_action(action)
+            alt_sig = self._action_signature_from_action(loop_guard_action)
+            if (
+                loop_guard_action.action_type not in {json_action.UNKNOWN, json_action.WAIT}
+                and alt_sig
+                and alt_sig != prev_sig
+            ):
+                source = "loop_guard_fallback"
+                action = loop_guard_action
+                tool_call = loop_guard_tool
+                self._emit_log(
+                    f"step={step_no} loop_guard_applied prev={prev_sig} alt={alt_sig}",
+                    tag="REASON",
+                )
 
         explore_candidates = self._stop_explorer_thread()
         explore_action_count = self._get_explore_action_count()
@@ -3309,19 +5208,38 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             "candidates": explore_candidates,
         }
 
+        safety_mode_reason = None
         if not explore_thread_clean:
-            source = f"{source}_thread_guard_soft"
-            parse_error = "explorer_thread_not_stopped_cleanly"
+            safety_mode_reason = "explorer_thread_not_stopped_cleanly"
+            source = f"{source}_thread_guard"
+            parse_error = safety_mode_reason
             self._clear_explore_root_baseline()
+            cooldown_steps = max(
+                int(self.explore_cooldown_after_safe_mode),
+                int(self.rollback_fail_explore_cooldown_steps),
+            )
+            self._explore_cooldown_steps = max(
+                int(self._explore_cooldown_steps),
+                cooldown_steps,
+            )
             self._emit_log(
-                f"step={step_no} thread_guard_failed -> soft_continue",
+                f"step={step_no} thread_guard_failed -> enable_safe_mode",
                 tag="REASON",
             )
         elif self._has_explore_root_baseline() and not bool(rollback_info.get("verified")):
-            source = f"{source}_rollback_guard_soft"
-            parse_error = "rollback_guard_failed_not_at_root"
+            safety_mode_reason = "rollback_guard_failed_not_at_root"
+            source = f"{source}_rollback_guard"
+            parse_error = safety_mode_reason
+            cooldown_steps = max(
+                int(self.explore_cooldown_after_safe_mode),
+                int(self.rollback_fail_explore_cooldown_steps),
+            )
+            self._explore_cooldown_steps = max(
+                int(self._explore_cooldown_steps),
+                cooldown_steps,
+            )
             self._emit_log(
-                f"step={step_no} rollback_guard_failed -> soft_continue",
+                f"step={step_no} rollback_guard_failed -> enable_safe_mode",
                 tag="REASON",
             )
 
@@ -3336,6 +5254,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 }
             )
         )
+        if strict_reject:
+            force_explore_due_to_uncertainty = False
         if (
             self._no_effect_repeat >= self.force_explore_after_repeats
             and (explore_action_count > 0 or bool(explore_candidates))
@@ -3352,19 +5272,186 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             if answer_text:
                 self.env.interaction_cache = answer_text
 
-        try:
-            with self._ui_lock:
-                execution_path = self._execute_action_with_coordinate_priority(action)
-        except Exception as exc:  # pylint: disable=broad-exception-caught
-            execution_error = str(exc)
-            source = "fallback_exec"
-            action, tool_call = self._fallback_explore(hints, ui_elements)
+        explore_thread_alive = bool(self._explore_thread and self._explore_thread.is_alive())
+        last_explore_age_sec = None
+        if self._last_explore_action_ts > 0.0:
+            last_explore_age_sec = max(0.0, float(time.time() - self._last_explore_action_ts))
+        self._emit_log(
+            (
+                f"step={step_no} pre_action_thread_state alive={explore_thread_alive} "
+                f"stop_event={self._explore_stop_event.is_set()} last_explore_age_sec={last_explore_age_sec}"
+            ),
+            tag="CHECK",
+        )
+
+        if safety_mode_reason and self._is_high_risk_interaction_action(action):
+            source = f"safe_mode_{safety_mode_reason}"
+            action, tool_call = self._build_safe_mode_back_action()
+            tool_args = tool_call.get("arguments") if isinstance(tool_call.get("arguments"), dict) else {}
+            self._emit_log(
+                f"step={step_no} safe_mode_applied reason={safety_mode_reason} replace_with=back",
+                tag="CHECK",
+            )
+
+        checkpoint_state = state
+        if self._is_calendar_or_contact_goal(goal):
             try:
                 with self._ui_lock:
+                    checkpoint_state = self.env.get_state(wait_to_stabilize=False)
+                completion_checkpoint = self._completion_checkpoint(goal, checkpoint_state)
+            except Exception as exc:  # pylint: disable=broad-exception-caught
+                completion_checkpoint = {"enabled": True, "error": str(exc)}
+
+            if self._is_complete_status_action(action) and not bool(completion_checkpoint.get("can_finish", True)):
+                save_pair = self._build_save_action_from_state(checkpoint_state)
+                if save_pair is not None:
+                    source = "completion_checkpoint_save"
+                    action, tool_call = save_pair
+                    tool_args = tool_call.get("arguments") if isinstance(tool_call.get("arguments"), dict) else {}
+                    self._emit_log(
+                        (
+                            f"step={step_no} completion_checkpoint_blocked_finish "
+                            f"save_visible={completion_checkpoint.get('save_visible')} "
+                            f"in_edit={completion_checkpoint.get('in_edit_activity')}"
+                        ),
+                        tag="CHECK",
+                    )
+                elif bool(completion_checkpoint.get("in_edit_activity")):
+                    source = "completion_checkpoint_back"
+                    action, tool_call = self._build_safe_mode_back_action()
+                    tool_args = tool_call.get("arguments") if isinstance(tool_call.get("arguments"), dict) else {}
+                    self._emit_log(
+                        f"step={step_no} completion_checkpoint_force_back_from_edit",
+                        tag="CHECK",
+                    )
+
+            if self._task_status_from_action(action) == "infeasible":
+                recovery_pair = self._attempt_structured_recovery_before_infeasible(
+                    goal=goal,
+                    state=checkpoint_state,
+                    step_no=step_no,
+                )
+                if recovery_pair is not None:
+                    source = "structured_recovery_before_infeasible"
+                    action, tool_call, structured_recovery_info = recovery_pair
+                    tool_args = tool_call.get("arguments") if isinstance(tool_call.get("arguments"), dict) else {}
+                    self._emit_log(
+                        f"step={step_no} infeasible_intercepted structured_recovery={structured_recovery_info}",
+                        tag="CHECK",
+                    )
+
+        model_coord = tool_args.get("coordinate") if isinstance(tool_args, dict) else None
+        parsed_coord = (
+            [int(action.x), int(action.y)]
+            if getattr(action, "x", None) is not None and getattr(action, "y", None) is not None
+            else None
+        )
+        if model_coord is not None or parsed_coord is not None:
+            try:
+                screen_size = self.env.logical_screen_size
+            except Exception:  # pylint: disable=broad-exception-caught
+                screen_size = None
+            self._emit_log(
+                (
+                    f"step={step_no} coord_check model={model_coord} parsed={parsed_coord} "
+                    f"screen={screen_size} mode={self.model_coordinate_mode}"
+                ),
+                tag="CHECK",
+            )
+
+        pre_action_pixels = np.array(step_start_pixels, copy=True)
+        post_state = None
+        action_effect: dict[str, Any] = {}
+        action_retry_attempted = False
+        action_retry_succeeded = False
+
+        try:
+            with self._ui_lock:
+                pre_action_state = self.env.get_state(wait_to_stabilize=False)
+            pre_action_pixels = np.array(pre_action_state.pixels, copy=True)
+            reasoning_pre_action_page = self._compact_page_record(pre_action_state)
+        except Exception:  # pylint: disable=broad-exception-caught
+            reasoning_pre_action_page = dict(reasoning_start_page)
+        return_alignment = self._page_alignment_summary(
+            reasoning_start_page,
+            reasoning_pre_action_page,
+        )
+
+        try:
+            if action.action_type == json_action.INPUT_TEXT:
+                execution_path, post_state, text_edit_info, execution_error = self._execute_verified_text_input(
+                    action=action,
+                    ui_elements=ui_elements,
+                )
+            else:
+                with self._ui_lock:
                     execution_path = self._execute_action_with_coordinate_priority(action)
-                execution_error = None
-            except Exception as exc2:  # pylint: disable=broad-exception-caught
-                execution_error = f"{execution_error}; fallback_failed={exc2}"
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            execution_error = str(exc)
+            source = f"{source}_exec_error"
+
+        if post_state is None:
+            try:
+                with self._ui_lock:
+                    post_state = self.env.get_state(wait_to_stabilize=False)
+            except Exception:  # pylint: disable=broad-exception-caught
+                post_state = None
+
+        after_activity = self._foreground_activity_name()
+        delete_dialog_info: dict[str, Any] = {}
+        if post_state is not None:
+            post_state, delete_dialog_info = self._handle_unexpected_delete_dialog(goal, post_state)
+            if bool(delete_dialog_info.get("handled")):
+                after_activity = self._foreground_activity_name()
+                if execution_error:
+                    execution_error = f"{execution_error}; unexpected_delete_dialog_cancelled"
+                else:
+                    execution_error = "unexpected_delete_dialog_cancelled"
+        action_effect = self._action_effect_summary(
+            before_pixels=pre_action_pixels,
+            after_pixels=(post_state.pixels if post_state is not None else None),
+            before_activity=reasoning_pre_action_page.get("activity"),
+            after_activity=after_activity,
+        )
+        if bool(delete_dialog_info.get("handled")):
+            action_effect["unstable"] = True
+
+        # One retry for click-like actions when nothing appears to change.
+        if (
+            not bool(action_effect.get("changed"))
+            and action.action_type in {json_action.CLICK, json_action.LONG_PRESS}
+            and post_state is not None
+        ):
+            retry_idx = _safe_int(getattr(action, "index", None))
+            if retry_idx is None:
+                retry_idx = self._index_from_coordinate(
+                    ui_elements=ui_elements,
+                    x=_safe_int(getattr(action, "x", None)),
+                    y=_safe_int(getattr(action, "y", None)),
+                )
+            if retry_idx is not None and 0 <= retry_idx < len(ui_elements):
+                retry_center = self._safe_center_from_element(ui_elements[retry_idx])
+                if retry_center is not None:
+                    action_retry_attempted = True
+                    retry_action = json_action.JSONAction(
+                        action_type=action.action_type,
+                        x=retry_center[0],
+                        y=retry_center[1],
+                    )
+                    try:
+                        with self._ui_lock:
+                            self._execute_action_with_coordinate_priority(retry_action)
+                            post_state = self.env.get_state(wait_to_stabilize=False)
+                        action_retry_succeeded = True
+                        execution_path = f"{execution_path}+retry_center"
+                        action_effect = self._action_effect_summary(
+                            before_pixels=pre_action_pixels,
+                            after_pixels=post_state.pixels,
+                            before_activity=reasoning_pre_action_page.get("activity"),
+                            after_activity=self._foreground_activity_name(),
+                        )
+                    except Exception:  # pylint: disable=broad-exception-caught
+                        action_retry_succeeded = False
 
         idx = _target_index(tool_call.get("arguments", {}))
         if idx is None:
@@ -3380,18 +5467,35 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
 
         action_text = self._tool_call_text(tool_call, source=source)
         if parse_error:
-            action_text += f" | parse_error={parse_error}"
+            action_text += f"; parse error: {parse_error}"
         if execution_error:
-            action_text += f" | execution_error={execution_error}"
+            action_text += f"; execution error: {execution_error}"
         if execution_path:
-            action_text += f" | execution_path={execution_path}"
-        action_text += f" | coordinate_mode={coord_mode_used}"
+            action_text += f"; executed via {execution_path}"
+        if action_effect:
+            changed_text = "yes" if bool(action_effect.get("changed")) else "no"
+            action_text += (
+                f"; effect changed: {changed_text}"
+                f" (delta={action_effect.get('pixel_delta')}, hash_diff={action_effect.get('hash_diff')})"
+            )
+        if action_retry_attempted:
+            action_text += f"; retry attempted: {action_retry_succeeded}"
+        if strict_retry_count > 0:
+            action_text += f"; strict json retries: {strict_retry_count}"
+        if strict_reject:
+            action_text += "; strict json rejected"
+        if text_edit_info:
+            action_text += f"; text edit info: {text_edit_info}"
+        action_text += f"; coordinate mode: {coord_mode_used}"
         self._emit_log(
-            f"step={step_no} final_decision={action_text}",
+            f"step={step_no} Final decision: {action_text}",
             tag="STEP",
         )
 
         self._last_action_text = action_text
+        self._last_action_effect = dict(action_effect or {})
+        if action_effect and not bool(action_effect.get("changed")):
+            self._execution_feedback = "Last action likely had no visible effect; avoid repeating same target."
         self._last_pixels = np.array(state.pixels, copy=True)
         self.history.append(action_text)
 
@@ -3409,18 +5513,81 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 "parse_error": parse_error,
                 "execution_error": execution_error,
                 "execution_path": execution_path,
+                "action_effect": action_effect,
+                "action_retry_attempted": action_retry_attempted,
+                "action_retry_succeeded": action_retry_succeeded,
+                "strict_retry_count": strict_retry_count,
+                "strict_reject": strict_reject,
+                "text_edit_info": text_edit_info,
+                "completion_checkpoint": completion_checkpoint,
+                "structured_recovery_info": structured_recovery_info,
+                "delete_dialog_info": delete_dialog_info,
                 "coordinate_mode": coord_mode_used,
                 "clues": clues,
                 "clue_debug": self.get_last_clue_debug_lines(),
                 "explore_candidates_count": len(explore_candidates),
+                "reasoning_page_record": reasoning_page_record,
             }
         )
 
         task_status = self._task_status_from_action(action)
         done = task_status is not None
         task_completed = bool(task_status == "completed")
-        with self._ui_lock:
-            post_state = self.env.get_state(wait_to_stabilize=False)
+        if post_state is None:
+            with self._ui_lock:
+                post_state = self.env.get_state(wait_to_stabilize=False)
+        reasoning_end_page = self._compact_page_record(post_state)
+        action_summary = self._simplify_action_entry(
+            {"tool_call": tool_call, "action_dict": action_dict},
+            fallback=action_text,
+        )
+        start_to_end_alignment = self._page_alignment_summary(
+            reasoning_start_page,
+            reasoning_end_page,
+        )
+        reasoning_page_record = {
+            "step": step_no,
+            "action": action_summary,
+            "source": source,
+            "explore_return_verified": bool(rollback_info.get("verified")),
+            "pre_action_thread_alive": explore_thread_alive,
+            "last_explore_age_sec": last_explore_age_sec,
+            "safety_mode_reason": safety_mode_reason,
+            "start_page": reasoning_start_page,
+            "before_action_page": reasoning_pre_action_page,
+            "end_page": reasoning_end_page,
+            "start_to_before_action": return_alignment,
+            "start_to_end": start_to_end_alignment,
+            "return_failed_suspected": bool(
+                (not bool(rollback_info.get("verified")))
+                or (return_alignment is not None and not bool(return_alignment.get("matched")))
+            ),
+            "action_effect": action_effect,
+            "action_retry_attempted": action_retry_attempted,
+            "action_retry_succeeded": action_retry_succeeded,
+            "completion_checkpoint": completion_checkpoint,
+            "structured_recovery_info": structured_recovery_info,
+            "delete_dialog_info": delete_dialog_info,
+        }
+        if self.actions:
+            self.actions[-1]["reasoning_page_record"] = reasoning_page_record
+        self._reasoning_page_records.append(reasoning_page_record)
+        if self._task_trace_dir:
+            self._append_jsonl(
+                os.path.join(self._task_trace_dir, "reasoning_page_records.jsonl"),
+                reasoning_page_record,
+            )
+        self._emit_log(
+            (
+                f"Step {step_no} reasoning record. Action {action_summary}. "
+                f"Start page: {self._page_brief_text(reasoning_start_page)}. "
+                f"Before action: {self._page_brief_text(reasoning_pre_action_page or {})}. "
+                f"Return match: {bool((return_alignment or {}).get('matched'))}, "
+                f"rollback verified: {bool(rollback_info.get('verified'))}. "
+                f"End page: {self._page_brief_text(reasoning_end_page)}."
+            ),
+            tag="CHECK",
+        )
         step_latency_sec = float(max(0.0, time.perf_counter() - step_start_perf))
         self._task_step_latencies.append(step_latency_sec)
         avg_step_sec = float(sum(self._task_step_latencies) / max(1, len(self._task_step_latencies)))
@@ -3463,6 +5630,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 },
                 "llm_response_raw": str(response),
                 "rollback_info": rollback_info,
+                "reasoning_page_record": reasoning_page_record,
                 "decision": {
                     "source": source,
                     "tool_call": tool_call,
@@ -3472,6 +5640,15 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                     "parse_error": parse_error,
                     "execution_error": execution_error,
                     "execution_path": execution_path,
+                    "action_effect": action_effect,
+                    "action_retry_attempted": action_retry_attempted,
+                    "action_retry_succeeded": action_retry_succeeded,
+                    "strict_retry_count": strict_retry_count,
+                    "strict_reject": strict_reject,
+                    "text_edit_info": text_edit_info,
+                    "completion_checkpoint": completion_checkpoint,
+                    "structured_recovery_info": structured_recovery_info,
+                    "delete_dialog_info": delete_dialog_info,
                     "coordinate_mode": coord_mode_used,
                 },
                 "return": {
@@ -3485,6 +5662,15 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                         "parse_error": parse_error,
                         "execution_error": execution_error,
                         "execution_path": execution_path,
+                        "action_effect": action_effect,
+                        "action_retry_attempted": action_retry_attempted,
+                        "action_retry_succeeded": action_retry_succeeded,
+                        "strict_retry_count": strict_retry_count,
+                        "strict_reject": strict_reject,
+                        "text_edit_info": text_edit_info,
+                        "completion_checkpoint": completion_checkpoint,
+                        "structured_recovery_info": structured_recovery_info,
+                        "delete_dialog_info": delete_dialog_info,
                         "coordinate_mode": coord_mode_used,
                         "goal_status": getattr(action, "goal_status", None),
                         "task_status": task_status,
@@ -3494,6 +5680,10 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                         "clue_debug": self.get_last_clue_debug_lines(),
                         "explore_candidates_count": len(explore_candidates),
                         "explore_action_count": explore_action_count,
+                        "reasoning_page_record": reasoning_page_record,
+                        "return_failed_suspected": bool(
+                            (reasoning_page_record or {}).get("return_failed_suspected", False)
+                        ),
                         "latency_sec": step_latency_sec,
                         "step_latency_sec": step_latency_sec,
                         "task_elapsed_sec": task_elapsed_sec,
@@ -3527,6 +5717,15 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 "parse_error": parse_error,
                 "execution_error": execution_error,
                 "execution_path": execution_path,
+                "action_effect": action_effect,
+                "action_retry_attempted": action_retry_attempted,
+                "action_retry_succeeded": action_retry_succeeded,
+                "strict_retry_count": strict_retry_count,
+                "strict_reject": strict_reject,
+                "text_edit_info": text_edit_info,
+                "completion_checkpoint": completion_checkpoint,
+                "structured_recovery_info": structured_recovery_info,
+                "delete_dialog_info": delete_dialog_info,
                 "coordinate_mode": coord_mode_used,
                 "goal_status": getattr(action, "goal_status", None),
                 "task_status": task_status,
@@ -3536,6 +5735,10 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 "clue_debug": self.get_last_clue_debug_lines(),
                 "explore_candidates_count": len(explore_candidates),
                 "explore_action_count": explore_action_count,
+                "reasoning_page_record": reasoning_page_record,
+                "return_failed_suspected": bool(
+                    (reasoning_page_record or {}).get("return_failed_suspected", False)
+                ),
                 "latency_sec": step_latency_sec,
                 "step_latency_sec": step_latency_sec,
                 "task_elapsed_sec": task_elapsed_sec,
