@@ -30,7 +30,7 @@ from absl import logging
 from android_world import checkpointer as checkpointer_lib
 from android_world import registry
 from android_world import suite_utils
-from android_world.agents import base_agent, human_agent, infer, m3a, random_agent, seeact, t3a, mai_ui, mm_agent, t3a_profiling, explorer_agent, gelab_agent
+from android_world.agents import base_agent, human_agent, infer, m3a, random_agent, seeact, t3a, mai_ui, mm_agent, t3a_profiling, explorer_agent, gelab_agent, explorer_agent_gelab
 from android_world.env import env_launcher
 from android_world.env import interface
 
@@ -105,7 +105,7 @@ selected_tasks = ("AudioRecorderRecordAudio, AudioRecorderRecordAudioWithFileNam
                   "SystemBluetoothTurnOn, SystemWifiTurnOff, SystemWifiTurnOn")
 # selected_tasks = ("SystemWifiTurnOff")
 
-success_tasks = ("NotesIsTodo,RecipeDeleteMultipleRecipesWithConstraint,RecipeDeleteSingleRecipe,RecipeDeleteSingleWithRecipeWithNoise,SimpleCalendarAnyEventsOnDate,SimpleCalendarEventsInTimeRange,SimpleCalendarEventsOnDate,SimpleCalendarFirstEventAfterStartTime,SimpleCalendarLocationOfEvent,SystemBluetoothTurnOffVerify,SystemBluetoothTurnOnVerify,SystemBrightnessMaxVerify,SystemBrightnessMinVerify,SystemWifiTurnOff,SystemWifiTurnOffVerify,SystemWifiTurnOn,SystemWifiTurnOnVerify")
+success_tasks = ("NotesIsTodo, RecipeDeleteMultipleRecipesWithConstraint, RecipeDeleteSingleRecipe, RecipeDeleteSingleWithRecipeWithNoise,SimpleCalendarAnyEventsOnDate,SimpleCalendarEventsInTimeRange,SimpleCalendarEventsOnDate,SimpleCalendarFirstEventAfterStartTime,SimpleCalendarLocationOfEvent,SystemBluetoothTurnOffVerify,SystemBluetoothTurnOnVerify,SystemBrightnessMaxVerify,SystemBrightnessMinVerify,SystemWifiTurnOff,SystemWifiTurnOffVerify,SystemWifiTurnOn,SystemWifiTurnOnVerify")
 _TASKS = flags.DEFINE_list(
     'tasks',
     None,
@@ -134,9 +134,9 @@ _OUTPUT_PATH = flags.DEFINE_string(
 )
 
 # Agent specific.
-_AGENT_NAME = flags.DEFINE_string('agent_name', 'explore_agent', help='Agent name.')
+_AGENT_NAME = flags.DEFINE_string('agent_name', 'explore_agent_gelab', help='Agent name.')
 
-# m3a_llamacpp, t3a_llamacpp, mai-ui, mm_agent, t3a_profiling, explore_agent, gelab_agent
+# m3a_llamacpp, t3a_llamacpp, mai-ui, mm_agent, t3a_profiling, explore_agent, explore_agent_gelab, gelab_agent
 
 _FIXED_TASK_SEED = flags.DEFINE_boolean(
     'fixed_task_seed',
@@ -241,6 +241,16 @@ def _get_agent(
         agent = t3a_profiling.T3AExecProfilingAgent(env, infer.DeepseekWrapper())
     elif _AGENT_NAME.value == 'explore_agent':
         agent = explorer_agent.ExplorerElementAgent(
+            env,
+            infer.LlamaCppWrapper(
+                api_url="http://localhost:8081/v1/chat/completions",
+                temperature=0.2,
+                max_tokens=512,
+            ),
+            reasoning_sleep_sec=20.0,
+        )
+    elif _AGENT_NAME.value == 'explore_agent_gelab':
+        agent = explorer_agent_gelab.ExplorerElementAgent(
             env,
             infer.LlamaCppWrapper(
                 api_url="http://localhost:8081/v1/chat/completions",
