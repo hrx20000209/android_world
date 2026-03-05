@@ -136,7 +136,7 @@ _OUTPUT_PATH = flags.DEFINE_string(
 # Agent specific.
 _AGENT_NAME = flags.DEFINE_string('agent_name', 'explore_agent_gelab', help='Agent name.')
 
-# m3a_llamacpp, t3a_llamacpp, mai-ui, mm_agent, t3a_profiling, explore_agent, explore_agent_gelab, gelab_agent
+# m3a_llamacpp, t3a_llamacpp, mai-ui, mm_agent, t3a_profiling, explore_agent, explore_agent_gelab, gelab_agent, explore_agent_gelab
 
 _FIXED_TASK_SEED = flags.DEFINE_boolean(
     'fixed_task_seed',
@@ -223,9 +223,9 @@ def _get_agent(
         agent = t3a.T3A(
             env,
             infer.LlamaCppTextWrapper(
-                api_url="http://localhost:8080/v1/chat/completions",
-                temperature=1.0,
-                max_tokens=2048,
+                api_url="http://localhost:8081/v1/chat/completions",
+                temperature=0.0,
+                max_tokens=512,
             ),
         )
     elif _AGENT_NAME.value == 'm3a_llamacpp':

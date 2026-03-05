@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import base64
+import hashlib
 import io
 import json
 import re
@@ -707,6 +708,80 @@ def _extract_task_queries(text: str) -> list[str]:
         seen.add(key)
         out.append(chunk)
     return out
+
+
+def _a11y_tree_signature(ui_elements: list[Any], top_k: int = 12) -> dict[str, Any]:
+    elements = list(ui_elements or [])
+    interactive_count = 0
+    head_rows: list[str] = []
+    structure_rows: list[str] = []
+    limit = max(1, int(top_k))
+    for idx, element in enumerate(elements):
+        clickable = bool(getattr(element, "is_clickable", False))
+        editable = bool(getattr(element, "is_editable", False))
+        scrollable = bool(getattr(element, "is_scrollable", False))
+        long_clickable = bool(getattr(element, "is_long_clickable", False))
+        if clickable or editable or scrollable or long_clickable:
+            interactive_count += 1
+        if len(head_rows) >= limit:
+            continue
+        cls = _normalize_space(getattr(element, "class_name", ""))
+        text = _normalize_space(getattr(element, "text", ""))
+        desc = _normalize_space(getattr(element, "content_description", ""))
+        rid = _normalize_space(getattr(element, "resource_name", "") or getattr(element, "resource_id", ""))
+        flags = (
+            ("C" if clickable else "-")
+            + ("E" if editable else "-")
+            + ("S" if scrollable else "-")
+            + ("L" if long_clickable else "-")
+        )
+        head_rows.append(f"{idx}:{cls}|{text}|{desc}|{rid}|{flags}")
+        structure_rows.append(f"{idx}:{cls}|{rid}|{flags}")
+    head_src = "||".join(head_rows)
+    structure_src = "||".join(structure_rows)
+    return {
+        "interactive_count": int(interactive_count),
+        "node_count": int(len(elements)),
+        "top_k": int(limit),
+        "head_hash": hashlib.sha1(head_src.encode("utf-8")).hexdigest()[:16] if head_src else "",
+        "structure_hash": (
+            hashlib.sha1(structure_src.encode("utf-8")).hexdigest()[:16]
+            if structure_src
+            else ""
+        ),
+    }
+
+
+def _a11y_signature_match(
+    root_sig: dict[str, Any] | None,
+    curr_sig: dict[str, Any] | None,
+    interactive_tolerance: int = 2,
+    node_tolerance: int = 3,
+) -> bool:
+    if not isinstance(root_sig, dict) or not isinstance(curr_sig, dict):
+        return False
+
+    root_head = _normalize_space(root_sig.get("head_hash"))
+    curr_head = _normalize_space(curr_sig.get("head_hash"))
+    if root_head and curr_head and root_head == curr_head:
+        return True
+
+    root_struct = _normalize_space(root_sig.get("structure_hash"))
+    curr_struct = _normalize_space(curr_sig.get("structure_hash"))
+    if not root_struct or not curr_struct or root_struct != curr_struct:
+        return False
+
+    try:
+        root_interactive = int(root_sig.get("interactive_count", 0))
+        curr_interactive = int(curr_sig.get("interactive_count", 0))
+        root_nodes = int(root_sig.get("node_count", 0))
+        curr_nodes = int(curr_sig.get("node_count", 0))
+    except Exception:  # pylint: disable=broad-exception-caught
+        return False
+
+    inter_ok = abs(root_interactive - curr_interactive) <= max(0, int(interactive_tolerance))
+    node_ok = abs(root_nodes - curr_nodes) <= max(0, int(node_tolerance))
+    return bool(inter_ok and node_ok)
 
 
 def _phash_pixels(pixels: np.ndarray) -> int:
