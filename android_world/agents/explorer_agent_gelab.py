@@ -105,6 +105,8 @@ class ExplorerHint:
     index: int
     score: float
     label: str
+    center: tuple[int, int] | None = None  # pixel center of the element
+    name: str = ""  # human-readable name (text or content_description)
 
 
 @dataclasses.dataclass
@@ -165,7 +167,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         text_verify_retry_limit: int = 2,
         structured_edit_disable_explore: bool = True,
         enable_sequential_exploration: bool = True,
-        sequential_explore_steps: int = 5,
+        sequential_explore_steps: int = 3,
     ):
         super().__init__(env, name)
         # Backward-compatible arg retained to avoid breaking older configs.
@@ -795,6 +797,11 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             f"step={source_step} sequential_explore_done candidates={len(candidates)}",
             tag="EXPLORE",
         )
+        # CRITICAL: clear the root baseline so _ensure_root_before_reasoning does not
+        # see a stale hash after rollback and falsely trigger safety mode.
+        # (Even with clean rollback there can be minor pHash drift from animations,
+        # which would cause every sequential-exploration step to fall into safe_mode.)
+        self._clear_explore_root_baseline()
         return candidates
 
     def _clear_explore_root_baseline(self) -> None:
@@ -1373,6 +1380,55 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         if periodic > 0 and int(step_no) % periodic == 0:
             return True, "periodic_probe"
         return False, "not_triggered"
+
+    def _should_start_sequential_exploration(
+        self,
+        step_no: int,
+        goal: str,
+        current_activity: str | None = None,
+    ) -> tuple[bool, str]:
+        """Gate for sequential exploration.
+
+        Unlike parallel exploration (which can probe at bootstrap and periodic
+        intervals at zero extra latency), sequential exploration blocks reasoning
+        and therefore should ONLY run when the agent is genuinely stuck.
+        Bootstrap and periodic probes are intentionally excluded here.
+        """
+        if bool(getattr(self, "structured_edit_disable_explore", True)) and self._is_structured_edit_activity(
+            current_activity,
+            goal=goal,
+        ):
+            return False, "structured_edit_mode"
+
+        cooldown = max(0, int(getattr(self, "_explore_cooldown_steps", 0)))
+        if cooldown > 0:
+            self._explore_cooldown_steps = max(0, cooldown - 1)
+            return False, "cooldown"
+
+        # Only explore when the agent appears stuck — not on every step.
+        if int(getattr(self, "_no_effect_repeat", 0)) >= 1:
+            return True, "no_effect_repeat"
+
+        last_source = ""
+        if self.actions and isinstance(self.actions[-1], dict):
+            last_source = str(self.actions[-1].get("source") or "").lower()
+        if "fallback" in last_source:
+            return True, "fallback_recovery"
+        if "parse" in last_source:
+            return True, "parse_uncertain"
+        if "safe_mode" in last_source:
+            return True, "safe_mode_recovery"
+
+        last_signature = ""
+        if self.actions and isinstance(self.actions[-1], dict):
+            last_signature = self._action_signature_from_dict(self.actions[-1].get("action_dict") or {})
+        repeat_need = max(2, int(getattr(self, "explore_stuck_action_repeat", 2)))
+        if last_signature and self._has_repeated_recent_action_signature(last_signature, repeats=repeat_need):
+            if self._recent_page_hash_stable(repeats=2, max_hash_diff=2):
+                return True, "page_loop"
+            return True, "repeat_loop"
+
+        return False, "not_stuck"
 
     def _should_apply_loop_guard(self, action: json_action.JSONAction) -> bool:
         if action is None:
@@ -4420,7 +4476,23 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             if getattr(element, "content_description", ""):
                 score += 0.8
 
-            hints.append(ExplorerHint(index=idx, score=score, label=_element_hint_compact_label(element)))
+            bbox = getattr(element, "bbox_pixels", None)
+            elem_center: tuple[int, int] | None = None
+            if bbox is not None:
+                elem_center = (
+                    int((bbox.x_min + bbox.x_max) / 2.0),
+                    int((bbox.y_min + bbox.y_max) / 2.0),
+                )
+            elem_text = _normalize_space(getattr(element, "text", ""))
+            elem_desc = _normalize_space(getattr(element, "content_description", ""))
+            elem_name = elem_text or elem_desc or "unnamed"
+            hints.append(ExplorerHint(
+                index=idx,
+                score=score,
+                label=_element_hint_compact_label(element),
+                center=elem_center,
+                name=elem_name,
+            ))
         hints.sort(key=lambda hint: hint.score, reverse=True)
         return hints[: self.max_hints]
 
@@ -4641,13 +4713,37 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         tail = self.history[-limit:]
         return "\n".join(f"{idx}. {self._simplify_history_item(item)}" for idx, item in enumerate(tail, start=1))
 
-    @staticmethod
-    def _hints_text(hints: list[ExplorerHint]) -> str:
+    def _hints_text(self, hints: list[ExplorerHint], top_n: int = 3) -> str:
+        """Return top-N hints as natural-language sentences with positional cues.
+
+        Format: "1. \"Images\" at the top left may be useful for the task."
+        Coordinates are converted to human-readable positions (top/middle/bottom +
+        left/center/right) using the logical screen size from the environment.
+        """
         if not hints:
             return "None."
+        try:
+            sw, sh = self.env.logical_screen_size
+            sw, sh = max(1, int(sw)), max(1, int(sh))
+        except Exception:  # pylint: disable=broad-exception-caught
+            sw, sh = 1080, 1920
         lines = []
-        for rank, hint in enumerate(hints, start=1):
-            lines.append(f"- #{rank}: element {hint.index}, score {hint.score:.2f}. {hint.label}")
+        for rank, hint in enumerate(hints[:top_n], start=1):
+            name = hint.name or "element"
+            pos_phrase = ""
+            if hint.center is not None:
+                cx, cy = hint.center
+                hpos = "left" if cx < sw / 3 else ("right" if cx > 2 * sw / 3 else "center")
+                vpos = "top" if cy < sh / 3 else ("bottom" if cy > 2 * sh / 3 else "middle")
+                if vpos == "middle" and hpos == "center":
+                    pos_phrase = "at the center of the screen"
+                else:
+                    pos_phrase = f"at the {vpos} {hpos}"
+            sentence = f'{rank}. "{name}"'
+            if pos_phrase:
+                sentence += f" {pos_phrase}"
+            sentence += " may be useful for the task."
+            lines.append(sentence)
         return "\n".join(lines)
 
     @staticmethod
@@ -4912,7 +5008,10 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         # In parallel mode, use clues collected during the previous step's background thread.
         seq_explore_candidates: list[dict[str, Any]] = []
         if self.enable_sequential_exploration:
-            should_explore, explore_gate_reason = self._should_start_exploration(
+            # Use a dedicated gate that only triggers when the agent is stuck.
+            # Sequential exploration blocks reasoning (adds latency), so we never
+            # probe at bootstrap or periodic intervals — only when genuinely stuck.
+            should_explore, explore_gate_reason = self._should_start_sequential_exploration(
                 step_no=step_no,
                 goal=goal,
                 current_activity=reasoning_start_page.get("activity"),
@@ -4929,6 +5028,18 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                     clues_text="",
                     source_step=step_no,
                     trigger_reason=explore_gate_reason,
+                )
+                # Fix 3: Refresh state after exploration + rollback so the LLM sees
+                # the current screen instead of the pre-exploration (stale) snapshot.
+                with self._ui_lock:
+                    state = self.env.get_state(wait_to_stabilize=True)
+                ui_elements = state.ui_elements
+                hints = self._build_hints(ui_elements)
+                reasoning_start_page = self._compact_page_record(state)
+                self._emit_log(
+                    f"step={step_no} state_refreshed_after_exploration "
+                    f"page=({self._state_page_hint(state)})",
+                    tag="EXPLORE",
                 )
                 clue_text = self.build_prompt_clues_from_candidates(
                     candidates=seq_explore_candidates,
@@ -5395,6 +5506,12 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             answer_text = str(tool_args.get("text") or "").strip()
             if answer_text:
                 self.env.interaction_cache = answer_text
+        elif raw_action_name == "terminate" and str(tool_args.get("status") or "").lower() == "success":
+            # GELAB COMPLETE+return: the return_text was embedded in tool_call by
+            # gelab_action_to_json_action so we can set interaction_cache here.
+            return_text = str(tool_args.get("return_text") or "").strip()
+            if return_text:
+                self.env.interaction_cache = return_text
 
         explore_thread_alive = bool(self._explore_thread and self._explore_thread.is_alive())
         last_explore_age_sec = None
@@ -5655,8 +5772,11 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         )
 
         task_status = self._task_status_from_action(action)
-        done = task_status is not None
-        task_completed = bool(task_status == "completed")
+        # ANSWER action (e.g. GELAB INFO or explicit answer) also ends the episode,
+        # consistent with gelab_agent.py which has: done = action_type in {STATUS, ANSWER}.
+        is_answer_action = action.action_type == json_action.ANSWER
+        done = task_status is not None or is_answer_action
+        task_completed = bool(task_status == "completed") or is_answer_action
         if post_state is None:
             with self._ui_lock:
                 post_state = self.env.get_state(wait_to_stabilize=False)

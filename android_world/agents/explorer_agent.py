@@ -115,6 +115,8 @@ class ExplorerHint:
     index: int
     score: float
     label: str
+    center: tuple[int, int] | None = None  # pixel center of the element
+    name: str = ""  # human-readable name (text or content_description)
 
 
 @dataclasses.dataclass
@@ -171,6 +173,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         explore_read_task_step_cap: int = 2,
         explore_stuck_action_repeat: int = 2,
         explore_cooldown_after_safe_mode: int = 1,
+        enable_sequential_exploration: bool = True,
+        sequential_explore_steps: int = 3,
     ):
         super().__init__(env, name)
         # Backward-compatible arg retained to avoid breaking older configs.
@@ -275,6 +279,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self.explore_min_actions_before_reasoning = max(0, int(explore_min_actions_before_reasoning))
         self.explore_budget_boost_per_zero_step = max(0, int(explore_budget_boost_per_zero_step))
         self.explore_budget_boost_max = max(0, int(explore_budget_boost_max))
+        self.enable_sequential_exploration = bool(enable_sequential_exploration)
+        self.sequential_explore_steps = max(1, int(sequential_explore_steps))
         self._explore_trigger_reason: str = ""
         self._explore_cooldown_steps: int = 0
 
@@ -727,6 +733,73 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             daemon=True,
         )
         self._explore_thread.start()
+
+    def _run_sequential_exploration(
+        self,
+        goal: str,
+        history_tail: list[str],
+        clues_text: str,
+        source_step: int,
+        trigger_reason: str = "sequential",
+    ) -> list[dict[str, Any]]:
+        """Run exploration synchronously for a fixed number of steps before reasoning.
+
+        Implements the paper design: explore K steps first, then reason with the
+        collected clues immediately (rather than using clues from the previous step's
+        background thread, which are already stale by the time reasoning starts).
+        """
+        self._explore_stop_event.clear()
+        self._explore_progress_event.clear()
+        with self._explore_action_count_lock:
+            self._explore_action_count = 0
+        self._explore_iteration_candidates = []
+        self._explore_trigger_reason = str(trigger_reason or "sequential")
+        self._clicked_bounds = set()
+        self._branch_action_history = []
+        self._replay_action_history = list(self._reasoning_action_history)
+
+        root_state = self._capture_explore_root_baseline(
+            trigger=f"step_{source_step}_seq_{self._explore_trigger_reason}"
+        )
+        if root_state is None:
+            self._emit_log(
+                f"step={source_step} sequential_explore_skipped reason=root_baseline_capture_failed",
+                tag="EXPLORE",
+            )
+            self._clear_explore_root_baseline()
+            return []
+
+        self._emit_log(
+            f"step={source_step} sequential_explore_begin trigger={self._explore_trigger_reason} "
+            f"budget={self.sequential_explore_steps} root_page=({self._state_page_hint(root_state)})",
+            tag="EXPLORE",
+        )
+
+        # Temporarily override max_steps so the worker respects the sequential budget.
+        original_max_steps = self.explore_max_steps
+        self.explore_max_steps = max(1, self.sequential_explore_steps)
+        try:
+            self._explore_worker(
+                goal=goal,
+                history_tail=history_tail,
+                clues_text=clues_text,
+                source_step=source_step,
+            )
+        finally:
+            self.explore_max_steps = original_max_steps
+
+        candidates = list(self._explore_iteration_candidates)
+        self._explore_iteration_candidates = []
+        self._emit_log(
+            f"step={source_step} sequential_explore_done candidates={len(candidates)}",
+            tag="EXPLORE",
+        )
+        # CRITICAL: clear the root baseline so _ensure_root_before_reasoning does not
+        # see a stale hash after rollback and falsely trigger safety mode.
+        # (Even with clean rollback there can be minor pHash drift from animations,
+        # which would cause every sequential-exploration step to fall into safe_mode.)
+        self._clear_explore_root_baseline()
+        return candidates
 
     def _clear_explore_root_baseline(self) -> None:
         self._explore_root_hash = None
@@ -1383,6 +1456,55 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         if periodic > 0 and int(step_no) % periodic == 0:
             return True, "periodic_probe"
         return False, "not_triggered"
+
+    def _should_start_sequential_exploration(
+        self,
+        step_no: int,
+        goal: str,
+        current_activity: str | None = None,
+    ) -> tuple[bool, str]:
+        """Gate for sequential exploration.
+
+        Unlike parallel exploration (which can probe at bootstrap and periodic
+        intervals at zero extra latency), sequential exploration blocks reasoning
+        and therefore should ONLY run when the agent is genuinely stuck.
+        Bootstrap and periodic probes are intentionally excluded here.
+        """
+        if bool(getattr(self, "structured_edit_disable_explore", True)) and self._is_structured_edit_activity(
+            current_activity,
+            goal=goal,
+        ):
+            return False, "structured_edit_mode"
+
+        cooldown = max(0, int(getattr(self, "_explore_cooldown_steps", 0)))
+        if cooldown > 0:
+            self._explore_cooldown_steps = max(0, cooldown - 1)
+            return False, "cooldown"
+
+        # Only explore when the agent appears stuck — not on every step.
+        if int(getattr(self, "_no_effect_repeat", 0)) >= 1:
+            return True, "no_effect_repeat"
+
+        last_source = ""
+        if self.actions and isinstance(self.actions[-1], dict):
+            last_source = str(self.actions[-1].get("source") or "").lower()
+        if "fallback" in last_source:
+            return True, "fallback_recovery"
+        if "parse" in last_source:
+            return True, "parse_uncertain"
+        if "safe_mode" in last_source:
+            return True, "safe_mode_recovery"
+
+        last_signature = ""
+        if self.actions and isinstance(self.actions[-1], dict):
+            last_signature = self._action_signature_from_dict(self.actions[-1].get("action_dict") or {})
+        repeat_need = max(2, int(getattr(self, "explore_stuck_action_repeat", 2)))
+        if last_signature and self._has_repeated_recent_action_signature(last_signature, repeats=repeat_need):
+            if self._recent_page_hash_stable(repeats=2, max_hash_diff=2):
+                return True, "page_loop"
+            return True, "repeat_loop"
+
+        return False, "not_stuck"
 
     def _should_apply_loop_guard(self, action: json_action.JSONAction) -> bool:
         if action is None:
@@ -3762,7 +3884,23 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             if getattr(element, "content_description", ""):
                 score += 0.8
 
-            hints.append(ExplorerHint(index=idx, score=score, label=_element_hint_compact_label(element)))
+            bbox = getattr(element, "bbox_pixels", None)
+            elem_center: tuple[int, int] | None = None
+            if bbox is not None:
+                elem_center = (
+                    int((bbox.x_min + bbox.x_max) / 2.0),
+                    int((bbox.y_min + bbox.y_max) / 2.0),
+                )
+            elem_text = _normalize_space(getattr(element, "text", ""))
+            elem_desc = _normalize_space(getattr(element, "content_description", ""))
+            elem_name = elem_text or elem_desc or "unnamed"
+            hints.append(ExplorerHint(
+                index=idx,
+                score=score,
+                label=_element_hint_compact_label(element),
+                center=elem_center,
+                name=elem_name,
+            ))
         hints.sort(key=lambda hint: hint.score, reverse=True)
         return hints[: self.max_hints]
 
@@ -3983,13 +4121,37 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         tail = self.history[-limit:]
         return "\n".join(f"{idx}. {self._simplify_history_item(item)}" for idx, item in enumerate(tail, start=1))
 
-    @staticmethod
-    def _hints_text(hints: list[ExplorerHint]) -> str:
+    def _hints_text(self, hints: list[ExplorerHint], top_n: int = 3) -> str:
+        """Return top-N hints as natural-language sentences with positional cues.
+
+        Format: "1. \"Images\" at the top left may be useful for the task."
+        Coordinates are converted to human-readable positions (top/middle/bottom +
+        left/center/right) using the logical screen size from the environment.
+        """
         if not hints:
             return "None."
+        try:
+            sw, sh = self.env.logical_screen_size
+            sw, sh = max(1, int(sw)), max(1, int(sh))
+        except Exception:  # pylint: disable=broad-exception-caught
+            sw, sh = 1080, 1920
         lines = []
-        for rank, hint in enumerate(hints, start=1):
-            lines.append(f"- #{rank}: element {hint.index}, score {hint.score:.2f}. {hint.label}")
+        for rank, hint in enumerate(hints[:top_n], start=1):
+            name = hint.name or "element"
+            pos_phrase = ""
+            if hint.center is not None:
+                cx, cy = hint.center
+                hpos = "left" if cx < sw / 3 else ("right" if cx > 2 * sw / 3 else "center")
+                vpos = "top" if cy < sh / 3 else ("bottom" if cy > 2 * sh / 3 else "middle")
+                if vpos == "middle" and hpos == "center":
+                    pos_phrase = "at the center of the screen"
+                else:
+                    pos_phrase = f"at the {vpos} {hpos}"
+            sentence = f'{rank}. "{name}"'
+            if pos_phrase:
+                sentence += f" {pos_phrase}"
+            sentence += " may be useful for the task."
+            lines.append(sentence)
         return "\n".join(lines)
 
     @staticmethod
@@ -4203,7 +4365,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         step_start_perf = time.perf_counter()
         # Defensive: ensure no stale explorer thread leaks into next reasoning step.
         self._stop_explorer_thread()
-        if not self.enable_parallel_exploration:
+        if not self.enable_parallel_exploration and not self.enable_sequential_exploration:
             # Prevent stale root baseline from triggering rollback guards when exploration is off.
             self._clear_explore_root_baseline()
         step_no = len(self.actions) + 1
@@ -4249,59 +4411,118 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             self._execution_feedback = ""
 
         clues = ""
-        if self._pending_explore_payload:
-            pending_candidates = self._pending_explore_payload.get("candidates") or []
-            source_step = self._pending_explore_payload.get("source_step")
-            clue_text = self.build_prompt_clues_from_candidates(
-                candidates=pending_candidates,
-                current_pixels=state.pixels,
-                max_items=4,
-                last_reasoning_action=(self.history[-1] if self.history else ""),
+        # Accumulate exploration candidates for this reasoning step.
+        # In sequential mode, run exploration now (blocking) and use results immediately.
+        # In parallel mode, use clues collected during the previous step's background thread.
+        seq_explore_candidates: list[dict[str, Any]] = []
+        if self.enable_sequential_exploration:
+            # Use a dedicated gate that only triggers when the agent is stuck.
+            # Sequential exploration blocks reasoning (adds latency), so we never
+            # probe at bootstrap or periodic intervals — only when genuinely stuck.
+            should_explore, explore_gate_reason = self._should_start_sequential_exploration(
+                step_no=step_no,
+                goal=goal,
+                current_activity=reasoning_start_page.get("activity"),
             )
-            if clue_text:
-                clues = (
-                    f"[Clue Source] Exploration step {source_step} prepared hints for reasoning step {len(self.actions) + 1}.\n"
-                    + clue_text
+            self._emit_log(
+                f"step={step_no} explore_gate should_explore={should_explore} "
+                f"reason={explore_gate_reason} mode=sequential",
+                tag="EXPLORE",
+            )
+            if should_explore:
+                seq_explore_candidates = self._run_sequential_exploration(
+                    goal=goal,
+                    history_tail=self.history[-3:],
+                    clues_text="",
+                    source_step=step_no,
+                    trigger_reason=explore_gate_reason,
                 )
+                # Fix 3: Refresh state after exploration + rollback so the LLM sees
+                # the current screen instead of the pre-exploration (stale) snapshot.
+                with self._ui_lock:
+                    state = self.env.get_state(wait_to_stabilize=True)
+                ui_elements = list(getattr(state, "ui_elements", None) or [])
+                hints = self._build_hints(ui_elements)
+                reasoning_start_page = self._compact_page_record(state)
+                self._emit_log(
+                    f"step={step_no} state_refreshed_after_exploration "
+                    f"page=({self._state_page_hint(state)})",
+                    tag="EXPLORE",
+                )
+                clue_text = self.build_prompt_clues_from_candidates(
+                    candidates=seq_explore_candidates,
+                    current_pixels=state.pixels,
+                    max_items=4,
+                    last_reasoning_action=(self.history[-1] if self.history else ""),
+                )
+                if clue_text:
+                    clues = (
+                        f"[Clue Source] Sequential exploration at step {step_no} "
+                        f"({len(seq_explore_candidates)} branches, budget={self.sequential_explore_steps} steps).\n"
+                        + clue_text
+                    )
+            else:
+                with self._explore_action_count_lock:
+                    self._explore_action_count = 0
+                self._explore_iteration_candidates = []
+                self._clear_explore_root_baseline()
+        else:
+            if self._pending_explore_payload:
+                pending_candidates = self._pending_explore_payload.get("candidates") or []
+                pending_source_step = self._pending_explore_payload.get("source_step")
+                clue_text = self.build_prompt_clues_from_candidates(
+                    candidates=pending_candidates,
+                    current_pixels=state.pixels,
+                    max_items=4,
+                    last_reasoning_action=(self.history[-1] if self.history else ""),
+                )
+                if clue_text:
+                    clues = (
+                        f"[Clue Source] Exploration step {pending_source_step} prepared hints for reasoning step {len(self.actions) + 1}.\n"
+                        + clue_text
+                    )
 
         self._emit_log_block(
             title=f"step={step_no} clues",
             content=clues or "None.",
             tag="REASON",
         )
-        explore_gate_reason = "disabled"
-        should_explore = False
-        if self.enable_parallel_exploration:
-            should_explore, explore_gate_reason = self._should_start_exploration(
-                step_no=step_no,
-                goal=goal,
-                current_activity=reasoning_start_page.get("activity"),
-            )
-            self._emit_log(
-                f"step={step_no} explore_gate should_explore={should_explore} reason={explore_gate_reason}",
-                tag="EXPLORE",
-            )
-        if not should_explore:
-            with self._explore_action_count_lock:
-                self._explore_action_count = 0
-            self._explore_iteration_candidates = []
-            self._clear_explore_root_baseline()
-        if self.enable_parallel_exploration:
-            if should_explore:
-                self._start_explorer_thread(
-                    goal=goal,
-                    history_tail=self.history[-3:],
-                    clues_text=clues,
-                    source_step=step_no,
-                    trigger_reason=explore_gate_reason,
-                )
 
+        if not self.enable_sequential_exploration:
+            explore_gate_reason = "disabled"
+            should_explore = False
+            if self.enable_parallel_exploration:
+                should_explore, explore_gate_reason = self._should_start_exploration(
+                    step_no=step_no,
+                    goal=goal,
+                    current_activity=reasoning_start_page.get("activity"),
+                )
+                self._emit_log(
+                    f"step={step_no} explore_gate should_explore={should_explore} reason={explore_gate_reason}",
+                    tag="EXPLORE",
+                )
+            if not should_explore:
+                with self._explore_action_count_lock:
+                    self._explore_action_count = 0
+                self._explore_iteration_candidates = []
+                self._clear_explore_root_baseline()
+            if self.enable_parallel_exploration:
+                if should_explore:
+                    self._start_explorer_thread(
+                        goal=goal,
+                        history_tail=self.history[-3:],
+                        clues_text=clues,
+                        source_step=step_no,
+                        trigger_reason=explore_gate_reason,
+                    )
+
+        clues_label = "Sequential explorer clues" if self.enable_sequential_exploration else "Parallel explorer clues"
         prompt_history = self._history_prompt_text(max_items=8)
         user_text = (
             f"Task: {goal}\n\n"
             f"History:\n{prompt_history}\n\n"
             f"Execution feedback:\n{self._execution_feedback or 'None.'}\n\n"
-            f"Parallel explorer clues:\n{clues or 'None.'}\n\n"
+            f"{clues_label}:\n{clues or 'None.'}\n\n"
             f"Explorer hints:\n{self._hints_text(hints)}"
         )
         prompt_log_text = (
@@ -4330,7 +4551,10 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         reasoning_start_perf = time.perf_counter()
         response, _, _ = self.vllm.predict_mm("", [], messages=messages)
         reasoning_elapsed = float(max(0.0, time.perf_counter() - reasoning_start_perf))
-        if self.reasoning_sleep_sec > reasoning_elapsed:
+        if not self.enable_sequential_exploration and self.reasoning_sleep_sec > reasoning_elapsed:
+            # Only sleep in parallel mode: the sleep simulates slow reasoning so the
+            # background exploration thread has more time to accumulate results.
+            # In sequential mode exploration already ran first, so the sleep is wasteful.
             sleep_sec = float(self.reasoning_sleep_sec - reasoning_elapsed)
             self._emit_log(
                 (
@@ -4432,14 +4656,20 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                     tag="REASON",
                 )
 
-        explore_candidates = self._stop_explorer_thread()
-        explore_action_count = self._get_explore_action_count()
-        explore_thread_clean = bool(self._explore_thread_stop_clean)
-        if not explore_thread_clean:
-            self._emit_log(
-                f"step={step_no} explorer_thread_not_stopped_cleanly -> guard_mode",
-                tag="STEP",
-            )
+        if self.enable_sequential_exploration:
+            # Exploration already ran synchronously before reasoning; no thread to stop.
+            explore_candidates = seq_explore_candidates
+            explore_action_count = self._get_explore_action_count()
+            explore_thread_clean = True
+        else:
+            explore_candidates = self._stop_explorer_thread()
+            explore_action_count = self._get_explore_action_count()
+            explore_thread_clean = bool(self._explore_thread_stop_clean)
+            if not explore_thread_clean:
+                self._emit_log(
+                    f"step={step_no} explorer_thread_not_stopped_cleanly -> guard_mode",
+                    tag="STEP",
+                )
         ui_settle_info = self._wait_for_ui_settle(
             checks=3,
             interval_sec=0.16,
@@ -4456,10 +4686,14 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             f"step={step_no} post_reasoning_rollback={rollback_info}",
             tag="STEP",
         )
-        self._pending_explore_payload = {
-            "source_step": len(self.actions) + 1,
-            "candidates": explore_candidates,
-        }
+        if self.enable_sequential_exploration:
+            # Sequential mode: each step explores fresh; no carry-over to next step.
+            self._pending_explore_payload = None
+        else:
+            self._pending_explore_payload = {
+                "source_step": len(self.actions) + 1,
+                "candidates": explore_candidates,
+            }
 
         safety_mode_reason = None
         action_blocked_by_state_gate = False
@@ -4564,6 +4798,12 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             answer_text = str(tool_args.get("text") or "").strip()
             if answer_text:
                 self.env.interaction_cache = answer_text
+        elif raw_action_name == "terminate" and str(tool_args.get("status") or "").lower() == "success":
+            # GELAB COMPLETE+return: the return_text was embedded in tool_call by
+            # gelab_action_to_json_action so we can set interaction_cache here.
+            return_text = str(tool_args.get("return_text") or "").strip()
+            if return_text:
+                self.env.interaction_cache = return_text
 
         explore_thread_alive = bool(self._explore_thread and self._explore_thread.is_alive())
         last_explore_age_sec = None
@@ -4786,8 +5026,11 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         )
 
         task_status = self._task_status_from_action(action)
-        done = task_status is not None
-        task_completed = bool(task_status == "completed")
+        # ANSWER action also ends the episode, consistent with gelab_agent.py:
+        # done = action_type in {STATUS, ANSWER}.
+        is_answer_action = action.action_type == json_action.ANSWER
+        done = task_status is not None or is_answer_action
+        task_completed = bool(task_status == "completed") or is_answer_action
         if post_state is None:
             with self._ui_lock:
                 post_state = self.env.get_state(wait_to_stabilize=False)
