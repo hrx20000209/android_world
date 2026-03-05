@@ -147,9 +147,13 @@ ACTION_SELECTION_PROMPT_TEMPLATE = (
           ' screen:\n{ui_elements_description}\n'
         + GUIDANCE
         + '{additional_guidelines}'
-        + '\n\nNow output an action from the above list in the correct JSON format,'
-          ' following the reason why you do that. Your answer should look like:\n'
-          'Reason: ...\nAction: {{"action_type":...}}\n\n'
+        + '\n\nNow output one action from the above list in the correct JSON format.'
+          ' Keep it concise and deterministic.\n'
+          'Preferred format:\n'
+          'Reason: <one short sentence, <= 20 words>\n'
+          'Action: {{"action_type":...}}\n'
+          'If you cannot provide Reason, still output a valid Action JSON.\n'
+          'Do not output long chain-of-thought.\n\n'
           'Your Answer:\n'
 )
 
@@ -269,6 +273,51 @@ def _summarize_prompt(
     )
 
 
+def _collect_action_parse_candidates(
+        action_output: str,
+        raw_response: object,
+) -> list[str]:
+    """Collect parse candidates from model output and raw response payload."""
+    candidates: list[str] = []
+    seen: set[str] = set()
+
+    def _add(text: object) -> None:
+        if not isinstance(text, str):
+            return
+        value = text.strip()
+        if not value or value in seen:
+            return
+        seen.add(value)
+        candidates.append(value)
+
+    _add(action_output)
+
+    if isinstance(raw_response, dict):
+        try:
+            message = raw_response['choices'][0]['message']
+        except Exception:  # pylint: disable=broad-exception-caught
+            message = None
+        if isinstance(message, dict):
+            _add(message.get('content'))
+            _add(message.get('reasoning_content'))
+
+    return candidates
+
+
+def _strict_action_repair_prompt(base_prompt: str, parse_error: str | None = None) -> str:
+    suffix = (
+        '\n\nFORMAT REPAIR REQUIRED:\n'
+        'Return exactly one action JSON.\n'
+        'Allowed examples:\n'
+        'Action: {"action_type":"click","index":3}\n'
+        '{"action_type":"open_app","app_name":"OsmAnd"}\n'
+        'Do not output explanations or chain-of-thought.'
+    )
+    if parse_error:
+        suffix += f'\nPrevious parse error: {parse_error}'
+    return base_prompt + suffix
+
+
 class T3A(base_agent.EnvironmentInteractingAgent):
     """Text only autonomous agent for Android."""
 
@@ -307,6 +356,9 @@ class T3A(base_agent.EnvironmentInteractingAgent):
             'action_prompt': None,
             'action_output': None,
             'action_raw_response': None,
+            'action_repair_prompt': None,
+            'action_repair_output': None,
+            'action_repair_raw_response': None,
             'summary_prompt': None,
             'summary': None,
             'summary_raw_response': None,
@@ -353,11 +405,40 @@ Action: {{"action_type": "status", "goal_status": "infeasible"}}"""
         step_data['action_output'] = action_output
         step_data['action_raw_response'] = raw_response
 
-        reason, action = m3a_utils.parse_reason_action_output(action_output)
+        reason = None
+        action = None
+        parse_error = None
+        for candidate in _collect_action_parse_candidates(action_output, raw_response):
+            parsed_reason, parsed_action = m3a_utils.parse_reason_action_output(candidate)
+            if parsed_action:
+                reason, action = parsed_reason, parsed_action
+                break
+            parse_error = 'missing_action_json'
+
+        # One strict repair retry for malformed / empty action outputs.
+        if not action:
+            repair_prompt = _strict_action_repair_prompt(action_prompt, parse_error)
+            step_data['action_repair_prompt'] = repair_prompt
+            retry_output, retry_safe, retry_raw = self.llm.predict(repair_prompt)
+            if not retry_safe:  # pylint: disable=singleton-comparison
+                retry_output = (
+                    'Action: {"action_type": "status", "goal_status": "infeasible"}'
+                )
+            step_data['action_repair_output'] = retry_output
+            step_data['action_repair_raw_response'] = retry_raw
+            for candidate in _collect_action_parse_candidates(retry_output, retry_raw):
+                parsed_reason, parsed_action = m3a_utils.parse_reason_action_output(candidate)
+                if parsed_action:
+                    reason, action = parsed_reason, parsed_action
+                    action_output = retry_output
+                    raw_response = retry_raw
+                    step_data['action_output'] = action_output
+                    step_data['action_raw_response'] = raw_response
+                    break
 
         # If the output is not in the right format, add it to step summary which
         # will be passed to next step and return.
-        if (not reason) or (not action):
+        if not action:
             print('Action prompt output is not in the correct format.')
             step_data['summary'] = (
                 'Output for action selection is not in the correct format, so no'
@@ -371,11 +452,14 @@ Action: {{"action_type": "status", "goal_status": "infeasible"}}"""
             )
 
         print('Action: ' + action)
-        print('Reason: ' + reason)
+        print('Reason: ' + (reason if reason else 'No reason provided.'))
 
         try:
+            action_json = agent_utils.extract_json(action)
+            if not action_json:
+                raise ValueError('Cannot extract action JSON.')
             converted_action = json_action.JSONAction(
-                **agent_utils.extract_json(action),
+                **action_json,
             )
         except Exception as e:  # pylint: disable=broad-exception-caught
             print('Failed to convert the output to a valid action.')
@@ -457,10 +541,11 @@ Action: {{"action_type": "status", "goal_status": "infeasible"}}"""
         step_data['after_screenshot'] = state.pixels.copy()
         step_data['after_element_list'] = ui_elements
 
+        reason_for_summary = reason if reason else 'No reason provided.'
         summary_prompt = _summarize_prompt(
             goal,
             action,
-            reason,
+            reason_for_summary,
             before_element_list,
             after_element_list,
         )
