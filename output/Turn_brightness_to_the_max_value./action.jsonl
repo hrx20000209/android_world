@@ -1,6 +1,0 @@
-{"name": "mobile_use", "arguments": {"action": "open", "text": "Settings"}}
-{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "up", "coordinate": [500, 800]}}
-{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [257, 386]}}
-{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [230, 339]}}
-{"name": "mobile_use", "arguments": {"action": "answer", "text": "Brightness is already at maximum (100%)."}}
-{"name": "mobile_use", "arguments": {"action": "terminate", "status": "success"}}

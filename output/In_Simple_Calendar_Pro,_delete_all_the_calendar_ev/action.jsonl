@@ -1,5 +1,0 @@
-{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "up", "coordinate": [500, 800]}}
-{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [610, 469]}}
-{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [787, 734]}}
-{"name": "mobile_use", "arguments": {"action": "answer", "text": "There are no calendar events on 2023-10-27, so no deletion is needed."}}
-{"name": "mobile_use", "arguments": {"action": "terminate", "status": "success"}}

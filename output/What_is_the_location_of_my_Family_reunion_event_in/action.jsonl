@@ -1,7 +1,0 @@
-{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "up", "coordinate": [500, 800]}}
-{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [834, 469]}}
-{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [784, 738]}}
-{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [213, 621]}}
-{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [235, 208]}}
-{"name": "mobile_use", "arguments": {"action": "answer", "text": "100 Main St Chicago"}}
-{"name": "mobile_use", "arguments": {"action": "terminate", "status": "success"}}

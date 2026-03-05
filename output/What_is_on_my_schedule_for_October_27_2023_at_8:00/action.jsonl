@@ -1,6 +1,0 @@
-{"name": "mobile_use", "arguments": {"action": "swipe", "direction": "up", "coordinate": [500, 800]}}
-{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [834, 469]}}
-{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [785, 738]}}
-{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [785, 738]}}
-{"name": "mobile_use", "arguments": {"action": "answer", "text": "Product demo"}}
-{"name": "mobile_use", "arguments": {"action": "terminate", "status": "success"}}

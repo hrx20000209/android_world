@@ -1,5 +1,0 @@
-{"name": "mobile_use", "arguments": {"action": "open", "text": "Broccoli APP"}}
-{"name": "mobile_use", "arguments": {"action": "click", "coordinate": [945, 146]}}
-{"name": "mobile_use", "arguments": {"action": "type", "text": "black garlic", "coordinate": [397, 147]}}
-{"name": "mobile_use", "arguments": {"action": "answer", "text": "No recipes using black garlic were found, so no deletions were performed."}}
-{"name": "mobile_use", "arguments": {"action": "terminate", "status": "success"}}
