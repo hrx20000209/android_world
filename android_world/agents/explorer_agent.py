@@ -2891,6 +2891,34 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             },
         )
 
+    @staticmethod
+    def _is_calendar_or_contact_goal(goal: str) -> bool:
+        low = _normalize_space(goal).lower()
+        return bool(
+            any(token in low for token in ("calendar", "event", "schedule"))
+            or any(token in low for token in ("contact", "phone number", "address book"))
+        )
+
+    def _is_structured_edit_activity(self, activity: str | None, goal: str = "") -> bool:
+        value = self._normalize_activity_name(activity)
+        if not value:
+            return False
+        edit_markers = (
+            "editeventactivity",
+            "eventeditactivity",
+            "editactivity",
+            "contacteditor",
+            "insertcontactactivity",
+            "createcontactactivity",
+        )
+        if any(marker in value for marker in edit_markers):
+            return True
+        if not self._is_calendar_or_contact_goal(goal):
+            return False
+        if any(token in value for token in ("calendar", "contact")) and "edit" in value:
+            return True
+        return False
+
     def _action_effect_summary(
         self,
         before_pixels: np.ndarray | None,
