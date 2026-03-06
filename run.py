@@ -43,9 +43,11 @@ os.environ['GRPC_TRACE'] = 'none'  # Disable tracing
 def _find_adb_directory() -> str:
     """Returns the directory where adb is located."""
     potential_paths = [
-        os.path.expanduser('~/Library/Android/sdk/platform-tools/adb'),
-        os.path.expanduser('~/Android/Sdk/platform-tools/adb'),
+        os.path.expanduser('~/Library/Android/sdk/platform-tools/adb'),  # macOS
+        os.path.expanduser('~/Android/Sdk/platform-tools/adb'),  # Linux
+        r'D:/Android SDK/platform-tools/adb.exe',  # Windows
     ]
+
     for path in potential_paths:
         if os.path.isfile(path):
             return path
@@ -137,7 +139,7 @@ _OUTPUT_PATH = flags.DEFINE_string(
 )
 
 # Agent specific.
-_AGENT_NAME = flags.DEFINE_string('agent_name', 'explore_agent_gelab', help='Agent name.')
+_AGENT_NAME = flags.DEFINE_string('agent_name', 'explore_agent', help='Agent name.')
 
 # m3a_llamacpp, t3a_llamacpp, mai-ui, mm_agent, t3a_profiling, explore_agent, explore_agent_gelab, gelab_agent, explore_agent_gelab
 
