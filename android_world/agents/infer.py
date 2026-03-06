@@ -556,8 +556,24 @@ class LlamaCppTextWrapper(LlmWrapper):
                     continue
 
                 js = response.json()
+                message = (
+                    js.get("choices", [{}])[0].get("message", {})
+                    if isinstance(js, dict)
+                    else {}
+                )
+                content = message.get("content") if isinstance(message, dict) else None
+                if not isinstance(content, str) or not content.strip():
+                    fallback_reasoning = (
+                        message.get("reasoning_content")
+                        if isinstance(message, dict)
+                        else None
+                    )
+                    if isinstance(fallback_reasoning, str) and fallback_reasoning.strip():
+                        content = fallback_reasoning
+                    else:
+                        content = str(content) if content is not None else ""
                 return (
-                    js["choices"][0]["message"]["content"],
+                    content,
                     True,
                     js,
                 )
