@@ -3747,29 +3747,19 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             trunk.get("node_text") or trunk.get("node_desc") or trunk.get("node_match_text") or ""
         )
         trunk_text = trunk_text or str(trunk.get("node_match_text") or trunk.get("node_desc") or "")
-        trunk_text = self._clue_text_snippet(trunk_text, max_chars=160)
-        lines = [
-            "[Parallel Exploration Clues]",
-            (
-                f"- Matched branches: {branch_ids or [best.get('branch_id')]}; "
-                f"page hash diff {best_diff}; overlap with previous action {best_action_hit}; "
-                f"confidence {confidence}."
-            ),
-            (
-                f"- Entry action {trunk.get('action_type')} at {self._region_from_record(trunk)} "
-                f"(coord {trunk.get('coordinate')}, bounds {trunk.get('bounds')}). "
-                f"Text: {trunk_text}. Resource: {trunk.get('node_resource_id')}."
-            ),
-            "- Possible next actions:",
-        ]
+        trunk_text = self._clue_text_snippet(trunk_text, max_chars=80)
 
+        # ── Goal & scoring ──────────────────────────────────────────────────
         goal_text = _normalize_space(self._task_goal or "")
         goal_queries = _extract_task_queries(goal_text) if goal_text else []
         if not goal_queries:
             goal_queries = _extract_task_queries(" ".join(self.history[-3:]))
+
         scored: list[tuple[float, float, float, dict[str, Any]]] = []
-        min_rel = 0.10
-        min_prior = 0.05
+        # Lowered thresholds: prefer showing something over empty clue.
+        # Even low-relevance elements give the model spatial context.
+        min_rel = 0.05
+        min_prior = 0.02
         for obs in observations:
             text = self._clean_clue_text(
                 obs.get("node_text") or obs.get("node_desc") or obs.get("node_match_text") or ""
@@ -3782,9 +3772,9 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 prior = float(obs.get("best_sim") or 0.0)
             if rel < min_rel and prior < min_prior:
                 continue
-            # Prefer semantically relevant leaves, fallback to explore score if semantics are weak.
             rank = rel * 0.75 + prior * 0.25
             scored.append((rank, rel, prior, obs))
+        # Final fallback: include everything with any text if still empty
         if not scored and observations:
             for obs in observations:
                 text = self._clean_clue_text(
@@ -3795,14 +3785,12 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 prior = float((obs.get("score_detail") or {}).get("score", 0.0))
                 if prior <= 0.0:
                     prior = float(obs.get("best_sim") or 0.0)
-                if prior <= 0.0:
-                    continue
-                scored.append((prior, 0.0, prior, obs))
+                scored.append((max(prior, 0.001), 0.0, prior, obs))
         scored.sort(key=lambda item: item[0], reverse=True)
 
         added = 0
-        seen = set()
-        k2_texts = []
+        seen: set[str] = set()
+        action_lines: list[str] = []
         for _, rel, prior, leaf in scored:
             text = self._clean_clue_text(
                 leaf.get("node_text") or leaf.get("node_desc") or leaf.get("node_match_text") or ""
@@ -3814,17 +3802,10 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 continue
             seen.add(key)
             pos = self._region_from_record(leaf)
-            effect = self._infer_ui_effect(text)
-            text = self._clue_text_snippet(text, max_chars=140)
-            lines.append(
-                (
-                    f"{added + 1}. Branch {leaf.get('branch')}: {leaf.get('action_type')} at {pos} "
-                    f"(coord {leaf.get('coordinate')}, bounds {leaf.get('bounds')}). "
-                    f"Text: {text}. Likely effect: {effect}. "
-                    f"Relevance {rel:.3f}, explore score {prior:.3f}."
-                )
-            )
-            k2_texts.append(text)
+            act_type = str(leaf.get("action_type") or "click").lower()
+            text = self._clue_text_snippet(text, max_chars=80)
+            # Natural-language format: no raw coords, no scores, no resource IDs.
+            action_lines.append(f'{added + 1}. {act_type} "{text}" at {pos}.')
             added += 1
             if added >= max_items:
                 break
@@ -3834,13 +3815,21 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         if added <= 0:
             return ""
 
-        keywords = self._extract_keywords(" ".join(k2_texts), limit=6)
-        if keywords:
-            lines.append(f"- Candidate keywords: {', '.join(keywords)}")
+        # ── Simple, LLM-friendly output ──────────────────────────────────
+        # Format designed for small (4B) models:
+        # • No technical metadata (hash diff, bounds, resource IDs, scores)
+        # • Plain verbs and positions ("click 'X' at top right")
+        # • Entry action shown only if it has a readable label
+        lines = ["[Explorer found these elements - may help if stuck:]"]
+        if trunk_text:
+            trunk_act = str(trunk.get("action_type") or "click").lower()
+            trunk_pos = self._region_from_record(trunk)
+            lines.append(f'  Entry: {trunk_act} "{trunk_text}" at {trunk_pos}.')
+        lines += action_lines
         lines.append("")
         out = "\n".join(lines)
-        if len(out) > 1400:
-            out = out[:1400].rstrip() + "\n"
+        if len(out) > 800:
+            out = out[:800].rstrip() + "\n"
         return out
 
     def get_last_clue_debug_lines(self) -> list[str]:

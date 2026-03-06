@@ -103,6 +103,8 @@ Fallback only when exact coordinates are unavailable:
 ## Note
 - Write a small plan and finally summarize your next action (with its target element) in one sentence in <thinking></thinking> part.
 - For click/long_press/type, prefer coordinate-based actions. Do not invent keys like button/label/target for these actions.
+- The `action` field must contain only the action name itself. Do not append `point:`, `summary:`, or other key-value text into `action`.
+- For coordinates, use JSON arrays like `"coordinate": [x, y]`. Do not use pseudo formats like `"action":"CLICK\tpoint:500,900"`.
 - If a coordinate is not reliable, use one of the provided element_id values.
 - Available Apps: `""" + json.dumps(AVAILABLE_APPS, ensure_ascii=True) + """`.
 You should use the `open` action to open the app as possible as you can, because it is the fast way to open the app.
@@ -164,12 +166,228 @@ def _extract_json_block(text: str) -> str:
     return text[start : end + 1]
 
 
+def _normalize_downsample_scale(scale: int | float | str) -> int:
+    try:
+        value = float(scale)
+    except Exception:  # pylint: disable=broad-exception-caught
+        value = 1.0
+    return max(1, int(round(value)))
+
+
+def _parse_coord_like(value: Any) -> list[int] | None:
+    if isinstance(value, (list, tuple)) and len(value) >= 2:
+        try:
+            return [int(round(float(value[0]))), int(round(float(value[1])))]
+        except Exception:  # pylint: disable=broad-exception-caught
+            return None
+    if isinstance(value, str):
+        nums = re.findall(r"-?\d+(?:\.\d+)?", value)
+        if len(nums) >= 2:
+            return [int(round(float(nums[0]))), int(round(float(nums[1])))]
+    return None
+
+
+def _extract_inline_coord(text: str) -> list[int] | None:
+    patterns = [
+        r'coordinate"\s*:\s*\[\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)',
+        r'point"\s*:\s*\[\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)',
+        r'point"\s*:\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)',
+        r"\bcoordinate\s*[:=]\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)",
+        r"\bpoint\s*[:=]\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)",
+    ]
+    for pattern in patterns:
+        m = re.search(pattern, str(text or ""), flags=re.IGNORECASE)
+        if m:
+            return [int(round(float(m.group(1)))), int(round(float(m.group(2))))]
+    return None
+
+
+def _clean_action_name(action_value: Any) -> str:
+    action_text = str(action_value or "").strip().strip('"').strip("'")
+    if not action_text:
+        return ""
+    action_text = action_text.replace("\\t", "\t")
+    if action_text.lower().startswith("action:"):
+        action_text = action_text.split(":", 1)[1].strip()
+    action_text = action_text.split("\t", 1)[0].split("\n", 1)[0].strip()
+    if " " in action_text:
+        action_text = action_text.split(" ", 1)[0].strip()
+    return action_text
+
+
+def _normalize_tool_call_obj(obj: dict[str, Any], raw_text: str = "") -> dict[str, Any]:
+    if not isinstance(obj, dict):
+        raise seeact_utils.ParseActionError("tool_call is not a dict")
+
+    name = str(obj.get("name") or "mobile_use").strip() or "mobile_use"
+    args_raw = obj.get("arguments")
+    if isinstance(args_raw, str):
+        try:
+            args_raw = json.loads(args_raw)
+        except Exception:  # pylint: disable=broad-exception-caught
+            args_raw = {}
+
+    if isinstance(args_raw, dict):
+        args = copy.deepcopy(args_raw)
+    else:
+        args = {k: v for k, v in obj.items() if k != "name"}
+
+    if "action" not in args and "action_type" in args:
+        args["action"] = args.get("action_type")
+    if "action" not in args and isinstance(args.get("name"), str):
+        args["action"] = args.get("name")
+    if "action" not in args and name.lower() != "mobile_use":
+        args["action"] = name
+
+    raw_action = args.get("action")
+    action_name = _clean_action_name(raw_action)
+    if not action_name:
+        action_name = "wait"
+    action_low = action_name.lower()
+
+    if action_low == "tap":
+        action_name = "click"
+        action_low = "click"
+    elif action_low == "longpress":
+        action_name = "long_press"
+        action_low = "long_press"
+    elif action_low in ("input_text", "input", "text"):
+        action_name = "type"
+        action_low = "type"
+    elif action_low in ("slide", "scroll"):
+        action_name = "swipe"
+        action_low = "swipe"
+    elif action_low in ("open_app", "awake"):
+        action_name = "open"
+        action_low = "open"
+    elif action_low in ("respond", "response", "reply", "read", "info"):
+        action_name = "answer"
+        action_low = "answer"
+    elif action_low in ("status", "complete", "abort"):
+        action_name = "terminate"
+        action_low = "terminate"
+
+    args["action"] = action_name
+
+    coordinate = None
+    for key in ("coordinate", "point", "coordinates"):
+        coordinate = _parse_coord_like(args.get(key))
+        if coordinate is not None:
+            break
+    if coordinate is None:
+        coordinate = _extract_inline_coord(str(raw_action or "")) or _extract_inline_coord(raw_text)
+
+    if action_low in ("click", "long_press", "type") and coordinate is not None:
+        args["coordinate"] = coordinate
+    if action_low == "type":
+        if args.get("text") is None:
+            args["text"] = str(args.get("value") or args.get("content") or args.get("return") or "")
+    if action_low == "swipe":
+        if args.get("direction") is None:
+            direction_match = re.search(
+                r'"direction"\s*:\s*"([^"]+)"|\bdirection\s*:\s*([a-zA-Z_]+)',
+                raw_text,
+                flags=re.IGNORECASE,
+            )
+            if direction_match:
+                args["direction"] = (direction_match.group(1) or direction_match.group(2) or "").strip()
+        if coordinate is not None and "coordinate" not in args:
+            args["coordinate"] = coordinate
+    if action_low == "drag":
+        start_coordinate = _parse_coord_like(args.get("start_coordinate")) or _parse_coord_like(args.get("point1"))
+        end_coordinate = _parse_coord_like(args.get("end_coordinate")) or _parse_coord_like(args.get("point2"))
+        if start_coordinate is not None:
+            args["start_coordinate"] = start_coordinate
+        if end_coordinate is not None:
+            args["end_coordinate"] = end_coordinate
+    if action_low in ("answer", "terminate"):
+        if args.get("text") is None:
+            args["text"] = str(args.get("content") or args.get("value") or args.get("return") or "")
+    if action_low == "terminate":
+        status = str(args.get("status") or args.get("goal_status") or "").strip().lower()
+        if not status:
+            status = "success" if str(args.get("text") or "").strip() else "fail"
+        if status in ("completed", "complete", "done"):
+            status = "success"
+        if status in ("failed", "infeasible", "error"):
+            status = "fail"
+        args["status"] = status
+    if action_low in ("back", "home", "menu", "enter"):
+        args["action"] = "system_button"
+        args["button"] = action_low
+
+    return {"name": "mobile_use", "arguments": args}
+
+
+def _parse_legacy_kv_tool_call(text: str) -> dict[str, Any] | None:
+    raw = str(text or "")
+    if not raw.strip():
+        return None
+    no_thinking = re.sub(
+        r"<\s*think(?:ing)?\s*>.*?<\s*/\s*think(?:ing)?\s*>",
+        " ",
+        raw,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    segments = [seg.strip() for seg in re.split(r"[\t\r\n]+", no_thinking) if seg.strip()]
+    kv: dict[str, str] = {}
+    for seg in segments:
+        if ":" not in seg:
+            continue
+        key, value = seg.split(":", 1)
+        key = key.strip().lower()
+        value = value.strip()
+        if key in ("explain", "summary", "reason"):
+            continue
+        kv[key] = value
+
+    action_value = kv.get("action") or kv.get("action_type")
+    if not action_value:
+        action_match = re.search(r"\baction\s*:\s*([^\t\r\n]+)", no_thinking, flags=re.IGNORECASE)
+        if action_match:
+            action_value = action_match.group(1).strip()
+    if not action_value:
+        return None
+
+    args: dict[str, Any] = {"action": action_value}
+    point_value = kv.get("point") or kv.get("coordinate") or kv.get("coordinates")
+    if point_value:
+        point = _parse_coord_like(point_value)
+        if point is not None:
+            args["coordinate"] = point
+    if "point1" in kv:
+        point1 = _parse_coord_like(kv.get("point1"))
+        if point1 is not None:
+            args["point1"] = point1
+    if "point2" in kv:
+        point2 = _parse_coord_like(kv.get("point2"))
+        if point2 is not None:
+            args["point2"] = point2
+
+    if "value" in kv:
+        args["value"] = kv["value"]
+    if "text" in kv:
+        args["text"] = kv["text"]
+    if "return" in kv:
+        args["return"] = kv["return"]
+    if "status" in kv:
+        args["status"] = kv["status"]
+    if "goal_status" in kv:
+        args["goal_status"] = kv["goal_status"]
+    if "button" in kv:
+        args["button"] = kv["button"]
+    if "direction" in kv:
+        args["direction"] = kv["direction"]
+
+    return _normalize_tool_call_obj({"name": "mobile_use", "arguments": args}, raw)
+
+
 def safe_json_loads(s: str) -> dict[str, Any]:
     """Robust JSON parsing for model tool-call output."""
     s = str(s or "").strip()
 
     try:
-        return json.loads(s)
+        return _normalize_tool_call_obj(json.loads(s), s)
     except Exception:  # pylint: disable=broad-exception-caught
         pass
 
@@ -179,7 +397,7 @@ def safe_json_loads(s: str) -> dict[str, Any]:
             s = s[4:].lstrip()
 
     try:
-        return json.loads(s)
+        return _normalize_tool_call_obj(json.loads(s), s)
     except Exception:  # pylint: disable=broad-exception-caught
         pass
 
@@ -191,33 +409,49 @@ def safe_json_loads(s: str) -> dict[str, Any]:
     if first != -1 and last != -1 and last > first:
         candidate = s[first:last + 1]
         try:
-            return json.loads(candidate)
+            return _normalize_tool_call_obj(json.loads(candidate), candidate)
         except Exception:  # pylint: disable=broad-exception-caught
             s = candidate
 
-    def extract(pattern: str, default: str | None = None) -> str | None:
+    legacy_tool_call = _parse_legacy_kv_tool_call(s)
+    if legacy_tool_call is not None:
+        return legacy_tool_call
+
+    def extract(pattern: str, default: str | None = None, flags: int = 0) -> str | None:
         m = re.search(pattern, s)
+        if m is None and flags:
+            m = re.search(pattern, s, flags=flags)
         return m.group(1) if m else default
 
     def extract_coord(key: str | None = None) -> list[int]:
         if key is not None:
-            m = re.search(rf'"{key}"\s*:\s*\[\s*(-?\d+)\s*,\s*(-?\d+)[^\]]*\]', s)
+            m = re.search(rf'"{key}"\s*:\s*\[\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)[^\]]*\]', s)
             if m:
-                return [int(m.group(1)), int(m.group(2))]
-        m = re.search(r"\[\s*(-?\d+)\s*,\s*(-?\d+)", s)
+                return [int(round(float(m.group(1)))), int(round(float(m.group(2))))]
+            m = re.search(rf'"{key}"\s*:\s*"(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)"', s)
+            if m:
+                return [int(round(float(m.group(1)))), int(round(float(m.group(2))))]
+        m = re.search(r"\[\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)", s)
         if m:
-            return [int(m.group(1)), int(m.group(2))]
+            return [int(round(float(m.group(1)))), int(round(float(m.group(2))))]
+        inline = _extract_inline_coord(s)
+        if inline is not None:
+            return inline
         return [-1, -1]
 
     name = extract(r'"name"\s*:\s*"([^"]+)"', "mobile_use")
-    action = extract(r'"action"\s*:\s*"([^"]+)"', "click")
+    action = extract(r'"action"\s*:\s*"([^"]+)"')
+    if action is None:
+        action = extract(r'"action_type"\s*:\s*"([^"]+)"')
+    if action is None:
+        action = extract(r"\baction\s*:\s*([^\t\r\n,}]+)", "click", flags=re.IGNORECASE)
     action_low = str(action or "click").strip().lower()
-    text = extract(r'"text"\s*:\s*"([^"]*)"')
+    text_value = extract(r'"text"\s*:\s*"([^"]*)"') or extract(r"\btext\s*:\s*([^\t\r\n]+)", flags=re.IGNORECASE)
     content = extract(r'"content"\s*:\s*"([^"]*)"')
-    value = extract(r'"value"\s*:\s*"([^"]*)"')
-    return_text = extract(r'"return"\s*:\s*"([^"]*)"')
-    button = extract(r'"button"\s*:\s*"([^"]+)"')
-    direction = extract(r'"direction"\s*:\s*"([^"]+)"')
+    value = extract(r'"value"\s*:\s*"([^"]*)"') or extract(r"\bvalue\s*:\s*([^\t\r\n]+)", flags=re.IGNORECASE)
+    return_text = extract(r'"return"\s*:\s*"([^"]*)"') or extract(r"\breturn\s*:\s*([^\t\r\n]+)", flags=re.IGNORECASE)
+    button = extract(r'"button"\s*:\s*"([^"]+)"') or extract(r"\bbutton\s*:\s*([^\t\r\n]+)", flags=re.IGNORECASE)
+    direction = extract(r'"direction"\s*:\s*"([^"]+)"') or extract(r"\bdirection\s*:\s*([^\t\r\n]+)", flags=re.IGNORECASE)
 
     args: dict[str, Any] = {"action": action}
 
@@ -226,7 +460,7 @@ def safe_json_loads(s: str) -> dict[str, Any]:
         if coord != [-1, -1]:
             args["coordinate"] = coord
     elif action_low == "type":
-        args["text"] = text or value or ""
+        args["text"] = text_value or value or ""
         coord = extract_coord("coordinate")
         if coord != [-1, -1]:
             args["coordinate"] = coord
@@ -245,14 +479,14 @@ def safe_json_loads(s: str) -> dict[str, Any]:
         args["button"] = "back"
     elif action_low in ("answer", "respond", "response", "reply", "read"):
         args["action"] = "answer"
-        args["text"] = text or content or value or return_text or ""
+        args["text"] = text_value or content or value or return_text or ""
     elif action_low == "terminate":
-        status = extract(r'"status"\s*:\s*"([^"]+)"', "fail")
+        status = extract(r'"status"\s*:\s*"([^"]+)"') or extract(r"\bstatus\s*:\s*([^\t\r\n]+)", "fail", flags=re.IGNORECASE)
         args["status"] = status
     else:
         args["action"] = "wait"
 
-    fixed_obj = {"name": name, "arguments": args}
+    fixed_obj = _normalize_tool_call_obj({"name": name, "arguments": args}, s)
     print("[safe_json_loads] recovered ->", fixed_obj)
     return fixed_obj
 
@@ -261,10 +495,9 @@ def parse_tagged_text(text: str) -> dict[str, Any]:
     """Parse <thinking> and <tool_call> tags."""
     text = str(text or "")
 
-    if "</think>" in text and "</thinking>" not in text:
-        text = text.replace("</think>", "</thinking>")
-        if "<thinking>" not in text:
-            text = "<thinking>" + text
+    text = text.replace("<TINK>", "<THINK>").replace("</TINK>", "</THINK>")
+    text = text.replace("<think>", "<thinking>").replace("</think>", "</thinking>")
+    text = text.replace("<THINK>", "<thinking>").replace("</THINK>", "</thinking>")
 
     result: dict[str, Any] = {"thinking": "", "tool_call": None}
 
@@ -281,7 +514,7 @@ def parse_tagged_text(text: str) -> dict[str, Any]:
     try:
         result["tool_call"] = safe_json_loads(_extract_json_block(text))
     except Exception:  # pylint: disable=broad-exception-caught
-        result["tool_call"] = None
+        result["tool_call"] = _parse_legacy_kv_tool_call(text)
 
     return result
 
@@ -326,11 +559,12 @@ def parse_action_to_structure_output(text: str) -> dict[str, Any]:
 def fetch_resized_image(screenshot_file: str, scale: int = 1) -> tuple[Image.Image, int, int, dict[str, Any]]:
     screenshot = Image.open(screenshot_file)
     width, height = screenshot.size
+    scale_divisor = _normalize_downsample_scale(scale)
     image_ele = update_image_size_(
         {
             "image": screenshot_file,
-            "width": max(1, int(width // scale)),
-            "height": max(1, int(height // scale)),
+            "width": max(1, int(round(width / scale_divisor))),
+            "height": max(1, int(round(height / scale_divisor))),
         }
     )
     resized_width = int(image_ele["resized_width"])
@@ -474,6 +708,7 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
         url: str | None = None,
         name: str = "MAIUIAgent",
         output_path: str = "",
+        image_downsample_scale: int | float = 1,
     ):
         super().__init__(env, name)
         self.vllm = vllm
@@ -481,6 +716,7 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
         self.api_key = api_key
         self.url = url
         self.output_path = str(output_path or "").strip()
+        self.image_downsample_scale = _normalize_downsample_scale(image_downsample_scale)
 
         self._actions: list[dict[str, Any]] = []
         self._screenshots: list[Image.Image] = []
@@ -504,6 +740,9 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
         if self._max_steps is None:
             return MAX_AGENT_STEPS
         return min(MAX_AGENT_STEPS, int(self._max_steps))
+
+    def set_image_downsample_scale(self, scale: int | float) -> None:
+        self.image_downsample_scale = _normalize_downsample_scale(scale)
 
     def reset(self, go_home: bool = False) -> None:
         super().reset(go_home)
@@ -632,7 +871,7 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
         screenshot_file = os.path.join(task_output_dir, f"screenshot_{step_idx}.png") if task_output_dir else f"screenshot_{step_idx}.png"
         screenshot.save(screenshot_file)
 
-        scale = 1
+        scale = self.image_downsample_scale
         resized_image, resized_width, resized_height, image_ele = fetch_resized_image(screenshot_file, scale)
         resized_screenshot_file = re.sub(r"screenshot_(\d+)\.png$", r"screenshot_resized_\1.png", screenshot_file)
         if resized_screenshot_file == screenshot_file:
@@ -648,7 +887,10 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
         )
         messages = build_mai_messages(goal, history_text, resized_screenshot_file, ui_element_text)
 
-        print(f"[DEBUG] resized screenshot saved to: {resized_screenshot_file}, size: {(resized_width, resized_height)}")
+        print(
+            f"[DEBUG] resized screenshot saved to: {resized_screenshot_file}, "
+            f"size: {(resized_width, resized_height)}, downsample_scale={scale}"
+        )
         print(f"[DEBUG] Messages: {mask_image_urls_for_logging(messages)}")
 
         action_response, _, _ = self.vllm.predict_mm("", [], messages=messages)
@@ -686,6 +928,19 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
 
             if action.action_type == json_action.ANSWER and action.text:
                 self.env.interaction_cache = action.text
+            else:
+                action_args = (dummy_action or {}).get("arguments", {})
+                if isinstance(action_args, dict):
+                    act = str(action_args.get("action") or "").strip().lower()
+                    if act in ("terminate", "status", "complete"):
+                        terminate_text = str(
+                            action_args.get("text")
+                            or action_args.get("value")
+                            or action_args.get("return")
+                            or ""
+                        ).strip()
+                        if terminate_text:
+                            self.env.interaction_cache = terminate_text
 
             actuation.execute_adb_action(
                 action,

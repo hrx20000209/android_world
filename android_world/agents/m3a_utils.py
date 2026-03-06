@@ -255,22 +255,34 @@ def parse_reason_action_output(raw_reason_action_output: str, ) -> tuple[Optiona
   Returns:
     If parsing successfully, returns reason and action.
   """
+    if raw_reason_action_output is None:
+        return None, None
+
+    text = str(raw_reason_action_output).strip()
+    if not text:
+        return None, None
+
     reason_result = re.search(
-        r'Reason:(.*)Action:', raw_reason_action_output, flags=re.DOTALL
+        r'Reason:\s*(.*?)(?:\nAction:|Action:|\Z)',
+        text,
+        flags=re.DOTALL | re.IGNORECASE,
     )
     reason = reason_result.group(1).strip() if reason_result else None
+
     action_result = re.search(
-        r'Action:(.*)', raw_reason_action_output, flags=re.DOTALL
+        r'Action:\s*(.*)',
+        text,
+        flags=re.DOTALL | re.IGNORECASE,
     )
-    action = action_result.group(1).strip() if action_result else None
+    action_segment = action_result.group(1).strip() if action_result else None
+
+    extracted = _extract_action_json(action_segment or text)
+    action = json.dumps(extracted) if extracted is not None else None
+
+    if action is not None and not reason:
+        reason = 'No explicit reason provided.'
 
     print(f"[DEBUG] Reason: {reason}, Action: {action}")
-
-    if action:
-        extracted = extract_json(action)
-        if extracted is not None:
-            action = json.dumps(extracted)
-
     return reason, action
 
 
@@ -341,6 +353,186 @@ def extract_json(s: str) -> Optional[dict[str, Any]]:
     else:
         print(f'No JSON match in {s}')
         return None
+
+
+def _extract_action_json(text: str) -> Optional[dict[str, Any]]:
+    """Extract the best action JSON object from arbitrary model output text."""
+    if not text:
+        return None
+
+    text = str(text)
+
+    # Fast path: whole string is JSON/Python dict.
+    full_text = text.strip()
+    for loader in (json.loads, ast.literal_eval):
+        try:
+            parsed = loader(full_text)
+            normalized = _normalize_action_dict(parsed)
+            if normalized is not None:
+                return normalized
+        except Exception:
+            continue
+
+    # Fallback: scan balanced `{...}` blocks and pick one containing action info.
+    for block in _balanced_brace_blocks(text):
+        for loader in (json.loads, ast.literal_eval):
+            try:
+                parsed = loader(block)
+            except Exception:
+                continue
+            normalized = _normalize_action_dict(parsed)
+            if normalized is not None:
+                return normalized
+    return None
+
+
+def _normalize_action_dict(parsed: Any) -> Optional[dict[str, Any]]:
+    if not isinstance(parsed, dict):
+        return None
+
+    # Canonical action dict.
+    if isinstance(parsed.get('action_type'), str):
+        out = dict(parsed)
+        canonical = _canonicalize_action_type(out.get('action_type'))
+        if not canonical:
+            return None
+        out['action_type'] = canonical
+        return out
+
+    # Some models output {"action": "..."}.
+    if isinstance(parsed.get('action'), str):
+        out = dict(parsed)
+        canonical = _canonicalize_action_type(out.pop('action'))
+        if not canonical:
+            return None
+        out['action_type'] = canonical
+        return out
+
+    # Tool-call style output.
+    if parsed.get('name') == 'mobile_use' and isinstance(parsed.get('arguments'), dict):
+        args = dict(parsed.get('arguments') or {})
+        action_name = args.get('action') or args.get('action_type')
+        if not isinstance(action_name, str):
+            return None
+        lower_name = action_name.strip().lower()
+        out: dict[str, Any] = {}
+
+        if lower_name in {'click', 'tap'}:
+            out['action_type'] = 'click'
+        elif lower_name in {'long_press', 'longpress'}:
+            out['action_type'] = 'long_press'
+        elif lower_name in {'input_text', 'type'}:
+            out['action_type'] = 'input_text'
+            if isinstance(args.get('text'), str):
+                out['text'] = args.get('text')
+        elif lower_name in {'open_app', 'open'}:
+            out['action_type'] = 'open_app'
+            if isinstance(args.get('app_name'), str):
+                out['app_name'] = args.get('app_name')
+        elif lower_name in {'wait'}:
+            out['action_type'] = 'wait'
+        elif lower_name in {'answer'}:
+            out['action_type'] = 'answer'
+            if isinstance(args.get('text'), str):
+                out['text'] = args.get('text')
+        elif lower_name in {'terminate'}:
+            out['action_type'] = 'status'
+            status = str(args.get('status') or '').strip().lower()
+            out['goal_status'] = 'complete' if status in {'done', 'complete', 'success'} else 'infeasible'
+        elif lower_name in {'system_button'}:
+            button = str(args.get('button') or '').strip().lower()
+            if button == 'back':
+                out['action_type'] = 'navigate_back'
+            elif button == 'home':
+                out['action_type'] = 'navigate_home'
+            else:
+                return None
+        else:
+            return None
+
+        if isinstance(args.get('index'), int):
+            out['index'] = int(args.get('index'))
+        return out if out.get('action_type') else None
+
+    return None
+
+
+def _canonicalize_action_type(action_type: Any) -> Optional[str]:
+    if not isinstance(action_type, str):
+        return None
+    token = action_type.strip().lower().replace('-', '_')
+    alias = {
+        'type': 'input_text',
+        'input': 'input_text',
+        'longpress': 'long_press',
+        'home': 'navigate_home',
+        'back': 'navigate_back',
+        'complete': 'status',
+        'abort': 'status',
+    }
+    token = alias.get(token, token)
+    if token not in {
+        'status',
+        'answer',
+        'click',
+        'long_press',
+        'input_text',
+        'keyboard_enter',
+        'navigate_home',
+        'navigate_back',
+        'scroll',
+        'open_app',
+        'wait',
+    }:
+        return None
+    return token
+
+
+def _balanced_brace_blocks(text: str, max_blocks: int = 64) -> list[str]:
+    """Returns balanced JSON-like blocks (`{...}`), keeping nested braces."""
+    blocks: list[str] = []
+    if not text:
+        return blocks
+
+    start = None
+    depth = 0
+    in_string = False
+    quote_char = ''
+    escaped = False
+
+    for idx, ch in enumerate(text):
+        if in_string:
+            if escaped:
+                escaped = False
+                continue
+            if ch == '\\':
+                escaped = True
+                continue
+            if ch == quote_char:
+                in_string = False
+            continue
+
+        if ch in {'"', "'"}:
+            in_string = True
+            quote_char = ch
+            continue
+
+        if ch == '{':
+            if depth == 0:
+                start = idx
+            depth += 1
+            continue
+
+        if ch == '}':
+            if depth <= 0:
+                continue
+            depth -= 1
+            if depth == 0 and start is not None:
+                blocks.append(text[start: idx + 1])
+                start = None
+                if len(blocks) >= max_blocks:
+                    break
+    return blocks
 
 
 def _generate_screenshot_table(task_result: dict[str, Any], i: int) -> str:
