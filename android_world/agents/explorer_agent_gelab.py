@@ -95,6 +95,16 @@ explain:本步目的\taction:动作名\t...参数...\tsummary:本步后简短进
 - action 字段只能是纯动作名（如 CLICK 或 click）。
 - 若使用 tool_call JSON，坐标必须放在 coordinate 数组，不要写成 "action":"CLICK\\tpoint:..."
 - 优先推动任务完成，避免无效重复动作。
+
+示例输出：
+<THINK>需要在搜索栏输入应用名称</THINK>
+explain:在搜索框输入文字	action:TYPE	value:Pro Expense	point:540,214	summary:已输入应用名
+
+<THINK>需要点击添加按钮来新建条目</THINK>
+explain:点击右下角加号按钮	action:CLICK	point:962,2188	summary:打开了新建页面
+
+<THINK>任务已完成，所有步骤执行成功</THINK>
+explain:任务完成	action:COMPLETE	return:已成功完成任务	summary:任务已完成
 """.strip()
 
 
@@ -141,8 +151,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         explore_leaf_width: int = 4,
         explore_max_branches: int | None = None,
         rollback_backtrack_limit: int = 2,
-        explore_action_pause_sec: float = 0.25,
-        reasoning_sleep_sec: float = 20.0,
+        explore_action_pause_sec: float = 0.6,
+        reasoning_sleep_sec: float = 0.0,
         embed_model_name: str = "sentence-transformers/paraphrase-MiniLM-L6-v2",
         verbose_step_logs: bool = True,
         reasoning_preview_chars: int = 180,
@@ -183,7 +193,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self.explore_leaf_width = max(1, int(explore_leaf_width))
         self.explore_max_branches = explore_max_branches
         self.rollback_backtrack_limit = max(1, int(rollback_backtrack_limit))
-        self.explore_action_pause_sec = max(0.05, float(explore_action_pause_sec))
+        self.explore_action_pause_sec = max(0.3, float(explore_action_pause_sec))
         # Simulate slow reasoning so parallel exploration can accumulate signal.
         self.reasoning_sleep_sec = max(0.0, float(reasoning_sleep_sec))
         self.embed_model_name = embed_model_name
@@ -238,6 +248,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self._explore_root_hash: int | None = None
         self._explore_root_pixels: np.ndarray | None = None
         self._explore_root_activity: str | None = None
+        self._explore_root_element_keys: set[str] = set()
+        self._permanently_excluded_keys: set[str] = set()
         self._replay_action_history: list[dict[str, Any]] = []
         self._reasoning_action_history: list[dict[str, Any]] = []
         self._branch_action_history: list[dict[str, Any]] = []
@@ -658,6 +670,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self._explore_root_hash = None
         self._explore_root_pixels = None
         self._explore_root_activity = None
+        self._explore_root_element_keys = set()
+        self._permanently_excluded_keys = set()
         self._explore_thread_stop_clean = True
         self._last_explore_action_ts = 0.0
         self._replay_action_history = []
@@ -808,6 +822,37 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self._explore_root_hash = None
         self._explore_root_pixels = None
         self._explore_root_activity = None
+        self._explore_root_element_keys = set()
+
+    def _state_element_keys(self, state: Any, limit: int = 96) -> set[str]:
+        keys: set[str] = set()
+        elements = list(getattr(state, "ui_elements", None) or [])
+        for element in elements:
+            if not self._is_valid_element(element):
+                continue
+            if not self._is_interactive(element):
+                continue
+            text = _normalize_space(getattr(element, "text", "")).lower()
+            desc = _normalize_space(getattr(element, "content_description", "")).lower()
+            rid = _normalize_space(
+                getattr(element, "resource_id", "") or getattr(element, "resource_name", "")
+            ).lower()
+            cls = _normalize_space(getattr(element, "class_name", "")).lower()
+            merged = "|".join([x for x in [text, desc, rid, cls] if x])
+            if not merged:
+                continue
+            keys.add(merged[:160])
+            if len(keys) >= max(8, int(limit)):
+                break
+        return keys
+
+    @staticmethod
+    def _element_key_overlap_ratio(root_keys: set[str], curr_keys: set[str]) -> float:
+        if not root_keys or not curr_keys:
+            return 0.0
+        inter = len(root_keys & curr_keys)
+        denom = max(1, min(len(root_keys), len(curr_keys)))
+        return float(inter) / float(denom)
 
     def _capture_explore_root_baseline(self, trigger: str = "") -> Any | None:
         try:
@@ -816,10 +861,12 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             self._explore_root_pixels = np.array(root_state.pixels, copy=True)
             self._explore_root_hash = _phash_pixels(root_state.pixels)
             self._explore_root_activity = self._foreground_activity_name() or None
+            self._explore_root_element_keys = self._state_element_keys(root_state)
             self._emit_log(
                 (
                     f"trigger={trigger or 'unspecified'} root_baseline_captured "
-                    f"activity={self._explore_root_activity} hash={self._explore_root_hash}"
+                    f"activity={self._explore_root_activity} hash={self._explore_root_hash} "
+                    f"element_keys={len(self._explore_root_element_keys)}"
                 ),
                 tag="ROLLBACK",
             )
@@ -1127,6 +1174,22 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         return any(token in text for token in tokens)
 
     @staticmethod
+    def _is_simple_direct_task(goal: str) -> bool:
+        goal_lower = _normalize_space(goal).lower()
+        if not goal_lower:
+            return False
+        simple_patterns = [
+            r"^take (one|a) (photo|picture|video|selfie)",
+            r"^(pause|start|stop|resume|reset|run) the (stopwatch|timer|alarm)",
+            r"^(open|launch|close) (the )?[a-z0-9 _-]+( app)?$",
+            r"^(turn on|turn off|enable|disable) ",
+            r"^(call|dial|text|message) ",
+            r"^set (the |an? )?(alarm|timer|reminder)",
+        ]
+        return any(re.search(pattern, goal_lower) for pattern in simple_patterns)
+
+
+    @staticmethod
     def _goal_is_read_only_query(goal: str) -> bool:
         text = _normalize_space(goal).lower()
         if not text:
@@ -1332,6 +1395,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
     ) -> tuple[bool, str]:
         if not bool(self.enable_parallel_exploration):
             return False, "disabled"
+        if self._is_simple_direct_task(goal):
+            return False, "simple_direct_task"
         if not bool(getattr(self, "targeted_exploration", False)):
             return True, "always_on"
         if bool(getattr(self, "structured_edit_disable_explore", True)) and self._is_structured_edit_activity(
@@ -1347,7 +1412,11 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
 
         read_only = self._goal_is_read_only_query(goal)
         if int(step_no) <= max(0, int(getattr(self, "explore_bootstrap_steps", 0))):
-            return True, "read_only_bootstrap" if read_only else "bootstrap"
+            _, target_hints = self._infer_target_app(goal)
+            if self._is_in_target_app(current_activity, target_hints):
+                return True, "read_only_bootstrap" if read_only else "bootstrap"
+            return False, "not_in_target_app_yet"
+
         if int(getattr(self, "_no_effect_repeat", 0)) >= 1:
             return True, "no_effect_repeat"
 
@@ -1394,18 +1463,23 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         and therefore should ONLY run when the agent is genuinely stuck.
         Bootstrap and periodic probes are intentionally excluded here.
         """
+        if self._is_simple_direct_task(goal):
+            return False, "simple_direct_task"
         if bool(getattr(self, "structured_edit_disable_explore", True)) and self._is_structured_edit_activity(
             current_activity,
             goal=goal,
         ):
             return False, "structured_edit_mode"
 
+        remaining = self._effective_max_steps() - len(self.actions)
+        if remaining <= 3:
+            return False, "low_remaining_steps"
+
         cooldown = max(0, int(getattr(self, "_explore_cooldown_steps", 0)))
         if cooldown > 0:
             self._explore_cooldown_steps = max(0, cooldown - 1)
             return False, "cooldown"
 
-        # Only explore when the agent appears stuck — not on every step.
         if int(getattr(self, "_no_effect_repeat", 0)) >= 1:
             return True, "no_effect_repeat"
 
@@ -1779,6 +1853,30 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             "choice_hits": choice_hits,
         }
 
+    # Patterns for UI elements that may cause irreversible state changes during exploration.
+    # These cover destructive ops, state-changing controls, media/comms/transaction actions.
+    _RISKY_EXPLORE_PATTERNS: list[str] = [
+        # Original destructive ops
+        r"\bdelete\b", r"\bremove\b", r"\bclear all\b", r"\berase\b",
+        r"\bwipe\b", r"\bdiscard\b", r"\buninstall\b", r"\bfactory reset\b",
+        # State-changing controls
+        r"\bpause\b", r"\bstart\b", r"\bstop\b", r"\bresume\b", r"\breset\b",
+        r"\brecord\b", r"\bcapture\b", r"\bshutter\b", r"\btake photo\b", r"\btake video\b",
+        # Submit / confirm
+        r"\bsend\b", r"\bsubmit\b", r"\bpost\b", r"\bpublish\b",
+        r"\bsave\b", r"\bconfirm\b", r"\bapply\b", r"\bok\b", r"\baccept\b",
+        # Communications
+        r"\bcall\b", r"\bdial\b", r"\breply\b", r"\bforward\b",
+        # Toggle / switch
+        r"\btoggle\b", r"\bswitch\b", r"\benable\b", r"\bdisable\b",
+        # Media control
+        r"\bplay\b", r"\bnext\b", r"\bprevious\b", r"\bskip\b",
+        # Transactions
+        r"\bbuy\b", r"\bpurchase\b", r"\border\b", r"\bpay\b",
+        # Account
+        r"\blogout\b", r"\bsign out\b", r"\blog out\b",
+    ]
+
     @staticmethod
     def _is_risky_element(element: Any) -> bool:
         merged = " ".join(
@@ -1790,39 +1888,46 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             ]
         )
         merged = ExplorerElementAgent._keyword_normalized_text(merged)
-        # Keep risky filtering narrow: only destructive operations.
         if not merged:
             return False
-        risky_patterns = [
-            r"\bdelete\b",
-            r"\bremove\b",
-            r"\bclear all\b",
-            r"\berase\b",
-            r"\bwipe\b",
-            r"\bdiscard\b",
-            r"\buninstall\b",
-            r"\bfactory reset\b",
-        ]
-        return any(re.search(pattern, merged) for pattern in risky_patterns)
+        return any(re.search(p, merged) for p in ExplorerElementAgent._RISKY_EXPLORE_PATTERNS)
+
+    @staticmethod
+    def _is_safe_explore_element(element: Any) -> bool:
+        """True if the element is safe to click during exploration.
+
+        Navigation containers (tabs, drawers, lists) are always safe.
+        Action-type widgets (buttons, toggles, checkboxes) are considered
+        unsafe unless their text/desc is already cleared by _is_risky_element.
+        """
+        cls = _normalize_space(getattr(element, "class_name", "")).lower()
+        safe_classes = {
+            "tabwidget", "tablayout", "tab", "tabview",
+            "navigationview", "navigationbar", "bottomnavigation",
+            "drawer", "drawerlayout",
+            "toolbar", "actionbar",
+            "listview", "recyclerview",
+            "viewpager",
+        }
+        dangerous_classes = {
+            "button", "imagebutton", "floatingactionbutton",
+            "switch", "togglebutton", "checkbox", "radiobutton",
+            "compoundbutton",
+        }
+        if any(safe in cls for safe in safe_classes):
+            return True
+        if any(danger in cls for danger in dangerous_classes):
+            return False
+        return True
 
     @staticmethod
     def _is_critical_risky_element(element: Any) -> bool:
-        """Narrow risk gate used by fallback-relaxed candidate recovery."""
+        """Critical risk gate used by fallback-relaxed candidate recovery."""
         merged = ExplorerElementAgent._element_merged_text(element)
         merged = ExplorerElementAgent._keyword_normalized_text(merged)
         if not merged:
             return False
-        critical_patterns = [
-            r"\bdelete\b",
-            r"\bremove\b",
-            r"\bclear all\b",
-            r"\berase\b",
-            r"\bwipe\b",
-            r"\bdiscard\b",
-            r"\buninstall\b",
-            r"\bfactory reset\b",
-        ]
-        return any(re.search(pattern, merged) for pattern in critical_patterns)
+        return any(re.search(pattern, merged) for pattern in ExplorerElementAgent._RISKY_EXPLORE_PATTERNS)
 
     def _element_region_label(self, element: Any) -> str:
         bbox = getattr(element, "bbox_pixels", None)
@@ -1954,6 +2059,14 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 continue
             if not self._is_interactive(element):
                 continue
+            key = self._element_key(idx, element)
+            if key in self._permanently_excluded_keys:
+                stats["removed_risky"] = int(stats.get("removed_risky", 0)) + 1
+                continue
+            if self._is_risky_element(element) or not self._is_safe_explore_element(element):
+                stats["removed_risky"] = int(stats.get("removed_risky", 0)) + 1
+                self._permanently_excluded_keys.add(key)
+                continue
             stats["valid_interactive"] += 1
             candidates.append((idx, element))
         stats["interactive_total"] = stats["valid_interactive"]
@@ -1963,7 +2076,13 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             dialog_primary: list[tuple[int, Any]] = []
             dialog_controls: list[tuple[int, Any]] = []
             for idx, element in candidates:
-                if self._is_critical_risky_element(element):
+                key = self._element_key(idx, element)
+                if key in self._permanently_excluded_keys:
+                    continue
+                if self._is_critical_risky_element(element) or self._is_risky_element(element):
+                    self._permanently_excluded_keys.add(key)
+                    continue
+                if not self._is_safe_explore_element(element):
                     continue
                 if self._is_dialog_primary_ack_action(element):
                     dialog_primary.append((idx, element))
@@ -1995,6 +2114,14 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 desc = _normalize_space(getattr(element, "content_description", ""))
                 hint = _normalize_space(getattr(element, "hint_text", ""))
                 if not (text or desc or hint):
+                    continue
+                key = self._element_key(idx, element)
+                if key in self._permanently_excluded_keys:
+                    stats["removed_risky"] = int(stats.get("removed_risky", 0)) + 1
+                    continue
+                if self._is_risky_element(element):
+                    self._permanently_excluded_keys.add(key)
+                    stats["removed_risky"] = int(stats.get("removed_risky", 0)) + 1
                     continue
                 if self._is_system_ui_noise_element(element):
                     stats["removed_meaningless"] = int(stats.get("removed_meaningless", 0)) + 1
@@ -2185,6 +2312,12 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 continue
             if getattr(element, "bbox_pixels", None) is None:
                 continue
+            key = self._element_key(idx, element)
+            if key in self._permanently_excluded_keys:
+                continue
+            if self._is_risky_element(element) or not self._is_safe_explore_element(element):
+                self._permanently_excluded_keys.add(key)
+                continue
             text = _normalize_space(getattr(element, "text", ""))
             desc = _normalize_space(getattr(element, "content_description", ""))
             rid = _normalize_space(
@@ -2236,51 +2369,56 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self,
         curr_pixels: np.ndarray,
         curr_activity: str | None = None,
-        phash_thr: int = 18,
-        mae_thr: float = 14.0,
+        curr_element_keys: set[str] | None = None,
+        phash_thr: int = 10,
+        mae_thr: float = 8.0,
     ) -> tuple[bool, str]:
         if self._explore_root_pixels is None or self._explore_root_hash is None:
             return False, "missing_root"
+
         root_activity = self._normalize_activity_name(self._explore_root_activity)
         root_pkg = self._activity_package_name(self._explore_root_activity)
         if curr_activity is None:
             curr_activity = self._foreground_activity_name()
         curr_activity_norm = self._normalize_activity_name(curr_activity)
         curr_pkg = self._activity_package_name(curr_activity)
-        different_package = bool(
-            root_pkg and curr_pkg and curr_pkg != root_pkg
-        )
-        different_activity = bool(
-            root_activity and curr_activity_norm and curr_activity_norm != root_activity
-        )
+
+        if root_pkg and curr_pkg and curr_pkg != root_pkg:
+            return False, "pkg_mismatch"
+        if root_activity and curr_activity_norm and curr_activity_norm != root_activity:
+            return False, "activity_mismatch"
+
+        signals: list[str] = []
         try:
             curr_hash = _phash_pixels(curr_pixels)
-            phash_diff = _hash_diff(self._explore_root_hash, curr_hash)
+            phash_diff = int(_hash_diff(self._explore_root_hash, curr_hash))
             if phash_diff <= int(phash_thr):
-                if different_package:
-                    return False, f"pkg_mismatch_phash:{phash_diff}"
-                if different_activity:
-                    # Avoid false-positive rollback verification across different screens
-                    # that happen to look visually similar.
-                    pass
-                else:
-                    return True, "phash"
+                signals.append(f"phash<={int(phash_thr)}:{phash_diff}")
         except Exception:  # pylint: disable=broad-exception-caught
             pass
+
         try:
-            mae = _mae_small(self._explore_root_pixels, curr_pixels)
-            if different_package and mae <= mae_thr:
-                return False, f"pkg_mismatch_mae:{mae:.2f}"
-            if different_activity:
-                strict_thr = min(float(mae_thr), 11.0)
-                if mae <= strict_thr:
-                    return True, f"activity_mismatch_mae:{mae:.2f}"
-                return False, f"activity_mismatch_mae:{mae:.2f}"
-            if mae <= mae_thr:
-                return True, f"mae:{mae:.2f}"
-            return False, f"mae:{mae:.2f}"
+            mae = float(_mae_small(self._explore_root_pixels, curr_pixels))
+            if mae <= float(mae_thr):
+                signals.append(f"mae<={float(mae_thr):.1f}:{mae:.2f}")
         except Exception:  # pylint: disable=broad-exception-caught
-            return False, "mae:err"
+            pass
+
+        if root_activity and curr_activity_norm and curr_activity_norm == root_activity:
+            signals.append("activity_match")
+
+        if self._explore_root_element_keys:
+            overlap = 0.0
+            if curr_element_keys is None:
+                curr_element_keys = set()
+            if curr_element_keys:
+                overlap = self._element_key_overlap_ratio(self._explore_root_element_keys, curr_element_keys)
+            if overlap >= 0.55:
+                signals.append(f"a11y_sig_match:{overlap:.2f}")
+
+        if len(signals) >= 2:
+            return True, "|".join(signals)
+        return False, "|".join(signals) if signals else "weak_match"
 
     def _rollback_to_root(
         self,
@@ -2322,6 +2460,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 same, same_reason = self._same_root_page(
                     state.pixels,
                     curr_activity=self._foreground_activity_name(),
+                    curr_element_keys=self._state_element_keys(state),
                 )
                 if same:
                     rollback_success = True
@@ -2380,6 +2519,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 same, same_reason = self._same_root_page(
                     final_state.pixels,
                     curr_activity=self._foreground_activity_name(),
+                    curr_element_keys=self._state_element_keys(final_state),
                 )
                 result["success"] = bool(same)
                 result["matched_by"] = same_reason
@@ -2481,7 +2621,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
     def _ensure_root_before_reasoning(
         self,
         step_no: int,
-        max_attempts: int = 2,
+        max_attempts: int = 4,
     ) -> dict[str, Any]:
         if not self._has_explore_root_baseline():
             verify_result = {
@@ -2509,6 +2649,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 same_root, same_reason = self._same_root_page(
                     state.pixels,
                     curr_activity=self._foreground_activity_name(),
+                    curr_element_keys=self._state_element_keys(state),
                 )
                 reasons.append(str(same_reason))
                 if not same_root:
@@ -2534,6 +2675,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             same_root, same_reason = self._same_root_page(
                 state.pixels,
                 curr_activity=self._foreground_activity_name(),
+                curr_element_keys=self._state_element_keys(state),
             )
             detail = {
                 "attempt": attempt,
@@ -2553,6 +2695,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 verify_result["verified"] = True
                 verify_result["matched_by"] = detail.get("stable_reasons") or same_reason
                 break
+            if attempt < max(1, int(max_attempts)):
+                time.sleep(0.25)
         return verify_result
 
     @staticmethod
@@ -3472,6 +3616,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 same_root, _ = self._same_root_page(
                     recovered_state.pixels,
                     curr_activity=self._foreground_activity_name(),
+                    curr_element_keys=self._state_element_keys(recovered_state),
                 )
                 if not same_root:
                     rollback_info = self._rollback_to_root(
@@ -3574,16 +3719,35 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
     ) -> dict[str, Any] | None:
         if self._explore_stop_event.is_set():
             return None
+        if cand.index < 0 or cand.index >= len(ui_elements):
+            return None
+
+        element = ui_elements[cand.index]
+        cand_key = str(cand.key or self._element_key(cand.index, element))
+        if cand_key in self._permanently_excluded_keys:
+            return None
+        if self._is_risky_element(element) or (not self._is_safe_explore_element(element)):
+            self._permanently_excluded_keys.add(cand_key)
+            self._emit_log(
+                f"step={source_step} branch={branch_id} depth={depth} "
+                f"SKIPPED risky/unsafe element: {self._element_brief_label(element)}",
+                tag="EXPLORE",
+            )
+            return None
+
         action = self._candidate_action(ui_elements, cand)
         before_hash = None
         try:
             before_hash = _phash_pixels(before_pixels)
         except Exception:  # pylint: disable=broad-exception-caught
             before_hash = None
+
         if self._explore_stop_event.is_set():
             return None
         try:
             with self._ui_lock:
+                if self._explore_stop_event.is_set():
+                    return None
                 self._execute_action_with_coordinate_priority(action)
         except Exception:  # pylint: disable=broad-exception-caught
             return None
@@ -3594,7 +3758,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
 
         time.sleep(self.explore_action_pause_sec)
         with self._ui_lock:
-            after_state = self.env.get_state(wait_to_stabilize=False)
+            after_state = self.env.get_state(wait_to_stabilize=True)
+
         after_hash = None
         try:
             after_hash = _phash_pixels(after_state.pixels)
@@ -3619,7 +3784,6 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             self._bound_effect_ema[cand.key] = float(new_ema)
             self._bound_effect_count[cand.key] = int(self._bound_effect_count.get(cand.key, 0)) + 1
 
-        element = ui_elements[cand.index]
         self._recent_clicked_regions.append(self._element_region_label(element))
         center, bounds = self._center_and_bounds(element)
         low_value_hit = self._is_low_value_explore_element(element)
@@ -3632,6 +3796,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         is_useful = bool(useful_by_change or useful_by_semantic)
         if low_value_hit and semantic_rel < 0.22 and not useful_by_change:
             is_useful = False
+            self._permanently_excluded_keys.add(cand_key)
+
         score_detail = {
             "score": round(cand.score, 4),
             "task_similarity": round(cand.task_similarity, 4),
@@ -3846,6 +4012,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             same_root, same_reason = self._same_root_page(
                 root_state.pixels,
                 curr_activity=self._foreground_activity_name(),
+                curr_element_keys=self._state_element_keys(root_state),
             )
             if not same_root:
                 rollback_info = self._rollback_to_root(
@@ -3862,6 +4029,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 same_root, same_reason = self._same_root_page(
                     root_state.pixels,
                     curr_activity=self._foreground_activity_name(),
+                    curr_element_keys=self._state_element_keys(root_state),
                 )
             self._emit_log(
                 f"step={source_step} branch={branch_id} root_check same_root={same_root} by={same_reason}",
@@ -4199,6 +4367,14 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         value = _normalize_space(text)
         if not value:
             return ""
+        # Remove resource-id / class-name technical fragments to make clues
+        # easier for small VLMs to consume.
+        value = re.sub(r"[a-z][a-z0-9_]*\.[a-z][a-z0-9_.]*:[a-z]+/[a-zA-Z0-9_]+", "", value)
+        value = re.sub(r"[a-z][a-z0-9_]*\.[a-z][a-z0-9_.]*\.[A-Z][a-zA-Z0-9_]*", "", value)
+        value = re.sub(r"\s*\|\s*", " ", value)
+        value = _normalize_space(value)
+        if not value:
+            return ""
         low = value.lower()
         noisy_patterns = [
             "adb shell",
@@ -4339,29 +4515,19 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             trunk.get("node_text") or trunk.get("node_desc") or trunk.get("node_match_text") or ""
         )
         trunk_text = trunk_text or str(trunk.get("node_match_text") or trunk.get("node_desc") or "")
-        trunk_text = self._clue_text_snippet(trunk_text, max_chars=160)
-        lines = [
-            "[Parallel Exploration Clues]",
-            (
-                f"- Matched branches: {branch_ids or [best.get('branch_id')]}; "
-                f"page hash diff {best_diff}; overlap with previous action {best_action_hit}; "
-                f"confidence {confidence}."
-            ),
-            (
-                f"- Entry action {trunk.get('action_type')} at {self._region_from_record(trunk)} "
-                f"(coord {trunk.get('coordinate')}, bounds {trunk.get('bounds')}). "
-                f"Text: {trunk_text}. Resource: {trunk.get('node_resource_id')}."
-            ),
-            "- Possible next actions:",
-        ]
+        trunk_text = self._clue_text_snippet(trunk_text, max_chars=80)
 
+        # ── Goal & scoring ──────────────────────────────────────────────────
         goal_text = _normalize_space(self._task_goal or "")
         goal_queries = _extract_task_queries(goal_text) if goal_text else []
         if not goal_queries:
             goal_queries = _extract_task_queries(" ".join(self.history[-3:]))
+
         scored: list[tuple[float, float, float, dict[str, Any]]] = []
-        min_rel = 0.10
-        min_prior = 0.05
+        # Lowered thresholds: prefer showing something over empty clue.
+        # Even low-relevance elements give the model spatial context.
+        min_rel = 0.05
+        min_prior = 0.02
         for obs in observations:
             text = self._clean_clue_text(
                 obs.get("node_text") or obs.get("node_desc") or obs.get("node_match_text") or ""
@@ -4374,9 +4540,9 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 prior = float(obs.get("best_sim") or 0.0)
             if rel < min_rel and prior < min_prior:
                 continue
-            # Prefer semantically relevant leaves, fallback to explore score if semantics are weak.
             rank = rel * 0.75 + prior * 0.25
             scored.append((rank, rel, prior, obs))
+        # Final fallback: include everything with any text if still empty
         if not scored and observations:
             for obs in observations:
                 text = self._clean_clue_text(
@@ -4387,14 +4553,12 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 prior = float((obs.get("score_detail") or {}).get("score", 0.0))
                 if prior <= 0.0:
                     prior = float(obs.get("best_sim") or 0.0)
-                if prior <= 0.0:
-                    continue
-                scored.append((prior, 0.0, prior, obs))
+                scored.append((max(prior, 0.001), 0.0, prior, obs))
         scored.sort(key=lambda item: item[0], reverse=True)
 
         added = 0
-        seen = set()
-        k2_texts = []
+        seen: set[str] = set()
+        action_lines: list[str] = []
         for _, rel, prior, leaf in scored:
             text = self._clean_clue_text(
                 leaf.get("node_text") or leaf.get("node_desc") or leaf.get("node_match_text") or ""
@@ -4406,17 +4570,10 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 continue
             seen.add(key)
             pos = self._region_from_record(leaf)
-            effect = self._infer_ui_effect(text)
-            text = self._clue_text_snippet(text, max_chars=140)
-            lines.append(
-                (
-                    f"{added + 1}. Branch {leaf.get('branch')}: {leaf.get('action_type')} at {pos} "
-                    f"(coord {leaf.get('coordinate')}, bounds {leaf.get('bounds')}). "
-                    f"Text: {text}. Likely effect: {effect}. "
-                    f"Relevance {rel:.3f}, explore score {prior:.3f}."
-                )
-            )
-            k2_texts.append(text)
+            act_type = str(leaf.get("action_type") or "click").lower()
+            text = self._clue_text_snippet(text, max_chars=80)
+            # Natural-language format: no raw coords, no scores, no resource IDs.
+            action_lines.append(f'{added + 1}. {act_type} "{text}" at {pos}.')
             added += 1
             if added >= max_items:
                 break
@@ -4426,13 +4583,21 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         if added <= 0:
             return ""
 
-        keywords = self._extract_keywords(" ".join(k2_texts), limit=6)
-        if keywords:
-            lines.append(f"- Candidate keywords: {', '.join(keywords)}")
+        # ── Simple, LLM-friendly output ──────────────────────────────────
+        # Format designed for small (4B) models:
+        # • No technical metadata (hash diff, bounds, resource IDs, scores)
+        # • Plain verbs and positions ("click 'X' at top right")
+        # • Entry action shown only if it has a readable label
+        lines = ["[探索发现以下元素可能对当前任务有帮助:]"]
+        if trunk_text:
+            trunk_act = str(trunk.get("action_type") or "click").lower()
+            trunk_pos = self._region_from_record(trunk)
+            lines.append(f'  点击 "{trunk_text}" (位于 {trunk_pos}) 后发现:')
+        lines += action_lines
         lines.append("")
         out = "\n".join(lines)
-        if len(out) > 1400:
-            out = out[:1400].rstrip() + "\n"
+        if len(out) > 800:
+            out = out[:800].rstrip() + "\n"
         return out
 
     def get_last_clue_debug_lines(self) -> list[str]:
@@ -4791,32 +4956,22 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         hints: list[ExplorerHint],
         ui_elements: list[Any],
     ) -> tuple[json_action.JSONAction, dict[str, Any]]:
+        def _safe_hint_center(index: int) -> tuple[int, int] | None:
+            if not (0 <= index < len(ui_elements)):
+                return None
+            element = ui_elements[index]
+            key = self._element_key(index, element)
+            if key in self._permanently_excluded_keys:
+                return None
+            if self._is_risky_element(element) or not self._is_safe_explore_element(element):
+                self._permanently_excluded_keys.add(key)
+                return None
+            return self._safe_center_from_element(element)
+
         for hint in hints:
-            if hint.index not in self._recent_indices:
-                center = None
-                if 0 <= hint.index < len(ui_elements):
-                    center = self._safe_center_from_element(ui_elements[hint.index])
-                if center is not None:
-                    return (
-                        json_action.JSONAction(action_type=json_action.CLICK, x=center[0], y=center[1]),
-                        {
-                            "name": "mobile_use",
-                            "arguments": {
-                                "action": "click",
-                                "element_id": hint.index,
-                                "coordinate": [center[0], center[1]],
-                            },
-                        },
-                    )
-                return (
-                    json_action.JSONAction(action_type=json_action.CLICK, index=hint.index),
-                    {"name": "mobile_use", "arguments": {"action": "click", "element_id": hint.index}},
-                )
-        if hints:
-            idx = hints[0].index
-            center = None
-            if 0 <= idx < len(ui_elements):
-                center = self._safe_center_from_element(ui_elements[idx])
+            if hint.index in self._recent_indices:
+                continue
+            center = _safe_hint_center(hint.index)
             if center is not None:
                 return (
                     json_action.JSONAction(action_type=json_action.CLICK, x=center[0], y=center[1]),
@@ -4824,15 +4979,27 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                         "name": "mobile_use",
                         "arguments": {
                             "action": "click",
-                            "element_id": idx,
+                            "element_id": hint.index,
                             "coordinate": [center[0], center[1]],
                         },
                     },
                 )
-            return (
-                json_action.JSONAction(action_type=json_action.CLICK, index=idx),
-                {"name": "mobile_use", "arguments": {"action": "click", "element_id": idx}},
-            )
+
+        for hint in hints:
+            center = _safe_hint_center(hint.index)
+            if center is not None:
+                return (
+                    json_action.JSONAction(action_type=json_action.CLICK, x=center[0], y=center[1]),
+                    {
+                        "name": "mobile_use",
+                        "arguments": {
+                            "action": "click",
+                            "element_id": hint.index,
+                            "coordinate": [center[0], center[1]],
+                        },
+                    },
+                )
+
         return (
             json_action.JSONAction(action_type=json_action.WAIT),
             {"name": "mobile_use", "arguments": {"action": "wait"}},
@@ -5144,18 +5311,13 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         response, _, _ = self.vllm.predict_mm("", [], messages=messages)
         reasoning_elapsed = float(max(0.0, time.perf_counter() - reasoning_start_perf))
         if not self.enable_sequential_exploration and self.reasoning_sleep_sec > reasoning_elapsed:
-            # Only sleep in parallel mode: the sleep simulates slow reasoning so the
-            # background exploration thread has more time to accumulate results.
-            # In sequential mode exploration already ran first, so the sleep is wasteful.
-            sleep_sec = float(self.reasoning_sleep_sec - reasoning_elapsed)
             self._emit_log(
                 (
-                    f"step={step_no} simulate_reasoning_sleep={sleep_sec:.3f}s "
-                    f"(elapsed={reasoning_elapsed:.3f}s target={self.reasoning_sleep_sec:.3f}s)"
+                    f"step={step_no} reasoning_sleep_disabled elapsed={reasoning_elapsed:.3f}s "
+                    f"configured_target={self.reasoning_sleep_sec:.3f}s"
                 ),
                 tag="REASON",
             )
-            time.sleep(sleep_sec)
         self._emit_log_block(
             title=f"step={step_no} llm_response",
             content=str(response),
@@ -5428,12 +5590,20 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 )
         rollback_info = self._ensure_root_before_reasoning(
             step_no=step_no,
-            max_attempts=2,
+            max_attempts=4,
         )
         self._emit_log(
             f"step={step_no} post_reasoning_rollback={rollback_info}",
             tag="STEP",
         )
+        screen_drift_after_rollback = None
+        try:
+            if bool(rollback_info.get("verified")):
+                with self._ui_lock:
+                    post_rollback_state = self.env.get_state(wait_to_stabilize=True)
+                screen_drift_after_rollback = _pixel_delta(step_start_pixels, post_rollback_state.pixels)
+        except Exception:  # pylint: disable=broad-exception-caught
+            screen_drift_after_rollback = None
         if self.enable_sequential_exploration:
             # Sequential mode: each step explores fresh; no carry-over to next step.
             self._pending_explore_payload = None
@@ -5444,6 +5614,17 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             }
 
         safety_mode_reason = None
+        if (
+            screen_drift_after_rollback is not None
+            and float(screen_drift_after_rollback) > 5.0
+        ):
+            safety_mode_reason = "screen_drifted_after_rollback"
+            source = f"{source}_drift_guard"
+            parse_error = safety_mode_reason
+            self._emit_log(
+                f"step={step_no} screen_drifted_after_rollback delta={float(screen_drift_after_rollback):.3f}",
+                tag="STEP",
+            )
         if not explore_thread_clean:
             safety_mode_reason = "explorer_thread_not_stopped_cleanly"
             source = f"{source}_thread_guard"

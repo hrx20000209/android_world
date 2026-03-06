@@ -106,6 +106,9 @@ selected_tasks = ("AudioRecorderRecordAudio, AudioRecorderRecordAudioWithFileNam
 # selected_tasks = ("SystemWifiTurnOff")
 
 success_tasks = ("NotesIsTodo, RecipeDeleteMultipleRecipesWithConstraint, RecipeDeleteSingleRecipe, RecipeDeleteSingleWithRecipeWithNoise,SimpleCalendarAnyEventsOnDate,SimpleCalendarEventsInTimeRange,SimpleCalendarEventsOnDate,SimpleCalendarFirstEventAfterStartTime,SimpleCalendarLocationOfEvent,SystemBluetoothTurnOffVerify,SystemBluetoothTurnOnVerify,SystemBrightnessMaxVerify,SystemBrightnessMinVerify,SystemWifiTurnOff,SystemWifiTurnOffVerify,SystemWifiTurnOn,SystemWifiTurnOnVerify")
+nan_tasks = ("SystemCopyToClipboard,SystemWifiTurnOnVerify,TasksCompletedTasksForDate,TasksDueNextWeek,TasksDueOnDate,TasksHighPriorityTasks,TasksHighPriorityTasksDueOnDate,TasksIncompleteTasksOnDate,TurnOffWifiAndTurnOnBluetooth,TurnOnWifiAndOpenApp,VlcCreatePlaylist"
+)
+
 _TASKS = flags.DEFINE_list(
     'tasks',
     None,

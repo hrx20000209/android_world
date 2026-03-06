@@ -58,47 +58,39 @@ AVAILABLE_APPS = [
     "Simple Calendar Pro",
 ]
 
-MAX_AGENT_STEPS = 20
+MAX_AGENT_STEPS = 15
 
 
-GELAB_SYSTEM_PROMPT = """You are a mobile GUI agent for AndroidWorld.
-You receive the user task, the current screenshot, concise operation history, and optional UI hints.
-You must choose exactly one next action to move the task forward.
+GELAB_SYSTEM_PROMPT = """
+你是一个手机 GUI-Agent 操作专家。你会收到：任务目标、历史动作、执行反馈、探索线索、当前截图。
+请输出“下一步唯一动作”，坐标使用 0-1000 归一化空间（左上角原点，x 向右，y 向下）。
 
-Coordinate system:
-- The screenshot coordinate origin is the top-left corner.
-- Use normalized coordinates in the range 0-1000 for both x and y.
+动作空间（GELAB）：
+1. CLICK：action:CLICK\tpoint:x,y
+2. TYPE：action:TYPE\tvalue:输入文本\tpoint:x,y
+3. COMPLETE：action:COMPLETE\treturn:最终回复
+4. WAIT：action:WAIT\tvalue:秒数
+5. AWAKE：action:AWAKE\tvalue:应用名
+6. INFO：action:INFO\tvalue:提问内容
+7. ABORT：action:ABORT\tvalue:原因
+8. SLIDE：action:SLIDE\tpoint1:x1,y1\tpoint2:x2,y2
+9. LONGPRESS：action:LONGPRESS\tpoint:x,y
 
-Action space:
-1. CLICK: click one point.
-   Format: action:CLICK\tpoint:x,y
-2. TYPE: type text into a field.
-   Format: action:TYPE\tvalue:text to type\tpoint:x,y
-3. COMPLETE: finish the task and report the result.
-   Format: action:COMPLETE\treturn:final result for the user
-5. AWAKE: open an app quickly.
-   Format: action:AWAKE\tvalue:app name
-6. INFO: ask the user for missing information.
-   Format: action:INFO\tvalue:question for the user
-7. ABORT: stop only if the task is impossible or unsafe.
-   Format: action:ABORT\tvalue:reason
-8. SLIDE: swipe from one point to another.
-   Format: action:SLIDE\tpoint1:x1,y1\tpoint2:x2,y2
-9. LONGPRESS: long-press one point.
-   Format: action:LONGPRESS\tpoint:x,y
+首选输出格式（推荐）：
+<THINK>简短思考</THINK>
+explain:本步目的\taction:动作名\t...参数...\tsummary:本步后简短进展
 
-Output format:
-<THINK>brief reasoning</THINK>
-explain:short purpose of this action\taction:ACTION_NAME\t...parameters...\tsummary:updated one-line task progress summary
+兼容格式（可选）：
+<tool_call>
+{"name":"mobile_use","arguments":{"action":"click","coordinate":[x,y]}}
+</tool_call>
 
-Rules:
-- Track your previous action mentally. Do not slide in the same way more than 5 times in a row.
-- Follow the latest user instruction strictly.
-- Prefer AWAKE when opening an app is the fastest valid move.
-- Prefer COMPLETE when the task is done. Use ABORT only when the task truly cannot continue.
-- Use INFO only when progress is blocked by missing user information.
-- Return only the required format. Do not wrap it in Markdown.
-- Available apps: """ + json.dumps(AVAILABLE_APPS, ensure_ascii=True) + """
+强约束：
+- 只输出一个动作，不要输出多个候选。
+- 不要把 point/value/summary 拼进 action 字段。
+- action 字段只能是纯动作名（如 CLICK 或 click）。
+- 若使用 tool_call JSON，坐标必须放在 coordinate 数组，不要写成 "action":"CLICK\\tpoint:..."
+- 优先推动任务完成，避免无效重复动作。
 """.strip()
 
 
@@ -617,7 +609,11 @@ def gelab_action_to_json_action(
         result_text = _normalize_space(parsed_action.get("return") or parsed_action.get("value"))
         if result_text:
             extras["return_text"] = result_text
-        tool_call["arguments"] = {"action": "terminate", "status": "success"}
+            # Embed return_text in tool_call so callers can pick it up and set
+            # interaction_cache without needing to track extras separately.
+            tool_call["arguments"] = {"action": "terminate", "status": "success", "return_text": result_text}
+        else:
+            tool_call["arguments"] = {"action": "terminate", "status": "success"}
         return (
             json_action.JSONAction(action_type=json_action.STATUS, goal_status="task_complete"),
             tool_call,
