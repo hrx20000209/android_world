@@ -142,7 +142,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         max_hints: int = 6,
         no_effect_delta_threshold: float = 1.2,
         force_explore_after_repeats: int = 2,
-        explore_max_steps: int = 14,
+        explore_max_steps: int = 15,
         explore_max_depth: int = 2,
         explore_leaf_width: int = 4,
         explore_max_branches: int | None = None,

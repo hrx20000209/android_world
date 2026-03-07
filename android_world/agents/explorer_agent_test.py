@@ -516,6 +516,35 @@ class ExplorerStatusPolicyTest(absltest.TestCase):
     self.assertIsNone(ExplorerElementAgent._task_status_from_action(click_action))
 
 
+class ExplorerScreenshotScaleTest(absltest.TestCase):
+
+  def _agent(self, scale: int) -> ExplorerElementAgent:
+    agent = object.__new__(ExplorerElementAgent)
+    agent.image_downsample_scale = scale
+    return agent
+
+  def test_normalize_downsample_scale_clamps_to_positive_int(self):
+    self.assertEqual(explorer_agent._normalize_downsample_scale(2.4), 2)
+    self.assertEqual(explorer_agent._normalize_downsample_scale("3"), 3)
+    self.assertEqual(explorer_agent._normalize_downsample_scale(0), 1)
+
+  def test_prepare_reasoning_pixels_downsamples_by_scale(self):
+    agent = self._agent(scale=2)
+    pixels = np.zeros((120, 80, 3), dtype=np.uint8)
+
+    resized = agent._prepare_reasoning_pixels(pixels)
+
+    self.assertEqual(resized.shape, (60, 40, 3))
+
+  def test_prepare_reasoning_pixels_is_noop_when_scale_is_one(self):
+    agent = self._agent(scale=1)
+    pixels = np.zeros((33, 19, 3), dtype=np.uint8)
+
+    resized = agent._prepare_reasoning_pixels(pixels)
+
+    self.assertIs(resized, pixels)
+
+
 class ExplorerStepLimitTest(absltest.TestCase):
 
   def test_step_limit_is_capped_at_20(self):
