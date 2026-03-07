@@ -265,7 +265,6 @@ def convert_mobile_agent_action_to_json_action(
     app_name = None
 
     result_json = {}
-    print(f"[DEBUG] dummy_action: {dummy_action}")
     # ---------- schema unification ----------
     if 'arguments' in dummy_action:
         arguments = dummy_action['arguments']
@@ -308,7 +307,6 @@ def convert_mobile_agent_action_to_json_action(
             index = _find_element_id(arguments)
 
     elif action_type == json_action.SWIPE:
-        print(f"[DEBUG] arguments: {arguments}")
         direction = arguments.get('direction')
         if direction is None and 'point1' in arguments and 'point2' in arguments:
             start_xy = arguments['point1']
@@ -323,7 +321,6 @@ def convert_mobile_agent_action_to_json_action(
             raise ValueError(f"SWIPE/SLIDE action missing direction or points: {arguments}")
 
     elif action_type == json_action.CLICK:
-        print(f"[DEBUG] Click Action arguments: {arguments}")
         coord = _find_coordinate(arguments)
         if coord is not None:
             x, y = coord

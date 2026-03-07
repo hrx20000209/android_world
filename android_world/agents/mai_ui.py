@@ -554,6 +554,16 @@ def safe_json_loads(s: str) -> dict[str, Any]:
     elif action_low == "drag":
         args["start_coordinate"] = extract_coord("start_coordinate")
         args["end_coordinate"] = extract_coord("end_coordinate")
+    elif action_low in ("open", "open_app", "awake"):
+        args["action"] = "open"
+        app_name = (
+            extract(r'"app_name"\s*:\s*"([^"]+)"')
+            or extract(r"\bapp_name\s*:\s*([^\t\r\n]+)", flags=re.IGNORECASE)
+            or text_value
+            or value
+        )
+        if app_name:
+            args["text"] = str(app_name).strip().strip('"').strip("'")
     elif action_low == "system_button":
         args["button"] = button or "back"
     elif action_low == "back":
@@ -575,7 +585,6 @@ def safe_json_loads(s: str) -> dict[str, Any]:
         args["action"] = "wait"
 
     fixed_obj = _normalize_tool_call_obj({"name": name, "arguments": args}, s)
-    print("[safe_json_loads] recovered ->", fixed_obj)
     return fixed_obj
 
 
@@ -969,16 +978,6 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
 
         history_text = self._history_text()
         messages = build_mai_messages(goal, history_text, resized_screenshot_file)
-
-        print(
-            f"[DEBUG] screenshot size original={screenshot.size}, "
-            f"resized_in_memory={resized_image.size}, "
-            f"resized_on_disk={resized_file_size}, "
-            f"target_resized=({resized_width}, {resized_height}), "
-            f"downsample_scale={scale}, "
-            f"resized_path={resized_screenshot_file}"
-        )
-        print(f"[DEBUG] Messages: {mask_image_urls_for_logging(messages)}")
 
         action_response, _, _ = self.vllm.predict_mm("", [], messages=messages)
         result["action_response"] = action_response

@@ -1749,6 +1749,18 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             return True
         return False
 
+    def _count_meaningful_interactive_elements(self, ui_elements: list[Any]) -> int:
+        count = 0
+        for element in list(ui_elements or []):
+            if not self._is_valid_element(element):
+                continue
+            if not self._is_interactive(element):
+                continue
+            if self._is_system_ui_noise_element(element):
+                continue
+            count += 1
+        return count
+
     @staticmethod
     def _is_meaningless_element(element: Any, intent_flags: dict[str, bool] | None = None) -> bool:
         intent_flags = intent_flags or {"input": False, "select": False, "nav": False}
@@ -5243,8 +5255,14 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         seq_explore_candidates: list[dict[str, Any]] = []
         prompt_explore_candidates: list[dict[str, Any]] = []
         if self.enable_sequential_exploration:
-            should_explore = self.sequential_explore_steps > 0
-            explore_gate_reason = "fixed_budget"
+            meaningful_interactive = self._count_meaningful_interactive_elements(ui_elements)
+            should_explore = self.sequential_explore_steps > 0 and meaningful_interactive >= 2
+            if self.sequential_explore_steps <= 0:
+                explore_gate_reason = "disabled_budget"
+            elif meaningful_interactive < 2:
+                explore_gate_reason = f"insufficient_meaningful_interactive({meaningful_interactive})"
+            else:
+                explore_gate_reason = "fixed_budget"
             self._emit_log(
                 f"step={step_no} explore_gate should_explore={should_explore} "
                 f"reason={explore_gate_reason} mode=sequential",

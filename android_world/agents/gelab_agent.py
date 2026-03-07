@@ -578,9 +578,9 @@ def _parse_action_tool_json(response_text: str, cot: str = "") -> OrderedDict[st
     if isinstance(payload.get("arguments"), dict):
         payload = dict(payload["arguments"])
 
-    raw_action = payload.get("action_type")
+    raw_action = payload.get("action_type") or payload.get("action")
     if not raw_action:
-        raise seeact_utils.ParseActionError("action_tool JSON missing action_type")
+        raise seeact_utils.ParseActionError("action_tool JSON missing action/action_type")
 
     parsed = OrderedDict()
     parsed["cot"] = cot
@@ -628,6 +628,40 @@ def _parse_action_tool_json(response_text: str, cot: str = "") -> OrderedDict[st
     return parsed
 
 
+def _parse_first_plain_json(response_text: str, cot: str = "") -> OrderedDict[str, Any]:
+    """Parse the first action-like JSON object before any <tool_call> tag."""
+    raw_text = str(response_text or "")
+    tool_call_match = re.search(r"<tool_call\b", raw_text, flags=re.IGNORECASE)
+    search_text = raw_text[: tool_call_match.start()] if tool_call_match else raw_text
+    search_text = _strip_code_fences(search_text).strip()
+    if not search_text:
+        raise seeact_utils.ParseActionError("no plain JSON before tool_call")
+
+    decoder = json.JSONDecoder()
+    last_error: Exception | None = None
+    for match in re.finditer(r"\{", search_text):
+        start = match.start()
+        try:
+            payload, _ = decoder.raw_decode(search_text[start:])
+        except Exception:  # pylint: disable=broad-exception-caught
+            continue
+        if not isinstance(payload, dict):
+            continue
+        if "action" not in payload and "action_type" not in payload:
+            continue
+        try:
+            return _parse_action_tool_json(json.dumps(payload, ensure_ascii=False), cot=cot)
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            last_error = exc
+            continue
+
+    if last_error is not None:
+        raise seeact_utils.ParseActionError(
+            f"plain JSON parse candidate failed: {last_error}"
+        ) from last_error
+    raise seeact_utils.ParseActionError("no action-like plain JSON found before tool_call")
+
+
 def parse_gelab_response(response_text: str) -> OrderedDict[str, Any]:
     if not response_text:
         raise seeact_utils.ParseActionError("empty GELAB response")
@@ -671,11 +705,15 @@ def parse_gelab_response(response_text: str) -> OrderedDict[str, Any]:
             return _parse_action_tool_json(response_text, cot=cot)
         except seeact_utils.ParseActionError as action_tool_error:
             try:
-                return _parse_tool_call_response(response_text, cot=cot)
-            except seeact_utils.ParseActionError as tool_error:
-                raise seeact_utils.ParseActionError(
-                    f"{kv_error}; action-tool fallback failed: {action_tool_error}; tool-call fallback failed: {tool_error}"
-                ) from tool_error
+                return _parse_first_plain_json(response_text, cot=cot)
+            except seeact_utils.ParseActionError as plain_json_error:
+                try:
+                    return _parse_tool_call_response(response_text, cot=cot)
+                except seeact_utils.ParseActionError as tool_error:
+                    raise seeact_utils.ParseActionError(
+                        f"{kv_error}; action-tool fallback failed: {action_tool_error}; "
+                        f"plain-json fallback failed: {plain_json_error}; tool-call fallback failed: {tool_error}"
+                    ) from tool_error
         except Exception as action_tool_error:  # pylint: disable=broad-exception-caught
             raise seeact_utils.ParseActionError(
                 f"{kv_error}; action-tool fallback failed: {action_tool_error}"
