@@ -56,6 +56,34 @@ class MAIParserTest(absltest.TestCase):
     self.assertEqual(parsed["arguments"]["action"], "answer")
     self.assertEqual(parsed["arguments"]["text"], "True")
 
+  def test_parse_respond_without_explicit_action(self):
+    response = (
+        "<thinking>The events are visible.</thinking>\n"
+        "respond:Game night,Product demo,Date night"
+    )
+
+    parsed = mai_ui.parse_mai_tool_call(response)
+
+    self.assertEqual(parsed["name"], "mobile_use")
+    self.assertEqual(parsed["arguments"]["action"], "answer")
+    self.assertEqual(
+        parsed["arguments"]["text"],
+        "Game night,Product demo,Date night",
+    )
+
+  def test_history_text_uses_recent_numbered_summaries(self):
+    env = test_utils.FakeAsyncEnv()
+    vllm = mock.Mock()
+    agent = mai_ui.MAIUIAgent(env=env, vllm=vllm, src_format="abs_origin", history_limit=2)
+    agent._summarys = ["opened files", "entered downloads", "answered title list"]
+
+    history_text = agent._history_text()
+
+    self.assertEqual(
+        history_text,
+        "2. entered downloads\n3. answered title list",
+    )
+
 
 class MAIStepLimitTest(absltest.TestCase):
 

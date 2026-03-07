@@ -86,7 +86,7 @@ For each function call, return the thinking process in <thinking> </thinking> ta
 
 {"action": "click", "coordinate": [x, y]}
 {"action": "long_press", "coordinate": [x, y]}
-{"action": "type", "text": "", "coordinate": [x, y]}
+{"action": "type", "text": ""}
 {"action": "swipe", "direction": "up or down or left or right", "coordinate": [x, y]} # "coordinate" is optional. Use the "coordinate" if you want to swipe a specific UI element.
 {"action": "open", "text": "app_name"}
 {"action": "drag", "start_coordinate": [x1, y1], "end_coordinate": [x2, y2]}
@@ -95,20 +95,10 @@ For each function call, return the thinking process in <thinking> </thinking> ta
 {"action": "terminate", "status": "success or fail"}
 {"action": "answer", "text": "xxx"} # Use escape characters \\\', \\", and \\n in text part to ensure we can parse the text in normal python string format.
 
-Fallback only when exact coordinates are unavailable:
-{"action": "click", "element_id": 3}
-{"action": "long_press", "element_id": 3}
-{"action": "type", "text": "xxx", "element_id": 3}
-
 ## Note
 - Write a small plan and finally summarize your next action (with its target element) in one sentence in <thinking></thinking> part.
-- For click/long_press/type, prefer coordinate-based actions. Do not invent keys like button/label/target for these actions.
-- The `action` field must contain only the action name itself. Do not append `point:`, `summary:`, or other key-value text into `action`.
-- For coordinates, use JSON arrays like `"coordinate": [x, y]`. Do not use pseudo formats like `"action":"CLICK\tpoint:500,900"`.
-- If a coordinate is not reliable, use one of the provided element_id values.
 - Available Apps: `""" + json.dumps(AVAILABLE_APPS, ensure_ascii=True) + """`.
 You should use the `open` action to open the app as possible as you can, because it is the fast way to open the app.
-- Use the `answer` action for question-answer tasks that only require returning a final value.
 - You must follow the Action Space strictly, and return the correct json object within <thinking> </thinking> and <tool_call></tool_call> XML tags.
 """.strip()
 
@@ -189,17 +179,38 @@ def _parse_coord_like(value: Any) -> list[int] | None:
 
 def _extract_inline_coord(text: str) -> list[int] | None:
     patterns = [
-        r'coordinate"\s*:\s*\[\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)',
-        r'point"\s*:\s*\[\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)',
-        r'point"\s*:\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)',
-        r"\bcoordinate\s*[:=]\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)",
-        r"\bpoint\s*[:=]\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)",
+        r'["\']?coordinate["\']?\s*(?:[:=：]|[\(\[\{])\s*(-?\d+(?:\.\d+)?)\s*[,，]\s*(-?\d+(?:\.\d+)?)',
+        r'["\']?coordinates["\']?\s*(?:[:=：]|[\(\[\{])\s*(-?\d+(?:\.\d+)?)\s*[,，]\s*(-?\d+(?:\.\d+)?)',
+        r'["\']?point["\']?\s*(?:[:=：]|[\(\[\{])\s*(-?\d+(?:\.\d+)?)\s*[,，]\s*(-?\d+(?:\.\d+)?)',
+        r"\bpoint\s*\(\s*(-?\d+(?:\.\d+)?)\s*[,，]\s*(-?\d+(?:\.\d+)?)\s*\)",
+        r"\[\s*(-?\d+(?:\.\d+)?)\s*[,，]\s*(-?\d+(?:\.\d+)?)\s*\]",
     ]
     for pattern in patterns:
         m = re.search(pattern, str(text or ""), flags=re.IGNORECASE)
         if m:
             return [int(round(float(m.group(1)))), int(round(float(m.group(2))))]
     return None
+
+
+def _infer_action_from_fields(args: dict[str, Any], raw_text: str = "") -> str:
+    if not isinstance(args, dict):
+        return ""
+    answer_keys = ("text", "content", "value", "return", "answer", "respond", "response", "reply", "final_answer", "read")
+    if any(args.get(key) for key in ("answer", "respond", "response", "reply", "final_answer", "read")):
+        return "answer"
+    if any(args.get(key) for key in ("status", "goal_status")):
+        return "terminate"
+    if any(args.get(key) is not None for key in ("point", "coordinate", "coordinates")):
+        return "click"
+    if any(args.get(key) is not None for key in ("point1", "point2", "start_coordinate", "end_coordinate", "direction")):
+        return "swipe"
+    if any(args.get(key) for key in ("app", "app_name")):
+        return "open"
+    if any(args.get(key) for key in answer_keys) and re.search(r"(?i)\b(answer|respond|response|reply|final_answer|read)\b", str(raw_text or "")):
+        return "answer"
+    if re.search(r"(?i)\b(status|goal_status)\b", str(raw_text or "")):
+        return "terminate"
+    return ""
 
 
 def _clean_action_name(action_value: Any) -> str:
@@ -242,7 +253,7 @@ def _normalize_tool_call_obj(obj: dict[str, Any], raw_text: str = "") -> dict[st
     raw_action = args.get("action")
     action_name = _clean_action_name(raw_action)
     if not action_name:
-        action_name = "wait"
+        action_name = _infer_action_from_fields(args, raw_text=raw_text) or "wait"
     action_low = action_name.lower()
 
     if action_low == "tap":
@@ -263,9 +274,18 @@ def _normalize_tool_call_obj(obj: dict[str, Any], raw_text: str = "") -> dict[st
     elif action_low in ("respond", "response", "reply", "read", "info"):
         action_name = "answer"
         action_low = "answer"
+    elif action_low in ("final_answer", "call_user", "calluser"):
+        action_name = "answer"
+        action_low = "answer"
     elif action_low in ("status", "complete", "abort"):
         action_name = "terminate"
         action_low = "terminate"
+    elif action_low in ("hot_key", "hotkey"):
+        action_name = "system_button"
+        action_low = "system_button"
+    elif action_low in ("double_tap", "double_click", "doubleclick"):
+        action_name = "click"
+        action_low = "click"
 
     args["action"] = action_name
 
@@ -293,6 +313,13 @@ def _normalize_tool_call_obj(obj: dict[str, Any], raw_text: str = "") -> dict[st
                 args["direction"] = (direction_match.group(1) or direction_match.group(2) or "").strip()
         if coordinate is not None and "coordinate" not in args:
             args["coordinate"] = coordinate
+        if args.get("direction") is None:
+            if _parse_coord_like(args.get("point1")) and _parse_coord_like(args.get("point2")):
+                args["point1"] = _parse_coord_like(args.get("point1"))
+                args["point2"] = _parse_coord_like(args.get("point2"))
+            elif _parse_coord_like(args.get("start_coordinate")) and _parse_coord_like(args.get("end_coordinate")):
+                args["start_coordinate"] = _parse_coord_like(args.get("start_coordinate"))
+                args["end_coordinate"] = _parse_coord_like(args.get("end_coordinate"))
     if action_low == "drag":
         start_coordinate = _parse_coord_like(args.get("start_coordinate")) or _parse_coord_like(args.get("point1"))
         end_coordinate = _parse_coord_like(args.get("end_coordinate")) or _parse_coord_like(args.get("point2"))
@@ -302,19 +329,39 @@ def _normalize_tool_call_obj(obj: dict[str, Any], raw_text: str = "") -> dict[st
             args["end_coordinate"] = end_coordinate
     if action_low in ("answer", "terminate"):
         if args.get("text") is None:
-            args["text"] = str(args.get("content") or args.get("value") or args.get("return") or "")
+            args["text"] = str(
+                args.get("content")
+                or args.get("value")
+                or args.get("return")
+                or args.get("answer")
+                or args.get("respond")
+                or args.get("response")
+                or args.get("reply")
+                or args.get("final_answer")
+                or args.get("read")
+                or ""
+            )
     if action_low == "terminate":
         status = str(args.get("status") or args.get("goal_status") or "").strip().lower()
         if not status:
             status = "success" if str(args.get("text") or "").strip() else "fail"
         if status in ("completed", "complete", "done"):
             status = "success"
-        if status in ("failed", "infeasible", "error"):
+        if status in ("failed", "failure", "infeasible", "error", "task_failed"):
             status = "fail"
+        if status in ("task_complete", "ok"):
+            status = "success"
         args["status"] = status
     if action_low in ("back", "home", "menu", "enter"):
         args["action"] = "system_button"
         args["button"] = action_low
+    if action_low == "system_button":
+        button = str(args.get("button") or args.get("key") or args.get("value") or "").strip().lower()
+        if button in ("", "none"):
+            button = "back"
+        if button == "return":
+            button = "back"
+        args["button"] = button
 
     return {"name": "mobile_use", "arguments": args}
 
@@ -347,6 +394,13 @@ def _parse_legacy_kv_tool_call(text: str) -> dict[str, Any] | None:
         if action_match:
             action_value = action_match.group(1).strip()
     if not action_value:
+        for key in ("answer", "respond", "response", "reply", "final_answer", "read"):
+            if str(kv.get(key) or "").strip():
+                action_value = "answer"
+                break
+    if not action_value and any(k in kv for k in ("status", "goal_status")):
+        action_value = "terminate"
+    if not action_value:
         return None
 
     args: dict[str, Any] = {"action": action_value}
@@ -355,6 +409,10 @@ def _parse_legacy_kv_tool_call(text: str) -> dict[str, Any] | None:
         point = _parse_coord_like(point_value)
         if point is not None:
             args["coordinate"] = point
+    if "coordinate" not in args:
+        inline_coord = _extract_inline_coord(no_thinking)
+        if inline_coord is not None:
+            args["coordinate"] = inline_coord
     if "point1" in kv:
         point1 = _parse_coord_like(kv.get("point1"))
         if point1 is not None:
@@ -368,12 +426,28 @@ def _parse_legacy_kv_tool_call(text: str) -> dict[str, Any] | None:
         args["value"] = kv["value"]
     if "text" in kv:
         args["text"] = kv["text"]
+    if "content" in kv:
+        args["content"] = kv["content"]
     if "return" in kv:
         args["return"] = kv["return"]
+    if "answer" in kv:
+        args["answer"] = kv["answer"]
+    if "respond" in kv:
+        args["respond"] = kv["respond"]
+    if "response" in kv:
+        args["response"] = kv["response"]
+    if "reply" in kv:
+        args["reply"] = kv["reply"]
+    if "final_answer" in kv:
+        args["final_answer"] = kv["final_answer"]
+    if "read" in kv:
+        args["read"] = kv["read"]
     if "status" in kv:
         args["status"] = kv["status"]
     if "goal_status" in kv:
         args["goal_status"] = kv["goal_status"]
+    if "key" in kv:
+        args["key"] = kv["key"]
     if "button" in kv:
         args["button"] = kv["button"]
     if "direction" in kv:
@@ -444,13 +518,21 @@ def safe_json_loads(s: str) -> dict[str, Any]:
     if action is None:
         action = extract(r'"action_type"\s*:\s*"([^"]+)"')
     if action is None:
-        action = extract(r"\baction\s*:\s*([^\t\r\n,}]+)", "click", flags=re.IGNORECASE)
+        action = extract(r"\baction\s*:\s*([^\t\r\n,}]+)", flags=re.IGNORECASE)
+    if action is None:
+        if re.search(r"(?i)\b(answer|respond|response|reply|final_answer|read)\s*[:=]", s):
+            action = "answer"
+        elif re.search(r"(?i)\b(status|goal_status)\s*[:=]", s):
+            action = "terminate"
+        elif _extract_inline_coord(s) is not None:
+            action = "click"
     action_low = str(action or "click").strip().lower()
     text_value = extract(r'"text"\s*:\s*"([^"]*)"') or extract(r"\btext\s*:\s*([^\t\r\n]+)", flags=re.IGNORECASE)
     content = extract(r'"content"\s*:\s*"([^"]*)"')
     value = extract(r'"value"\s*:\s*"([^"]*)"') or extract(r"\bvalue\s*:\s*([^\t\r\n]+)", flags=re.IGNORECASE)
     return_text = extract(r'"return"\s*:\s*"([^"]*)"') or extract(r"\breturn\s*:\s*([^\t\r\n]+)", flags=re.IGNORECASE)
     button = extract(r'"button"\s*:\s*"([^"]+)"') or extract(r"\bbutton\s*:\s*([^\t\r\n]+)", flags=re.IGNORECASE)
+    key = extract(r'"key"\s*:\s*"([^"]+)"') or extract(r"\bkey\s*:\s*([^\t\r\n]+)", flags=re.IGNORECASE)
     direction = extract(r'"direction"\s*:\s*"([^"]+)"') or extract(r"\bdirection\s*:\s*([^\t\r\n]+)", flags=re.IGNORECASE)
 
     args: dict[str, Any] = {"action": action}
@@ -477,12 +559,18 @@ def safe_json_loads(s: str) -> dict[str, Any]:
     elif action_low == "back":
         args["action"] = "system_button"
         args["button"] = "back"
-    elif action_low in ("answer", "respond", "response", "reply", "read"):
+    elif action_low in ("answer", "respond", "response", "reply", "read", "final_answer", "call_user", "calluser", "info"):
         args["action"] = "answer"
         args["text"] = text_value or content or value or return_text or ""
-    elif action_low == "terminate":
+    elif action_low in ("terminate", "status", "complete", "abort"):
+        args["action"] = "terminate"
         status = extract(r'"status"\s*:\s*"([^"]+)"') or extract(r"\bstatus\s*:\s*([^\t\r\n]+)", "fail", flags=re.IGNORECASE)
         args["status"] = status
+        if not args.get("text"):
+            args["text"] = text_value or content or value or return_text or ""
+    elif action_low in ("hot_key", "hotkey", "system_button"):
+        args["action"] = "system_button"
+        args["button"] = (button or key or value or "back")
     else:
         args["action"] = "wait"
 
@@ -573,26 +661,6 @@ def fetch_resized_image(screenshot_file: str, scale: int = 1) -> tuple[Image.Ima
     return screenshot, resized_width, resized_height, image_ele
 
 
-def _safe_get_action_type(action_dict: dict[str, Any] | None) -> str | None:
-    if not isinstance(action_dict, dict):
-        return None
-    arguments = action_dict.get("arguments")
-    if isinstance(arguments, dict) and "action" in arguments:
-        return str(arguments.get("action"))
-    if "name" in action_dict:
-        return str(action_dict.get("name"))
-    return None
-
-
-def _safe_get_text(action_dict: dict[str, Any] | None) -> str:
-    if not isinstance(action_dict, dict):
-        return ""
-    arguments = action_dict.get("arguments")
-    if not isinstance(arguments, dict):
-        return ""
-    return str(arguments.get("text") or arguments.get("content") or "")
-
-
 def _summarize_action(arguments: dict[str, Any]) -> str:
     action = str(arguments.get("action") or "").strip().lower()
     if action == "click":
@@ -625,6 +693,19 @@ def _summarize_action(arguments: dict[str, Any]) -> str:
     if action == "wait":
         return "wait"
     return str(arguments)
+
+
+def _thinking_to_summary(thinking: str) -> str:
+    text = re.sub(r"\s+", " ", str(thinking or "")).strip()
+    if not text:
+        return ""
+    chunks = [chunk.strip() for chunk in re.split(r"[。！？.!?]", text) if chunk.strip()]
+    if not chunks:
+        return text[:96]
+    last = chunks[-1]
+    if len(last) > 96:
+        last = last[:96].rstrip(" ,.;:") + "..."
+    return last
 
 
 def _action_to_dict(action_obj: json_action.JSONAction) -> dict[str, Any]:
@@ -676,6 +757,7 @@ def _format_ui_element_list(
 
 
 def build_mai_messages(goal: str, history: str, screenshot_path: str, ui_element_text: str = "None.") -> list[dict[str, Any]]:
+    _ = ui_element_text
     system_msg = {
         "role": "system",
         "content": [{"type": "text", "text": MAI_MOBILE_SYS_PROMPT}],
@@ -683,8 +765,8 @@ def build_mai_messages(goal: str, history: str, screenshot_path: str, ui_element
     user_text = (
         f"Task:\n{goal}\n\n"
         f"Action History:\n{history if history else 'None yet.'}\n\n"
-        f"Visible UI elements:\n{ui_element_text}\n\n"
-        "Now output the next action as a JSON function call for `mobile_use` inside <tool_call></tool_call>."
+        "Current screenshot is attached below.\n"
+        "Choose the next single action."
     )
     user_msg = {
         "role": "user",
@@ -709,6 +791,7 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
         name: str = "MAIUIAgent",
         output_path: str = "",
         image_downsample_scale: int | float = 1,
+        history_limit: int = 8,
     ):
         super().__init__(env, name)
         self.vllm = vllm
@@ -717,6 +800,7 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
         self.url = url
         self.output_path = str(output_path or "").strip()
         self.image_downsample_scale = _normalize_downsample_scale(image_downsample_scale)
+        self.history_limit = max(1, int(history_limit))
 
         self._actions: list[dict[str, Any]] = []
         self._screenshots: list[Image.Image] = []
@@ -802,10 +886,13 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
         return task_dir
 
     def _history_text(self) -> str:
+        if not self._summarys:
+            return "None yet."
+        start = max(0, len(self._summarys) - self.history_limit)
         lines = []
-        for idx, summary in enumerate(self._summarys, start=1):
-            lines.append(f"Step {idx}: {summary};")
-        return " ".join(lines)
+        for idx, summary in enumerate(self._summarys[start:], start=start + 1):
+            lines.append(f"{idx}. {summary}")
+        return "\n".join(lines)
 
     def _write_action_log(self, task_output_dir: str) -> None:
         if not task_output_dir:
@@ -877,19 +964,19 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
         if resized_screenshot_file == screenshot_file:
             resized_screenshot_file = screenshot_file.replace(".png", f"_resized_scale{scale}.png")
         resized_image.save(resized_screenshot_file)
+        with Image.open(resized_screenshot_file) as resized_file_img:
+            resized_file_size = resized_file_img.size
 
         history_text = self._history_text()
-        ui_element_text = _format_ui_element_list(
-            state.ui_elements,
-            image_ele,
-            coordinate_format=self.src_format,
-            limit=12,
-        )
-        messages = build_mai_messages(goal, history_text, resized_screenshot_file, ui_element_text)
+        messages = build_mai_messages(goal, history_text, resized_screenshot_file)
 
         print(
-            f"[DEBUG] resized screenshot saved to: {resized_screenshot_file}, "
-            f"size: {(resized_width, resized_height)}, downsample_scale={scale}"
+            f"[DEBUG] screenshot size original={screenshot.size}, "
+            f"resized_in_memory={resized_image.size}, "
+            f"resized_on_disk={resized_file_size}, "
+            f"target_resized=({resized_width}, {resized_height}), "
+            f"downsample_scale={scale}, "
+            f"resized_path={resized_screenshot_file}"
         )
         print(f"[DEBUG] Messages: {mask_image_urls_for_logging(messages)}")
 
@@ -900,22 +987,13 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
 
         summary = "wait"
         thought = ""
+        parse_error = None
 
         try:
             parsed = parse_tagged_text(action_response)
             thought = parsed.get("thinking") or ""
             tool_call = parsed.get("tool_call") or parse_mai_tool_call(action_response)
             dummy_action = tool_call
-
-            last_action = self._actions[-1] if self._actions else None
-            if _safe_get_action_type(last_action) == "answer":
-                dummy_action = {
-                    "name": "mobile_use",
-                    "arguments": {"action": "terminate", "status": "success"},
-                }
-                answer_text = _safe_get_text(last_action)
-                if answer_text:
-                    self.env.interaction_cache = answer_text
 
             action, dummy_action_translated = mobile_agent_utils.convert_mobile_agent_action_to_json_action(
                 dummy_action,
@@ -952,7 +1030,11 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
             result["dummy_action"] = dummy_action
             result["dummy_action_translated"] = dummy_action_translated
             result["action"] = action
-            summary = _summarize_action(dummy_action.get("arguments", {}))
+            action_summary = _summarize_action(dummy_action.get("arguments", {}))
+            thinking_summary = _thinking_to_summary(thought)
+            summary = thinking_summary or action_summary
+            if len(summary) > 140:
+                summary = summary[:140].rstrip(" ,.;:") + "..."
 
         except (
             seeact_utils.ParseActionError,
@@ -962,6 +1044,7 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
             json.JSONDecodeError,
         ) as exc:
             print("Failed to parse/normalize MAI tool_call:", exc)
+            parse_error = str(exc)
             dummy_action = {"name": "mobile_use", "arguments": {"action": "wait"}}
             action = json_action.JSONAction(action_type=json_action.WAIT)
 
@@ -975,7 +1058,7 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
             result["dummy_action"] = dummy_action
             result["dummy_action_translated"] = dummy_action
             result["action"] = action
-            summary = "wait"
+            summary = "Parser fallback wait"
 
         except Exception:  # pylint: disable=broad-exception-caught
             traceback.print_exc()
@@ -990,6 +1073,8 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
             {
                 "name": "mobile_use",
                 "arguments": (result["dummy_action"] or {}).get("arguments", {}),
+                "summary": summary,
+                "parse_error": parse_error,
             }
         )
 
@@ -1012,5 +1097,8 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
         result["latency_sec"] = float(max(0.0, latency))
         print(f"[INFO] Step Latency: {latency:.2f} seconds")
 
-        done = bool(isinstance(action_obj, json_action.JSONAction) and action_obj.action_type == json_action.STATUS)
+        done = bool(
+            isinstance(action_obj, json_action.JSONAction)
+            and action_obj.action_type in {json_action.STATUS, json_action.ANSWER}
+        )
         return base_agent.AgentInteractionResult(done=done, data=result)

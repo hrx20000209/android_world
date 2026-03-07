@@ -34,7 +34,7 @@ import traceback
 
 from android_world.agents.coordinate_resize import convert_point_format, update_image_size_
 
-MAX_AGENT_STEPS = 40
+MAX_AGENT_STEPS = 20
 
 
 ###############################################################################
