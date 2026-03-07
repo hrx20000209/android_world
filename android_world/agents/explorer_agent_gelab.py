@@ -66,9 +66,9 @@ except Exception:  # pylint: disable=broad-exception-caught
 
 MAX_AGENT_STEPS = 15
 EXPLORER_MAI_SYSTEM_PROMPT = (
-    GELAB_SYSTEM_PROMPT
+    GELAB_SYSTEM_PROMPT.replace("你会收到：任务目标、历史动作、当前截图。", "你会收到：任务目标、历史摘要、当前截图。")
     + "\n\n"
-    + "你还会收到探索器给出的历史动作摘要、执行反馈和探索线索摘要。"
+    + "你还会收到探索器给出的历史摘要和探索线索摘要。"
     + "请利用这些摘要避免重复无效动作，优先输出最可能推进任务完成的下一步。"
 ).strip()
 
@@ -116,6 +116,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         explore_leaf_width: int = 4,
         explore_max_branches: int | None = None,
         rollback_backtrack_limit: int = 2,
+        rollback_settle_sec: float = 0.25,
+        rollback_replay_max_actions: int = 3,
         explore_action_pause_sec: float = 0.6,
         reasoning_sleep_sec: float = 0.0,
         embed_model_name: str = "sentence-transformers/paraphrase-MiniLM-L6-v2",
@@ -158,6 +160,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self.explore_leaf_width = max(1, int(explore_leaf_width))
         self.explore_max_branches = explore_max_branches
         self.rollback_backtrack_limit = max(1, int(rollback_backtrack_limit))
+        self.rollback_settle_sec = max(0.0, float(rollback_settle_sec))
+        self.rollback_replay_max_actions = max(1, int(rollback_replay_max_actions))
         self.explore_action_pause_sec = max(0.3, float(explore_action_pause_sec))
         self.reasoning_sleep_sec = max(0.0, float(reasoning_sleep_sec))
         self.embed_model_name = embed_model_name
@@ -781,7 +785,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         if bool(getattr(self, "basic_sequential_exploration", False)):
             rollback_info = self._rollback_to_root(
                 max_depth=self.rollback_backtrack_limit,
-                enable_replay=False,
+                enable_replay=True,
                 trigger=f"step_{source_step}_seq_final_root",
             )
             self._emit_log(
@@ -834,7 +838,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
     def _capture_explore_root_baseline(self, trigger: str = "") -> Any | None:
         try:
             with self._ui_lock:
-                root_state = self.env.get_state(wait_to_stabilize=False)
+                root_state = self.env.get_state(wait_to_stabilize=True)
             self._explore_root_pixels = np.array(root_state.pixels, copy=True)
             self._explore_root_hash = _phash_pixels(root_state.pixels)
             self._explore_root_activity = self._foreground_activity_name() or None
@@ -1028,6 +1032,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             queries.append(text)
 
         # Prefer structured action records over free-form history text.
+        # Keep only semantic fields; action verbs/directions (e.g. swipe/up/back)
+        # tend to poison similarity ranking and cause repetitive navigation loops.
         for entry in (self.actions or [])[-4:]:
             if not isinstance(entry, dict):
                 continue
@@ -1035,10 +1041,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             args = tool_call.get("arguments") if isinstance(tool_call, dict) else {}
             if not isinstance(args, dict):
                 continue
-            action_name = _normalize_space(args.get("action") or args.get("action_type") or "")
-            if action_name:
-                _add_query(action_name, max_len=28)
-            for key in ("text", "app_name", "button", "direction", "status", "goal_status"):
+            for key in ("text", "app_name"):
                 value = _normalize_space(args.get(key) or "")
                 if value:
                     _add_query(value, max_len=64)
@@ -1050,13 +1053,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 text = _normalize_space(item)
                 if not text:
                     continue
-                action_match = re.search(r"action=([a-zA-Z_]+)", text, flags=re.IGNORECASE)
-                if not action_match:
-                    action_match = re.search(r"\[(?:llm|fallback[^\]]*)\]\s*([a-zA-Z_]+)", text, flags=re.IGNORECASE)
-                action_name = _normalize_space(action_match.group(1)) if action_match else ""
-                if action_name:
-                    _add_query(action_name, max_len=28)
-                for key in ("text", "app_name", "button", "direction", "status", "goal_status"):
+                for key in ("text", "app_name"):
                     field_match = re.search(rf"{key}=([^|]+)", text, flags=re.IGNORECASE)
                     if not field_match:
                         field_match = re.search(rf"{key}\s*:\s*([^|;]+)", text, flags=re.IGNORECASE)
@@ -1246,6 +1243,9 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             ("broccoli", "Broccoli", ["com.flauschcode.broccoli", "broccoli"]),
             ("simple calendar", "Simple Calendar Pro", ["com.simplemobiletools.calendar.pro", "calendar"]),
             ("calendar pro", "Simple Calendar Pro", ["com.simplemobiletools.calendar.pro", "calendar"]),
+            ("simple gallery pro", "Simple Gallery Pro", ["com.simplemobiletools.gallery.pro", "gallery"]),
+            ("simple gallery", "Simple Gallery Pro", ["com.simplemobiletools.gallery.pro", "gallery"]),
+            ("pro expense", "Pro Expense", ["com.arduia.expense", "expense"]),
             ("audio recorder", "Audio Recorder", ["com.dimowner.audiorecorder", "audiorecorder"]),
         ]
         for marker, app_name, hints in mappings:
@@ -1749,6 +1749,26 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             return True
         return False
 
+    @staticmethod
+    def _is_launcher_noise_element(element: Any) -> bool:
+        rid = _normalize_space(
+            getattr(element, "resource_id", "") or getattr(element, "resource_name", "")
+        ).lower()
+        text = _normalize_space(getattr(element, "text", "")).lower()
+        desc = _normalize_space(getattr(element, "content_description", "")).lower()
+        merged = " ".join([rid, text, desc])
+        if any(token in rid for token in ("nexuslauncher:id/date", "nexuslauncher:id/title_text")):
+            return True
+        if re.fullmatch(r"\d{1,2}:\d{2}(:\d{2})?", text):
+            return True
+        if text and re.search(r"\b(mon|tue|wed|thu|fri|sat|sun)\b", text):
+            return True
+        if "predicted app" in desc and not bool(getattr(element, "is_clickable", False)):
+            return True
+        if "home" == desc and not bool(getattr(element, "is_clickable", False)):
+            return True
+        return bool("launcher" in rid and "date" in merged)
+
     def _count_meaningful_interactive_elements(self, ui_elements: list[Any]) -> int:
         count = 0
         for element in list(ui_elements or []):
@@ -1757,6 +1777,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             if not self._is_interactive(element):
                 continue
             if self._is_system_ui_noise_element(element):
+                continue
+            if self._is_launcher_noise_element(element):
                 continue
             count += 1
         return count
@@ -1773,6 +1795,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         if ExplorerElementAgent._is_date_time_picker_like(element):
             return True
         if ExplorerElementAgent._is_system_ui_noise_element(element):
+            return True
+        if ExplorerElementAgent._is_launcher_noise_element(element):
             return True
         # Keep only obvious no-op widgets filtered out.
         if "progressbar" in cls:
@@ -2362,52 +2386,44 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         phash_thr: int = 10,
         mae_thr: float = 8.0,
     ) -> tuple[bool, str]:
-        if self._explore_root_pixels is None or self._explore_root_hash is None:
+        del curr_activity, curr_element_keys, mae_thr
+        if self._explore_root_hash is None:
             return False, "missing_root"
-
-        root_activity = self._normalize_activity_name(self._explore_root_activity)
-        root_pkg = self._activity_package_name(self._explore_root_activity)
-        if curr_activity is None:
-            curr_activity = self._foreground_activity_name()
-        curr_activity_norm = self._normalize_activity_name(curr_activity)
-        curr_pkg = self._activity_package_name(curr_activity)
-
-        if root_pkg and curr_pkg and curr_pkg != root_pkg:
-            return False, "pkg_mismatch"
-        if root_activity and curr_activity_norm and curr_activity_norm != root_activity:
-            return False, "activity_mismatch"
-
-        signals: list[str] = []
         try:
             curr_hash = _phash_pixels(curr_pixels)
             phash_diff = int(_hash_diff(self._explore_root_hash, curr_hash))
-            if phash_diff <= int(phash_thr):
-                signals.append(f"phash<={int(phash_thr)}:{phash_diff}")
         except Exception:  # pylint: disable=broad-exception-caught
-            pass
+            return False, "phash_err"
+        if phash_diff <= int(phash_thr):
+            return True, f"phash<={int(phash_thr)}:{phash_diff}"
+        return False, f"phash>{int(phash_thr)}:{phash_diff}"
 
-        try:
-            mae = float(_mae_small(self._explore_root_pixels, curr_pixels))
-            if mae <= float(mae_thr):
-                signals.append(f"mae<={float(mae_thr):.1f}:{mae:.2f}")
-        except Exception:  # pylint: disable=broad-exception-caught
-            pass
+    def _rollback_pause(self) -> None:
+        pause_sec = max(0.0, float(getattr(self, "rollback_settle_sec", 0.0)))
+        if pause_sec > 0.0:
+            time.sleep(pause_sec)
 
-        if root_activity and curr_activity_norm and curr_activity_norm == root_activity:
-            signals.append("activity_match")
-
-        if self._explore_root_element_keys:
-            overlap = 0.0
-            if curr_element_keys is None:
-                curr_element_keys = set()
-            if curr_element_keys:
-                overlap = self._element_key_overlap_ratio(self._explore_root_element_keys, curr_element_keys)
-            if overlap >= 0.55:
-                signals.append(f"a11y_sig_match:{overlap:.2f}")
-
-        if len(signals) >= 2:
-            return True, "|".join(signals)
-        return False, "|".join(signals) if signals else "weak_match"
+    def _select_replay_actions_for_rollback(self) -> list[json_action.JSONAction]:
+        source_actions = self._replay_action_history or self._reasoning_action_history
+        if not source_actions:
+            return []
+        safe_types = {
+            json_action.OPEN_APP,
+            json_action.NAVIGATE_HOME,
+            json_action.NAVIGATE_BACK,
+        }
+        filtered: list[json_action.JSONAction] = []
+        for action_dict in source_actions:
+            try:
+                action = json_action.JSONAction(**action_dict)
+            except Exception:  # pylint: disable=broad-exception-caught
+                continue
+            if action.action_type in safe_types:
+                filtered.append(action)
+        if not filtered:
+            return []
+        keep = max(1, int(getattr(self, "rollback_replay_max_actions", 3)))
+        return filtered[-keep:]
 
     def _rollback_to_root(
         self,
@@ -2415,10 +2431,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         enable_replay: bool = True,
         trigger: str = "",
     ) -> dict[str, Any]:
-        if bool(getattr(self, "basic_sequential_exploration", False)) and self.enable_sequential_exploration:
-            # Basic sequential mode: avoid home+replay fallback that can move us far
-            # away from the original page and add unstable side effects.
-            enable_replay = False
+        back_limit = 2
         result = {
             "trigger": trigger or "unspecified",
             "success": False,
@@ -2444,16 +2457,14 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
 
         rollback_success = False
         with self._rollback_lock:
-            for i in range(max_depth):
+            for i in range(back_limit + 1):
                 if self._explore_stop_event.is_set() and str(result["trigger"]).startswith("explore_"):
                     result["mode"] = "interrupted"
                     return result
                 with self._ui_lock:
-                    state = self.env.get_state(wait_to_stabilize=False)
+                    state = self.env.get_state(wait_to_stabilize=True)
                 same, same_reason = self._same_root_page(
                     state.pixels,
-                    curr_activity=self._foreground_activity_name(),
-                    curr_element_keys=self._state_element_keys(state),
                 )
                 if same:
                     rollback_success = True
@@ -2467,49 +2478,48 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                     )
                     break
 
+                if i >= back_limit:
+                    break
                 self._emit_log(
-                    f"trigger={result['trigger']} rollback_back#{i + 1}/{max_depth} "
+                    f"trigger={result['trigger']} rollback_back#{i + 1}/{back_limit} "
                     f"from_page=({self._state_page_hint(state)})",
                     tag="ROLLBACK",
                 )
                 with self._ui_lock:
                     self.env.execute_action(json_action.JSONAction(action_type=json_action.NAVIGATE_BACK))
                 result["back_presses"] += 1
+                self._rollback_pause()
 
             if not rollback_success and enable_replay:
                 if self._explore_stop_event.is_set() and str(result["trigger"]).startswith("explore_"):
                     result["mode"] = "interrupted"
                     return result
-                result["mode"] = "home_replay"
+                result["mode"] = "replay"
                 self._emit_log(
-                    f"trigger={result['trigger']} rollback_fallback=navigate_home+replay",
+                    f"trigger={result['trigger']} rollback_fallback=replay",
                     tag="ROLLBACK",
                 )
-                with self._ui_lock:
-                    self.env.execute_action(json_action.JSONAction(action_type=json_action.NAVIGATE_HOME))
-                replay_actions = self._replay_action_history or self._reasoning_action_history
-                for action_dict in replay_actions:
-                    try:
-                        action = json_action.JSONAction(**action_dict)
-                    except Exception:  # pylint: disable=broad-exception-caught
-                        continue
-                    if action.action_type == json_action.OPEN_APP:
-                        reset_info = self._replay_open_app_with_force_stop(action.app_name)
-                        result["replay_open_resets"].append(reset_info)
-                    else:
-                        with self._ui_lock:
-                            self.env.execute_action(action)
+                replay_actions = self._select_replay_actions_for_rollback()
+                if not replay_actions:
+                    self._emit_log(
+                        f"trigger={result['trigger']} rollback_replay_skipped reason=no_safe_actions",
+                        tag="ROLLBACK",
+                    )
+                for action in replay_actions:
+                    with self._ui_lock:
+                        self.env.execute_action(action)
                     result["replayed_actions"] += 1
+                    self._rollback_pause()
 
                 with self._ui_lock:
-                    final_state = self.env.get_state(wait_to_stabilize=False)
+                    final_state = self.env.get_state(wait_to_stabilize=True)
                 same, same_reason = self._same_root_page(
                     final_state.pixels,
-                    curr_activity=self._foreground_activity_name(),
-                    curr_element_keys=self._state_element_keys(final_state),
                 )
                 result["success"] = bool(same)
                 result["matched_by"] = same_reason
+                if not same:
+                    result["mode"] = "replay_failed"
                 self._emit_log(
                     f"trigger={result['trigger']} rollback_replay_done success={result['success']} "
                     f"replayed={result['replayed_actions']} matched_by={same_reason} "
@@ -3633,7 +3643,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 if not same_root:
                     rollback_info = self._rollback_to_root(
                         max_depth=self.rollback_backtrack_limit,
-                        enable_replay=False,
+                        enable_replay=True,
                         trigger="unexpected_delete_dialog_restore",
                     )
                     try:
@@ -4018,7 +4028,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             )
 
             with self._ui_lock:
-                root_state = self.env.get_state(wait_to_stabilize=False)
+                root_state = self.env.get_state(wait_to_stabilize=True)
             same_root, same_reason = self._same_root_page(
                 root_state.pixels,
                 curr_activity=self._foreground_activity_name(),
@@ -4035,7 +4045,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                     tag="EXPLORE",
                 )
                 with self._ui_lock:
-                    root_state = self.env.get_state(wait_to_stabilize=False)
+                    root_state = self.env.get_state(wait_to_stabilize=True)
                 same_root, same_reason = self._same_root_page(
                     root_state.pixels,
                     curr_activity=self._foreground_activity_name(),
@@ -4047,11 +4057,10 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             )
             if not same_root:
                 self._emit_log(
-                    f"step={source_step} branch={branch_id} root_check_failed_after_recovery -> skip_branch",
+                    f"step={source_step} branch={branch_id} root_check_failed_after_recovery -> stop_explore",
                     tag="EXPLORE",
                 )
-                branches_done += 1
-                continue
+                break
             branch_max_depth = max_depth
             branch_depth_topk = depth_topk
 
@@ -4157,6 +4166,12 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                     f"step={source_step} branch={branch_id} rollback_result={rollback_info}",
                     tag="EXPLORE",
                 )
+                if not bool(rollback_info.get("success")):
+                    self._emit_log(
+                        f"step={source_step} branch={branch_id} rollback_failed_after_root_click_fail -> stop_explore",
+                        tag="EXPLORE",
+                    )
+                    break
                 branches_done += 1
                 continue
 
@@ -4177,7 +4192,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 and not self._explore_stop_event.is_set()
             ):
                 with self._ui_lock:
-                    state = self.env.get_state(wait_to_stabilize=False)
+                    state = self.env.get_state(wait_to_stabilize=True)
                 depth_candidates, n_candidates = self._pick_topk(
                     ui_elements=state.ui_elements,
                     goal_queries=goal_queries,
@@ -4298,11 +4313,10 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             )
             if not bool(rollback_info.get("success")):
                 self._emit_log(
-                    f"step={source_step} branch={branch_id} dropped reason=rollback_not_restored",
+                    f"step={source_step} branch={branch_id} dropped reason=rollback_not_restored -> stop_explore",
                     tag="EXPLORE",
                 )
-                branches_done += 1
-                continue
+                break
             trunk_obs = branch_candidate.get("trunk") or {}
             trunk_useful = bool(trunk_obs.get("is_useful"))
             has_useful_leaf = bool(branch_candidate.get("leaf_observations"))
@@ -4888,9 +4902,16 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         if not self.actions:
             return "None yet."
 
+        def _sanitize_summary_text(text: str) -> str:
+            cleaned = str(text or "")
+            cleaned = re.sub(r"<tool_call>.*?</tool_call>", " ", cleaned, flags=re.IGNORECASE | re.DOTALL)
+            cleaned = re.sub(r"\{[^{}]{0,220}\}", " ", cleaned)
+            cleaned = cleaned.replace("\t", " ").replace("\n", " ")
+            return _normalize_space(cleaned)
+
         tail_actions = self.actions[-limit:]
         tail_history = self.history[-len(tail_actions) :] if self.history else []
-        lines: list[str] = []
+        compressed: list[tuple[str, int]] = []
         for idx, entry in enumerate(tail_actions, start=1):
             fallback = tail_history[idx - 1] if idx - 1 < len(tail_history) else ""
             summary = ""
@@ -4900,6 +4921,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                     or entry.get("summary")
                     or ""
                 )
+                summary = _sanitize_summary_text(summary)
                 if not summary:
                     summary = self._simplify_action_entry(entry, fallback=fallback)
                 parse_error = _normalize_space(entry.get("parse_error") or "")
@@ -4913,8 +4935,21 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 summary = self._simplify_history_item(fallback)
             if len(summary) > 120:
                 summary = summary[:120].rstrip(" ,.;:") + "..."
-            lines.append(f"{idx}. {summary}")
-        return "\n".join(lines) if lines else "None yet."
+            if compressed and compressed[-1][0] == summary:
+                prev_text, prev_count = compressed[-1]
+                compressed[-1] = (prev_text, prev_count + 1)
+            else:
+                compressed.append((summary, 1))
+
+        if not compressed:
+            return "None yet."
+        lines: list[str] = []
+        for idx, (text, count) in enumerate(compressed, start=1):
+            if count > 1:
+                lines.append(f"{idx}. {text} (x{count})")
+            else:
+                lines.append(f"{idx}. {text}")
+        return "\n".join(lines)
 
     def _summarize_explore_candidates(self, candidates: list[dict[str, Any]], max_items: int = 4) -> str:
         if not candidates:
@@ -5358,7 +5393,6 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                     )
 
         clues_label = "Sequential explorer clues" if self.enable_sequential_exploration else "Parallel explorer clues"
-        prompt_history = self._history_prompt_text(max_items=8)
         prompt_history_summary = self._history_summary_text(max_items=8)
         prompt_explore_summary = self._summarize_explore_candidates(
             prompt_explore_candidates,
@@ -5366,9 +5400,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         )
         user_text = (
             f"Task:\n{goal}\n\n"
-            f"History actions:\n{prompt_history}\n\n"
             f"History summaries:\n{prompt_history_summary}\n\n"
-            f"Execution feedback:\n{self._execution_feedback or 'None.'}\n\n"
             f"{clues_label}:\n{clues or 'None.'}\n\n"
             f"Exploration hint summary:\n{prompt_explore_summary}\n\n"
             "Current screenshot is attached below.\n"

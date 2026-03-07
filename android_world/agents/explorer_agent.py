@@ -63,7 +63,7 @@ except Exception:  # pylint: disable=broad-exception-caught
 
 MAX_AGENT_STEPS = 15
 
-EXPLORER_MAI_SYSTEM_PROMPT = """You are a GUI agent. You are given a task, action history, execution feedback, explorer clues, explorer hints, and the current screenshot.
+EXPLORER_MAI_SYSTEM_PROMPT = """You are a GUI agent. You are given a task, history summaries, explorer clues, explorer hints, and the current screenshot.
 
 ## Output Format
 For each function call, return the thinking process in <thinking> </thinking> tags, and one json object with function name and arguments within <tool_call></tool_call> XML tags:
@@ -155,6 +155,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         explore_leaf_width: int = 4,
         explore_max_branches: int | None = None,
         rollback_backtrack_limit: int = 2,
+        rollback_settle_sec: float = 0.25,
+        rollback_replay_max_actions: int = 3,
         explore_action_pause_sec: float = 0.25,
         reasoning_sleep_sec: float = 0.0,
         embed_model_name: str = "sentence-transformers/paraphrase-MiniLM-L6-v2",
@@ -193,6 +195,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self.explore_leaf_width = max(1, int(explore_leaf_width))
         self.explore_max_branches = explore_max_branches
         self.rollback_backtrack_limit = max(1, int(rollback_backtrack_limit))
+        self.rollback_settle_sec = max(0.0, float(rollback_settle_sec))
+        self.rollback_replay_max_actions = max(1, int(rollback_replay_max_actions))
         self.explore_action_pause_sec = max(0.05, float(explore_action_pause_sec))
         self.reasoning_sleep_sec = max(0.0, float(reasoning_sleep_sec))
         self.embed_model_name = embed_model_name
@@ -1075,6 +1079,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             queries.append(text)
 
         # Prefer structured action records over free-form history text.
+        # Keep only semantic fields; action verbs/directions (e.g. swipe/up/back)
+        # tend to poison similarity ranking and cause repetitive navigation loops.
         for entry in (self.actions or [])[-4:]:
             if not isinstance(entry, dict):
                 continue
@@ -1082,10 +1088,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             args = tool_call.get("arguments") if isinstance(tool_call, dict) else {}
             if not isinstance(args, dict):
                 continue
-            action_name = _normalize_space(args.get("action") or args.get("action_type") or "")
-            if action_name:
-                _add_query(action_name, max_len=28)
-            for key in ("text", "app_name", "button", "direction", "status", "goal_status"):
+            for key in ("text", "app_name"):
                 value = _normalize_space(args.get(key) or "")
                 if value:
                     _add_query(value, max_len=64)
@@ -1097,13 +1100,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 text = _normalize_space(item)
                 if not text:
                     continue
-                action_match = re.search(r"action=([a-zA-Z_]+)", text, flags=re.IGNORECASE)
-                if not action_match:
-                    action_match = re.search(r"\[(?:llm|fallback[^\]]*)\]\s*([a-zA-Z_]+)", text, flags=re.IGNORECASE)
-                action_name = _normalize_space(action_match.group(1)) if action_match else ""
-                if action_name:
-                    _add_query(action_name, max_len=28)
-                for key in ("text", "app_name", "button", "direction", "status", "goal_status"):
+                for key in ("text", "app_name"):
                     field_match = re.search(rf"{key}=([^|]+)", text, flags=re.IGNORECASE)
                     if not field_match:
                         field_match = re.search(rf"{key}\s*:\s*([^|;]+)", text, flags=re.IGNORECASE)
@@ -1277,6 +1274,9 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             ("broccoli", "Broccoli", ["com.flauschcode.broccoli", "broccoli"]),
             ("simple calendar", "Simple Calendar Pro", ["com.simplemobiletools.calendar.pro", "calendar"]),
             ("calendar pro", "Simple Calendar Pro", ["com.simplemobiletools.calendar.pro", "calendar"]),
+            ("simple gallery pro", "Simple Gallery Pro", ["com.simplemobiletools.gallery.pro", "gallery"]),
+            ("simple gallery", "Simple Gallery Pro", ["com.simplemobiletools.gallery.pro", "gallery"]),
+            ("pro expense", "Pro Expense", ["com.arduia.expense", "expense"]),
             ("audio recorder", "Audio Recorder", ["com.dimowner.audiorecorder", "audiorecorder"]),
         ]
         for marker, app_name, hints in mappings:
@@ -1716,6 +1716,26 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         return False
 
     @staticmethod
+    def _is_launcher_noise_element(element: Any) -> bool:
+        rid = _normalize_space(
+            getattr(element, "resource_id", "") or getattr(element, "resource_name", "")
+        ).lower()
+        text = _normalize_space(getattr(element, "text", "")).lower()
+        desc = _normalize_space(getattr(element, "content_description", "")).lower()
+        merged = " ".join([rid, text, desc])
+        if any(token in rid for token in ("nexuslauncher:id/date", "nexuslauncher:id/title_text")):
+            return True
+        if re.fullmatch(r"\d{1,2}:\d{2}(:\d{2})?", text):
+            return True
+        if text and re.search(r"\b(mon|tue|wed|thu|fri|sat|sun)\b", text):
+            return True
+        if "predicted app" in desc and not bool(getattr(element, "is_clickable", False)):
+            return True
+        if "home" == desc and not bool(getattr(element, "is_clickable", False)):
+            return True
+        return bool("launcher" in rid and "date" in merged)
+
+    @staticmethod
     def _is_meaningless_element(element: Any, intent_flags: dict[str, bool] | None = None) -> bool:
         intent_flags = intent_flags or {"input": False, "select": False, "nav": False}
         merged = ExplorerElementAgent._element_merged_text(element)
@@ -1727,6 +1747,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         if ExplorerElementAgent._is_date_time_picker_like(element):
             return True
         if ExplorerElementAgent._is_system_ui_noise_element(element):
+            return True
+        if ExplorerElementAgent._is_launcher_noise_element(element):
             return True
         # Keep only obvious no-op widgets filtered out.
         if "progressbar" in cls:
@@ -2253,51 +2275,47 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self,
         curr_pixels: np.ndarray,
         curr_activity: str | None = None,
-        phash_thr: int = 18,
+        phash_thr: int = 10,
         mae_thr: float = 14.0,
     ) -> tuple[bool, str]:
-        if self._explore_root_pixels is None or self._explore_root_hash is None:
+        del curr_activity, mae_thr
+        if self._explore_root_hash is None:
             return False, "missing_root"
-        root_activity = self._normalize_activity_name(self._explore_root_activity)
-        root_pkg = self._activity_package_name(self._explore_root_activity)
-        if curr_activity is None:
-            curr_activity = self._foreground_activity_name()
-        curr_activity_norm = self._normalize_activity_name(curr_activity)
-        curr_pkg = self._activity_package_name(curr_activity)
-        different_package = bool(
-            root_pkg and curr_pkg and curr_pkg != root_pkg
-        )
-        different_activity = bool(
-            root_activity and curr_activity_norm and curr_activity_norm != root_activity
-        )
         try:
             curr_hash = _phash_pixels(curr_pixels)
-            phash_diff = _hash_diff(self._explore_root_hash, curr_hash)
-            if phash_diff <= int(phash_thr):
-                if different_package:
-                    return False, f"pkg_mismatch_phash:{phash_diff}"
-                if different_activity:
-                    # Avoid false-positive rollback verification across different screens
-                    # that happen to look visually similar.
-                    pass
-                else:
-                    return True, "phash"
+            phash_diff = int(_hash_diff(self._explore_root_hash, curr_hash))
         except Exception:  # pylint: disable=broad-exception-caught
-            pass
-        try:
-            mae = _mae_small(self._explore_root_pixels, curr_pixels)
-            if different_package and mae <= mae_thr:
-                return False, f"pkg_mismatch_mae:{mae:.2f}"
-            if different_activity:
-                strict_thr = min(float(mae_thr), 11.0)
-                if mae <= strict_thr:
-                    return True, f"activity_mismatch_mae:{mae:.2f}"
-                return False, f"activity_mismatch_mae:{mae:.2f}"
-            if mae <= mae_thr:
-                return True, f"mae:{mae:.2f}"
-            return False, f"mae:{mae:.2f}"
-        except Exception:  # pylint: disable=broad-exception-caught
-            return False, "mae:err"
+            return False, "phash_err"
+        if phash_diff <= int(phash_thr):
+            return True, f"phash<={int(phash_thr)}:{phash_diff}"
+        return False, f"phash>{int(phash_thr)}:{phash_diff}"
+
+    def _rollback_pause(self) -> None:
+        pause_sec = max(0.0, float(getattr(self, "rollback_settle_sec", 0.0)))
+        if pause_sec > 0.0:
+            time.sleep(pause_sec)
+
+    def _select_replay_actions_for_rollback(self) -> list[json_action.JSONAction]:
+        source_actions = self._replay_action_history or self._reasoning_action_history
+        if not source_actions:
+            return []
+        safe_types = {
+            json_action.OPEN_APP,
+            json_action.NAVIGATE_HOME,
+            json_action.NAVIGATE_BACK,
+        }
+        filtered: list[json_action.JSONAction] = []
+        for action_dict in source_actions:
+            try:
+                action = json_action.JSONAction(**action_dict)
+            except Exception:  # pylint: disable=broad-exception-caught
+                continue
+            if action.action_type in safe_types:
+                filtered.append(action)
+        if not filtered:
+            return []
+        keep = max(1, int(getattr(self, "rollback_replay_max_actions", 3)))
+        return filtered[-keep:]
 
     def _rollback_to_root(
         self,
@@ -2305,6 +2323,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         enable_replay: bool = True,
         trigger: str = "",
     ) -> dict[str, Any]:
+        back_limit = 2
         result = {
             "trigger": trigger or "unspecified",
             "success": False,
@@ -2330,15 +2349,14 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
 
         rollback_success = False
         with self._rollback_lock:
-            for i in range(max_depth):
+            for i in range(back_limit + 1):
                 if self._explore_stop_event.is_set() and str(result["trigger"]).startswith("explore_"):
                     result["mode"] = "interrupted"
                     return result
                 with self._ui_lock:
-                    state = self.env.get_state(wait_to_stabilize=False)
+                    state = self.env.get_state(wait_to_stabilize=True)
                 same, same_reason = self._same_root_page(
                     state.pixels,
-                    curr_activity=self._foreground_activity_name(),
                 )
                 if same:
                     rollback_success = True
@@ -2352,75 +2370,52 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                     )
                     break
 
+                if i >= back_limit:
+                    break
                 self._emit_log(
-                    f"trigger={result['trigger']} rollback_back#{i + 1}/{max_depth} "
+                    f"trigger={result['trigger']} rollback_back#{i + 1}/{back_limit} "
                     f"from_page=({self._state_page_hint(state)})",
                     tag="ROLLBACK",
                 )
                 with self._ui_lock:
                     self.env.execute_action(json_action.JSONAction(action_type=json_action.NAVIGATE_BACK))
                 result["back_presses"] += 1
+                self._rollback_pause()
 
             if not rollback_success and enable_replay:
                 if self._explore_stop_event.is_set() and str(result["trigger"]).startswith("explore_"):
                     result["mode"] = "interrupted"
                     return result
-                last_open_app = self._last_opened_app_from_history()
-                if not last_open_app:
-                    result["mode"] = "missing_open_app_in_history"
-                    result["matched_by"] = "missing_open_app_in_history"
-                    self._emit_log(
-                        f"trigger={result['trigger']} rollback_failed reason=missing_open_app_in_history",
-                        tag="ROLLBACK",
-                    )
-                    return result
-
-                result["mode"] = "home_open_app"
+                result["mode"] = "replay"
                 self._emit_log(
-                    f"trigger={result['trigger']} rollback_fallback=navigate_home+open_app app={last_open_app}",
+                    f"trigger={result['trigger']} rollback_fallback=replay",
                     tag="ROLLBACK",
                 )
-                with self._ui_lock:
-                    self.env.execute_action(json_action.JSONAction(action_type=json_action.NAVIGATE_HOME))
-                home_state = self._get_state_after_action_stable(
-                    before_pixels=None,
-                    timeout_sec=0.8,
-                    interval_sec=0.12,
-                )
-                home_pixels = home_state.pixels if home_state is not None else None
-
-                with self._ui_lock:
-                    self.env.execute_action(
-                        json_action.JSONAction(action_type=json_action.OPEN_APP, app_name=last_open_app)
-                    )
-                result["replayed_actions"] = 1
-
-                final_state = self._get_state_after_action_stable(
-                    before_pixels=home_pixels,
-                    timeout_sec=1.2,
-                    interval_sec=0.12,
-                )
-                if final_state is not None:
-                    same, same_reason = self._same_root_page(
-                        final_state.pixels,
-                        curr_activity=self._foreground_activity_name(),
-                    )
-                    result["success"] = bool(same)
-                    result["matched_by"] = same_reason
+                replay_actions = self._select_replay_actions_for_rollback()
+                if not replay_actions:
                     self._emit_log(
-                        f"trigger={result['trigger']} rollback_home_open_done success={result['success']} "
-                        f"replayed={result['replayed_actions']} matched_by={same_reason} "
-                        f"final_page=({self._state_page_hint(final_state)})",
+                        f"trigger={result['trigger']} rollback_replay_skipped reason=no_safe_actions",
                         tag="ROLLBACK",
                     )
-                else:
-                    result["success"] = False
-                    result["matched_by"] = "missing_final_state"
-                    self._emit_log(
-                        f"trigger={result['trigger']} rollback_home_open_done success=False "
-                        f"reason=missing_final_state",
-                        tag="ROLLBACK",
-                    )
+                for action in replay_actions:
+                    with self._ui_lock:
+                        self.env.execute_action(action)
+                    result["replayed_actions"] += 1
+                    self._rollback_pause()
+
+                with self._ui_lock:
+                    final_state = self.env.get_state(wait_to_stabilize=True)
+                same, same_reason = self._same_root_page(final_state.pixels)
+                result["success"] = bool(same)
+                result["matched_by"] = same_reason
+                if not same:
+                    result["mode"] = "replay_failed"
+                self._emit_log(
+                    f"trigger={result['trigger']} rollback_replay_done success={result['success']} "
+                    f"replayed={result['replayed_actions']} matched_by={same_reason} "
+                    f"final_page=({self._state_page_hint(final_state)})",
+                    tag="ROLLBACK",
+                )
             elif not rollback_success:
                 result["mode"] = "backtrack_failed"
                 self._emit_log(
@@ -2611,7 +2606,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
 
         rollback_info = self._rollback_to_root(
             max_depth=self.rollback_backtrack_limit,
-            enable_replay=False,
+            enable_replay=True,
             trigger=f"reasoning_step_{step_no}_post_llm_backtrack",
         )
         stable_after, stable_after_reasons = self._is_root_stable(checks=2, interval_sec=0.12)
@@ -3055,7 +3050,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             )
 
             with self._ui_lock:
-                root_state = self.env.get_state(wait_to_stabilize=False)
+                root_state = self.env.get_state(wait_to_stabilize=True)
             same_root, same_reason = self._same_root_page(
                 root_state.pixels,
                 curr_activity=self._foreground_activity_name(),
@@ -3071,7 +3066,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                     tag="EXPLORE",
                 )
                 with self._ui_lock:
-                    root_state = self.env.get_state(wait_to_stabilize=False)
+                    root_state = self.env.get_state(wait_to_stabilize=True)
                 same_root, same_reason = self._same_root_page(
                     root_state.pixels,
                     curr_activity=self._foreground_activity_name(),
@@ -3082,11 +3077,10 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             )
             if not same_root:
                 self._emit_log(
-                    f"step={source_step} branch={branch_id} root_check_failed_after_recovery -> skip_branch",
+                    f"step={source_step} branch={branch_id} root_check_failed_after_recovery -> stop_explore",
                     tag="EXPLORE",
                 )
-                branches_done += 1
-                continue
+                break
             branch_max_depth = max_depth
             branch_depth_topk = depth_topk
 
@@ -3192,6 +3186,12 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                     f"step={source_step} branch={branch_id} rollback_result={rollback_info}",
                     tag="EXPLORE",
                 )
+                if not bool(rollback_info.get("success")):
+                    self._emit_log(
+                        f"step={source_step} branch={branch_id} rollback_failed_after_root_click_fail -> stop_explore",
+                        tag="EXPLORE",
+                    )
+                    break
                 branches_done += 1
                 continue
             if bool(obs_root.get("system_ui_triggered")):
@@ -3208,6 +3208,12 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                     f"step={source_step} branch={branch_id} rollback_result={rollback_info}",
                     tag="EXPLORE",
                 )
+                if not bool(rollback_info.get("success")):
+                    self._emit_log(
+                        f"step={source_step} branch={branch_id} rollback_failed_after_root_system_ui -> stop_explore",
+                        tag="EXPLORE",
+                    )
+                    break
                 branches_done += 1
                 continue
 
@@ -3228,7 +3234,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 and not self._explore_stop_event.is_set()
             ):
                 with self._ui_lock:
-                    state = self.env.get_state(wait_to_stabilize=False)
+                    state = self.env.get_state(wait_to_stabilize=True)
                 depth_candidates, n_candidates = self._pick_topk(
                     ui_elements=state.ui_elements,
                     goal_queries=goal_queries,
@@ -3356,11 +3362,10 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             )
             if not bool(rollback_info.get("success")):
                 self._emit_log(
-                    f"step={source_step} branch={branch_id} dropped reason=rollback_not_restored",
+                    f"step={source_step} branch={branch_id} dropped reason=rollback_not_restored -> stop_explore",
                     tag="EXPLORE",
                 )
-                branches_done += 1
-                continue
+                break
             trunk_obs = branch_candidate.get("trunk") or {}
             trunk_useful = bool(trunk_obs.get("is_useful"))
             has_useful_leaf = bool(branch_candidate.get("leaf_observations"))
@@ -4241,11 +4246,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                     trigger_reason=explore_gate_reason,
                 )
 
-        prompt_history = self._history_prompt_text(max_items=8)
         user_text = (
             f"Task: {goal}\n\n"
-            f"History:\n{prompt_history}\n\n"
-            f"Execution feedback:\n{self._execution_feedback or 'None.'}\n\n"
             f"Parallel explorer clues:\n{clues or 'None.'}\n\n"
             f"Explorer hints:\n{self._hints_text(hints)}"
         )
