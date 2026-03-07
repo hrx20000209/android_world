@@ -58,27 +58,35 @@ AVAILABLE_APPS = [
     "Simple Calendar Pro",
 ]
 
-MAX_AGENT_STEPS = 15
+MAX_AGENT_STEPS = 20
 
 
 GELAB_SYSTEM_PROMPT = """
-你是一个手机 GUI-Agent 操作专家。你会收到：任务目标、历史动作、执行反馈、探索线索、当前截图。
+你是一个手机 GUI-Agent 操作专家。你会收到：任务目标、历史动作、当前截图。
 请输出“下一步唯一动作”，坐标使用 0-1000 归一化空间（左上角原点，x 向右，y 向下）。
 
 动作空间（GELAB）：
 1. CLICK：action:CLICK\tpoint:x,y
 2. TYPE：action:TYPE\tvalue:输入文本\tpoint:x,y
 3. COMPLETE：action:COMPLETE\treturn:最终回复
-4. WAIT：action:WAIT\tvalue:秒数
-5. AWAKE：action:AWAKE\tvalue:应用名
-6. INFO：action:INFO\tvalue:提问内容
-7. ABORT：action:ABORT\tvalue:原因
-8. SLIDE：action:SLIDE\tpoint1:x1,y1\tpoint2:x2,y2
-9. LONGPRESS：action:LONGPRESS\tpoint:x,y
+4. AWAKE：action:AWAKE\tvalue:应用名
+5. INFO：action:INFO\tvalue:提问内容
+6. ABORT：action:ABORT\tvalue:原因
+7. SLIDE：action:SLIDE\tpoint1:x1,y1\tpoint2:x2,y2
+8. LONGPRESS：action:LONGPRESS\tpoint:x,y
+9. ANSWER：action:ANSWER\tvalue:最终答案（问答类任务推荐）
 
 首选输出格式（推荐）：
 <THINK>简短思考</THINK>
 explain:本步目的\taction:动作名\t...参数...\tsummary:本步后简短进展
+
+官方 action_tool 格式（强兼容，优先推荐）：
+{"action_type":"CLICK","point":[x,y]}
+{"action_type":"TYPE","value":"文本","point":[x,y]}
+{"action_type":"HOT_KEY","key":"ENTER|BACK|HOME"}
+{"action_type":"SLIDE","point1":[x1,y1],"point2":[x2,y2]}
+{"action_type":"ANSWER","value":"最终答案"}
+{"action_type":"COMPLETE","status":"SUCCESS|FAILURE","value":"可选结果"}
 
 兼容格式（可选）：
 <tool_call>
@@ -91,6 +99,7 @@ explain:本步目的\taction:动作名\t...参数...\tsummary:本步后简短进
 - action 字段只能是纯动作名（如 CLICK 或 click）。
 - 若使用 tool_call JSON，坐标必须放在 coordinate 数组，不要写成 "action":"CLICK\\tpoint:..."
 - 优先推动任务完成，避免无效重复动作。
+- 不要输出 Wait 这个action
 """.strip()
 
 
@@ -180,7 +189,22 @@ def _extract_coordinate(arguments: dict[str, Any], *keys: str) -> list[int] | No
                 return [int(round(float(value[0]))), int(round(float(value[1])))]
             except Exception:  # pylint: disable=broad-exception-caught
                 continue
+        if isinstance(value, str):
+            nums = re.findall(r"-?\d+(?:\.\d+)?", value)
+            if len(nums) >= 2:
+                try:
+                    return [int(round(float(nums[0]))), int(round(float(nums[1])))]
+                except Exception:  # pylint: disable=broad-exception-caught
+                    continue
     return None
+
+
+def _extract_direction(value: Any) -> str:
+    text = _normalize_space(value).lower()
+    for direction in ("up", "down", "left", "right"):
+        if re.search(rf"\b{direction}\b", text):
+            return direction
+    return ""
 
 
 def _normalize_tool_call(tool_obj: Any) -> dict[str, Any]:
@@ -220,7 +244,7 @@ def _normalize_tool_call(tool_obj: Any) -> dict[str, Any]:
             normalized_args["coordinate"] = coord
     elif action_name in ("swipe", "slide"):
         normalized_args["action"] = "swipe"
-        direction = _normalize_space(args.get("direction")).lower()
+        direction = _extract_direction(args.get("direction"))
         start_coordinate = _extract_coordinate(args, "start_coordinate", "point1")
         end_coordinate = _extract_coordinate(args, "end_coordinate", "point2")
         if not direction and start_coordinate is not None and end_coordinate is not None:
@@ -340,13 +364,30 @@ def _parse_key_values(kv_text: str) -> OrderedDict[str, Any]:
         "action_type",
         "summary",
         "value",
+        "respond",
+        "answer",
+        "response",
+        "reply",
+        "final_answer",
+        "text",
+        "content",
+        "app_name",
         "return",
+        "status",
+        "key",
         "point",
+        "coordinate",
+        "coordinates",
         "point1",
         "point2",
+        "start_coordinate",
+        "end_coordinate",
+        "direction",
+        "button",
     ]
     pattern = re.compile(
-        r"(^|[\t\n])\s*(%s)\s*:" % "|".join(re.escape(field) for field in fields),
+        r'(^|[\t\n])\s*["\']?(%s)["\']?\s*(?:[:=：]|[\(\[\{])'
+        % "|".join(re.escape(field) for field in fields),
         flags=re.IGNORECASE,
     )
     matches = list(pattern.finditer(kv_text))
@@ -387,6 +428,206 @@ def _parse_tool_call_response(response_text: str, cot: str = "") -> OrderedDict[
     return parsed
 
 
+_ACTION_ALIASES = {
+    "TAP": "CLICK",
+    "PRESS": "CLICK",
+    "LONG_CLICK": "LONGPRESS",
+    "LONGCLICK": "LONGPRESS",
+    "LONG_PRESS": "LONGPRESS",
+    "LONGPRESS": "LONGPRESS",
+    "DOUBLE_TAP": "DOUBLECLICK",
+    "DOUBLE_CLICK": "DOUBLECLICK",
+    "DOUBLECLICK": "DOUBLECLICK",
+    "HOT_KEY": "HOTKEY",
+    "HOTKEY": "HOTKEY",
+    "CALL_USER": "CALLUSER",
+    "CALLUSER": "CALLUSER",
+    "SWIPE": "SLIDE",
+    "OPEN_APP": "AWAKE",
+    "OPEN": "AWAKE",
+    "ANSWER": "ANSWER",
+    "RESPOND": "ANSWER",
+    "RESPONSE": "ANSWER",
+    "REPLY": "ANSWER",
+    "FINAL_ANSWER": "ANSWER",
+    "READ": "ANSWER",
+    "TERMINATE": "COMPLETE",
+    "STATUS": "COMPLETE",
+}
+
+
+def _canonical_action_name(raw_action: Any) -> str:
+    text = _normalize_space(raw_action).upper().replace("-", "_")
+    if not text:
+        raise seeact_utils.ParseActionError("missing GELAB action field")
+    match = re.search(r"[A-Z_]+", text)
+    if not match:
+        raise seeact_utils.ParseActionError(f"invalid GELAB action field: {raw_action}")
+    token = match.group(0)
+    return _ACTION_ALIASES.get(token, token)
+
+
+def _extract_norm_point_from_text(text: str, keys: tuple[str, ...]) -> list[int] | None:
+    for key in keys:
+        match = re.search(
+            rf'(?i)\b["\']?{re.escape(key)}["\']?\s*(?:[:=：]|[\(\[\{{])\s*(-?\d+(?:\.\d+)?)\s*[,，]\s*(-?\d+(?:\.\d+)?)',
+            text,
+        )
+        if match:
+            return _clip_norm_point([int(round(float(match.group(1)))), int(round(float(match.group(2))))])
+    return None
+
+
+def _extract_unlabeled_points_from_text(text: str, max_points: int = 3) -> list[list[int]]:
+    points: list[list[int]] = []
+    for match in re.finditer(
+        r"[\[\(]\s*(-?\d+(?:\.\d+)?)\s*[,，]\s*(-?\d+(?:\.\d+)?)\s*[\]\)]",
+        str(text or ""),
+    ):
+        points.append(
+            _clip_norm_point([int(round(float(match.group(1)))), int(round(float(match.group(2))))])
+        )
+        if len(points) >= max(1, int(max_points)):
+            break
+    return points
+
+
+def _extract_text_field_from_text(text: str, keys: tuple[str, ...]) -> str:
+    for key in keys:
+        match = re.search(
+            rf'(?is)\b["\']?{re.escape(key)}["\']?\s*(?:[:=：]|[\(\[\{{])\s*(.+?)(?:[\t\r\n]|$)',
+            text,
+        )
+        if match:
+            value = _normalize_space(match.group(1).strip(" \t\r\n\"'}]"))
+            if value:
+                return value
+    return ""
+
+
+def _apply_text_fallback_fields(action: OrderedDict[str, Any], kv_text: str) -> None:
+    action_name = str(action.get("action") or "").upper()
+    unlabeled_points = _extract_unlabeled_points_from_text(kv_text, max_points=4)
+    if action_name in {"CLICK", "LONGPRESS", "DOUBLECLICK", "TYPE"}:
+        if not any(key in action for key in ("point", "coordinate", "coordinates")):
+            point = _extract_norm_point_from_text(kv_text, ("point", "coordinate", "coordinates"))
+            if point is None and unlabeled_points:
+                point = unlabeled_points[0]
+            if point is not None:
+                action["point"] = point
+
+    if action_name == "SLIDE":
+        if "point1" not in action and "start_coordinate" not in action:
+            point1 = _extract_norm_point_from_text(kv_text, ("point1", "start_coordinate"))
+            if point1 is None and len(unlabeled_points) >= 1:
+                point1 = unlabeled_points[0]
+            if point1 is not None:
+                action["point1"] = point1
+        if "point2" not in action and "end_coordinate" not in action:
+            point2 = _extract_norm_point_from_text(kv_text, ("point2", "end_coordinate"))
+            if point2 is None and len(unlabeled_points) >= 2:
+                point2 = unlabeled_points[1]
+            if point2 is not None:
+                action["point2"] = point2
+        if "point" not in action and "direction" in action:
+            point = _extract_norm_point_from_text(kv_text, ("point", "coordinate", "coordinates"))
+            if point is None and unlabeled_points:
+                point = unlabeled_points[0]
+            if point is not None:
+                action["point"] = point
+        if "direction" not in action:
+            direction = _extract_direction(kv_text)
+            if direction:
+                action["direction"] = direction
+
+    if action_name in {"TYPE", "AWAKE", "INFO", "ABORT", "CALLUSER", "ANSWER"} and not action.get("value"):
+        value = _extract_text_field_from_text(
+            kv_text,
+            (
+                "value",
+                "text",
+                "app_name",
+                "return",
+                "answer",
+                "respond",
+                "response",
+                "reply",
+                "final_answer",
+                "content",
+            ),
+        )
+        if value:
+            action["value"] = value
+
+    if action_name == "HOTKEY" and not action.get("key"):
+        key = _extract_text_field_from_text(kv_text, ("key", "value"))
+        if key:
+            action["key"] = key
+
+    if action_name == "COMPLETE" and not action.get("status"):
+        status = _extract_text_field_from_text(kv_text, ("status",))
+        if status:
+            action["status"] = status
+
+
+def _parse_action_tool_json(response_text: str, cot: str = "") -> OrderedDict[str, Any]:
+    payload = _safe_json_loads(response_text)
+    if not isinstance(payload, dict):
+        raise seeact_utils.ParseActionError("action_tool payload is not a JSON object")
+
+    if isinstance(payload.get("arguments"), dict):
+        payload = dict(payload["arguments"])
+
+    raw_action = payload.get("action_type")
+    if not raw_action:
+        raise seeact_utils.ParseActionError("action_tool JSON missing action_type")
+
+    parsed = OrderedDict()
+    parsed["cot"] = cot
+    parsed["action"] = _canonical_action_name(raw_action)
+
+    for src, dst in (("summary", "summary"), ("explain", "explain"), ("status", "status"), ("key", "key")):
+        value = _normalize_space(payload.get(src))
+        if value:
+            parsed[dst] = value
+
+    for key in ("point", "coordinate", "coordinates"):
+        point = _extract_coordinate(payload, key)
+        if point is not None:
+            parsed["point"] = _clip_norm_point(point)
+            break
+
+    point1 = _extract_coordinate(payload, "point1", "start_coordinate")
+    point2 = _extract_coordinate(payload, "point2", "end_coordinate")
+    if point1 is not None:
+        parsed["point1"] = _clip_norm_point(point1)
+    if point2 is not None:
+        parsed["point2"] = _clip_norm_point(point2)
+
+    if "point" not in parsed:
+        x = _safe_int(payload.get("x"))
+        y = _safe_int(payload.get("y"))
+        if x is not None and y is not None:
+            parsed["point"] = _clip_norm_point([x, y])
+
+    direction = _extract_direction(payload.get("direction"))
+    if direction:
+        parsed["direction"] = direction
+
+    value = payload.get("value")
+    if value is None:
+        for key in ("text", "app_name", "return"):
+            if payload.get(key) is not None:
+                value = payload.get(key)
+                break
+    if value is not None:
+        parsed["value"] = str(value)
+    if payload.get("return") is not None:
+        parsed["return"] = str(payload.get("return"))
+
+    return parsed
+
+
 def parse_gelab_response(response_text: str) -> OrderedDict[str, Any]:
     if not response_text:
         raise seeact_utils.ParseActionError("empty GELAB response")
@@ -397,22 +638,48 @@ def parse_gelab_response(response_text: str) -> OrderedDict[str, Any]:
         if "action" not in action and "action_type" in action:
             action["action"] = action["action_type"]
         if "action" not in action:
+            answer_text = _normalize_space(
+                action.get("value")
+                or action.get("answer")
+                or action.get("respond")
+                or action.get("response")
+                or action.get("reply")
+                or action.get("final_answer")
+                or action.get("content")
+            )
+            if answer_text:
+                action["action"] = "ANSWER"
+                action["value"] = answer_text
+        if "action" not in action:
             raise seeact_utils.ParseActionError("missing GELAB action field")
-        action["action"] = str(action["action"]).strip().upper()
-        if "point" in action:
-            action["point"] = _parse_point(action["point"])
-        if "point1" in action:
-            action["point1"] = _parse_point(action["point1"])
-        if "point2" in action:
-            action["point2"] = _parse_point(action["point2"])
+        action["action"] = _canonical_action_name(action["action"])
+        for key in (
+            "point",
+            "coordinate",
+            "coordinates",
+            "point1",
+            "point2",
+            "start_coordinate",
+            "end_coordinate",
+        ):
+            if key in action:
+                action[key] = _parse_point(action[key])
+        _apply_text_fallback_fields(action, kv_text)
         return action
     except seeact_utils.ParseActionError as kv_error:
         try:
-            return _parse_tool_call_response(response_text, cot=cot)
-        except seeact_utils.ParseActionError as tool_error:
+            return _parse_action_tool_json(response_text, cot=cot)
+        except seeact_utils.ParseActionError as action_tool_error:
+            try:
+                return _parse_tool_call_response(response_text, cot=cot)
+            except seeact_utils.ParseActionError as tool_error:
+                raise seeact_utils.ParseActionError(
+                    f"{kv_error}; action-tool fallback failed: {action_tool_error}; tool-call fallback failed: {tool_error}"
+                ) from tool_error
+        except Exception as action_tool_error:  # pylint: disable=broad-exception-caught
             raise seeact_utils.ParseActionError(
-                f"{kv_error}; tool-call fallback failed: {tool_error}"
-            ) from tool_error
+                f"{kv_error}; action-tool fallback failed: {action_tool_error}"
+            ) from action_tool_error
 
 
 def gelab_action_to_json_action(
@@ -434,6 +701,16 @@ def gelab_action_to_json_action(
                 raise seeact_utils.ParseActionError("tool-call click missing coordinate")
             return (
                 json_action.JSONAction(action_type=json_action.CLICK, x=coordinate[0], y=coordinate[1]),
+                tool_call,
+                extras,
+            )
+
+        if tool_action in {"double_tap", "double_click"}:
+            coordinate = _extract_coordinate(arguments, "coordinate")
+            if coordinate is None:
+                raise seeact_utils.ParseActionError("tool-call double_tap missing coordinate")
+            return (
+                json_action.JSONAction(action_type=json_action.DOUBLE_TAP, x=coordinate[0], y=coordinate[1]),
                 tool_call,
                 extras,
             )
@@ -465,7 +742,7 @@ def gelab_action_to_json_action(
             )
 
         if tool_action == "swipe":
-            direction = _normalize_space(arguments.get("direction")).lower()
+            direction = _extract_direction(arguments.get("direction"))
             start_coordinate = _extract_coordinate(arguments, "start_coordinate")
             end_coordinate = _extract_coordinate(arguments, "end_coordinate")
             if not direction and start_coordinate is not None and end_coordinate is not None:
@@ -498,6 +775,16 @@ def gelab_action_to_json_action(
                 return json_action.JSONAction(action_type=json_action.KEYBOARD_ENTER), tool_call, extras
             raise seeact_utils.ParseActionError(f"unsupported system button: {button}")
 
+        if tool_action in {"hot_key", "hotkey"}:
+            key = _normalize_space(arguments.get("key") or arguments.get("value")).lower()
+            if key == "back":
+                return json_action.JSONAction(action_type=json_action.NAVIGATE_BACK), tool_call, extras
+            if key == "home":
+                return json_action.JSONAction(action_type=json_action.NAVIGATE_HOME), tool_call, extras
+            if key == "enter":
+                return json_action.JSONAction(action_type=json_action.KEYBOARD_ENTER), tool_call, extras
+            raise seeact_utils.ParseActionError(f"unsupported HOT_KEY: {key}")
+
         if tool_action == "wait":
             wait_value = max(1, _safe_int(arguments.get("value")) or 1)
             extras["wait_seconds"] = wait_value
@@ -505,6 +792,10 @@ def gelab_action_to_json_action(
 
         if tool_action == "answer":
             text = _normalize_space(arguments.get("text"))
+            return json_action.JSONAction(action_type=json_action.ANSWER, text=text), tool_call, extras
+
+        if tool_action == "call_user":
+            text = _normalize_space(arguments.get("text") or arguments.get("value"))
             return json_action.JSONAction(action_type=json_action.ANSWER, text=text), tool_call, extras
 
         if tool_action == "terminate":
@@ -522,9 +813,9 @@ def gelab_action_to_json_action(
         raise seeact_utils.ParseActionError(f"unsupported tool-call action: {tool_action}")
 
     if action_type == "CLICK":
-        point = parsed_action.get("point")
+        point = parsed_action.get("point") or parsed_action.get("coordinate") or parsed_action.get("coordinates")
         if point is None:
-            raise seeact_utils.ParseActionError("CLICK requires point")
+            raise seeact_utils.ParseActionError("CLICK requires point/coordinate")
         abs_point = _norm_to_abs(point, screen_size)
         tool_call["arguments"] = {"action": "click", "coordinate": abs_point}
         return (
@@ -534,9 +825,9 @@ def gelab_action_to_json_action(
         )
 
     if action_type == "LONGPRESS":
-        point = parsed_action.get("point")
+        point = parsed_action.get("point") or parsed_action.get("coordinate") or parsed_action.get("coordinates")
         if point is None:
-            raise seeact_utils.ParseActionError("LONGPRESS requires point")
+            raise seeact_utils.ParseActionError("LONGPRESS requires point/coordinate")
         abs_point = _norm_to_abs(point, screen_size)
         tool_call["arguments"] = {"action": "long_press", "coordinate": abs_point}
         return (
@@ -545,13 +836,26 @@ def gelab_action_to_json_action(
             extras,
         )
 
+    if action_type == "DOUBLECLICK":
+        point = parsed_action.get("point") or parsed_action.get("coordinate") or parsed_action.get("coordinates")
+        if point is None:
+            raise seeact_utils.ParseActionError("DOUBLECLICK requires point/coordinate")
+        abs_point = _norm_to_abs(point, screen_size)
+        tool_call["arguments"] = {"action": "double_tap", "coordinate": abs_point}
+        return (
+            json_action.JSONAction(action_type=json_action.DOUBLE_TAP, x=abs_point[0], y=abs_point[1]),
+            tool_call,
+            extras,
+        )
+
     if action_type == "TYPE":
         value = str(parsed_action.get("value") or "")
         if not value:
             raise seeact_utils.ParseActionError("TYPE requires value")
-        point = parsed_action.get("point")
+        point = parsed_action.get("point") or parsed_action.get("coordinate") or parsed_action.get("coordinates")
         if point is None:
-            raise seeact_utils.ParseActionError("TYPE requires point")
+            tool_call["arguments"] = {"action": "type", "text": value}
+            return json_action.JSONAction(action_type=json_action.INPUT_TEXT, text=value), tool_call, extras
         abs_point = _norm_to_abs(point, screen_size)
         tool_call["arguments"] = {"action": "type", "text": value, "coordinate": abs_point}
         return (
@@ -566,27 +870,33 @@ def gelab_action_to_json_action(
         )
 
     if action_type == "SLIDE":
-        point1 = parsed_action.get("point1")
-        point2 = parsed_action.get("point2")
-        if point1 is None or point2 is None:
-            raise seeact_utils.ParseActionError("SLIDE requires point1 and point2")
-        start_abs = _norm_to_abs(point1, screen_size)
-        end_abs = _norm_to_abs(point2, screen_size)
-        direction = _infer_direction(point1, point2)
-        tool_call["arguments"] = {
-            "action": "swipe",
-            "direction": direction,
-            "start_coordinate": start_abs,
-            "end_coordinate": end_abs,
-        }
-        extras["start_coordinate"] = start_abs
-        extras["end_coordinate"] = end_abs
+        point1 = parsed_action.get("point1") or parsed_action.get("start_coordinate")
+        point2 = parsed_action.get("point2") or parsed_action.get("end_coordinate")
+        direction = _extract_direction(parsed_action.get("direction") or parsed_action.get("value"))
+        if point1 is not None and point2 is not None:
+            start_abs = _norm_to_abs(point1, screen_size)
+            end_abs = _norm_to_abs(point2, screen_size)
+            if not direction:
+                direction = _infer_direction(point1, point2)
+            tool_call["arguments"] = {
+                "action": "swipe",
+                "direction": direction,
+                "start_coordinate": start_abs,
+                "end_coordinate": end_abs,
+            }
+            extras["start_coordinate"] = start_abs
+            extras["end_coordinate"] = end_abs
+            extras["direction"] = direction
+            return (
+                json_action.JSONAction(action_type=json_action.SWIPE, direction=direction),
+                tool_call,
+                extras,
+            )
+        if not direction:
+            raise seeact_utils.ParseActionError("SLIDE requires point1/point2 or direction")
+        tool_call["arguments"] = {"action": "swipe", "direction": direction}
         extras["direction"] = direction
-        return (
-            json_action.JSONAction(action_type=json_action.SWIPE, direction=direction),
-            tool_call,
-            extras,
-        )
+        return json_action.JSONAction(action_type=json_action.SWIPE, direction=direction), tool_call, extras
 
     if action_type == "AWAKE":
         app_name = _normalize_space(parsed_action.get("value"))
@@ -605,17 +915,41 @@ def gelab_action_to_json_action(
         tool_call["arguments"] = {"action": "wait", "value": wait_value}
         return json_action.JSONAction(action_type=json_action.WAIT), tool_call, extras
 
+    if action_type == "HOTKEY":
+        key = _normalize_space(parsed_action.get("key") or parsed_action.get("value")).lower()
+        if key == "back":
+            tool_call["arguments"] = {"action": "system_button", "button": "back"}
+            return json_action.JSONAction(action_type=json_action.NAVIGATE_BACK), tool_call, extras
+        if key == "home":
+            tool_call["arguments"] = {"action": "system_button", "button": "home"}
+            return json_action.JSONAction(action_type=json_action.NAVIGATE_HOME), tool_call, extras
+        if key == "enter":
+            tool_call["arguments"] = {"action": "system_button", "button": "enter"}
+            return json_action.JSONAction(action_type=json_action.KEYBOARD_ENTER), tool_call, extras
+        raise seeact_utils.ParseActionError("HOTKEY requires key in {ENTER,BACK,HOME}")
+
     if action_type == "COMPLETE":
+        status = _normalize_space(parsed_action.get("status")).lower()
+        failed = status in {"failure", "fail", "failed", "infeasible"}
         result_text = _normalize_space(parsed_action.get("return") or parsed_action.get("value"))
+        if result_text.lower() in {"success", "failure", "fail", "failed"}:
+            result_text = ""
         if result_text:
             extras["return_text"] = result_text
             # Embed return_text in tool_call so callers can pick it up and set
             # interaction_cache without needing to track extras separately.
-            tool_call["arguments"] = {"action": "terminate", "status": "success", "return_text": result_text}
+            tool_call["arguments"] = {
+                "action": "terminate",
+                "status": "fail" if failed else "success",
+                "return_text": result_text,
+            }
         else:
-            tool_call["arguments"] = {"action": "terminate", "status": "success"}
+            tool_call["arguments"] = {"action": "terminate", "status": "fail" if failed else "success"}
         return (
-            json_action.JSONAction(action_type=json_action.STATUS, goal_status="task_complete"),
+            json_action.JSONAction(
+                action_type=json_action.STATUS,
+                goal_status="infeasible" if failed else "task_complete",
+            ),
             tool_call,
             extras,
         )
@@ -642,60 +976,39 @@ def gelab_action_to_json_action(
             extras,
         )
 
-    raise seeact_utils.ParseActionError(f"unsupported GELAB action: {action_type}")
-
-
-def _element_hints(
-    ui_elements: list[Any],
-    screen_size: tuple[int, int],
-    limit: int = 8,
-) -> list[str]:
-    hints: list[str] = []
-    width, height = max(1, int(screen_size[0])), max(1, int(screen_size[1]))
-    for idx, element in enumerate(ui_elements):
-        if len(hints) >= max(1, int(limit)):
-            break
-        clickable = bool(getattr(element, "is_clickable", False))
-        editable = bool(getattr(element, "is_editable", False))
-        scrollable = bool(getattr(element, "is_scrollable", False))
-        long_clickable = bool(getattr(element, "is_long_clickable", False))
-        if not any([clickable, editable, scrollable, long_clickable]):
-            continue
-        bbox = getattr(element, "bbox_pixels", None)
-        if bbox is None:
-            continue
-        text = _normalize_space(getattr(element, "text", ""))
-        desc = _normalize_space(getattr(element, "content_description", ""))
-        rid = _normalize_space(getattr(element, "resource_id", "") or getattr(element, "resource_name", ""))
-        center_x = int(round((((bbox.x_min + bbox.x_max) / 2.0) / width) * 1000))
-        center_y = int(round((((bbox.y_min + bbox.y_max) / 2.0) / height) * 1000))
-        flags = []
-        if clickable:
-            flags.append("click")
-        if editable:
-            flags.append("edit")
-        if scrollable:
-            flags.append("scroll")
-        if long_clickable:
-            flags.append("long")
-        label = text or desc or rid or f"element_{idx}"
-        hints.append(
-            f"element_id={idx}, label='{label}', center=[{center_x},{center_y}], flags={flags}"
+    if action_type == "ANSWER":
+        answer = _normalize_space(parsed_action.get("value") or parsed_action.get("return"))
+        if not answer:
+            raise seeact_utils.ParseActionError("ANSWER requires value")
+        tool_call["arguments"] = {"action": "answer", "text": answer}
+        return (
+            json_action.JSONAction(action_type=json_action.ANSWER, text=answer),
+            tool_call,
+            extras,
         )
-    return hints
+
+    if action_type == "CALLUSER":
+        question = _normalize_space(parsed_action.get("value") or parsed_action.get("return"))
+        if not question:
+            question = "Need user input to continue."
+        tool_call["arguments"] = {"action": "answer", "text": question}
+        return (
+            json_action.JSONAction(action_type=json_action.ANSWER, text=question),
+            tool_call,
+            extras,
+        )
+
+    raise seeact_utils.ParseActionError(f"unsupported GELAB action: {action_type}")
 
 
 def build_gelab_messages(
     goal: str,
     history: str,
     screenshot: Image.Image,
-    hints: list[str],
 ) -> list[dict[str, Any]]:
-    hint_text = "\n".join(f"- {hint}" for hint in hints) if hints else "None."
     user_text = (
-        f"User task:\n{goal}\n\n"
-        f"Action history:\n{history or 'None yet.'}\n\n"
-        f"Helpful UI hints:\n{hint_text}\n\n"
+        f"Task:\n{goal}\n\n"
+        f"History actions:\n{history or 'None yet.'}\n\n"
         "Current screenshot is attached below.\n"
         "Choose the next single action."
     )
@@ -827,9 +1140,9 @@ class GELABAgent(base_agent.EnvironmentInteractingAgent):
         state = self.get_post_transition_state()
         screenshot = Image.fromarray(state.pixels)
         screen_size = self.env.logical_screen_size
-        hints = _element_hints(state.ui_elements, screen_size)
+        hints: list[str] = []
         history = self._history_text()
-        messages = build_gelab_messages(goal, history, screenshot, hints)
+        messages = build_gelab_messages(goal, history, screenshot)
         message_text = _messages_text_for_logging(messages)
         if message_text:
             _print_step_section(step_idx, "Model input", message_text)

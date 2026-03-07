@@ -44,7 +44,7 @@ class EpisodeResult:
 def run_episode(
     goal: str,
     agent: base_agent.EnvironmentInteractingAgent,
-    max_n_steps: int = 10,
+    max_n_steps: int = 20,
     start_on_home_screen: bool = False,
     termination_fn: Callable[[interface.AsyncEnv], float] | None = None,
     print_fn: Callable[[str], None] = print,

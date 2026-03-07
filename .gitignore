@@ -4,6 +4,7 @@
 # Byte-compiled
 _pycache__/
 .cache/
+.claude/
 
 # Poetry, setuptools, PyPI distribution artifacts.
 /*.egg-info
@@ -11,6 +12,9 @@ _pycache__/
 build/
 dist/
 poetry.lock
+explore_k1_masks/
+explorer_traces/
+output/
 
 # Tests
 .pytest_cache/

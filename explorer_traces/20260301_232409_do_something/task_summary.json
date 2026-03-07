@@ -1,9 +1,0 @@
-{
-  "goal": "do something",
-  "status": "infeasible",
-  "steps": 0,
-  "total_latency_sec": 0.0002810955047607422,
-  "avg_step_latency_sec": 0.0,
-  "step_latencies_sec": [],
-  "created_at": "2026-03-01 23:24:09"
-}
