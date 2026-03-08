@@ -21,6 +21,8 @@ class ExplorerElementAgent(_BaseExplorerElementAgent):
     def __init__(self, *args: Any, **kwargs: Any):
         # Keep run.py compatibility (gelab explorer does not use this arg).
         kwargs.pop("image_downsample_scale", None)
+        # Keep this ablation as "full knowledge injection" instead of safe-hint cleanup.
+        kwargs.setdefault("prompt_cleanup_safe_hint_mode", False)
         super().__init__(*args, **kwargs)
 
     # Keep exploration gate behavior synchronized with explorer_agent_gelab.

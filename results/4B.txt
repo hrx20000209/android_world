@@ -26,7 +26,7 @@ FilesMoveFile                                            22                 1.00
 MarkorAddNoteHeader                                      23                 1.00               0.00                12.00            86.10                 7.02             0.00
 MarkorChangeNoteContent                                  24                 1.00               0.00                12.00            78.00                 6.30             0.00
 MarkorCreateFolder                                       25                 1.00               1.00                 6.00            64.90                 6.32             0.00
-MarkorCreateNote                                         26                 0.00                NaN                  NaN            41.60                  NaN             1.00
+MarkorCreateNote                                         26                 0.00               0.00                 7.00            41.60                  NaN             1.00
 MarkorCreateNoteAndSms                                   27                 1.00               0.00                18.00           135.90                 6.63             0.00
 MarkorCreateNoteFromClipboard                            28                 1.00               0.00                14.00           100.10                 6.75             0.00
 MarkorDeleteAllNotes                                     29                 1.00               0.00                14.00            62.50                 4.30             0.00
@@ -48,7 +48,7 @@ OsmAndTrack                                              44                 1.00
 RecipeAddMultipleRecipes                                 45                 1.00               0.00                21.00           132.70                 6.06             0.00
 RecipeAddMultipleRecipesFromImage                        46                 1.00               0.00                21.00           115.50                 5.11             0.00
 RecipeAddMultipleRecipesFromMarkor                       47                 1.00               0.00                21.00           113.80                 5.26             0.00
-RecipeAddMultipleRecipesFromMarkor2                      48                 0.00                NaN                  NaN            93.60                  NaN             1.00
+RecipeAddMultipleRecipesFromMarkor2                      48                 0.00               0.00                14.00            93.60                  NaN             1.00
 RecipeAddSingleRecipe                                    49                 1.00               0.00                21.00           146.90                 6.79             0.00
 RecipeDeleteDuplicateRecipes                             50                 1.00               1.00                 6.00            35.10                 5.16             0.00
 RecipeDeleteDuplicateRecipes2                            51                 1.00               0.00                21.00           119.50                 5.54             0.00
