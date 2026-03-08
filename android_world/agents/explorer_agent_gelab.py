@@ -730,11 +730,12 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         source_step: int,
         trigger_reason: str = "sequential",
     ) -> list[dict[str, Any]]:
-        """Run exploration synchronously for a fixed number of steps before reasoning.
+        """Run exploration synchronously for a fixed number of steps.
 
-        This implements the paper's design: explore K steps first, then reason with
-        the collected clues immediately (instead of parallel exploration where clues
-        from step N are used for step N+1).
+        Per the paper's step-alignment design (§5.3), the candidates
+        returned here are NOT used for the current step's reasoning.
+        Instead they are stored and aligned with the NEXT step's
+        screenshot via pHash matching before being injected as clues.
         """
         self._explore_stop_event.clear()
         self._explore_progress_event.clear()
@@ -5284,12 +5285,45 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             self._execution_feedback = ""
 
         clues = ""
-        # Accumulate exploration candidates for this reasoning step.
-        # In sequential mode, run exploration now (blocking) and use results immediately.
-        # In parallel mode, use clues collected during the previous step's background thread.
+        # ── Step-Alignment (paper §5.3) ──────────────────────────────────
+        # Exploration at step N produces observations O_N.  After the
+        # reasoning action at step N changes the screen to s_{N+1}, we
+        # align O_N with s_{N+1} via pHash matching, and the aligned
+        # observations become clues for step N+1's reasoning.
+        #
+        # Flow per step:
+        #   1. ALIGN: use _pending_explore_payload (from previous step)
+        #      against current screenshot → clues
+        #   2. EXPLORE: run exploration from current screen → store
+        #      candidates for NEXT step (not used for this step's clues)
         seq_explore_candidates: list[dict[str, Any]] = []
         prompt_explore_candidates: list[dict[str, Any]] = []
         if self.enable_sequential_exploration:
+            # ── 1. Align previous exploration with current screenshot ──
+            if self._pending_explore_payload:
+                prev_candidates = self._pending_explore_payload.get("candidates") or []
+                prev_source_step = self._pending_explore_payload.get("source_step")
+                prompt_explore_candidates = list(prev_candidates)
+                clue_text = self.build_prompt_clues_from_candidates(
+                    candidates=prev_candidates,
+                    current_pixels=state.pixels,
+                    max_items=4,
+                    last_reasoning_action=(self.history[-1] if self.history else ""),
+                )
+                if clue_text:
+                    clues = (
+                        f"[Clue Source] Aligned exploration from step {prev_source_step} "
+                        f"({len(prev_candidates)} branches) matched against current screen.\n"
+                        + clue_text
+                    )
+                self._emit_log(
+                    f"step={step_no} aligned_prev_exploration source_step={prev_source_step} "
+                    f"candidates={len(prev_candidates)} clues_generated={bool(clue_text)}",
+                    tag="EXPLORE",
+                )
+                self._pending_explore_payload = None
+
+            # ── 2. Explore from current screen (results for NEXT step) ──
             meaningful_interactive = self._count_meaningful_interactive_elements(ui_elements)
             should_explore = self.sequential_explore_steps > 0 and meaningful_interactive >= 2
             if self.sequential_explore_steps <= 0:
@@ -5311,8 +5345,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                     source_step=step_no,
                     trigger_reason=explore_gate_reason,
                 )
-                prompt_explore_candidates = list(seq_explore_candidates)
-                # Fix 3: Refresh state after exploration + rollback so the LLM sees
+                # Refresh state after exploration + rollback so the LLM sees
                 # the current screen instead of the pre-exploration (stale) snapshot.
                 with self._ui_lock:
                     state = self.env.get_state(wait_to_stabilize=True)
@@ -5324,18 +5357,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                     f"page=({self._state_page_hint(state)})",
                     tag="EXPLORE",
                 )
-                clue_text = self.build_prompt_clues_from_candidates(
-                    candidates=seq_explore_candidates,
-                    current_pixels=state.pixels,
-                    max_items=4,
-                    last_reasoning_action=(self.history[-1] if self.history else ""),
-                )
-                if clue_text:
-                    clues = (
-                        f"[Clue Source] Sequential exploration at step {step_no} "
-                        f"({len(seq_explore_candidates)} branches, budget={self.sequential_explore_steps} steps).\n"
-                        + clue_text
-                    )
+                # Store candidates for NEXT step's alignment — NOT for this step.
             else:
                 with self._explore_action_count_lock:
                     self._explore_action_count = 0
@@ -5392,7 +5414,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                         trigger_reason=explore_gate_reason,
                     )
 
-        clues_label = "Sequential explorer clues" if self.enable_sequential_exploration else "Parallel explorer clues"
+        clues_label = "Aligned explorer clues" if self.enable_sequential_exploration else "Parallel explorer clues"
         prompt_history_summary = self._history_summary_text(max_items=8)
         prompt_explore_summary = self._summarize_explore_candidates(
             prompt_explore_candidates,
@@ -5702,7 +5724,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
 
         if self.enable_sequential_exploration:
             # Exploration already ran synchronously before reasoning; no thread to stop.
-            # seq_explore_candidates were used directly as clues above.
+            # seq_explore_candidates are stored for NEXT step's alignment (not used now).
             explore_candidates = seq_explore_candidates
             explore_action_count = self._get_explore_action_count()
             explore_thread_clean = True
@@ -5755,8 +5777,16 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         except Exception:  # pylint: disable=broad-exception-caught
             screen_drift_after_rollback = None
         if self.enable_sequential_exploration:
-            # Sequential mode: each step explores fresh; no carry-over to next step.
-            self._pending_explore_payload = None
+            # Sequential mode with step alignment (paper §5.3):
+            # Store this step's exploration candidates so the NEXT step
+            # can align them with its screenshot and generate clues.
+            if seq_explore_candidates:
+                self._pending_explore_payload = {
+                    "source_step": step_no,
+                    "candidates": seq_explore_candidates,
+                }
+            else:
+                self._pending_explore_payload = None
         else:
             self._pending_explore_payload = {
                 "source_step": len(self.actions) + 1,
