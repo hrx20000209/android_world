@@ -362,6 +362,29 @@ def _normalize_tool_call_obj(obj: dict[str, Any], raw_text: str = "") -> dict[st
         if button == "return":
             button = "back"
         args["button"] = button
+    if action_low == "open":
+        app_name = _normalize_space(
+            args.get("text")
+            or args.get("app_name")
+            or args.get("app")
+            or args.get("value")
+            or ""
+        )
+        if not app_name:
+            raw_action_text = _normalize_space(str(raw_action or ""))
+            m = re.search(
+                r"(?i)^(?:open_app|open|awake)\s*[:=]?\s*([A-Za-z][A-Za-z0-9 ._\\-]{1,48})$",
+                raw_action_text,
+            )
+            if m:
+                app_name = _normalize_space(m.group(1))
+        if not app_name:
+            m = re.search(r'"app_name"\s*:\s*"([^"]+)"', str(raw_text or ""), flags=re.IGNORECASE)
+            if m:
+                app_name = _normalize_space(m.group(1))
+        if app_name:
+            args["text"] = app_name
+            args["app_name"] = app_name
 
     return {"name": "mobile_use", "arguments": args}
 
@@ -903,6 +926,76 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
             lines.append(f"{idx}. {summary}")
         return "\n".join(lines)
 
+    def _infer_app_from_goal(self, goal: str) -> str:
+        goal_text = str(goal or "").strip().lower()
+        if not goal_text:
+            return ""
+        alias_map = {
+            "audio recorder": "Audio Recorder",
+            "pro expense": "Pro Expense",
+            "simple gallery pro": "Simple Gallery Pro",
+            "simple gallery": "Simple Gallery Pro",
+            "simple calendar pro": "Simple Calendar Pro",
+            "simple calendar": "Simple Calendar Pro",
+            "broccoli": "Broccoli APP",
+            "joplin": "Joplin",
+            "markor": "Markor",
+            "tasks": "Tasks",
+            "chrome": "Chrome",
+            "camera": "Camera",
+            "files": "Files",
+            "settings": "Settings",
+            "contacts": "Contacts",
+            "clock": "Clock",
+            "dialer": "Dialer",
+        }
+        for marker, app_name in alias_map.items():
+            if marker in goal_text:
+                return app_name
+        apps_sorted = sorted(AVAILABLE_APPS, key=lambda x: len(str(x)), reverse=True)
+        for app_name in apps_sorted:
+            app_text = str(app_name or "").strip()
+            if app_text and app_text.lower() in goal_text:
+                return app_text
+        return ""
+
+    def _recent_open_app_name(self) -> str:
+        for item in reversed(self._actions):
+            if not isinstance(item, dict):
+                continue
+            args = item.get("arguments") or {}
+            if not isinstance(args, dict):
+                continue
+            action_name = str(args.get("action") or "").strip().lower()
+            if action_name not in {"open", "open_app", "awake"}:
+                continue
+            app_name = str(
+                args.get("text")
+                or args.get("app_name")
+                or args.get("value")
+                or ""
+            ).strip()
+            if app_name:
+                return app_name
+        return ""
+
+    def _resolve_open_app_name(self, goal: str, tool_call: dict[str, Any]) -> str:
+        args = (tool_call or {}).get("arguments") if isinstance(tool_call, dict) else {}
+        if not isinstance(args, dict):
+            args = {}
+        app_name = str(
+            args.get("text")
+            or args.get("app_name")
+            or args.get("value")
+            or ""
+        ).strip()
+        if app_name:
+            return app_name
+        inferred = self._infer_app_from_goal(goal)
+        if inferred:
+            return inferred
+        return self._recent_open_app_name()
+
     def _write_action_log(self, task_output_dir: str) -> None:
         if not task_output_dir:
             return
@@ -993,6 +1086,21 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
             thought = parsed.get("thinking") or ""
             tool_call = parsed.get("tool_call") or parse_mai_tool_call(action_response)
             dummy_action = tool_call
+            print("========== MAI parsed_tool_call ==========")
+            print(json.dumps(tool_call, ensure_ascii=False, indent=2))
+
+            action_args = (dummy_action or {}).get("arguments", {})
+            if isinstance(action_args, dict):
+                action_name = str(action_args.get("action") or "").strip().lower()
+                if action_name in {"open", "open_app", "awake"}:
+                    resolved_app = self._resolve_open_app_name(goal, dummy_action)
+                    if resolved_app:
+                        action_args["action"] = "open"
+                        action_args["text"] = resolved_app
+                        action_args["app_name"] = resolved_app
+                        print(f"[CHECK] MAI open_app resolved to: {resolved_app}")
+                    else:
+                        print("[CHECK] MAI open_app unresolved: missing app name")
 
             action, dummy_action_translated = mobile_agent_utils.convert_mobile_agent_action_to_json_action(
                 dummy_action,
@@ -1002,6 +1110,10 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
                 scale=scale,
                 ui_elements=state.ui_elements,
             )
+            print("========== MAI normalized_action ==========")
+            print(repr(action))
+            print("========== MAI translated_tool_call ==========")
+            print(json.dumps(dummy_action_translated, ensure_ascii=False, indent=2))
 
             if action.action_type == json_action.ANSWER and action.text:
                 self.env.interaction_cache = action.text
@@ -1063,6 +1175,9 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
             traceback.print_exc()
             print(action_response)
             raise
+
+        print("========== MAI final_action ==========")
+        print(repr(result["action"]))
 
         self._text_actions.append(summary)
         self._summarys.append(summary)

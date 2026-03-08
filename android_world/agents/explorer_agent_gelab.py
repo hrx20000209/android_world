@@ -22,6 +22,7 @@ from PIL import Image, ImageDraw
 from android_world.agents import base_agent
 from android_world.agents import seeact_utils
 from android_world.agents.gelab_agent import GELAB_SYSTEM_PROMPT
+from android_world.agents.gelab_agent import AVAILABLE_APPS
 from android_world.agents.gelab_agent import gelab_action_to_json_action
 from android_world.agents.gelab_agent import parse_gelab_response
 from android_world.agents.explorer_agent_constants import (
@@ -116,9 +117,9 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         explore_leaf_width: int = 4,
         explore_max_branches: int | None = None,
         rollback_backtrack_limit: int = 2,
-        rollback_settle_sec: float = 0.25,
-        rollback_replay_max_actions: int = 3,
-        explore_action_pause_sec: float = 0.6,
+        rollback_settle_sec: float = 0.12,
+        rollback_replay_max_actions: int = 2,
+        explore_action_pause_sec: float = 0.35,
         reasoning_sleep_sec: float = 0.0,
         embed_model_name: str = "sentence-transformers/paraphrase-MiniLM-L6-v2",
         verbose_step_logs: bool = True,
@@ -144,7 +145,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         text_verify_retry_limit: int = 2,
         structured_edit_disable_explore: bool = True,
         enable_sequential_exploration: bool = True,
-        sequential_explore_steps: int = 3,
+        sequential_explore_steps: int = 2,
     ):
         super().__init__(env, name)
         # Backward-compatible arg retained to avoid breaking older configs.
@@ -255,7 +256,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self.text_verify_retry_limit = max(1, int(text_verify_retry_limit))
         self.structured_edit_disable_explore = bool(structured_edit_disable_explore)
         self.enable_sequential_exploration = bool(enable_sequential_exploration)
-        self.sequential_explore_steps = max(1, int(sequential_explore_steps))
+        self.sequential_explore_steps = max(0, int(sequential_explore_steps))
         # Keep exploration close to the paper's basic design:
         # fixed-K sequential exploration without heavy rollback/safe-mode overrides.
         self.basic_sequential_exploration = True
@@ -1240,6 +1241,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         if not text:
             return None, []
         mappings = [
+            ("markor", "Markor", ["net.gsantner.markor", "markor"]),
+            ("tasks", "Tasks", ["org.tasks", "tasks"]),
             ("joplin", "Joplin", ["net.cozic.joplin", "joplin"]),
             ("broccoli", "Broccoli", ["com.flauschcode.broccoli", "broccoli"]),
             ("simple calendar", "Simple Calendar Pro", ["com.simplemobiletools.calendar.pro", "calendar"]),
@@ -1252,6 +1255,19 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         for marker, app_name, hints in mappings:
             if marker in text:
                 return app_name, list(hints)
+        for app_name in sorted(list(AVAILABLE_APPS), key=lambda value: len(str(value)), reverse=True):
+            app_text = _normalize_space(app_name).lower()
+            if not app_text or app_text not in text:
+                continue
+            hints = []
+            try:
+                normalized = _normalize_space(adb_utils.normalize_app_name(app_name)).lower()
+            except Exception:  # pylint: disable=broad-exception-caught
+                normalized = ""
+            if normalized:
+                hints.append(normalized.split("/", 1)[0])
+            hints.append(app_text.split(" ", 1)[0])
+            return str(app_name), [hint for hint in hints if hint]
         return None, []
 
     @staticmethod
@@ -1287,6 +1303,36 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 },
             },
         )
+
+    def _recent_open_app_name(self) -> str:
+        for entry in reversed(list(self.actions or [])):
+            if not isinstance(entry, dict):
+                continue
+            tool_call = entry.get("tool_call") or {}
+            if not isinstance(tool_call, dict):
+                continue
+            args = tool_call.get("arguments") or {}
+            if not isinstance(args, dict):
+                continue
+            action_name = _normalize_space(args.get("action") or "").lower()
+            if action_name not in {"open", "open_app", "awake"}:
+                continue
+            app_name = _normalize_space(args.get("app_name") or args.get("text") or args.get("value") or "")
+            if app_name:
+                return app_name
+        return ""
+
+    def _resolve_open_app_name(self, goal: str, tool_call: dict[str, Any] | None) -> str:
+        args = (tool_call or {}).get("arguments") if isinstance(tool_call, dict) else {}
+        if not isinstance(args, dict):
+            args = {}
+        app_name = _normalize_space(args.get("app_name") or args.get("text") or args.get("value") or "")
+        if app_name:
+            return app_name
+        inferred_name, _ = self._infer_target_app(goal)
+        if inferred_name:
+            return _normalize_space(inferred_name)
+        return self._recent_open_app_name()
 
     @staticmethod
     def _coord_bucket(value: Any, bucket: int = 10) -> str:
@@ -1481,6 +1527,38 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             return True, "repeat_loop"
 
         return False, "not_stuck"
+
+    def _has_direct_goal_action(self, goal: str, ui_elements: list[Any]) -> bool:
+        goal_text = _normalize_space(goal).lower()
+        if not goal_text:
+            return False
+        delete_intent = self._goal_has_delete_intent(goal)
+        input_intent = any(token in goal_text for token in _TASK_INPUT_KEYWORDS)
+        save_intent = any(token in goal_text for token in {"save", "apply", "confirm", "done", "finish"})
+        record_intent = any(token in goal_text for token in {"record", "audio clip", "microphone", "mic"})
+        goal_queries = _extract_task_queries(goal)
+        query_keywords = self._query_keywords(goal_queries, [], limit=16)
+        for element in list(ui_elements or []):
+            if not self._is_valid_element(element):
+                continue
+            if not self._is_interactive(element):
+                continue
+            if self._is_system_ui_noise_element(element) or self._is_launcher_noise_element(element):
+                continue
+            merged = self._element_merged_text(element)
+            if not merged:
+                continue
+            if delete_intent and any(token in merged for token in {"delete", "remove", "trash", "bin", "discard"}):
+                return True
+            if save_intent and any(token in merged for token in (_SUBMIT_ACTION_KEYWORDS | {"save", "apply", "done", "confirm"})):
+                return True
+            if record_intent and any(token in merged for token in {"record", "start", "mic", "microphone"}):
+                return True
+            if input_intent and bool(getattr(element, "is_editable", False)):
+                return True
+            if query_keywords and self._query_overlap_score(query_keywords, merged) >= 0.45:
+                return True
+        return False
 
     def _should_apply_loop_guard(self, action: json_action.JSONAction) -> bool:
         if action is None:
@@ -2411,7 +2489,6 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         safe_types = {
             json_action.OPEN_APP,
             json_action.NAVIGATE_HOME,
-            json_action.NAVIGATE_BACK,
         }
         filtered: list[json_action.JSONAction] = []
         for action_dict in source_actions:
@@ -2419,6 +2496,10 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 action = json_action.JSONAction(**action_dict)
             except Exception:  # pylint: disable=broad-exception-caught
                 continue
+            if action.action_type == json_action.OPEN_APP:
+                app_name = _normalize_space(getattr(action, "app_name", "") or "")
+                if not app_name:
+                    continue
             if action.action_type in safe_types:
                 filtered.append(action)
         if not filtered:
@@ -2507,10 +2588,18 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                         tag="ROLLBACK",
                     )
                 for action in replay_actions:
-                    with self._ui_lock:
-                        self.env.execute_action(action)
-                    result["replayed_actions"] += 1
-                    self._rollback_pause()
+                    try:
+                        with self._ui_lock:
+                            self.env.execute_action(action)
+                        result["replayed_actions"] += 1
+                        self._rollback_pause()
+                    except Exception as exc:  # pylint: disable=broad-exception-caught
+                        self._emit_log(
+                            f"trigger={result['trigger']} rollback_replay_action_failed "
+                            f"action={action.action_type} error={exc}",
+                            tag="ROLLBACK",
+                        )
+                        continue
 
                 with self._ui_lock:
                     final_state = self.env.get_state(wait_to_stabilize=True)
@@ -2754,6 +2843,163 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 "arguments": {"action": "system_button", "button": "back"},
             },
         )
+
+    def _build_click_action_from_element(
+        self,
+        ui_elements: list[Any],
+        index: int,
+    ) -> tuple[json_action.JSONAction, dict[str, Any]] | None:
+        if index < 0 or index >= len(ui_elements):
+            return None
+        center = self._safe_center_from_element(ui_elements[index])
+        if center is not None:
+            return (
+                json_action.JSONAction(action_type=json_action.CLICK, x=center[0], y=center[1]),
+                {
+                    "name": "mobile_use",
+                    "arguments": {"action": "click", "coordinate": [center[0], center[1]]},
+                },
+            )
+        return (
+            json_action.JSONAction(action_type=json_action.CLICK, index=index),
+            {
+                "name": "mobile_use",
+                "arguments": {"action": "click", "index": int(index)},
+            },
+        )
+
+    def _target_index_for_action(
+        self,
+        action: json_action.JSONAction,
+        tool_call: dict[str, Any],
+        ui_elements: list[Any],
+    ) -> int | None:
+        idx = _target_index(tool_call.get("arguments", {}))
+        if idx is None:
+            idx = _safe_int(getattr(action, "index", None))
+        if idx is not None:
+            return int(idx)
+        return self._index_from_coordinate(
+            ui_elements=ui_elements,
+            x=_safe_int(getattr(action, "x", None)),
+            y=_safe_int(getattr(action, "y", None)),
+        )
+
+    def _apply_task_goal_guard(
+        self,
+        goal: str,
+        current_activity: str | None,
+        ui_elements: list[Any],
+        action: json_action.JSONAction,
+        tool_call: dict[str, Any],
+    ) -> tuple[json_action.JSONAction, dict[str, Any], str | None]:
+        if not self._goal_has_delete_intent(goal):
+            return action, tool_call, None
+
+        target_idx = self._target_index_for_action(action, tool_call, ui_elements)
+        activity_low = _normalize_space(current_activity).lower()
+        if activity_low and "settings" in activity_low:
+            if action.action_type != json_action.NAVIGATE_BACK:
+                back_action, back_tool = self._build_safe_mode_back_action()
+                return back_action, back_tool, "settings_back"
+            return action, tool_call, None
+
+        merged_page = " ".join(self._element_merged_text(element) for element in list(ui_elements or []))
+        has_import_sheet = any(
+            token in merged_page for token in {"import from device", "select file", "filesystem", "import"}
+        )
+        cancel_idx = None
+        for idx, element in enumerate(list(ui_elements or [])):
+            if not self._is_valid_element(element) or not self._is_interactive(element):
+                continue
+            merged = self._element_merged_text(element)
+            if not merged:
+                continue
+            if any(token in merged for token in {"cancel", "close", "dismiss", "取消", "关闭"}):
+                cancel_idx = idx
+                break
+        if has_import_sheet and cancel_idx is not None:
+            if target_idx != cancel_idx and action.action_type not in {json_action.NAVIGATE_BACK, json_action.OPEN_APP}:
+                cancel_pair = self._build_click_action_from_element(ui_elements, cancel_idx)
+                if cancel_pair is not None:
+                    return cancel_pair[0], cancel_pair[1], "dismiss_import_sheet"
+
+        # In deletion goals, prioritize destructive confirmation on dialogs
+        # to avoid getting stuck in select-loop without confirming.
+        screen_flags = self._screen_mode_flags(ui_elements)
+        if bool(screen_flags.get("dialog")):
+            confirm_tokens = {"delete", "remove", "discard", "confirm", "yes", "ok", "确定", "删除"}
+            reject_tokens = {"cancel", "no", "back", "dismiss", "取消", "否", "返回"}
+            confirm_phrases = {"confirm delete", "do you really want to delete", "are you sure"}
+            merged_dialog = " ".join(self._element_merged_text(element) for element in list(ui_elements or []))
+            has_confirm_phrase = any(token in merged_dialog for token in confirm_phrases)
+            confirm_idx = None
+            rightmost_idx = None
+            rightmost_x = -1
+            for idx, element in enumerate(list(ui_elements or [])):
+                if not self._is_valid_element(element) or not self._is_interactive(element):
+                    continue
+                merged = self._element_merged_text(element)
+                if not merged:
+                    continue
+                if any(token in merged for token in reject_tokens):
+                    continue
+                center = self._safe_center_from_element(element)
+                if center is not None and center[0] > rightmost_x:
+                    rightmost_x = center[0]
+                    rightmost_idx = idx
+                if any(token in merged for token in confirm_tokens):
+                    confirm_idx = idx
+                    break
+            if confirm_idx is None and has_confirm_phrase and rightmost_idx is not None:
+                confirm_idx = rightmost_idx
+            if confirm_idx is not None and target_idx != confirm_idx:
+                confirm_pair = self._build_click_action_from_element(ui_elements, confirm_idx)
+                if confirm_pair is not None:
+                    return confirm_pair[0], confirm_pair[1], "confirm_delete_dialog"
+
+        delete_idx = None
+        delete_score = -1
+        delete_tokens = {"delete", "remove", "trash", "bin", "discard", "删除"}
+        for idx, element in enumerate(list(ui_elements or [])):
+            if not self._is_valid_element(element) or not self._is_interactive(element):
+                continue
+            merged = self._element_merged_text(element)
+            if not merged:
+                continue
+            if not any(token in merged for token in delete_tokens):
+                continue
+            score = 0
+            rid = _normalize_space(
+                getattr(element, "resource_id", "") or getattr(element, "resource_name", "")
+            ).lower()
+            if "delete" in rid or "remove" in rid:
+                score += 2
+            if self._is_submit_or_dismiss_control(element):
+                score += 1
+            if score > delete_score:
+                delete_idx = idx
+                delete_score = score
+        if delete_idx is not None:
+            consecutive_guard = 0
+            for entry in reversed(list(self.actions or [])[-4:]):
+                if not isinstance(entry, dict):
+                    break
+                src = _normalize_space(entry.get("source")).lower()
+                if src == "goal_guard_prefer_delete_control":
+                    consecutive_guard += 1
+                    continue
+                break
+            should_force_delete = (
+                target_idx != delete_idx
+                and action.action_type not in {json_action.STATUS, json_action.ANSWER}
+                and consecutive_guard < 2
+            )
+            if should_force_delete:
+                delete_pair = self._build_click_action_from_element(ui_elements, delete_idx)
+                if delete_pair is not None:
+                    return delete_pair[0], delete_pair[1], "prefer_delete_control"
+        return action, tool_call, None
 
     @staticmethod
     def _is_calendar_or_contact_goal(goal: str) -> bool:
@@ -3580,19 +3826,31 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         if not ui_elements:
             return state, info
 
-        merged_page = " ".join(self._element_merged_text(element) for element in ui_elements)
-        danger_tokens = {
-            "delete",
-            "remove",
-            "discard",
-            "proceed with deletion",
-            "are you sure",
-            "confirm deletion",
-        }
-        if not any(token in merged_page for token in danger_tokens):
-            return state, info
         flags = self._screen_mode_flags(ui_elements)
         if not bool(flags.get("dialog")):
+            return state, info
+
+        merged_page = " ".join(self._element_merged_text(element) for element in ui_elements)
+        strong_phrases = {
+            "are you sure",
+            "confirm deletion",
+            "proceed with deletion",
+            "delete this",
+            "delete all",
+            "permanently delete",
+        }
+        button_delete_tokens = {"delete", "remove", "discard", "erase", "clear all", "删除"}
+        has_strong_phrase = any(token in merged_page for token in strong_phrases)
+        has_delete_button = False
+        for element in ui_elements:
+            if not self._is_interactive(element):
+                continue
+            merged = self._element_merged_text(element)
+            if any(token in merged for token in button_delete_tokens):
+                has_delete_button = True
+                break
+        # Avoid false positives like "some records were deleted" warnings.
+        if not (has_strong_phrase or has_delete_button):
             return state, info
 
         cancel_tokens = {
@@ -5325,13 +5583,20 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
 
             # ── 2. Explore from current screen (results for NEXT step) ──
             meaningful_interactive = self._count_meaningful_interactive_elements(ui_elements)
-            should_explore = self.sequential_explore_steps > 0 and meaningful_interactive >= 2
+            should_explore, explore_gate_reason = self._should_start_sequential_exploration(
+                step_no=step_no,
+                goal=goal,
+                current_activity=reasoning_start_page.get("activity"),
+            )
             if self.sequential_explore_steps <= 0:
+                should_explore = False
                 explore_gate_reason = "disabled_budget"
-            elif meaningful_interactive < 2:
+            elif should_explore and meaningful_interactive < 2:
+                should_explore = False
                 explore_gate_reason = f"insufficient_meaningful_interactive({meaningful_interactive})"
-            else:
-                explore_gate_reason = "fixed_budget"
+            elif should_explore and self._has_direct_goal_action(goal, ui_elements):
+                should_explore = False
+                explore_gate_reason = "direct_goal_action_visible"
             self._emit_log(
                 f"step={step_no} explore_gate should_explore={should_explore} "
                 f"reason={explore_gate_reason} mode=sequential",
@@ -5942,6 +6207,66 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                         f"step={step_no} infeasible_intercepted structured_recovery={structured_recovery_info}",
                         tag="CHECK",
                     )
+
+        if action.action_type == json_action.OPEN_APP:
+            resolved_app_name = self._resolve_open_app_name(goal=goal, tool_call=tool_call)
+            if resolved_app_name:
+                action, tool_call = self._build_open_app_action(resolved_app_name)
+                tool_args = tool_call.get("arguments") if isinstance(tool_call.get("arguments"), dict) else {}
+                self._emit_log(
+                    f"step={step_no} open_app_name_resolved app={resolved_app_name}",
+                    tag="CHECK",
+                )
+            else:
+                source = f"{source}_open_app_missing_name"
+                parse_error = parse_error or "open_app_missing_name"
+                action = json_action.JSONAction(action_type=json_action.WAIT)
+                tool_call = {
+                    "name": "mobile_use",
+                    "arguments": {
+                        "action": "wait",
+                        "reason": "open_app_missing_name",
+                    },
+                }
+                tool_args = tool_call.get("arguments") if isinstance(tool_call.get("arguments"), dict) else {}
+                self._emit_log(
+                    f"step={step_no} open_app_name_missing -> converted_to_wait",
+                    tag="CHECK",
+                )
+
+        guarded_action, guarded_tool_call, guard_reason = self._apply_task_goal_guard(
+            goal=goal,
+            current_activity=reasoning_start_page.get("activity"),
+            ui_elements=ui_elements,
+            action=action,
+            tool_call=tool_call,
+        )
+        if guard_reason:
+            action = guarded_action
+            tool_call = guarded_tool_call
+            tool_args = tool_call.get("arguments") if isinstance(tool_call.get("arguments"), dict) else {}
+            source = f"goal_guard_{guard_reason}"
+            self._emit_log(
+                f"step={step_no} task_goal_guard applied={guard_reason}",
+                tag="CHECK",
+            )
+
+        self._emit_log_block(
+            title=f"step={step_no} final_action_after_parse",
+            content=(
+                json.dumps(
+                    {
+                        "source": source,
+                        "parse_error": parse_error,
+                        "normalized_action": repr(action),
+                        "tool_call": tool_call,
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                )
+            ),
+            tag="REASON",
+        )
 
         model_coord = tool_args.get("coordinate") if isinstance(tool_args, dict) else None
         parsed_coord = (

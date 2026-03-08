@@ -1088,6 +1088,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         if not text:
             return None, []
         mappings = [
+            ("markor", "Markor", ["net.gsantner.markor", "markor"]),
+            ("tasks", "Tasks", ["org.tasks", "tasks"]),
             ("joplin", "Joplin", ["net.cozic.joplin", "joplin"]),
             ("broccoli", "Broccoli", ["com.flauschcode.broccoli", "broccoli"]),
             ("simple calendar", "Simple Calendar Pro", ["com.simplemobiletools.calendar.pro", "calendar"]),
@@ -2120,7 +2122,6 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         safe_types = {
             json_action.OPEN_APP,
             json_action.NAVIGATE_HOME,
-            json_action.NAVIGATE_BACK,
         }
         filtered: list[json_action.JSONAction] = []
         for action_dict in source_actions:
@@ -2128,6 +2129,10 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 action = json_action.JSONAction(**action_dict)
             except Exception:  # pylint: disable=broad-exception-caught
                 continue
+            if action.action_type == json_action.OPEN_APP:
+                app_name = _normalize_space(getattr(action, "app_name", "") or "")
+                if not app_name:
+                    continue
             if action.action_type in safe_types:
                 filtered.append(action)
         if not filtered:
@@ -2216,10 +2221,18 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                         tag="ROLLBACK",
                     )
                 for action in replay_actions:
-                    with self._ui_lock:
-                        self.env.execute_action(action)
-                    result["replayed_actions"] += 1
-                    self._rollback_pause()
+                    try:
+                        with self._ui_lock:
+                            self.env.execute_action(action)
+                        result["replayed_actions"] += 1
+                        self._rollback_pause()
+                    except Exception as exc:  # pylint: disable=broad-exception-caught
+                        self._emit_log(
+                            f"trigger={result['trigger']} rollback_replay_action_failed "
+                            f"action={action.action_type} error={exc}",
+                            tag="ROLLBACK",
+                        )
+                        continue
 
                 with self._ui_lock:
                     final_state = self.env.get_state(wait_to_stabilize=True)
