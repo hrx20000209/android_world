@@ -1,57 +1,141 @@
-                                      task_num  num_complete_trials  mean_success_rate  mean_episode_length  total_runtime_s  num_fail_trials
+                                                   task_num  num_complete_trials  mean_success_rate  mean_episode_length  total_runtime_s  mean_step_latency_s  num_fail_trials
 task
-AudioRecorderRecordAudio                     0                  1.0               0.00                12.00            35.60              0.0
-AudioRecorderRecordAudioWithFileName         1                  1.0               0.00                20.00            97.80              0.0
-BrowserDraw                                  2                  1.0               0.00                20.00           107.70              0.0
-BrowserMaze                                  3                  1.0               0.00                20.00            88.20              0.0
-BrowserMultiply                              4                  1.0               0.00                22.00            93.30              0.0
-CameraTakePhoto                              5                  1.0               0.00                 3.00            26.50              0.0
-CameraTakeVideo                              6                  1.0               0.00                10.00           103.70              0.0
-ClockStopWatchPausedVerify                   7                  1.0               1.00                 4.00            22.70              0.0
-ClockStopWatchRunning                        8                  1.0               0.00                 5.00            33.50              0.0
-ClockTimerEntry                              9                  1.0               0.00                10.00            59.20              0.0
-ContactsAddContact                          10                  1.0               0.00                12.00            77.50              0.0
-ContactsNewContactDraft                     11                  1.0               0.00                12.00            64.90              0.0
-ExpenseAddSingle                            12                  1.0               0.00                12.00            66.20              0.0
-ExpenseDeleteDuplicates                     13                  1.0               0.00                12.00            77.30              0.0
-ExpenseDeleteMultiple                       14                  1.0               0.00                20.00            99.40              0.0
-ExpenseDeleteSingle                         15                  1.0               1.00                 6.00            36.30              0.0
-FilesDeleteFile                             16                  1.0               1.00                13.00            74.10              0.0
-FilesMoveFile                               17                  1.0               0.00                20.00           168.70              0.0
-MarkorAddNoteHeader                         18                  1.0               0.00                12.00            50.10              0.0
-MarkorChangeNoteContent                     19                  1.0               0.00                12.00            55.80              0.0
-MarkorCreateFolder                          20                  1.0               0.00                10.00            60.60              0.0
-MarkorCreateNote                            21                  1.0               0.00                16.00            51.80              0.0
-MarkorDeleteAllNotes                        22                  1.0               0.00                14.00            57.00              0.0
-MarkorDeleteNewestNote                      23                  1.0               0.00                10.00            42.80              0.0
-MarkorDeleteNote                            24                  1.0               0.00                10.00            41.80              0.0
-MarkorEditNote                              25                  1.0               0.00                 7.00            34.10              0.0
-MarkorMoveNote                              26                  1.0               0.00                11.00            63.30              0.0
-MarkorTranscribeReceipt                     27                  1.0               0.00                18.00           107.90              0.0
-OpenAppTaskEval                             28                  1.0               1.00                 2.00            11.50              0.0
-OsmAndFavorite                              29                  1.0               0.00                13.00            81.70              0.0
-SystemBluetoothTurnOff                      30                  1.0               0.00                10.00            69.50              0.0
-SystemBluetoothTurnOn                       31                  1.0               0.00                10.00            40.70              0.0
-SystemWifiTurnOff                           32                  1.0               1.00                 8.00            45.00              0.0
-SystemWifiTurnOn                            33                  1.0               1.00                 6.00            30.50              0.0
-========= Average =========                  0                  1.0               0.18                11.82            64.02              0.0
+AudioRecorderRecordAudio                                  0                  1.0               0.00                12.00            87.00                 6.89              0.0
+AudioRecorderRecordAudioWithFileName                      1                  1.0               0.00                16.00            97.90                 5.71              0.0
+BrowserDraw                                               2                  1.0               0.00                 8.00            42.40                 4.60              0.0
+BrowserMaze                                               3                  1.0               0.00                16.00           110.90                 6.46              0.0
+BrowserMultiply                                           4                  1.0               0.00                 3.00            15.70                 3.71              0.0
+CameraTakePhoto                                           5                  1.0               0.00                10.00            90.20                 8.51              0.0
+CameraTakeVideo                                           6                  1.0               0.00                10.00            96.70                 9.16              0.0
+ClockStopWatchPausedVerify                                7                  1.0               1.00                 3.00            15.30                 4.25              0.0
+ClockStopWatchRunning                                     8                  1.0               1.00                 4.00            21.30                 4.64              0.0
+ClockTimerEntry                                           9                  1.0               0.00                10.00            56.70                 5.26              0.0
+ContactsAddContact                                       10                  1.0               1.00                10.00            72.40                 6.83              0.0
+ContactsNewContactDraft                                  11                  1.0               0.00                12.00            80.30                 6.31              0.0
+ExpenseAddMultiple                                       12                  1.0               0.00                16.00            82.70                 4.71              0.0
+ExpenseAddMultipleFromGallery                            13                  1.0               0.00                16.00           148.00                 8.55              0.0
+ExpenseAddMultipleFromMarkor                             14                  1.0               0.00                 5.00            29.80                 4.96              0.0
+ExpenseAddSingle                                         15                  1.0               0.00                12.00            94.80                 7.38              0.0
+ExpenseDeleteDuplicates                                  16                  1.0               0.00                10.00            63.40                 5.71              0.0
+ExpenseDeleteDuplicates2                                 17                  1.0               0.00                16.00           125.90                 7.33              0.0
+ExpenseDeleteMultiple                                    18                  1.0               0.00                 4.00            28.80                 6.11              0.0
+ExpenseDeleteMultiple2                                   19                  1.0               0.00                11.00            75.50                 6.35              0.0
+ExpenseDeleteSingle                                      20                  1.0               0.00                 4.00            30.40                 6.15              0.0
+FilesDeleteFile                                          21                  1.0               0.00                 8.00            57.50                 6.43              0.0
+FilesMoveFile                                            22                  1.0               0.00                16.00           124.50                 7.28              0.0
+MarkorAddNoteHeader                                      23                  1.0               0.00                12.00            78.30                 6.18              0.0
+MarkorChangeNoteContent                                  24                  1.0               0.00                12.00            75.70                 5.92              0.0
+MarkorCreateFolder                                       25                  1.0               0.00                10.00            68.00                 6.30              0.0
+MarkorCreateNote                                         26                  1.0               0.00                 7.00            45.00                 5.77              0.0
+MarkorCreateNoteAndSms                                   27                  1.0               0.00                16.00           121.60                 6.38              0.0
+MarkorCreateNoteFromClipboard                            28                  1.0               0.00                14.00            84.80                 5.47              0.0
+MarkorDeleteAllNotes                                     29                  1.0               0.00                14.00           135.00                 9.18              0.0
+MarkorDeleteNewestNote                                   30                  1.0               0.00                 8.00            52.40                 6.18              0.0
+MarkorDeleteNote                                         31                  1.0               0.00                10.00           101.40                 9.55              0.0
+MarkorEditNote                                           32                  1.0               0.00                 8.00            54.50                 6.13              0.0
+MarkorMergeNotes                                         33                  1.0               0.00                16.00            89.80                 5.27              0.0
+MarkorMoveNote                                           34                  1.0               0.00                14.00            89.20                 5.95              0.0
+MarkorTranscribeReceipt                                  35                  1.0               0.00                16.00           100.80                 5.89              0.0
+MarkorTranscribeVideo                                    36                  1.0               0.00                 8.00            68.70                 7.82              0.0
+NotesIsTodo                                              37                  1.0               1.00                 6.00            36.00                 4.22              0.0
+NotesMeetingAttendeeCount                                38                  1.0               1.00                 5.00            35.00                 4.99              0.0
+NotesRecipeIngredientCount                               39                  1.0               0.00                 5.00            36.10                 5.25              0.0
+NotesTodoItemCount                                       40                  1.0               0.00                10.00           150.30                13.99              0.0
+OpenAppTaskEval                                          41                  1.0               1.00                 4.00            24.30                 5.41              0.0
+OsmAndFavorite                                           42                  1.0               0.00                11.00            67.50                 5.72              0.0
+OsmAndMarker                                             43                  1.0               0.00                16.00           112.40                 6.45              0.0
+OsmAndTrack                                              44                  1.0               0.00                16.00           122.00                 7.09              0.0
+RecipeAddMultipleRecipes                                 45                  1.0               0.00                16.00           104.40                 5.94              0.0
+RecipeAddMultipleRecipesFromImage                        46                  1.0               0.00                16.00           102.10                 5.92              0.0
+RecipeAddMultipleRecipesFromMarkor                       47                  1.0               0.00                16.00            92.70                 5.41              0.0
+RecipeAddMultipleRecipesFromMarkor2                      48                  1.0               0.00                14.00            76.70                 4.97              0.0
+RecipeAddSingleRecipe                                    49                  1.0               0.00                16.00           141.00                 8.31              0.0
+RecipeDeleteDuplicateRecipes                             50                  1.0               1.00                 8.00            56.40                 6.20              0.0
+RecipeDeleteDuplicateRecipes2                            51                  1.0               0.00                16.00           121.00                 7.09              0.0
+RecipeDeleteDuplicateRecipes3                            52                  1.0               0.00                 6.00            40.60                 6.06              0.0
+RecipeDeleteMultipleRecipes                              53                  1.0               0.00                 4.00            27.90                 5.87              0.0
+RecipeDeleteMultipleRecipesWithConstraint                54                  1.0               1.00                16.00            97.20                 5.57              0.0
+RecipeDeleteMultipleRecipesWithNoise                     55                  1.0               0.00                16.00            96.50                 5.51              0.0
+RecipeDeleteSingleRecipe                                 56                  1.0               0.00                 4.00            26.10                 5.73              0.0
+RecipeDeleteSingleWithRecipeWithNoise                    57                  1.0               0.00                16.00           103.60                 6.01              0.0
+RetroCreatePlaylist                                      58                  1.0               0.00                16.00           104.50                 5.78              0.0
+RetroPlayingQueue                                        59                  1.0               0.00                16.00           156.30                 9.23              0.0
+RetroPlaylistDuration                                    60                  1.0               0.00                16.00            93.10                 5.31              0.0
+RetroSavePlaylist                                        61                  1.0               0.00                16.00            92.60                 5.27              0.0
+SaveCopyOfReceiptTaskEval                                62                  1.0               0.00                16.00            94.50                 5.51              0.0
+SimpleCalendarAddOneEvent                                63                  1.0               0.00                16.00            99.80                 5.79              0.0
+SimpleCalendarAddOneEventInTwoWeeks                      64                  1.0               0.00                16.00            93.10                 5.37              0.0
+SimpleCalendarAddOneEventRelativeDay                     65                  1.0               0.00                16.00            97.30                 5.69              0.0
+SimpleCalendarAddOneEventTomorrow                        66                  1.0               0.00                14.00            92.10                 6.07              0.0
+SimpleCalendarAddRepeatingEvent                          67                  1.0               0.00                16.00            99.70                 5.77              0.0
+SimpleCalendarAnyEventsOnDate                            68                  1.0               0.00                10.00            62.10                 5.73              0.0
+SimpleCalendarDeleteEvents                               69                  1.0               1.00                13.00            87.00                 6.22              0.0
+SimpleCalendarDeleteEventsOnRelativeDay                  70                  1.0               1.00                10.00            72.30                 6.45              0.0
+SimpleCalendarDeleteOneEvent                             71                  1.0               1.00                 7.00            49.60                 6.15              0.0
+SimpleCalendarEventOnDateAtTime                          72                  1.0               1.00                 4.00            18.40                 4.01              0.0
+SimpleCalendarEventsInNextWeek                           73                  1.0               0.00                10.00            58.40                 5.46              0.0
+SimpleCalendarEventsInTimeRange                          74                  1.0               1.00                 4.00            23.70                 4.30              0.0
+SimpleCalendarEventsOnDate                               75                  1.0               1.00                 4.00            21.70                 4.56              0.0
+SimpleCalendarFirstEventAfterStartTime                   76                  1.0               0.00                10.00            58.10                 5.45              0.0
+SimpleCalendarLocationOfEvent                            77                  1.0               1.00                 4.00            21.50                 4.78              0.0
+SimpleCalendarNextEvent                                  78                  1.0               0.00                 4.00            21.90                 4.59              0.0
+SimpleCalendarNextMeetingWithPerson                      79                  1.0               0.00                 7.00            45.50                 5.91              0.0
+SimpleDrawProCreateDrawing                               80                  1.0               0.00                16.00            98.60                 5.84              0.0
+SimpleSmsReply                                           81                  1.0               1.00                 6.00            57.50                 7.05              0.0
+SimpleSmsReplyMostRecent                                 82                  1.0               1.00                 6.00            58.30                 5.29              0.0
+SimpleSmsResend                                          83                  1.0               0.00                11.00           101.40                 6.68              0.0
+SimpleSmsSend                                            84                  1.0               1.00                 7.00            58.80                 6.31              0.0
+SimpleSmsSendClipboardContent                            85                  1.0               0.00                11.00            78.30                 5.62              0.0
+SimpleSmsSendReceivedAddress                             86                  1.0               0.00                12.00            97.90                 5.60              0.0
+SportsTrackerActivitiesCountForWeek                      87                  1.0               0.00                 2.00            10.80                 3.96              0.0
+SportsTrackerActivitiesOnDate                            88                  1.0               0.00                 5.00            28.70                 5.05              0.0
+SportsTrackerActivityDuration                            89                  1.0               0.00                10.00            57.00                 5.26              0.0
+SportsTrackerLongestDistanceActivity                     90                  1.0               0.00                 4.00            25.10                 5.24              0.0
+SportsTrackerTotalDistanceForCategoryOverInterval        91                  1.0               0.00                 7.00            43.70                 5.81              0.0
+SportsTrackerTotalDurationForCategoryThisWeek            92                  1.0               0.00                 2.00             8.10                 3.09              0.0
+SystemBluetoothTurnOff                                   93                  1.0               0.00                10.00            55.90                 5.19              0.0
+SystemBluetoothTurnOffVerify                             94                  1.0               0.00                10.00            54.20                 5.04              0.0
+SystemBluetoothTurnOn                                    95                  1.0               1.00                 8.00            48.70                 5.65              0.0
+SystemBluetoothTurnOnVerify                              96                  1.0               1.00                 2.00            10.40                 4.58              0.0
+SystemBrightnessMax                                      97                  1.0               0.00                10.00           101.60                 9.84              0.0
+SystemBrightnessMaxVerify                                98                  1.0               1.00                10.00            99.60                 9.47              0.0
+SystemBrightnessMin                                      99                  1.0               0.00                10.00           103.80                 9.94              0.0
+SystemBrightnessMinVerify                               100                  1.0               0.00                10.00           103.00                 9.90              0.0
+SystemCopyToClipboard                                   101                  1.0               0.00                10.00            69.10                 6.25              0.0
+SystemWifiTurnOff                                       102                  1.0               1.00                 7.00            60.00                 8.13              0.0
+SystemWifiTurnOffVerify                                 103                  1.0               1.00                 4.00            32.80                 7.58              0.0
+SystemWifiTurnOn                                        104                  1.0               1.00                 5.00            36.40                 6.93              0.0
+SystemWifiTurnOnVerify                                  105                  1.0               1.00                 4.00            33.60                 8.01              0.0
+TasksCompletedTasksForDate                              106                  1.0               0.00                10.00            96.10                 9.11              0.0
+TasksDueNextWeek                                        107                  1.0               0.00                 2.00            10.50                 3.84              0.0
+TasksDueOnDate                                          108                  1.0               1.00                 2.00             9.60                 3.84              0.0
+TasksHighPriorityTasks                                  109                  1.0               0.00                 2.00            10.80                 4.49              0.0
+TasksHighPriorityTasksDueOnDate                         110                  1.0               0.00                 4.00            24.70                 5.55              0.0
+TasksIncompleteTasksOnDate                              111                  1.0               0.00                 2.00            13.80                 3.94              0.0
+TurnOffWifiAndTurnOnBluetooth                           112                  1.0               1.00                16.00           118.20                 7.10              0.0
+TurnOnWifiAndOpenApp                                    113                  1.0               1.00                 5.00            34.50                 6.32              0.0
+VlcCreatePlaylist                                       114                  1.0               0.00                16.00           107.90                 6.32              0.0
+VlcCreateTwoPlaylists                                   115                  1.0               0.00                16.00            98.80                 5.63              0.0
+========= Average =========                               0                  1.0               0.24                 9.94            69.87                 6.15              0.0
 
 
                          mean_success_rate
-difficulty                            easy medium hard
+difficulty                            easy medium  hard
 tags
-complex_ui_understanding               0.0    0.0    -
-data_edit                              0.0    0.5    -
-data_entry                             0.0    0.0    -
-game_playing                           0.0      -    -
-math_counting                            -      -  0.0
-memorization                           0.0    0.0  0.0
-multi_app                              0.0    0.0    -
-parameterized                         0.14   0.11    -
-repetition                             0.0      -    -
-requires_setup                         0.0    0.0    -
-screen_reading                         0.6    0.0  0.0
-search                                 0.0    0.0    -
-transcription                          0.0    0.0    -
-untagged                               0.0    0.0    -
-verification                           1.0      -    -
+complex_ui_understanding              0.33    0.0   0.0
+data_edit                             0.27   0.14   0.0
+data_entry                            0.13    0.0   0.0
+game_playing                          0.00      -     -
+information_retrieval                 0.29   0.22   0.0
+math_counting                         0.00    0.0   0.0
+memorization                          0.00    0.0   0.0
+multi_app                             0.00    0.0   0.0
+parameterized                         0.27   0.15  0.06
+repetition                            0.50    0.0   0.2
+requires_setup                        0.00    0.0   0.0
+screen_reading                        0.42    0.0  0.11
+search                                0.55    0.0   0.0
+transcription                         0.50    0.0   0.0
+untagged                              0.20    0.5     -
+verification                          0.71      -     -
+Global mean step latency: 6.154s across 116 episodes
