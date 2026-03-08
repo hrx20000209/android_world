@@ -1086,6 +1086,7 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
             thought = parsed.get("thinking") or ""
             tool_call = parsed.get("tool_call") or parse_mai_tool_call(action_response)
             dummy_action = tool_call
+            unresolved_open_app = False
             print("========== MAI parsed_tool_call ==========")
             print(json.dumps(tool_call, ensure_ascii=False, indent=2))
 
@@ -1101,6 +1102,12 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
                         print(f"[CHECK] MAI open_app resolved to: {resolved_app}")
                     else:
                         print("[CHECK] MAI open_app unresolved: missing app name")
+                        unresolved_open_app = True
+                        action_args["action"] = "wait"
+                        for stale_key in ("text", "app_name", "value"):
+                            action_args.pop(stale_key, None)
+                        if not parse_error:
+                            parse_error = "open_app_missing_name"
 
             action, dummy_action_translated = mobile_agent_utils.convert_mobile_agent_action_to_json_action(
                 dummy_action,
@@ -1131,6 +1138,8 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
                         if terminate_text:
                             self.env.interaction_cache = terminate_text
 
+            if unresolved_open_app and action.action_type == json_action.WAIT:
+                print("[CHECK] MAI skipped invalid open_app and executed WAIT fallback")
             actuation.execute_adb_action(
                 action,
                 state.ui_elements,

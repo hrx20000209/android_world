@@ -1164,13 +1164,11 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         goal_lower = _normalize_space(goal).lower()
         if not goal_lower:
             return False
-        goal_lower = goal_lower.strip(" \t\r\n.,;:!?")
         simple_patterns = [
             r"^take (one|a) (photo|picture|video|selfie)",
             r"^(pause|start|stop|resume|reset|run) the (stopwatch|timer|alarm)",
             r"^(open|launch|close) (the )?[a-z0-9 _-]+( app)?$",
             r"^(turn on|turn off|enable|disable) ",
-            r"^turn [a-z0-9 _-]+ (on|off)$",
             r"^(call|dial|text|message) ",
             r"^set (the |an? )?(alarm|timer|reminder)",
         ]
@@ -1492,7 +1490,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
     ) -> tuple[bool, str]:
         if not bool(self.enable_parallel_exploration):
             return False, "disabled"
-        simple_direct_task = bool(self._is_simple_direct_task(goal))
+        if self._is_simple_direct_task(goal):
+            return False, "simple_direct_task"
         if not bool(getattr(self, "targeted_exploration", False)):
             return True, "always_on"
         if bool(getattr(self, "structured_edit_disable_explore", True)) and self._is_structured_edit_activity(
@@ -1506,11 +1505,6 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             self._explore_cooldown_steps = max(0, cooldown - 1)
             return False, "cooldown"
 
-        # For simple direct tasks, keep the first step fast, then allow
-        # exploration only under mild stuck signals.
-        if simple_direct_task and int(step_no) <= 1:
-            return False, "simple_direct_warmup"
-
         read_only = self._goal_is_read_only_query(goal)
         if int(step_no) <= max(0, int(getattr(self, "explore_bootstrap_steps", 0))):
             _, target_hints = self._infer_target_app(goal)
@@ -1520,8 +1514,6 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
 
         if int(getattr(self, "_no_effect_repeat", 0)) >= 2:
             return True, "no_effect_repeat"
-        if simple_direct_task and int(getattr(self, "_no_effect_repeat", 0)) >= 1:
-            return True, "simple_direct_no_effect_repeat"
 
         last_source = ""
         if self.actions and isinstance(self.actions[-1], dict):
@@ -1567,11 +1559,9 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         and therefore should ONLY run when the agent is genuinely stuck.
         Bootstrap and periodic probes are intentionally excluded here.
         """
-        simple_direct_task = bool(self._is_simple_direct_task(goal))
-        min_step = int(getattr(self, "sequential_explore_min_step", 4))
-        if simple_direct_task:
-            min_step = min(min_step, 2)
-        if int(step_no) < int(min_step):
+        if self._is_simple_direct_task(goal):
+            return False, "simple_direct_task"
+        if int(step_no) < int(getattr(self, "sequential_explore_min_step", 4)):
             return False, "early_step_fast_path"
         if bool(getattr(self, "structured_edit_disable_explore", True)) and self._is_structured_edit_activity(
             current_activity,
@@ -1601,37 +1591,16 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             self._explore_cooldown_steps = max(0, cooldown - 1)
             return False, "cooldown"
 
-        _, target_hints = self._infer_target_app(goal)
-        in_target_app = self._is_in_target_app(current_activity, target_hints)
-        if target_hints and not in_target_app:
-            # Safe recovery probe: when we drift away from target app, allow
-            # occasional low-budget exploration instead of repeatedly reasoning
-            # on irrelevant screens.
-            if int(step_no) >= 3 and (
-                int(step_no) % 3 == 0 or int(getattr(self, "_no_effect_repeat", 0)) >= 1
-            ):
-                return True, "target_app_recovery_probe"
-
-        if simple_direct_task:
-            if target_hints and not in_target_app:
-                return True, "simple_direct_not_in_target_app"
-
-        no_effect_need = int(max(1, int(getattr(self, "sequential_explore_min_no_effect", 3))))
-        if simple_direct_task:
-            no_effect_need = min(no_effect_need, 1)
         if int(getattr(self, "_no_effect_repeat", 0)) >= int(
-            no_effect_need
+            max(1, int(getattr(self, "sequential_explore_min_no_effect", 3)))
         ):
-            return True, "simple_direct_no_effect_repeat" if simple_direct_task else "no_effect_repeat"
+            return True, "no_effect_repeat"
 
         if self.actions and isinstance(self.actions[-1], dict):
             last_action_type = str(
                 (self.actions[-1].get("action_dict") or {}).get("action_type") or ""
             ).strip().lower()
-            if (
-                last_action_type in {"open_app", "navigate_back", "navigate_home"}
-                and not simple_direct_task
-            ):
+            if last_action_type in {"open_app", "navigate_back", "navigate_home"}:
                 return False, "recent_navigation_action"
 
         last_signature = ""
@@ -1641,15 +1610,10 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             int(getattr(self, "sequential_explore_min_repeat", 3)),
             int(getattr(self, "explore_stuck_action_repeat", 2)),
         )
-        if simple_direct_task:
-            repeat_need = min(repeat_need, 2)
         if last_signature and self._has_repeated_recent_action_signature(last_signature, repeats=repeat_need):
             if self._recent_page_hash_stable(repeats=2, max_hash_diff=2):
-                return True, "simple_direct_page_loop" if simple_direct_task else "page_loop"
-            return True, "simple_direct_repeat_loop" if simple_direct_task else "repeat_loop"
-
-        if simple_direct_task and int(step_no) % 4 == 0:
-            return True, "simple_direct_periodic_probe"
+                return True, "page_loop"
+            return True, "repeat_loop"
 
         return False, "not_stuck"
 
@@ -6275,13 +6239,8 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 should_explore = False
                 explore_gate_reason = f"insufficient_meaningful_interactive({meaningful_interactive})"
             elif should_explore and self._has_direct_goal_action(goal, ui_elements):
-                # For simple direct tasks, still allow a small safe probe when
-                # the agent already shows mild stuck signals.
-                simple_direct_task = bool(self._is_simple_direct_task(goal))
-                simple_stuck = bool(int(getattr(self, "_no_effect_repeat", 0)) >= 1)
-                if not (simple_direct_task and simple_stuck):
-                    should_explore = False
-                    explore_gate_reason = "direct_goal_action_visible"
+                should_explore = False
+                explore_gate_reason = "direct_goal_action_visible"
             self._emit_log(
                 f"step={step_no} explore_gate should_explore={should_explore} "
                 f"reason={explore_gate_reason} mode=sequential",

@@ -2313,6 +2313,18 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 continue
             if action.action_type == json_action.OPEN_APP:
                 app_name = _normalize_space(getattr(action, "app_name", "") or "")
+                if not app_name and isinstance(action_dict, dict):
+                    app_name = _normalize_space(
+                        action_dict.get("app_name")
+                        or action_dict.get("text")
+                        or action_dict.get("value")
+                        or ""
+                    )
+                    if app_name:
+                        action = json_action.JSONAction(
+                            action_type=json_action.OPEN_APP,
+                            app_name=app_name,
+                        )
                 if not app_name:
                     continue
             if action.action_type in safe_types:
@@ -4571,11 +4583,37 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         )
 
         # One retry for click-like actions when nothing appears to change.
+        # To avoid accidental double-toggles on non-idempotent controls, first
+        # re-check a stabilized snapshot, and skip retry on risky/submit widgets.
         if (
             not bool(action_effect.get("changed"))
             and action.action_type in {json_action.CLICK, json_action.LONG_PRESS}
             and post_state is not None
         ):
+            stable_state = self._get_state_after_action_stable(
+                before_pixels=pre_action_pixels,
+                timeout_sec=1.0,
+                interval_sec=0.12,
+            )
+            stable_state, stable_after_activity, _ = self._recover_post_action_state_from_system_ui(
+                post_state=stable_state,
+                before_pixels=pre_action_pixels,
+                log_prefix=f"step={step_no} stable_check",
+                log_tag="REASON",
+                timeout_sec=1.0,
+                serialize_with_rollback_lock=False,
+                max_overlay_backs=1,
+            )
+            if stable_state is not None:
+                stable_effect = self._action_effect_summary(
+                    before_pixels=pre_action_pixels,
+                    after_pixels=stable_state.pixels,
+                    before_activity=reasoning_pre_action_page.get("activity"),
+                    after_activity=stable_after_activity,
+                )
+                if bool(stable_effect.get("changed")):
+                    post_state = stable_state
+                    action_effect = stable_effect
             retry_idx = _safe_int(getattr(action, "index", None))
             if retry_idx is None:
                 retry_idx = self._index_from_coordinate(
@@ -4583,6 +4621,13 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                     x=_safe_int(getattr(action, "x", None)),
                     y=_safe_int(getattr(action, "y", None)),
                 )
+            if retry_idx is not None and 0 <= retry_idx < len(ui_elements):
+                retry_element = ui_elements[retry_idx]
+                if (
+                    self._is_critical_risky_element(retry_element)
+                    or self._is_submit_or_dismiss_control(retry_element)
+                ):
+                    retry_idx = None
             if retry_idx is not None and 0 <= retry_idx < len(ui_elements):
                 retry_center = self._safe_center_from_element(ui_elements[retry_idx])
                 if retry_center is not None:

@@ -23,6 +23,34 @@ class ExplorerElementAgent(_BaseExplorerElementAgent):
         kwargs.pop("image_downsample_scale", None)
         super().__init__(*args, **kwargs)
 
+    # Keep exploration gate behavior synchronized with explorer_agent_gelab.
+    def _should_start_exploration(
+        self,
+        step_no: int,
+        goal: str,
+        current_activity: str | None = None,
+    ) -> tuple[bool, str]:
+        return super()._should_start_exploration(
+            step_no=step_no,
+            goal=goal,
+            current_activity=current_activity,
+        )
+
+    # Keep sequential exploration gate behavior synchronized with explorer_agent_gelab.
+    def _should_start_sequential_exploration(
+        self,
+        step_no: int,
+        goal: str,
+        current_activity: str | None = None,
+        ui_elements: list[Any] | None = None,
+    ) -> tuple[bool, str]:
+        return super()._should_start_sequential_exploration(
+            step_no=step_no,
+            goal=goal,
+            current_activity=current_activity,
+            ui_elements=ui_elements,
+        )
+
     def _collect_candidates(
         self,
         ui_elements: list[Any],
@@ -128,4 +156,3 @@ class ExplorerElementAgent(_BaseExplorerElementAgent):
 
 class ElementTextAgent(ExplorerElementAgent):
     pass
-

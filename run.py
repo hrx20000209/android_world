@@ -30,7 +30,7 @@ from absl import logging
 from android_world import checkpointer as checkpointer_lib
 from android_world import registry
 from android_world import suite_utils
-from android_world.agents import base_agent, human_agent, infer, m3a, random_agent, seeact, t3a, mai_ui, mm_agent, t3a_profiling, explorer_agent, gelab_agent, explorer_agent_gelab, explorer_agent_ablation_random, explorer_agent_ablation_back2, explorer_agent_ablation_no_knowledge
+from android_world.agents import base_agent, human_agent, infer, m3a, random_agent, seeact, t3a, mm_agent, t3a_profiling, explorer_agent, gelab_agent, explorer_agent_gelab, explorer_agent_ablation_random, explorer_agent_ablation_back2, explorer_agent_ablation_no_knowledge
 from android_world.env import env_launcher
 from android_world.env import interface
 
@@ -201,6 +201,7 @@ def _get_agent(
         agent = t3a.T3A(env, infer.DeepseekWrapper())
     # UI-TARS.
     elif _AGENT_NAME.value == 'mai-ui':
+        from android_world.agents import mai_ui
         agent = mai_ui.MAIUIAgent(
             env,
             infer.LlamaCppWrapper(
@@ -370,7 +371,8 @@ def _main() -> None:
         f'Finished running agent {_AGENT_NAME.value} on {_SUITE_FAMILY.value}'
         f' family. Wrote to {checkpoint_dir}.'
     )
-    agent.save_summary()
+    if hasattr(agent, 'save_summary'):
+        agent.save_summary()
 
     env.close()
 
