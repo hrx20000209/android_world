@@ -158,7 +158,6 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         rollback_settle_sec: float = 0.25,
         rollback_replay_max_actions: int = 3,
         explore_action_pause_sec: float = 0.25,
-        reasoning_sleep_sec: float = 0.0,
         embed_model_name: str = "sentence-transformers/paraphrase-MiniLM-L6-v2",
         verbose_step_logs: bool = True,
         reasoning_preview_chars: int = 180,
@@ -198,7 +197,6 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self.rollback_settle_sec = max(0.0, float(rollback_settle_sec))
         self.rollback_replay_max_actions = max(1, int(rollback_replay_max_actions))
         self.explore_action_pause_sec = max(0.05, float(explore_action_pause_sec))
-        self.reasoning_sleep_sec = max(0.0, float(reasoning_sleep_sec))
         self.embed_model_name = embed_model_name
         self.verbose_step_logs = bool(verbose_step_logs)
         self.reasoning_preview_chars = max(60, int(reasoning_preview_chars))
@@ -4312,16 +4310,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
 
         reasoning_start_perf = time.perf_counter()
         response, _, _ = self.vllm.predict_mm("", [], messages=messages)
-        reasoning_elapsed = float(max(0.0, time.perf_counter() - reasoning_start_perf))
-        if self.reasoning_sleep_sec > reasoning_elapsed:
-            sleep_sec = float(self.reasoning_sleep_sec - reasoning_elapsed)
-            self._emit_log(
-                (
-                    f"step={step_no} reasoning_sleep_skipped configured={sleep_sec:.3f}s "
-                    f"(elapsed={reasoning_elapsed:.3f}s target={self.reasoning_sleep_sec:.3f}s)"
-                ),
-                tag="REASON",
-            )
+        _ = float(max(0.0, time.perf_counter() - reasoning_start_perf))
         self._emit_log_block(
             title=f"step={step_no} llm_response",
             content=str(response),

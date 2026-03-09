@@ -30,7 +30,7 @@ from absl import logging
 from android_world import checkpointer as checkpointer_lib
 from android_world import registry
 from android_world import suite_utils
-from android_world.agents import base_agent, human_agent, infer, m3a, random_agent, seeact, t3a, mm_agent, t3a_profiling, explorer_agent, gelab_agent, gelab_agent_resize, explorer_agent_gelab, explorer_agent_ablation_random, explorer_agent_ablation_back2, explorer_agent_ablation_no_knowledge
+from android_world.agents import base_agent, human_agent, infer, m3a, random_agent, seeact, t3a, mm_agent, t3a_profiling, explorer_agent, gelab_agent, gelab_agent_resize, explorer_agent_gelab, explorer_agent_gelab_light, explorer_agent_ablation_random, explorer_agent_ablation_back2, explorer_agent_ablation_no_knowledge
 from android_world.env import env_launcher
 from android_world.env import interface
 
@@ -139,7 +139,7 @@ _OUTPUT_PATH = flags.DEFINE_string(
 )
 
 # Agent specific.
-_AGENT_NAME = flags.DEFINE_string('agent_name', 'gelab_agent_resize', help='Agent name.')
+_AGENT_NAME = flags.DEFINE_string('agent_name', 'explore_agent_gelab', help='Agent name.')
 _IMAGE_DOWNSAMPLE_SCALE = flags.DEFINE_float(
     'image_downsample_scale',
     2.0,
@@ -268,31 +268,29 @@ def _get_agent(
             env,
             infer.LlamaCppWrapper(
                 api_url="http://localhost:8081/v1/chat/completions",
-                temperature=0.2,
+                temperature=0.0,
                 max_tokens=512,
             ),
-            reasoning_sleep_sec=0.0,
             image_downsample_scale=_IMAGE_DOWNSAMPLE_SCALE.value,
         )
     elif _AGENT_NAME.value == 'explore_agent_gelab':
-        agent = explorer_agent_gelab.ExplorerElementAgent(
+        agent = explorer_agent_gelab_light.ExplorerElementAgent(
             env,
             infer.LlamaCppWrapper(
                 api_url="http://localhost:8081/v1/chat/completions",
-                temperature=0.2,
+                temperature=0.0,
                 max_tokens=512,
             ),
-            reasoning_sleep_sec=0.0,
+            image_downsample_scale=_IMAGE_DOWNSAMPLE_SCALE.value,
         )
     elif _AGENT_NAME.value == 'explore_agent_ablation_random':
         agent = explorer_agent_ablation_random.ExplorerElementAgent(
             env,
             infer.LlamaCppWrapper(
                 api_url="http://localhost:8081/v1/chat/completions",
-                temperature=0.2,
+                temperature=0.0,
                 max_tokens=512,
             ),
-            reasoning_sleep_sec=0.0,
             image_downsample_scale=_IMAGE_DOWNSAMPLE_SCALE.value,
         )
     elif _AGENT_NAME.value == 'explore_agent_ablation_back2':
@@ -300,10 +298,9 @@ def _get_agent(
             env,
             infer.LlamaCppWrapper(
                 api_url="http://localhost:8081/v1/chat/completions",
-                temperature=0.2,
+                temperature=0.0,
                 max_tokens=512,
             ),
-            reasoning_sleep_sec=0.0,
             image_downsample_scale=_IMAGE_DOWNSAMPLE_SCALE.value,
         )
     elif _AGENT_NAME.value == 'explore_agent_ablation_no_knowledge':
@@ -311,10 +308,9 @@ def _get_agent(
             env,
             infer.LlamaCppWrapper(
                 api_url="http://localhost:8081/v1/chat/completions",
-                temperature=0.2,
+                temperature=0.0,
                 max_tokens=512,
             ),
-            reasoning_sleep_sec=0.0,
             image_downsample_scale=_IMAGE_DOWNSAMPLE_SCALE.value,
         )
     elif _AGENT_NAME.value == 'ui_tars_agent':

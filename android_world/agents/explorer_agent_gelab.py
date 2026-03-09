@@ -74,6 +74,14 @@ EXPLORER_MAI_SYSTEM_PROMPT = (
 ).strip()
 
 
+def _normalize_downsample_scale(scale: int | float | str) -> float:
+    try:
+        value = float(scale)
+    except Exception:  # pylint: disable=broad-exception-caught
+        value = 1.0
+    return max(1.0, value)
+
+
 
 
 @dataclasses.dataclass(frozen=True)
@@ -120,7 +128,6 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         rollback_settle_sec: float = 0.12,
         rollback_replay_max_actions: int = 2,
         explore_action_pause_sec: float = 0.35,
-        reasoning_sleep_sec: float = 0.0,
         embed_model_name: str = "sentence-transformers/paraphrase-MiniLM-L6-v2",
         verbose_step_logs: bool = True,
         reasoning_preview_chars: int = 180,
@@ -146,6 +153,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         structured_edit_disable_explore: bool = True,
         enable_sequential_exploration: bool = True,
         sequential_explore_steps: int = 2,
+        image_downsample_scale: int | float = 1.0,
         prompt_cleanup_safe_hint_mode: bool = True,
     ):
         super().__init__(env, name)
@@ -165,7 +173,6 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self.rollback_settle_sec = max(0.0, float(rollback_settle_sec))
         self.rollback_replay_max_actions = max(1, int(rollback_replay_max_actions))
         self.explore_action_pause_sec = max(0.3, float(explore_action_pause_sec))
-        self.reasoning_sleep_sec = max(0.0, float(reasoning_sleep_sec))
         self.embed_model_name = embed_model_name
         self.verbose_step_logs = bool(verbose_step_logs)
         self.reasoning_preview_chars = max(60, int(reasoning_preview_chars))
@@ -175,6 +182,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         if requested_mode == "auto":
             requested_mode = "1000"
         self.model_coordinate_mode = requested_mode
+        self.image_downsample_scale = _normalize_downsample_scale(image_downsample_scale)
         self.enable_parallel_exploration = bool(enable_parallel_exploration)
         self.save_explore_masks = bool(save_explore_masks)
         self.explore_mask_output_dir = str(explore_mask_output_dir or "explore_k1_masks").strip()
@@ -214,8 +222,6 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self._explore_iteration_candidates: list[dict[str, Any]] = []
         self._pending_explore_payload: dict[str, Any] | None = None
         self._last_clue_debug: dict[str, Any] = {}
-        self.prompt_cleanup_safe_hint_mode = bool(prompt_cleanup_safe_hint_mode)
-        self._last_sequential_explore_meta: dict[str, Any] | None = None
 
         self._explore_root_hash: int | None = None
         self._explore_root_pixels: np.ndarray | None = None
@@ -260,12 +266,15 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self.structured_edit_disable_explore = bool(structured_edit_disable_explore)
         self.enable_sequential_exploration = bool(enable_sequential_exploration)
         self.sequential_explore_steps = max(0, int(sequential_explore_steps))
+        self.prompt_cleanup_safe_hint_mode = bool(prompt_cleanup_safe_hint_mode)
         # Sequential explore policy: trigger only when stuck, but early enough
         # to reduce detours in total step count.
-        self.sequential_explore_min_step = 2
+        self.sequential_explore_min_step = 3
         self.sequential_explore_min_no_effect = 2
         self.sequential_explore_min_repeat = 2
-        self.sequential_explore_min_gap = 1
+        self.sequential_explore_min_gap = 2
+        self.sequential_explore_max_runs = 2
+        self._sequential_explore_runs = 0
         self._last_sequential_explore_step = 0
         # Keep exploration close to the paper's basic design:
         # fixed-K sequential exploration without heavy rollback/safe-mode overrides.
@@ -283,6 +292,26 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         if self._max_steps is None:
             return MAX_AGENT_STEPS
         return min(MAX_AGENT_STEPS, int(self._max_steps))
+
+    def set_image_downsample_scale(self, scale: int | float) -> None:
+        self.image_downsample_scale = _normalize_downsample_scale(scale)
+
+    def _prepare_reasoning_pixels(self, pixels: np.ndarray) -> np.ndarray:
+        scale_divisor = float(self.image_downsample_scale)
+        if scale_divisor <= 1.0:
+            return pixels
+        image = Image.fromarray(np.array(pixels, copy=True))
+        width, height = image.size
+        target_width = max(1, int(round(width / scale_divisor)))
+        target_height = max(1, int(round(height / scale_divisor)))
+        if target_width == width and target_height == height:
+            return pixels
+        if hasattr(Image, "Resampling"):
+            resample = Image.Resampling.BILINEAR
+        else:
+            resample = Image.BILINEAR
+        resized = image.resize((target_width, target_height), resample=resample)
+        return np.array(resized)
 
     def _emit_log(self, message: str, tag: str = "EXPLORE") -> None:
         if not self.verbose_step_logs:
@@ -649,7 +678,6 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self._explore_iteration_candidates = []
         self._pending_explore_payload = None
         self._last_clue_debug = {}
-        self._last_sequential_explore_meta = None
         self._explore_root_hash = None
         self._explore_root_pixels = None
         self._explore_root_activity = None
@@ -678,6 +706,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self._task_trace_dir = None
         self._task_step_latencies = []
         self._explore_trigger_reason = ""
+        self._sequential_explore_runs = 0
         self._last_sequential_explore_step = 0
         self._explore_cooldown_steps = 0
         self._structured_recovery_used = False
@@ -760,28 +789,10 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         self._branch_action_history = []
         self._replay_action_history = list(self._reasoning_action_history)
 
-        self._last_sequential_explore_meta = {
-            "source_step": int(source_step),
-            "trigger_reason": str(self._explore_trigger_reason or trigger_reason or "sequential"),
-            "ran": False,
-            "rollback_success": True,
-            "alignment_ok": True,
-            "candidate_count": 0,
-        }
-
         root_state = self._capture_explore_root_baseline(
             trigger=f"step_{source_step}_seq_{self._explore_trigger_reason}"
         )
         if root_state is None:
-            self._last_sequential_explore_meta = {
-                "source_step": int(source_step),
-                "trigger_reason": str(self._explore_trigger_reason or trigger_reason or "sequential"),
-                "ran": False,
-                "rollback_success": False,
-                "alignment_ok": False,
-                "candidate_count": 0,
-                "skip_reason": "root_baseline_capture_failed",
-            }
             self._emit_log(
                 f"step={source_step} sequential_explore_skipped reason=root_baseline_capture_failed",
                 tag="EXPLORE",
@@ -794,6 +805,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             f"budget={self.sequential_explore_steps} root_page=({self._state_page_hint(root_state)})",
             tag="EXPLORE",
         )
+        self._sequential_explore_runs = int(getattr(self, "_sequential_explore_runs", 0)) + 1
         self._last_sequential_explore_step = int(source_step)
 
         # Temporarily override max_steps so the worker respects the sequential budget.
@@ -811,14 +823,6 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
 
         candidates = list(self._explore_iteration_candidates)
         self._explore_iteration_candidates = []
-        self._last_sequential_explore_meta = {
-            "source_step": int(source_step),
-            "trigger_reason": str(self._explore_trigger_reason or trigger_reason or "sequential"),
-            "ran": True,
-            "rollback_success": True,
-            "alignment_ok": True,
-            "candidate_count": int(len(candidates)),
-        }
         self._emit_log(
             f"step={source_step} sequential_explore_done candidates={len(candidates)}",
             tag="EXPLORE",
@@ -833,12 +837,6 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 f"step={source_step} sequential_explore_final_root={rollback_info}",
                 tag="EXPLORE",
             )
-            if isinstance(self._last_sequential_explore_meta, dict):
-                self._last_sequential_explore_meta["rollback_success"] = bool(rollback_info.get("success"))
-                self._last_sequential_explore_meta["alignment_ok"] = bool(rollback_info.get("success"))
-                self._last_sequential_explore_meta["rollback_mode"] = str(
-                    rollback_info.get("mode") or ""
-                )
             self._rollback_pause()
         # CRITICAL: clear the root baseline so _ensure_root_before_reasoning does not
         # see a stale hash after rollback and falsely trigger safety mode.
@@ -1604,11 +1602,12 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         Bootstrap and periodic probes are intentionally excluded here.
         """
         simple_direct_task = bool(self._is_simple_direct_task(goal))
-        min_step = int(getattr(self, "sequential_explore_min_step", 4))
-        if simple_direct_task:
-            min_step = min(min_step, 2)
+        min_step = int(getattr(self, "sequential_explore_min_step", 3))
         if int(step_no) < int(min_step):
             return False, "early_step_fast_path"
+        max_runs = max(0, int(getattr(self, "sequential_explore_max_runs", 0)))
+        if max_runs > 0 and int(getattr(self, "_sequential_explore_runs", 0)) >= max_runs:
+            return False, "run_budget_exhausted"
         if bool(getattr(self, "structured_edit_disable_explore", True)) and self._is_structured_edit_activity(
             current_activity,
             goal=goal,
@@ -1640,21 +1639,19 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         _, target_hints = self._infer_target_app(goal)
         in_target_app = self._is_in_target_app(current_activity, target_hints)
         if target_hints and not in_target_app:
-            # Safe recovery probe: when we drift away from target app, allow
-            # occasional low-budget exploration instead of repeatedly reasoning
-            # on irrelevant screens.
-            if int(step_no) >= 3 and (
-                int(step_no) % 3 == 0 or int(getattr(self, "_no_effect_repeat", 0)) >= 1
-            ):
-                return True, "target_app_recovery_probe"
+            # Conservative recovery: only when there is already a stuck signal.
+            if int(getattr(self, "_no_effect_repeat", 0)) >= 1:
+                return True, "target_app_recovery_stuck"
 
         if simple_direct_task:
             if target_hints and not in_target_app:
-                return True, "simple_direct_not_in_target_app"
+                if int(getattr(self, "_no_effect_repeat", 0)) >= 1:
+                    return True, "simple_direct_not_in_target_app_stuck"
+                return False, "simple_direct_wait_target_recovery_signal"
 
         no_effect_need = int(max(1, int(getattr(self, "sequential_explore_min_no_effect", 3))))
         if simple_direct_task:
-            no_effect_need = min(no_effect_need, 1)
+            no_effect_need = max(no_effect_need, 2)
         if int(getattr(self, "_no_effect_repeat", 0)) >= int(
             no_effect_need
         ):
@@ -1683,9 +1680,6 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             if self._recent_page_hash_stable(repeats=2, max_hash_diff=2):
                 return True, "simple_direct_page_loop" if simple_direct_task else "page_loop"
             return True, "simple_direct_repeat_loop" if simple_direct_task else "repeat_loop"
-
-        if simple_direct_task and int(step_no) % 4 == 0:
-            return True, "simple_direct_periodic_probe"
 
         return False, "not_stuck"
 
@@ -5966,6 +5960,36 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
 
         return "\n".join(lines) if lines else "None."
 
+    def _should_inject_safe_hint(self, candidates: list[dict[str, Any]]) -> tuple[bool, str]:
+        if not bool(getattr(self, "prompt_cleanup_safe_hint_mode", True)):
+            return False, "cleanup_mode_disabled"
+        if not candidates:
+            return False, "no_prev_candidates"
+        if len(candidates) > 3:
+            return False, "too_many_candidates"
+        useful_count = 0
+        for cand in list(candidates):
+            trunk = cand.get("trunk") or {}
+            if isinstance(trunk, dict) and bool(trunk.get("is_useful")):
+                useful_count += 1
+        if useful_count <= 0:
+            return False, "no_useful_trunk"
+        return True, "safe_hint_ok"
+
+    def _build_single_safe_hint(self, candidates: list[dict[str, Any]]) -> str:
+        for cand in list(candidates or []):
+            trunk = cand.get("trunk") or {}
+            if not isinstance(trunk, dict):
+                continue
+            action_name = _normalize_space(trunk.get("action_type") or "click").lower()
+            node_text = self._clean_clue_text(
+                trunk.get("node_text") or trunk.get("node_desc") or trunk.get("node_match_text") or ""
+            )
+            node_text = self._clue_text_snippet(node_text or "entry point", max_chars=52)
+            if node_text:
+                return f'{action_name} "{node_text}" may lead to a useful page.'
+        return ""
+
     def _hints_text(self, hints: list[ExplorerHint], top_n: int = 3) -> str:
         """Return top-N hints as natural-language sentences with positional cues.
 
@@ -5998,70 +6022,6 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             sentence += " may be useful for the task."
             lines.append(sentence)
         return "\n".join(lines)
-
-    def should_inject_safe_hint(
-        self,
-        pending_payload: dict[str, Any] | None,
-    ) -> tuple[bool, str]:
-        if not bool(getattr(self, "prompt_cleanup_safe_hint_mode", False)):
-            return False, "cleanup_mode_disabled"
-        if not isinstance(pending_payload, dict):
-            return False, "no_pending_payload"
-        candidates = list(pending_payload.get("candidates") or [])
-        if not candidates:
-            return False, "no_candidates"
-        if len(candidates) > 3:
-            return False, "too_many_candidates"
-        meta = pending_payload.get("meta") if isinstance(pending_payload.get("meta"), dict) else {}
-        rollback_ok = bool(meta.get("rollback_success", True))
-        if not rollback_ok:
-            return False, "rollback_not_restored"
-        alignment_ok = bool(meta.get("alignment_ok", True))
-        if not alignment_ok:
-            return False, "alignment_failed"
-        return True, "safe_hint_ready"
-
-    def build_single_safe_hint(
-        self,
-        pending_payload: dict[str, Any] | None,
-    ) -> str:
-        if not isinstance(pending_payload, dict):
-            return ""
-        candidates = list(pending_payload.get("candidates") or [])
-        if not candidates:
-            return ""
-
-        def _pick_obs(cand: dict[str, Any]) -> dict[str, Any] | None:
-            trunk = cand.get("trunk") if isinstance(cand.get("trunk"), dict) else None
-            leaves = [x for x in list(cand.get("leaf_observations") or []) if isinstance(x, dict)]
-            if trunk and bool(trunk.get("is_useful")):
-                return trunk
-            for leaf in leaves:
-                if bool(leaf.get("is_useful")):
-                    return leaf
-            if trunk:
-                return trunk
-            if leaves:
-                return leaves[0]
-            return None
-
-        best_obs: dict[str, Any] | None = None
-        for cand in candidates:
-            if not isinstance(cand, dict):
-                continue
-            best_obs = _pick_obs(cand)
-            if best_obs:
-                break
-        if not best_obs:
-            return ""
-
-        text = self._clean_clue_text(
-            best_obs.get("node_text") or best_obs.get("node_desc") or best_obs.get("node_match_text") or ""
-        )
-        text = self._clue_text_snippet(text or "entry point", max_chars=48)
-        action_type = _normalize_space(best_obs.get("action_type") or "click").lower() or "click"
-        pos = self._region_from_record(best_obs)
-        return f'可优先尝试 {action_type} "{text}"（{pos}）。'
 
     @staticmethod
     def _safe_center_from_element(element: Any) -> tuple[int, int] | None:
@@ -6335,66 +6295,12 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         #      candidates for NEXT step (not used for this step's clues)
         seq_explore_candidates: list[dict[str, Any]] = []
         prompt_explore_candidates: list[dict[str, Any]] = []
-        cleanup_prompt_mode = bool(
-            getattr(self, "prompt_cleanup_safe_hint_mode", False)
-            and self.enable_sequential_exploration
+        had_pending_prev_explore = bool(self._pending_explore_payload)
+        self._emit_log(
+            f"step={step_no} pending_prev_exploration exists={had_pending_prev_explore}",
+            tag="EXPLORE",
         )
-        safe_hint_text = ""
-        safe_hint_injected = False
-        safe_hint_skip_reason = "not_applicable"
-        prompt_mode = "baseline_prompt"
-        current_step_explore_ran = False
-        current_step_explore_reason = "deferred_after_reasoning"
-
-        if self.enable_sequential_exploration and cleanup_prompt_mode:
-            pending_exists = bool(self._pending_explore_payload)
-            pending_payload = dict(self._pending_explore_payload or {}) if pending_exists else None
-            self._pending_explore_payload = None
-            self._emit_log(
-                f"step={step_no} pending_exploration_exists={pending_exists}",
-                tag="EXPLORE",
-            )
-            if pending_payload:
-                prompt_explore_candidates = list(pending_payload.get("candidates") or [])
-                pending_meta = pending_payload.get("meta") if isinstance(pending_payload.get("meta"), dict) else {}
-                hint_ok, hint_reason = self.should_inject_safe_hint(pending_payload)
-                if hint_ok:
-                    safe_hint_text = self.build_single_safe_hint(pending_payload)
-                    if safe_hint_text:
-                        safe_hint_injected = True
-                        prompt_mode = "baseline_plus_safe_hint"
-                        safe_hint_skip_reason = ""
-                    else:
-                        safe_hint_skip_reason = "empty_hint"
-                else:
-                    safe_hint_skip_reason = hint_reason
-                self._emit_log(
-                    (
-                        f"step={step_no} previous_explore_meta "
-                        f"rollback_success={pending_meta.get('rollback_success', True)} "
-                        f"alignment_ok={pending_meta.get('alignment_ok', True)} "
-                        f"candidate_count={len(prompt_explore_candidates)}"
-                    ),
-                    tag="EXPLORE",
-                )
-            else:
-                safe_hint_skip_reason = "no_pending_payload"
-            self._emit_log(
-                (
-                    f"step={step_no} safe_hint_injected={safe_hint_injected} "
-                    f"skip_reason={safe_hint_skip_reason} prompt_mode={prompt_mode} "
-                    f"hint_text={safe_hint_text or '<none>'}"
-                ),
-                tag="EXPLORE",
-            )
-            with self._explore_action_count_lock:
-                self._explore_action_count = 0
-            self._explore_iteration_candidates = []
-            self._clear_explore_root_baseline()
-            clues = safe_hint_text if safe_hint_injected else ""
-            current_step_explore_ran = False
-            current_step_explore_reason = "deferred_after_reasoning"
-        elif self.enable_sequential_exploration:
+        if self.enable_sequential_exploration:
             # ── 1. Align previous exploration with current screenshot ──
             if self._pending_explore_payload:
                 prev_candidates = self._pending_explore_payload.get("candidates") or []
@@ -6472,8 +6378,6 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                     self._explore_action_count = 0
                 self._explore_iteration_candidates = []
                 self._clear_explore_root_baseline()
-            current_step_explore_ran = bool(should_explore)
-            current_step_explore_reason = str(explore_gate_reason)
         else:
             if self._pending_explore_payload:
                 pending_candidates = self._pending_explore_payload.get("candidates") or []
@@ -6490,8 +6394,6 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                         f"[Clue Source] Exploration step {pending_source_step} prepared hints for reasoning step {len(self.actions) + 1}.\n"
                         + clue_text
                     )
-            current_step_explore_ran = False
-            current_step_explore_reason = "parallel_mode"
 
         self._emit_log_block(
             title=f"step={step_no} clues",
@@ -6527,17 +6429,31 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                         trigger_reason=explore_gate_reason,
                     )
 
+        prompt_mode = "legacy_explorer_prompt"
+        safe_hint = ""
+        safe_hint_injected = False
+        safe_hint_reason = "cleanup_mode_disabled"
         prompt_history_actions = self._history_prompt_text(max_items=8)
-        if cleanup_prompt_mode:
-            if safe_hint_injected and safe_hint_text:
+        if bool(getattr(self, "prompt_cleanup_safe_hint_mode", True)):
+            should_hint, safe_hint_reason = self._should_inject_safe_hint(prompt_explore_candidates)
+            if should_hint:
+                safe_hint = self._build_single_safe_hint(prompt_explore_candidates)
+                if safe_hint:
+                    safe_hint_injected = True
+                    prompt_mode = "baseline_plus_safe_hint"
+                else:
+                    safe_hint_reason = "empty_hint_text"
+            if not safe_hint_injected:
+                prompt_mode = "baseline_prompt"
+
+            if safe_hint_injected:
                 user_text = (
                     f"Task:\n{goal}\n\n"
                     f"History actions:\n{prompt_history_actions}\n\n"
-                    f"Exploration hint:\n{safe_hint_text}\n\n"
+                    f"Exploration hint:\n{safe_hint}\n\n"
                     "Current screenshot is attached below.\n"
                     "Choose the next single action."
                 )
-                prompt_mode = "baseline_plus_safe_hint"
             else:
                 user_text = (
                     f"Task:\n{goal}\n\n"
@@ -6545,7 +6461,6 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                     "Current screenshot is attached below.\n"
                     "Choose the next single action."
                 )
-                prompt_mode = "baseline_prompt"
         else:
             clues_label = "Aligned explorer clues" if self.enable_sequential_exploration else "Parallel explorer clues"
             prompt_history_summary = self._history_summary_text(max_items=8)
@@ -6561,15 +6476,15 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 "Current screenshot is attached below.\n"
                 "Choose the next single action."
             )
-            prompt_mode = "legacy_explore_prompt"
+        system_prompt = GELAB_SYSTEM_PROMPT if bool(getattr(self, "prompt_cleanup_safe_hint_mode", True)) else EXPLORER_MAI_SYSTEM_PROMPT
         self._emit_log(
-            f"step={step_no} prompt_mode={prompt_mode}",
+            f"step={step_no} prompt_mode={prompt_mode} safe_hint_injected={safe_hint_injected} "
+            f"safe_hint_reason={safe_hint_reason} safe_hint_text={safe_hint or '<none>'}",
             tag="REASON",
         )
-        system_prompt_text = GELAB_SYSTEM_PROMPT if cleanup_prompt_mode else EXPLORER_MAI_SYSTEM_PROMPT
         prompt_log_text = (
             "[VLM text input | system]\n"
-            + system_prompt_text
+            + system_prompt
             + "\n\n[VLM text input | user]\n"
             + user_text
         )
@@ -6579,28 +6494,30 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
             tag="REASON",
         )
 
+        prompt_pixels = self._prepare_reasoning_pixels(state.pixels)
+        self._emit_log(
+            (
+                f"step={step_no} prompt_resolution "
+                f"original={state.pixels.shape[1]}x{state.pixels.shape[0]} "
+                f"model={prompt_pixels.shape[1]}x{prompt_pixels.shape[0]} "
+                f"downsample_scale={self.image_downsample_scale:.3f}"
+            ),
+            tag="REASON",
+        )
         messages = [
-            {"role": "system", "content": [{"type": "text", "text": system_prompt_text}]},
+            {"role": "system", "content": [{"type": "text", "text": system_prompt}]},
             {
                 "role": "user",
                 "content": [
                     {"type": "text", "text": user_text},
-                    {"type": "image_url", "image_url": {"url": _to_data_url(state.pixels)}},
+                    {"type": "image_url", "image_url": {"url": _to_data_url(prompt_pixels)}},
                 ],
             },
         ]
 
         reasoning_start_perf = time.perf_counter()
         response, _, _ = self.vllm.predict_mm("", [], messages=messages)
-        reasoning_elapsed = float(max(0.0, time.perf_counter() - reasoning_start_perf))
-        if not self.enable_sequential_exploration and self.reasoning_sleep_sec > reasoning_elapsed:
-            self._emit_log(
-                (
-                    f"step={step_no} reasoning_sleep_disabled elapsed={reasoning_elapsed:.3f}s "
-                    f"configured_target={self.reasoning_sleep_sec:.3f}s"
-                ),
-                tag="REASON",
-            )
+        _ = float(max(0.0, time.perf_counter() - reasoning_start_perf))
         self._emit_log_block(
             title=f"step={step_no} llm_response",
             content=str(response),
@@ -6816,40 +6733,35 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
         if strict_reject and last_parse_exc is not None:
             parse_error = str(last_parse_exc)
         if not strict_reject:
-            if cleanup_prompt_mode:
+            force_open_app, app_name = self._should_force_open_target_app(
+                step_no=step_no,
+                goal=goal,
+                current_activity=reasoning_start_page.get("activity"),
+                action=action,
+            )
+            if force_open_app and app_name:
+                source = "target_app_bootstrap"
+                action, tool_call = self._build_open_app_action(app_name)
                 self._emit_log(
-                    f"step={step_no} action_override_heuristics_bypassed cleanup_prompt_mode",
+                    f"step={step_no} target_app_bootstrap force_open_app={app_name}",
                     tag="REASON",
                 )
-            else:
-                force_open_app, app_name = self._should_force_open_target_app(
-                    step_no=step_no,
-                    goal=goal,
-                    current_activity=reasoning_start_page.get("activity"),
-                    action=action,
+            if self._should_force_back_from_chooser(
+                goal=goal,
+                current_activity=reasoning_start_page.get("activity"),
+                action=action,
+            ):
+                source = "chooser_guard_back"
+                action = json_action.JSONAction(action_type=json_action.NAVIGATE_BACK)
+                tool_call = {
+                    "name": "mobile_use",
+                    "arguments": {"action": "system_button", "button": "back"},
+                }
+                self._emit_log(
+                    f"step={step_no} chooser_guard applied -> navigate_back",
+                    tag="REASON",
                 )
-                if force_open_app and app_name:
-                    source = "target_app_bootstrap"
-                    action, tool_call = self._build_open_app_action(app_name)
-                    self._emit_log(
-                        f"step={step_no} target_app_bootstrap force_open_app={app_name}",
-                        tag="REASON",
-                    )
-                if self._should_force_back_from_chooser(
-                    goal=goal,
-                    current_activity=reasoning_start_page.get("activity"),
-                    action=action,
-                ):
-                    source = "chooser_guard_back"
-                    action = json_action.JSONAction(action_type=json_action.NAVIGATE_BACK)
-                    tool_call = {
-                        "name": "mobile_use",
-                        "arguments": {"action": "system_button", "button": "back"},
-                    }
-                    self._emit_log(
-                        f"step={step_no} chooser_guard applied -> navigate_back",
-                        tag="REASON",
-                    )
+            if not bool(getattr(self, "prompt_cleanup_safe_hint_mode", True)):
                 aligned_action, aligned_tool, aligned_reason = self._apply_aligned_candidate_guard(
                     goal=goal,
                     ui_elements=ui_elements,
@@ -6865,15 +6777,12 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                         f"step={step_no} aligned_explore_guard applied={aligned_reason}",
                         tag="REASON",
                     )
-        allow_loop_guard = not cleanup_prompt_mode
-        if cleanup_prompt_mode:
-            self._emit_log(
-                f"step={step_no} loop_guard_bypassed cleanup_prompt_mode",
-                tag="REASON",
-            )
-        elif self._is_simple_direct_task(goal):
+        allow_loop_guard = True
+        if self._is_simple_direct_task(goal):
             allow_loop_guard = False
         elif self._has_direct_goal_action(goal, ui_elements):
+            allow_loop_guard = False
+        if bool(getattr(self, "prompt_cleanup_safe_hint_mode", True)):
             allow_loop_guard = False
         if not strict_reject and allow_loop_guard and self._should_apply_loop_guard(action):
             loop_guard_action, loop_guard_tool = self._fallback_explore(hints, ui_elements)
@@ -6893,16 +6802,11 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 )
 
         if self.enable_sequential_exploration:
-            if cleanup_prompt_mode:
-                explore_candidates = []
-                explore_action_count = 0
-                explore_thread_clean = True
-            else:
-                # Exploration already ran synchronously before reasoning; no thread to stop.
-                # seq_explore_candidates are stored for NEXT step's alignment (not used now).
-                explore_candidates = seq_explore_candidates
-                explore_action_count = self._get_explore_action_count()
-                explore_thread_clean = True
+            # Exploration already ran synchronously before reasoning; no thread to stop.
+            # seq_explore_candidates are stored for NEXT step's alignment (not used now).
+            explore_candidates = seq_explore_candidates
+            explore_action_count = self._get_explore_action_count()
+            explore_thread_clean = True
         else:
             explore_candidates = self._stop_explorer_thread()
             explore_action_count = self._get_explore_action_count()
@@ -6951,7 +6855,7 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 screen_drift_after_rollback = _pixel_delta(step_start_pixels, post_rollback_state.pixels)
         except Exception:  # pylint: disable=broad-exception-caught
             screen_drift_after_rollback = None
-        if self.enable_sequential_exploration and (not cleanup_prompt_mode):
+        if self.enable_sequential_exploration:
             # Sequential mode with step alignment (paper §5.3):
             # Store this step's exploration candidates so the NEXT step
             # can align them with its screenshot and generate clues.
@@ -6959,22 +6863,19 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 self._pending_explore_payload = {
                     "source_step": step_no,
                     "candidates": seq_explore_candidates,
-                    "meta": dict(self._last_sequential_explore_meta or {}),
                 }
             else:
                 self._pending_explore_payload = None
-            self._emit_log(
-                (
-                    f"step={step_no} current_step_exploration_ran={current_step_explore_ran} "
-                    f"reason={current_step_explore_reason} produced_candidates={len(seq_explore_candidates)}"
-                ),
-                tag="EXPLORE",
-            )
-        elif not self.enable_sequential_exploration:
+        else:
             self._pending_explore_payload = {
                 "source_step": len(self.actions) + 1,
                 "candidates": explore_candidates,
             }
+        self._emit_log(
+            f"step={step_no} current_step_exploration_ran={bool(should_explore) if self.enable_sequential_exploration else bool(explore_action_count > 0)} "
+            f"candidates_for_next={len((self._pending_explore_payload or {}).get('candidates') or [])}",
+            tag="EXPLORE",
+        )
 
         safety_mode_reason = None
         if not basic_seq_mode:
@@ -7023,34 +6924,29 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                     tag="REASON",
                 )
 
-        force_explore_due_to_uncertainty = False
-        if cleanup_prompt_mode:
-            self._emit_log(
-                f"step={step_no} forced_explore_bypassed cleanup_prompt_mode",
-                tag="REASON",
+        force_explore_due_to_uncertainty = bool(
+            action.action_type == json_action.WAIT
+            or (
+                parse_error is not None
+                and parse_error
+                not in {
+                    "rollback_guard_failed_not_at_root",
+                    "explorer_thread_not_stopped_cleanly",
+                }
             )
-        else:
-            force_explore_due_to_uncertainty = bool(
-                action.action_type == json_action.WAIT
-                or (
-                    parse_error is not None
-                    and parse_error
-                    not in {
-                        "rollback_guard_failed_not_at_root",
-                        "explorer_thread_not_stopped_cleanly",
-                    }
-                )
-            )
-            if strict_reject:
-                force_explore_due_to_uncertainty = False
-            if (
-                self._no_effect_repeat >= self.force_explore_after_repeats
-                and (explore_action_count > 0 or bool(explore_candidates))
-                and force_explore_due_to_uncertainty
-                and action.action_type not in {json_action.STATUS, json_action.ANSWER}
-            ):
-                source = "forced_explore"
-                action, tool_call = self._fallback_explore(hints, ui_elements)
+        )
+        if strict_reject:
+            force_explore_due_to_uncertainty = False
+        if bool(getattr(self, "prompt_cleanup_safe_hint_mode", True)):
+            force_explore_due_to_uncertainty = False
+        if (
+            self._no_effect_repeat >= self.force_explore_after_repeats
+            and (explore_action_count > 0 or bool(explore_candidates))
+            and force_explore_due_to_uncertainty
+            and action.action_type not in {json_action.STATUS, json_action.ANSWER}
+        ):
+            source = "forced_explore"
+            action, tool_call = self._fallback_explore(hints, ui_elements)
 
         tool_args = tool_call.get("arguments") if isinstance(tool_call.get("arguments"), dict) else {}
         raw_action_name = str(tool_args.get("action") or tool_args.get("action_type") or "").strip().lower()
@@ -7348,80 +7244,6 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                     except Exception:  # pylint: disable=broad-exception-caught
                         action_retry_succeeded = False
 
-        if self.enable_sequential_exploration and cleanup_prompt_mode:
-            post_ui_elements = list(post_state.ui_elements or []) if post_state is not None else []
-            post_activity = (
-                self._compact_page_record(post_state).get("activity")
-                if post_state is not None
-                else reasoning_start_page.get("activity")
-            )
-            meaningful_interactive = self._count_meaningful_interactive_elements(post_ui_elements)
-            should_explore_post, explore_gate_reason_post = self._should_start_sequential_exploration(
-                step_no=step_no,
-                goal=goal,
-                current_activity=post_activity,
-                ui_elements=post_ui_elements,
-            )
-            if self.sequential_explore_steps <= 0:
-                should_explore_post = False
-                explore_gate_reason_post = "disabled_budget"
-            elif should_explore_post and meaningful_interactive < 2:
-                should_explore_post = False
-                explore_gate_reason_post = f"insufficient_meaningful_interactive({meaningful_interactive})"
-            self._emit_log(
-                (
-                    f"step={step_no} post_action_explore_gate should_explore={should_explore_post} "
-                    f"reason={explore_gate_reason_post} mode=sequential_cleanup"
-                ),
-                tag="EXPLORE",
-            )
-            current_step_explore_ran = bool(should_explore_post)
-            current_step_explore_reason = str(explore_gate_reason_post)
-            if should_explore_post:
-                seq_explore_candidates = self._run_sequential_exploration(
-                    goal=goal,
-                    history_tail=self.history[-3:],
-                    clues_text="",
-                    source_step=step_no,
-                    trigger_reason=f"post_action:{explore_gate_reason_post}",
-                )
-                explore_candidates = list(seq_explore_candidates)
-                explore_action_count = self._get_explore_action_count()
-                pending_meta = dict(self._last_sequential_explore_meta or {})
-                if seq_explore_candidates:
-                    self._pending_explore_payload = {
-                        "source_step": step_no,
-                        "candidates": seq_explore_candidates,
-                        "meta": pending_meta,
-                    }
-                else:
-                    self._pending_explore_payload = None
-                self._emit_log(
-                    (
-                        f"step={step_no} post_action_exploration_done candidates={len(seq_explore_candidates)} "
-                        f"rollback_success={pending_meta.get('rollback_success')} "
-                        f"alignment_ok={pending_meta.get('alignment_ok')}"
-                    ),
-                    tag="EXPLORE",
-                )
-                try:
-                    with self._ui_lock:
-                        post_state = self.env.get_state(wait_to_stabilize=True)
-                except Exception:  # pylint: disable=broad-exception-caught
-                    pass
-            else:
-                with self._explore_action_count_lock:
-                    self._explore_action_count = 0
-                self._explore_iteration_candidates = []
-                self._clear_explore_root_baseline()
-                explore_candidates = []
-                explore_action_count = 0
-                self._pending_explore_payload = None
-                self._emit_log(
-                    f"step={step_no} post_action_exploration_skipped reason={explore_gate_reason_post}",
-                    tag="EXPLORE",
-                )
-
         idx = _target_index(tool_call.get("arguments", {}))
         if idx is None:
             idx = _safe_int(getattr(action, "index", None))
@@ -7493,12 +7315,6 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 "action_effect": action_effect,
                 "action_retry_attempted": action_retry_attempted,
                 "action_retry_succeeded": action_retry_succeeded,
-                "prompt_mode": prompt_mode,
-                "safe_hint_injected": safe_hint_injected,
-                "safe_hint_skip_reason": safe_hint_skip_reason,
-                "safe_hint_text": safe_hint_text,
-                "current_step_explore_ran": current_step_explore_ran,
-                "current_step_explore_reason": current_step_explore_reason,
                 "strict_retry_count": strict_retry_count,
                 "strict_reject": strict_reject,
                 "text_edit_info": text_edit_info,
@@ -7509,6 +7325,18 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 "clues": clues,
                 "clue_debug": self.get_last_clue_debug_lines(),
                 "explore_candidates_count": len(explore_candidates),
+                "prompt_mode": prompt_mode,
+                "safe_hint_injected": safe_hint_injected,
+                "safe_hint_text": safe_hint,
+                "model_input_resolution": {
+                    "width": int(prompt_pixels.shape[1]),
+                    "height": int(prompt_pixels.shape[0]),
+                },
+                "original_resolution": {
+                    "width": int(state.pixels.shape[1]),
+                    "height": int(state.pixels.shape[0]),
+                },
+                "image_downsample_scale": float(self.image_downsample_scale),
                 "reasoning_page_record": reasoning_page_record,
             }
         )
@@ -7607,14 +7435,20 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                     "clues": clues or "None.",
                     "hints": self._hints_text(hints),
                     "vlm_user_text": user_text,
-                },
-                "explore": {
                     "prompt_mode": prompt_mode,
                     "safe_hint_injected": safe_hint_injected,
-                    "safe_hint_skip_reason": safe_hint_skip_reason,
-                    "safe_hint_text": safe_hint_text or None,
-                    "current_step_explore_ran": current_step_explore_ran,
-                    "current_step_explore_reason": current_step_explore_reason,
+                    "safe_hint_text": safe_hint,
+                    "model_input_resolution": {
+                        "width": int(prompt_pixels.shape[1]),
+                        "height": int(prompt_pixels.shape[0]),
+                    },
+                    "original_resolution": {
+                        "width": int(state.pixels.shape[1]),
+                        "height": int(state.pixels.shape[0]),
+                    },
+                    "image_downsample_scale": float(self.image_downsample_scale),
+                },
+                "explore": {
                     "explore_action_count": explore_action_count,
                     "filter_stats": dict(self._last_filter_stats or {}),
                     "candidates_count": len(explore_candidates),
@@ -7664,12 +7498,6 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                         "structured_recovery_info": structured_recovery_info,
                         "delete_dialog_info": delete_dialog_info,
                         "coordinate_mode": coord_mode_used,
-                        "prompt_mode": prompt_mode,
-                        "safe_hint_injected": safe_hint_injected,
-                        "safe_hint_skip_reason": safe_hint_skip_reason,
-                        "safe_hint_text": safe_hint_text or None,
-                        "current_step_explore_ran": current_step_explore_ran,
-                        "current_step_explore_reason": current_step_explore_reason,
                         "goal_status": getattr(action, "goal_status", None),
                         "task_status": task_status,
                         "task_completed": task_completed,
@@ -7678,6 +7506,18 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                         "clue_debug": self.get_last_clue_debug_lines(),
                         "explore_candidates_count": len(explore_candidates),
                         "explore_action_count": explore_action_count,
+                        "prompt_mode": prompt_mode,
+                        "safe_hint_injected": safe_hint_injected,
+                        "safe_hint_text": safe_hint,
+                        "model_input_resolution": {
+                            "width": int(prompt_pixels.shape[1]),
+                            "height": int(prompt_pixels.shape[0]),
+                        },
+                        "original_resolution": {
+                            "width": int(state.pixels.shape[1]),
+                            "height": int(state.pixels.shape[0]),
+                        },
+                        "image_downsample_scale": float(self.image_downsample_scale),
                         "reasoning_page_record": reasoning_page_record,
                         "return_failed_suspected": bool(
                             (reasoning_page_record or {}).get("return_failed_suspected", False)
@@ -7725,12 +7565,6 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 "structured_recovery_info": structured_recovery_info,
                 "delete_dialog_info": delete_dialog_info,
                 "coordinate_mode": coord_mode_used,
-                "prompt_mode": prompt_mode,
-                "safe_hint_injected": safe_hint_injected,
-                "safe_hint_skip_reason": safe_hint_skip_reason,
-                "safe_hint_text": safe_hint_text or None,
-                "current_step_explore_ran": current_step_explore_ran,
-                "current_step_explore_reason": current_step_explore_reason,
                 "goal_status": getattr(action, "goal_status", None),
                 "task_status": task_status,
                 "task_completed": task_completed,
@@ -7739,6 +7573,18 @@ class ExplorerElementAgent(base_agent.EnvironmentInteractingAgent):
                 "clue_debug": self.get_last_clue_debug_lines(),
                 "explore_candidates_count": len(explore_candidates),
                 "explore_action_count": explore_action_count,
+                "prompt_mode": prompt_mode,
+                "safe_hint_injected": safe_hint_injected,
+                "safe_hint_text": safe_hint,
+                "model_input_resolution": {
+                    "width": int(prompt_pixels.shape[1]),
+                    "height": int(prompt_pixels.shape[0]),
+                },
+                "original_resolution": {
+                    "width": int(state.pixels.shape[1]),
+                    "height": int(state.pixels.shape[0]),
+                },
+                "image_downsample_scale": float(self.image_downsample_scale),
                 "reasoning_page_record": reasoning_page_record,
                 "return_failed_suspected": bool(
                     (reasoning_page_record or {}).get("return_failed_suspected", False)
