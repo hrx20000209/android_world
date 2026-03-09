@@ -36,6 +36,8 @@ from android_world.agents import gelab_agent_resize
 from android_world.agents import seeact_utils
 from android_world.agents.explorer_agent_utils import _hash_diff
 from android_world.agents.explorer_agent_utils import _phash_pixels
+from android_world.agents.explorer_agent_utils import _to_json_action
+from android_world.agents.explorer_agent_utils import parse_tool_call
 from android_world.env import json_action
 
 MAX_EXPLORER_STEPS = 15
@@ -293,6 +295,8 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
     def _is_replay_safe_action(action: json_action.JSONAction | None) -> bool:
         if action is None:
             return False
+        if action.action_type == json_action.OPEN_APP:
+            return bool(_clean_text(getattr(action, "app_name", "")))
         return action.action_type in {
             json_action.CLICK,
             json_action.LONG_PRESS,
@@ -327,6 +331,56 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         if not self._is_replay_safe_action(action):
             return None
         return action
+
+    def _infer_open_app_name_from_goal(self, goal: str) -> str:
+        goal_low = _clean_text(goal).lower()
+        if not goal_low:
+            return ""
+        for app in gelab_agent.AVAILABLE_APPS:
+            app_name = _clean_text(app)
+            if app_name and app_name.lower() in goal_low:
+                return app_name
+        return ""
+
+    def _recover_action_from_tool_call(
+        self,
+        response: str,
+        state: Any,
+        screen_size: tuple[int, int],
+        goal: str,
+    ) -> tuple[json_action.JSONAction, dict[str, Any], dict[str, Any], OrderedDict[str, Any]]:
+        recovered_tool_call = parse_tool_call(str(response))
+        ui_elements = list(getattr(state, "ui_elements", None) or [])
+        recovered_action = _to_json_action(
+            recovered_tool_call,
+            ui_elements,
+            fallback_index=None,
+            logical_screen_size=screen_size,
+            coordinate_mode="1000",
+        )
+        if recovered_action.action_type == json_action.OPEN_APP and not _clean_text(recovered_action.app_name):
+            inferred = self._infer_open_app_name_from_goal(goal)
+            if inferred:
+                recovered_action = json_action.JSONAction(
+                    action_type=json_action.OPEN_APP,
+                    app_name=inferred,
+                )
+                recovered_tool_call = {
+                    "name": "mobile_use",
+                    "arguments": {"action": "open_app", "text": inferred},
+                }
+            else:
+                raise seeact_utils.ParseActionError("open_app_missing_name")
+        if recovered_action.action_type == json_action.UNKNOWN:
+            raise seeact_utils.ParseActionError("tool_call_recovery_unknown_action")
+
+        recovered_parsed_action = OrderedDict(
+            cot="",
+            action="RECOVERED_TOOL_CALL",
+            summary="Recovered action from tool_call parser.",
+        )
+        recovered_extras: dict[str, Any] = {"recovered_from_tool_call": True}
+        return recovered_action, recovered_tool_call, recovered_extras, recovered_parsed_action
 
     def _select_replay_actions_for_probe(
         self,
@@ -681,16 +735,27 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             action, tool_call, extras = gelab_agent.gelab_action_to_json_action(parsed_action, screen_size)
         except seeact_utils.ParseActionError as error:
             parse_error = str(error)
-            parsed_action = OrderedDict(
-                cot="",
-                action="WAIT",
-                value="1",
-                summary="Parser fallback wait",
-                parse_error=parse_error,
-            )
-            action = json_action.JSONAction(action_type=json_action.WAIT)
-            tool_call = {"name": "mobile_use", "arguments": {"action": "wait", "value": 1}}
-            extras = {"wait_seconds": 1, "parse_error": parse_error, "fallback": "parse_error_wait"}
+            try:
+                action, tool_call, extras, parsed_action = self._recover_action_from_tool_call(
+                    response=str(response),
+                    state=state,
+                    screen_size=screen_size,
+                    goal=goal,
+                )
+                parsed_action["parse_error"] = parse_error
+                parsed_action["fallback"] = "tool_call_recovery"
+            except Exception as recovery_error:  # pylint: disable=broad-exception-caught
+                parsed_action = OrderedDict(
+                    cot="",
+                    action="WAIT",
+                    value="1",
+                    summary="Parser fallback wait",
+                    parse_error=parse_error,
+                    recovery_error=_clean_text(recovery_error),
+                )
+                action = json_action.JSONAction(action_type=json_action.WAIT)
+                tool_call = {"name": "mobile_use", "arguments": {"action": "wait", "value": 1}}
+                extras = {"wait_seconds": 1, "parse_error": parse_error, "fallback": "parse_error_wait"}
 
         if parse_error:
             gelab_agent._print_step_section(step_idx, "Parse fallback", parse_error)  # pylint: disable=protected-access
