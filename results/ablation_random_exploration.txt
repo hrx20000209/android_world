@@ -113,7 +113,7 @@ TasksHighPriorityTasks                                  109                 1.00
 TasksHighPriorityTasksDueOnDate                         110                 1.00               0.00                10.00            59.50                 5.30             0.00
 TasksIncompleteTasksOnDate                              111                 1.00               1.00                 2.00            14.40                 5.00             0.00
 TurnOffWifiAndTurnOnBluetooth                           112                 1.00               1.00                12.00            69.60                 5.20             0.00
-TurnOnWifiAndOpenApp                                    113                 1.00               0.50                12.00            70.10                 5.26             0.00
+TurnOnWifiAndOpenApp                                    113                 1.00               0.00                12.00            70.10                 5.26             0.00
 VlcCreatePlaylist                                       114                 1.00               0.00                16.00            97.80                 5.38             0.00
 VlcCreateTwoPlaylists                                   115                 1.00               0.00                 5.00            36.60                 5.14             0.00
 ========= Average =========                               0                 1.00               0.28                10.42            89.01                 7.62             0.09

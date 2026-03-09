@@ -23,6 +23,8 @@ from android_world.env import interface
 from android_world.env import json_action
 from android_world.env import representation_utils
 
+MAX_AGENT_STEPS = 20
+
 PROMPT_PREFIX = (
     'You are an agent who can operate an Android phone on behalf of a user.'
     " Based on user's goal/request, you may\n"
@@ -347,7 +349,28 @@ class T3A(base_agent.EnvironmentInteractingAgent):
     def set_task_guidelines(self, task_guidelines: list[str]) -> None:
         self.additional_guidelines = task_guidelines
 
+    def set_max_steps(self, max_steps: int) -> None:
+        super().set_max_steps(min(MAX_AGENT_STEPS, int(max_steps)))
+
+    def _effective_max_steps(self) -> int:
+        if self._max_steps is None:
+            return MAX_AGENT_STEPS
+        return min(MAX_AGENT_STEPS, int(self._max_steps))
+
     def step(self, goal: str) -> base_agent.AgentInteractionResult:
+        if len(self.history) >= self._effective_max_steps():
+            return base_agent.AgentInteractionResult(
+                True,
+                {
+                    'summary': (
+                        f'Reached the maximum step limit ({self._effective_max_steps()}).'
+                    ),
+                    'action_output': (
+                        'Action: {"action_type": "status", "goal_status": "infeasible"}'
+                    ),
+                },
+            )
+
         step_data = {
             'before_screenshot': None,
             'after_screenshot': None,
