@@ -50,26 +50,21 @@ class ExplorerElementAgent(_BaseExplorerElementAgent):
         changed: bool,
         after_activity: str,
     ) -> str:
-        after_short = str(after_activity or "").strip().split("/")[-1]
+        _ = changed
+        _ = after_activity
         labels: list[str] = []
         for item in list(getattr(self, "_last_probe_candidates", [])):
             label = str(item.get("label", "")).strip()
             if label and label not in labels:
                 labels.append(label)
-            if len(labels) >= 12:
+            if len(labels) >= 6:
                 break
         picked = str(candidate.get("label", "")).strip() or "entry"
-        if labels and after_short:
-            return (
-                "Exploration (no alignment/filter): observed possible entries "
-                + ", ".join(labels)
-                + f"; current probe clicked \"{picked}\"; post-page={after_short}; changed={bool(changed)}."
-            )
         if labels:
             return (
                 "Exploration (no alignment/filter): observed possible entries "
                 + ", ".join(labels)
-                + f"; current probe clicked \"{picked}\"; changed={bool(changed)}."
+                + f"; current probe clicked \"{picked}\"."
             )
         return f"Exploration (no alignment/filter): current probe clicked \"{picked}\"."
 

@@ -69,10 +69,10 @@ AVAILABLE_APPS = [
 ]
 
 
-MAI_MOBILE_SYS_PROMPT = """You are a GUI agent. You are given a task, action history, and a screenshot. Output exactly one next action.
+MAI_MOBILE_SYS_PROMPT = """You are a GUI agent. You are given a task and your action history, with screenshots. You need to perform the next action to complete the task.
 
 ## Output Format
-Return a short thought in <thinking></thinking>, then one JSON function call inside <tool_call></tool_call>:
+For each function call, return the thinking process in <thinking> </thinking> tags, and a json object with function name and arguments within <tool_call></tool_call> XML tags:
 ```
 <thinking>
 ...
@@ -81,7 +81,6 @@ Return a short thought in <thinking></thinking>, then one JSON function call ins
 {"name": "mobile_use", "arguments": <args-json-object>}
 </tool_call>
 ```
-Do not output markdown code fences.
 
 ## Action Space
 
@@ -97,9 +96,9 @@ Do not output markdown code fences.
 {"action": "answer", "text": "xxx"} # Use escape characters \\\', \\", and \\n in text part to ensure we can parse the text in normal python string format.
 
 ## Note
-- Output only one action, no alternatives.
+- Write a small plan and finally summarize your next action (with its target element) in one sentence in <thinking></thinking> part.
 - Available Apps: `""" + json.dumps(AVAILABLE_APPS, ensure_ascii=True) + """`.
-- Use `open` when you need to launch an app.
+You should use the `open` action to open the app as possible as you can, because it is the fast way to open the app.
 - You must follow the Action Space strictly, and return the correct json object within <thinking> </thinking> and <tool_call></tool_call> XML tags.
 """.strip()
 
@@ -163,10 +162,6 @@ def _normalize_downsample_scale(scale: int | float | str) -> int:
     except Exception:  # pylint: disable=broad-exception-caught
         value = 1.0
     return max(1, int(round(value)))
-
-
-def _normalize_space(value: Any) -> str:
-    return re.sub(r"\s+", " ", str(value or "")).strip()
 
 
 def _parse_coord_like(value: Any) -> list[int] | None:
@@ -749,45 +744,6 @@ def _action_to_dict(action_obj: json_action.JSONAction) -> dict[str, Any]:
     return {k: v for k, v in action_obj.__dict__.items() if v is not None}
 
 
-def _infer_coordinate_src_format(
-    arguments: dict[str, Any],
-    default_src_format: str,
-    resized_size: tuple[int, int],
-    logical_screen_size: tuple[int, int],
-) -> str:
-    """Infer coordinate frame from values to avoid systematic mis-clicks."""
-    src = str(default_src_format or "").strip().lower()
-    if src != "qwen-vl":
-        return default_src_format
-    if not isinstance(arguments, dict):
-        return default_src_format
-
-    points: list[list[float]] = []
-    for key in ("coordinate", "point", "coordinates", "start_coordinate", "end_coordinate", "point1", "point2"):
-        value = arguments.get(key)
-        if isinstance(value, (list, tuple)) and len(value) >= 2:
-            try:
-                points.append([float(value[0]), float(value[1])])
-            except Exception:  # pylint: disable=broad-exception-caught
-                continue
-    if not points:
-        return default_src_format
-
-    max_x = max(p[0] for p in points)
-    max_y = max(p[1] for p in points)
-
-    if max_x <= 1000.0 and max_y <= 1000.0:
-        return "qwen-vl"
-
-    resized_w, resized_h = resized_size
-    logical_w, logical_h = logical_screen_size
-    if max_x <= max(1.0, resized_w * 1.15) and max_y <= max(1.0, resized_h * 1.15):
-        return "abs_resized"
-    if max_x <= max(1.0, logical_w * 1.15) and max_y <= max(1.0, logical_h * 1.15):
-        return "abs_origin"
-    return default_src_format
-
-
 def _format_ui_element_list(
     ui_elements: list[Any],
     image_ele: dict[str, Any],
@@ -832,32 +788,15 @@ def _format_ui_element_list(
     return "\n".join(lines) if lines else "None."
 
 
-def _coordinate_instruction(src_format: str) -> str:
-    src = str(src_format or "").strip().lower()
-    if src == "qwen-vl":
-        return "Coordinates are in 0-999 normalized space (x,y)."
-    if src == "abs_resized":
-        return "Coordinates are absolute pixels on the provided screenshot."
-    return "Coordinates are absolute pixels on the device screen."
-
-
-def build_mai_messages(
-    goal: str,
-    history: str,
-    screenshot_path: str,
-    ui_element_text: str = "None.",
-    coordinate_instruction: str = "",
-) -> list[dict[str, Any]]:
+def build_mai_messages(goal: str, history: str, screenshot_path: str, ui_element_text: str = "None.") -> list[dict[str, Any]]:
+    _ = ui_element_text
     system_msg = {
         "role": "system",
         "content": [{"type": "text", "text": MAI_MOBILE_SYS_PROMPT}],
     }
-    coord_text = _normalize_space(coordinate_instruction)
     user_text = (
         f"Task:\n{goal}\n\n"
         f"Action History:\n{history if history else 'None yet.'}\n\n"
-        f"Visible UI elements (subset):\n{ui_element_text if ui_element_text else 'None.'}\n\n"
-        f"{coord_text if coord_text else ''}\n"
         "Current screenshot is attached below.\n"
         "Choose the next single action."
     )
@@ -1131,20 +1070,7 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
             resized_file_size = resized_file_img.size
 
         history_text = self._history_text()
-        ui_element_text = _format_ui_element_list(
-            state.ui_elements,
-            image_ele,
-            coordinate_format=self.src_format,
-            limit=12,
-        )
-        coordinate_instruction = _coordinate_instruction(self.src_format)
-        messages = build_mai_messages(
-            goal,
-            history_text,
-            resized_screenshot_file,
-            ui_element_text=ui_element_text,
-            coordinate_instruction=coordinate_instruction,
-        )
+        messages = build_mai_messages(goal, history_text, resized_screenshot_file)
 
         action_response, _, _ = self.vllm.predict_mm("", [], messages=messages)
         result["action_response"] = action_response
@@ -1183,24 +1109,10 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
                         if not parse_error:
                             parse_error = "open_app_missing_name"
 
-            effective_src_format = self.src_format
-            if isinstance(action_args, dict):
-                effective_src_format = _infer_coordinate_src_format(
-                    action_args,
-                    default_src_format=self.src_format,
-                    resized_size=(int(resized_file_size[0]), int(resized_file_size[1])),
-                    logical_screen_size=tuple(self.env.logical_screen_size),
-                )
-            if str(effective_src_format) != str(self.src_format):
-                print(
-                    "[CHECK] MAI coordinate frame adjusted: "
-                    f"default={self.src_format} -> inferred={effective_src_format}"
-                )
-
             action, dummy_action_translated = mobile_agent_utils.convert_mobile_agent_action_to_json_action(
                 dummy_action,
                 image_ele,
-                src_format=effective_src_format,
+                src_format=self.src_format,
                 tgt_format="abs_origin",
                 scale=scale,
                 ui_elements=state.ui_elements,
@@ -1240,7 +1152,7 @@ class MAIUIAgent(base_agent.EnvironmentInteractingAgent):
             result["action"] = action
             action_summary = _summarize_action(dummy_action.get("arguments", {}))
             thinking_summary = _thinking_to_summary(thought)
-            summary = action_summary or thinking_summary
+            summary = thinking_summary or action_summary
             if len(summary) > 140:
                 summary = summary[:140].rstrip(" ,.;:") + "..."
 

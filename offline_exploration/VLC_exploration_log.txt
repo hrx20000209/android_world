@@ -1,0 +1,36 @@
+APP: VLC
+
+Overview:
+This log summarizes offline exploration observations about the typical UI layout and interaction patterns of the VLC Android application.
+The information is generic UI knowledge intended to guide exploration without task-specific hints.
+
+Typical Entry Screen:
+- Top toolbar usually contains navigation/back button on the left.
+- Overflow menu (three dots) often located at top-right.
+- Main content area shows the primary data of the app.
+- Some screens include floating action buttons (FAB) at bottom-right.
+
+Common UI Elements:
+- Lists: many items appear in vertically scrollable lists.
+- Floating Action Button: often used to create or add items.
+- Context menus: long-press on list items may open additional actions.
+- Search icon may appear in the top toolbar.
+- Bottom navigation bars may switch between major sections.
+
+Exploration Observations:
+1. When opening the app, inspect the toolbar and bottom navigation.
+2. If the screen shows a list, scroll vertically to reveal more items.
+3. Look for floating buttons or "+" icons to create or add entries.
+4. Tap list items to open detail views.
+5. Long press items to access edit/delete/share operations.
+6. Use the overflow menu to access additional options.
+7. If no progress is made, try navigating back or opening a different tab.
+
+Common Interaction Patterns:
+- Tap main items to open details.
+- Scroll when content is partially hidden.
+- Use menu or overflow options to find advanced actions.
+- Use navigation elements to switch sections.
+
+Notes:
+This exploration knowledge is derived from offline inspection of common Android UI patterns and is meant to guide general interaction strategies.

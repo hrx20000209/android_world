@@ -88,13 +88,11 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         history_limit: int = 8,
         image_downsample_scale: float = 2.0,
         enable_light_exploration: bool = True,
-        light_explore_max_runs: int = 2,
-        light_explore_max_step: int = 3,
+        light_explore_max_runs: int = 1,
+        light_explore_max_step: int = 2,
         light_explore_launcher_only: bool = True,
         light_explore_require_keyword: bool = True,
         light_explore_require_stall: bool = True,
-        light_explore_soft_launcher_recovery: bool = True,
-        light_explore_soft_launcher_step: int = 3,
         light_explore_back_limit: int = 2,
         light_explore_hash_threshold: int = 10,
         light_explore_replay_max_actions: int = 1,
@@ -115,8 +113,6 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         self.light_explore_launcher_only = bool(light_explore_launcher_only)
         self.light_explore_require_keyword = bool(light_explore_require_keyword)
         self.light_explore_require_stall = bool(light_explore_require_stall)
-        self.light_explore_soft_launcher_recovery = bool(light_explore_soft_launcher_recovery)
-        self.light_explore_soft_launcher_step = max(0, int(light_explore_soft_launcher_step))
         self.light_explore_back_limit = max(1, int(light_explore_back_limit))
         self.light_explore_hash_threshold = max(1, int(light_explore_hash_threshold))
         self.light_explore_replay_max_actions = max(0, int(light_explore_replay_max_actions))
@@ -540,14 +536,7 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         if step_idx >= self.light_explore_max_step:
             return False, "beyond_step_window"
         if self.light_explore_require_stall and not page_stalled:
-            soft_ok = bool(
-                self.light_explore_soft_launcher_recovery
-                and self._is_launcher_activity(root_activity)
-                and step_idx <= self.light_explore_soft_launcher_step
-            )
-            if not soft_ok:
-                return False, "page_not_stalled"
-            return True, "soft_launcher_recovery"
+            return False, "page_not_stalled"
         if self.light_explore_launcher_only and not self._is_launcher_activity(root_activity):
             return False, "not_launcher_activity"
         return True, "ok"
