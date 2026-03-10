@@ -15,7 +15,6 @@ poetry.lock
 explore_k1_masks/
 explorer_traces/
 output/
-results/
 
 # Tests
 .pytest_cache/
