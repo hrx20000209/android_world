@@ -20,6 +20,16 @@ class ExplorerElementAgent(_BaseExplorerElementAgent):
             return None
         return self._ablation_rng.choice(list(candidates))
 
+    def _choose_secondary_probe_candidate(
+        self,
+        candidates: list[dict[str, Any]],
+        first_candidate: dict[str, Any] | None = None,
+    ) -> dict[str, Any] | None:
+        _ = first_candidate
+        if not candidates:
+            return None
+        return self._ablation_rng.choice(list(candidates))
+
 
 class ElementTextAgent(ExplorerElementAgent):
     pass

@@ -30,7 +30,7 @@ from absl import logging
 from android_world import checkpointer as checkpointer_lib
 from android_world import registry
 from android_world import suite_utils
-from android_world.agents import base_agent, human_agent, infer, m3a, random_agent, seeact, t3a, mm_agent, t3a_profiling, explorer_agent, gelab_agent, gelab_agent_resize, explorer_agent_gelab, explorer_agent_gelab_light, explorer_agent_ablation_random, explorer_agent_ablation_back2, explorer_agent_ablation_no_knowledge
+from android_world.agents import base_agent, human_agent, infer, m3a, random_agent, seeact, t3a, mm_agent, t3a_profiling, explorer_agent, gelab_agent, gelab_agent_resize, gelab_offline_exploration, explorer_agent_gelab, explorer_agent_gelab_light, explorer_agent_ablation_random, explorer_agent_ablation_back2, explorer_agent_ablation_no_knowledge
 from android_world.env import env_launcher
 from android_world.env import interface
 
@@ -139,7 +139,7 @@ _OUTPUT_PATH = flags.DEFINE_string(
 )
 
 # Agent specific.
-_AGENT_NAME = flags.DEFINE_string('agent_name', 'explore_agent_gelab', help='Agent name.')
+_AGENT_NAME = flags.DEFINE_string('agent_name', 'explore_agent_ablation_no_knowledge', help='Agent name.')
 _IMAGE_DOWNSAMPLE_SCALE = flags.DEFINE_float(
     'image_downsample_scale',
     2.0,
@@ -147,7 +147,7 @@ _IMAGE_DOWNSAMPLE_SCALE = flags.DEFINE_float(
     '1.0 means no downsampling.',
 )
 
-# m3a_llamacpp, t3a_llamacpp, mai-ui, mm_agent, t3a_profiling, explore_agent, explore_agent_gelab, gelab_agent, gelab_agent_resize, explore_agent_ablation_random, explore_agent_ablation_back2, explore_agent_ablation_no_knowledge
+# m3a_llamacpp, t3a_llamacpp, mai-ui, mm_agent, t3a_profiling, explore_agent, explore_agent_gelab, gelab_agent, gelab_agent_resize, gelab_offline_exploration, explore_agent_ablation_random, explore_agent_ablation_back2, explore_agent_ablation_no_knowledge
 
 _FIXED_TASK_SEED = flags.DEFINE_boolean(
     'fixed_task_seed',
@@ -225,6 +225,17 @@ def _get_agent(
         )
     elif _AGENT_NAME.value == 'gelab_agent_resize':
         agent = gelab_agent_resize.GELABAgent(
+            env,
+            infer.LlamaCppWrapper(
+                api_url="http://localhost:8081/v1/chat/completions",
+                temperature=0.0,
+            ),
+            "qwen-vl",
+            output_path="./output",
+            image_downsample_scale=_IMAGE_DOWNSAMPLE_SCALE.value,
+        )
+    elif _AGENT_NAME.value == 'gelab_offline_exploration':
+        agent = gelab_offline_exploration.GELABAgent(
             env,
             infer.LlamaCppWrapper(
                 api_url="http://localhost:8081/v1/chat/completions",

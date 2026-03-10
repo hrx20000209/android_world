@@ -89,10 +89,12 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         image_downsample_scale: float = 2.0,
         enable_light_exploration: bool = True,
         light_explore_max_runs: int = 1,
-        light_explore_max_step: int = 2,
-        light_explore_launcher_only: bool = True,
-        light_explore_require_keyword: bool = True,
-        light_explore_require_stall: bool = True,
+        light_explore_max_step: int = 3,
+        light_explore_launcher_only: bool = False,
+        light_explore_require_keyword: bool = False,
+        light_explore_require_stall: bool = False,
+        light_explore_branch_budget: int = 3,
+        light_explore_branch_depth: int = 2,
         light_explore_back_limit: int = 2,
         light_explore_hash_threshold: int = 10,
         light_explore_replay_max_actions: int = 1,
@@ -113,6 +115,8 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         self.light_explore_launcher_only = bool(light_explore_launcher_only)
         self.light_explore_require_keyword = bool(light_explore_require_keyword)
         self.light_explore_require_stall = bool(light_explore_require_stall)
+        self.light_explore_branch_budget = max(1, int(light_explore_branch_budget))
+        self.light_explore_branch_depth = max(1, int(light_explore_branch_depth))
         self.light_explore_back_limit = max(1, int(light_explore_back_limit))
         self.light_explore_hash_threshold = max(1, int(light_explore_hash_threshold))
         self.light_explore_replay_max_actions = max(0, int(light_explore_replay_max_actions))
@@ -180,10 +184,52 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                     out.append(token)
         return out
 
+    def _goal_tokens(self, goal: str) -> list[str]:
+        text = _clean_text(goal).lower()
+        out: list[str] = []
+        seen: set[str] = set()
+        for token in re.findall(r"[a-z0-9]{3,}", text):
+            if token not in seen:
+                seen.add(token)
+                out.append(token)
+            if len(out) >= 32:
+                break
+        return out
+
+    @staticmethod
+    def _normalize_resource_id(resource_id: str) -> str:
+        rid = _clean_text(resource_id)
+        if not rid:
+            return ""
+        # Drop package prefix to avoid app-name leakage like "net.gsantner.markor:*".
+        rid = rid.split("/")[-1]
+        rid = rid.split(":")[-1]
+        rid = rid.replace("_", " ")
+        rid = re.sub(r"[^a-zA-Z0-9 ]+", " ", rid)
+        return _clean_text(rid)
+
+    @staticmethod
+    def _text_similarity_score(merged: str, goal_tokens: list[str], app_keywords: list[str]) -> float:
+        merged_low = _clean_text(merged).lower()
+        if not merged_low:
+            return 0.0
+        score = 0.0
+        goal_token_set = set(goal_tokens)
+        for kw in app_keywords:
+            if kw and kw in merged_low:
+                score += 1.5 + min(len(kw), 12) * 0.06
+        merged_tokens = set(re.findall(r"[a-z0-9]{3,}", merged_low))
+        if merged_tokens and goal_token_set:
+            overlap = merged_tokens.intersection(goal_token_set)
+            if overlap:
+                score += float(len(overlap)) * 1.2
+                score += float(len(overlap)) / max(1.0, float(len(merged_tokens)))
+        return float(score)
+
     def _element_text(self, element: Any) -> str:
         text = _clean_text(getattr(element, "text", ""))
         desc = _clean_text(getattr(element, "content_description", ""))
-        element_id = _clean_text(getattr(element, "resource_id", ""))
+        element_id = self._normalize_resource_id(str(getattr(element, "resource_id", "")))
         merged = " ".join(x for x in [text, desc, element_id] if x)
         return _clean_text(merged).lower()
 
@@ -239,9 +285,8 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         ui_elements = list(getattr(state, "ui_elements", None) or [])
         if not ui_elements:
             return []
-        keywords = self._goal_app_keywords(goal)
-        if self.light_explore_require_keyword and not keywords:
-            return []
+        app_keywords = self._goal_app_keywords(goal)
+        goal_tokens = self._goal_tokens(goal)
 
         candidates: list[dict[str, Any]] = []
         for idx, element in enumerate(ui_elements):
@@ -256,21 +301,24 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             if "inputmethod" in merged or "systemui" in merged:
                 continue
 
-            score = 0.0
-            if keywords:
-                for kw in keywords:
-                    if kw and kw in merged:
-                        score += 4.0 + min(len(kw), 12) * 0.1
-            else:
+            score = self._text_similarity_score(
+                merged=merged,
+                goal_tokens=goal_tokens,
+                app_keywords=app_keywords,
+            )
+            if not app_keywords and not goal_tokens:
                 score = 1.0
-            if self.light_explore_require_keyword and score <= 0.0:
+            if self.light_explore_require_keyword and app_keywords and score <= 0.0:
                 continue
+            # Keep a tiny fallback score to guarantee one safe explore attempt.
+            if score <= 0.0:
+                score = 0.01
 
             label = _clean_text(getattr(element, "text", "")) or _clean_text(
                 getattr(element, "content_description", "")
             )
             if not label:
-                label = keywords[0] if keywords else "candidate"
+                label = app_keywords[0] if app_keywords else "candidate"
 
             candidates.append(
                 {
@@ -284,11 +332,28 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             )
 
         candidates.sort(key=lambda item: (float(item.get("score", 0.0)), -int(item.get("index", 0))), reverse=True)
-        return candidates[:8]
+        keep_n = max(3, int(self.light_explore_branch_budget) * 2)
+        return candidates[:keep_n]
 
     def _choose_probe_candidate(self, candidates: list[dict[str, Any]]) -> dict[str, Any] | None:
         if not candidates:
             return None
+        return candidates[0]
+
+    def _choose_secondary_probe_candidate(
+        self,
+        candidates: list[dict[str, Any]],
+        first_candidate: dict[str, Any] | None = None,
+    ) -> dict[str, Any] | None:
+        if not candidates:
+            return None
+        first_center = None
+        if isinstance(first_candidate, dict):
+            first_center = first_candidate.get("center")
+        for cand in candidates:
+            if first_center is not None and cand.get("center") == first_center:
+                continue
+            return cand
         return candidates[0]
 
     @staticmethod
@@ -521,6 +586,17 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             diff = 10**9
         return bool(prev_activity and curr_activity and prev_activity == curr_activity and diff <= 2)
 
+    @staticmethod
+    def _has_keyboard_ui(state: Any) -> bool:
+        for element in list(getattr(state, "ui_elements", None) or []):
+            text = _clean_text(getattr(element, "resource_id", "")) + " " + _clean_text(
+                getattr(element, "content_description", "")
+            )
+            low = text.lower()
+            if "inputmethod" in low or "keyboard" in low or "key_pos_" in low:
+                return True
+        return False
+
     def _should_run_light_exploration(
         self,
         step_idx: int,
@@ -533,8 +609,12 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             return False, "run_budget_zero"
         if self._light_explore_runs >= self.light_explore_max_runs:
             return False, "run_budget_exhausted"
+        if step_idx <= 0:
+            return False, "before_first_action"
         if step_idx >= self.light_explore_max_step:
             return False, "beyond_step_window"
+        if step_idx > 1 and (not page_stalled) and (not self._is_launcher_activity(root_activity)):
+            return False, "non_stall_non_launcher"
         if self.light_explore_require_stall and not page_stalled:
             return False, "page_not_stalled"
         if self.light_explore_launcher_only and not self._is_launcher_activity(root_activity):
@@ -553,6 +633,12 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             root_state = self.env.get_state(wait_to_stabilize=True)
             root_hash = self._state_hash(root_state)
             root_activity = self._foreground_activity_name()
+            if self._has_keyboard_ui(root_state):
+                print(
+                    f"[EXPLORE {_now_hms()}] step: {step_idx + 1} "
+                    "light_explore_skipped=keyboard_visible"
+                )
+                return ""
             should_run, reason = self._should_run_light_exploration(
                 step_idx=step_idx,
                 root_activity=root_activity,
@@ -569,60 +655,154 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             self._last_probe_candidates = list(candidates)
             if not candidates:
                 print(f"[EXPLORE {_now_hms()}] step: {step_idx + 1} light_explore_no_candidates")
-                self._light_explore_runs += 1
                 return ""
-
-            candidate = self._choose_probe_candidate(candidates)
-            if not candidate:
-                print(f"[EXPLORE {_now_hms()}] step: {step_idx + 1} light_explore_candidate_none")
-                self._light_explore_runs += 1
-                return ""
-
-            center = candidate.get("center")
-            if not isinstance(center, (list, tuple)) or len(center) < 2:
-                print(f"[EXPLORE {_now_hms()}] step: {step_idx + 1} light_explore_center_invalid")
-                self._light_explore_runs += 1
-                return ""
-
-            probe_action = json_action.JSONAction(
-                action_type=json_action.CLICK,
-                x=int(center[0]),
-                y=int(center[1]),
-            )
-            label = _clean_text(candidate.get("label")) or "candidate"
-            print(
-                f"[EXPLORE {_now_hms()}] step: {step_idx + 1} "
-                f"light_explore_probe_action=click label={label} center={[int(center[0]), int(center[1])]}"
-            )
-            self.env.execute_action(probe_action)
-            after_state = self.env.get_state(wait_to_stabilize=True)
-            changed, after_activity, hash_diff = self._probe_page_changed(root_activity, root_hash, after_state)
-            print(
-                f"[EXPLORE {_now_hms()}] step: {step_idx + 1} "
-                f"light_explore_probe_effect changed={changed} hash_diff={hash_diff} after_activity={after_activity}"
-            )
-
             replay_actions = self._select_replay_actions_for_probe(current_action=current_action)
-            rollback_info = self._rollback_to_probe_root(
-                root_activity=root_activity,
-                root_hash=root_hash,
-                replay_actions=replay_actions,
-                step_idx=step_idx,
+            pool = list(candidates)
+            branch_candidates: list[dict[str, Any]] = []
+            for _ in range(max(1, int(self.light_explore_branch_budget))):
+                chosen = self._choose_probe_candidate(pool)
+                if chosen is None:
+                    break
+                branch_candidates.append(chosen)
+                chosen_center = chosen.get("center")
+                pool = [c for c in pool if c.get("center") != chosen_center]
+            if not branch_candidates:
+                print(f"[EXPLORE {_now_hms()}] step: {step_idx + 1} light_explore_no_branch_candidates")
+                return ""
+            shortlist = ", ".join(
+                f"{_clean_text(c.get('label')) or 'candidate'}:{float(c.get('score') or 0.0):.2f}"
+                for c in branch_candidates
             )
-            self._light_explore_runs += 1
-            if not bool(rollback_info.get("success")):
+            print(
+                f"[EXPLORE {_now_hms()}] step: {step_idx + 1} "
+                f"light_explore_branch_begin candidates={len(branch_candidates)} depth={self.light_explore_branch_depth} "
+                f"shortlist=[{shortlist}]"
+            )
+
+            best_observation: dict[str, Any] | None = None
+            attempted_any = False
+            for b_idx, first_candidate in enumerate(branch_candidates):
+                labels: list[str] = []
+                total_score = float(first_candidate.get("score") or 0.0)
+                changed_any = False
+                final_activity = root_activity
+                depth_reached = 0
+                rollback_info = None
+
+                first_center = first_candidate.get("center")
+                if not isinstance(first_center, (list, tuple)) or len(first_center) < 2:
+                    continue
+                first_label = _clean_text(first_candidate.get("label")) or f"candidate_{b_idx}"
+                labels.append(first_label)
                 print(
                     f"[EXPLORE {_now_hms()}] step: {step_idx + 1} "
-                    f"light_explore_restore_failed={rollback_info}"
+                    f"light_explore_branch={b_idx + 1} depth=1 click={first_label} center={[int(first_center[0]), int(first_center[1])]}"
                 )
-                self.enable_light_exploration = False
+                attempted_any = True
+                self.env.execute_action(
+                    json_action.JSONAction(
+                        action_type=json_action.CLICK,
+                        x=int(first_center[0]),
+                        y=int(first_center[1]),
+                    )
+                )
+                state_after_first = self.env.get_state(wait_to_stabilize=True)
+                changed1, activity1, hash_diff1 = self._probe_page_changed(root_activity, root_hash, state_after_first)
+                depth_reached = 1
+                changed_any = bool(changed_any or changed1)
+                final_activity = activity1
+                print(
+                    f"[EXPLORE {_now_hms()}] step: {step_idx + 1} "
+                    f"light_explore_branch={b_idx + 1} depth=1 changed={changed1} hash_diff={hash_diff1} after={activity1}"
+                )
+
+                allow_depth2 = int(self.light_explore_branch_depth) >= 2 and b_idx == 0
+                if allow_depth2:
+                    second_candidates = self._collect_probe_candidates(state_after_first, goal)
+                    second_candidate = self._choose_secondary_probe_candidate(second_candidates, first_candidate=first_candidate)
+                    if second_candidate is not None:
+                        second_center = second_candidate.get("center")
+                        if isinstance(second_center, (list, tuple)) and len(second_center) >= 2:
+                            second_label = _clean_text(second_candidate.get("label")) or f"candidate_{b_idx}_2"
+                            labels.append(second_label)
+                            total_score += float(second_candidate.get("score") or 0.0)
+                            print(
+                                f"[EXPLORE {_now_hms()}] step: {step_idx + 1} "
+                                f"light_explore_branch={b_idx + 1} depth=2 click={second_label} center={[int(second_center[0]), int(second_center[1])]}"
+                            )
+                            self.env.execute_action(
+                                json_action.JSONAction(
+                                    action_type=json_action.CLICK,
+                                    x=int(second_center[0]),
+                                    y=int(second_center[1]),
+                                )
+                            )
+                            state_after_second = self.env.get_state(wait_to_stabilize=True)
+                            changed2, activity2, hash_diff2 = self._probe_page_changed(root_activity, root_hash, state_after_second)
+                            depth_reached = 2
+                            changed_any = bool(changed_any or changed2)
+                            final_activity = activity2
+                            print(
+                                f"[EXPLORE {_now_hms()}] step: {step_idx + 1} "
+                                f"light_explore_branch={b_idx + 1} depth=2 changed={changed2} hash_diff={hash_diff2} after={activity2}"
+                            )
+
+                rollback_info = self._rollback_to_probe_root(
+                    root_activity=root_activity,
+                    root_hash=root_hash,
+                    replay_actions=replay_actions,
+                    step_idx=step_idx,
+                )
+                if not bool((rollback_info or {}).get("success")):
+                    print(
+                        f"[EXPLORE {_now_hms()}] step: {step_idx + 1} "
+                        f"light_explore_restore_failed={rollback_info}"
+                    )
+                    self._light_explore_runs += 1
+                    self.enable_light_exploration = False
+                    return ""
+
+                observation = {
+                    "labels": list(labels),
+                    "changed": bool(changed_any),
+                    "after_activity": final_activity,
+                    "score": float(total_score),
+                    "depth_reached": int(depth_reached),
+                }
+                if best_observation is None:
+                    best_observation = observation
+                else:
+                    curr_key = (
+                        1 if bool(observation.get("changed")) else 0,
+                        int(observation.get("depth_reached") or 0),
+                        float(observation.get("score") or 0.0),
+                    )
+                    best_key = (
+                        1 if bool(best_observation.get("changed")) else 0,
+                        int(best_observation.get("depth_reached") or 0),
+                        float(best_observation.get("score") or 0.0),
+                    )
+                    if curr_key > best_key:
+                        best_observation = observation
+
+            if attempted_any:
+                self._light_explore_runs += 1
+            if not best_observation:
+                print(
+                    f"[EXPLORE {_now_hms()}] step: {step_idx + 1} "
+                    "light_explore_no_branch_observation"
+                )
                 return ""
 
+            path_label = " -> ".join([_clean_text(x) for x in list(best_observation.get("labels") or []) if _clean_text(x)])
+            synthetic_candidate = {"label": path_label or "candidate-path"}
             hint = self._build_hint_from_observation(
-                candidate=candidate,
-                changed=changed,
-                after_activity=after_activity,
+                candidate=synthetic_candidate,
+                changed=bool(best_observation.get("changed")),
+                after_activity=str(best_observation.get("after_activity") or ""),
             )
+            if hint:
+                hint = _clean_text(f"{hint} (rollback verified)")
             if hint:
                 print(
                     f"[EXPLORE {_now_hms()}] step: {step_idx + 1} "

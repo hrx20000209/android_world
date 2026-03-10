@@ -74,28 +74,31 @@ def _safe_json_loads(payload: str) -> dict[str, Any]:
 
     def _extract(pattern: str, default: str | None = None) -> str | None:
         m = re.search(pattern, s)
-        return m.group(1) if m else default
+        if m:
+            return m.group(1)
+        return default
 
     def _extract_coord(key: str | None = None) -> list[int] | None:
         if key is not None:
             m = re.search(
-                rf'"{key}"\s*:\s*\[\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)[^\]]*\]',
+                rf'["\']?{re.escape(key)}["\']?\s*:\s*\[\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)[^\]]*\]',
                 s,
             )
             if m:
                 return [int(round(float(m.group(1)))), int(round(float(m.group(2))))]
             m = re.search(
-                rf'"{key}"\s*:\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)',
+                rf'["\']?{re.escape(key)}["\']?\s*:\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)',
                 s,
             )
             if m:
                 return [int(round(float(m.group(1)))), int(round(float(m.group(2))))]
             m = re.search(
-                rf'"{key}"\s*:\s*"(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)"',
+                rf'["\']?{re.escape(key)}["\']?\s*:\s*["\'](-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)["\']',
                 s,
             )
             if m:
                 return [int(round(float(m.group(1)))), int(round(float(m.group(2))))]
+            return None
         m = re.search(r"\[\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)", s)
         if m:
             return [int(round(float(m.group(1)))), int(round(float(m.group(2))))]
@@ -105,18 +108,47 @@ def _safe_json_loads(payload: str) -> dict[str, Any]:
     act = _extract(r'"action"\s*:\s*"([^"]+)"')
     if not act:
         act = _extract(r'"action_type"\s*:\s*"([^"]+)"')
+    if not act:
+        act = _extract(r"\baction_type\b['\"]?\s*[:=]\s*['\"]?([a-zA-Z_]+)")
+    if not act:
+        act = _extract(r"\baction\b['\"]?\s*[:=]\s*['\"]?([a-zA-Z_]+)")
     act = (act or "unknown").strip()
 
     text = _extract(r'"text"\s*:\s*"([^"]*)"', "")
+    if not text:
+        text = _extract(r"\btext\b['\"]?\s*[:=]\s*['\"]([^'\"]*)['\"]", "")
+    value_field = _extract(r'"value"\s*:\s*"([^"]*)"', "")
+    if not value_field:
+        value_field = _extract(r"\bvalue\b['\"]?\s*[:=]\s*['\"]([^'\"]*)['\"]", "")
     button = _extract(r'"button"\s*:\s*"([^"]+)"')
+    if not button:
+        button = _extract(r"\bbutton\b['\"]?\s*[:=]\s*['\"]?([a-zA-Z_]+)")
+    key = _extract(r'"key"\s*:\s*"([^"]+)"')
+    if not key:
+        key = _extract(r"\bkey\b['\"]?\s*[:=]\s*['\"]?([a-zA-Z_]+)")
     direction = _extract(r'"direction"\s*:\s*"([^"]+)"')
+    if not direction:
+        direction = _extract(r"\bdirection\b['\"]?\s*[:=]\s*['\"]?([a-zA-Z_]+)")
     status = _extract(r'"status"\s*:\s*"([^"]+)"')
     goal_status = _extract(r'"goal_status"\s*:\s*"([^"]+)"')
     app_name = _extract(r'"app_name"\s*:\s*"([^"]+)"')
-    open_text = _extract(r'"text"\s*:\s*"([^"]+)"')
+    open_text = _extract(r'"text"\s*:\s*"([^"]+)"') or text
 
     args: dict[str, Any] = {"action": act}
-    act_low = act.lower()
+    act_low = act.lower().replace("-", "_").replace(" ", "_")
+    if act_low == "awake":
+        act_low = "open_app"
+    elif act_low in {"slide"}:
+        act_low = "swipe"
+    elif act_low in {"longpress", "longclick", "long_click"}:
+        act_low = "long_press"
+    elif act_low in {"hot_key", "hotkey"}:
+        act_low = "system_button"
+    elif act_low in {"complete", "abort", "finish", "done"}:
+        act_low = "status"
+    elif act_low in {"doubleclick", "double_click", "doubletap", "double_tap"}:
+        act_low = "click"
+    args["action"] = act_low
 
     def _extract_any_coord() -> list[int] | None:
         for key in ("coordinate", "point", "xy", "tap_point"):
@@ -125,7 +157,7 @@ def _safe_json_loads(payload: str) -> dict[str, Any]:
                 return coord_val
         return _extract_coord(None)
 
-    if act_low in {"click", "long_press", "tap"}:
+    if act_low in {"click", "long_press", "tap", "press"}:
         coord = _extract_any_coord()
         if coord is not None:
             args["coordinate"] = coord
@@ -145,14 +177,17 @@ def _safe_json_loads(payload: str) -> dict[str, Any]:
             args["start_coordinate"] = start_coord
             args["end_coordinate"] = end_coord
     elif act_low in {"open", "open_app"}:
-        args["text"] = open_text or app_name or ""
+        args["text"] = open_text or value_field or app_name or ""
         if app_name:
             args["app_name"] = app_name
-    elif act_low in {"system_button", "back"}:
+    elif act_low in {"system_button", "back", "home", "enter"}:
         args["action"] = "system_button"
-        args["button"] = button or ("back" if act_low == "back" else "back")
+        if act_low in {"back", "home", "enter"}:
+            args["button"] = act_low
+        else:
+            args["button"] = (button or key or "back").lower()
     elif act_low == "answer":
-        args["text"] = text or ""
+        args["text"] = text or value_field or ""
     elif act_low in {"terminate", "status"}:
         if status:
             args["status"] = status
@@ -181,10 +216,17 @@ def parse_tool_call(response_text: str) -> dict[str, Any]:
             block = text.split("<tool_call>", 1)[1].split("</tool_call>", 1)[0].strip()
         except Exception as exc:  # pylint: disable=broad-exception-caught
             raise seeact_utils.ParseActionError(f"malformed tool_call: {exc}")
+    elif "<tool_call>" in text:
+        # Tolerate truncated outputs missing </tool_call> by taking tail text.
+        try:
+            block = text.split("<tool_call>", 1)[1].strip()
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            raise seeact_utils.ParseActionError(f"malformed tool_call_start: {exc}")
     if block is None:
         block = _extract_first_json_block(text)
     if block is None:
-        raise seeact_utils.ParseActionError("cannot find action JSON")
+        # Last-resort robust mode: feed raw text to regex-recovery parser.
+        block = text
 
     obj = _safe_json_loads(block)
 
@@ -544,7 +586,7 @@ def _to_json_action(
     def pick_coordinate() -> tuple[int, int] | None:
         return _extract_coordinate(args)
 
-    if action == "click":
+    if action in {"click", "tap", "press", "double_click", "doubleclick", "double_tap", "doubletap"}:
         coordinate = pick_coordinate()
         if "coordinate" in args and coordinate is None:
             return json_action.JSONAction(action_type=json_action.UNKNOWN)
@@ -561,7 +603,7 @@ def _to_json_action(
             return json_action.JSONAction(action_type=json_action.UNKNOWN)
         return json_action.JSONAction(action_type=json_action.CLICK, index=idx)
 
-    if action == "long_press":
+    if action in {"long_press", "longpress", "long_click", "longclick"}:
         coordinate = pick_coordinate()
         if "coordinate" in args and coordinate is None:
             return json_action.JSONAction(action_type=json_action.UNKNOWN)
@@ -601,7 +643,7 @@ def _to_json_action(
             text=str(args.get("text", "")),
         )
 
-    if action in {"swipe", "scroll"}:
+    if action in {"swipe", "scroll", "slide"}:
         start_xy = _as_xy(args.get("start_coordinate"))
         end_xy = _as_xy(args.get("end_coordinate"))
         direction = _normalize_dir(
@@ -617,14 +659,14 @@ def _to_json_action(
             )
         return json_action.JSONAction(action_type=json_action.SWIPE, direction=direction)
 
-    if action in {"open", "open_app"}:
+    if action in {"open", "open_app", "awake"}:
         return json_action.JSONAction(
             action_type=json_action.OPEN_APP,
-            app_name=str(args.get("text") or args.get("app_name") or ""),
+            app_name=str(args.get("text") or args.get("value") or args.get("app_name") or ""),
         )
 
-    if action == "system_button":
-        btn = str(args.get("button", "back")).strip().lower()
+    if action in {"system_button", "hot_key", "hotkey"}:
+        btn = str(args.get("button") or args.get("key") or "back").strip().lower()
         if btn == "back":
             return json_action.JSONAction(action_type=json_action.NAVIGATE_BACK)
         if btn == "home":
@@ -642,7 +684,7 @@ def _to_json_action(
             text=str(args.get("text") or ""),
         )
 
-    if action in {"terminate", "status", "finish", "done"}:
+    if action in {"terminate", "status", "finish", "done", "complete", "abort"}:
         return json_action.JSONAction(
             action_type=json_action.STATUS,
             goal_status=_goal_status(args.get("status") or args.get("goal_status")),
