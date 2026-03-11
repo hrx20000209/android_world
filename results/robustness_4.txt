@@ -1,0 +1,140 @@
+                                                   task_num  num_complete_trials  mean_success_rate  mean_episode_length  total_runtime_s  mean_step_latency_s  num_fail_trials
+task
+AudioRecorderRecordAudio                                  0                 1.00               0.00                12.00            50.40                 4.01             0.00
+AudioRecorderRecordAudioWithFileName                      1                 1.00               0.00                20.00            98.10                 4.56             0.00
+BrowserDraw                                               2                 0.00                NaN                  NaN            21.20                  NaN             1.00
+BrowserMaze                                               3                 0.00                NaN                  NaN            13.30                  NaN             1.00
+BrowserMultiply                                           4                 1.00               0.00                21.00            72.90                 3.27             0.00
+CameraTakePhoto                                           5                 1.00               0.00                10.00            54.60                 5.00             0.00
+CameraTakeVideo                                           6                 1.00               0.00                10.00            53.70                 4.64             0.00
+ClockStopWatchPausedVerify                                7                 1.00               1.00                 4.00            17.10                 3.76             0.00
+ClockStopWatchRunning                                     8                 1.00               1.00                 4.00            14.90                 3.31             0.00
+ClockTimerEntry                                           9                 1.00               0.00                10.00            45.80                 3.97             0.00
+ContactsAddContact                                       10                 1.00               1.00                 9.00            42.30                 4.29             0.00
+ContactsNewContactDraft                                  11                 1.00               1.00                11.00            53.00                 4.30             0.00
+ExpenseAddMultiple                                       12                 1.00               0.00                21.00            80.50                 3.52             0.00
+ExpenseAddMultipleFromGallery                            13                 1.00               0.00                11.00            55.60                 4.00             0.00
+ExpenseAddMultipleFromMarkor                             14                 1.00               0.00                21.00            71.10                 3.08             0.00
+ExpenseAddSingle                                         15                 1.00               1.00                10.00            49.80                 4.40             0.00
+ExpenseDeleteDuplicates                                  16                 1.00               1.00                 7.00            35.40                 4.17             0.00
+ExpenseDeleteDuplicates2                                 17                 1.00               0.00                 7.00            38.60                 4.62             0.00
+ExpenseDeleteMultiple                                    18                 1.00               1.00                11.00            56.30                 4.46             0.00
+ExpenseDeleteMultiple2                                   19                 1.00               0.00                21.00            91.60                 4.04             0.00
+ExpenseDeleteSingle                                      20                 1.00               1.00                 5.00            29.30                 4.74             0.00
+FilesDeleteFile                                          21                 1.00               0.00                 8.00            46.10                 4.88             0.00
+FilesMoveFile                                            22                 1.00               0.00                20.00            83.70                 3.83             0.00
+MarkorAddNoteHeader                                      23                 1.00               0.00                12.00            56.10                 4.27             0.00
+MarkorChangeNoteContent                                  24                 1.00               0.00                12.00            55.30                 4.41             0.00
+MarkorCreateFolder                                       25                 1.00               0.00                 5.00            27.20                 4.36             0.00
+MarkorCreateNote                                         26                 1.00               0.00                 6.00            36.00                 4.66             0.00
+MarkorCreateNoteAndSms                                   27                 1.00               0.00                18.00            89.00                 3.90             0.00
+MarkorCreateNoteFromClipboard                            28                 1.00               0.00                12.00            55.60                 3.97             0.00
+MarkorDeleteAllNotes                                     29                 1.00               1.00                 7.00            32.20                 4.31             0.00
+MarkorDeleteNewestNote                                   30                 1.00               0.00                 2.00             8.70                 3.35             0.00
+MarkorDeleteNote                                         31                 1.00               1.00                 5.00            22.00                 3.58             0.00
+MarkorEditNote                                           32                 1.00               0.00                 9.00            37.70                 3.98             0.00
+MarkorMergeNotes                                         33                 1.00               0.00                21.00            73.60                 3.32             0.00
+MarkorMoveNote                                           34                 1.00               0.00                 3.00            20.40                 5.08             0.00
+MarkorTranscribeReceipt                                  35                 1.00               0.00                18.00            97.20                 5.21             0.00
+MarkorTranscribeVideo                                    36                 1.00               0.00                20.00            98.90                 4.51             0.00
+NotesIsTodo                                              37                 1.00               1.00                 2.00            25.90                 4.72             0.00
+NotesMeetingAttendeeCount                                38                 1.00               0.00                 5.00            34.00                 3.50             0.00
+NotesRecipeIngredientCount                               39                 1.00               0.00                 5.00            35.50                 3.83             0.00
+NotesTodoItemCount                                       40                 1.00               1.00                 4.00            35.90                 4.72             0.00
+OpenAppTaskEval                                          41                 1.00               0.00                 4.00            20.00                 4.59             0.00
+OsmAndFavorite                                           42                 1.00               0.00                13.00            60.70                 4.49             0.00
+OsmAndMarker                                             43                 1.00               0.00                20.00           105.70                 4.95             0.00
+OsmAndTrack                                              44                 1.00               0.00                21.00            92.90                 4.26             0.00
+RecipeAddMultipleRecipes                                 45                 1.00               0.00                21.00            58.00                 2.48             0.00
+RecipeAddMultipleRecipesFromImage                        46                 1.00               0.00                21.00            93.10                 4.05             0.00
+RecipeAddMultipleRecipesFromMarkor                       47                 1.00               0.00                21.00            85.90                 3.84             0.00
+RecipeAddMultipleRecipesFromMarkor2                      48                 1.00               0.00                21.00            95.10                 4.22             0.00
+RecipeAddSingleRecipe                                    49                 1.00               1.00                21.00            93.70                 4.16             0.00
+RecipeDeleteDuplicateRecipes                             50                 1.00               1.00                 8.00            41.40                 4.51             0.00
+RecipeDeleteDuplicateRecipes2                            51                 1.00               0.00                21.00            96.30                 4.30             0.00
+RecipeDeleteDuplicateRecipes3                            52                 1.00               0.00                21.00            91.20                 4.07             0.00
+RecipeDeleteMultipleRecipes                              53                 1.00               0.00                21.00            91.90                 4.12             0.00
+RecipeDeleteMultipleRecipesWithConstraint                54                 1.00               1.00                21.00            63.50                 2.73             0.00
+RecipeDeleteMultipleRecipesWithNoise                     55                 1.00               0.00                15.00            72.10                 4.44             0.00
+RecipeDeleteSingleRecipe                                 56                 1.00               0.00                10.00            48.60                 4.27             0.00
+RecipeDeleteSingleWithRecipeWithNoise                    57                 1.00               1.00                11.00            54.60                 4.49             0.00
+RetroCreatePlaylist                                      58                 0.00                NaN                  NaN             2.90                  NaN             1.00
+RetroPlayingQueue                                        59                 0.00                NaN                  NaN             2.40                  NaN             1.00
+RetroPlaylistDuration                                    60                 0.00                NaN                  NaN             1.80                  NaN             1.00
+RetroSavePlaylist                                        61                 0.00                NaN                  NaN             2.60                  NaN             1.00
+SaveCopyOfReceiptTaskEval                                62                 1.00               1.00                10.00            45.40                 4.20             0.00
+SimpleCalendarAddOneEvent                                63                 1.00               0.00                21.00            84.60                 3.77             0.00
+SimpleCalendarAddOneEventInTwoWeeks                      64                 1.00               0.00                21.00            88.20                 3.95             0.00
+SimpleCalendarAddOneEventRelativeDay                     65                 1.00               0.00                21.00            90.20                 4.01             0.00
+SimpleCalendarAddOneEventTomorrow                        66                 1.00               0.00                21.00            74.70                 3.29             0.00
+SimpleCalendarAddRepeatingEvent                          67                 1.00               0.00                21.00            77.60                 3.43             0.00
+SimpleCalendarAnyEventsOnDate                            68                 1.00               1.00                 3.00            19.00                 5.37             0.00
+SimpleCalendarDeleteEvents                               69                 1.00               0.00                14.00            61.80                 3.94             0.00
+SimpleCalendarDeleteEventsOnRelativeDay                  70                 1.00               0.00                12.00            57.50                 4.27             0.00
+SimpleCalendarDeleteOneEvent                             71                 1.00               1.00                 6.00            33.50                 4.68             0.00
+SimpleCalendarEventOnDateAtTime                          72                 1.00               1.00                 4.00            59.90                14.00             0.00
+SimpleCalendarEventsInNextWeek                           73                 1.00               0.00                 2.00            16.40                 6.74             0.00
+SimpleCalendarEventsInTimeRange                          74                 1.00               1.00                 3.00            22.90                 6.01             0.00
+SimpleCalendarEventsOnDate                               75                 1.00               1.00                 3.00            20.20                 5.77             0.00
+SimpleCalendarFirstEventAfterStartTime                   76                 1.00               1.00                 3.00            23.20                 6.25             0.00
+SimpleCalendarLocationOfEvent                            77                 1.00               0.00                10.00            47.60                 4.34             0.00
+SimpleCalendarNextEvent                                  78                 1.00               0.00                 2.00            18.80                 6.89             0.00
+SimpleCalendarNextMeetingWithPerson                      79                 1.00               0.00                10.00            39.50                 3.51             0.00
+SimpleDrawProCreateDrawing                               80                 1.00               0.00                18.00            75.20                 3.92             0.00
+SimpleSmsReply                                           81                 1.00               1.00                 7.00            48.50                 4.67             0.00
+SimpleSmsReplyMostRecent                                 82                 1.00               0.00                 9.00            65.20                 4.33             0.00
+SimpleSmsResend                                          83                 1.00               0.00                12.00            78.00                 4.00             0.00
+SimpleSmsSend                                            84                 1.00               1.00                 9.00            59.80                 4.91             0.00
+SimpleSmsSendClipboardContent                            85                 1.00               0.00                12.00            60.10                 3.57             0.00
+SimpleSmsSendReceivedAddress                             86                 1.00               0.00                18.00           101.70                 3.95             0.00
+SportsTrackerActivitiesCountForWeek                      87                 1.00               0.00                 8.00            37.50                 3.90             0.00
+SportsTrackerActivitiesOnDate                            88                 1.00               0.00                20.00            73.60                 3.48             0.00
+SportsTrackerActivityDuration                            89                 1.00               0.00                10.00            37.50                 3.37             0.00
+SportsTrackerLongestDistanceActivity                     90                 1.00               0.00                 4.00            23.40                 5.12             0.00
+SportsTrackerTotalDistanceForCategoryOverInterval        91                 1.00               0.00                 6.00            29.80                 4.21             0.00
+SportsTrackerTotalDurationForCategoryThisWeek            92                 1.00               0.00                 7.00            33.70                 4.40             0.00
+SystemBluetoothTurnOff                                   93                 1.00               0.00                10.00            40.10                 3.78             0.00
+SystemBluetoothTurnOffVerify                             94                 1.00               0.00                10.00            40.00                 3.52             0.00
+SystemBluetoothTurnOn                                    95                 1.00               0.00                10.00            38.70                 3.47             0.00
+SystemBluetoothTurnOnVerify                              96                 1.00               0.00                10.00            42.70                 3.72             0.00
+SystemBrightnessMax                                      97                 1.00               0.00                10.00            49.30                 4.36             0.00
+SystemBrightnessMaxVerify                                98                 1.00               0.00                10.00            39.90                 3.77             0.00
+SystemBrightnessMin                                      99                 1.00               0.00                10.00            48.90                 4.31             0.00
+SystemBrightnessMinVerify                               100                 1.00               0.00                10.00            47.80                 4.47             0.00
+SystemCopyToClipboard                                   101                 1.00               0.00                10.00            67.10                 5.60             0.00
+SystemWifiTurnOff                                       102                 1.00               1.00                 7.00            39.10                 5.06             0.00
+SystemWifiTurnOffVerify                                 103                 1.00               1.00                 5.00            28.40                 4.92             0.00
+SystemWifiTurnOn                                        104                 1.00               0.00                10.00            47.30                 4.32             0.00
+SystemWifiTurnOnVerify                                  105                 1.00               1.00                 3.00            22.90                 5.79             0.00
+TasksCompletedTasksForDate                              106                 1.00               0.00                10.00            47.40                 4.05             0.00
+TasksDueNextWeek                                        107                 1.00               0.00                 5.00            28.50                 4.71             0.00
+TasksDueOnDate                                          108                 1.00               1.00                 5.00            34.10                 5.82             0.00
+TasksHighPriorityTasks                                  109                 1.00               0.00                 9.00            44.90                 4.54             0.00
+TasksHighPriorityTasksDueOnDate                         110                 1.00               0.00                 5.00            28.20                 4.90             0.00
+TasksIncompleteTasksOnDate                              111                 1.00               1.00                 5.00            32.10                 5.60             0.00
+TurnOffWifiAndTurnOnBluetooth                           112                 1.00               0.00                20.00            75.20                 3.50             0.00
+TurnOnWifiAndOpenApp                                    113                 1.00               0.50                14.00            61.50                 3.94             0.00
+VlcCreatePlaylist                                       114                 1.00               0.00                21.00            88.40                 3.85             0.00
+VlcCreateTwoPlaylists                                   115                 1.00               0.00                21.00           208.30                 9.47             0.00
+========= Average =========                               0                 0.95               0.28                11.52            52.56                 4.44             0.05
+
+
+                         mean_success_rate
+difficulty                            easy medium  hard
+tags
+complex_ui_understanding               0.4    0.0  0.14
+data_edit                             0.55   0.14   0.0
+data_entry                            0.33    0.0   0.0
+information_retrieval                 0.57   0.33   0.0
+math_counting                          0.0    0.5   0.0
+memorization                             -    0.0   0.0
+multi_app                                -    0.0   0.0
+parameterized                         0.43   0.16  0.12
+repetition                             1.0    0.0  0.25
+requires_setup                        0.33    0.0   0.0
+screen_reading                        0.67    0.0  0.11
+search                                0.55    0.0   0.0
+transcription                          0.5    0.0   0.0
+untagged                               0.2    0.0     -
+verification                          0.43      -     -
+Global mean step latency: 4.438s across 110 episodes
