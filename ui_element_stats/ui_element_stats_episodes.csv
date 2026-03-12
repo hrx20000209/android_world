@@ -1,0 +1,157 @@
+task_template,app_names,app_combo,goal,num_steps,total_elements_seen,avg_elements_per_step,step_ui_element_counts
+AudioRecorderRecordAudio,audio recorder,audio recorder,Record an audio clip using Audio Recorder app and save it.,11,0,0.0,0|0|0|0|0|0|0|0|0|0|0
+AudioRecorderRecordAudioWithFileName,audio recorder,audio recorder,"Record an audio clip and save it with name ""presentation_fGwr.m4a"" using Audio Recorder app.",15,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0|0|0
+BrowserDraw,chrome,chrome,Open the file task.html in Downloads in the file manager; when prompted open it with Chrome. Then create a drawing using the three colors shown at the top and hit submit.,20,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0
+BrowserMaze,chrome,chrome,"Open the file task.html in Downloads in the file manager; when prompted open it with Chrome. Then navigate the X to the bottom-right cell, by using the direction buttons.",20,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0
+BrowserMultiply,chrome,chrome,"Open the file task.html in Downloads in the file manager; when prompted open it with Chrome. Then click the button 5 times, remember the numbers displayed, and enter their product in the form.",20,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0
+CameraTakePhoto,camera,camera,Take one photo.,10,0,0.0,0|0|0|0|0|0|0|0|0|0
+CameraTakeVideo,camera,camera,Take one video.,9,0,0.0,0|0|0|0|0|0|0|0|0
+ClockStopWatchPausedVerify,clock,clock,Pause the stopwatch.,3,0,0.0,0|0|0
+ClockStopWatchRunning,clock,clock,Run the stopwatch.,6,0,0.0,0|0|0|0|0|0
+ClockTimerEntry,clock,clock,"Create a timer with 0 hours, 16 minutes, and 35 seconds. Do not start the timer.",10,0,0.0,0|0|0|0|0|0|0|0|0|0
+ContactsAddContact,contacts,contacts,Create a new contact for Hugo Pereira. Their number is +13920741751.,10,0,0.0,0|0|0|0|0|0|0|0|0|0
+ContactsNewContactDraft,contacts,contacts,"Go to the new contact screen and enter the following details: First Name: Grace, Last Name: Taylor, Phone: 799-802-1530, Phone Label: Work. Do NOT hit save.",11,0,0.0,0|0|0|0|0|0|0|0|0|0|0
+ExpenseAddMultiple,pro expense,pro expense,"Add the following expenses into the pro expense:
+Expense: Social Club Dues
+ amount_dollars: $67.41
+ category_name: Social
+ note: Monthly recurring
+
+Expense: Legal Fees
+ amount_dollars: $10.14
+ category_name: Others
+ note: Monthly recurring
+
+Expense: Stationery
+ amount_dollars: $118.93
+ category_name: Others
+ note: Remember to transfer funds
+",20,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0
+ExpenseAddMultipleFromGallery,pro expense|simple gallery pro,pro expense + simple gallery pro,Add the expenses from expenses.jpg in Simple Gallery Pro to pro expense.,8,0,0.0,0|0|0|0|0|0|0|0
+ExpenseAddMultipleFromMarkor,pro expense,pro expense,Go through the transactions in my_expenses.txt in Markor. Log the reimbursable transactions in the pro expense.,20,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0
+ExpenseAddSingle,pro expense,pro expense,"Add the following expenses into the pro expense:
+Expense: Therapy Sessions
+ amount_dollars: $307.01
+ category_name: Health Care
+ note: I may repeat this
+",12,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0
+ExpenseDeleteDuplicates,pro expense,pro expense,"Delete all but one of any expenses in pro expense that are exact duplicates, ensuring at least one instance of each unique expense remains.",8,0,0.0,0|0|0|0|0|0|0|0
+ExpenseDeleteDuplicates2,pro expense,pro expense,"Delete all but one of any expenses in pro expense that are exact duplicates, ensuring at least one instance of each unique expense remains.",11,0,0.0,0|0|0|0|0|0|0|0|0|0|0
+ExpenseDeleteMultiple,pro expense,pro expense,"Delete the following expenses from pro expense: Ride-Sharing, Flight Tickets, Taxi Fare.",11,0,0.0,0|0|0|0|0|0|0|0|0|0|0
+ExpenseDeleteMultiple2,pro expense,pro expense,"Delete the following expenses from pro expense: Streaming Services, Unexpected Expenses, Pet Supplies.",20,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0
+ExpenseDeleteSingle,pro expense,pro expense,Delete the following expenses from pro expense: Rental Income.,5,0,0.0,0|0|0|0|0
+FilesDeleteFile,files,files,Delete the file q2a8_fancy_banana.mp3 from the Android filesystem located in the Notifications folder within the sdk_gphone_x86_64 storage area.,1,0,0.0,0
+FilesMoveFile,files,files,Move the file holiday_photos.jpg from Podcasts within the sdk_gphone_x86_64 storage area to the DCIM within the same sdk_gphone_x86_64 storage area in the Android filesystem.,1,0,0.0,0
+MarkorAddNoteHeader,markor,markor,"Update the Markor note 2023_08_10_neat_wolf.txt by adding the following text, along with a new blank line before the existing content: ""RnI8sP34yDzJQbvkfplR"", and rename it to busy_wolf_2023_07_23.txt.",12,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0
+MarkorChangeNoteContent,markor,markor,"Update the content of strong_jacket_h1hZ.txt to ""inNqu8UNNtyXBHCZpYp7"" in Markor and change its name to lively_fox_2023_03_22.md.",12,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0
+MarkorCreateFolder,markor,markor,Create a new folder in Markor named folder_20260312_171815.,10,0,0.0,0|0|0|0|0|0|0|0|0|0
+MarkorCreateNote,markor,markor,Create a new note in Markor named 2023_01_26_wise_yacht.md with the following text: Ignorance is bliss.,10,0,0.0,0|0|0|0|0|0|0|0|0|0
+MarkorCreateNoteAndSms,markor|simple sms messenger,markor + simple sms messenger,Create a new note in Markor named fair_ant_XOdi.txt with the following text: Actions speak louder than words.. Share the entire content of the note with the phone number +13192815309 via SMS using Simple SMS Messenger,18,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0
+MarkorCreateNoteFromClipboard,markor|clipper,markor + clipper,Create a note in Markor named 2023_09_08_active_umbrella.txt. Perform a paste operation in the note and save the note.,9,0,0.0,0|0|0|0|0|0|0|0|0
+MarkorDeleteAllNotes,markor,markor,Delete all my notes in Markor.,7,0,0.0,0|0|0|0|0|0|0
+MarkorDeleteNewestNote,markor,markor,Delete the newest note in Markor.,5,0,0.0,0|0|0|0|0
+MarkorDeleteNote,markor,markor,Delete the note in Markor named bold_king_edited.,5,0,0.0,0|0|0|0|0
+MarkorEditNote,markor,markor,"Edit note_SiFbv.txt in Markor. Add to the top of the note Hello, World!",8,0,0.0,0|0|0|0|0|0|0|0
+MarkorMergeNotes,markor,markor,"Merge the contents of Markor notes tough_frog_2023_08_05.txt, proud_cat_edited.txt and 2023_08_21_friendly_koala.md (in the same order) into a new Markor note named mIObBbo4 and save it. Add a new line between the content of each note.",20,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0
+MarkorMoveNote,markor,markor,"In Markor, move the note shy_king_copy.md from StudyGuides to MeetingMinutes.",14,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0|0
+MarkorTranscribeReceipt,simple gallery pro|markor,simple gallery pro + markor,"Create a file in Markor, called receipt.md with the transactions from the receipt.png. Use Simple Gallery to view the receipt. Please enter transactions in csv format including the header ""Date, Item, Amount"".",18,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0
+MarkorTranscribeVideo,markor|vlc,markor + vlc,"Transcribe the contents of video ZwUN_moment_70_.mp4 by watching it in VLC player (located in Download) and writing the sequence of strings shown on each frame to the text file ZwUN_moment_70__transcription.txt in Markor as a comma separated list. For example, if the first frame shows the text ""edna"" and the second frame shows the text ""pineapple"", then the text file should contain only the following text: ""edna, pineapple"".",20,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0
+NotesIsTodo,joplin,joplin,Is the note titled 'To-Do List' in the Joplin app marked as a todo item? Respond with either 'True' if it is a todo or 'False' if not.,4,0,0.0,0|0|0|0
+NotesMeetingAttendeeCount,joplin,joplin,How many attendees were present in the meeting titled 'Employee Performance Evaluation' in the Joplin app? Express your answer as just a single number.,6,0,0.0,0|0|0|0|0|0
+NotesRecipeIngredientCount,joplin,joplin,What quantity of spirulina do I need for the recipe 'Chicken Alfredo' in the Joplin app? Express your answer in the format <amount> <unit> where both the amount and unit exactly match the format in the recipe.,9,0,0.0,0|0|0|0|0|0|0|0|0
+NotesTodoItemCount,joplin,joplin,How many to-dos do I have in the 'Ideas' folder in the Joplin app? Express your answer as just a single number.,4,0,0.0,0|0|0|0
+OpenAppTaskEval,camera|clock|contacts|settings|dialer,camera + clock + contacts + settings + dialer,Open the contacts app. Clear any pop-ups that may appear by granting all permissions that are required.,3,0,0.0,0|0|0
+OsmAndFavorite,osmand,osmand,"Add a favorite location marker for 47.1303814, 9.5930117 in the OsmAnd maps app.",13,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0
+OsmAndMarker,osmand,osmand,"Add a location marker for Planken, Liechtenstein in the OsmAnd maps app.",2,0,0.0,0|0
+OsmAndTrack,osmand,osmand,"Save a track with waypoints Schönberg, Liechtenstein, Triesen, Liechtenstein, Bendern, Liechtenstein in the OsmAnd maps app in the same order as listed.",20,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0
+RecipeAddMultipleRecipes,broccoli app,broccoli app,"Add the following recipes into the Broccoli app:
+Recipe: Chicken Alfredo Pasta
+ description: A delicious and healthy choice for any time of the day.
+ servings: 2 servings
+ preparationTime: 10 mins
+ ingredients: as desired
+ directions: Cook fettuccine pasta, toss with Alfredo sauce and grilled chicken strips. Serve with a sprinkle of Parmesan cheese. Try adding a pinch of your favorite spices for extra flavor.
+
+Recipe: Quinoa Salad with Vegetables
+ description: A quick and easy meal, perfect for busy weekdays.
+ servings: 8 servings
+ preparationTime: 30 mins
+ ingredients: to your liking
+ directions: Mix cooked quinoa with diced vegetables, feta cheese, and a lemon olive oil dressing. Try adding a pinch of your favorite spices for extra flavor.
+
+Recipe: Butternut Squash Soup
+ description: A delicious and healthy choice for any time of the day.
+ servings: 1 serving
+ preparationTime: 45 mins
+ ingredients: per individual taste
+ directions: Sauté onions and garlic, add cubed butternut squash and broth. Puree until smooth and season with nutmeg, salt, and pepper. Feel free to substitute with ingredients you have on hand.
+",20,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0
+RecipeAddMultipleRecipesFromImage,broccoli app|simple gallery pro,broccoli app + simple gallery pro,Add the recipes from recipes.jpg in Simple Gallery Pro to the Broccoli recipe app.,20,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0
+RecipeAddMultipleRecipesFromMarkor,broccoli app,broccoli app,Add the recipes from recipes.txt in Markor to the Broccoli recipe app.,19,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0
+RecipeAddMultipleRecipesFromMarkor2,broccoli app,broccoli app,Add the recipes from recipes.txt in Markor that take 10 mins to prepare into the Broccoli recipe app.,20,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0
+RecipeAddSingleRecipe,broccoli app,broccoli app,"Add the following recipes into the Broccoli app:
+Recipe: Chicken Caesar Salad Wrap
+ description: An ideal recipe for experimenting with different flavors and ingredients.
+ servings: 3-4 servings
+ preparationTime: 2 hrs
+ ingredients: as desired
+ directions: Toss chopped romaine lettuce with Caesar dressing, grilled chicken strips, and Parmesan cheese. Wrap in a large tortilla. Feel free to substitute with ingredients you have on hand.
+",20,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0
+RecipeDeleteDuplicateRecipes,broccoli app,broccoli app,"Delete all but one of any recipes in the Broccoli app that are exact duplicates, ensuring at least one instance of each unique recipe remains",10,0,0.0,0|0|0|0|0|0|0|0|0|0
+RecipeDeleteDuplicateRecipes2,broccoli app,broccoli app,"Delete all but one of any recipes in the Broccoli app that are exact duplicates, ensuring at least one instance of each unique recipe remains",20,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0
+RecipeDeleteDuplicateRecipes3,broccoli app,broccoli app,"Delete all but one of any recipes in the Broccoli app that are exact duplicates, ensuring at least one instance of each unique recipe remains",20,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0
+RecipeDeleteMultipleRecipes,broccoli app,broccoli app,"Delete the following recipes from Broccoli app: Zucchini Noodles with Pesto, Garlic Butter Shrimp, Lentil Soup.",20,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0
+RecipeDeleteMultipleRecipesWithConstraint,broccoli app,broccoli app,Delete the recipes from Broccoli app that use black garlic in the directions.,4,0,0.0,0|0|0|0
+RecipeDeleteMultipleRecipesWithNoise,broccoli app,broccoli app,"Delete the following recipes from Broccoli app: Chicken Alfredo Pasta, Tomato Basil Bruschetta, Grilled Cheese with Tomato and Basil.",20,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0
+RecipeDeleteSingleRecipe,broccoli app,broccoli app,Delete the following recipes from Broccoli app: Thai Peanut Noodle Salad.,7,0,0.0,0|0|0|0|0|0|0
+RecipeDeleteSingleWithRecipeWithNoise,broccoli app,broccoli app,Delete the following recipes from Broccoli app: Classic Margherita Pizza.,11,0,0.0,0|0|0|0|0|0|0|0|0|0|0
+SaveCopyOfReceiptTaskEval,simple gallery pro,simple gallery pro,"In Simple Gallery Pro, copy receipt_2023_01_22_sure_frog.jpg in DCIM and save a copy with the same name in Download",9,0,0.0,0|0|0|0|0|0|0|0|0
+SimpleCalendarAddOneEvent,simple calendar pro,simple calendar pro,"In Simple Calendar Pro, create a calendar event on 2023-10-29 at 13h with the title 'Call with the Team' and the description 'We will understand upcoming project milestones.'. The event should last for 60 mins.",20,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0
+SimpleCalendarAddOneEventInTwoWeeks,simple calendar pro,simple calendar pro,"In Simple Calendar Pro, create a calendar event in two weeks from today at 17h with the title 'Meeting with the Team' and the description 'We will prepare for annual budget.'. The event should last for 30 mins.",20,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0
+SimpleCalendarAddOneEventRelativeDay,simple calendar pro,simple calendar pro,"In Simple Calendar Pro, create a calendar event for this Thursday at 5h with the title 'Call with the Team' and the description 'We will celebrate team roles.'. The event should last for 60 mins.",20,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0
+SimpleCalendarAddOneEventTomorrow,simple calendar pro,simple calendar pro,"In Simple Calendar Pro, create a calendar event for tomorrow at 20h with the title 'Call with the Team' and the description 'We will prepare for team roles.'. The event should last for 30 mins.",20,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0
+SimpleCalendarAddRepeatingEvent,simple calendar pro,simple calendar pro,"In Simple Calendar Pro, create a recurring calendar event titled 'Review session for Budget Planning' starting on 2023-10-15 at 14h. The event recurs weekly, forever, and lasts for 60 minutes each occurrence. The event description should be 'We will understand business objectives. Remember to confirm attendance.'.",20,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0
+SimpleCalendarAnyEventsOnDate,simple calendar pro,simple calendar pro,"Do I have any events October 28 in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",2,0,0.0,0|0
+SimpleCalendarDeleteEvents,simple calendar pro,simple calendar pro,"In Simple Calendar Pro, delete all the calendar events on 2023-10-27",8,0,0.0,0|0|0|0|0|0|0|0
+SimpleCalendarDeleteEventsOnRelativeDay,simple calendar pro,simple calendar pro,"In Simple Calendar Pro, delete all events scheduled for this Monday.",12,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0
+SimpleCalendarDeleteOneEvent,simple calendar pro,simple calendar pro,"In Simple Calendar Pro, delete the calendar event on 2023-10-24 at 23h with the title 'Workshop on Project X'",11,0,0.0,0|0|0|0|0|0|0|0|0|0|0
+SimpleCalendarEventOnDateAtTime,simple calendar pro,simple calendar pro,"What is on my schedule for October 27 2023 at 8:00pm in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",5,0,0.0,0|0|0|0|0
+SimpleCalendarEventsInNextWeek,simple calendar pro,simple calendar pro,"What events do I have in the next week in Simple Calendar Pro? Assume the week starts from Monday. Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",2,0,0.0,0|0
+SimpleCalendarEventsInTimeRange,simple calendar pro,simple calendar pro,"Do I have any events between 4:15pm and 8pm Friday in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",3,0,0.0,0|0|0
+SimpleCalendarEventsOnDate,simple calendar pro,simple calendar pro,"What events do I have October 24 in Simple Calendar Pro? Answer with the titles only. If there are multiple titles, format your answer as a comma separated list.",2,0,0.0,0|0
+SimpleCalendarFirstEventAfterStartTime,simple calendar pro,simple calendar pro,"What is my first event after 5:20pm October 29 2023 in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",3,0,0.0,0|0|0
+SimpleCalendarLocationOfEvent,simple calendar pro,simple calendar pro,What is the location of my Family reunion event in Simple Calendar Pro? Answer with the location only.,5,0,0.0,0|0|0|0|0
+SimpleCalendarNextEvent,simple calendar pro,simple calendar pro,"What is my next upcoming event in Simple Calendar Pro? Answer with the title only. If there are multiples titles, format your answer in a comma separated list.",3,0,0.0,0|0|0
+SimpleCalendarNextMeetingWithPerson,simple calendar pro,simple calendar pro,When is my next meeting with Ava in Simple Calendar Pro? Express your answer in the format <month name> <day> <year> <hour in 24-hour format>:<minutes>.,4,0,0.0,0|0|0|0
+SimpleDrawProCreateDrawing,simple draw pro,simple draw pro,Create a new drawing in Simple Draw Pro. Name it adipiscing_fair_jelly_final.png. Save it in the Pictures folder within the sdk_gphone_x86_64 storage area.,18,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0
+SimpleSmsReply,simple sms messenger,simple sms messenger,Reply to +18407874306 with message: Yoga class every Tuesday and Thursday at 6 PM. in Simple SMS Messenger,9,0,0.0,0|0|0|0|0|0|0|0|0
+SimpleSmsReplyMostRecent,simple sms messenger,simple sms messenger,Reply to the most recent text message using Simple SMS Messenger with message: A quick brown fox.,10,0,0.0,0|0|0|0|0|0|0|0|0|0
+SimpleSmsSend,simple sms messenger,simple sms messenger,Send a text message using Simple SMS Messenger to +16597910719 with message: Beauty is in the eye of the beholder.,12,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0
+SimpleSmsSendClipboardContent,simple sms messenger|clipper,simple sms messenger + clipper,Send a message to +15459061746 with the clipboard content in Simple SMS Messenger,12,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0
+SportsTrackerActivitiesCountForWeek,open tracks sports tracker,open tracks sports tracker,How many running activities did I do this week in the OpenTracks app? Assume the week starts from Monday. Express your answer as a single integer.,2,0,0.0,0|0
+SportsTrackerActivitiesOnDate,open tracks sports tracker,open tracks sports tracker,"What activities did I do October 01 in the OpenTracks app? Answer with the activity type only. If there are multiple types, format your answer in a comma separated list.",4,0,0.0,0|0|0|0
+SportsTrackerActivityDuration,open tracks sports tracker,open tracks sports tracker,How long was my skiing activity October 12 2023 in the OpenTracks app? Express your answer in minutes as a single integer.,9,0,0.0,0|0|0|0|0|0|0|0|0
+SportsTrackerLongestDistanceActivity,open tracks sports tracker,open tracks sports tracker,What was the longest distance covered in a mountain biking activity in the OpenTracks app this week? Assume the week starts from Monday. Express your answer as a single number in meters rounded to the nearest integer.,3,0,0.0,0|0|0
+SportsTrackerTotalDistanceForCategoryOverInterval,open tracks sports tracker,open tracks sports tracker,What was the total distance covered for kayaking activities in the OpenTracks app from October 09 2023 to October 10 2023? Express your answer as a single number in meters rounded to the nearest integer.,12,0,0.0,0|0|0|0|0|0|0|0|0|0|0|0
+SportsTrackerTotalDurationForCategoryThisWeek,open tracks sports tracker,open tracks sports tracker,What was the total duration of running activities in the OpenTracks app this week? Assume the week starts from Monday. Express your answer in minutes as a single integer.,2,0,0.0,0|0
+SystemBluetoothTurnOff,settings,settings,Turn bluetooth off.,8,0,0.0,0|0|0|0|0|0|0|0
+SystemBluetoothTurnOffVerify,settings,settings,Turn bluetooth off.,10,0,0.0,0|0|0|0|0|0|0|0|0|0
+SystemBluetoothTurnOn,settings,settings,Turn bluetooth on.,10,0,0.0,0|0|0|0|0|0|0|0|0|0
+SystemBluetoothTurnOnVerify,settings,settings,Turn bluetooth on.,10,0,0.0,0|0|0|0|0|0|0|0|0|0
+SystemBrightnessMax,settings,settings,Turn brightness to the max value.,10,0,0.0,0|0|0|0|0|0|0|0|0|0
+SystemBrightnessMaxVerify,settings,settings,Turn brightness to the max value.,9,0,0.0,0|0|0|0|0|0|0|0|0
+SystemBrightnessMin,settings,settings,Turn brightness to the min value.,10,0,0.0,0|0|0|0|0|0|0|0|0|0
+SystemBrightnessMinVerify,settings,settings,Turn brightness to the min value.,9,0,0.0,0|0|0|0|0|0|0|0|0
+SystemCopyToClipboard,clipper,clipper,Copy the following text to the clipboard: Tracking #: 5K672F4C,10,0,0.0,0|0|0|0|0|0|0|0|0|0
+SystemWifiTurnOff,settings,settings,Turn wifi off.,10,0,0.0,0|0|0|0|0|0|0|0|0|0
+SystemWifiTurnOffVerify,settings,settings,Turn wifi off.,10,0,0.0,0|0|0|0|0|0|0|0|0|0
+TasksCompletedTasksForDate,tasks,tasks,"Which tasks have I completed for October 16 2023 in Tasks app? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",10,372,37.2,20|50|50|50|50|6|23|23|50|50
+TasksDueNextWeek,tasks,tasks,How many tasks do I have due next week in Tasks app? Assume the week starts from Monday. Express your answer as a single integer.,7,201,28.7143,20|50|50|22|22|15|22
+TasksDueOnDate,tasks,tasks,"What tasks do I have due October 24 2023 in Tasks app? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",3,92,30.6667,20|20|52
+TasksHighPriorityTasks,tasks,tasks,"What are my high priority tasks in Tasks app? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",2,71,35.5,20|51
+TasksHighPriorityTasksDueOnDate,tasks,tasks,"Which tasks with high priority are due October 18 2023 in the Tasks app? Answer with the title only. If there are multiples titles, format your answer in a comma separated list.",4,143,35.75,20|54|54|15
+TasksIncompleteTasksOnDate,tasks,tasks,"What incomplete tasks do I have still have to do by Thursday in Tasks app? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",2,70,35.0,20|50
+TurnOffWifiAndTurnOnBluetooth,settings,settings,"Turn off WiFi, then enable bluetooth",6,130,21.6667,20|39|34|10|9|18
+TurnOnWifiAndOpenApp,settings,settings,"Turn on Wifi, then open the settings app",14,270,19.2857,20|20|20|20|25|25|6|26|13|13|27|25|16|14
+VlcCreatePlaylist,vlc,vlc,"Create a playlist titled ""Ultimate Fails Series"" with the following files in VLC (located in Internal Memory/VLCVideos), in order: highlight_41_4K_2023_03_30.mp4, scene_68_4K_copy.mp4",20,397,19.85,20|41|41|19|69|31|14|6|13|13|13|13|13|13|13|13|13|13|13|13
+VlcCreateTwoPlaylists,vlc,vlc,"Create a playlist titled ""Ultimate Fails Series"" with the following files in VLC (located in Internal Memory/VLCVideos), in order: 2023_03_29_highlight_14_.mp4, scene_94_HD_MYI6.mp4, moment_1_HD_2023_07_27.mp4, recording_61_4K_final.mp4. And then, create a playlist titled ""Adventure Marathon"" with the following files in VLC, in order: clip_12_HD_2023_02_25.mp4, 8u3n_footage_29_HD.mp4, footage_46_raw_jZFR.mp4, D7B0_highlight_2_4K.mp4.",20,612,30.6,20|41|41|19|19|41|6|6|41|41|19|19|41|41|19|19|41|6|66|66
