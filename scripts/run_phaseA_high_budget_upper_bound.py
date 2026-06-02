@@ -34,10 +34,19 @@ PHASE_A_TASKS = [
 
 SEARCH_VARIANT_CONFIGS = {
     "S1_BFS": {"explore_strategy": "bfs", "search_strategy": "stratified_bfs", "safe_mcts": False},
+    "S1_BFS_BUDGET12": {"explore_strategy": "bfs", "search_strategy": "stratified_bfs", "safe_mcts": False},
     "S2_DFS": {"explore_strategy": "dfs", "search_strategy": "iddfs", "safe_mcts": False},
+    "S2_DFS_BUDGET12": {"explore_strategy": "dfs", "search_strategy": "iddfs", "safe_mcts": False},
     "S3_BEAM": {"explore_strategy": "dfs", "search_strategy": "beam", "safe_mcts": False},
+    "S3_BEAM_BUDGET12": {"explore_strategy": "dfs", "search_strategy": "beam", "safe_mcts": False},
     "S4_MCTS": {"explore_strategy": "dfs", "search_strategy": "mcts", "safe_mcts": True},
+    "S4_MCTS_BUDGET12": {"explore_strategy": "dfs", "search_strategy": "mcts", "safe_mcts": True},
     "S5_OPERATOR_STRATIFIED_BEST_FIRST": {
+        "explore_strategy": "dfs",
+        "search_strategy": "best_first",
+        "safe_mcts": False,
+    },
+    "S5_PATTERN_AWARE_OPERATOR_BEST_FIRST_BUDGET12": {
         "explore_strategy": "dfs",
         "search_strategy": "best_first",
         "safe_mcts": False,
@@ -61,6 +70,7 @@ REQUIRED_FILES = [
     "prompt_traces.jsonl",
     "hint_hit_follow.jsonl",
     "rollback_events.jsonl",
+    "rollback_gate_decisions.jsonl",
     "rollback_level2_cases.md",
     "rollback_failure_cases.md",
     "shortcut_plans.jsonl",

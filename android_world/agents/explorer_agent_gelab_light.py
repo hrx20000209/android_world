@@ -317,6 +317,10 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         self.light_explore_variant = _clean_text(
             os.environ.get("ANDROID_WORLD_LIGHT_EXPLORE_VARIANT", "")
         )
+        self.light_explore_pattern_aware_operator_best_first = _env_bool(
+            "ANDROID_WORLD_LIGHT_EXPLORE_PATTERN_AWARE_OPERATOR_BEST_FIRST",
+            "PATTERN_AWARE_OPERATOR_BEST_FIRST" in self.light_explore_variant.upper(),
+        )
         self.light_explore_safe_mcts = _env_bool(
             "ANDROID_WORLD_LIGHT_EXPLORE_SAFE_MCTS",
             False,
@@ -720,13 +724,20 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             "branch_continuation": "gated depth-first continuation to depth 2",
             "ranking": "best-first score",
             "candidate_score_formula": (
-                "MissingSlotGain + TaskEntityMatch - RiskPenalty"
-                if self.light_explore_upper_bound_evidence
+                "PatternPrior + MissingSlotGain + TaskEntityMatch - RiskPenalty - RollbackRisk"
+                if getattr(self, "light_explore_pattern_aware_operator_best_first", False)
                 else (
-                    "2.0*MissingSlotGain + 1.5*TaskEntityMatch + 1.0*OperatorPriority + "
-                    "1.0*TaskProgress + 0.5*Novelty - 2.0*RiskPenalty - 1.0*RollbackCost - "
-                    "1.0*WrongScreenRolePenalty - 0.5*RevisitPenalty"
+                    "MissingSlotGain + TaskEntityMatch - RiskPenalty"
+                    if self.light_explore_upper_bound_evidence
+                    else (
+                        "2.0*MissingSlotGain + 1.5*TaskEntityMatch + 1.0*OperatorPriority + "
+                        "1.0*TaskProgress + 0.5*Novelty - 2.0*RiskPenalty - 1.0*RollbackCost - "
+                        "1.0*WrongScreenRolePenalty - 0.5*RevisitPenalty"
+                    )
                 )
+            ),
+            "pattern_aware_operator_best_first": bool(
+                getattr(self, "light_explore_pattern_aware_operator_best_first", False)
             ),
             "branch_budget": int(self.light_explore_branch_budget),
             "max_depth": int(self.light_explore_branch_depth),
@@ -816,7 +827,11 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         if quality_rejection:
             wrong_screen_role_penalty = max(wrong_screen_role_penalty, 1.0)
         revisit_penalty = min(1.0, float(candidate.get("visits") or 0.0))
-        if getattr(self, "light_explore_upper_bound_evidence", False):
+        pattern_prior = self._candidate_pattern_prior(candidate, goal, operator=operator, label=label)
+        rollback_risk = self._candidate_rollback_risk(candidate, goal, operator=operator, label=label)
+        if getattr(self, "light_explore_pattern_aware_operator_best_first", False):
+            final_score = pattern_prior + missing_slot_gain + task_entity_match - risk_penalty - rollback_risk
+        elif getattr(self, "light_explore_upper_bound_evidence", False):
             final_score = missing_slot_gain + task_entity_match - risk_penalty
         else:
             final_score = (
@@ -837,15 +852,85 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             "TaskProgress": float(task_progress),
             "Novelty": float(novelty),
             "RiskPenalty": float(risk_penalty),
+            "RollbackRisk": float(rollback_risk),
+            "PatternPrior": float(pattern_prior),
             "RollbackCost": float(rollback_cost),
             "WrongScreenRolePenalty": float(wrong_screen_role_penalty),
             "RevisitPenalty": float(revisit_penalty),
             "final_score": float(final_score),
+            "final_score_or_utility": float(final_score),
             "operator": operator,
             "operator_reason": operator_reason,
             "quality_filter_reason": quality_rejection,
             "filtered_by_quality": bool(quality_rejection),
         }
+
+    def _candidate_pattern_prior(
+        self,
+        candidate: dict[str, Any],
+        goal: str,
+        *,
+        operator: str = "",
+        label: str = "",
+    ) -> float:
+        """Task-family/operator-level pattern prior inspired by PASTE."""
+        operator = _clean_text(operator or candidate.get("operator") or "").strip()
+        label = _clean_text(label or candidate.get("label") or candidate.get("merged") or "").lower()
+        merged = _clean_text(candidate.get("merged") or label).lower()
+        text = f"{label} {merged}".strip()
+        task_mode = self._task_mode(goal)
+        apps = set(self._goal_app_keywords(goal))
+        entities = [e.lower() for e in self._task_entities(goal) if e]
+        exact_entity = any(entity and entity in text for entity in entities)
+        has_search = any(token in text for token in ("search", "find", "filter"))
+        if operator in {"SearchPeek", "FilterPeek"} and has_search and (
+            apps & {"joplin", "files", "calendar", "opentracks", "sportstracker", "sports"}
+            or task_mode in {"RECIPE_INGREDIENT", "NAVIGATION_SEARCH", "EVENT_QUERY", "ACTIVITY_STATS"}
+        ):
+            return 1.0 if exact_entity or has_search else 0.5
+        if operator in {"SearchPeek", "FormSchema"} and task_mode in {"RECIPE_INGREDIENT", "NAVIGATION_SEARCH", "EVENT_QUERY"}:
+            return 0.75
+        if operator == "ListInspect" and exact_entity:
+            return 1.0
+        if operator in {"DetailPeek", "StatsPeek"} and task_mode in {"ACTIVITY_STATS", "RECIPE_INGREDIENT", "INFO_QUERY_COUNT"}:
+            return 1.0 if exact_entity or operator == "StatsPeek" else 0.5
+        if operator == "ListInspect" and task_mode in {"INFO_QUERY_COUNT", "EVENT_QUERY", "ACTIVITY_STATS"}:
+            return 0.5
+        if task_mode == "EVENT_QUERY" and any(token in text for token in ("new event", "add event", "create event")):
+            return 1.0
+        if task_mode == "ACTIVITY_STATS" and any(token in text for token in ("markers", "marker")):
+            return 1.0
+        if operator == "RiskBoundary":
+            return 0.0
+        return 0.0
+
+    def _candidate_rollback_risk(
+        self,
+        candidate: dict[str, Any],
+        goal: str,
+        *,
+        operator: str = "",
+        label: str = "",
+    ) -> float:
+        operator = _clean_text(operator or candidate.get("operator") or "").strip()
+        label = _clean_text(label or candidate.get("label") or candidate.get("merged") or "").lower()
+        merged = _clean_text(candidate.get("merged") or label).lower()
+        text = f"{label} {merged}".strip()
+        apps = set(self._goal_app_keywords(goal))
+        task_mode = self._task_mode(goal)
+        if operator == "RiskBoundary" or self._is_transaction_unsafe_candidate(candidate):
+            return 1.0
+        if any(token in text for token in ("delete", "save", "confirm", "toggle", "remove", "discard")):
+            return 1.0
+        fragile_app = bool(
+            apps & {"joplin", "calendar", "opentracks", "sportstracker", "sports", "files", "browser"}
+            or task_mode in {"RECIPE_INGREDIENT", "EVENT_QUERY", "ACTIVITY_STATS", "NAVIGATION_SEARCH"}
+        )
+        if fragile_app and operator in {"DetailPeek", "StatsPeek", "NavigationPeek"}:
+            return 1.0 if any(token in text for token in ("resolver", "chrome", "browser", "open with", "map")) else 0.5
+        if fragile_app and operator in {"SearchPeek", "FilterPeek", "ListInspect"}:
+            return 0.25
+        return 0.0
 
     def _candidate_quality_filter_reason(self, candidate: dict[str, Any], goal: str) -> str:
         if not getattr(self, "light_explore_quality_filters", True):
@@ -1309,7 +1394,10 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             "filtered_invalid_bbox_count": int(quality.get("filtered_invalid_bbox_count") or 0),
             "filtered_generic_container_count": int(quality.get("filtered_generic_container_count") or 0),
             "filtered_app_name_only_count": int(quality.get("filtered_app_name_only_count") or 0),
+            "filtered_duplicate_count": int(quality.get("filtered_duplicate_count") or 0),
+            "filtered_wrong_task_family_count": int(quality.get("filtered_wrong_task_family_count") or 0),
             "filtered_wrong_operator_count": int(quality.get("filtered_wrong_operator_count") or 0),
+            "filtered_risky_count": int(quality.get("filtered_risky_count") or 0),
             "top_filtered_examples": list(quality.get("top_filtered_examples") or [])[:12],
             "selected_branch_count": len(selected),
             "attempt_count": int(attempt_count),
@@ -1428,6 +1516,11 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                     or trace.get("reason_less_than_30")
                     or ("safe_candidate_shortage_or_budget" if min_attempts and attempted_count < min_attempts else "")
                 ),
+                "less_than_12_reason": (
+                    trace.get("no_candidate_reason")
+                    or trace.get("reason_less_than_12")
+                    or ("safe_candidate_shortage_or_budget" if min_attempts and attempted_count < min_attempts else "")
+                ),
                 "depth1_count": sum(1 for obs in observations if int(obs.get("depth_reached") or 0) >= 1),
                 "depth2_count": sum(1 for obs in observations if int(obs.get("depth_reached") or 0) >= 2),
                 "max_depth_reached": max([int(obs.get("depth_reached") or 0) for obs in observations] or [0]),
@@ -1454,7 +1547,13 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                     "root_operator": obs.get("operator"),
                     "root_score": obs.get("score"),
                     "selected_rank": obs.get("branch_id"),
-                    "selected_reason": "operator_stratified_budget",
+                    "selected_reason": (
+                        (d1.get("candidate") or {}).get("reason_selected")
+                        if isinstance(d1.get("candidate"), dict)
+                        else None
+                    )
+                    or obs.get("selected_reason")
+                    or "operator_stratified_budget",
                     "depth_reached": obs.get("depth_reached"),
                     "depth1_action": (d1.get("candidate") or {}).get("label") if isinstance(d1.get("candidate"), dict) else "",
                     "depth1_state_summary": d1.get("observed_elements") or [],
@@ -1467,6 +1566,10 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                     "evidence_type_candidate": obs.get("evidence_type"),
                     "evidence_gain": obs.get("evidence_gain"),
                     "rollback_success": bool(rb.get("success")),
+                    "rollback_level": rb.get("level"),
+                    "rollback_mode": rb.get("mode"),
+                    "depth1_screenshot_path": d1.get("screenshot"),
+                    "depth2_screenshot_path": d2.get("screenshot"),
                     "screenshot_paths": [step.get("screenshot") for step in steps if step.get("screenshot")],
                 },
             )
@@ -1509,20 +1612,24 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                     "text": _clean_text((cand.get("a11y") or {}).get("text") if isinstance(cand.get("a11y"), dict) else ""),
                     "content_desc": _clean_text((cand.get("a11y") or {}).get("content_description") if isinstance(cand.get("a11y"), dict) else ""),
                     "resource_id": _clean_text((cand.get("a11y") or {}).get("resource_id") if isinstance(cand.get("a11y"), dict) else ""),
+                    "class_name": _clean_text((cand.get("a11y") or {}).get("class_name") if isinstance(cand.get("a11y"), dict) else ""),
                     "bbox": (cand.get("a11y") or {}).get("bbox") if isinstance(cand.get("a11y"), dict) else cand.get("bbox"),
                     "center": [int(center[0]), int(center[1])] if isinstance(center, (list, tuple)) and len(center) >= 2 else center,
                     "operator": cand.get("operator") or components.get("operator"),
                     "operator_reason": cand.get("operator_reason") or components.get("operator_reason"),
+                    "PatternPrior": components.get("PatternPrior"),
                     "MissingSlotGain": components.get("MissingSlotGain"),
                     "TaskEntityMatch": components.get("TaskEntityMatch"),
                     "OperatorPriority": components.get("OperatorPriority"),
                     "TaskProgress": components.get("TaskProgress"),
                     "Novelty": components.get("Novelty"),
                     "RiskPenalty": components.get("RiskPenalty"),
+                    "RollbackRisk": components.get("RollbackRisk"),
                     "RollbackCost": components.get("RollbackCost"),
                     "WrongScreenRolePenalty": components.get("WrongScreenRolePenalty"),
                     "RevisitPenalty": components.get("RevisitPenalty"),
                     "final_score": components.get("final_score") or cand.get("final_score"),
+                    "final_score_or_utility": components.get("final_score_or_utility") or components.get("final_score") or cand.get("final_score"),
                     "selected": bool(cand in selected),
                     "selected_rank": next((i + 1 for i, item in enumerate(selected) if item == cand), None),
                     "selected_reason": cand.get("reason_selected"),
@@ -1563,6 +1670,14 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                 "evidence_type_candidate": candidate_type,
                 "final_evidence_type": evidence_type,
                 "score_components": components,
+                "PatternPrior": components.get("PatternPrior"),
+                "MissingSlotGain": components.get("MissingSlotGain"),
+                "TaskEntityMatch": components.get("TaskEntityMatch"),
+                "RiskPenalty": components.get("RiskPenalty"),
+                "RollbackRisk": components.get("RollbackRisk"),
+                "final_score_or_utility": components.get("final_score_or_utility")
+                or components.get("final_score")
+                or components.get("score"),
                 "evidence_gain": obs.get("evidence_gain") or obs.get("score"),
                 "confidence": float(confidence),
                 "confidence_components": confidence_components,
@@ -1622,7 +1737,50 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             event.setdefault("planned_action_suppressed", bool(trace.get("planned_action_suppressed")))
             event.setdefault("suppression_reason", trace.get("suppression_reason") or "")
             event.setdefault("failure_reasons", rb.get("failure_reasons") or rb.get("failure_reason") or [])
+            event.setdefault("branch_evidence_discarded", not bool(event.get("success", True)))
+            event.setdefault("prompt_history_contaminated", False)
+            event.setdefault(
+                "main_action_suppressed",
+                bool(trace.get("main_action_blocked_by_rollback_gate")),
+            )
+            event.setdefault("rollback_timeline_image", "")
+            event.setdefault("rollback_case_markdown", "")
             self._append_diagnostic_jsonl(goal, "rollback_events.jsonl", event)
+            self._append_diagnostic_jsonl(
+                goal,
+                "rollback_gate_decisions.jsonl",
+                {
+                    "timestamp": time.time(),
+                    "task": goal,
+                    "variant": self.light_explore_variant,
+                    "step": trace.get("step"),
+                    "branch_id": event.get("branch_id")
+                    or event.get("candidate_id")
+                    or trace.get("branch_id")
+                    or trace.get("trace_id"),
+                    "rollback_level": event.get("rollback_level"),
+                    "rollback_mode": event.get("rollback_mode"),
+                    "trigger_reason": event.get("trigger_reason")
+                    or event.get("reason")
+                    or event.get("failure_reason"),
+                    "success": bool(event.get("success", True)),
+                    "state_aligned": bool(event.get("state_aligned", event.get("success", True))),
+                    "branch_evidence_discarded": bool(event.get("branch_evidence_discarded")),
+                    "prompt_history_contaminated": bool(event.get("prompt_history_contaminated")),
+                    "main_action_suppressed": bool(event.get("main_action_suppressed")),
+                    "screenshot_path": event.get("screenshot_path")
+                    or event.get("screenshot")
+                    or "",
+                    "before_anchor": event.get("before_anchor", ""),
+                    "after_anchor": event.get("after_anchor", ""),
+                    "before_activity": event.get("before_activity", ""),
+                    "after_activity": event.get("after_activity", ""),
+                    "before_phash": event.get("before_phash", ""),
+                    "after_phash": event.get("after_phash", ""),
+                    "rollback_timeline_image": event.get("rollback_timeline_image", ""),
+                    "rollback_case_markdown": event.get("rollback_case_markdown", ""),
+                },
+            )
             if bool(event.get("level2_triggered")) or not bool(event.get("success", True)):
                 task_dir = self._task_output_dir(goal)
                 if task_dir:
@@ -8676,8 +8834,8 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             trace["available_for_next_prompt"] = bool(
                 all_rollback_success and (has_depth2_observation or has_fixed_prompt_candidate)
             )
-            if not all_rollback_success and not self.light_explore_force_every_step:
-                self.enable_light_exploration = False
+            if not all_rollback_success:
+                trace["exploration_step_stopped_after_rollback_failed"] = True
             if trace["available_for_next_prompt"]:
                 self._pending_speculative_traces = [trace]
                 print(
