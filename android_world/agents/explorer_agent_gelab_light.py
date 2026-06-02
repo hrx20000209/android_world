@@ -1935,6 +1935,48 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         )
         return mode
 
+    def _execute_root_open_anchor(
+        self,
+        action: json_action.JSONAction,
+        root_activity: str,
+    ) -> str:
+        root_pkg = self._package_from_activity(root_activity)
+        action_pkg = self._package_for_app_name(getattr(action, "app_name", ""))
+        if (
+            action.action_type != json_action.OPEN_APP
+            or not root_pkg
+            or action_pkg != root_pkg
+            or self._is_launcher_activity(root_activity)
+            or "/" not in _clean_text(root_activity)
+        ):
+            return self._execute_probe_action(action)
+
+        action_start = time.time()
+        try:
+            adb_utils.start_activity(root_activity, extra_args=[], env=self.env.controller, timeout_sec=5)
+            if self.light_explore_action_settle_s > 0:
+                time.sleep(float(self.light_explore_action_settle_s))
+            curr_pkg = self._package_from_activity(self._foreground_activity_name())
+            if curr_pkg == root_pkg:
+                latency_ms = float(max(0.0, time.time() - action_start) * 1000.0)
+                self._append_latency_profile_event(
+                    getattr(self, "_current_goal_for_depth", ""),
+                    {
+                        "event": "probe_action",
+                        "action_type": str(action.action_type),
+                        "mode": "fast_start_root_activity",
+                        "latency_ms": latency_ms,
+                        "app_name": _clean_text(getattr(action, "app_name", "")),
+                        "root_activity": root_activity,
+                        "includes_settle": bool(self.light_explore_action_settle_s > 0),
+                        "settle_s": float(self.light_explore_action_settle_s),
+                    },
+                )
+                return "fast_start_root_activity"
+        except Exception:  # pylint: disable=broad-exception-caught
+            pass
+        return self._execute_probe_action(action)
+
     @staticmethod
     def _normalize_activity_name(activity: str | None) -> str:
         return _clean_text(activity).lower()
@@ -1975,6 +2017,130 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             or package.endswith(".nexuslauncher")
             or value.startswith("com.google.android.apps.nexuslauncher/")
         )
+
+    @staticmethod
+    def _package_from_activity(activity: str | None) -> str:
+        value = _clean_text(activity).lower()
+        if not value or "/" not in value:
+            return value
+        return value.split("/", 1)[0]
+
+    def _package_for_app_name(self, app_name: str | None) -> str:
+        app_text = _clean_text(app_name)
+        if not app_text:
+            return ""
+        try:
+            normalized = _clean_text(adb_utils.normalize_app_name(app_text))
+        except Exception:  # pylint: disable=broad-exception-caught
+            normalized = app_text
+        for candidate in (normalized, app_text):
+            if not candidate:
+                continue
+            try:
+                activity = adb_utils.get_adb_activity(candidate)
+            except Exception:  # pylint: disable=broad-exception-caught
+                activity = None
+            package = self._package_from_activity(activity)
+            if package:
+                return package
+            if "/" in candidate:
+                return self._package_from_activity(candidate)
+            if "." in candidate and " " not in candidate:
+                return candidate.lower()
+        return ""
+
+    def _app_name_for_root_activity(self, root_activity: str | None) -> str:
+        root_pkg = self._package_from_activity(root_activity)
+        if not root_pkg or self._is_launcher_activity(root_activity):
+            return ""
+        package_aliases = {
+            "com.android.chrome": "Chrome",
+            "com.android.settings": "Settings",
+            "com.google.android.documentsui": "Files",
+            "com.google.android.deskclock": "Clock",
+            "com.google.android.contacts": "Contacts",
+            "com.android.camera2": "Camera",
+            "com.dimowner.audiorecorder": "Audio Recorder",
+            "net.gsantner.markor": "Markor",
+            "org.tasks": "Tasks",
+            "com.simplemobiletools.calendar.pro": "Simple Calendar Pro",
+            "com.simplemobiletools.draw.pro": "Simple Draw Pro",
+            "com.simplemobiletools.gallery.pro": "Simple Gallery Pro",
+            "com.simplemobiletools.smsmessenger": "Simple SMS Messenger",
+            "com.arduia.expense": "Pro Expense",
+            "com.flauschcode.broccoli": "Broccoli APP",
+            "net.osmand": "OSMand",
+            "de.dennisguse.opentracks": "OpenTracks",
+            "net.cozic.joplin": "Joplin",
+            "org.videolan.vlc": "VLC",
+            "code.name.monkey.retromusic": "Retro Music",
+        }
+        if root_pkg in package_aliases:
+            return package_aliases[root_pkg]
+        for app_name in sorted(gelab_agent.AVAILABLE_APPS, key=lambda value: len(str(value)), reverse=True):
+            if self._package_for_app_name(str(app_name)) == root_pkg:
+                return str(app_name)
+        if "." in root_pkg:
+            return root_pkg
+        return ""
+
+    def _prepare_home_replay_actions(
+        self,
+        replay_actions: list[json_action.JSONAction],
+        root_activity: str,
+    ) -> tuple[list[json_action.JSONAction], dict[str, Any]]:
+        root_pkg = self._package_from_activity(root_activity)
+        root_app_name = self._app_name_for_root_activity(root_activity)
+        original_actions = list(replay_actions or [])
+        info: dict[str, Any] = {
+            "root_package": root_pkg,
+            "root_app_name": root_app_name,
+            "original_replay_action_types": [str(action.action_type) for action in original_actions],
+            "inserted_open_app_anchor": False,
+            "dropped_actions_before_anchor": 0,
+            "dropped_foreign_open_app_actions": 0,
+        }
+        if not root_pkg or self._is_launcher_activity(root_activity) or not root_app_name:
+            info["replay_action_types"] = [str(action.action_type) for action in original_actions]
+            return original_actions, info
+
+        root_open_idx: int | None = None
+        for idx, action in enumerate(original_actions):
+            if action.action_type != json_action.OPEN_APP:
+                continue
+            if self._package_for_app_name(getattr(action, "app_name", "")) == root_pkg:
+                root_open_idx = idx
+                break
+
+        if root_open_idx is None:
+            anchored = [
+                json_action.JSONAction(action_type=json_action.OPEN_APP, app_name=root_app_name),
+                *original_actions,
+            ]
+            info["inserted_open_app_anchor"] = True
+        else:
+            anchored = list(original_actions[root_open_idx:])
+            info["dropped_actions_before_anchor"] = int(root_open_idx)
+            if anchored:
+                anchored[0] = json_action.JSONAction(
+                    action_type=json_action.OPEN_APP,
+                    app_name=root_app_name,
+                )
+
+        filtered: list[json_action.JSONAction] = []
+        for idx, action in enumerate(anchored):
+            if action.action_type == json_action.NAVIGATE_HOME:
+                info["dropped_actions_before_anchor"] += 1 if idx == 0 else 0
+                continue
+            if action.action_type == json_action.OPEN_APP:
+                action_pkg = self._package_for_app_name(getattr(action, "app_name", ""))
+                if action_pkg and action_pkg != root_pkg:
+                    info["dropped_foreign_open_app_actions"] += 1
+                    continue
+            filtered.append(action)
+
+        info["replay_action_types"] = [str(action.action_type) for action in filtered]
+        return filtered, info
 
     def _goal_keywords(self, goal: str) -> list[str]:
         text = _clean_text(goal).lower()
@@ -4645,6 +4811,8 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         final_state: Any,
         replay_actions: list[json_action.JSONAction],
         matched_by: str,
+        replay_anchor: dict[str, Any] | None = None,
+        post_replay_back_stop_reason: str = "",
     ) -> dict[str, Any]:
         final_activity = self._foreground_activity_name()
         final_hash = self._state_hash(final_state)
@@ -4663,6 +4831,20 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             reasons.append("visual_hash_mismatch")
         if not replay_actions:
             reasons.append("no_replay_trace")
+        anchor_info = dict(replay_anchor or {})
+        original_types = list(anchor_info.get("original_replay_action_types") or [])
+        if (
+            self._package_from_activity(root_activity)
+            and not self._is_launcher_activity(root_activity)
+            and json_action.OPEN_APP not in original_types
+        ):
+            reasons.append("missing_open_app_anchor")
+        if int(anchor_info.get("dropped_actions_before_anchor") or 0) > 0:
+            reasons.append("unsafe_replay_actions_before_open_app")
+        if int(anchor_info.get("dropped_foreign_open_app_actions") or 0) > 0:
+            reasons.append("foreign_open_app_removed_from_replay")
+        if post_replay_back_stop_reason:
+            reasons.append(str(post_replay_back_stop_reason))
         if self._has_keyboard_ui(final_state):
             reasons.append("keyboard_or_ime_visible")
         if not reasons:
@@ -4675,6 +4857,8 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             "hash_diff": hash_diff,
             "matched_by": matched_by,
             "replay_action_types": [str(action.action_type) for action in replay_actions],
+            "replay_anchor": anchor_info,
+            "post_replay_back_stop_reason": post_replay_back_stop_reason,
             "likely_reasons": reasons,
             "final_semantic_summary": self._state_semantic_summary(final_state),
         }
@@ -4709,8 +4893,11 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             "matched_by": None,
             "latency_ms": 0.0,
             "home_attempted": False,
+            "original_replay_action_types": [str(action.action_type) for action in replay_actions],
             "replay_action_types": [str(action.action_type) for action in replay_actions],
             "replay_failures": [],
+            "replay_anchor": {},
+            "post_replay_back_stop_reason": "",
             "profile_events": [],
         }
 
@@ -4789,12 +4976,18 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                 f"rollback_home_action_failed error={exc}"
             )
 
+        replay_actions, replay_anchor = self._prepare_home_replay_actions(replay_actions, root_activity)
+        result["replay_anchor"] = dict(replay_anchor)
+        result["replay_action_types"] = [str(action.action_type) for action in replay_actions]
+
         if replay_actions:
-            for action in replay_actions:
+            for replay_idx, action in enumerate(replay_actions):
                 try:
                     replay_start = time.time()
                     if action.action_type == json_action.WAIT:
                         time.sleep(1.0)
+                    elif replay_idx == 0 and action.action_type == json_action.OPEN_APP:
+                        self._execute_root_open_anchor(action, root_activity)
                     else:
                         self._execute_probe_action(action)
                     replay_event = {
@@ -4835,6 +5028,11 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             final_pkg = final_activity.split("/", 1)[0] if final_activity else ""
             if root_pkg and final_pkg and root_pkg == final_pkg:
                 for i in range(back_limit):
+                    curr_activity = self._normalize_activity_name(self._foreground_activity_name())
+                    curr_pkg = curr_activity.split("/", 1)[0] if curr_activity else ""
+                    if curr_pkg != root_pkg or self._is_launcher_activity(curr_activity):
+                        result["post_replay_back_stop_reason"] = "left_root_package_before_back"
+                        break
                     print(
                         f"[ROLLBACK {_now_hms()}] step: {step_idx + 1} "
                         f"rollback_post_replay_back#{i + 1}/{back_limit} matched={matched_by}"
@@ -4866,6 +5064,54 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                     self._append_latency_profile_event(getattr(self, "_current_goal_for_depth", ""), verify_event)
                     if same:
                         break
+                    curr_activity = self._normalize_activity_name(self._foreground_activity_name())
+                    curr_pkg = curr_activity.split("/", 1)[0] if curr_activity else ""
+                    if curr_pkg != root_pkg or self._is_launcher_activity(curr_activity):
+                        result["post_replay_back_stop_reason"] = "left_root_package_after_back"
+                        root_app_name = _clean_text(replay_anchor.get("root_app_name") or "")
+                        if root_app_name:
+                            reopen_start = time.time()
+                            try:
+                                self._execute_root_open_anchor(
+                                    json_action.JSONAction(
+                                        action_type=json_action.OPEN_APP,
+                                        app_name=root_app_name,
+                                    ),
+                                    root_activity,
+                                )
+                                reopen_event = {
+                                    "event": "rollback_action",
+                                    "step": int(step_idx + 1),
+                                    "phase": "level2_recover_root_app",
+                                    "action_type": json_action.OPEN_APP,
+                                    "latency_ms": float(max(0.0, time.time() - reopen_start) * 1000.0),
+                                    "app_name": root_app_name,
+                                }
+                                result["profile_events"].append(reopen_event)
+                                self._append_latency_profile_event(
+                                    getattr(self, "_current_goal_for_depth", ""),
+                                    reopen_event,
+                                )
+                                verify_start = time.time()
+                                same, matched_by, final_state = _verify_root()
+                                verify_event = {
+                                    "event": "rollback_verify",
+                                    "step": int(step_idx + 1),
+                                    "phase": "level2_recover_root_app_verify",
+                                    "same": bool(same),
+                                    "matched_by": matched_by,
+                                    "latency_ms": float(max(0.0, time.time() - verify_start) * 1000.0),
+                                }
+                                result["profile_events"].append(verify_event)
+                                self._append_latency_profile_event(
+                                    getattr(self, "_current_goal_for_depth", ""),
+                                    verify_event,
+                                )
+                            except Exception as exc:  # pylint: disable=broad-exception-caught
+                                result["replay_failures"].append(
+                                    {"action_type": "recover_root_app", "error": _clean_text(exc)}
+                                )
+                        break
         result["success"] = bool(same)
         result["matched_by"] = matched_by
         result["mode"] = "home_replay" if same else "home_replay_failed"
@@ -4879,6 +5125,8 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                 final_state=final_state,
                 replay_actions=replay_actions,
                 matched_by=matched_by,
+                replay_anchor=result.get("replay_anchor") if isinstance(result.get("replay_anchor"), dict) else {},
+                post_replay_back_stop_reason=_clean_text(result.get("post_replay_back_stop_reason") or ""),
             )
             analysis = result.get("failure_analysis") if isinstance(result.get("failure_analysis"), dict) else {}
             likely_reasons = analysis.get("likely_reasons") if isinstance(analysis, dict) else []
