@@ -1,0 +1,16 @@
+task_id,task,app,task_mode,shard
+1,NotesRecipeIngredientCount,Joplin,answer_entity,A
+2,NotesIsTodo,Joplin,answer_boolean,A
+3,FilesDeleteFile,Files,delete_boundary,A
+4,FilesMoveFile,Files,navigation_mutation,A
+5,SportsTrackerActivityDuration,OpenTracks,answer_stats,A
+6,SportsTrackerTotalDistanceForCategoryOverInterval,OpenTracks,answer_stats,A
+7,SimpleCalendarNextMeetingWithPerson,Calendar,answer_entity,A
+8,SimpleCalendarEventsInTimeRange,Calendar,answer_entity,A
+9,ClockStopWatchRunning,Clock,state_verify,A
+10,ClockTimerEntry,Clock,state_verify,A
+11,MarkorCreateNote,Markor,create_note,A
+12,MarkorEditNote,Markor,edit_note,A
+13,MarkorCreateFolder,Markor,create_folder,A
+14,ExpenseDeleteSingle,Expense,delete_boundary,A
+15,ExpenseDeleteMultiple2,Expense,delete_boundary,A

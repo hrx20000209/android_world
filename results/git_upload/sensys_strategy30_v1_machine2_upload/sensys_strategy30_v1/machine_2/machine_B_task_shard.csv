@@ -1,0 +1,16 @@
+task_id,task,app,task_mode,shard
+16,ExpenseAddSingle,Expense,create_record,B
+17,BrowserMaze,Browser,web_interaction,B
+18,BrowserMultiply,Browser,web_interaction,B
+19,BrowserDraw,Browser,web_interaction,B
+20,ContactsNewContactDraft,Contacts,draft_data_entry,B
+21,ContactsAddContact,Contacts,data_entry,B
+22,AudioRecorderRecordAudio,AudioRecorder,record_audio,B
+23,AudioRecorderRecordAudioWithFileName,AudioRecorder,record_audio,B
+24,SystemWifiTurnOnVerify,System,state_verify,B
+25,SystemWifiTurnOffVerify,System,state_verify,B
+26,SystemBrightnessMinVerify,System,state_verify,B
+27,SimpleDrawProCreateDrawing,SimpleDraw,create_drawing,B
+28,CameraTakePhoto,Camera,capture_photo,B
+29,OsmAndFavorite,OsmAnd,map_marker,B
+30,OsmAndMarker,OsmAnd,map_marker,B

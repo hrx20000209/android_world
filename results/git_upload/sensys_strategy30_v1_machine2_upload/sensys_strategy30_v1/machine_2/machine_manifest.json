@@ -1,0 +1,48 @@
+{
+  "run_group_id": "sensys_strategy30_v1",
+  "machine_id": "2",
+  "task_shard_id": "ALL",
+  "variant_shard": [
+    "S2_DFS_BUDGET12",
+    "S4_MCTS_BUDGET12"
+  ],
+  "experiment_root": "D:\\Projects\\android_world\\results\\strategy_30task_split\\sensys_strategy30_v1",
+  "variants": [
+    "S2_DFS_BUDGET12",
+    "S4_MCTS_BUDGET12"
+  ],
+  "max_cases": 30,
+  "tasks": [
+    "NotesRecipeIngredientCount",
+    "NotesIsTodo",
+    "FilesDeleteFile",
+    "FilesMoveFile",
+    "SportsTrackerActivityDuration",
+    "SportsTrackerTotalDistanceForCategoryOverInterval",
+    "SimpleCalendarNextMeetingWithPerson",
+    "SimpleCalendarEventsInTimeRange",
+    "ClockStopWatchRunning",
+    "ClockTimerEntry",
+    "MarkorCreateNote",
+    "MarkorEditNote",
+    "MarkorCreateFolder",
+    "ExpenseDeleteSingle",
+    "ExpenseDeleteMultiple2",
+    "ExpenseAddSingle",
+    "BrowserMaze",
+    "BrowserMultiply",
+    "BrowserDraw",
+    "ContactsNewContactDraft",
+    "ContactsAddContact",
+    "AudioRecorderRecordAudio",
+    "AudioRecorderRecordAudioWithFileName",
+    "SystemWifiTurnOnVerify",
+    "SystemWifiTurnOffVerify",
+    "SystemBrightnessMinVerify",
+    "SimpleDrawProCreateDrawing",
+    "CameraTakePhoto",
+    "OsmAndFavorite",
+    "OsmAndMarker"
+  ],
+  "dry_run": false
+}

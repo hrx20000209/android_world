@@ -1,0 +1,2616 @@
+{
+  "exploration_trace_count": 320,
+  "rollback_total": 537,
+  "rollback_success": 526,
+  "rollback_success_rate": 0.9795158286778398,
+  "rollback_level1_total": 482,
+  "rollback_level1_success": 482,
+  "rollback_level1_success_rate": 1.0,
+  "rollback_level2_total": 55,
+  "rollback_level2_success": 44,
+  "rollback_level2_success_rate": 0.8,
+  "rollback_failures": [
+    {
+      "success": false,
+      "mode": "home_replay_failed",
+      "level": "level2",
+      "back_presses": 8,
+      "replayed_actions": 5,
+      "matched_by": "activity_match=False|phash_diff=26",
+      "latency_ms": 25340.80195426941,
+      "home_attempted": true,
+      "replay_action_types": [
+        "open_app",
+        "click",
+        "click",
+        "click",
+        "click"
+      ],
+      "replay_failures": [],
+      "profile_events": [
+        {
+          "event": "rollback_verify",
+          "step": 6,
+          "phase": "level1_backtrack",
+          "attempt": 0,
+          "same": false,
+          "matched_by": "activity_match=True|phash_diff=17",
+          "latency_ms": 140.61975479125977,
+          "back_presses_so_far": 0
+        },
+        {
+          "event": "rollback_action",
+          "step": 6,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 319.7495937347412
+        },
+        {
+          "event": "rollback_verify",
+          "step": 6,
+          "phase": "level1_backtrack",
+          "attempt": 1,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=18",
+          "latency_ms": 1360.4471683502197,
+          "back_presses_so_far": 1
+        },
+        {
+          "event": "rollback_action",
+          "step": 6,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 317.7785873413086
+        },
+        {
+          "event": "rollback_verify",
+          "step": 6,
+          "phase": "level1_backtrack",
+          "attempt": 2,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=26",
+          "latency_ms": 1243.2971000671387,
+          "back_presses_so_far": 2
+        },
+        {
+          "event": "rollback_action",
+          "step": 6,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 325.8185386657715
+        },
+        {
+          "event": "rollback_verify",
+          "step": 6,
+          "phase": "level1_backtrack",
+          "attempt": 3,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=26",
+          "latency_ms": 1330.7957649230957,
+          "back_presses_so_far": 3
+        },
+        {
+          "event": "rollback_action",
+          "step": 6,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 321.7499256134033
+        },
+        {
+          "event": "rollback_verify",
+          "step": 6,
+          "phase": "level1_backtrack",
+          "attempt": 4,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=26",
+          "latency_ms": 1243.3855533599854,
+          "back_presses_so_far": 4
+        },
+        {
+          "event": "rollback_action",
+          "step": 6,
+          "phase": "level2_home_replay",
+          "action_type": "navigate_home",
+          "latency_ms": 909.9047183990479
+        },
+        {
+          "event": "rollback_action",
+          "step": 6,
+          "phase": "level2_replay",
+          "action_type": "open_app",
+          "latency_ms": 633.8489055633545
+        },
+        {
+          "event": "rollback_action",
+          "step": 6,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 327.70442962646484
+        },
+        {
+          "event": "rollback_action",
+          "step": 6,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 326.36070251464844
+        },
+        {
+          "event": "rollback_action",
+          "step": 6,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 323.0454921722412
+        },
+        {
+          "event": "rollback_action",
+          "step": 6,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 341.26925468444824
+        },
+        {
+          "event": "rollback_verify",
+          "step": 6,
+          "phase": "level2_final",
+          "same": false,
+          "matched_by": "activity_match=True|phash_diff=19",
+          "latency_ms": 1320.756435394287
+        },
+        {
+          "event": "rollback_action",
+          "step": 6,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 327.3799419403076
+        },
+        {
+          "event": "rollback_verify",
+          "step": 6,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 1,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=19",
+          "latency_ms": 1410.6364250183105
+        },
+        {
+          "event": "rollback_action",
+          "step": 6,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 322.3986625671387
+        },
+        {
+          "event": "rollback_verify",
+          "step": 6,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 2,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=26",
+          "latency_ms": 2159.4321727752686
+        },
+        {
+          "event": "rollback_action",
+          "step": 6,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 332.4301242828369
+        },
+        {
+          "event": "rollback_verify",
+          "step": 6,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 3,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=26",
+          "latency_ms": 1190.3975009918213
+        },
+        {
+          "event": "rollback_action",
+          "step": 6,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 304.9180507659912
+        },
+        {
+          "event": "rollback_verify",
+          "step": 6,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 4,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=26",
+          "latency_ms": 1257.765531539917
+        }
+      ],
+      "level2_triggered": true,
+      "level2_trigger_reason": "replay_required_after_home",
+      "failure_analysis": {
+        "root_activity": "com.google.android.documentsui/com.android.documentsui.files.FilesActivity",
+        "final_activity": "com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity",
+        "root_hash": 14601447075011936448,
+        "final_hash": 576460754097187498,
+        "hash_diff": 26,
+        "matched_by": "activity_match=False|phash_diff=26",
+        "replay_action_types": [
+          "open_app",
+          "click",
+          "click",
+          "click",
+          "click"
+        ],
+        "likely_reasons": [
+          "activity_mismatch",
+          "visual_hash_mismatch"
+        ],
+        "final_semantic_summary": [
+          "status bar launch animation container",
+          "container",
+          "status bar container",
+          "status bar",
+          "status bar contents",
+          "status bar start side container",
+          "status bar start side content",
+          "status bar start side except heads up",
+          "15:37",
+          "notification icon area",
+          "notificationIcons",
+          "Android System notification: Check access settings"
+        ]
+      },
+      "failure_reason": "activity_mismatch,visual_hash_mismatch",
+      "failure_screenshot": "D:\\Projects\\android_world\\results\\strategy_30task_split\\sensys_strategy30_v1\\machine_2\\S2_DFS_BUDGET12\\run_20260602T154948\\traces\\Move_the_file_action_film.mp4_from_DCIM_within_the_sdk_gphone_x_18d9fc96\\rollback_failed_step_06.png"
+    },
+    {
+      "success": false,
+      "mode": "home_replay_failed",
+      "level": "level2",
+      "back_presses": 8,
+      "replayed_actions": 4,
+      "matched_by": "activity_match=False|phash_diff=32",
+      "latency_ms": 22626.68251991272,
+      "home_attempted": true,
+      "replay_action_types": [
+        "open_app",
+        "swipe",
+        "click",
+        "click"
+      ],
+      "replay_failures": [],
+      "profile_events": [
+        {
+          "event": "rollback_verify",
+          "step": 5,
+          "phase": "level1_backtrack",
+          "attempt": 0,
+          "same": false,
+          "matched_by": "activity_match=True|phash_diff=19",
+          "latency_ms": 152.18496322631836,
+          "back_presses_so_far": 0
+        },
+        {
+          "event": "rollback_action",
+          "step": 5,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 305.2937984466553
+        },
+        {
+          "event": "rollback_verify",
+          "step": 5,
+          "phase": "level1_backtrack",
+          "attempt": 1,
+          "same": false,
+          "matched_by": "activity_match=True|phash_diff=20",
+          "latency_ms": 1437.70432472229,
+          "back_presses_so_far": 1
+        },
+        {
+          "event": "rollback_action",
+          "step": 5,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 316.500186920166
+        },
+        {
+          "event": "rollback_verify",
+          "step": 5,
+          "phase": "level1_backtrack",
+          "attempt": 2,
+          "same": false,
+          "matched_by": "activity_match=True|phash_diff=20",
+          "latency_ms": 1238.9755249023438,
+          "back_presses_so_far": 2
+        },
+        {
+          "event": "rollback_action",
+          "step": 5,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 317.26789474487305
+        },
+        {
+          "event": "rollback_verify",
+          "step": 5,
+          "phase": "level1_backtrack",
+          "attempt": 3,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=20",
+          "latency_ms": 1374.3793964385986,
+          "back_presses_so_far": 3
+        },
+        {
+          "event": "rollback_action",
+          "step": 5,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 314.34011459350586
+        },
+        {
+          "event": "rollback_verify",
+          "step": 5,
+          "phase": "level1_backtrack",
+          "attempt": 4,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=32",
+          "latency_ms": 1218.904972076416,
+          "back_presses_so_far": 4
+        },
+        {
+          "event": "rollback_action",
+          "step": 5,
+          "phase": "level2_home_replay",
+          "action_type": "navigate_home",
+          "latency_ms": 317.5065517425537
+        },
+        {
+          "event": "rollback_action",
+          "step": 5,
+          "phase": "level2_replay",
+          "action_type": "open_app",
+          "latency_ms": 499.1133213043213
+        },
+        {
+          "event": "rollback_action",
+          "step": 5,
+          "phase": "level2_replay",
+          "action_type": "swipe",
+          "latency_ms": 907.8190326690674
+        },
+        {
+          "event": "rollback_action",
+          "step": 5,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 327.36992835998535
+        },
+        {
+          "event": "rollback_action",
+          "step": 5,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 344.8474407196045
+        },
+        {
+          "event": "rollback_verify",
+          "step": 5,
+          "phase": "level2_final",
+          "same": false,
+          "matched_by": "activity_match=True|phash_diff=33",
+          "latency_ms": 1228.3003330230713
+        },
+        {
+          "event": "rollback_action",
+          "step": 5,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 329.8623561859131
+        },
+        {
+          "event": "rollback_verify",
+          "step": 5,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 1,
+          "same": false,
+          "matched_by": "activity_match=True|phash_diff=17",
+          "latency_ms": 1373.8148212432861
+        },
+        {
+          "event": "rollback_action",
+          "step": 5,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 319.882869720459
+        },
+        {
+          "event": "rollback_verify",
+          "step": 5,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 2,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=15",
+          "latency_ms": 1290.5175685882568
+        },
+        {
+          "event": "rollback_action",
+          "step": 5,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 325.28185844421387
+        },
+        {
+          "event": "rollback_verify",
+          "step": 5,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 3,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=32",
+          "latency_ms": 1257.1194171905518
+        },
+        {
+          "event": "rollback_action",
+          "step": 5,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 327.4097442626953
+        },
+        {
+          "event": "rollback_verify",
+          "step": 5,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 4,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=32",
+          "latency_ms": 1264.786958694458
+        }
+      ],
+      "level2_triggered": true,
+      "level2_trigger_reason": "replay_required_after_home",
+      "failure_analysis": {
+        "root_activity": "net.cozic.joplin/net.cozic.joplin.MainActivity",
+        "final_activity": "com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity",
+        "root_hash": 9719103558189654128,
+        "final_hash": 576460754097187498,
+        "hash_diff": 32,
+        "matched_by": "activity_match=False|phash_diff=32",
+        "replay_action_types": [
+          "open_app",
+          "swipe",
+          "click",
+          "click"
+        ],
+        "likely_reasons": [
+          "activity_mismatch",
+          "visual_hash_mismatch"
+        ],
+        "final_semantic_summary": [
+          "status bar launch animation container",
+          "container",
+          "status bar container",
+          "status bar",
+          "status bar contents",
+          "status bar start side container",
+          "status bar start side content",
+          "status bar start side except heads up",
+          "15:36",
+          "notification icon area",
+          "notificationIcons",
+          "Android System notification: Check access settings"
+        ]
+      },
+      "failure_reason": "activity_mismatch,visual_hash_mismatch",
+      "failure_screenshot": "D:\\Projects\\android_world\\results\\strategy_30task_split\\sensys_strategy30_v1\\machine_2\\S2_DFS_BUDGET12\\run_20260602T154948\\traces\\Is_the_note_titled_Travel_Itinerary_in_the_Joplin_app_marked_as_947ea02b\\rollback_failed_step_05.png"
+    },
+    {
+      "success": false,
+      "mode": "home_replay_failed",
+      "level": "level2",
+      "back_presses": 8,
+      "replayed_actions": 6,
+      "matched_by": "activity_match=False|phash_diff=30",
+      "latency_ms": 26027.990102767944,
+      "home_attempted": true,
+      "replay_action_types": [
+        "open_app",
+        "click",
+        "click",
+        "input_text",
+        "click",
+        "click"
+      ],
+      "replay_failures": [],
+      "profile_events": [
+        {
+          "event": "rollback_verify",
+          "step": 7,
+          "phase": "level1_backtrack",
+          "attempt": 0,
+          "same": false,
+          "matched_by": "activity_match=True|phash_diff=29",
+          "latency_ms": 174.87025260925293,
+          "back_presses_so_far": 0
+        },
+        {
+          "event": "rollback_action",
+          "step": 7,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 321.8839168548584
+        },
+        {
+          "event": "rollback_verify",
+          "step": 7,
+          "phase": "level1_backtrack",
+          "attempt": 1,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=32",
+          "latency_ms": 1319.166898727417,
+          "back_presses_so_far": 1
+        },
+        {
+          "event": "rollback_action",
+          "step": 7,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 321.1648464202881
+        },
+        {
+          "event": "rollback_verify",
+          "step": 7,
+          "phase": "level1_backtrack",
+          "attempt": 2,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=30",
+          "latency_ms": 1310.7337951660156,
+          "back_presses_so_far": 2
+        },
+        {
+          "event": "rollback_action",
+          "step": 7,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 348.79541397094727
+        },
+        {
+          "event": "rollback_verify",
+          "step": 7,
+          "phase": "level1_backtrack",
+          "attempt": 3,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=30",
+          "latency_ms": 1261.4247798919678,
+          "back_presses_so_far": 3
+        },
+        {
+          "event": "rollback_action",
+          "step": 7,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 313.2903575897217
+        },
+        {
+          "event": "rollback_verify",
+          "step": 7,
+          "phase": "level1_backtrack",
+          "attempt": 4,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=30",
+          "latency_ms": 1247.7197647094727,
+          "back_presses_so_far": 4
+        },
+        {
+          "event": "rollback_action",
+          "step": 7,
+          "phase": "level2_home_replay",
+          "action_type": "navigate_home",
+          "latency_ms": 318.9101219177246
+        },
+        {
+          "event": "rollback_action",
+          "step": 7,
+          "phase": "level2_replay",
+          "action_type": "open_app",
+          "latency_ms": 496.69480323791504
+        },
+        {
+          "event": "rollback_action",
+          "step": 7,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 311.34891510009766
+        },
+        {
+          "event": "rollback_action",
+          "step": 7,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 333.50443840026855
+        },
+        {
+          "event": "rollback_action",
+          "step": 7,
+          "phase": "level2_replay",
+          "action_type": "input_text",
+          "latency_ms": 803.5092353820801
+        },
+        {
+          "event": "rollback_action",
+          "step": 7,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 328.75514030456543
+        },
+        {
+          "event": "rollback_action",
+          "step": 7,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 330.1253318786621
+        },
+        {
+          "event": "rollback_verify",
+          "step": 7,
+          "phase": "level2_final",
+          "same": false,
+          "matched_by": "activity_match=True|phash_diff=33",
+          "latency_ms": 1279.8480987548828
+        },
+        {
+          "event": "rollback_action",
+          "step": 7,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 312.61563301086426
+        },
+        {
+          "event": "rollback_verify",
+          "step": 7,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 1,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=33",
+          "latency_ms": 1319.9262619018555
+        },
+        {
+          "event": "rollback_action",
+          "step": 7,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 316.96534156799316
+        },
+        {
+          "event": "rollback_verify",
+          "step": 7,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 2,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=30",
+          "latency_ms": 1299.4537353515625
+        },
+        {
+          "event": "rollback_action",
+          "step": 7,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 315.6423568725586
+        },
+        {
+          "event": "rollback_verify",
+          "step": 7,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 3,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=30",
+          "latency_ms": 1717.1852588653564
+        },
+        {
+          "event": "rollback_action",
+          "step": 7,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 350.1162528991699
+        },
+        {
+          "event": "rollback_verify",
+          "step": 7,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 4,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=30",
+          "latency_ms": 1482.431173324585
+        }
+      ],
+      "level2_triggered": true,
+      "level2_trigger_reason": "replay_required_after_home",
+      "failure_analysis": {
+        "root_activity": "net.cozic.joplin/net.cozic.joplin.MainActivity",
+        "final_activity": "com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity",
+        "root_hash": 11737190886536179888,
+        "final_hash": 576460754097187498,
+        "hash_diff": 30,
+        "matched_by": "activity_match=False|phash_diff=30",
+        "replay_action_types": [
+          "open_app",
+          "click",
+          "click",
+          "input_text",
+          "click",
+          "click"
+        ],
+        "likely_reasons": [
+          "activity_mismatch",
+          "visual_hash_mismatch"
+        ],
+        "final_semantic_summary": [
+          "status bar launch animation container",
+          "container",
+          "status bar container",
+          "status bar",
+          "status bar contents",
+          "status bar start side container",
+          "status bar start side content",
+          "status bar start side except heads up",
+          "15:37",
+          "notification icon area",
+          "notificationIcons",
+          "Android System notification: Check access settings"
+        ]
+      },
+      "failure_reason": "activity_mismatch,visual_hash_mismatch",
+      "failure_screenshot": "D:\\Projects\\android_world\\results\\strategy_30task_split\\sensys_strategy30_v1\\machine_2\\S2_DFS_BUDGET12\\run_20260602T154948\\traces\\What_quantity_of_matcha_powder_do_I_need_for_the_recipe_Beef_St_1653e163\\rollback_failed_step_07.png"
+    },
+    {
+      "success": false,
+      "mode": "home_replay_failed",
+      "level": "level2",
+      "back_presses": 4,
+      "replayed_actions": 6,
+      "matched_by": "activity_match=False|phash_diff=24",
+      "latency_ms": 23199.760675430298,
+      "home_attempted": true,
+      "replay_action_types": [
+        "click",
+        "swipe",
+        "swipe",
+        "swipe",
+        "swipe",
+        "swipe"
+      ],
+      "replay_failures": [],
+      "profile_events": [
+        {
+          "event": "rollback_verify",
+          "step": 8,
+          "phase": "level1_backtrack",
+          "attempt": 0,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=0",
+          "latency_ms": 150.68674087524414,
+          "back_presses_so_far": 0
+        },
+        {
+          "event": "rollback_action",
+          "step": 8,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 363.2702827453613
+        },
+        {
+          "event": "rollback_verify",
+          "step": 8,
+          "phase": "level1_backtrack",
+          "attempt": 1,
+          "same": false,
+          "matched_by": "activity_match=True|phash_diff=34",
+          "latency_ms": 1583.7128162384033,
+          "back_presses_so_far": 1
+        },
+        {
+          "event": "rollback_action",
+          "step": 8,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 313.88258934020996
+        },
+        {
+          "event": "rollback_verify",
+          "step": 8,
+          "phase": "level1_backtrack",
+          "attempt": 2,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=0",
+          "latency_ms": 1742.6443099975586,
+          "back_presses_so_far": 2
+        },
+        {
+          "event": "rollback_action",
+          "step": 8,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 343.7168598175049
+        },
+        {
+          "event": "rollback_verify",
+          "step": 8,
+          "phase": "level1_backtrack",
+          "attempt": 3,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=31",
+          "latency_ms": 1646.8250751495361,
+          "back_presses_so_far": 3
+        },
+        {
+          "event": "rollback_action",
+          "step": 8,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 321.11597061157227
+        },
+        {
+          "event": "rollback_verify",
+          "step": 8,
+          "phase": "level1_backtrack",
+          "attempt": 4,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=31",
+          "latency_ms": 1291.754961013794,
+          "back_presses_so_far": 4
+        },
+        {
+          "event": "rollback_action",
+          "step": 8,
+          "phase": "level2_home_replay",
+          "action_type": "navigate_home",
+          "latency_ms": 327.6500701904297
+        },
+        {
+          "event": "rollback_action",
+          "step": 8,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 330.07311820983887
+        },
+        {
+          "event": "rollback_action",
+          "step": 8,
+          "phase": "level2_replay",
+          "action_type": "swipe",
+          "latency_ms": 934.4484806060791
+        },
+        {
+          "event": "rollback_action",
+          "step": 8,
+          "phase": "level2_replay",
+          "action_type": "swipe",
+          "latency_ms": 936.7110729217529
+        },
+        {
+          "event": "rollback_action",
+          "step": 8,
+          "phase": "level2_replay",
+          "action_type": "swipe",
+          "latency_ms": 997.8349208831787
+        },
+        {
+          "event": "rollback_action",
+          "step": 8,
+          "phase": "level2_replay",
+          "action_type": "swipe",
+          "latency_ms": 935.5645179748535
+        },
+        {
+          "event": "rollback_action",
+          "step": 8,
+          "phase": "level2_replay",
+          "action_type": "swipe",
+          "latency_ms": 1306.0309886932373
+        },
+        {
+          "event": "rollback_verify",
+          "step": 8,
+          "phase": "level2_final",
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=24",
+          "latency_ms": 1259.6123218536377
+        }
+      ],
+      "level2_triggered": true,
+      "level2_trigger_reason": "replay_required_after_home",
+      "failure_analysis": {
+        "root_activity": "de.dennisguse.opentracks/de.dennisguse.opentracks.TrackListActivity",
+        "final_activity": "com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity",
+        "root_hash": 9693861323808539539,
+        "final_hash": 1128902306594204305,
+        "hash_diff": 24,
+        "matched_by": "activity_match=False|phash_diff=24",
+        "replay_action_types": [
+          "click",
+          "swipe",
+          "swipe",
+          "swipe",
+          "swipe",
+          "swipe"
+        ],
+        "likely_reasons": [
+          "activity_mismatch",
+          "visual_hash_mismatch"
+        ],
+        "final_semantic_summary": [
+          "status bar launch animation container",
+          "container",
+          "status bar container",
+          "status bar",
+          "status bar contents",
+          "status bar start side container",
+          "status bar start side content",
+          "status bar start side except heads up",
+          "15:37",
+          "notification icon area",
+          "notificationIcons",
+          "Android System notification: Check access settings"
+        ]
+      },
+      "failure_reason": "activity_mismatch,visual_hash_mismatch",
+      "failure_screenshot": "D:\\Projects\\android_world\\results\\strategy_30task_split\\sensys_strategy30_v1\\machine_2\\S2_DFS_BUDGET12\\run_20260602T154948\\traces\\How_long_was_my_climbing_activity_October_15_in_the_OpenTracks__584bfe41\\rollback_failed_step_08.png"
+    },
+    {
+      "success": false,
+      "mode": "home_replay_failed",
+      "level": "level2",
+      "back_presses": 8,
+      "replayed_actions": 2,
+      "matched_by": "activity_match=False|phash_diff=30",
+      "latency_ms": 22567.402601242065,
+      "home_attempted": true,
+      "replay_action_types": [
+        "open_app",
+        "swipe"
+      ],
+      "replay_failures": [],
+      "profile_events": [
+        {
+          "event": "rollback_verify",
+          "step": 3,
+          "phase": "level1_backtrack",
+          "attempt": 0,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=0",
+          "latency_ms": 173.1410026550293,
+          "back_presses_so_far": 0
+        },
+        {
+          "event": "rollback_action",
+          "step": 3,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 354.4492721557617
+        },
+        {
+          "event": "rollback_verify",
+          "step": 3,
+          "phase": "level1_backtrack",
+          "attempt": 1,
+          "same": false,
+          "matched_by": "activity_match=True|phash_diff=31",
+          "latency_ms": 1735.5647087097168,
+          "back_presses_so_far": 1
+        },
+        {
+          "event": "rollback_action",
+          "step": 3,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 318.99499893188477
+        },
+        {
+          "event": "rollback_verify",
+          "step": 3,
+          "phase": "level1_backtrack",
+          "attempt": 2,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=3",
+          "latency_ms": 1567.5714015960693,
+          "back_presses_so_far": 2
+        },
+        {
+          "event": "rollback_action",
+          "step": 3,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 316.0276412963867
+        },
+        {
+          "event": "rollback_verify",
+          "step": 3,
+          "phase": "level1_backtrack",
+          "attempt": 3,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=30",
+          "latency_ms": 1270.1621055603027,
+          "back_presses_so_far": 3
+        },
+        {
+          "event": "rollback_action",
+          "step": 3,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 320.85275650024414
+        },
+        {
+          "event": "rollback_verify",
+          "step": 3,
+          "phase": "level1_backtrack",
+          "attempt": 4,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=30",
+          "latency_ms": 2009.282112121582,
+          "back_presses_so_far": 4
+        },
+        {
+          "event": "rollback_action",
+          "step": 3,
+          "phase": "level2_home_replay",
+          "action_type": "navigate_home",
+          "latency_ms": 323.3349323272705
+        },
+        {
+          "event": "rollback_action",
+          "step": 3,
+          "phase": "level2_replay",
+          "action_type": "open_app",
+          "latency_ms": 738.0509376525879
+        },
+        {
+          "event": "rollback_action",
+          "step": 3,
+          "phase": "level2_replay",
+          "action_type": "swipe",
+          "latency_ms": 937.4425411224365
+        },
+        {
+          "event": "rollback_verify",
+          "step": 3,
+          "phase": "level2_final",
+          "same": false,
+          "matched_by": "activity_match=True|phash_diff=27",
+          "latency_ms": 1266.4594650268555
+        },
+        {
+          "event": "rollback_action",
+          "step": 3,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 331.85315132141113
+        },
+        {
+          "event": "rollback_verify",
+          "step": 3,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 1,
+          "same": false,
+          "matched_by": "activity_match=True|phash_diff=21",
+          "latency_ms": 1367.7232265472412
+        },
+        {
+          "event": "rollback_action",
+          "step": 3,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 322.66759872436523
+        },
+        {
+          "event": "rollback_verify",
+          "step": 3,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 2,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=4",
+          "latency_ms": 1592.8606986999512
+        },
+        {
+          "event": "rollback_action",
+          "step": 3,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 325.50644874572754
+        },
+        {
+          "event": "rollback_verify",
+          "step": 3,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 3,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=30",
+          "latency_ms": 1294.5399284362793
+        },
+        {
+          "event": "rollback_action",
+          "step": 3,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 324.22494888305664
+        },
+        {
+          "event": "rollback_verify",
+          "step": 3,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 4,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=30",
+          "latency_ms": 1866.5869235992432
+        }
+      ],
+      "level2_triggered": true,
+      "level2_trigger_reason": "replay_required_after_home",
+      "failure_analysis": {
+        "root_activity": "de.dennisguse.opentracks/de.dennisguse.opentracks.TrackListActivity",
+        "final_activity": "com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity",
+        "root_hash": 9692735415278207891,
+        "final_hash": 576460754097187498,
+        "hash_diff": 30,
+        "matched_by": "activity_match=False|phash_diff=30",
+        "replay_action_types": [
+          "open_app",
+          "swipe"
+        ],
+        "likely_reasons": [
+          "activity_mismatch",
+          "visual_hash_mismatch"
+        ],
+        "final_semantic_summary": [
+          "status bar launch animation container",
+          "container",
+          "status bar container",
+          "status bar",
+          "status bar contents",
+          "status bar start side container",
+          "status bar start side content",
+          "status bar start side except heads up",
+          "15:35",
+          "notification icon area",
+          "notificationIcons",
+          "Android System notification: Check access settings"
+        ]
+      },
+      "failure_reason": "activity_mismatch,visual_hash_mismatch",
+      "failure_screenshot": "D:\\Projects\\android_world\\results\\strategy_30task_split\\sensys_strategy30_v1\\machine_2\\S2_DFS_BUDGET12\\run_20260602T154948\\traces\\What_was_the_total_distance_covered_for_snow_boarding_activitie_d227ec5a\\rollback_failed_step_03.png"
+    },
+    {
+      "success": false,
+      "mode": "home_replay_failed",
+      "level": "level2",
+      "back_presses": 8,
+      "replayed_actions": 5,
+      "matched_by": "activity_match=False|phash_diff=30",
+      "latency_ms": 28776.680946350098,
+      "home_attempted": true,
+      "replay_action_types": [
+        "open_app",
+        "swipe",
+        "swipe",
+        "swipe",
+        "click"
+      ],
+      "replay_failures": [],
+      "profile_events": [
+        {
+          "event": "rollback_verify",
+          "step": 6,
+          "phase": "level1_backtrack",
+          "attempt": 0,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=0",
+          "latency_ms": 171.10657691955566,
+          "back_presses_so_far": 0
+        },
+        {
+          "event": "rollback_action",
+          "step": 6,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 340.59953689575195
+        },
+        {
+          "event": "rollback_verify",
+          "step": 6,
+          "phase": "level1_backtrack",
+          "attempt": 1,
+          "same": false,
+          "matched_by": "activity_match=True|phash_diff=34",
+          "latency_ms": 1595.346450805664,
+          "back_presses_so_far": 1
+        },
+        {
+          "event": "rollback_action",
+          "step": 6,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 320.0080394744873
+        },
+        {
+          "event": "rollback_verify",
+          "step": 6,
+          "phase": "level1_backtrack",
+          "attempt": 2,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=0",
+          "latency_ms": 1952.7349472045898,
+          "back_presses_so_far": 2
+        },
+        {
+          "event": "rollback_action",
+          "step": 6,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 338.1342887878418
+        },
+        {
+          "event": "rollback_verify",
+          "step": 6,
+          "phase": "level1_backtrack",
+          "attempt": 3,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=24",
+          "latency_ms": 2017.254114151001,
+          "back_presses_so_far": 3
+        },
+        {
+          "event": "rollback_action",
+          "step": 6,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 320.14966011047363
+        },
+        {
+          "event": "rollback_verify",
+          "step": 6,
+          "phase": "level1_backtrack",
+          "attempt": 4,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=30",
+          "latency_ms": 1275.0661373138428,
+          "back_presses_so_far": 4
+        },
+        {
+          "event": "rollback_action",
+          "step": 6,
+          "phase": "level2_home_replay",
+          "action_type": "navigate_home",
+          "latency_ms": 333.1453800201416
+        },
+        {
+          "event": "rollback_action",
+          "step": 6,
+          "phase": "level2_replay",
+          "action_type": "open_app",
+          "latency_ms": 979.5937538146973
+        },
+        {
+          "event": "rollback_action",
+          "step": 6,
+          "phase": "level2_replay",
+          "action_type": "swipe",
+          "latency_ms": 1026.3779163360596
+        },
+        {
+          "event": "rollback_action",
+          "step": 6,
+          "phase": "level2_replay",
+          "action_type": "swipe",
+          "latency_ms": 926.0144233703613
+        },
+        {
+          "event": "rollback_action",
+          "step": 6,
+          "phase": "level2_replay",
+          "action_type": "swipe",
+          "latency_ms": 894.1545486450195
+        },
+        {
+          "event": "rollback_action",
+          "step": 6,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 336.1508846282959
+        },
+        {
+          "event": "rollback_verify",
+          "step": 6,
+          "phase": "level2_final",
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=35",
+          "latency_ms": 1299.602746963501
+        },
+        {
+          "event": "rollback_action",
+          "step": 6,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 315.7212734222412
+        },
+        {
+          "event": "rollback_verify",
+          "step": 6,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 1,
+          "same": false,
+          "matched_by": "activity_match=True|phash_diff=35",
+          "latency_ms": 1415.776014328003
+        },
+        {
+          "event": "rollback_action",
+          "step": 6,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 311.17939949035645
+        },
+        {
+          "event": "rollback_verify",
+          "step": 6,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 2,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=6",
+          "latency_ms": 1614.4802570343018
+        },
+        {
+          "event": "rollback_action",
+          "step": 6,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 318.25757026672363
+        },
+        {
+          "event": "rollback_verify",
+          "step": 6,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 3,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=30",
+          "latency_ms": 1345.564842224121
+        },
+        {
+          "event": "rollback_action",
+          "step": 6,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 334.57326889038086
+        },
+        {
+          "event": "rollback_verify",
+          "step": 6,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 4,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=30",
+          "latency_ms": 1369.4424629211426
+        }
+      ],
+      "level2_triggered": true,
+      "level2_trigger_reason": "replay_required_after_home",
+      "failure_analysis": {
+        "root_activity": "de.dennisguse.opentracks/de.dennisguse.opentracks.TrackListActivity",
+        "final_activity": "com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity",
+        "root_hash": 9693861323808670611,
+        "final_hash": 576460754097187498,
+        "hash_diff": 30,
+        "matched_by": "activity_match=False|phash_diff=30",
+        "replay_action_types": [
+          "open_app",
+          "swipe",
+          "swipe",
+          "swipe",
+          "click"
+        ],
+        "likely_reasons": [
+          "activity_mismatch",
+          "visual_hash_mismatch"
+        ],
+        "final_semantic_summary": [
+          "status bar launch animation container",
+          "container",
+          "status bar container",
+          "status bar",
+          "status bar contents",
+          "status bar start side container",
+          "status bar start side content",
+          "status bar start side except heads up",
+          "15:36",
+          "notification icon area",
+          "notificationIcons",
+          "Android System notification: Check access settings"
+        ]
+      },
+      "failure_reason": "activity_mismatch,visual_hash_mismatch",
+      "failure_screenshot": "D:\\Projects\\android_world\\results\\strategy_30task_split\\sensys_strategy30_v1\\machine_2\\S2_DFS_BUDGET12\\run_20260602T154948\\traces\\What_was_the_total_distance_covered_for_snow_boarding_activitie_d227ec5a\\rollback_failed_step_06.png"
+    },
+    {
+      "success": false,
+      "mode": "home_replay_failed",
+      "level": "level2",
+      "back_presses": 8,
+      "replayed_actions": 6,
+      "matched_by": "activity_match=False|phash_diff=32",
+      "latency_ms": 27114.057540893555,
+      "home_attempted": true,
+      "replay_action_types": [
+        "click",
+        "wait",
+        "open_app",
+        "click",
+        "click",
+        "click"
+      ],
+      "replay_failures": [],
+      "profile_events": [
+        {
+          "event": "rollback_verify",
+          "step": 11,
+          "phase": "level1_backtrack",
+          "attempt": 0,
+          "same": false,
+          "matched_by": "activity_match=True|phash_diff=21",
+          "latency_ms": 142.50850677490234,
+          "back_presses_so_far": 0
+        },
+        {
+          "event": "rollback_action",
+          "step": 11,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 311.75684928894043
+        },
+        {
+          "event": "rollback_verify",
+          "step": 11,
+          "phase": "level1_backtrack",
+          "attempt": 1,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=22",
+          "latency_ms": 1571.3775157928467,
+          "back_presses_so_far": 1
+        },
+        {
+          "event": "rollback_action",
+          "step": 11,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 314.9244785308838
+        },
+        {
+          "event": "rollback_verify",
+          "step": 11,
+          "phase": "level1_backtrack",
+          "attempt": 2,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=33",
+          "latency_ms": 1438.8706684112549,
+          "back_presses_so_far": 2
+        },
+        {
+          "event": "rollback_action",
+          "step": 11,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 717.1711921691895
+        },
+        {
+          "event": "rollback_verify",
+          "step": 11,
+          "phase": "level1_backtrack",
+          "attempt": 3,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=29",
+          "latency_ms": 1539.7722721099854,
+          "back_presses_so_far": 3
+        },
+        {
+          "event": "rollback_action",
+          "step": 11,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 323.7500190734863
+        },
+        {
+          "event": "rollback_verify",
+          "step": 11,
+          "phase": "level1_backtrack",
+          "attempt": 4,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=29",
+          "latency_ms": 1291.1741733551025,
+          "back_presses_so_far": 4
+        },
+        {
+          "event": "rollback_action",
+          "step": 11,
+          "phase": "level2_home_replay",
+          "action_type": "navigate_home",
+          "latency_ms": 304.29792404174805
+        },
+        {
+          "event": "rollback_action",
+          "step": 11,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 328.63402366638184
+        },
+        {
+          "event": "rollback_action",
+          "step": 11,
+          "phase": "level2_replay",
+          "action_type": "wait",
+          "latency_ms": 1000.6017684936523
+        },
+        {
+          "event": "rollback_action",
+          "step": 11,
+          "phase": "level2_replay",
+          "action_type": "open_app",
+          "latency_ms": 658.1552028656006
+        },
+        {
+          "event": "rollback_action",
+          "step": 11,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 328.8090229034424
+        },
+        {
+          "event": "rollback_action",
+          "step": 11,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 375.9157657623291
+        },
+        {
+          "event": "rollback_action",
+          "step": 11,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 324.8863220214844
+        },
+        {
+          "event": "rollback_verify",
+          "step": 11,
+          "phase": "level2_final",
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=33",
+          "latency_ms": 1440.1438236236572
+        },
+        {
+          "event": "rollback_action",
+          "step": 11,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 305.13548851013184
+        },
+        {
+          "event": "rollback_verify",
+          "step": 11,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 1,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=32",
+          "latency_ms": 1274.7368812561035
+        },
+        {
+          "event": "rollback_action",
+          "step": 11,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 306.22315406799316
+        },
+        {
+          "event": "rollback_verify",
+          "step": 11,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 2,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=33",
+          "latency_ms": 1306.6627979278564
+        },
+        {
+          "event": "rollback_action",
+          "step": 11,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 311.51604652404785
+        },
+        {
+          "event": "rollback_verify",
+          "step": 11,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 3,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=33",
+          "latency_ms": 1302.5188446044922
+        },
+        {
+          "event": "rollback_action",
+          "step": 11,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 319.78917121887207
+        },
+        {
+          "event": "rollback_verify",
+          "step": 11,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 4,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=32",
+          "latency_ms": 1259.1142654418945
+        }
+      ],
+      "level2_triggered": true,
+      "level2_trigger_reason": "replay_required_after_home",
+      "failure_analysis": {
+        "root_activity": "de.dennisguse.opentracks/de.dennisguse.opentracks.ui.aggregatedStatistics.AggregatedStatisticsActivity",
+        "final_activity": "de.dennisguse.opentracks/de.dennisguse.opentracks.TrackListActivity",
+        "root_hash": 10858443619215388848,
+        "final_hash": 9764793017939756978,
+        "hash_diff": 32,
+        "matched_by": "activity_match=False|phash_diff=32",
+        "replay_action_types": [
+          "click",
+          "wait",
+          "open_app",
+          "click",
+          "click",
+          "click"
+        ],
+        "likely_reasons": [
+          "activity_mismatch",
+          "visual_hash_mismatch",
+          "keyboard_or_ime_visible"
+        ],
+        "final_semantic_summary": [
+          "status bar launch animation container",
+          "container",
+          "status bar container",
+          "status bar",
+          "status bar contents",
+          "status bar start side container",
+          "status bar start side content",
+          "status bar start side except heads up",
+          "15:38",
+          "notification icon area",
+          "notificationIcons",
+          "Android System notification: Check access settings"
+        ]
+      },
+      "failure_reason": "activity_mismatch,visual_hash_mismatch,keyboard_or_ime_visible",
+      "failure_screenshot": "D:\\Projects\\android_world\\results\\strategy_30task_split\\sensys_strategy30_v1\\machine_2\\S2_DFS_BUDGET12\\run_20260602T154948\\traces\\What_was_the_total_distance_covered_for_snow_boarding_activitie_d227ec5a\\rollback_failed_step_11.png"
+    },
+    {
+      "success": false,
+      "mode": "home_replay_failed",
+      "level": "level2",
+      "back_presses": 4,
+      "replayed_actions": 6,
+      "matched_by": "activity_match=False|phash_diff=27",
+      "latency_ms": 23363.495349884033,
+      "home_attempted": true,
+      "replay_action_types": [
+        "click",
+        "click",
+        "wait",
+        "input_text",
+        "click",
+        "input_text"
+      ],
+      "replay_failures": [],
+      "profile_events": [
+        {
+          "event": "rollback_verify",
+          "step": 15,
+          "phase": "level1_backtrack",
+          "attempt": 0,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=1",
+          "latency_ms": 125.85043907165527,
+          "back_presses_so_far": 0
+        },
+        {
+          "event": "rollback_action",
+          "step": 15,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 332.27992057800293
+        },
+        {
+          "event": "rollback_verify",
+          "step": 15,
+          "phase": "level1_backtrack",
+          "attempt": 1,
+          "same": false,
+          "matched_by": "activity_match=True|phash_diff=28",
+          "latency_ms": 1497.7760314941406,
+          "back_presses_so_far": 1
+        },
+        {
+          "event": "rollback_action",
+          "step": 15,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 321.37393951416016
+        },
+        {
+          "event": "rollback_verify",
+          "step": 15,
+          "phase": "level1_backtrack",
+          "attempt": 2,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=1",
+          "latency_ms": 1645.8747386932373,
+          "back_presses_so_far": 2
+        },
+        {
+          "event": "rollback_action",
+          "step": 15,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 325.7412910461426
+        },
+        {
+          "event": "rollback_verify",
+          "step": 15,
+          "phase": "level1_backtrack",
+          "attempt": 3,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=23",
+          "latency_ms": 1264.2574310302734,
+          "back_presses_so_far": 3
+        },
+        {
+          "event": "rollback_action",
+          "step": 15,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 328.2020092010498
+        },
+        {
+          "event": "rollback_verify",
+          "step": 15,
+          "phase": "level1_backtrack",
+          "attempt": 4,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=23",
+          "latency_ms": 1618.262529373169,
+          "back_presses_so_far": 4
+        },
+        {
+          "event": "rollback_action",
+          "step": 15,
+          "phase": "level2_home_replay",
+          "action_type": "navigate_home",
+          "latency_ms": 327.04710960388184
+        },
+        {
+          "event": "rollback_action",
+          "step": 15,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 327.7883529663086
+        },
+        {
+          "event": "rollback_action",
+          "step": 15,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 406.8007469177246
+        },
+        {
+          "event": "rollback_action",
+          "step": 15,
+          "phase": "level2_replay",
+          "action_type": "wait",
+          "latency_ms": 1001.2719631195068
+        },
+        {
+          "event": "rollback_action",
+          "step": 15,
+          "phase": "level2_replay",
+          "action_type": "input_text",
+          "latency_ms": 1431.6439628601074
+        },
+        {
+          "event": "rollback_action",
+          "step": 15,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 314.7163391113281
+        },
+        {
+          "event": "rollback_action",
+          "step": 15,
+          "phase": "level2_replay",
+          "action_type": "input_text",
+          "latency_ms": 1373.140573501587
+        },
+        {
+          "event": "rollback_verify",
+          "step": 15,
+          "phase": "level2_final",
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=27",
+          "latency_ms": 1877.9551982879639
+        }
+      ],
+      "level2_triggered": true,
+      "level2_trigger_reason": "replay_required_after_home",
+      "failure_analysis": {
+        "root_activity": "de.dennisguse.opentracks/de.dennisguse.opentracks.TrackListActivity",
+        "final_activity": "com.google.android.googlequicksearchbox/com.google.android.apps.search.googleapp.activity.GoogleAppActivity",
+        "root_hash": 9692169710078001714,
+        "final_hash": 12373950141965170614,
+        "hash_diff": 27,
+        "matched_by": "activity_match=False|phash_diff=27",
+        "replay_action_types": [
+          "click",
+          "click",
+          "wait",
+          "input_text",
+          "click",
+          "input_text"
+        ],
+        "likely_reasons": [
+          "activity_mismatch",
+          "visual_hash_mismatch"
+        ],
+        "final_semantic_summary": [
+          "status bar launch animation container",
+          "container",
+          "status bar container",
+          "status bar",
+          "status bar contents",
+          "status bar start side container",
+          "status bar start side content",
+          "status bar start side except heads up",
+          "15:39",
+          "notification icon area",
+          "notificationIcons",
+          "Android System notification: Check access settings"
+        ]
+      },
+      "failure_reason": "activity_mismatch,visual_hash_mismatch",
+      "failure_screenshot": "D:\\Projects\\android_world\\results\\strategy_30task_split\\sensys_strategy30_v1\\machine_2\\S2_DFS_BUDGET12\\run_20260602T154948\\traces\\What_was_the_total_distance_covered_for_snow_boarding_activitie_d227ec5a\\rollback_failed_step_15.png"
+    },
+    {
+      "success": false,
+      "mode": "home_replay_failed",
+      "level": "level2",
+      "back_presses": 4,
+      "replayed_actions": 6,
+      "matched_by": "activity_match=False|phash_diff=30",
+      "latency_ms": 24765.7368183136,
+      "home_attempted": true,
+      "replay_action_types": [
+        "click",
+        "wait",
+        "input_text",
+        "click",
+        "input_text",
+        "wait"
+      ],
+      "replay_failures": [],
+      "profile_events": [
+        {
+          "event": "rollback_verify",
+          "step": 16,
+          "phase": "level1_backtrack",
+          "attempt": 0,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=2",
+          "latency_ms": 137.2361183166504,
+          "back_presses_so_far": 0
+        },
+        {
+          "event": "rollback_action",
+          "step": 16,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 498.0435371398926
+        },
+        {
+          "event": "rollback_verify",
+          "step": 16,
+          "phase": "level1_backtrack",
+          "attempt": 1,
+          "same": false,
+          "matched_by": "activity_match=True|phash_diff=27",
+          "latency_ms": 1319.7314739227295,
+          "back_presses_so_far": 1
+        },
+        {
+          "event": "rollback_action",
+          "step": 16,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 313.2154941558838
+        },
+        {
+          "event": "rollback_verify",
+          "step": 16,
+          "phase": "level1_backtrack",
+          "attempt": 2,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=1",
+          "latency_ms": 1737.5710010528564,
+          "back_presses_so_far": 2
+        },
+        {
+          "event": "rollback_action",
+          "step": 16,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 315.7784938812256
+        },
+        {
+          "event": "rollback_verify",
+          "step": 16,
+          "phase": "level1_backtrack",
+          "attempt": 3,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=30",
+          "latency_ms": 1313.105821609497,
+          "back_presses_so_far": 3
+        },
+        {
+          "event": "rollback_action",
+          "step": 16,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 316.500186920166
+        },
+        {
+          "event": "rollback_verify",
+          "step": 16,
+          "phase": "level1_backtrack",
+          "attempt": 4,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=30",
+          "latency_ms": 1236.4261150360107,
+          "back_presses_so_far": 4
+        },
+        {
+          "event": "rollback_action",
+          "step": 16,
+          "phase": "level2_home_replay",
+          "action_type": "navigate_home",
+          "latency_ms": 936.8207454681396
+        },
+        {
+          "event": "rollback_action",
+          "step": 16,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 326.5726566314697
+        },
+        {
+          "event": "rollback_action",
+          "step": 16,
+          "phase": "level2_replay",
+          "action_type": "wait",
+          "latency_ms": 1000.9145736694336
+        },
+        {
+          "event": "rollback_action",
+          "step": 16,
+          "phase": "level2_replay",
+          "action_type": "input_text",
+          "latency_ms": 1234.3850135803223
+        },
+        {
+          "event": "rollback_action",
+          "step": 16,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 358.5619926452637
+        },
+        {
+          "event": "rollback_action",
+          "step": 16,
+          "phase": "level2_replay",
+          "action_type": "input_text",
+          "latency_ms": 2262.9616260528564
+        },
+        {
+          "event": "rollback_action",
+          "step": 16,
+          "phase": "level2_replay",
+          "action_type": "wait",
+          "latency_ms": 1000.6611347198486
+        },
+        {
+          "event": "rollback_verify",
+          "step": 16,
+          "phase": "level2_final",
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=30",
+          "latency_ms": 1412.9106998443604
+        }
+      ],
+      "level2_triggered": true,
+      "level2_trigger_reason": "replay_required_after_home",
+      "failure_analysis": {
+        "root_activity": "com.google.android.googlequicksearchbox/com.google.android.apps.search.googleapp.activity.GoogleAppActivity",
+        "final_activity": "com.google.android.deskclock/com.android.deskclock.DeskClock",
+        "root_hash": 12373950141965170614,
+        "final_hash": 13596631925831823472,
+        "hash_diff": 30,
+        "matched_by": "activity_match=False|phash_diff=30",
+        "replay_action_types": [
+          "click",
+          "wait",
+          "input_text",
+          "click",
+          "input_text",
+          "wait"
+        ],
+        "likely_reasons": [
+          "activity_mismatch",
+          "visual_hash_mismatch"
+        ],
+        "final_semantic_summary": [
+          "status bar launch animation container",
+          "container",
+          "status bar container",
+          "status bar",
+          "status bar contents",
+          "status bar start side container",
+          "status bar start side content",
+          "status bar start side except heads up",
+          "15:40",
+          "notification icon area",
+          "notificationIcons",
+          "Android System notification: Check access settings"
+        ]
+      },
+      "failure_reason": "activity_mismatch,visual_hash_mismatch",
+      "failure_screenshot": "D:\\Projects\\android_world\\results\\strategy_30task_split\\sensys_strategy30_v1\\machine_2\\S2_DFS_BUDGET12\\run_20260602T154948\\traces\\What_was_the_total_distance_covered_for_snow_boarding_activitie_d227ec5a\\rollback_failed_step_16.png"
+    },
+    {
+      "success": false,
+      "mode": "home_replay_failed",
+      "level": "level2",
+      "back_presses": 8,
+      "replayed_actions": 6,
+      "matched_by": "activity_match=False|phash_diff=24",
+      "latency_ms": 32387.133598327637,
+      "home_attempted": true,
+      "replay_action_types": [
+        "input_text",
+        "wait",
+        "open_app",
+        "click",
+        "click",
+        "input_text"
+      ],
+      "replay_failures": [],
+      "profile_events": [
+        {
+          "event": "rollback_verify",
+          "step": 20,
+          "phase": "level1_backtrack",
+          "attempt": 0,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=1",
+          "latency_ms": 144.14525032043457,
+          "back_presses_so_far": 0
+        },
+        {
+          "event": "rollback_action",
+          "step": 20,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 342.14210510253906
+        },
+        {
+          "event": "rollback_verify",
+          "step": 20,
+          "phase": "level1_backtrack",
+          "attempt": 1,
+          "same": false,
+          "matched_by": "activity_match=True|phash_diff=29",
+          "latency_ms": 2324.8963356018066,
+          "back_presses_so_far": 1
+        },
+        {
+          "event": "rollback_action",
+          "step": 20,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 317.7039623260498
+        },
+        {
+          "event": "rollback_verify",
+          "step": 20,
+          "phase": "level1_backtrack",
+          "attempt": 2,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=1",
+          "latency_ms": 1427.4346828460693,
+          "back_presses_so_far": 2
+        },
+        {
+          "event": "rollback_action",
+          "step": 20,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 328.8235664367676
+        },
+        {
+          "event": "rollback_verify",
+          "step": 20,
+          "phase": "level1_backtrack",
+          "attempt": 3,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=27",
+          "latency_ms": 1526.1061191558838,
+          "back_presses_so_far": 3
+        },
+        {
+          "event": "rollback_action",
+          "step": 20,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 327.44741439819336
+        },
+        {
+          "event": "rollback_verify",
+          "step": 20,
+          "phase": "level1_backtrack",
+          "attempt": 4,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=24",
+          "latency_ms": 1250.2906322479248,
+          "back_presses_so_far": 4
+        },
+        {
+          "event": "rollback_action",
+          "step": 20,
+          "phase": "level2_home_replay",
+          "action_type": "navigate_home",
+          "latency_ms": 301.69153213500977
+        },
+        {
+          "event": "rollback_action",
+          "step": 20,
+          "phase": "level2_replay",
+          "action_type": "input_text",
+          "latency_ms": 1153.5265445709229
+        },
+        {
+          "event": "rollback_action",
+          "step": 20,
+          "phase": "level2_replay",
+          "action_type": "wait",
+          "latency_ms": 1000.4534721374512
+        },
+        {
+          "event": "rollback_action",
+          "step": 20,
+          "phase": "level2_replay",
+          "action_type": "open_app",
+          "latency_ms": 717.540979385376
+        },
+        {
+          "event": "rollback_action",
+          "step": 20,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 324.171781539917
+        },
+        {
+          "event": "rollback_action",
+          "step": 20,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 327.3811340332031
+        },
+        {
+          "event": "rollback_action",
+          "step": 20,
+          "phase": "level2_replay",
+          "action_type": "input_text",
+          "latency_ms": 2375.24676322937
+        },
+        {
+          "event": "rollback_verify",
+          "step": 20,
+          "phase": "level2_final",
+          "same": false,
+          "matched_by": "activity_match=True|phash_diff=15",
+          "latency_ms": 1274.4686603546143
+        },
+        {
+          "event": "rollback_action",
+          "step": 20,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 306.31184577941895
+        },
+        {
+          "event": "rollback_verify",
+          "step": 20,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 1,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=15",
+          "latency_ms": 1668.4472560882568
+        },
+        {
+          "event": "rollback_action",
+          "step": 20,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 324.5103359222412
+        },
+        {
+          "event": "rollback_verify",
+          "step": 20,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 2,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=24",
+          "latency_ms": 1273.3323574066162
+        },
+        {
+          "event": "rollback_action",
+          "step": 20,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 314.6369457244873
+        },
+        {
+          "event": "rollback_verify",
+          "step": 20,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 3,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=24",
+          "latency_ms": 2069.57745552063
+        },
+        {
+          "event": "rollback_action",
+          "step": 20,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 301.71918869018555
+        },
+        {
+          "event": "rollback_verify",
+          "step": 20,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 4,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=24",
+          "latency_ms": 1270.2152729034424
+        }
+      ],
+      "level2_triggered": true,
+      "level2_trigger_reason": "replay_required_after_home",
+      "failure_analysis": {
+        "root_activity": "de.dennisguse.opentracks/de.dennisguse.opentracks.TrackListActivity",
+        "final_activity": "com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity",
+        "root_hash": 14303855728505389618,
+        "final_hash": 576460754097187498,
+        "hash_diff": 24,
+        "matched_by": "activity_match=False|phash_diff=24",
+        "replay_action_types": [
+          "input_text",
+          "wait",
+          "open_app",
+          "click",
+          "click",
+          "input_text"
+        ],
+        "likely_reasons": [
+          "activity_mismatch",
+          "visual_hash_mismatch"
+        ],
+        "final_semantic_summary": [
+          "status bar launch animation container",
+          "container",
+          "status bar container",
+          "status bar",
+          "status bar contents",
+          "status bar start side container",
+          "status bar start side content",
+          "status bar start side except heads up",
+          "15:42",
+          "notification icon area",
+          "notificationIcons",
+          "Clock notification:"
+        ]
+      },
+      "failure_reason": "activity_mismatch,visual_hash_mismatch",
+      "failure_screenshot": "D:\\Projects\\android_world\\results\\strategy_30task_split\\sensys_strategy30_v1\\machine_2\\S2_DFS_BUDGET12\\run_20260602T154948\\traces\\What_was_the_total_distance_covered_for_snow_boarding_activitie_d227ec5a\\rollback_failed_step_20.png"
+    },
+    {
+      "success": false,
+      "mode": "home_replay_failed",
+      "level": "level2",
+      "back_presses": 8,
+      "replayed_actions": 4,
+      "matched_by": "activity_match=False|phash_diff=26",
+      "latency_ms": 27666.338682174683,
+      "home_attempted": true,
+      "replay_action_types": [
+        "swipe",
+        "swipe",
+        "click",
+        "swipe"
+      ],
+      "replay_failures": [],
+      "profile_events": [
+        {
+          "event": "rollback_verify",
+          "step": 5,
+          "phase": "level1_backtrack",
+          "attempt": 0,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=5",
+          "latency_ms": 177.02269554138184,
+          "back_presses_so_far": 0
+        },
+        {
+          "event": "rollback_action",
+          "step": 5,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 315.53196907043457
+        },
+        {
+          "event": "rollback_verify",
+          "step": 5,
+          "phase": "level1_backtrack",
+          "attempt": 1,
+          "same": false,
+          "matched_by": "activity_match=True|phash_diff=17",
+          "latency_ms": 1722.468376159668,
+          "back_presses_so_far": 1
+        },
+        {
+          "event": "rollback_action",
+          "step": 5,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 358.68310928344727
+        },
+        {
+          "event": "rollback_verify",
+          "step": 5,
+          "phase": "level1_backtrack",
+          "attempt": 2,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=5",
+          "latency_ms": 1775.944471359253,
+          "back_presses_so_far": 2
+        },
+        {
+          "event": "rollback_action",
+          "step": 5,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 321.727991104126
+        },
+        {
+          "event": "rollback_verify",
+          "step": 5,
+          "phase": "level1_backtrack",
+          "attempt": 3,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=26",
+          "latency_ms": 1236.372709274292,
+          "back_presses_so_far": 3
+        },
+        {
+          "event": "rollback_action",
+          "step": 5,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 329.5116424560547
+        },
+        {
+          "event": "rollback_verify",
+          "step": 5,
+          "phase": "level1_backtrack",
+          "attempt": 4,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=26",
+          "latency_ms": 1256.3133239746094,
+          "back_presses_so_far": 4
+        },
+        {
+          "event": "rollback_action",
+          "step": 5,
+          "phase": "level2_home_replay",
+          "action_type": "navigate_home",
+          "latency_ms": 326.68256759643555
+        },
+        {
+          "event": "rollback_action",
+          "step": 5,
+          "phase": "level2_replay",
+          "action_type": "swipe",
+          "latency_ms": 926.5589714050293
+        },
+        {
+          "event": "rollback_action",
+          "step": 5,
+          "phase": "level2_replay",
+          "action_type": "swipe",
+          "latency_ms": 1499.2501735687256
+        },
+        {
+          "event": "rollback_action",
+          "step": 5,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 326.57790184020996
+        },
+        {
+          "event": "rollback_action",
+          "step": 5,
+          "phase": "level2_replay",
+          "action_type": "swipe",
+          "latency_ms": 987.0259761810303
+        },
+        {
+          "event": "rollback_verify",
+          "step": 5,
+          "phase": "level2_final",
+          "same": false,
+          "matched_by": "activity_match=True|phash_diff=20",
+          "latency_ms": 1324.4469165802002
+        },
+        {
+          "event": "rollback_action",
+          "step": 5,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 327.8768062591553
+        },
+        {
+          "event": "rollback_verify",
+          "step": 5,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 1,
+          "same": false,
+          "matched_by": "activity_match=True|phash_diff=19",
+          "latency_ms": 1441.7510032653809
+        },
+        {
+          "event": "rollback_action",
+          "step": 5,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 325.2120018005371
+        },
+        {
+          "event": "rollback_verify",
+          "step": 5,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 2,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=5",
+          "latency_ms": 1641.0696506500244
+        },
+        {
+          "event": "rollback_action",
+          "step": 5,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 369.1892623901367
+        },
+        {
+          "event": "rollback_verify",
+          "step": 5,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 3,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=26",
+          "latency_ms": 1257.8115463256836
+        },
+        {
+          "event": "rollback_action",
+          "step": 5,
+          "phase": "level2_post_replay_back",
+          "action_type": "navigate_back",
+          "latency_ms": 314.6493434906006
+        },
+        {
+          "event": "rollback_verify",
+          "step": 5,
+          "phase": "level2_post_replay_back_verify",
+          "attempt": 4,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=26",
+          "latency_ms": 1996.872901916504
+        }
+      ],
+      "level2_triggered": true,
+      "level2_trigger_reason": "replay_required_after_home",
+      "failure_analysis": {
+        "root_activity": "com.android.settings/com.android.settings.homepage.SettingsHomepageActivity",
+        "final_activity": "com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity",
+        "root_hash": 9709972730710900944,
+        "final_hash": 576460754097187498,
+        "hash_diff": 26,
+        "matched_by": "activity_match=False|phash_diff=26",
+        "replay_action_types": [
+          "swipe",
+          "swipe",
+          "click",
+          "swipe"
+        ],
+        "likely_reasons": [
+          "activity_mismatch",
+          "visual_hash_mismatch"
+        ],
+        "final_semantic_summary": [
+          "status bar launch animation container",
+          "container",
+          "status bar container",
+          "status bar",
+          "status bar contents",
+          "status bar start side container",
+          "status bar start side content",
+          "status bar start side except heads up",
+          "15:37",
+          "notification icon area",
+          "notificationIcons",
+          "Clock notification:"
+        ]
+      },
+      "failure_reason": "activity_mismatch,visual_hash_mismatch",
+      "failure_screenshot": "D:\\Projects\\android_world\\results\\strategy_30task_split\\sensys_strategy30_v1\\machine_2\\S2_DFS_BUDGET12\\run_20260602T154948\\traces\\Turn_brightness_to_the_min_value_178fab52\\rollback_failed_step_05.png"
+    }
+  ],
+  "shortcut": {
+    "mode": "shadow",
+    "state_mode": "FULL_A11Y_CONTROL",
+    "allow_safe_search_input": false,
+    "shortcut_plan_count": 320,
+    "shortcut_candidate_count": 0,
+    "shortcut_would_fire_count": 0,
+    "active_shortcut_fired_count": 0,
+    "skipped_vlm_calls": 0,
+    "shortcut_shadow_eval_count": 0,
+    "shortcut_shadow_action_match_count": 0,
+    "shortcut_shadow_precision": null,
+    "direct_answer_candidate_count": 0,
+    "no_plan_reason_distribution": {
+      "exploration_not_completed:skipped": 246,
+      "no_rooted_depth2_observation": 49,
+      "exploration_not_completed:rollback_failed": 11,
+      "exploration_not_completed:skipped_transaction_unsafe": 13,
+      "exploration_not_completed:no_candidates": 1
+    },
+    "no_fire_reason_distribution": {
+      "no_pending_plan": 320
+    }
+  },
+  "state_acquisition": {
+    "full_a11y_calls": 1476.0,
+    "screenshot_calls": 622.0,
+    "activity_calls": 1801.0,
+    "cached_state_hits": 0.0,
+    "rollback_full_a11y_fallbacks": 0.0,
+    "branch_full_a11y_calls": 1145.0,
+    "root_state_reuse_count": 320.0,
+    "passive_no_get_state_count": 0.0,
+    "rollback_light_verify_count": 0.0,
+    "rollback_full_a11y_fallback_count": 0.0,
+    "rooted_depth1_only_count": 0.0,
+    "rooted_depth2_count": 0.0,
+    "t2_candidate_count": 0.0,
+    "searchinput_t2_candidate_count": 0.0,
+    "depth2_blocked_by_hash_unchanged_count": 155.0,
+    "depth2_blocked_by_semantic_unchanged_count": 56.0,
+    "depth2_blocked_by_no_typed_candidate_count": 0.0,
+    "depth2_blocked_by_safety_count": 0.0,
+    "depth2_blocked_by_should_expand_count": 450.0
+  }
+}

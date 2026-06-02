@@ -274,6 +274,8 @@ def _variant_args(variant_name: str, tasks: list[str], variant_root: Path, max_c
 
 def _variant_env(variant_name: str) -> dict[str, str]:
     env = os.environ.copy()
+    env["PYTHONIOENCODING"] = "utf-8"
+    env["PYTHONUTF8"] = "1"
     env["ANDROID_WORLD_T2_ACTIVE"] = "0"
     env["ANDROID_WORLD_LIGHT_EXPLORE_UNSAFE_SPECULATIVE_EXECUTION"] = "0"
     if VARIANT_CONFIGS[variant_name].get("pattern_aware"):

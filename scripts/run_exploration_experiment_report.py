@@ -34,7 +34,12 @@ except Exception:  # pragma: no cover - optional dependency
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_AGENT = "explore_agent_gelab"
 DEFAULT_EXPERIMENT_ROOT = REPO_ROOT / "results" / "exploration_full_experiment"
-DEFAULT_ADB_PATH = "/Users/huangrunxi/Library/Android/sdk/platform-tools/adb"
+DEFAULT_ADB_PATH = (
+    shutil.which("adb")
+    or os.environ.get("ADB_PATH")
+    or os.environ.get("ANDROID_ADB_PATH")
+    or "/Users/huangrunxi/Library/Android/sdk/platform-tools/adb"
+)
 ACCESSIBILITY_FORWARDER_SERVICE = (
     "com.google.androidenv.accessibilityforwarder/"
     "com.google.androidenv.accessibilityforwarder.AccessibilityForwarder"
@@ -42,6 +47,7 @@ ACCESSIBILITY_FORWARDER_SERVICE = (
 FAST_A11Y_SERVICE = "com.androidworld.fasta11y/com.androidworld.fasta11y.FastA11yService"
 FAST_A11Y_APK = REPO_ROOT / "tools" / "fast_a11y_dumper" / "build" / "fast-a11y.apk"
 FAST_A11Y_BUILD_SCRIPT = REPO_ROOT / "tools" / "fast_a11y_dumper" / "build_apk.sh"
+FAST_A11Y_BUILD_SCRIPT_PY = REPO_ROOT / "tools" / "fast_a11y_dumper" / "build_apk.py"
 
 
 def _run_cmd(
@@ -132,7 +138,11 @@ def _preflight_uiautomator_dump(adb_path: str, serial: str) -> tuple[bool, str]:
 def _ensure_fast_a11y_provider(adb_path: str, serial: str) -> str:
     chunks: list[str] = []
     if not FAST_A11Y_APK.exists():
-        build = _run_cmd([str(FAST_A11Y_BUILD_SCRIPT)], timeout=120.0)
+        if os.name == "nt":
+            build_cmd = [sys.executable, str(FAST_A11Y_BUILD_SCRIPT_PY)]
+        else:
+            build_cmd = [str(FAST_A11Y_BUILD_SCRIPT)]
+        build = _run_cmd(build_cmd, timeout=120.0)
         chunks.append("build_apk=" + ("ok" if build.returncode == 0 else "failed"))
         chunks.append(build.stdout[-4000:])
         if build.returncode != 0:
@@ -1735,15 +1745,15 @@ def _write_report(
     ]
     for key in ("exploration_status", "rollback", "rates", "tasks"):
         if key in charts:
-            lines.append(f"![{key}]({charts[key].resolve()})")
+            lines.append(f"![{key}]({_markdown_image_path(charts[key], path)})")
             lines.append("")
     for key in ("episode_success", "episode_steps_avg", "episode_steps_by_task"):
         if key in charts:
-            lines.append(f"![{key}]({charts[key].resolve()})")
+            lines.append(f"![{key}]({_markdown_image_path(charts[key], path)})")
             lines.append("")
     for key in ("baseline_success", "baseline_steps", "baseline_step_delta"):
         if key in charts:
-            lines.append(f"![{key}]({charts[key].resolve()})")
+            lines.append(f"![{key}]({_markdown_image_path(charts[key], path)})")
             lines.append("")
 
     baseline = summary.get("baseline_compare") if isinstance(summary.get("baseline_compare"), dict) else {}
@@ -1918,6 +1928,14 @@ def _timestamp() -> str:
     return _dt.datetime.now().strftime("%Y%m%dT%H%M%S")
 
 
+def _markdown_image_path(image_path: Path, report_path: Path) -> str:
+    try:
+        rel = image_path.resolve().relative_to(report_path.parent.resolve())
+        return rel.as_posix()
+    except ValueError:
+        return image_path.resolve().as_posix()
+
+
 def _run_androidworld(args: argparse.Namespace, run_dir: Path, trace_root: Path, log_path: Path) -> int:
     checkpoint_dir = Path(args.checkpoint_dir) if args.checkpoint_dir else run_dir / "checkpoints"
     checkpoint_dir.mkdir(parents=True, exist_ok=True)
@@ -1948,6 +1966,8 @@ def _run_androidworld(args: argparse.Namespace, run_dir: Path, trace_root: Path,
         cmd.append("--perform_emulator_setup")
 
     env = os.environ.copy()
+    env["PYTHONIOENCODING"] = "utf-8"
+    env["PYTHONUTF8"] = "1"
     env["ANDROID_WORLD_EXPLORATION_TRACE_ROOT"] = str(trace_root)
     env["ANDROID_WORLD_LIGHT_EXPLORE_ENABLE"] = "1" if args.explore_enable else "0"
     env["ANDROID_WORLD_LIGHT_EXPLORE_MAX_RUNS"] = str(args.explore_max_runs)

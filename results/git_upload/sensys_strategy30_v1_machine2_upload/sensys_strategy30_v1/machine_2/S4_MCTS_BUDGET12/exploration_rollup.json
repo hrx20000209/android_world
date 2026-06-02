@@ -1,0 +1,637 @@
+{
+  "exploration_trace_count": 48,
+  "rollback_total": 111,
+  "rollback_success": 108,
+  "rollback_success_rate": 0.972972972972973,
+  "rollback_level1_total": 87,
+  "rollback_level1_success": 87,
+  "rollback_level1_success_rate": 1.0,
+  "rollback_level2_total": 24,
+  "rollback_level2_success": 21,
+  "rollback_level2_success_rate": 0.875,
+  "rollback_failures": [
+    {
+      "success": false,
+      "mode": "home_replay_failed",
+      "level": "level2",
+      "back_presses": 4,
+      "replayed_actions": 6,
+      "matched_by": "activity_match=False|phash_diff=10",
+      "latency_ms": 25707.385778427124,
+      "home_attempted": true,
+      "replay_action_types": [
+        "open_app",
+        "swipe",
+        "click",
+        "click",
+        "click",
+        "click"
+      ],
+      "replay_failures": [],
+      "profile_events": [
+        {
+          "event": "rollback_verify",
+          "step": 7,
+          "phase": "level1_backtrack",
+          "attempt": 0,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=0",
+          "latency_ms": 139.66965675354004,
+          "back_presses_so_far": 0
+        },
+        {
+          "event": "rollback_action",
+          "step": 7,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 326.587438583374
+        },
+        {
+          "event": "rollback_verify",
+          "step": 7,
+          "phase": "level1_backtrack",
+          "attempt": 1,
+          "same": false,
+          "matched_by": "activity_match=True|phash_diff=18",
+          "latency_ms": 1492.4204349517822,
+          "back_presses_so_far": 1
+        },
+        {
+          "event": "rollback_action",
+          "step": 7,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 306.40435218811035
+        },
+        {
+          "event": "rollback_verify",
+          "step": 7,
+          "phase": "level1_backtrack",
+          "attempt": 2,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=0",
+          "latency_ms": 1960.3281021118164,
+          "back_presses_so_far": 2
+        },
+        {
+          "event": "rollback_action",
+          "step": 7,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 407.18817710876465
+        },
+        {
+          "event": "rollback_verify",
+          "step": 7,
+          "phase": "level1_backtrack",
+          "attempt": 3,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=10",
+          "latency_ms": 1989.750623703003,
+          "back_presses_so_far": 3
+        },
+        {
+          "event": "rollback_action",
+          "step": 7,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 435.66203117370605
+        },
+        {
+          "event": "rollback_verify",
+          "step": 7,
+          "phase": "level1_backtrack",
+          "attempt": 4,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=21",
+          "latency_ms": 1353.8298606872559,
+          "back_presses_so_far": 4
+        },
+        {
+          "event": "rollback_action",
+          "step": 7,
+          "phase": "level2_home_replay",
+          "action_type": "navigate_home",
+          "latency_ms": 321.6671943664551
+        },
+        {
+          "event": "rollback_action",
+          "step": 7,
+          "phase": "level2_replay",
+          "action_type": "open_app",
+          "latency_ms": 1608.3600521087646
+        },
+        {
+          "event": "rollback_action",
+          "step": 7,
+          "phase": "level2_replay",
+          "action_type": "swipe",
+          "latency_ms": 1043.2121753692627
+        },
+        {
+          "event": "rollback_action",
+          "step": 7,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 329.160213470459
+        },
+        {
+          "event": "rollback_action",
+          "step": 7,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 316.8818950653076
+        },
+        {
+          "event": "rollback_action",
+          "step": 7,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 315.9980773925781
+        },
+        {
+          "event": "rollback_action",
+          "step": 7,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 313.6579990386963
+        },
+        {
+          "event": "rollback_verify",
+          "step": 7,
+          "phase": "level2_final",
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=10",
+          "latency_ms": 1385.9074115753174
+        }
+      ],
+      "level2_triggered": true,
+      "level2_trigger_reason": "replay_required_after_home",
+      "failure_analysis": {
+        "root_activity": "com.google.android.gms/com.google.android.gms.accountsettings.mg.ui.main.MainActivity",
+        "final_activity": "com.android.settings/com.android.settings.Settings",
+        "root_hash": 774865978424066208,
+        "final_hash": 9709990322896945376,
+        "hash_diff": 10,
+        "matched_by": "activity_match=False|phash_diff=10",
+        "replay_action_types": [
+          "open_app",
+          "swipe",
+          "click",
+          "click",
+          "click",
+          "click"
+        ],
+        "likely_reasons": [
+          "activity_mismatch"
+        ],
+        "final_semantic_summary": [
+          "status bar launch animation container",
+          "container",
+          "status bar container",
+          "status bar",
+          "status bar contents",
+          "status bar start side container",
+          "status bar start side content",
+          "status bar start side except heads up",
+          "15:42",
+          "notification icon area",
+          "notificationIcons",
+          "Android System notification: Check access settings"
+        ]
+      },
+      "failure_reason": "activity_mismatch",
+      "failure_screenshot": "D:\\Projects\\android_world\\results\\strategy_30task_split\\sensys_strategy30_v1\\machine_2\\S4_MCTS_BUDGET12\\run_20260602T171800\\traces\\Turn_brightness_to_the_min_value_178fab52\\rollback_failed_step_07.png"
+    },
+    {
+      "success": false,
+      "mode": "home_replay_failed",
+      "level": "level2",
+      "back_presses": 4,
+      "replayed_actions": 6,
+      "matched_by": "activity_match=False|phash_diff=14",
+      "latency_ms": 26378.201484680176,
+      "home_attempted": true,
+      "replay_action_types": [
+        "swipe",
+        "click",
+        "click",
+        "click",
+        "click",
+        "wait"
+      ],
+      "replay_failures": [],
+      "profile_events": [
+        {
+          "event": "rollback_verify",
+          "step": 8,
+          "phase": "level1_backtrack",
+          "attempt": 0,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=0",
+          "latency_ms": 115.68975448608398,
+          "back_presses_so_far": 0
+        },
+        {
+          "event": "rollback_action",
+          "step": 8,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 306.4591884613037
+        },
+        {
+          "event": "rollback_verify",
+          "step": 8,
+          "phase": "level1_backtrack",
+          "attempt": 1,
+          "same": false,
+          "matched_by": "activity_match=True|phash_diff=16",
+          "latency_ms": 1864.9728298187256,
+          "back_presses_so_far": 1
+        },
+        {
+          "event": "rollback_action",
+          "step": 8,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 451.28822326660156
+        },
+        {
+          "event": "rollback_verify",
+          "step": 8,
+          "phase": "level1_backtrack",
+          "attempt": 2,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=0",
+          "latency_ms": 1897.4206447601318,
+          "back_presses_so_far": 2
+        },
+        {
+          "event": "rollback_action",
+          "step": 8,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 459.869384765625
+        },
+        {
+          "event": "rollback_verify",
+          "step": 8,
+          "phase": "level1_backtrack",
+          "attempt": 3,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=25",
+          "latency_ms": 1432.293176651001,
+          "back_presses_so_far": 3
+        },
+        {
+          "event": "rollback_action",
+          "step": 8,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 330.44934272766113
+        },
+        {
+          "event": "rollback_verify",
+          "step": 8,
+          "phase": "level1_backtrack",
+          "attempt": 4,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=25",
+          "latency_ms": 1460.7667922973633,
+          "back_presses_so_far": 4
+        },
+        {
+          "event": "rollback_action",
+          "step": 8,
+          "phase": "level2_home_replay",
+          "action_type": "navigate_home",
+          "latency_ms": 327.4803161621094
+        },
+        {
+          "event": "rollback_action",
+          "step": 8,
+          "phase": "level2_replay",
+          "action_type": "swipe",
+          "latency_ms": 1187.21604347229
+        },
+        {
+          "event": "rollback_action",
+          "step": 8,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 326.723575592041
+        },
+        {
+          "event": "rollback_action",
+          "step": 8,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 389.81056213378906
+        },
+        {
+          "event": "rollback_action",
+          "step": 8,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 328.22370529174805
+        },
+        {
+          "event": "rollback_action",
+          "step": 8,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 454.73742485046387
+        },
+        {
+          "event": "rollback_action",
+          "step": 8,
+          "phase": "level2_replay",
+          "action_type": "wait",
+          "latency_ms": 1001.2171268463135
+        },
+        {
+          "event": "rollback_verify",
+          "step": 8,
+          "phase": "level2_final",
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=14",
+          "latency_ms": 1360.9638214111328
+        }
+      ],
+      "level2_triggered": true,
+      "level2_trigger_reason": "replay_required_after_home",
+      "failure_analysis": {
+        "root_activity": "com.android.settings/com.android.settings.Settings",
+        "final_activity": "com.google.android.documentsui/com.android.documentsui.files.FilesActivity",
+        "root_hash": 9709990322896945376,
+        "final_hash": 756746027863638064,
+        "hash_diff": 14,
+        "matched_by": "activity_match=False|phash_diff=14",
+        "replay_action_types": [
+          "swipe",
+          "click",
+          "click",
+          "click",
+          "click",
+          "wait"
+        ],
+        "likely_reasons": [
+          "activity_mismatch"
+        ],
+        "final_semantic_summary": [
+          "status bar launch animation container",
+          "container",
+          "status bar container",
+          "status bar",
+          "status bar contents",
+          "status bar start side container",
+          "status bar start side content",
+          "status bar start side except heads up",
+          "15:43",
+          "notification icon area",
+          "notificationIcons",
+          "Android System notification: Check access settings"
+        ]
+      },
+      "failure_reason": "activity_mismatch",
+      "failure_screenshot": "D:\\Projects\\android_world\\results\\strategy_30task_split\\sensys_strategy30_v1\\machine_2\\S4_MCTS_BUDGET12\\run_20260602T171800\\traces\\Turn_brightness_to_the_min_value_178fab52\\rollback_failed_step_08.png"
+    },
+    {
+      "success": false,
+      "mode": "home_replay_failed",
+      "level": "level2",
+      "back_presses": 4,
+      "replayed_actions": 6,
+      "matched_by": "activity_match=False|phash_diff=27",
+      "latency_ms": 22099.987745285034,
+      "home_attempted": true,
+      "replay_action_types": [
+        "click",
+        "click",
+        "click",
+        "click",
+        "wait",
+        "swipe"
+      ],
+      "replay_failures": [],
+      "profile_events": [
+        {
+          "event": "rollback_verify",
+          "step": 9,
+          "phase": "level1_backtrack",
+          "attempt": 0,
+          "same": false,
+          "matched_by": "activity_match=True|phash_diff=15",
+          "latency_ms": 114.87007141113281,
+          "back_presses_so_far": 0
+        },
+        {
+          "event": "rollback_action",
+          "step": 9,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 322.5741386413574
+        },
+        {
+          "event": "rollback_verify",
+          "step": 9,
+          "phase": "level1_backtrack",
+          "attempt": 1,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=15",
+          "latency_ms": 2205.043315887451,
+          "back_presses_so_far": 1
+        },
+        {
+          "event": "rollback_action",
+          "step": 9,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 588.0236625671387
+        },
+        {
+          "event": "rollback_verify",
+          "step": 9,
+          "phase": "level1_backtrack",
+          "attempt": 2,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=27",
+          "latency_ms": 1546.7462539672852,
+          "back_presses_so_far": 2
+        },
+        {
+          "event": "rollback_action",
+          "step": 9,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 367.0697212219238
+        },
+        {
+          "event": "rollback_verify",
+          "step": 9,
+          "phase": "level1_backtrack",
+          "attempt": 3,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=21",
+          "latency_ms": 1416.393756866455,
+          "back_presses_so_far": 3
+        },
+        {
+          "event": "rollback_action",
+          "step": 9,
+          "phase": "level1_backtrack",
+          "action_type": "navigate_back",
+          "latency_ms": 333.19592475891113
+        },
+        {
+          "event": "rollback_verify",
+          "step": 9,
+          "phase": "level1_backtrack",
+          "attempt": 4,
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=21",
+          "latency_ms": 1360.908031463623,
+          "back_presses_so_far": 4
+        },
+        {
+          "event": "rollback_action",
+          "step": 9,
+          "phase": "level2_home_replay",
+          "action_type": "navigate_home",
+          "latency_ms": 317.66390800476074
+        },
+        {
+          "event": "rollback_action",
+          "step": 9,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 328.0959129333496
+        },
+        {
+          "event": "rollback_action",
+          "step": 9,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 343.16086769104004
+        },
+        {
+          "event": "rollback_action",
+          "step": 9,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 310.9605312347412
+        },
+        {
+          "event": "rollback_action",
+          "step": 9,
+          "phase": "level2_replay",
+          "action_type": "click",
+          "latency_ms": 326.2152671813965
+        },
+        {
+          "event": "rollback_action",
+          "step": 9,
+          "phase": "level2_replay",
+          "action_type": "wait",
+          "latency_ms": 1399.3213176727295
+        },
+        {
+          "event": "rollback_action",
+          "step": 9,
+          "phase": "level2_replay",
+          "action_type": "swipe",
+          "latency_ms": 902.7657508850098
+        },
+        {
+          "event": "rollback_verify",
+          "step": 9,
+          "phase": "level2_final",
+          "same": false,
+          "matched_by": "activity_match=False|phash_diff=27",
+          "latency_ms": 1460.2961540222168
+        }
+      ],
+      "level2_triggered": true,
+      "level2_trigger_reason": "replay_required_after_home",
+      "failure_analysis": {
+        "root_activity": "com.google.android.documentsui/com.android.documentsui.files.FilesActivity",
+        "final_activity": "com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity",
+        "root_hash": 756746027863638064,
+        "final_hash": 12297829382473034410,
+        "hash_diff": 27,
+        "matched_by": "activity_match=False|phash_diff=27",
+        "replay_action_types": [
+          "click",
+          "click",
+          "click",
+          "click",
+          "wait",
+          "swipe"
+        ],
+        "likely_reasons": [
+          "activity_mismatch",
+          "visual_hash_mismatch"
+        ],
+        "final_semantic_summary": [
+          "status bar launch animation container",
+          "container",
+          "status bar container",
+          "status bar",
+          "status bar contents",
+          "status bar start side container",
+          "status bar start side content",
+          "status bar start side except heads up",
+          "15:43",
+          "notification icon area",
+          "notificationIcons",
+          "Android System notification: Check access settings"
+        ]
+      },
+      "failure_reason": "activity_mismatch,visual_hash_mismatch",
+      "failure_screenshot": "D:\\Projects\\android_world\\results\\strategy_30task_split\\sensys_strategy30_v1\\machine_2\\S4_MCTS_BUDGET12\\run_20260602T171800\\traces\\Turn_brightness_to_the_min_value_178fab52\\rollback_failed_step_09.png"
+    }
+  ],
+  "shortcut": {
+    "mode": "shadow",
+    "state_mode": "FULL_A11Y_CONTROL",
+    "allow_safe_search_input": false,
+    "shortcut_plan_count": 48,
+    "shortcut_candidate_count": 0,
+    "shortcut_would_fire_count": 0,
+    "active_shortcut_fired_count": 0,
+    "skipped_vlm_calls": 0,
+    "shortcut_shadow_eval_count": 0,
+    "shortcut_shadow_action_match_count": 0,
+    "shortcut_shadow_precision": null,
+    "direct_answer_candidate_count": 0,
+    "no_plan_reason_distribution": {
+      "exploration_not_completed:skipped": 35,
+      "no_rooted_depth2_observation": 10,
+      "exploration_not_completed:rollback_failed": 3
+    },
+    "no_fire_reason_distribution": {
+      "no_pending_plan": 70
+    }
+  },
+  "state_acquisition": {
+    "full_a11y_calls": 406.0,
+    "screenshot_calls": 127.0,
+    "activity_calls": 446.0,
+    "cached_state_hits": 0.0,
+    "rollback_full_a11y_fallbacks": 0.0,
+    "branch_full_a11y_calls": 333.0,
+    "root_state_reuse_count": 48.0,
+    "passive_no_get_state_count": 0.0,
+    "rollback_light_verify_count": 0.0,
+    "rollback_full_a11y_fallback_count": 0.0,
+    "rooted_depth1_only_count": 0.0,
+    "rooted_depth2_count": 0.0,
+    "t2_candidate_count": 0.0,
+    "searchinput_t2_candidate_count": 0.0,
+    "depth2_blocked_by_hash_unchanged_count": 19.0,
+    "depth2_blocked_by_semantic_unchanged_count": 11.0,
+    "depth2_blocked_by_no_typed_candidate_count": 0.0,
+    "depth2_blocked_by_safety_count": 0.0,
+    "depth2_blocked_by_should_expand_count": 111.0
+  }
+}

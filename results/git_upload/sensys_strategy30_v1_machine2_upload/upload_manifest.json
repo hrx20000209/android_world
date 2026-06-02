@@ -1,0 +1,13 @@
+﻿{
+    "package_name":  "sensys_strategy30_v1_machine2_upload",
+    "run_group_id":  "sensys_strategy30_v1",
+    "machine_id":  "machine_2",
+    "created_at":  "2026-06-02T19:04:05",
+    "source":  "D:\\Projects\\android_world\\results\\strategy_30task_split\\sensys_strategy30_v1\\machine_2",
+    "variants":  [
+                     "S2_DFS_BUDGET12",
+                     "S4_MCTS_BUDGET12"
+                 ],
+    "layout":  "sensys_strategy30_v1/machine_2/\u003cvariant\u003e contains merge-ready CSV/JSONL plus report outputs",
+    "merge_hint":  "On the other machine, combine this machine_2 directory with machine_1 under the same sensys_strategy30_v1 directory, then run: python scripts/merge_strategy_30task_results.py --run_group \u003cpath-to-sensys_strategy30_v1\u003e"
+}
