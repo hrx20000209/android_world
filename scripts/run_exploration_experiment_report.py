@@ -1956,6 +1956,8 @@ def _run_androidworld(args: argparse.Namespace, run_dir: Path, trace_root: Path,
         f"--checkpoint_dir={checkpoint_dir}",
         f"--output_path={run_dir}",
     ]
+    if int(args.max_n_steps) > 0:
+        cmd.append(f"--max_n_steps={int(args.max_n_steps)}")
     if args.tasks:
         cmd.append(f"--tasks={args.tasks}")
     if args.fixed_task_seed:
@@ -2236,6 +2238,12 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--clean_trace_root", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--max_cases", type=int, default=8)
+    parser.add_argument(
+        "--max_n_steps",
+        type=int,
+        default=0,
+        help="Optional fixed AndroidWorld per-task step cap; 0 keeps default complexity budgets.",
+    )
     parser.add_argument("--report_on_failure", action=argparse.BooleanOptionalAction, default=True)
     return parser.parse_args()
 

@@ -155,6 +155,12 @@ _FIXED_TASK_SEED = flags.DEFINE_boolean(
     'Whether to use the same task seed when running multiple task combinations'
     ' (n_task_combinations > 1).',
 )
+_MAX_N_STEPS = flags.DEFINE_integer(
+    'max_n_steps',
+    0,
+    'Optional fixed per-task step cap. Use 0 to keep AndroidWorld default '
+    'complexity-based budgets.',
+)
 
 # MiniWoB is very lightweight and new screens/View Hierarchy load quickly.
 _MINIWOB_TRANSITION_PAUSE = 0.2
@@ -404,6 +410,7 @@ def _main() -> None:
         agent,
         checkpointer=checkpointer_lib.IncrementalCheckpointer(checkpoint_dir),
         demo_mode=False,
+        max_n_steps=_MAX_N_STEPS.value if _MAX_N_STEPS.value > 0 else None,
     )
     print(
         f'Finished running agent {_AGENT_NAME.value} on {_SUITE_FAMILY.value}'

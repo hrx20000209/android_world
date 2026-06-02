@@ -440,6 +440,7 @@ def run(
         return_full_episode_data: bool = False,
         process_episodes_fn=None,
         check_episode_fn: Callable[[dict[str, Any]], bool] | None = None,
+        max_n_steps: int | None = None,
 ) -> list[dict[str, Any]]:
     """Create suite and runs eval suite.
 
@@ -457,6 +458,8 @@ def run(
     process_episodes_fn: The function to process episode data. Usually to
       compute metrics. Deafaults to process_episodes from this file.
     check_episode_fn: The function to check episode data.
+    max_n_steps: Optional fixed per-task step cap. If unset, AndroidWorld's
+      task-complexity based budget is used.
 
   Returns:
     Step-by-step data from each episode.
@@ -465,10 +468,15 @@ def run(
     def run_episode(task: task_eval.TaskEval) -> episode_runner.EpisodeResult:
         if demo_mode:
             _display_goal(agent.env, task)
+        step_budget = (
+            int(max_n_steps)
+            if max_n_steps is not None and int(max_n_steps) > 0
+            else _allocate_step_budget(task.complexity)
+        )
         return episode_runner.run_episode(
             goal=task.goal,
             agent=agent,
-            max_n_steps=_allocate_step_budget(task.complexity),
+            max_n_steps=step_budget,
             start_on_home_screen=task.start_on_home_screen,
             termination_fn=(
                 miniwob_base.is_episode_terminated

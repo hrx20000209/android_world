@@ -29,6 +29,9 @@ PYTHON_BIN = sys.executable
 
 DEFAULT_TASKS_CSV = REPO_ROOT / "configs" / "frozen_30task_selection.csv"
 DEFAULT_ROOT = REPO_ROOT / "results" / "pase_30task_final_single"
+DEFAULT_MAX_STEPS = 16
+DEFAULT_BRANCH_BUDGET = 12
+DEFAULT_MIN_ATTEMPTS = 12
 
 VARIANT_CONFIGS: dict[str, dict[str, Any]] = {
     "B0_BASELINE_RERUN": {
@@ -36,8 +39,8 @@ VARIANT_CONFIGS: dict[str, dict[str, Any]] = {
     },
     "PASE_PATTERN_AWARE_OPERATOR_BEST_FIRST_BUDGET12": {
         "enabled": True,
-        "explore_strategy": "bfs",
-        "explore_search_strategy": "stratified_bfs",
+        "explore_strategy": "dfs",
+        "explore_search_strategy": "best_first",
         "safe_mcts": False,
         "pattern_aware": True,
     },
@@ -66,13 +69,16 @@ REQUIRED_FILES = [
     "shortcut_plans.jsonl",
     "shortcut_shadow_eval.jsonl",
     "state_acquisition_metrics.csv",
+    "latency_profile.jsonl",
     "runtime_config.yaml",
+    "runtime_config.json",
     "state_alignment.jsonl",
     "step_decoupling_status.jsonl",
     "checkpoint_rows.jsonl",
 ]
 
 SCREENSHOT_DIRS = [
+    Path("rollback_timeline_images"),
     Path("screenshots/rollback_failures"),
     Path("screenshots/depth1_branches"),
     Path("screenshots/depth2_branches"),
@@ -331,7 +337,13 @@ def _materialize_variant_outputs(variant_root: Path, run_dir: Path, variant_name
     (variant_root / "variant_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
-def _common_args(variant_name: str, tasks: list[str], variant_root: Path, max_cases: int) -> list[str]:
+def _common_args(
+    variant_name: str,
+    tasks: list[str],
+    variant_root: Path,
+    max_cases: int,
+    max_steps: int,
+) -> list[str]:
     return [
         PYTHON_BIN,
         str(REPORT_SCRIPT),
@@ -345,6 +357,7 @@ def _common_args(variant_name: str, tasks: list[str], variant_root: Path, max_ca
         "--baseline_table=results/4B_2.txt",
         f"--experiment_root={variant_root}",
         f"--max_cases={max_cases}",
+        f"--max_n_steps={max_steps}",
         "--a11y_method=fast_provider",
         "--a11y_preflight_timeout=90",
         "--latency_profile",
@@ -363,9 +376,17 @@ def _common_args(variant_name: str, tasks: list[str], variant_root: Path, max_ca
     ]
 
 
-def _variant_args(variant_name: str, tasks: list[str], variant_root: Path, max_cases: int) -> list[str]:
+def _variant_args(
+    variant_name: str,
+    tasks: list[str],
+    variant_root: Path,
+    max_cases: int,
+    max_steps: int,
+    branch_budget: int,
+    min_attempts: int,
+) -> list[str]:
     cfg = VARIANT_CONFIGS[variant_name]
-    cmd = _common_args(variant_name, tasks, variant_root, max_cases)
+    cmd = _common_args(variant_name, tasks, variant_root, max_cases, max_steps)
     if not cfg.get("enabled"):
         cmd.extend(
             [
@@ -385,8 +406,8 @@ def _variant_args(variant_name: str, tasks: list[str], variant_root: Path, max_c
             "--explore_enable",
             "--explore_max_runs=10000",
             "--explore_max_step=10000",
-            "--explore_branch_budget=12",
-            "--explore_min_attempts_per_step=12",
+            f"--explore_branch_budget={branch_budget}",
+            f"--explore_min_attempts_per_step={min_attempts}",
             "--explore_branch_depth=2",
             "--explore_back_limit=4",
             "--explore_replay_max_actions=6",
@@ -408,7 +429,7 @@ def _variant_args(variant_name: str, tasks: list[str], variant_root: Path, max_c
             "--explore_answer_extractors",
             "--explore_slot_complete",
             "--explore_slot_policy_switcher",
-            "--explore_enable_t2_lookahead",
+            "--no-explore_enable_t2_lookahead",
             "--explore_lightweight_a11y_trace",
             "--explore_trace_a11y_limit=120",
             "--trace_screenshot_mode=failure+level2+depth2+injected+sampled",
@@ -429,6 +450,9 @@ def _run_variant(
     task_rows: list[dict[str, str]],
     tasks_csv: Path,
     max_cases: int,
+    max_steps: int,
+    branch_budget: int,
+    min_attempts: int,
     force: bool,
     env_overrides: dict[str, str],
 ) -> int:
@@ -443,7 +467,15 @@ def _run_variant(
             print(f"[pase] skip {variant_name} (manifest exists, use --force to rerun).")
             return 0
 
-    cmd = _variant_args(variant_name, tasks, variant_root, max_cases)
+    cmd = _variant_args(
+        variant_name,
+        tasks,
+        variant_root,
+        max_cases,
+        max_steps,
+        branch_budget,
+        min_attempts,
+    )
     log_path = variant_root / "driver.log"
 
     env = os.environ.copy()
@@ -458,8 +490,9 @@ def _run_variant(
             "ANDROID_WORLD_LIGHT_EXPLORE_PLANNED_ONLY": "0",
             "ANDROID_WORLD_T2_MODE": "shadow",
             "ANDROID_WORLD_T2_ACTIVE": "0",
-            "ANDROID_WORLD_LIGHT_EXPLORE_BRANCH_BUDGET": "12",
-            "ANDROID_WORLD_LIGHT_EXPLORE_MIN_ATTEMPTS_PER_STEP": "12",
+            "ANDROID_WORLD_MAX_N_STEPS": str(max_steps),
+            "ANDROID_WORLD_LIGHT_EXPLORE_BRANCH_BUDGET": str(branch_budget),
+            "ANDROID_WORLD_LIGHT_EXPLORE_MIN_ATTEMPTS_PER_STEP": str(min_attempts),
             "ANDROID_WORLD_LIGHT_EXPLORE_BRANCH_DEPTH": "2",
             "ANDROID_WORLD_TRACE_SCREENSHOT_MODE": "failure+level2+depth2+injected+sampled",
             "ANDROID_WORLD_LIGHT_EXPLORE_T2_LOOKAHEAD": "0",
@@ -568,6 +601,8 @@ def _merge_compare_report(run_root: Path, variants: list[str], tasks: list[str])
         "## 总体对比",
         "",
         f"- 任务总数：`{len(tasks)}`",
+        "- 任务 step 上限：`16`",
+        "- Active t+2 shortcut：`off`（shadow metadata only）",
         f"- B0 success_rate: `{base.get('success_rate', 0):.4f}`",
         f"- PASE success_rate: `{pase.get('success_rate', 0):.4f}`",
         f"- B0 成功任务数：`{base.get('success_count', 0)}`",
@@ -662,6 +697,9 @@ def main() -> int:
     parser.add_argument("--experiment_root", default=str(DEFAULT_ROOT))
     parser.add_argument("--variants", default=",".join(VARIANT_CONFIGS.keys()))
     parser.add_argument("--max_cases", type=int, default=30)
+    parser.add_argument("--max_steps", type=int, default=DEFAULT_MAX_STEPS)
+    parser.add_argument("--branch_budget", type=int, default=DEFAULT_BRANCH_BUDGET)
+    parser.add_argument("--min_attempts_per_step", type=int, default=DEFAULT_MIN_ATTEMPTS)
     parser.add_argument("--force", action="store_true", help="rerun variants even if existing manifest is present")
     parser.add_argument("--report_only", action="store_true", help="skip running, only regenerate merged report")
     args = parser.parse_args()
@@ -695,6 +733,9 @@ def main() -> int:
                 task_rows=[r for r in task_rows if str(r.get("task", "")) in set(tasks)],
                 tasks_csv=tasks_csv,
                 max_cases=args.max_cases,
+                max_steps=args.max_steps,
+                branch_budget=args.branch_budget,
+                min_attempts=args.min_attempts_per_step,
                 force=args.force,
                 env_overrides={},
             )
