@@ -243,7 +243,6 @@ def _variant_args(variant_name: str, tasks: list[str], variant_root: Path, max_c
         "--explore_min_attempts_per_step=12",
         "--explore_branch_depth=2",
         "--explore_back_limit=4",
-        "--explore_replay_max_actions=6",
         "--explore_fallback_safe_candidates",
         "--explore_safe_click_only",
         "--explore_skip_launcher",

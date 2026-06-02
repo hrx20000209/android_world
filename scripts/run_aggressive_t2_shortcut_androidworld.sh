@@ -58,7 +58,6 @@ export ANDROID_WORLD_LIGHT_EXPLORE_MAX_STEP=10000
 export ANDROID_WORLD_LIGHT_EXPLORE_BRANCH_BUDGET=2
 export ANDROID_WORLD_LIGHT_EXPLORE_BRANCH_DEPTH=3
 export ANDROID_WORLD_LIGHT_EXPLORE_BACK_LIMIT=4
-export ANDROID_WORLD_LIGHT_EXPLORE_REPLAY_MAX_ACTIONS=6
 export ANDROID_WORLD_LIGHT_EXPLORE_PLANNED_ONLY=1
 export ANDROID_WORLD_LIGHT_EXPLORE_FALLBACK_SAFE_CANDIDATES=1
 export ANDROID_WORLD_LIGHT_EXPLORE_SAFE_CLICK_ONLY=1
@@ -111,7 +110,6 @@ ENV
     --explore_branch_budget=2
     --explore_branch_depth=3
     --explore_back_limit=4
-    --explore_replay_max_actions=6
     --explore_planned_only
     --explore_fallback_safe_candidates
     --explore_safe_click_only

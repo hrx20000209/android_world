@@ -1997,7 +1997,6 @@ def _run_androidworld(args: argparse.Namespace, run_dir: Path, trace_root: Path,
         "1" if args.explore_diagnostic_artifacts else "0"
     )
     env["ANDROID_WORLD_LIGHT_EXPLORE_BACK_LIMIT"] = str(args.explore_back_limit)
-    env["ANDROID_WORLD_LIGHT_EXPLORE_REPLAY_MAX_ACTIONS"] = str(args.explore_replay_max_actions)
     env["ANDROID_WORLD_LIGHT_EXPLORE_PLANNED_ONLY"] = "1" if args.explore_planned_only else "0"
     env["ANDROID_WORLD_LIGHT_EXPLORE_DECOUPLE_PLANNED"] = "1" if args.explore_decouple_planned else "0"
     env["ANDROID_WORLD_LIGHT_EXPLORE_PARALLEL_VLM"] = "1" if args.explore_parallel_vlm else "0"
@@ -2142,7 +2141,6 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--explore_quality_filters", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--explore_diagnostic_artifacts", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--explore_back_limit", type=int, default=3)
-    parser.add_argument("--explore_replay_max_actions", type=int, default=3)
     parser.add_argument("--explore_planned_only", action=argparse.BooleanOptionalAction, default=False)
     parser.add_argument("--explore_decouple_planned", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--explore_parallel_vlm", action=argparse.BooleanOptionalAction, default=True)

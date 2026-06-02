@@ -50,7 +50,6 @@ python scripts/run_exploration_experiment_report.py \
   --explore_branch_budget="${BRANCH_BUDGET}" \
   --explore_branch_depth="${DEPTH}" \
   --explore_back_limit=4 \
-  --explore_replay_max_actions=6 \
   --no-explore_planned_only \
   --explore_fallback_safe_candidates \
   --no-explore_safe_click_only \

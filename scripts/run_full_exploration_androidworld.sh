@@ -22,7 +22,6 @@ python scripts/run_exploration_experiment_report.py \
   --explore_branch_budget=1 \
   --explore_branch_depth=2 \
   --explore_back_limit=2 \
-  --explore_replay_max_actions=3 \
   --explore_planned_only \
   --no-explore_safe_click_only \
   --explore_skip_launcher \

@@ -102,7 +102,6 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         light_explore_branch_depth: int = 2,
         light_explore_back_limit: int = 3,
         light_explore_hash_threshold: int = 12,
-        light_explore_replay_max_actions: int = 5,
         light_explore_high_complexity_clickable_threshold: int = 14,
         light_explore_relaxed_period: int = 2,
         light_explore_disable_after_rollback_failures: int = 2,
@@ -132,7 +131,6 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         self.light_explore_branch_depth = max(1, int(light_explore_branch_depth))
         self.light_explore_back_limit = max(1, int(light_explore_back_limit))
         self.light_explore_hash_threshold = max(1, int(light_explore_hash_threshold))
-        self.light_explore_replay_max_actions = max(0, int(light_explore_replay_max_actions))
         self.light_explore_high_complexity_clickable_threshold = max(
             1, int(light_explore_high_complexity_clickable_threshold)
         )
@@ -734,15 +732,11 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         actions: list[json_action.JSONAction] = []
         if self._is_replay_safe_action(current_action):
             actions.append(current_action)
-        if self.light_explore_replay_max_actions <= 0:
-            return actions
         for record in reversed(list(self._actions)):
             action = self._json_action_from_record(record.get("action_dict"))
             if action is None:
                 continue
             actions.append(action)
-            if len(actions) >= max(1, int(self.light_explore_replay_max_actions)):
-                break
         actions.reverse()
         return actions
 
