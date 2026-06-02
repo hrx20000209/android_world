@@ -1,4 +1,3 @@
-cd /Users/huangrunxi/Projects/android_world
 python scripts/run_pase_30task_final_linux.py \
   --tasks_csv configs/frozen_30task_selection.csv \
   --experiment_root results/pase_30task_final_single \
