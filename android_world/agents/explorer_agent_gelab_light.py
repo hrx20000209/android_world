@@ -607,18 +607,15 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             wait_to_stabilize=bool(wait_to_stabilize and not self.light_explore_fast_state)
         )
         total_ms = float(max(0.0, time.time() - start) * 1000.0)
-        self._append_latency_profile_event(
-            "",
-            {
-                "event": "probe_get_state",
-                "context": self._state_acquisition_context,
-                "wait_to_stabilize": bool(wait_to_stabilize and not self.light_explore_fast_state),
-                "total_ms": total_ms,
-                "a11y_latency_ms": self._state_a11y_latency_ms(state),
-                "ui_element_count": int(self._state_auxiliary(state, "ui_element_count", 0) or 0),
-                "a11y_method": _clean_text(self._state_auxiliary(state, "a11y_method", "")),
-            },
-        )
+        state_aux = self._state_aux_trace(state)
+        latency_row = {
+            "event": "probe_get_state",
+            "context": self._state_acquisition_context,
+            "wait_to_stabilize": bool(wait_to_stabilize and not self.light_explore_fast_state),
+            "total_ms": total_ms,
+        }
+        latency_row.update(state_aux)
+        self._append_latency_profile_event("", latency_row)
         return state
 
     @staticmethod
@@ -635,11 +632,31 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             return 0.0
 
     def _state_aux_trace(self, state: Any) -> dict[str, Any]:
-        return {
+        fallback_used = self._state_auxiliary(state, "a11y_fallback_used", False)
+        if isinstance(fallback_used, str):
+            fallback_used = fallback_used.strip().lower() in {"1", "true", "yes"}
+        trace = {
             "a11y_latency_ms": self._state_a11y_latency_ms(state),
             "a11y_method": _clean_text(self._state_auxiliary(state, "a11y_method", "")),
+            "a11y_actual_method": _clean_text(self._state_auxiliary(state, "a11y_actual_method", "")),
+            "a11y_fallback_used": bool(fallback_used),
             "ui_element_count": int(self._state_auxiliary(state, "ui_element_count", 0) or 0),
         }
+        for key in (
+            "fast_a11y_capture_ms",
+            "fast_a11y_serialize_ms",
+            "fast_a11y_service_ms",
+            "fast_a11y_node_count",
+            "fast_a11y_emitted_count",
+            "fast_a11y_payload_bytes",
+        ):
+            value = self._state_auxiliary(state, key, None)
+            if value is not None:
+                trace[key] = value
+        error = self._state_auxiliary(state, "fast_provider_error", "")
+        if error:
+            trace["fast_provider_error"] = _clean_text(error)[:500]
+        return trace
 
     def _append_latency_profile_event(self, goal: str, row: dict[str, Any]) -> None:
         if not getattr(self, "latency_profile_enabled", False):

@@ -16,6 +16,7 @@
 
 import contextlib
 import enum
+import json
 import os
 import time
 from typing import Any
@@ -123,7 +124,15 @@ OBSERVATION_KEY_FOREST = 'forest'
 OBSERVATION_KEY_UI_ELEMENTS = 'ui_elements'
 OBSERVATION_KEY_A11Y_LATENCY_SEC = 'a11y_latency_sec'
 OBSERVATION_KEY_A11Y_METHOD = 'a11y_method'
+OBSERVATION_KEY_A11Y_ACTUAL_METHOD = 'a11y_actual_method'
+OBSERVATION_KEY_A11Y_FALLBACK_USED = 'a11y_fallback_used'
 OBSERVATION_KEY_UI_ELEMENT_COUNT = 'ui_element_count'
+OBSERVATION_KEY_FAST_A11Y_CAPTURE_MS = 'fast_a11y_capture_ms'
+OBSERVATION_KEY_FAST_A11Y_SERIALIZE_MS = 'fast_a11y_serialize_ms'
+OBSERVATION_KEY_FAST_A11Y_SERVICE_MS = 'fast_a11y_service_ms'
+OBSERVATION_KEY_FAST_A11Y_NODE_COUNT = 'fast_a11y_node_count'
+OBSERVATION_KEY_FAST_A11Y_EMITTED_COUNT = 'fast_a11y_emitted_count'
+OBSERVATION_KEY_FAST_A11Y_PAYLOAD_BYTES = 'fast_a11y_payload_bytes'
 FAST_A11Y_PROVIDER_AUTHORITY = 'com.androidworld.fasta11y.provider'
 FAST_A11Y_PROVIDER_SERVICE = (
     'com.androidworld.fasta11y/com.androidworld.fasta11y.FastA11yService'
@@ -183,6 +192,9 @@ class AndroidWorldController(base_wrapper.BaseWrapper):
         else:
             self._env = env
         self._a11y_method = a11y_method
+        self._last_a11y_actual_method = a11y_method.value
+        self._last_a11y_fallback_used = False
+        self._last_fast_a11y_metrics: dict[str, Any] = {}
         if a11y_method == A11yMethod.FAST_PROVIDER:
             self._enable_fast_a11y_provider()
 
@@ -238,24 +250,38 @@ class AndroidWorldController(base_wrapper.BaseWrapper):
     def get_ui_elements(self) -> list[representation_utils.UIElement]:
         """Returns the most recent UI elements from the device."""
         if self._a11y_method == A11yMethod.A11Y_FORWARDER_APP:
+            self._last_a11y_actual_method = A11yMethod.A11Y_FORWARDER_APP.value
+            self._last_a11y_fallback_used = False
+            self._last_fast_a11y_metrics = {}
             return representation_utils.forest_to_ui_elements(
                 self.get_a11y_forest(),
                 exclude_invisible_elements=True,
             )
         elif self._a11y_method == A11yMethod.UIAUTOMATOR:
+            self._last_a11y_actual_method = A11yMethod.UIAUTOMATOR.value
+            self._last_a11y_fallback_used = False
+            self._last_fast_a11y_metrics = {}
             return representation_utils.xml_dump_to_ui_elements(
                 adb_utils.uiautomator_dump(self._env)
             )
         elif self._a11y_method == A11yMethod.FAST_PROVIDER:
             try:
+                dump = self._fast_a11y_provider_dump()
+                self._last_a11y_actual_method = A11yMethod.FAST_PROVIDER.value
+                self._last_a11y_fallback_used = False
                 return representation_utils.json_dump_to_ui_elements(
-                    self._fast_a11y_provider_dump(),
+                    dump,
                 )
             except Exception as exc:  # pylint: disable=broad-exception-caught
                 logging.warning(
                     'Fast a11y provider failed after retry; falling back to uiautomator dump: %s',
                     exc,
                 )
+                metrics = dict(self._last_fast_a11y_metrics)
+                metrics['fast_provider_error'] = str(exc)[:500]
+                self._last_fast_a11y_metrics = metrics
+                self._last_a11y_actual_method = A11yMethod.UIAUTOMATOR.value
+                self._last_a11y_fallback_used = True
                 return representation_utils.xml_dump_to_ui_elements(
                     adb_utils.uiautomator_dump(self._env)
                 )
@@ -299,6 +325,7 @@ class AndroidWorldController(base_wrapper.BaseWrapper):
     def _fast_a11y_provider_dump(self) -> str:
         uri = f'content://{FAST_A11Y_PROVIDER_AUTHORITY}/flat?compact=1'
         last_error: Exception | None = None
+        self._last_fast_a11y_metrics = {}
         for attempt in range(2):
             if attempt > 0:
                 try:
@@ -314,11 +341,37 @@ class AndroidWorldController(base_wrapper.BaseWrapper):
                 )
                 output = response.generic.output.decode('utf-8', errors='replace')
                 if '"ok":true' in output:
+                    self._last_fast_a11y_metrics = self._extract_fast_a11y_metrics(output)
                     return output
                 last_error = RuntimeError(output[:500])
             except Exception as exc:  # pylint: disable=broad-exception-caught
                 last_error = exc
         raise RuntimeError(f'fast_a11y_provider_unavailable: {last_error}')
+
+    @staticmethod
+    def _extract_fast_a11y_metrics(output: str) -> dict[str, Any]:
+        metrics: dict[str, Any] = {
+            OBSERVATION_KEY_FAST_A11Y_PAYLOAD_BYTES: len(output.encode('utf-8', errors='replace')),
+        }
+        try:
+            data = json.loads(output)
+        except json.JSONDecodeError:
+            return metrics
+        if not isinstance(data, dict):
+            return metrics
+        key_map = {
+            'captureMs': OBSERVATION_KEY_FAST_A11Y_CAPTURE_MS,
+            'serializeMs': OBSERVATION_KEY_FAST_A11Y_SERIALIZE_MS,
+            'serviceMs': OBSERVATION_KEY_FAST_A11Y_SERVICE_MS,
+            'nodeCount': OBSERVATION_KEY_FAST_A11Y_NODE_COUNT,
+            'emittedCount': OBSERVATION_KEY_FAST_A11Y_EMITTED_COUNT,
+            'payloadBytes': OBSERVATION_KEY_FAST_A11Y_PAYLOAD_BYTES,
+        }
+        for src, dst in key_map.items():
+            value = data.get(src)
+            if value is not None:
+                metrics[dst] = value
+        return metrics
 
     def _process_timestep(self, timestep: dm_env.TimeStep) -> dm_env.TimeStep:
         """Adds a11y tree info to the observation."""
@@ -329,6 +382,9 @@ class AndroidWorldController(base_wrapper.BaseWrapper):
                 forest,
                 exclude_invisible_elements=True,
             )
+            self._last_a11y_actual_method = A11yMethod.A11Y_FORWARDER_APP.value
+            self._last_a11y_fallback_used = False
+            self._last_fast_a11y_metrics = {}
         else:
             forest = None
             ui_elements = self.get_ui_elements()
@@ -338,7 +394,11 @@ class AndroidWorldController(base_wrapper.BaseWrapper):
             0.0, time.time() - a11y_start
         )
         timestep.observation[OBSERVATION_KEY_A11Y_METHOD] = self._a11y_method.value
+        timestep.observation[OBSERVATION_KEY_A11Y_ACTUAL_METHOD] = self._last_a11y_actual_method
+        timestep.observation[OBSERVATION_KEY_A11Y_FALLBACK_USED] = self._last_a11y_fallback_used
         timestep.observation[OBSERVATION_KEY_UI_ELEMENT_COUNT] = len(ui_elements)
+        for key, value in self._last_fast_a11y_metrics.items():
+            timestep.observation[key] = value
         return timestep
 
     def pull_file(

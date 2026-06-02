@@ -9,7 +9,7 @@ EXP_ROOT="${EXP_ROOT:-${ROOT_DIR}/results/lb_mcts_final_116task_v2}"
 LB_ROOT="${LB_ROOT:-${EXP_ROOT}/LB_MCTS_FINAL}"
 MAX_STEPS="${MAX_STEPS:-16}"
 CONSOLE_PORT="${CONSOLE_PORT:-5554}"
-A11Y_METHOD="${A11Y_METHOD:-fast_provider}"
+A11Y_METHOD="${A11Y_METHOD:-uiautomator}"
 
 if [[ -z "${ADB_PATH:-}" ]]; then
   if [[ -n "${ANDROID_ADB_PATH:-}" ]]; then
