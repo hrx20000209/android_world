@@ -410,7 +410,6 @@ def _variant_args(
             f"--explore_min_attempts_per_step={min_attempts}",
             "--explore_branch_depth=2",
             "--explore_back_limit=4",
-            "--explore_replay_max_actions=6",
             "--explore_fallback_safe_candidates",
             "--explore_safe_click_only",
             "--explore_skip_launcher",

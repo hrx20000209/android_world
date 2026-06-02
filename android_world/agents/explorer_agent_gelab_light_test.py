@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
+import tempfile
+
 from absl.testing import absltest
 
 from android_world.agents.explorer_agent_gelab_light import ExplorerElementAgent
@@ -85,6 +88,57 @@ class HomeReplayAnchorTest(absltest.TestCase):
         [json_action.OPEN_APP, json_action.CLICK],
     )
     self.assertEqual(replay_actions[0].app_name, "OpenTracks")
+
+  def test_select_replay_actions_keeps_full_safe_history(self):
+    agent = self._agent()
+    agent._actions = [
+        {"action_dict": {"action_type": json_action.OPEN_APP, "app_name": "Settings"}},
+        {"action_dict": {"action_type": json_action.SWIPE, "direction": "up"}},
+        {"action_dict": {"action_type": json_action.CLICK, "x": 10, "y": 20}},
+        {"action_dict": {"action_type": json_action.CLICK, "x": 30, "y": 40}},
+        {"action_dict": {"action_type": json_action.WAIT}},
+    ]
+
+    replay_actions = agent._select_replay_actions_for_probe(
+        json_action.JSONAction(action_type=json_action.CLICK, x=50, y=60)
+    )
+
+    self.assertEqual(
+        [action.action_type for action in replay_actions],
+        [
+            json_action.OPEN_APP,
+            json_action.SWIPE,
+            json_action.CLICK,
+            json_action.CLICK,
+            json_action.WAIT,
+            json_action.CLICK,
+        ],
+    )
+    self.assertEqual(replay_actions[0].app_name, "Settings")
+
+  def test_prompt_trace_files_use_short_path_when_windows_path_is_long(self):
+    if os.name != "nt":
+      self.skipTest("Windows path-length fallback is only used on Windows.")
+    agent = self._agent()
+    agent.light_explore_variant = "S4_MCTS_BUDGET12"
+
+    with tempfile.TemporaryDirectory(dir=os.getcwd()) as tmp:
+      long_task_dir = os.path.join(tmp, "task_" + ("x" * 155))
+      agent._task_output_dir = lambda goal: long_task_dir
+
+      full_path, context_path = agent._write_prompt_trace_files(
+          goal="long path prompt trace test",
+          step_idx=0,
+          messages=[],
+          exploration_context="ctx",
+          message_text="msg",
+          hint_for_prompt="hint",
+      )
+
+      self.assertIn(os.path.join("p", "S4MCTSBU"), context_path)
+      self.assertTrue(os.path.exists(full_path))
+      self.assertTrue(os.path.exists(context_path))
+      self.assertLess(len(os.path.abspath(context_path)), 240)
 
 
 if __name__ == "__main__":

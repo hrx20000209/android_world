@@ -44,7 +44,6 @@ COMMON_EXPLORE=(
   --no-explore_use_current_action
   --no-explore_use_planning_text
   --explore_back_limit=4
-  --explore_replay_max_actions=6
   --no-explore_planned_only
   --explore_decouple_planned
   --explore_parallel_vlm

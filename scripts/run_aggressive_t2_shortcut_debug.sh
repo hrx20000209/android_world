@@ -43,7 +43,6 @@ run_variant() {
       --explore_branch_budget=1 \
       --explore_branch_depth=2 \
       --explore_back_limit=4 \
-      --explore_replay_max_actions=6 \
       --explore_planned_only \
       --no-explore_fallback_safe_candidates \
       --no-explore_safe_click_only \

@@ -236,7 +236,6 @@ def main() -> int:
                 "--explore_branch_budget=10",
                 "--explore_branch_depth=2",
                 "--explore_back_limit=4",
-                "--explore_replay_max_actions=6",
                 "--no-explore_planned_only",
                 "--explore_decouple_planned",
                 "--explore_parallel_vlm",

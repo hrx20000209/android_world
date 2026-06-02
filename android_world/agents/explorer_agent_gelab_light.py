@@ -168,7 +168,6 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         light_explore_branch_depth: int = 2,
         light_explore_back_limit: int = 3,
         light_explore_hash_threshold: int = 10,
-        light_explore_replay_max_actions: int = 3,
         light_explore_visit_penalty: float = 0.18,
         light_explore_min_launcher_relevance: float = 0.20,
         light_explore_prompt_result_limit: int = PROMPT_RESULT_LIMIT,
@@ -190,10 +189,6 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         light_explore_branch_budget = _env_int("ANDROID_WORLD_LIGHT_EXPLORE_BRANCH_BUDGET", light_explore_branch_budget)
         light_explore_branch_depth = _env_int("ANDROID_WORLD_LIGHT_EXPLORE_BRANCH_DEPTH", light_explore_branch_depth)
         light_explore_back_limit = _env_int("ANDROID_WORLD_LIGHT_EXPLORE_BACK_LIMIT", light_explore_back_limit)
-        light_explore_replay_max_actions = _env_int(
-            "ANDROID_WORLD_LIGHT_EXPLORE_REPLAY_MAX_ACTIONS",
-            light_explore_replay_max_actions,
-        )
         self._initial_enable_light_exploration = bool(enable_light_exploration)
         self.enable_light_exploration = bool(enable_light_exploration)
         self.light_explore_max_runs = max(0, int(light_explore_max_runs))
@@ -205,7 +200,6 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         self.light_explore_branch_depth = max(1, int(light_explore_branch_depth))
         self.light_explore_back_limit = max(1, int(light_explore_back_limit))
         self.light_explore_hash_threshold = max(1, int(light_explore_hash_threshold))
-        self.light_explore_replay_max_actions = max(0, int(light_explore_replay_max_actions))
         self.light_explore_visit_penalty = max(0.0, float(light_explore_visit_penalty))
         self.light_explore_min_launcher_relevance = max(0.0, float(light_explore_min_launcher_relevance))
         self.light_explore_prompt_result_limit = max(1, int(light_explore_prompt_result_limit))
@@ -1229,10 +1223,16 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         if not task_dir:
             return "", ""
         variant = _clean_text(self.light_explore_variant or "default") or "default"
-        prompt_dir = os.path.join(task_dir, "prompts", variant)
-        os.makedirs(prompt_dir, exist_ok=True)
+        safe_variant = re.sub(r"[^a-zA-Z0-9_.-]+", "_", variant).strip("._-") or "default"
+        prompt_dir = os.path.join(task_dir, "prompts", safe_variant)
         full_path = os.path.join(prompt_dir, f"step_{step_idx + 1:03d}_full_prompt.txt")
         context_path = os.path.join(prompt_dir, f"step_{step_idx + 1:03d}_exploration_context.txt")
+        if os.name == "nt" and max(len(os.path.abspath(full_path)), len(os.path.abspath(context_path))) >= 240:
+            compact_variant = re.sub(r"[^a-zA-Z0-9]+", "", safe_variant)[:8] or "v"
+            prompt_dir = os.path.join(task_dir, "p", compact_variant)
+            full_path = os.path.join(prompt_dir, f"s{step_idx + 1:03d}_full.txt")
+            context_path = os.path.join(prompt_dir, f"s{step_idx + 1:03d}_ctx.txt")
+        os.makedirs(prompt_dir, exist_ok=True)
         prompt_snapshot = {
             "step": int(step_idx + 1),
             "goal": goal,
@@ -5258,15 +5258,11 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         actions: list[json_action.JSONAction] = []
         if self._is_replay_safe_action(current_action):
             actions.append(current_action)
-        if self.light_explore_replay_max_actions <= 0:
-            return actions
         for record in reversed(list(self._actions)):
             action = self._json_action_from_record(record.get("action_dict"))
             if action is None:
                 continue
             actions.append(action)
-            if len(actions) >= max(1, int(self.light_explore_replay_max_actions)):
-                break
         actions.reverse()
         return actions
 

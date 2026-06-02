@@ -101,7 +101,6 @@ COMMON_EXPLORE_ARGS = [
     "--explore_branch_budget=10",
     "--explore_branch_depth=2",
     "--explore_back_limit=4",
-    "--explore_replay_max_actions=6",
     "--no-explore_planned_only",
     "--explore_fallback_safe_candidates",
     "--no-explore_safe_click_only",

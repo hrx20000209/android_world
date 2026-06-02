@@ -187,7 +187,6 @@ def main() -> int:
         "--explore_branch_budget=1",
         "--explore_branch_depth=2",
         "--explore_back_limit=4",
-        "--explore_replay_max_actions=6",
         "--explore_planned_only",
         "--explore_fallback_safe_candidates",
         "--explore_safe_click_only",
