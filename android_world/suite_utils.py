@@ -561,12 +561,17 @@ def _create_failed_result(
         constants.EpisodeConstants.GOAL: goal,
         constants.EpisodeConstants.TASK_TEMPLATE: name,
         constants.EpisodeConstants.EPISODE_DATA: np.nan,
-        constants.EpisodeConstants.IS_SUCCESSFUL: np.nan,
+        constants.EpisodeConstants.IS_SUCCESSFUL: 0.0,
         constants.EpisodeConstants.FINISH_DTIME: datetime.datetime.now(),
         constants.EpisodeConstants.RUN_TIME: run_time,
-        constants.EpisodeConstants.EPISODE_LENGTH: np.nan,
+        constants.EpisodeConstants.EPISODE_LENGTH: 0,
         constants.EpisodeConstants.EXCEPTION_INFO: exception,
-        constants.EpisodeConstants.AUX_DATA: None,
+        constants.EpisodeConstants.AUX_DATA: {
+            'step_latencies_sec': [],
+            'num_steps': 0,
+            'total_step_latency_sec': 0.0,
+            'mean_step_latency_sec': 0.0,
+        },
     }
 
 
@@ -639,6 +644,17 @@ def _episode_mean_step_latency(episode: dict[str, Any]) -> float:
     if run_time is not None and episode_len is not None and episode_len > 0.0:
         return float(run_time / episode_len)
     return float('nan')
+
+
+def _has_exception(value: Any) -> bool:
+    if value is None:
+        return False
+    try:
+        if pd.isna(value):
+            return False
+    except (TypeError, ValueError):
+        pass
+    return bool(value)
 
 
 def _display_success_overlay(
@@ -763,27 +779,49 @@ def process_episodes(
     df = df.assign(
         mean_step_latency_s=df.apply(_episode_mean_step_latency, axis=1)
     )
+    df['_has_exception'] = df[constants.EpisodeConstants.EXCEPTION_INFO].map(
+        _has_exception
+    )
+    success_values = pd.to_numeric(
+        df.get(
+            constants.EpisodeConstants.IS_SUCCESSFUL,
+            pd.Series(0.0, index=df.index),
+        ),
+        errors='coerce',
+    ).fillna(0.0)
+    episode_lengths = pd.to_numeric(
+        df.get(
+            constants.EpisodeConstants.EPISODE_LENGTH,
+            pd.Series(np.nan, index=df.index),
+        ),
+        errors='coerce',
+    )
+    step_latencies = pd.to_numeric(
+        df['mean_step_latency_s'],
+        errors='coerce',
+    )
+    df['_success_for_summary'] = success_values
+    df['_episode_length_for_summary'] = episode_lengths.where(
+        ~df['_has_exception']
+    )
+    df['_mean_step_latency_for_summary'] = step_latencies.where(
+        ~df['_has_exception']
+    )
 
     result_df = df.groupby(
         constants.EpisodeConstants.TASK_TEMPLATE, dropna=True
-    ).agg({
-        constants.EpisodeConstants.IS_SUCCESSFUL: ['count', 'mean'],
-        constants.EpisodeConstants.EPISODE_LENGTH: 'mean',
-        constants.EpisodeConstants.RUN_TIME: 'sum',
-        'mean_step_latency_s': 'mean',
-        constants.EpisodeConstants.EXCEPTION_INFO: [
-            ('none_count', lambda x: x.notnull().sum())
-        ],
-    })
+    ).agg(
+        num_complete_trials=('_has_exception', lambda x: int((~x).sum())),
+        mean_success_rate=('_success_for_summary', 'mean'),
+        mean_episode_length=('_episode_length_for_summary', 'mean'),
+        total_runtime_s=(constants.EpisodeConstants.RUN_TIME, 'sum'),
+        mean_step_latency_s=('_mean_step_latency_for_summary', 'mean'),
+        num_fail_trials=('_has_exception', lambda x: int(x.sum())),
+    )
     result_df = result_df.sort_index()
-    result_df.columns = [
-        'num_complete_trials',
-        'mean_success_rate',
-        'mean_episode_length',
-        'total_runtime_s',
-        'mean_step_latency_s',
-        'num_fail_trials',
-    ]
+    result_df[['mean_episode_length', 'mean_step_latency_s']] = result_df[
+        ['mean_episode_length', 'mean_step_latency_s']
+    ].fillna(0.0)
     result_df['total_runtime_s'] = result_df['total_runtime_s'].map(
         lambda x: float('{:.1f}'.format(x))
     )
@@ -815,7 +853,8 @@ def process_episodes(
         pd.set_option('display.precision', 2)
         _log_and_print('\n\n%s', tags_df)
         global_step_latency = pd.to_numeric(
-            df['mean_step_latency_s'], errors='coerce'
+            df.loc[~df['_has_exception'], 'mean_step_latency_s'],
+            errors='coerce',
         ).dropna()
         if not global_step_latency.empty:
             _log_and_print(

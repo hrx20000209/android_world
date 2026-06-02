@@ -682,52 +682,50 @@ def _launch_default_app(
 
 
 def normalize_app_name(app_name: str) -> str:
-    """Map human-readable app names to Android package names."""
-    APP_NAME_TO_PACKAGE = {
-        # ===== File / Media =====
-        "File Manager": "com.google.android.documentsui",
-        "Files": "com.simplemobiletools.filemanager.pro",
-        "Gallery": "com.simplemobiletools.gallery.pro",
-        "Photos": "com.google.android.apps.photos",
+    """Normalize model-facing app aliases before launching.
 
-        # ===== Audio / Video =====
-        "Audio Recorder": "com.dimowner.audiorecorder",  # 注意：不是 dimowner
-        "Music": "com.spotify.music",
-        "YouTube Music": "com.google.android.apps.youtube.music",
-        "YouTube": "com.google.android.youtube",
+  Prefer canonical names that are already covered by _PATTERN_TO_ACTIVITY.
+  Returning a package name too early bypasses the more precise activity mapping.
+  """
+    if not app_name:
+        return app_name
+    normalized = re.sub(r'\s+', ' ', str(app_name)).strip()
+    aliases = {
+        # File manager aliases. AndroidWorld file tasks use DocumentsUI.
+        'file manager': 'files',
+        'files app': 'files',
+        '文件': 'files',
+        '文件管理': 'files',
+        '文件管理器': 'files',
+        '档案': 'files',
 
-        # ===== Notes / Docs =====
-        "Notes": "com.simplemobiletools.notes.pro",
-        "Docs": "com.google.android.apps.docs",
-
-        # ===== Communication =====
-        "Phone": "com.google.android.dialer",
-        "Messages": "com.google.android.apps.messaging",
-        "Contacts": "com.google.android.contacts",
-        "Gmail": "com.google.android.gm",
-
-        # ===== Browser / Search =====
-        "Chrome": "com.android.chrome",
-        "Browser": "com.android.chrome",
-        "Google": "com.google.android.googlequicksearchbox",
-
-        # ===== Utilities =====
-        "Calculator": "com.simplemobiletools.calculator",
-        "Clock": "com.simplemobiletools.clock",
-        "Calendar": "com.simplemobiletools.calendar",
-        "Flashlight": "com.simplemobiletools.flashlight",
-
-        # ===== Maps =====
-        "Maps": "com.google.android.apps.maps",
-
-        # ===== Expense / Tasks (Android World 常用) =====
-        "Tasks": "org.tasks",
-        "Pro Expense": "com.arduia.expense",
-
-        # ===== Launcher（一般不需要 monkey）=====
-        "Launcher": "com.google.android.apps.nexuslauncher",
+        # Common Chinese names emitted by the GELAB Chinese prompt.
+        '浏览器': 'Chrome',
+        '谷歌浏览器': 'Chrome',
+        '相机': 'camera',
+        '照相机': 'camera',
+        '录音机': 'audio recorder',
+        '音频录音机': 'audio recorder',
+        '时钟': 'clock',
+        '设置': 'settings',
+        '系统设置': 'settings',
+        '联系人': 'contacts',
+        '通讯录': 'contacts',
+        '短信': 'simple sms messenger',
+        '短信应用': 'simple sms messenger',
+        '日历': 'simple calendar pro',
+        '图库': 'simple gallery pro',
+        '画图': 'simple draw pro',
+        '绘图': 'simple draw pro',
+        '任务': 'tasks',
+        '费用': 'pro expense',
+        '食谱': 'broccoli app',
+        '地图': 'osmand',
+        '音乐': 'retro music',
+        '视频播放器': 'vlc',
+        '笔记': 'markor',
     }
-    return APP_NAME_TO_PACKAGE.get(app_name, app_name)
+    return aliases.get(normalized.casefold(), normalized)
 
 
 def launch_app(
@@ -744,6 +742,8 @@ def launch_app(
   Returns:
     The name of the app that is launched.
   """
+
+    app_name = normalize_app_name(app_name)
 
     if app_name in _DEFAULT_URIS:
         _launch_default_app(app_name, env)
@@ -1856,10 +1856,35 @@ def set_root_if_needed(
 
 def uiautomator_dump(env, timeout_sec: Optional[float] = 30) -> str:
     """Issues a uiautomator dump request and returns the UI hierarchy."""
-    dump_args = 'shell uiautomator dump /sdcard/window_dump.xml'
-    issue_generic_request(dump_args, env, timeout_sec=timeout_sec)
-
     read_args = 'shell cat /sdcard/window_dump.xml'
-    response = issue_generic_request(read_args, env, timeout_sec=timeout_sec)
-
-    return response.generic.output.decode('utf-8')
+    last_exc: Exception | None = None
+    dump_commands = (
+        'shell uiautomator dump /sdcard/window_dump.xml',
+        'shell uiautomator dump --compressed /sdcard/window_dump.xml',
+    )
+    for attempt in range(3):
+        for dump_args in dump_commands:
+            try:
+                issue_generic_request(
+                    'shell rm -f /sdcard/window_dump.xml',
+                    env,
+                    timeout_sec=timeout_sec,
+                )
+                issue_generic_request(dump_args, env, timeout_sec=timeout_sec)
+                response = issue_generic_request(read_args, env, timeout_sec=timeout_sec)
+                output = response.generic.output.decode('utf-8')
+                if output.strip():
+                    return output
+            except Exception as exc:  # pylint: disable=broad-exception-caught
+                last_exc = exc
+                logging.warning(
+                    'uiautomator dump attempt %d failed with %s',
+                    attempt + 1,
+                    exc,
+                )
+        time.sleep(0.5 * (attempt + 1))
+    logging.warning(
+        'uiautomator dump failed after retries; returning empty hierarchy. last_error=%s',
+        last_exc,
+    )
+    return '<?xml version="1.0" encoding="UTF-8"?><hierarchy rotation="0"></hierarchy>'

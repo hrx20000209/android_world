@@ -15,6 +15,7 @@
 """Tools for processing and representing accessibility trees."""
 
 import dataclasses
+import json
 from typing import Any, Optional
 import xml.etree.ElementTree as ET
 from android_env.proto.a11y import android_accessibility_forest_pb2
@@ -216,4 +217,78 @@ def xml_dump_to_ui_elements(xml_string: str) -> list[UIElement]:
       process_node(child, is_root=False)
 
   process_node(parsed_hierarchy, is_root=True)
+  return ui_elements
+
+
+def json_dump_to_ui_elements(
+    json_string: str,
+    screen_size: Optional[tuple[int, int]] = None,
+) -> list[UIElement]:
+  """Converts FastA11yProvider JSON output to UIElements."""
+  payload = json.loads(json_string)
+  if not payload.get('ok'):
+    return []
+
+  nodes = payload.get('nodes')
+  if nodes is None:
+    nodes = []
+
+    def collect_tree_nodes(node: dict[str, Any] | None) -> None:
+      if not node:
+        return
+      nodes.append(node)
+      for child in node.get('children') or []:
+        collect_tree_nodes(child)
+
+    for window in payload.get('windows') or []:
+      collect_tree_nodes(window.get('root'))
+
+  ui_elements: list[UIElement] = []
+  for node in nodes:
+    bounds = node.get('bounds')
+    if isinstance(bounds, list) and len(bounds) == 4:
+      bbox_pixels = BoundingBox(
+          int(bounds[0]),
+          int(bounds[2]),
+          int(bounds[1]),
+          int(bounds[3]),
+      )
+      bbox = (
+          _normalize_bounding_box(bbox_pixels, screen_size)
+          if screen_size is not None
+          else bbox_pixels
+      )
+    else:
+      bbox_pixels = None
+      bbox = None
+
+    ui_elements.append(
+        UIElement(
+            text=node.get('text'),
+            content_description=node.get('contentDescription'),
+            class_name=node.get('class'),
+            bbox=bbox,
+            bbox_pixels=bbox_pixels,
+            hint_text=node.get('hint'),
+            is_checked=node.get('checked'),
+            is_checkable=node.get('checkable'),
+            is_clickable=node.get('clickable'),
+            is_editable=node.get('editable'),
+            is_enabled=node.get('enabled'),
+            is_focused=node.get('focused'),
+            is_focusable=node.get('focusable'),
+            is_long_clickable=node.get('longClickable'),
+            is_scrollable=node.get('scrollable'),
+            is_selected=node.get('selected'),
+            is_visible=node.get('visible'),
+            package_name=node.get('package'),
+            resource_name=node.get('resourceId'),
+            resource_id=node.get('resourceId'),
+            metadata={
+                'fast_a11y_id': node.get('id'),
+                'depth': node.get('depth'),
+                'window_index': node.get('windowIndex'),
+            },
+        )
+    )
   return ui_elements

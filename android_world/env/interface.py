@@ -198,6 +198,15 @@ class AsyncEnv(abc.ABC):
 
 def _process_timestep(timestep: dm_env.TimeStep) -> State:
     """Parses timestep observation and returns State."""
+    auxiliaries = {
+        key: timestep.observation.get(key)
+        for key in (
+            android_world_controller.OBSERVATION_KEY_A11Y_LATENCY_SEC,
+            android_world_controller.OBSERVATION_KEY_A11Y_METHOD,
+            android_world_controller.OBSERVATION_KEY_UI_ELEMENT_COUNT,
+        )
+        if key in timestep.observation
+    }
     return State(
         pixels=timestep.observation['pixels'],
         forest=timestep.observation[
@@ -206,7 +215,7 @@ def _process_timestep(timestep: dm_env.TimeStep) -> State:
         ui_elements=timestep.observation[
             android_world_controller.OBSERVATION_KEY_UI_ELEMENTS
         ],
-        auxiliaries={},
+        auxiliaries=auxiliaries,
     )
 
 

@@ -30,7 +30,7 @@ from absl import logging
 from android_world import checkpointer as checkpointer_lib
 from android_world import registry
 from android_world import suite_utils
-from android_world.agents import base_agent, human_agent, infer, m3a, random_agent, seeact, t3a, mm_agent, t3a_profiling, explorer_agent, gelab_agent, gelab_agent_resize, gelab_offline_exploration, explorer_agent_gelab, explorer_agent_gelab_light, explorer_agent_ablation_random, explorer_agent_ablation_back2, explorer_agent_ablation_no_knowledge
+from android_world.agents import base_agent, human_agent, infer, m3a, random_agent, seeact, t3a, mm_agent, t3a_profiling, explorer_agent, gelab_agent, gelab_agent_resize, gelab_offline_exploration, explorer_agent_gelab, explorer_agent_gelab_light, explorer_agent_gelab_bandit, explorer_agent_gelab_effectiveness, explorer_agent_ablation_random, explorer_agent_ablation_back2, explorer_agent_ablation_no_knowledge
 from android_world.env import env_launcher
 from android_world.env import interface
 
@@ -139,10 +139,10 @@ _OUTPUT_PATH = flags.DEFINE_string(
 )
 
 # Agent specific.
-_AGENT_NAME = flags.DEFINE_string('agent_name', 'explore_agent_ablation_no_knowledge', help='Agent name.')
+_AGENT_NAME = flags.DEFINE_string('agent_name', 'explore_agent_gelab', help='Agent name.')
 _IMAGE_DOWNSAMPLE_SCALE = flags.DEFINE_float(
     'image_downsample_scale',
-    2.0,
+    1.0,
     'Downsample divisor for screenshot size before sending to vision models. '
     '1.0 means no downsampling.',
 )
@@ -286,6 +286,26 @@ def _get_agent(
         )
     elif _AGENT_NAME.value == 'explore_agent_gelab':
         agent = explorer_agent_gelab_light.ExplorerElementAgent(
+            env,
+            infer.LlamaCppWrapper(
+                api_url="http://localhost:8081/v1/chat/completions",
+                temperature=0.0,
+                max_tokens=512,
+            ),
+            image_downsample_scale=_IMAGE_DOWNSAMPLE_SCALE.value,
+        )
+    elif _AGENT_NAME.value == 'explore_agent_gelab_bandit':
+        agent = explorer_agent_gelab_bandit.ExplorerElementAgent(
+            env,
+            infer.LlamaCppWrapper(
+                api_url="http://localhost:8081/v1/chat/completions",
+                temperature=0.0,
+                max_tokens=512,
+            ),
+            image_downsample_scale=_IMAGE_DOWNSAMPLE_SCALE.value,
+        )
+    elif _AGENT_NAME.value == 'explore_agent_gelab_effectiveness':
+        agent = explorer_agent_gelab_effectiveness.ExplorerElementAgent(
             env,
             infer.LlamaCppWrapper(
                 api_url="http://localhost:8081/v1/chat/completions",

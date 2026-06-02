@@ -121,6 +121,13 @@ OBSERVATION_KEY_FOREST = 'forest'
 # UI elements are specific nodes extracted from forest. See
 # representation_utils.forest_to_ui_elements for details.
 OBSERVATION_KEY_UI_ELEMENTS = 'ui_elements'
+OBSERVATION_KEY_A11Y_LATENCY_SEC = 'a11y_latency_sec'
+OBSERVATION_KEY_A11Y_METHOD = 'a11y_method'
+OBSERVATION_KEY_UI_ELEMENT_COUNT = 'ui_element_count'
+FAST_A11Y_PROVIDER_AUTHORITY = 'com.androidworld.fasta11y.provider'
+FAST_A11Y_PROVIDER_SERVICE = (
+    'com.androidworld.fasta11y/com.androidworld.fasta11y.FastA11yService'
+)
 
 
 class A11yMethod(enum.Enum):
@@ -131,6 +138,9 @@ class A11yMethod(enum.Enum):
 
     # From `uiautomator dump``.
     UIAUTOMATOR = 'uiautomator'
+
+    # From the lightweight FastA11yProvider app installed by tools/fast_a11y_dumper.
+    FAST_PROVIDER = 'fast_provider'
 
     # No A11y tree retrieval
     NONE = 'none'
@@ -173,6 +183,8 @@ class AndroidWorldController(base_wrapper.BaseWrapper):
         else:
             self._env = env
         self._a11y_method = a11y_method
+        if a11y_method == A11yMethod.FAST_PROVIDER:
+            self._enable_fast_a11y_provider()
 
     @property
     def device_screen_size(self) -> tuple[int, int]:
@@ -234,11 +246,59 @@ class AndroidWorldController(base_wrapper.BaseWrapper):
             return representation_utils.xml_dump_to_ui_elements(
                 adb_utils.uiautomator_dump(self._env)
             )
+        elif self._a11y_method == A11yMethod.FAST_PROVIDER:
+            return representation_utils.json_dump_to_ui_elements(
+                self._fast_a11y_provider_dump(),
+            )
         else:
             return []
 
+    def _enable_fast_a11y_provider(self) -> None:
+        adb_utils.issue_generic_request(
+            ['shell', 'settings', 'put', 'secure', 'accessibility_enabled', '1'],
+            self._env,
+            timeout_sec=10,
+        )
+        response = adb_utils.issue_generic_request(
+            [
+                'shell',
+                'settings',
+                'get',
+                'secure',
+                'enabled_accessibility_services',
+            ],
+            self._env,
+            timeout_sec=10,
+        )
+        enabled = response.generic.output.decode('utf-8', errors='replace').strip()
+        services = [] if enabled in {'', 'null'} else [x for x in enabled.split(':') if x]
+        if FAST_A11Y_PROVIDER_SERVICE not in services:
+            services.append(FAST_A11Y_PROVIDER_SERVICE)
+            adb_utils.issue_generic_request(
+                [
+                    'shell',
+                    'settings',
+                    'put',
+                    'secure',
+                    'enabled_accessibility_services',
+                    ':'.join(services),
+                ],
+                self._env,
+                timeout_sec=10,
+            )
+
+    def _fast_a11y_provider_dump(self) -> str:
+        uri = f'content://{FAST_A11Y_PROVIDER_AUTHORITY}/flat?compact=1'
+        response = adb_utils.issue_generic_request(
+            ['shell', 'content', 'read', '--uri', uri],
+            self._env,
+            timeout_sec=10,
+        )
+        return response.generic.output.decode('utf-8', errors='replace')
+
     def _process_timestep(self, timestep: dm_env.TimeStep) -> dm_env.TimeStep:
         """Adds a11y tree info to the observation."""
+        a11y_start = time.time()
         if self._a11y_method == A11yMethod.A11Y_FORWARDER_APP:
             forest = self.get_a11y_forest()
             ui_elements = representation_utils.forest_to_ui_elements(
@@ -250,6 +310,11 @@ class AndroidWorldController(base_wrapper.BaseWrapper):
             ui_elements = self.get_ui_elements()
         timestep.observation[OBSERVATION_KEY_FOREST] = forest
         timestep.observation[OBSERVATION_KEY_UI_ELEMENTS] = ui_elements
+        timestep.observation[OBSERVATION_KEY_A11Y_LATENCY_SEC] = max(
+            0.0, time.time() - a11y_start
+        )
+        timestep.observation[OBSERVATION_KEY_A11Y_METHOD] = self._a11y_method.value
+        timestep.observation[OBSERVATION_KEY_UI_ELEMENT_COUNT] = len(ui_elements)
         return timestep
 
     def pull_file(
@@ -307,6 +372,7 @@ def get_controller(
         console_port: int = 5554,
         adb_path: str = DEFAULT_ADB_PATH,
         grpc_port: int = 8554,
+        a11y_method: A11yMethod | None = None,
 ) -> AndroidWorldController:
     """Creates a controller by connecting to an existing Android environment."""
 
@@ -325,4 +391,14 @@ def get_controller(
     )
     android_env_instance = loader.load(config)
     logging.info('Setting up AndroidWorldController.')
-    return AndroidWorldController(android_env_instance)
+    if a11y_method is None:
+        method_from_env = os.environ.get('ANDROID_WORLD_A11Y_METHOD', '').strip().lower()
+        if method_from_env in {'uiautomator', 'ui_automator'}:
+            a11y_method = A11yMethod.UIAUTOMATOR
+        elif method_from_env in {'fast_provider', 'fast', 'provider'}:
+            a11y_method = A11yMethod.FAST_PROVIDER
+        elif method_from_env in {'none', 'disabled'}:
+            a11y_method = A11yMethod.NONE
+        else:
+            a11y_method = A11yMethod.A11Y_FORWARDER_APP
+    return AndroidWorldController(android_env_instance, a11y_method=a11y_method)

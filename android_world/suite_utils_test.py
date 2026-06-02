@@ -377,6 +377,66 @@ class SuiteUtilsTest(parameterized.TestCase):
       self.assertEqual(result[constants.EpisodeConstants.IS_SUCCESSFUL], True)
       self.assertEqual(result[constants.EpisodeConstants.AGENT_NAME], 'AnAgent')
 
+  def test_create_failed_result_scores_as_failed_trial(self):
+    result = suite_utils._create_failed_result(
+        'AudioRecorderRecordAudio', 'Record audio.', 'Traceback...', 5.7
+    )
+
+    self.assertEqual(result[constants.EpisodeConstants.IS_SUCCESSFUL], 0.0)
+    self.assertEqual(result[constants.EpisodeConstants.EPISODE_LENGTH], 0)
+    self.assertEqual(
+        result[constants.EpisodeConstants.AUX_DATA]['mean_step_latency_sec'],
+        0.0,
+    )
+    self.assertIsNotNone(result[constants.EpisodeConstants.EXCEPTION_INFO])
+
+  def test_process_episodes_counts_exception_trials_as_failures(self):
+    task_name = 'AudioRecorderRecordAudio'
+    failed_episode = {
+        constants.EpisodeConstants.GOAL: 'Record audio.',
+        constants.EpisodeConstants.TASK_TEMPLATE: task_name,
+        constants.EpisodeConstants.EPISODE_DATA: np.nan,
+        constants.EpisodeConstants.IS_SUCCESSFUL: np.nan,
+        constants.EpisodeConstants.EPISODE_LENGTH: np.nan,
+        constants.EpisodeConstants.RUN_TIME: 5.7,
+        constants.EpisodeConstants.EXCEPTION_INFO: 'Traceback...',
+        constants.EpisodeConstants.AUX_DATA: None,
+    }
+
+    result = suite_utils.process_episodes([failed_episode])
+    row = result.loc[task_name]
+
+    self.assertEqual(row['num_complete_trials'], 0)
+    self.assertEqual(row['num_fail_trials'], 1)
+    self.assertEqual(row['mean_success_rate'], 0.0)
+    self.assertEqual(row['mean_episode_length'], 0.0)
+    self.assertEqual(row['mean_step_latency_s'], 0.0)
+    self.assertFalse(np.isnan(row['mean_success_rate']))
+
+  def test_process_episodes_excludes_exceptions_from_latency_means(self):
+    task_name = 'AudioRecorderRecordAudio'
+    completed_episode = {
+        constants.EpisodeConstants.GOAL: 'Record audio.',
+        constants.EpisodeConstants.TASK_TEMPLATE: task_name,
+        constants.EpisodeConstants.IS_SUCCESSFUL: 1.0,
+        constants.EpisodeConstants.EPISODE_LENGTH: 8,
+        constants.EpisodeConstants.RUN_TIME: 20.0,
+        constants.EpisodeConstants.EXCEPTION_INFO: None,
+        constants.EpisodeConstants.AUX_DATA: {'mean_step_latency_sec': 2.5},
+    }
+    failed_episode = suite_utils._create_failed_result(
+        task_name, 'Record audio.', 'Traceback...', 4.0
+    )
+
+    result = suite_utils.process_episodes([completed_episode, failed_episode])
+    row = result.loc[task_name]
+
+    self.assertEqual(row['num_complete_trials'], 1)
+    self.assertEqual(row['num_fail_trials'], 1)
+    self.assertEqual(row['mean_success_rate'], 0.5)
+    self.assertEqual(row['mean_episode_length'], 8.0)
+    self.assertEqual(row['mean_step_latency_s'], 2.5)
+
 
 class RunTaskSuiteTest(absltest.TestCase):
 

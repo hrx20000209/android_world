@@ -2,7 +2,7 @@
 *.pyc
 
 # Byte-compiled
-_pycache__/
+__pycache__/
 .cache/
 .claude/
 
@@ -13,8 +13,21 @@ build/
 dist/
 poetry.lock
 explore_k1_masks/
+mobile_explorer_20task_outputs/
 explorer_traces/
 output/
+offline_exploration/
+raw_screenshot.png
+som_screenshot.png
+Task\ List\ _\ AndroidWorld.html
+Task\ List\ _\ AndroidWorld_files/
+exploration_evidence_cache.json
+
+# Experiment outputs: ignore all result trees by default.
+results/**
+!results/git_upload/
+!results/git_upload/**
+!results/git_upload/.gitkeep
 
 # Tests
 .pytest_cache/

@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import base64
 import io
+import hashlib
 import json
 import os
 import re
@@ -289,7 +290,9 @@ def _normalize_tool_call(tool_obj: Any) -> dict[str, Any]:
 def _safe_task_name(goal: str, max_len: int = 72) -> str:
     value = re.sub(r"[^a-zA-Z0-9._-]+", "_", str(goal or "").strip())
     value = re.sub(r"_+", "_", value).strip("._")
-    return (value or "task")[:max_len]
+    digest = hashlib.blake2b(str(goal or "").encode("utf-8", errors="ignore"), digest_size=4).hexdigest()
+    prefix_len = max(8, int(max_len) - len(digest) - 1)
+    return f"{(value or 'task')[:prefix_len]}_{digest}"
 
 
 def _image_to_data_url(image: Image.Image) -> str:

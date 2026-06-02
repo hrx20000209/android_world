@@ -58,10 +58,10 @@ RecipeDeleteMultipleRecipesWithConstraint                54                 1.00
 RecipeDeleteMultipleRecipesWithNoise                     55                 1.00               0.00                16.00            95.60                 5.67             0.00
 RecipeDeleteSingleRecipe                                 56                 1.00               1.00                 8.00            56.80                 6.50             0.00
 RecipeDeleteSingleWithRecipeWithNoise                    57                 1.00               1.00                16.00            90.40                 5.36             0.00
-RetroCreatePlaylist                                      58                 0.00                NaN                  NaN             5.50                  NaN             2.00
-RetroPlayingQueue                                        59                 0.00                NaN                  NaN             5.00                  NaN             2.00
-RetroPlaylistDuration                                    60                 0.00                NaN                  NaN             3.80                  NaN             2.00
-RetroSavePlaylist                                        61                 0.00                NaN                  NaN             5.00                  NaN             2.00
+RetroCreatePlaylist                                      58                 0.00               0.00                16.00             5.50                  NaN             2.00
+RetroPlayingQueue                                        59                 0.00               0.00                16.00             5.00                  NaN             2.00
+RetroPlaylistDuration                                    60                 0.00               0.00                16.00             3.80                  NaN             2.00
+RetroSavePlaylist                                        61                 0.00               0.00                16.00             5.00                  NaN             2.00
 SaveCopyOfReceiptTaskEval                                62                 1.00               1.00                10.00            63.80                 6.06             0.00
 SimpleCalendarAddOneEvent                                63                 1.00               0.00                16.00            85.90                 5.05             0.00
 SimpleCalendarAddOneEventInTwoWeeks                      64                 1.00               0.00                16.00            85.90                 5.10             0.00
