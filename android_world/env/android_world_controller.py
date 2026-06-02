@@ -247,9 +247,18 @@ class AndroidWorldController(base_wrapper.BaseWrapper):
                 adb_utils.uiautomator_dump(self._env)
             )
         elif self._a11y_method == A11yMethod.FAST_PROVIDER:
-            return representation_utils.json_dump_to_ui_elements(
-                self._fast_a11y_provider_dump(),
-            )
+            try:
+                return representation_utils.json_dump_to_ui_elements(
+                    self._fast_a11y_provider_dump(),
+                )
+            except Exception as exc:  # pylint: disable=broad-exception-caught
+                logging.warning(
+                    'Fast a11y provider failed after retry; falling back to uiautomator dump: %s',
+                    exc,
+                )
+                return representation_utils.xml_dump_to_ui_elements(
+                    adb_utils.uiautomator_dump(self._env)
+                )
         else:
             return []
 
@@ -289,12 +298,27 @@ class AndroidWorldController(base_wrapper.BaseWrapper):
 
     def _fast_a11y_provider_dump(self) -> str:
         uri = f'content://{FAST_A11Y_PROVIDER_AUTHORITY}/flat?compact=1'
-        response = adb_utils.issue_generic_request(
-            ['shell', 'content', 'read', '--uri', uri],
-            self._env,
-            timeout_sec=10,
-        )
-        return response.generic.output.decode('utf-8', errors='replace')
+        last_error: Exception | None = None
+        for attempt in range(2):
+            if attempt > 0:
+                try:
+                    self._enable_fast_a11y_provider()
+                    time.sleep(0.5)
+                except Exception as exc:  # pylint: disable=broad-exception-caught
+                    last_error = exc
+            try:
+                response = adb_utils.issue_generic_request(
+                    ['shell', 'content', 'read', '--uri', uri],
+                    self._env,
+                    timeout_sec=3,
+                )
+                output = response.generic.output.decode('utf-8', errors='replace')
+                if '"ok":true' in output:
+                    return output
+                last_error = RuntimeError(output[:500])
+            except Exception as exc:  # pylint: disable=broad-exception-caught
+                last_error = exc
+        raise RuntimeError(f'fast_a11y_provider_unavailable: {last_error}')
 
     def _process_timestep(self, timestep: dm_env.TimeStep) -> dm_env.TimeStep:
         """Adds a11y tree info to the observation."""

@@ -123,17 +123,25 @@ def _clean_text(value: Any) -> str:
 
 
 def _to_user_text(goal: str, history: str, hint: str) -> str:
+    decision_constraints = (
+        "Decision constraints:\n"
+        "- Do not choose COMPLETE, ANSWER, or task_complete unless the current screen visibly proves the requested final state.\n"
+        "- For file delete or file move tasks, do not complete immediately after a destructive dialog or one list observation; first verify the folder/path and the exact source absence or destination presence on the current screen.\n"
+        "- If exploration context conflicts with the current screen, ignore exploration context and act only on the current screen.\n\n"
+    )
     if hint:
         return (
             f"Task:\n{goal}\n\n"
             f"History actions:\n{history or 'None yet.'}\n\n"
             f"Exploration context:\n{hint}\n\n"
+            f"{decision_constraints}"
             "Current screenshot is attached below.\n"
             "Choose the next single action."
         )
     return (
         f"Task:\n{goal}\n\n"
         f"History actions:\n{history or 'None yet.'}\n\n"
+        f"{decision_constraints}"
         "Current screenshot is attached below.\n"
         "Choose the next single action."
     )
@@ -1337,6 +1345,35 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         rollback_verified = 1.0 if bool(rollback_info.get("success")) else 0.0
         target_or_answer = 1.0 if bool(obs.get("target_visible") or obs.get("answer_complete") or obs.get("slot_complete")) else 0.0
         score_margin = self._score_margin_normalized(score_components)
+        operator = _clean_text(obs.get("operator") or score_components.get("operator"))
+        evidence_type = _clean_text(obs.get("evidence_type") or obs.get("boundary_type"))
+        safe_action_boundary_operators = {
+            "SearchPeek",
+            "FilterPeek",
+            "DetailPeek",
+            "StatsPeek",
+            "ListInspect",
+            "NavigationPeek",
+            "FormSchema",
+        }
+        safe_action_boundary = (
+            rollback_verified >= 1.0
+            and int(obs.get("depth_reached") or 0) >= 1
+            and operator in safe_action_boundary_operators
+            and evidence_type
+            in {
+                "ACTION_HINT",
+                "SHORTCUT_BOUNDARY",
+                "TARGET_BOUNDARY",
+                "CHOICE_BOUNDARY",
+                "SCHEMA_BOUNDARY",
+                "ANSWER_BOUNDARY",
+            }
+        )
+        if safe_action_boundary:
+            slot_coverage = max(slot_coverage, 0.65)
+            target_or_answer = max(target_or_answer, 0.65)
+            score_margin = max(score_margin, 0.50)
         confidence = (
             0.30 * state_match
             + 0.20 * slot_coverage
@@ -1370,7 +1407,24 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             return "low_confidence"
         if evidence_type == "ANSWER_HINT" and not bool(obs.get("answer_complete") or obs.get("slot_complete")):
             return "missing_slot"
-        if evidence_type == "ACTION_HINT" and not bool(obs.get("target_visible") or int(obs.get("depth_reached") or 0) >= 2):
+        operator = _clean_text(candidate.get("operator") or obs.get("operator"))
+        safe_action_boundary_operators = {
+            "SearchPeek",
+            "FilterPeek",
+            "DetailPeek",
+            "StatsPeek",
+            "ListInspect",
+            "NavigationPeek",
+            "FormSchema",
+        }
+        safe_action_boundary = (
+            bool(rollback_info.get("success"))
+            and int(obs.get("depth_reached") or 0) >= 1
+            and operator in safe_action_boundary_operators
+        )
+        if evidence_type == "ACTION_HINT" and not bool(
+            obs.get("target_visible") or int(obs.get("depth_reached") or 0) >= 2 or safe_action_boundary
+        ):
             return "not_visible_target"
         if self._is_transaction_unsafe_candidate(candidate) and evidence_type != "RISK_HINT":
             return "unsafe_action"
@@ -5360,6 +5414,11 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             "replay_failures": [],
             "replay_anchor": {},
             "post_replay_back_stop_reason": "",
+            "post_replay_back_presses": 0,
+            "home_replay_action_limit_removed": True,
+            "home_replay_timeout_sec": float(
+                max(2.0, _env_float("ANDROID_WORLD_LIGHT_EXPLORE_HOME_REPLAY_TIMEOUT_SEC", 30.0))
+            ),
             "profile_events": [],
         }
 
@@ -5489,15 +5548,30 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             final_activity = self._normalize_activity_name(self._foreground_activity_name())
             final_pkg = final_activity.split("/", 1)[0] if final_activity else ""
             if root_pkg and final_pkg and root_pkg == final_pkg:
-                for i in range(back_limit):
+                post_replay_deadline = time.time() + float(result["home_replay_timeout_sec"])
+                post_replay_seen: dict[tuple[str, int], int] = {}
+                i = 0
+                while True:
+                    if time.time() >= post_replay_deadline:
+                        result["post_replay_back_stop_reason"] = "post_replay_back_timeout"
+                        break
                     curr_activity = self._normalize_activity_name(self._foreground_activity_name())
                     curr_pkg = curr_activity.split("/", 1)[0] if curr_activity else ""
                     if curr_pkg != root_pkg or self._is_launcher_activity(curr_activity):
                         result["post_replay_back_stop_reason"] = "left_root_package_before_back"
                         break
+                    try:
+                        final_hash_before_back = int(self._state_hash(final_state))
+                    except Exception:  # pylint: disable=broad-exception-caught
+                        final_hash_before_back = -1
+                    state_key = (curr_activity, final_hash_before_back)
+                    post_replay_seen[state_key] = post_replay_seen.get(state_key, 0) + 1
+                    if post_replay_seen[state_key] >= 2:
+                        result["post_replay_back_stop_reason"] = "post_replay_back_stalled_no_state_change"
+                        break
                     print(
                         f"[ROLLBACK {_now_hms()}] step: {step_idx + 1} "
-                        f"rollback_post_replay_back#{i + 1}/{back_limit} matched={matched_by}"
+                        f"rollback_post_replay_back#{i + 1} matched={matched_by}"
                     )
                     post_back_start = time.time()
                     self._execute_probe_action(json_action.JSONAction(action_type=json_action.NAVIGATE_BACK))
@@ -5511,6 +5585,7 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                     result["profile_events"].append(back_event)
                     self._append_latency_profile_event(getattr(self, "_current_goal_for_depth", ""), back_event)
                     result["back_presses"] += 1
+                    result["post_replay_back_presses"] += 1
                     verify_start = time.time()
                     same, matched_by, final_state = _verify_root()
                     verify_event = {
@@ -5574,10 +5649,11 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                                     {"action_type": "recover_root_app", "error": _clean_text(exc)}
                                 )
                         break
+                    i += 1
         result["success"] = bool(same)
         result["matched_by"] = matched_by
         result["mode"] = "home_replay" if same else "home_replay_failed"
-        if same and result.get("home_attempted") and int(result.get("back_presses") or 0) > back_limit:
+        if same and result.get("home_attempted") and int(result.get("post_replay_back_presses") or 0) > 0:
             result["mode"] = "home_replay_backtrack"
         result["latency_ms"] = float(max(0.0, time.time() - rollback_start) * 1000.0)
         if not same:
@@ -6782,6 +6858,33 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         exact = self._upper_bound_exact_entity_match_score(item, observed, goal)
         if exact >= 1.0:
             return 1.0
+        candidate = item.get("next_candidate") if isinstance(item.get("next_candidate"), dict) else {}
+        operator = _clean_text(item.get("operator") or candidate.get("operator"))
+        safe_action_boundary_operators = {
+            "SearchPeek",
+            "FilterPeek",
+            "DetailPeek",
+            "StatsPeek",
+            "ListInspect",
+            "NavigationPeek",
+            "FormSchema",
+        }
+        try:
+            depth_reached = int(item.get("depth_reached") or item.get("evidence_depth") or 0)
+        except (TypeError, ValueError):
+            depth_reached = 0
+        if evidence_type == "ACTION_HINT":
+            if self._is_transaction_unsafe_candidate(candidate):
+                return 0.0
+            if bool(item.get("rollback_verified")) and depth_reached >= 1 and operator in safe_action_boundary_operators:
+                return 0.80
+            if float(item.get("evidence_gain") or 0.0) > 0.0 and operator in safe_action_boundary_operators:
+                return 0.60
+        if evidence_type == "SCHEMA_HINT":
+            if bool(item.get("rollback_verified")) and operator in {"SearchPeek", "FilterPeek", "FormSchema"}:
+                return 0.65
+        if evidence_type == "RISK_HINT":
+            return 0.60
         if float(item.get("evidence_gain") or 0.0) > 0.0:
             return 0.5 if exact >= 1.0 else 0.0
         return 0.0
@@ -6878,6 +6981,11 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                 summary_all_debug=bool(self.light_explore_summary_all_debug),
             )
             rendered = self._upper_bound_render_evidence(item, evidence_type, candidate, observed, goal)
+            required_slot_or_target_score = 1.0
+            if evidence_type == "ACTION_HINT":
+                required_slot_or_target_score = 0.60
+            elif evidence_type in {"SCHEMA_HINT", "RISK_HINT"}:
+                required_slot_or_target_score = 0.60
             reason = ""
             if evidence_type == "NONE":
                 reason = "no_supported_evidence_type"
@@ -6887,14 +6995,18 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                 reason = "rollback_not_verified"
             elif state_match_score < 0.50:
                 reason = "state_not_aligned"
-            elif slot_or_target_score < 1.0:
-                reason = "no_exact_target_or_entity_match"
+            elif evidence_type == "ACTION_HINT" and self._is_transaction_unsafe_candidate(candidate):
+                reason = "unsafe_action"
+            elif slot_or_target_score < required_slot_or_target_score:
+                reason = (
+                    "safe_action_boundary_not_supported"
+                    if evidence_type == "ACTION_HINT"
+                    else "no_exact_target_or_entity_match"
+                )
             elif self._upper_bound_observed_noise_only(observed):
                 reason = "system_or_status_bar_only"
             elif confidence < threshold:
                 reason = "low_confidence"
-            elif evidence_type == "ACTION_HINT" and self._is_transaction_unsafe_candidate(candidate):
-                reason = "unsafe_action"
             if reason:
                 rejected.append(
                     {

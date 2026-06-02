@@ -227,9 +227,31 @@ def _materialize_outputs(variant_root: Path, max_steps: int) -> Path:
 
 
 def _load_baseline(inventory_path: Path | None, explicit_path: str) -> tuple[Path | None, list[dict[str, Any]], str]:
+    def load_rows(root: Path) -> list[dict[str, Any]]:
+        direct = [dict(r) for r in _read_csv(root / "per_task_results.csv")]
+        if direct:
+            return direct
+        summary = _read_json(root / "report" / "summary.json")
+        rows = ((summary.get("episodes") or {}).get("task_episode_rows") or [])
+        if isinstance(rows, list) and rows:
+            return [
+                {
+                    "task": _task_name(r),
+                    "episode_length": r.get("episode_length"),
+                    "success": r.get("success"),
+                    "exception": r.get("exception"),
+                }
+                for r in rows
+                if isinstance(r, dict) and _task_name(r)
+            ]
+        latest = _latest_run(root)
+        if latest:
+            return load_rows(latest)
+        return []
+
     if explicit_path:
         root = Path(explicit_path).expanduser().resolve()
-        return root, [dict(r) for r in _read_csv(root / "per_task_results.csv")], "explicit"
+        return root, load_rows(root), "explicit"
     if not inventory_path or not inventory_path.exists():
         return None, [], "none"
     inv = _read_json(inventory_path)
@@ -237,7 +259,7 @@ def _load_baseline(inventory_path: Path | None, explicit_path: str) -> tuple[Pat
         item = inv.get(key)
         if isinstance(item, dict) and item.get("path"):
             root = Path(str(item["path"])).expanduser().resolve()
-            rows = [dict(r) for r in _read_csv(root / "per_task_results.csv")]
+            rows = load_rows(root)
             if rows:
                 return root, rows, key
     return None, [], "none"

@@ -168,8 +168,10 @@ def create_suite(
         suite[name] = current
     suite = _filter_tasks(suite, task_registry, tasks)
 
-    # Sort suite alphabetically by task name.
-    return Suite(sorted(suite.items()))
+    # Preserve insertion order. When --tasks is explicit, _filter_tasks builds
+    # the suite in that requested order; sorting here would silently undo
+    # staged experiment schedules such as a frozen 30-task prefix.
+    return Suite(suite.items())
 
 
 def _suggest_keyword(
@@ -213,10 +215,11 @@ def _filter_tasks(
                 + _suggest_keyword(name, list(task_registry.keys()))
             )
 
-    # Filter.
-    for name, instances in suite.items():
-        if name in tasks:
-            subset[name] = instances
+    # Filter in the explicit order requested by --tasks. This matters for
+    # reproducible staged experiments, e.g. running a frozen 30-task prefix
+    # before the remaining AndroidWorld tasks.
+    for name in tasks:
+        subset[name] = suite[name]
     return subset
 
 

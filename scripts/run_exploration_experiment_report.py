@@ -1745,15 +1745,15 @@ def _write_report(
     ]
     for key in ("exploration_status", "rollback", "rates", "tasks"):
         if key in charts:
-            lines.append(f"![{key}]({_markdown_image_path(charts[key], path)})")
+            lines.append(f"![{key}]({_markdown_image_path(charts[key], report_path)})")
             lines.append("")
     for key in ("episode_success", "episode_steps_avg", "episode_steps_by_task"):
         if key in charts:
-            lines.append(f"![{key}]({_markdown_image_path(charts[key], path)})")
+            lines.append(f"![{key}]({_markdown_image_path(charts[key], report_path)})")
             lines.append("")
     for key in ("baseline_success", "baseline_steps", "baseline_step_delta"):
         if key in charts:
-            lines.append(f"![{key}]({_markdown_image_path(charts[key], path)})")
+            lines.append(f"![{key}]({_markdown_image_path(charts[key], report_path)})")
             lines.append("")
 
     baseline = summary.get("baseline_compare") if isinstance(summary.get("baseline_compare"), dict) else {}
@@ -2099,7 +2099,11 @@ def _run_androidworld(args: argparse.Namespace, run_dir: Path, trace_root: Path,
         for line in process.stdout:
             print(line, end="")
             log_file.write(line)
-        return process.wait()
+        exit_code = process.wait()
+        log_file.write(f"\nANDROIDWORLD_EXIT_CODE={exit_code}\n")
+        log_file.flush()
+        print(f"[experiment] androidworld_exit_code={exit_code}", flush=True)
+        return exit_code
 
 
 def parse_args() -> argparse.Namespace:
