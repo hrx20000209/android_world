@@ -1970,6 +1970,9 @@ def _run_androidworld(args: argparse.Namespace, run_dir: Path, trace_root: Path,
     env = os.environ.copy()
     env["PYTHONIOENCODING"] = "utf-8"
     env["PYTHONUTF8"] = "1"
+    if int(args.max_n_steps) > 0:
+        env["ANDROID_WORLD_MAX_STEPS"] = str(int(args.max_n_steps))
+        env["ANDROID_WORLD_MAX_N_STEPS"] = str(int(args.max_n_steps))
     env["ANDROID_WORLD_EXPLORATION_TRACE_ROOT"] = str(trace_root)
     env["ANDROID_WORLD_LIGHT_EXPLORE_ENABLE"] = "1" if args.explore_enable else "0"
     env["ANDROID_WORLD_LIGHT_EXPLORE_MAX_RUNS"] = str(args.explore_max_runs)
@@ -2072,12 +2075,14 @@ def _run_androidworld(args: argparse.Namespace, run_dir: Path, trace_root: Path,
             k
             for k in env
             if k.startswith("ANDROID_WORLD_LIGHT_EXPLORE_")
+            or k.startswith("ANDROID_WORLD_LB_MCTS_")
             or k.startswith("ANDROID_WORLD_BANDIT_")
             or k.startswith("ANDROID_WORLD_T2_")
             or k == "ANDROID_WORLD_EXPLORATION_TIMING"
             or k == "ANDROID_WORLD_DECOUPLED_EXPLORATION"
             or k == "ANDROID_WORLD_TRACE_SCREENSHOT_MODE"
             or k == "ANDROID_WORLD_LATENCY_PROFILE"
+            or k in {"ANDROID_WORLD_MAX_STEPS", "ANDROID_WORLD_MAX_N_STEPS"}
         ):
             log_file.write(f"{key}={env[key]}\n")
         log_file.write("\n")

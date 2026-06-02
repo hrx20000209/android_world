@@ -486,6 +486,31 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             0.0,
             _env_float("ANDROID_WORLD_LIGHT_EXPLORE_MIN_SECONDARY_SCORE", 0.10),
         )
+        self.light_explore_lb_mcts = bool(
+            _env_bool("ANDROID_WORLD_LIGHT_EXPLORE_LB_MCTS", False)
+            or _clean_text(getattr(self, "light_explore_variant", "")).upper().startswith("LB_MCTS")
+        )
+        self.lb_mcts_c_puct = _env_float("ANDROID_WORLD_LB_MCTS_C_PUCT", 1.4)
+        self.lb_mcts_lambda_risk = _env_float("ANDROID_WORLD_LB_MCTS_LAMBDA_RISK", 1.0)
+        self.lb_mcts_lambda_latency = _env_float("ANDROID_WORLD_LB_MCTS_LAMBDA_LATENCY", 0.5)
+        self.lb_mcts_min_budget_ms = _env_float("ANDROID_WORLD_LB_MCTS_MIN_BUDGET_MS", 3000.0)
+        self.lb_mcts_max_budget_ms = _env_float("ANDROID_WORLD_LB_MCTS_MAX_BUDGET_MS", 12000.0)
+        self.lb_mcts_slack_ratio = _env_float("ANDROID_WORLD_LB_MCTS_SLACK_RATIO", 0.8)
+        self.lb_mcts_max_rollouts_per_step = max(
+            1,
+            _env_int("ANDROID_WORLD_LB_MCTS_MAX_ROLLOUTS_PER_STEP", 12),
+        )
+        self.lb_mcts_min_depth2_attempts = max(
+            0,
+            _env_int("ANDROID_WORLD_LB_MCTS_MIN_DEPTH2_ATTEMPTS", 1),
+        )
+        self.lb_mcts_default_reasoning_latency_ms = _env_float(
+            "ANDROID_WORLD_LB_MCTS_DEFAULT_REASONING_LATENCY_MS",
+            10000.0,
+        )
+        self._lb_mcts_reasoning_ewma_ms = float(self.lb_mcts_default_reasoning_latency_ms)
+        self._lb_mcts_selection_step_records: dict[int, list[dict[str, Any]]] = {}
+        self._lb_mcts_latency_budget_records: dict[int, dict[str, Any]] = {}
         if self.light_explore_diagnostic_full:
             self.light_explore_planned_only = False
             self.light_explore_fallback_safe_candidates = True
@@ -719,10 +744,22 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                 )
             ),
             "parallel_with_vlm": bool(self.light_explore_parallel_vlm),
-            "search_strategy_name": "Operator-Stratified Best-First Exploration",
-            "root_level_strategy": "stratified breadth-first across operator groups",
-            "branch_continuation": "gated depth-first continuation to depth 2",
-            "ranking": "best-first score",
+            "search_strategy_name": (
+                "Latency-Bounded Task-Aware MCTS Exploration"
+                if bool(getattr(self, "light_explore_lb_mcts", False))
+                else "Operator-Stratified Best-First Exploration"
+            ),
+            "root_level_strategy": (
+                "latency-bounded task-aware UCT over rollback-safe UI actions"
+                if bool(getattr(self, "light_explore_lb_mcts", False))
+                else "stratified breadth-first across operator groups"
+            ),
+            "branch_continuation": "depth-prioritized gated continuation to depth 2",
+            "ranking": (
+                "UCT = Q + c_puct*P*sqrt(log(N_parent+1)/(N_child+1)) - lambda_risk*RollbackRisk - lambda_latency*LatencyCostNorm"
+                if bool(getattr(self, "light_explore_lb_mcts", False))
+                else "best-first score"
+            ),
             "candidate_score_formula": (
                 "PatternPrior + MissingSlotGain + TaskEntityMatch - RiskPenalty - RollbackRisk"
                 if getattr(self, "light_explore_pattern_aware_operator_best_first", False)
@@ -739,6 +776,16 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             "pattern_aware_operator_best_first": bool(
                 getattr(self, "light_explore_pattern_aware_operator_best_first", False)
             ),
+            "lb_mcts": bool(getattr(self, "light_explore_lb_mcts", False)),
+            "lb_mcts_paper_name": "Latency-Bounded Task-Aware MCTS Exploration with Pattern-Aware Speculative UI Probing",
+            "lb_mcts_chinese_name": "时延约束的任务感知 MCTS 探索",
+            "lb_mcts_c_puct": float(getattr(self, "lb_mcts_c_puct", 1.4)),
+            "lb_mcts_lambda_risk": float(getattr(self, "lb_mcts_lambda_risk", 1.0)),
+            "lb_mcts_lambda_latency": float(getattr(self, "lb_mcts_lambda_latency", 0.5)),
+            "lb_mcts_min_budget_ms": float(getattr(self, "lb_mcts_min_budget_ms", 3000.0)),
+            "lb_mcts_max_budget_ms": float(getattr(self, "lb_mcts_max_budget_ms", 12000.0)),
+            "lb_mcts_slack_ratio": float(getattr(self, "lb_mcts_slack_ratio", 0.8)),
+            "max_step_limit": int(os.environ.get("ANDROID_WORLD_MAX_STEPS") or os.environ.get("ANDROID_WORLD_MAX_N_STEPS") or 0),
             "branch_budget": int(self.light_explore_branch_budget),
             "max_depth": int(self.light_explore_branch_depth),
             "min_attempts_per_step": int(getattr(self, "light_explore_min_attempts_per_step", 0)),
@@ -1259,9 +1306,9 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             if task_mode == "EVENT_QUERY" and any(token in label for token in ("new event", "add event", "create event")):
                 return "AVOID_HINT", 0.70
         if task_mode in {"FORM_CREATE_EDIT"}:
-            return "SCHEMA_HINT", 0.75
+            return "SCHEMA_HINT", 0.65
         if int(obs.get("depth_reached") or 0) >= 2 or bool(obs.get("target_visible")) or str(obs.get("boundary_type") or "").endswith("BOUNDARY"):
-            return "ACTION_HINT", 0.85
+            return "ACTION_HINT", 0.70
         return "NONE", 1.0
 
     @staticmethod
@@ -1537,6 +1584,50 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             d1 = next((step for step in steps if int(step.get("depth") or 0) == 1), {})
             d2 = next((step for step in steps if int(step.get("depth") or 0) == 2), {})
             rb = obs.get("rollback") if isinstance(obs.get("rollback"), dict) else {}
+            if bool(getattr(self, "light_explore_lb_mcts", False)) and self.light_explore_search_strategy == "mcts":
+                cand_for_reward = {}
+                if d2 and isinstance(d2.get("candidate"), dict):
+                    cand_for_reward = d2.get("candidate") or {}
+                elif d1 and isinstance(d1.get("candidate"), dict):
+                    cand_for_reward = d1.get("candidate") or {}
+                components = cand_for_reward.get("score_components") if isinstance(cand_for_reward.get("score_components"), dict) else {}
+                latency_cost_norm = float(cand_for_reward.get("mcts_latency_cost_norm") or 0.0)
+                reward_components = {
+                    "AnswerBoundary": 1.0 if _clean_text(obs.get("evidence_type")) == "ANSWER_HINT" else 0.0,
+                    "ActionBoundary": 1.0 if _clean_text(obs.get("evidence_type")) == "ACTION_HINT" else 0.0,
+                    "TargetEntityFound": float(components.get("TaskEntityMatch") or 0.0),
+                    "SlotCompletionGain": float(obs.get("slot_coverage") or components.get("MissingSlotGain") or 0.0),
+                    "UsefulSchema": 1.0 if _clean_text(obs.get("evidence_type")) == "SCHEMA_HINT" else 0.0,
+                    "HardNegative": 1.0 if _clean_text(obs.get("evidence_type")) == "AVOID_HINT" else 0.0,
+                    "RiskViolation": 1.0 if self._is_transaction_unsafe_candidate(cand_for_reward) else 0.0,
+                    "RollbackFailure": 0.0 if bool(rb.get("success", True)) else 1.0,
+                    "LowQualityObservation": 1.0 if not obs.get("observed_elements") else 0.0,
+                    "LatencyCostNorm": latency_cost_norm,
+                }
+                reward_value = (
+                    3.0 * reward_components["AnswerBoundary"]
+                    + 2.0 * reward_components["ActionBoundary"]
+                    + 2.0 * reward_components["TargetEntityFound"]
+                    + 1.5 * reward_components["SlotCompletionGain"]
+                    + 1.0 * reward_components["UsefulSchema"]
+                    + 1.0 * reward_components["HardNegative"]
+                    - 2.0 * reward_components["RiskViolation"]
+                    - 2.0 * reward_components["RollbackFailure"]
+                    - 1.0 * reward_components["LowQualityObservation"]
+                    - 0.5 * reward_components["LatencyCostNorm"]
+                )
+                self._append_diagnostic_jsonl(
+                    goal,
+                    "mcts_reward_records.jsonl",
+                    {
+                        "record_type": "MCTSRewardRecord",
+                        "task_id": _clean_text(goal)[:200],
+                        "step": trace.get("step"),
+                        "branch_id": obs.get("branch_id"),
+                        **reward_components,
+                        "reward": float(reward_value),
+                    },
+                )
             self._append_diagnostic_jsonl(
                 goal,
                 "exploration_branch_trace.jsonl",
@@ -2684,6 +2775,381 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             risk_penalty = 1.5 if self.light_explore_safe_mcts else 1.0
             return q_value + 1.4 * math.sqrt(math.log(parent_visits + 1.0) / (visits + 1.0)) - risk_penalty * risk_value
         return base + 0.5 * estimated_gain - risk
+
+    def _lb_mcts_operator_name(self, candidate: dict[str, Any], goal: str) -> str:
+        operator, _ = self._candidate_operator(candidate, goal)
+        label = _clean_text(candidate.get("label") or candidate.get("merged")).lower()
+        action_kind = _clean_text(candidate.get("action_kind")).lower()
+        if operator == "RiskBoundary":
+            return "RiskWarning"
+        if self._is_transaction_unsafe_candidate(candidate):
+            return "AvoidPath"
+        if action_kind in {"type", json_action.INPUT_TEXT}:
+            return "SafeSearchInput"
+        if operator == "SearchPeek":
+            return "SearchPeek"
+        if operator == "FilterPeek":
+            return "FilterInspect"
+        if operator == "StatsPeek":
+            return "StatsInspect"
+        if operator == "DetailPeek":
+            return "DetailInspect"
+        if operator == "FormSchema":
+            return "SchemaInspect"
+        if operator == "NavigationPeek":
+            return "NavigationPeek"
+        if operator == "ListInspect":
+            if any(entity and entity in label for entity in self._task_entities(goal)):
+                return "ClickExactResult"
+            return "DetailInspect"
+        return "PassiveInspect" if candidate.get("passive_only") else "NavigationPeek"
+
+    def _lb_mcts_speculation_level(self, candidate: dict[str, Any], goal: str) -> str:
+        operator_name = self._lb_mcts_operator_name(candidate, goal)
+        if operator_name in {"RiskWarning", "AvoidPath"} or self._is_transaction_unsafe_candidate(candidate):
+            return "D"
+        action_kind = _clean_text(candidate.get("action_kind")).lower()
+        if candidate.get("passive_only") or operator_name == "PassiveInspect":
+            return "A"
+        if action_kind in {"type", json_action.INPUT_TEXT}:
+            return "C"
+        return "B"
+
+    def _lb_mcts_estimated_latency_ms(self, candidate: dict[str, Any], goal: str) -> float:
+        operator_name = self._lb_mcts_operator_name(candidate, goal)
+        base = {
+            "PassiveInspect": 250.0,
+            "RiskWarning": 250.0,
+            "AvoidPath": 250.0,
+            "SearchPeek": 1300.0,
+            "SafeSearchInput": 2200.0,
+            "ClickExactResult": 1600.0,
+            "DetailInspect": 1600.0,
+            "StatsInspect": 1800.0,
+            "FilterInspect": 1600.0,
+            "SchemaInspect": 1200.0,
+            "NavigationPeek": 1400.0,
+        }.get(operator_name, 1400.0)
+        components = candidate.get("score_components") if isinstance(candidate.get("score_components"), dict) else {}
+        rollback_risk = float(components.get("RollbackRisk") or 0.0)
+        return float(base + 900.0 * max(0.0, min(1.0, rollback_risk)))
+
+    def _lb_mcts_pattern_tuple(
+        self,
+        candidate: dict[str, Any],
+        goal: str,
+        root_state: Any,
+        root_activity: str,
+        root_labels: list[str],
+    ) -> dict[str, Any]:
+        del root_state
+        components = candidate.get("score_components") if isinstance(candidate.get("score_components"), dict) else {}
+        operator_name = self._lb_mcts_operator_name(candidate, goal)
+        task_mode = self._task_mode(goal)
+        screen_role = self._infer_screen_role_from_labels(root_labels)
+        entities = self._task_entities(goal)
+        derived_parameter = ""
+        action_kind = _clean_text(candidate.get("action_kind")).lower()
+        if action_kind in {"type", json_action.INPUT_TEXT}:
+            derived_parameter = _clean_text(candidate.get("text") or self._extract_goal_search_text(goal))
+        elif entities:
+            derived_parameter = entities[0]
+        prediction = {
+            "SearchPeek": "SearchInput",
+            "SafeSearchInput": "SearchInput",
+            "ClickExactResult": "ClickExactResult",
+            "DetailInspect": "DetailInspect",
+            "StatsInspect": "StatsInspect",
+            "FilterInspect": "FilterInspect",
+            "SchemaInspect": "SchemaInspect",
+            "AvoidPath": "AvoidPath",
+            "RiskWarning": "RiskWarning",
+        }.get(operator_name, "DetailInspect")
+        function_name = {
+            "SearchInput": "type_exact_task_entity",
+            "ClickExactResult": "click_row_containing_target_entity",
+            "DetailInspect": "inspect_detail_page_for_answer",
+            "StatsInspect": "inspect_stat_page_for_answer",
+            "FilterInspect": "inspect_filter_or_stats_schema",
+            "SchemaInspect": "inspect_schema_no_content_input",
+            "AvoidPath": "avoid_known_wrong_or_risky_path",
+            "RiskWarning": "avoid_speculative_commit_or_mutation",
+        }.get(prediction, "inspect_task_relevant_ui")
+        context_signature = hashlib.sha1(
+            "|".join(
+                [
+                    ",".join(self._goal_app_keywords(goal)[:3]),
+                    task_mode,
+                    screen_role,
+                    _clean_text(root_activity),
+                    "|".join(_clean_text(x).lower() for x in root_labels[:12]),
+                    _clean_text(candidate.get("operator") or ""),
+                    _clean_text(candidate.get("label") or candidate.get("merged")),
+                ]
+            ).encode("utf-8", errors="ignore")
+        ).hexdigest()[:16]
+        probability = max(
+            0.05,
+            min(
+                0.95,
+                float(components.get("PatternPrior") or 0.0)
+                + 0.15 * float(components.get("TaskEntityMatch") or 0.0)
+                - 0.15 * float(components.get("RiskPenalty") or 0.0),
+            ),
+        )
+        return {
+            "app": ",".join(self._goal_app_keywords(goal)[:3]),
+            "task_mode": task_mode,
+            "screen_role": screen_role,
+            "context_signature": context_signature,
+            "prediction": prediction,
+            "function_name": function_name,
+            "derived_parameter": derived_parameter,
+            "probability": float(probability),
+        }
+
+    def _lb_mcts_latency_budget(self) -> tuple[float, dict[str, Any]]:
+        expected = float(getattr(self, "_lb_mcts_reasoning_ewma_ms", 0.0) or self.lb_mcts_default_reasoning_latency_ms)
+        min_budget = max(0.0, float(getattr(self, "lb_mcts_min_budget_ms", 3000.0)))
+        max_budget = max(min_budget, float(getattr(self, "lb_mcts_max_budget_ms", 12000.0)))
+        budget = min(max_budget, max(min_budget, float(getattr(self, "lb_mcts_slack_ratio", 0.8)) * expected))
+        return float(budget), {
+            "expected_reasoning_latency_ms": float(expected),
+            "latency_budget_ms": float(budget),
+            "max_rollouts_per_step": int(getattr(self, "lb_mcts_max_rollouts_per_step", 12)),
+        }
+
+    def _lb_mcts_reward_from_components(
+        self,
+        candidate: dict[str, Any],
+        goal: str,
+        latency_cost_norm: float,
+    ) -> tuple[float, dict[str, float]]:
+        components = candidate.get("score_components") if isinstance(candidate.get("score_components"), dict) else {}
+        operator_name = self._lb_mcts_operator_name(candidate, goal)
+        label = _clean_text(candidate.get("label") or candidate.get("merged")).lower()
+        answer_boundary = 1.0 if operator_name in {"StatsInspect"} else 0.0
+        action_boundary = 1.0 if operator_name in {"SearchPeek", "SafeSearchInput", "ClickExactResult", "DetailInspect", "StatsInspect"} else 0.0
+        target_entity_found = float(components.get("TaskEntityMatch") or 0.0)
+        slot_gain = max(0.0, min(1.0, float(components.get("MissingSlotGain") or 0.0)))
+        useful_schema = 1.0 if operator_name in {"SearchPeek", "SafeSearchInput", "FilterInspect", "SchemaInspect"} else 0.0
+        hard_negative = 1.0 if operator_name in {"AvoidPath", "RiskWarning"} or "marker" in label else 0.0
+        risk_violation = 1.0 if self._is_transaction_unsafe_candidate(candidate) else 0.0
+        low_quality = 1.0 if _clean_text(candidate.get("quality_filter_reason") or components.get("quality_filter_reason")) else 0.0
+        reward = (
+            3.0 * answer_boundary
+            + 2.0 * action_boundary
+            + 2.0 * target_entity_found
+            + 1.5 * slot_gain
+            + 1.0 * useful_schema
+            + 1.0 * hard_negative
+            - 2.0 * risk_violation
+            - 1.0 * low_quality
+            - 0.5 * latency_cost_norm
+        )
+        return float(reward), {
+            "AnswerBoundary": answer_boundary,
+            "ActionBoundary": action_boundary,
+            "TargetEntityFound": target_entity_found,
+            "SlotCompletionGain": slot_gain,
+            "UsefulSchema": useful_schema,
+            "HardNegative": hard_negative,
+            "RiskViolation": risk_violation,
+            "RollbackFailure": 0.0,
+            "LowQualityObservation": low_quality,
+            "LatencyCostNorm": float(latency_cost_norm),
+        }
+
+    def _record_lb_mcts_candidate_filter_stats(
+        self,
+        *,
+        goal: str,
+        step: int,
+        raw_count: int,
+        candidates: list[dict[str, Any]],
+    ) -> None:
+        quality_reasons = [_clean_text(c.get("quality_filter_reason") or "") for c in candidates]
+        risky = [c for c in candidates if self._is_transaction_unsafe_candidate(c) or bool(c.get("risk_boundary"))]
+        examples = [
+            {
+                "label": _clean_text(c.get("label") or c.get("merged")),
+                "reason": _clean_text(c.get("quality_filter_reason") or ("risky" if c in risky else "")),
+            }
+            for c in candidates
+            if _clean_text(c.get("quality_filter_reason") or "") or c in risky
+        ][:8]
+        self._append_diagnostic_jsonl(
+            goal,
+            "candidate_filter_stats.jsonl",
+            {
+                "record_type": "CandidateFilterStats",
+                "task_id": _clean_text(goal)[:200],
+                "step": int(step),
+                "raw_candidate_count": int(raw_count),
+                "after_filter_count": int(len(candidates)),
+                "filtered_system_ui_count": sum(1 for r in quality_reasons if "system" in r or "status" in r),
+                "filtered_generic_container_count": sum(1 for r in quality_reasons if "container" in r or "generic" in r),
+                "filtered_invalid_bbox_count": sum(1 for r in quality_reasons if "bbox" in r or "geometry" in r),
+                "filtered_app_name_only_count": sum(1 for r in quality_reasons if "app_name" in r),
+                "filtered_duplicate_count": sum(1 for r in quality_reasons if "duplicate" in r),
+                "filtered_wrong_task_family_count": sum(1 for r in quality_reasons if "wrong" in r),
+                "filtered_risky_count": int(len(risky)),
+                "top_filtered_examples": examples,
+            },
+        )
+
+    def _select_lb_mcts_branch_candidates(
+        self,
+        *,
+        goal: str,
+        step_idx: int,
+        candidates: list[dict[str, Any]],
+        root_state: Any,
+        root_activity: str,
+        root_labels: list[str],
+        trace: dict[str, Any],
+    ) -> list[dict[str, Any]]:
+        latency_budget_ms, budget_record = self._lb_mcts_latency_budget()
+        max_rollouts = min(
+            max(1, int(self.light_explore_branch_budget)),
+            max(1, int(getattr(self, "lb_mcts_max_rollouts_per_step", 12))),
+        )
+        parent_visits = max(
+            1.0,
+            sum(float(s.get("n") or 0.0) for s in self._search_policy_stats.values()) + 1.0,
+        )
+        records: list[dict[str, Any]] = []
+        selected: list[dict[str, Any]] = []
+        seen_centers: set[tuple[int, int]] = set()
+        for idx, candidate in enumerate(candidates):
+            components = candidate.get("score_components") if isinstance(candidate.get("score_components"), dict) else {}
+            candidate["quality_filter_reason"] = _clean_text(
+                candidate.get("quality_filter_reason")
+                or components.get("quality_filter_reason")
+                or self._candidate_quality_filter_reason(candidate, goal)
+            )
+            operator_name = self._lb_mcts_operator_name(candidate, goal)
+            pattern_tuple = self._lb_mcts_pattern_tuple(candidate, goal, root_state, root_activity, root_labels)
+            pattern_prior = float(pattern_tuple.get("probability") or components.get("PatternPrior") or 0.0)
+            rollback_risk = max(0.0, min(1.0, float(components.get("RollbackRisk") or 0.0)))
+            estimated_latency_ms = self._lb_mcts_estimated_latency_ms(candidate, goal)
+            latency_cost_norm = max(0.0, min(1.0, estimated_latency_ms / float(latency_budget_ms or 1.0)))
+            reward, reward_components = self._lb_mcts_reward_from_components(candidate, goal, latency_cost_norm)
+            key = _clean_text(candidate.get("key") or candidate.get("merged") or candidate.get("label") or f"candidate_{idx}")
+            stats = self._search_policy_stats.get(key, {})
+            child_visits = float(stats.get("n") or 0.0)
+            q_value = float(stats.get("q") or reward)
+            uct = (
+                q_value
+                + float(self.lb_mcts_c_puct) * pattern_prior * math.sqrt(math.log(parent_visits + 1.0) / (child_visits + 1.0))
+                - float(self.lb_mcts_lambda_risk) * rollback_risk
+                - float(self.lb_mcts_lambda_latency) * latency_cost_norm
+            )
+            safe_to_execute = self._lb_mcts_speculation_level(candidate, goal) != "D" or operator_name in {"AvoidPath", "RiskWarning"}
+            record = {
+                "record_type": "MCTSSelectionRecord",
+                "task_id": _clean_text(goal)[:200],
+                "step": int(step_idx + 1),
+                "node_id": f"{step_idx + 1}:root",
+                "action_id": key,
+                "operator": operator_name,
+                "label": _clean_text(candidate.get("label") or candidate.get("merged")),
+                "Q": float(q_value),
+                "P": float(pattern_prior),
+                "N_parent": float(parent_visits),
+                "N_child": float(child_visits),
+                "RollbackRisk": float(rollback_risk),
+                "LatencyCostNorm": float(latency_cost_norm),
+                "UCT": float(uct),
+                "selected": False,
+                "selected_rank": None,
+                "reward_prior": float(reward),
+                "reward_components": reward_components,
+                "estimated_latency_ms": float(estimated_latency_ms),
+                "safe_to_execute": bool(safe_to_execute),
+                "speculation_level": self._lb_mcts_speculation_level(candidate, goal),
+                "pattern_tuple": pattern_tuple,
+            }
+            candidate["mcts_uct"] = float(uct)
+            candidate["mcts_q"] = float(q_value)
+            candidate["mcts_pattern_prior"] = float(pattern_prior)
+            candidate["mcts_latency_cost_norm"] = float(latency_cost_norm)
+            candidate["mcts_estimated_latency_ms"] = float(estimated_latency_ms)
+            candidate["mcts_reward_prior"] = float(reward)
+            candidate["mcts_reward_components"] = reward_components
+            candidate["search_strategy_score"] = float(uct)
+            records.append(record)
+            self._append_diagnostic_jsonl(
+                goal,
+                "pattern_tuple_records.jsonl",
+                {
+                    "record_type": "PatternTupleRecord",
+                    "task_id": _clean_text(goal)[:200],
+                    "step": int(step_idx + 1),
+                    **pattern_tuple,
+                    "context": {
+                        "app_family": pattern_tuple.get("app"),
+                        "task_mode": pattern_tuple.get("task_mode"),
+                        "screen_role": pattern_tuple.get("screen_role"),
+                        "current_visible_anchors": root_labels[:12],
+                        "rollback_status": "eligible",
+                    },
+                    "matched": bool(pattern_prior >= 0.50),
+                    "used_by_mcts": True,
+                    "evidence_result": "",
+                },
+            )
+        ranked = sorted(records, key=lambda r: float(r.get("UCT") or 0.0), reverse=True)
+        by_action_id = {
+            _clean_text(c.get("key") or c.get("merged") or c.get("label") or f"candidate_{idx}"): c
+            for idx, c in enumerate(candidates)
+        }
+        for record in ranked:
+            if len(selected) >= max_rollouts:
+                break
+            candidate = by_action_id.get(_clean_text(record.get("action_id")))
+            if not candidate:
+                continue
+            center = candidate.get("center")
+            center_key = tuple(center) if isinstance(center, (list, tuple)) and len(center) >= 2 else (id(candidate), 0)
+            if center_key in seen_centers:
+                continue
+            seen_centers.add(center_key)
+            candidate["reason_selected"] = "lb_mcts_uct_latency_bounded"
+            selected.append(candidate)
+            record["selected"] = True
+            record["selected_rank"] = len(selected)
+        selected_ids = {
+            _clean_text(c.get("key") or c.get("merged") or c.get("label"))
+            for c in selected
+        }
+        for candidate in candidates:
+            key = _clean_text(candidate.get("key") or candidate.get("merged") or candidate.get("label"))
+            if key not in selected_ids:
+                candidate["reason_rejected"] = "not_selected_by_lb_mcts_budget_or_uct"
+        for record in records:
+            self._append_diagnostic_jsonl(goal, "mcts_selection_records.jsonl", record)
+        trace["latency_budget_ms"] = float(latency_budget_ms)
+        trace["expected_reasoning_latency_ms"] = float(budget_record["expected_reasoning_latency_ms"])
+        trace["mcts_actual_rollouts"] = int(len(selected))
+        trace["mcts_selection_record_count"] = int(len(records))
+        trace["mcts_stopped_by_latency_budget"] = False
+        budget_record.update(
+            {
+                "record_type": "LatencyBudgetRecord",
+                "task_id": _clean_text(goal)[:200],
+                "step": int(step_idx + 1),
+                "elapsed_exploration_ms": 0.0,
+                "actual_rollouts": int(len(selected)),
+                "depth2_attempted": False,
+                "stopped_by_latency_budget": False,
+                "stopped_by_rollback_failure": False,
+                "stopped_by_no_safe_action": not bool(selected),
+            }
+        )
+        self._lb_mcts_latency_budget_records[int(step_idx + 1)] = dict(budget_record)
+        self._append_diagnostic_jsonl(goal, "latency_budget_records.jsonl", budget_record)
+        return selected
 
     def _prepare_search_strategy_candidates(
         self,
@@ -6254,10 +6720,10 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         del summary_all_debug
         thresholds = {
             "ANSWER_HINT": 0.70,
-            "ACTION_HINT": 0.75,
-            "AVOID_HINT": 0.80,
-            "SCHEMA_HINT": 0.85,
-            "RISK_HINT": 0.80,
+            "ACTION_HINT": 0.70,
+            "AVOID_HINT": 0.65,
+            "SCHEMA_HINT": 0.65,
+            "RISK_HINT": 0.60,
         }
         return float(thresholds.get(_clean_text(evidence_type), 1.0))
 
@@ -8173,56 +8639,77 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                 candidates = relevant_candidates
                 trace["candidate_count_after_launcher_relevance_filter"] = int(len(candidates))
             replay_actions = self._select_replay_actions_for_probe(current_action=None)
-            branch_candidates: list[dict[str, Any]] = []
-            grouped: dict[str, list[dict[str, Any]]] = {}
-            for candidate in candidates:
-                grouped.setdefault(_clean_text(candidate.get("operator") or "Other"), []).append(candidate)
-            for group in grouped.values():
-                group.sort(
-                    key=lambda c: (
-                        float(c.get("search_strategy_score") or c.get("final_score") or c.get("score") or 0.0),
-                        float(c.get("score") or 0.0),
+            budget = max(1, int(self.light_explore_branch_budget))
+            if bool(getattr(self, "light_explore_lb_mcts", False)) and self.light_explore_search_strategy == "mcts":
+                self._record_lb_mcts_candidate_filter_stats(
+                    goal=goal,
+                    step=step_idx + 1,
+                    raw_count=int(len(candidates)),
+                    candidates=candidates,
+                )
+                branch_candidates = self._select_lb_mcts_branch_candidates(
+                    goal=goal,
+                    step_idx=step_idx,
+                    candidates=candidates,
+                    root_state=root_state,
+                    root_activity=root_activity,
+                    root_labels=self._state_semantic_summary(root_state, limit=24),
+                    trace=trace,
+                )
+                trace["search_strategy_name"] = "Latency-Bounded Task-Aware MCTS Exploration"
+                trace["root_level_strategy"] = "latency-bounded UCT over rollback-safe UI actions"
+                trace["branch_continuation"] = "depth-prioritized gated DFS to depth 2"
+                trace["ranking"] = "latency-bounded UCT"
+            else:
+                branch_candidates = []
+                grouped: dict[str, list[dict[str, Any]]] = {}
+                for candidate in candidates:
+                    grouped.setdefault(_clean_text(candidate.get("operator") or "Other"), []).append(candidate)
+                for group in grouped.values():
+                    group.sort(
+                        key=lambda c: (
+                            float(c.get("search_strategy_score") or c.get("final_score") or c.get("score") or 0.0),
+                            float(c.get("score") or 0.0),
+                        ),
+                        reverse=True,
+                    )
+                operator_order = sorted(
+                    grouped,
+                    key=lambda op: float(
+                        grouped[op][0].get("search_strategy_score")
+                        or grouped[op][0].get("final_score")
+                        or grouped[op][0].get("score")
+                        or 0.0
                     ),
                     reverse=True,
                 )
-            operator_order = sorted(
-                grouped,
-                key=lambda op: float(
-                    grouped[op][0].get("search_strategy_score")
-                    or grouped[op][0].get("final_score")
-                    or grouped[op][0].get("score")
-                    or 0.0
-                ),
-                reverse=True,
-            )
-            seen_centers: set[tuple[int, int]] = set()
-            budget = max(1, int(self.light_explore_branch_budget))
-            while len(branch_candidates) < budget and operator_order:
-                made_progress = False
-                for operator in list(operator_order):
-                    group = grouped.get(operator) or []
-                    while group:
-                        chosen = group.pop(0)
-                        center = chosen.get("center")
-                        center_key = tuple(center) if isinstance(center, (list, tuple)) and len(center) >= 2 else (id(chosen), 0)
-                        if center_key in seen_centers:
-                            continue
-                        seen_centers.add(center_key)
-                        chosen["reason_selected"] = "stratified_bfs_operator_best"
-                        branch_candidates.append(chosen)
-                        made_progress = True
+                seen_centers: set[tuple[int, int]] = set()
+                while len(branch_candidates) < budget and operator_order:
+                    made_progress = False
+                    for operator in list(operator_order):
+                        group = grouped.get(operator) or []
+                        while group:
+                            chosen = group.pop(0)
+                            center = chosen.get("center")
+                            center_key = tuple(center) if isinstance(center, (list, tuple)) and len(center) >= 2 else (id(chosen), 0)
+                            if center_key in seen_centers:
+                                continue
+                            seen_centers.add(center_key)
+                            chosen["reason_selected"] = "stratified_bfs_operator_best"
+                            branch_candidates.append(chosen)
+                            made_progress = True
+                            break
+                        if len(branch_candidates) >= budget:
+                            break
+                        if not group and operator in operator_order:
+                            operator_order.remove(operator)
+                    if not made_progress:
                         break
-                    if len(branch_candidates) >= budget:
-                        break
-                    if not group and operator in operator_order:
-                        operator_order.remove(operator)
-                if not made_progress:
-                    break
-            selected_keys = {_clean_text(c.get("key") or c.get("label") or c.get("merged")) for c in branch_candidates}
-            for candidate in candidates:
-                key = _clean_text(candidate.get("key") or candidate.get("label") or candidate.get("merged"))
-                if key not in selected_keys:
-                    candidate["reason_rejected"] = "not_selected_after_operator_stratification_or_budget"
+                selected_keys = {_clean_text(c.get("key") or c.get("label") or c.get("merged")) for c in branch_candidates}
+                for candidate in candidates:
+                    key = _clean_text(candidate.get("key") or candidate.get("label") or candidate.get("merged"))
+                    if key not in selected_keys:
+                        candidate["reason_rejected"] = "not_selected_after_operator_stratification_or_budget"
             trace["selected_targets"] = [self._candidate_trace(c) for c in branch_candidates]
             trace["attempt_count"] = int(
                 len(branch_candidates)
@@ -8294,6 +8781,13 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                 )
             self._state_acquisition_context = "branch"
             for b_idx, first_candidate in enumerate(branch_candidates):
+                if bool(getattr(self, "light_explore_lb_mcts", False)) and self.light_explore_search_strategy == "mcts":
+                    elapsed_ms = float(max(0.0, time.time() - float(trace.get("started_at") or time.time())) * 1000.0)
+                    if elapsed_ms > float(trace.get("latency_budget_ms") or 0.0):
+                        trace["mcts_stopped_by_latency_budget"] = True
+                        trace["stopped_by_latency_budget"] = True
+                        trace["stop_reason"] = "latency_budget_exhausted"
+                        break
                 labels: list[str] = []
                 branch_steps: list[dict[str, Any]] = []
                 total_score = float(first_candidate.get("score") or 0.0)
@@ -9108,6 +9602,26 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         finally:
             self._state_acquisition_context = previous_state_acquisition_context
             trace["latency_ms"] = float(max(0.0, time.time() - float(trace.get("started_at") or time.time())) * 1000.0)
+            if bool(getattr(self, "light_explore_lb_mcts", False)) and self.light_explore_search_strategy == "mcts":
+                budget_record = dict(self._lb_mcts_latency_budget_records.get(int(trace.get("step") or 0), {}))
+                if budget_record:
+                    observations = [obs for obs in list(trace.get("observations") or []) if isinstance(obs, dict)]
+                    depth2_attempted = any(
+                        any(int(step.get("depth") or 0) >= 2 for step in list(obs.get("steps") or []) if isinstance(step, dict))
+                        for obs in observations
+                    )
+                    budget_record.update(
+                        {
+                            "phase": "final",
+                            "elapsed_exploration_ms": float(trace.get("latency_ms") or 0.0),
+                            "actual_rollouts": int(len(observations)),
+                            "depth2_attempted": bool(depth2_attempted),
+                            "stopped_by_latency_budget": bool(trace.get("stopped_by_latency_budget") or trace.get("mcts_stopped_by_latency_budget")),
+                            "stopped_by_rollback_failure": bool(trace.get("exploration_step_stopped_after_rollback_failed") or trace.get("status") == "rollback_failed"),
+                            "stopped_by_no_safe_action": bool(trace.get("status") in {"no_candidates", "no_branch_candidates"}),
+                        }
+                    )
+                    self._append_diagnostic_jsonl(goal, "latency_budget_records.jsonl", budget_record)
             self._emit_diagnostic_artifacts(goal, trace)
             self._append_exploration_trace(goal, trace)
 
@@ -9360,6 +9874,9 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         vlm_start = time.time()
         response, _, _ = self.vllm.predict_mm("", [], messages=messages)
         vlm_latency_ms = float(max(0.0, time.time() - vlm_start) * 1000.0)
+        if bool(getattr(self, "light_explore_lb_mcts", False)):
+            previous_ewma = float(getattr(self, "_lb_mcts_reasoning_ewma_ms", 0.0) or vlm_latency_ms)
+            self._lb_mcts_reasoning_ewma_ms = 0.7 * previous_ewma + 0.3 * float(vlm_latency_ms)
         gelab_agent._print_step_section(step_idx, "Model output", str(response))  # pylint: disable=protected-access
 
         parse_error = None
