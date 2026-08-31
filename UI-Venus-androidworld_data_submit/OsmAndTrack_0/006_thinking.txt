@@ -1,0 +1,2 @@
+
+The current screen shows the configuration menu for the map within the OsmAnd app. However, this screen is not directly related to adding waypoints or saving a track. To proceed with the user's task, I need to navigate back to the main map interface where I can search for and add the specified waypoints. The back arrow at the top left corner of the screen suggests a way to return to the previous screen.

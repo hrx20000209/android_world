@@ -1,0 +1,2 @@
+
+To turn off WiFi as part of the user's task, I need to access the "Internet" section where WiFi settings are located. The "Internet" option is clearly visible on the screen, so clicking on it will allow me to manage the WiFi connection.

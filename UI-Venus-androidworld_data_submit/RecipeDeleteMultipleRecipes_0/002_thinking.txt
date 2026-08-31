@@ -1,0 +1,2 @@
+
+To delete the specified recipes, I need to interact with each recipe individually. Starting with "Zucchini Noodles with Pesto," I'll click on it to view its details and look for a delete option.

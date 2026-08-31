@@ -1,0 +1,2 @@
+
+To continue with the task, I need to save the newly created drawing. The save icon at the top right corner seems like the appropriate option to initiate saving the drawing. Once clicked, it should prompt me to name the file and choose the location where it should be saved.

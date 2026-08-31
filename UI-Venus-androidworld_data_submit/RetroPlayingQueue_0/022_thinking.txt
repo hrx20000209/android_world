@@ -1,0 +1,2 @@
+
+The current screen shows the search result for "Heartbeat Away." To add this song to the playing queue, I need to interact with the three-dot menu next to the song entry. This menu likely contains an option to add the song to the queue. Once this is done, all the required songs will be added to the playing queue as per the user's request.

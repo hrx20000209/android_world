@@ -1,0 +1,2 @@
+
+"The favorite location marker has been successfully added at the specified coordinates."

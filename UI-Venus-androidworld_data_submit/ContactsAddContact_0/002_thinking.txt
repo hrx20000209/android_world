@@ -1,0 +1,2 @@
+
+To proceed with creating a new contact, I need to address this permission request. Choosing "Don't allow" will let me continue without enabling notifications, which isn't necessary for adding a contact.

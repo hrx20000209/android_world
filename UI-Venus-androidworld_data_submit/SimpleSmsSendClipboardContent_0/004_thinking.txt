@@ -1,0 +1,2 @@
+
+To continue with sending the message, I need to confirm the entered phone number. The checkmark icon at the top right corner seems to be the confirmation button for proceeding with the entered number.

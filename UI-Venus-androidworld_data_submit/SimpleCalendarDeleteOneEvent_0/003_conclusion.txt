@@ -1,0 +1,2 @@
+
+"Click on the event titled 'Workshop on Project X' to view its details and options."

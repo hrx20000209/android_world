@@ -1,0 +1,2 @@
+
+To turn the brightness to the minimum value, I need to access the settings where the brightness control is located. The gear icon on the home screen likely represents the settings app. Opening this app should lead me to the display or brightness settings.

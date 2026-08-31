@@ -1,0 +1,3 @@
+1.0
+SystemBluetoothTurnOffVerify
+98.81034398078918

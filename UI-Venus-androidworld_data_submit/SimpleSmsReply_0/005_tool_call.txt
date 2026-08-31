@@ -1,0 +1,1 @@
+{'action': 'Type', 'params': {'content': 'Yoga class every Tuesday and Thursday at 6 PM.'}}

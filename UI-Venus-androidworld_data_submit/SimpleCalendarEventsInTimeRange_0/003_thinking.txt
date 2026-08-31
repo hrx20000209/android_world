@@ -1,0 +1,2 @@
+
+The user wants to know if there are any events scheduled between 4:15 PM and 8 PM on Friday. From the screenshot, we can see an event titled "Cooking Class" scheduled from 4:15 PM to 5:15 PM. There are no other events listed within the specified time frame. Therefore, the answer is "Cooking Class".

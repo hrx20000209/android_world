@@ -1,0 +1,2 @@
+
+The user wants to know how many tasks they have due next week in the Tasks app. Currently, the home screen is visible, but there's no indication of the Tasks app being open or accessible directly from this view. Therefore, the next step should be to launch the Tasks app.

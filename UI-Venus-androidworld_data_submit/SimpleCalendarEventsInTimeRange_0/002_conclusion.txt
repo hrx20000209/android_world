@@ -1,0 +1,2 @@
+
+"Click on the date for the Friday in question to view its events."

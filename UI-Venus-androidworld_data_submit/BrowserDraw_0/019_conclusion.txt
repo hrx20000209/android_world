@@ -1,0 +1,2 @@
+
+"Select the pink color to start drawing."

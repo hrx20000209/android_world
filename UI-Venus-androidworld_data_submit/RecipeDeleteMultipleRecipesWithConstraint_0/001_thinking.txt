@@ -1,0 +1,2 @@
+
+To delete recipes containing black garlic from the Broccoli app, I need to first open the app. Since the app isn't visible on this home screen, I should scroll through the app list or search for it.

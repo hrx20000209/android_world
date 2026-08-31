@@ -1,0 +1,2 @@
+
+To add the specified songs to the playing queue, I need to search for each song individually. The search bar is active, and the keyboard is ready for input. The first song in the list is "Through the Storm," so I should start by typing this song name into the search bar.

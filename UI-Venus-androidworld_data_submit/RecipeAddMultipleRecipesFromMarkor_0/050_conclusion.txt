@@ -1,0 +1,2 @@
+
+"Click the SAVE button to save the newly added recipe."

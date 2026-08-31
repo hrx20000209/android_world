@@ -1,0 +1,2 @@
+
+"Select the second duplicate entry for 'Caprese Salad Skewers' to proceed with deletion."

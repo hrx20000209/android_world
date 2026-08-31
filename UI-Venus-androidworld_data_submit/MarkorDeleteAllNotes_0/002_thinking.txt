@@ -1,0 +1,2 @@
+
+The user's goal is to delete all notes in Markor. We are currently viewing the list of files in the Documents directory within the Markor app. To delete all notes, we need to select each file and delete them individually. The next logical step would be to start selecting the first note for deletion.

@@ -1,0 +1,2 @@
+
+To create a new event, I need to click the '+' button typically used for adding new events. This aligns with the user's request to add a recurring event starting on October 15th.

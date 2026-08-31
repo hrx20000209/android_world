@@ -1,0 +1,2 @@
+
+"Click on the 'Review session for Project X' event to view its details."

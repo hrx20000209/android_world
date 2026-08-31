@@ -1,0 +1,2 @@
+
+The next step is to select 'Work' from the dropdown menu to set the correct label for the phone number. The dropdown menu is already open, showing various options including 'Work', which needs to be clicked to update the label accordingly.

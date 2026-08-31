@@ -1,0 +1,2 @@
+
+To continue with the task of adding the identified recipes into the Broccoli recipe app, I need to open the Broccoli app. It is visible on the current screen, so the next logical step is to click on the Broccoli app icon to open it.

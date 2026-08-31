@@ -1,0 +1,2 @@
+
+To update the Markor note as requested, I need to open the Markor app first. Since it's not visible on this home screen, I should look for it either in the app drawer or another home screen page. The next step would be to access the file system where the note is located.

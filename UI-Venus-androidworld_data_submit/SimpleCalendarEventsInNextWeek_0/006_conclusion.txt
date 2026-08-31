@@ -1,0 +1,2 @@
+
+"Click outside the menu to close it and confirm the visible events."

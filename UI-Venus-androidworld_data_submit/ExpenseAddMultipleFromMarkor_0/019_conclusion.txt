@@ -1,0 +1,2 @@
+
+"Adding a note indicating that the 'Client meeting coffee' transaction is reimbursable."

@@ -1,0 +1,2 @@
+
+To proceed with deleting duplicate expenses, I need to access the 'Expense Logs' where all recorded expenses are listed. From there, I can identify and remove any exact duplicates while ensuring at least one instance of each unique expense remains. The 'Expense Logs' option is clearly visible in the menu.

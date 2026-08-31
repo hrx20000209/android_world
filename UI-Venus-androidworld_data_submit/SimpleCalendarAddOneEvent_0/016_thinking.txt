@@ -1,0 +1,2 @@
+
+To complete the creation of the calendar event, I need to save all the entered information. The checkmark icon at the top right corner typically serves as the 'Save' button in many apps. Clicking this will finalize and save the event with the specified details.

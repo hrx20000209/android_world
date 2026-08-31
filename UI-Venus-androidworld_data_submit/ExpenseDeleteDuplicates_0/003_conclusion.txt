@@ -1,0 +1,2 @@
+
+"Click on 'Expense Logs' to view detailed expense entries."

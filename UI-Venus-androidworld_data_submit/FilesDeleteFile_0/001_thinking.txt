@@ -1,0 +1,2 @@
+
+To delete the specified file, I need to open the file manager app. Since there's no visible file manager icon on this home screen, I should scroll or swipe to find it or access the app drawer where all apps are listed.

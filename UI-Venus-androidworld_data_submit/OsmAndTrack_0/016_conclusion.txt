@@ -1,0 +1,2 @@
+
+"Click the 'Add' button to add the current location as a waypoint."

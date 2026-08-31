@@ -1,0 +1,2 @@
+
+The current screen shows the search results for "Through the Storm." To add this song to the playing queue, I need to interact with the three-dot menu next to the song entry. This menu likely contains an option to add the song to the queue. Once this is done, I'll proceed to search for the next song in the list.

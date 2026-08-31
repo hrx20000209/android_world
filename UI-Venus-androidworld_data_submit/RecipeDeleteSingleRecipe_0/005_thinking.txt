@@ -1,0 +1,2 @@
+
+The confirmation dialog is asking whether to delete the recipe. To proceed with the deletion as requested by the user, I need to confirm by selecting the 'DELETE' option.

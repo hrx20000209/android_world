@@ -1,0 +1,2 @@
+
+To complete the task of creating a new contact for Hugo Pereira, all required information has been entered correctly. The final step is to save the contact details. The 'Save' button is visible and needs to be clicked to finalize the creation of the contact.

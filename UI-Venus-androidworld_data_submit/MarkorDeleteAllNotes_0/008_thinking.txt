@@ -1,0 +1,2 @@
+
+The user's goal is to delete all notes in Markor. Currently, one note has been selected for deletion. The next logical step is to select the remaining note for deletion as well. Long pressing on the second note should bring up an option to select it for deletion.

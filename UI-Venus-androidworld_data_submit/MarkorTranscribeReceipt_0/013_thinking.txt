@@ -1,0 +1,2 @@
+
+The task of creating the `receipt.md` file and entering the transaction data in CSV format has been completed. The final step is to save the file to ensure all changes are preserved. The save icon is visible at the top of the screen, and clicking it will finalize the task.

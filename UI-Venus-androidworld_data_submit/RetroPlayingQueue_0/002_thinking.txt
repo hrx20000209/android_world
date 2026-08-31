@@ -1,0 +1,2 @@
+
+To add the specified songs to the playing queue, I need to navigate to the section where I can find these songs. The current screen shows general options like 'History', 'Last added', 'Most played', and 'Shuffle'. However, there's no direct option to search for specific songs. The bottom navigation bar has icons that likely lead to other sections such as songs, albums, artists, etc. Clicking on the icon that represents songs could help me find the specific songs needed.

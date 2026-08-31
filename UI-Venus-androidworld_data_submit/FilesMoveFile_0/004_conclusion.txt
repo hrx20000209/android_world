@@ -1,0 +1,2 @@
+
+"Click inside the sdk_gphone_x86_64 storage area to view its contents."

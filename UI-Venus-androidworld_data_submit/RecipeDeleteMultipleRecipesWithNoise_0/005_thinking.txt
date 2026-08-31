@@ -1,0 +1,2 @@
+
+To continue with the task of deleting the specified recipes, I need to select the 'Delete' option from the menu. This will remove the 'Chicken Alfredo Pasta' recipe as required. Once this is done, I can move on to deleting the other two recipes.

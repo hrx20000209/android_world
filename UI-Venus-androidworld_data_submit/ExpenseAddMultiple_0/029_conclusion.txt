@@ -1,0 +1,2 @@
+
+"Click the SAVE button to save the 'Stationery' expense entry."

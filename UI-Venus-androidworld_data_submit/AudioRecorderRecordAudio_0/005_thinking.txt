@@ -1,0 +1,2 @@
+
+The user has already initiated the recording process in the previous step. Now, the current screen shows the recording in progress with a timer indicating elapsed time. To complete the task of recording an audio clip, the next logical step is to stop the recording. The large circular button at the bottom center of the screen, which was previously used to start the recording, should now function as the stop button. Clicking this button will halt the recording and allow the user to save the recorded clip.

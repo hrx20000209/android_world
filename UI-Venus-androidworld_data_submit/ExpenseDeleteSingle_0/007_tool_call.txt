@@ -1,0 +1,1 @@
+{'action': 'Finished', 'params': {'content': 'Rental Income expense has been successfully deleted.'}}

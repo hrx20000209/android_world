@@ -1,0 +1,2 @@
+
+The user wants to know their tasks due on October 24, 2023, in the Tasks app. Currently, the home screen is visible, but the Tasks app is not open. The next step should be to launch the Tasks app so we can check for tasks due on the specified date.

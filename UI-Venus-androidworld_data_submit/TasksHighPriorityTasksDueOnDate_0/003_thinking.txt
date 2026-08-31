@@ -1,0 +1,2 @@
+
+To find tasks with high priority due on October 18, 2023, I need to apply a filter for the specific date and priority level. The 'Filters' section likely contains options to set these criteria. Clicking on the 'Filters' section would allow me to refine the task list according to the required parameters.

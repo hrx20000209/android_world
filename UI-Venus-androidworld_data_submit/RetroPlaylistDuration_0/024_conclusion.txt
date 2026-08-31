@@ -1,0 +1,2 @@
+
+"Clear the current search query to try a new search term."

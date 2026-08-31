@@ -1,0 +1,245 @@
+{
+  "seed": 30,
+  "tasks": [
+    {
+      "name": "AudioRecorderRecordAudio",
+      "baseline_success": 0,
+      "baseline_steps": 12,
+      "max_steps": 17
+    },
+    {
+      "name": "AudioRecorderRecordAudioWithFileName",
+      "baseline_success": 0,
+      "baseline_steps": 20,
+      "max_steps": 25
+    },
+    {
+      "name": "BrowserDraw",
+      "baseline_success": 0,
+      "baseline_steps": 20,
+      "max_steps": 25
+    },
+    {
+      "name": "BrowserMaze",
+      "baseline_success": 0,
+      "baseline_steps": 20,
+      "max_steps": 25
+    },
+    {
+      "name": "BrowserMultiply",
+      "baseline_success": 0,
+      "baseline_steps": 21,
+      "max_steps": 26
+    },
+    {
+      "name": "CameraTakePhoto",
+      "baseline_success": 0,
+      "baseline_steps": 10,
+      "max_steps": 15
+    },
+    {
+      "name": "CameraTakeVideo",
+      "baseline_success": 0,
+      "baseline_steps": 10,
+      "max_steps": 15
+    },
+    {
+      "name": "ClockStopWatchPausedVerify",
+      "baseline_success": 0,
+      "baseline_steps": 10,
+      "max_steps": 15
+    },
+    {
+      "name": "ClockStopWatchRunning",
+      "baseline_success": 1,
+      "baseline_steps": 4,
+      "max_steps": 10
+    },
+    {
+      "name": "ClockTimerEntry",
+      "baseline_success": 0,
+      "baseline_steps": 10,
+      "max_steps": 15
+    },
+    {
+      "name": "ContactsAddContact",
+      "baseline_success": 1,
+      "baseline_steps": 9,
+      "max_steps": 14
+    },
+    {
+      "name": "ContactsNewContactDraft",
+      "baseline_success": 1,
+      "baseline_steps": 10,
+      "max_steps": 15
+    },
+    {
+      "name": "ExpenseAddMultiple",
+      "baseline_success": 0,
+      "baseline_steps": 21,
+      "max_steps": 26
+    },
+    {
+      "name": "ExpenseAddMultipleFromGallery",
+      "baseline_success": 0,
+      "baseline_steps": 21,
+      "max_steps": 26
+    },
+    {
+      "name": "ExpenseAddMultipleFromMarkor",
+      "baseline_success": 0,
+      "baseline_steps": 14,
+      "max_steps": 19
+    },
+    {
+      "name": "ExpenseAddSingle",
+      "baseline_success": 1,
+      "baseline_steps": 10,
+      "max_steps": 15
+    },
+    {
+      "name": "ExpenseDeleteDuplicates",
+      "baseline_success": 1,
+      "baseline_steps": 7,
+      "max_steps": 12
+    },
+    {
+      "name": "ExpenseDeleteDuplicates2",
+      "baseline_success": 1,
+      "baseline_steps": 12,
+      "max_steps": 17
+    },
+    {
+      "name": "ExpenseDeleteMultiple",
+      "baseline_success": 1,
+      "baseline_steps": 11,
+      "max_steps": 16
+    },
+    {
+      "name": "ExpenseDeleteMultiple2",
+      "baseline_success": 1,
+      "baseline_steps": 21,
+      "max_steps": 26
+    },
+    {
+      "name": "ExpenseDeleteSingle",
+      "baseline_success": 1,
+      "baseline_steps": 5,
+      "max_steps": 10
+    },
+    {
+      "name": "FilesDeleteFile",
+      "baseline_success": 0,
+      "baseline_steps": 9,
+      "max_steps": 14
+    },
+    {
+      "name": "FilesMoveFile",
+      "baseline_success": 0,
+      "baseline_steps": 20,
+      "max_steps": 25
+    },
+    {
+      "name": "MarkorAddNoteHeader",
+      "baseline_success": 0,
+      "baseline_steps": 12,
+      "max_steps": 17
+    },
+    {
+      "name": "MarkorChangeNoteContent",
+      "baseline_success": 0,
+      "baseline_steps": 12,
+      "max_steps": 17
+    },
+    {
+      "name": "MarkorCreateFolder",
+      "baseline_success": 1,
+      "baseline_steps": 5,
+      "max_steps": 10
+    },
+    {
+      "name": "MarkorCreateNote",
+      "baseline_success": 1,
+      "baseline_steps": 8,
+      "max_steps": 13
+    },
+    {
+      "name": "MarkorCreateNoteAndSms",
+      "baseline_success": 0,
+      "baseline_steps": 16,
+      "max_steps": 21
+    },
+    {
+      "name": "MarkorCreateNoteFromClipboard",
+      "baseline_success": 0,
+      "baseline_steps": 14,
+      "max_steps": 19
+    },
+    {
+      "name": "MarkorDeleteAllNotes",
+      "baseline_success": 1,
+      "baseline_steps": 7,
+      "max_steps": 12
+    },
+    {
+      "name": "MarkorDeleteNewestNote",
+      "baseline_success": 1,
+      "baseline_steps": 5,
+      "max_steps": 10
+    },
+    {
+      "name": "MarkorDeleteNote",
+      "baseline_success": 1,
+      "baseline_steps": 5,
+      "max_steps": 10
+    },
+    {
+      "name": "MarkorEditNote",
+      "baseline_success": 0,
+      "baseline_steps": 12,
+      "max_steps": 17
+    },
+    {
+      "name": "MarkorMergeNotes",
+      "baseline_success": 0,
+      "baseline_steps": 21,
+      "max_steps": 26
+    },
+    {
+      "name": "MarkorMoveNote",
+      "baseline_success": 0,
+      "baseline_steps": 14,
+      "max_steps": 19
+    },
+    {
+      "name": "MarkorTranscribeReceipt",
+      "baseline_success": 0,
+      "baseline_steps": 18,
+      "max_steps": 23
+    },
+    {
+      "name": "MarkorTranscribeVideo",
+      "baseline_success": 0,
+      "baseline_steps": 20,
+      "max_steps": 25
+    },
+    {
+      "name": "NotesIsTodo",
+      "baseline_success": 1,
+      "baseline_steps": 2,
+      "max_steps": 10
+    },
+    {
+      "name": "NotesMeetingAttendeeCount",
+      "baseline_success": 1,
+      "baseline_steps": 6,
+      "max_steps": 11
+    },
+    {
+      "name": "NotesRecipeIngredientCount",
+      "baseline_success": 0,
+      "baseline_steps": 5,
+      "max_steps": 10
+    }
+  ]
+}

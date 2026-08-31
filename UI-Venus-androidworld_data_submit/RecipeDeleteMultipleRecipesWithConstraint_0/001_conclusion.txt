@@ -1,0 +1,2 @@
+
+"Launched the Broccoli app to start searching for recipes."

@@ -1,0 +1,2 @@
+
+To set the end time to 20:30, I need to adjust the minute hand from 00 to 30. The current screenshot shows the time picker dialog with the hour already set to 20. I should now click on the '30' mark to set the minutes correctly.

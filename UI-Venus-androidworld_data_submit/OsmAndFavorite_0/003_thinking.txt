@@ -1,0 +1,2 @@
+
+The user needs to input the specific coordinates to locate the desired position on the map. The search bar is active, and the keyboard is ready for typing. The next logical step is to enter the coordinates "47.1303814, 9.5930117" into the search bar to find the location on the map.

@@ -1,0 +1,2 @@
+
+To find the longest distance covered in a mountain biking activity this week, I need to filter the activities specifically for "mountain biking" within the specified date range. The current screen allows me to select the type of activity. I should select "mountain biking" and ensure the date range covers this week starting from Monday. Once filtered, I can review the activities and find the longest distance.

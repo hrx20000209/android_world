@@ -18,6 +18,9 @@ import contextlib
 import enum
 import json
 import os
+import socket
+import struct
+import threading
 import time
 from typing import Any
 from typing import cast
@@ -119,6 +122,27 @@ DEFAULT_ADB_PATH = '~/Android/Sdk/platform-tools/adb'
 # https://developer.android.com/reference/android/accessibilityservice/AccessibilityService
 
 OBSERVATION_KEY_FOREST = 'forest'
+
+
+class _LazyA11yForest:
+  """Stands in for an a11y forest until something reads a field from it."""
+
+  __slots__ = ("_fetch", "_forest")
+
+  def __init__(self, fetch):
+    self._fetch = fetch
+    self._forest = None
+
+  def _resolve(self):
+    if self._forest is None:
+      self._forest = self._fetch()
+    return self._forest
+
+  def __getattr__(self, name):
+    return getattr(self._resolve(), name)
+
+  def __bool__(self):
+    return True
 # UI elements are specific nodes extracted from forest. See
 # representation_utils.forest_to_ui_elements for details.
 OBSERVATION_KEY_UI_ELEMENTS = 'ui_elements'
@@ -158,13 +182,27 @@ class A11yMethod(enum.Enum):
 def apply_a11y_forwarder_app_wrapper(
         env: env_interface.AndroidEnvInterface, install_a11y_forwarding_app: bool
 ) -> env_interface.AndroidEnvInterface:
-    return a11y_grpc_wrapper.A11yGrpcWrapper(
+    wrapped_env = a11y_grpc_wrapper.A11yGrpcWrapper(
         env,
         install_a11y_forwarding=install_a11y_forwarding_app,
         start_a11y_service=True,
         enable_a11y_tree_info=True,
         latest_a11y_info_only=True,
     )
+    # A11yGrpcWrapper normally configures the AccessibilityForwarder gRPC
+    # endpoint only when AndroidEnv reports a relaunch_count increase during
+    # reset(). On reused or recently restarted emulators that counter may not
+    # advance, leaving the service bound with tree logging enabled but grpcPort
+    # stuck at 0. In that state logcat shows:
+    #   "Can't log accessibility tree because gRPC port has not been set."
+    # Force one initial endpoint configuration so AndroidWorld can retrieve the
+    # first reset tree reliably.
+    try:
+        wrapped_env._configure_grpc()  # pylint: disable=protected-access
+        wrapped_env._enable_a11y_tree_logs()  # pylint: disable=protected-access
+    except Exception as exc:  # pylint: disable=broad-exception-caught
+        logging.warning('Initial a11y gRPC configuration failed: %s', exc)
+    return wrapped_env
 
 
 class AndroidWorldController(base_wrapper.BaseWrapper):
@@ -195,6 +233,8 @@ class AndroidWorldController(base_wrapper.BaseWrapper):
         self._last_a11y_actual_method = a11y_method.value
         self._last_a11y_fallback_used = False
         self._last_fast_a11y_metrics: dict[str, Any] = {}
+        self._fast_a11y_socket: socket.socket | None = None
+        self._fast_a11y_socket_lock = threading.Lock()
         if a11y_method == A11yMethod.FAST_PROVIDER:
             self._enable_fast_a11y_provider()
 
@@ -323,6 +363,9 @@ class AndroidWorldController(base_wrapper.BaseWrapper):
             )
 
     def _fast_a11y_provider_dump(self) -> str:
+        socket_port = int(os.environ.get('ANDROID_WORLD_FAST_A11Y_SOCKET_PORT', '0') or 0)
+        if socket_port > 0:
+            return self._fast_a11y_socket_dump(socket_port)
         uri = f'content://{FAST_A11Y_PROVIDER_AUTHORITY}/flat?compact=1'
         last_error: Exception | None = None
         self._last_fast_a11y_metrics = {}
@@ -347,6 +390,45 @@ class AndroidWorldController(base_wrapper.BaseWrapper):
             except Exception as exc:  # pylint: disable=broad-exception-caught
                 last_error = exc
         raise RuntimeError(f'fast_a11y_provider_unavailable: {last_error}')
+
+    @staticmethod
+    def _socket_read_exact(connection: socket.socket, size: int) -> bytes:
+        chunks = bytearray()
+        while len(chunks) < size:
+            chunk = connection.recv(size - len(chunks))
+            if not chunk:
+                raise ConnectionError('fast a11y socket closed during response')
+            chunks.extend(chunk)
+        return bytes(chunks)
+
+    def _fast_a11y_socket_dump(self, port: int) -> str:
+        last_error: Exception | None = None
+        with self._fast_a11y_socket_lock:
+            for _ in range(2):
+                try:
+                    if self._fast_a11y_socket is None:
+                        connection = socket.create_connection(('127.0.0.1', port), timeout=3.0)
+                        connection.settimeout(3.0)
+                        self._fast_a11y_socket = connection
+                    connection = self._fast_a11y_socket
+                    connection.sendall(b'flat 0 10000\n')
+                    size = struct.unpack('>I', self._socket_read_exact(connection, 4))[0]
+                    if size > 32 * 1024 * 1024:
+                        raise ValueError(f'fast a11y payload too large: {size}')
+                    payload = self._socket_read_exact(connection, size).decode('utf-8')
+                    if '"ok":true' not in payload:
+                        raise RuntimeError(payload[:500])
+                    self._last_fast_a11y_metrics = self._extract_fast_a11y_metrics(payload)
+                    return payload
+                except Exception as exc:  # pylint: disable=broad-exception-caught
+                    last_error = exc
+                    if self._fast_a11y_socket is not None:
+                        try:
+                            self._fast_a11y_socket.close()
+                        except OSError:
+                            pass
+                        self._fast_a11y_socket = None
+        raise RuntimeError(f'fast_a11y_socket_unavailable: {last_error}')
 
     @staticmethod
     def _extract_fast_a11y_metrics(output: str) -> dict[str, Any]:
@@ -386,7 +468,15 @@ class AndroidWorldController(base_wrapper.BaseWrapper):
             self._last_a11y_fallback_used = False
             self._last_fast_a11y_metrics = {}
         else:
-            forest = None
+            # Not None: a task's own is_successful() may read state.forest even
+            # though the agent never does, and handing it None crashes the
+            # evaluation rather than the agent - ContactsNewContactDraft scored
+            # 0 in 0 steps this way on 2026-08-30 ("'NoneType' object has no
+            # attribute 'windows'"). Fetching the forest eagerly here would put
+            # the ~1s gRPC round trip back into every single step, which is the
+            # cost fast_provider exists to avoid, so it is fetched on first
+            # access and only by whoever actually wants it.
+            forest = _LazyA11yForest(self.get_a11y_forest)
             ui_elements = self.get_ui_elements()
         timestep.observation[OBSERVATION_KEY_FOREST] = forest
         timestep.observation[OBSERVATION_KEY_UI_ELEMENTS] = ui_elements

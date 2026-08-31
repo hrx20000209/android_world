@@ -1,0 +1,2 @@
+
+The task requires opening the 'task.html' file in the Downloads folder using Chrome. The previous steps indicate that the file was already selected, but now we're back at the Downloads screen. It seems like the file needs to be opened again. The next logical step is to click on the 'task.html' file to initiate its opening process once more.

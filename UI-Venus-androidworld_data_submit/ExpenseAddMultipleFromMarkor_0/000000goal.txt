@@ -1,0 +1,1 @@
+Go through the transactions in my_expenses.txt in Markor. Log the reimbursable transactions in the pro expense.

@@ -1,0 +1,2 @@
+
+The user's goal was to save a track with specific waypoints in the OsmAnd app. Based on the screenshot and the sequence of actions taken, it appears that the waypoints Schönberg, Triesen, and Bendern have been successfully added and saved. The confirmation message at the bottom indicates that the GPX file has been saved, suggesting that the task is complete.

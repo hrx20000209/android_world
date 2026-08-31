@@ -1,0 +1,2 @@
+
+The user wants to know which tasks they have completed on October 16, 2023, in the Tasks app. Currently, the home screen is visible, and the Tasks app is not open. The next step should be to launch the Tasks app so we can check the completed tasks for the specified date.

@@ -1,0 +1,2 @@
+
+"Click on the date October 24th to view the details of the events scheduled for that day."

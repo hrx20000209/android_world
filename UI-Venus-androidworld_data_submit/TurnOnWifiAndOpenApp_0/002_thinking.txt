@@ -1,0 +1,2 @@
+
+To turn on Wi-Fi, I need to access the quick settings menu again. Since the previous action was a scroll, it seems like the quick settings were already accessed but not fully utilized. Now, I should swipe down from the top of the screen to reveal the full quick settings panel where I can toggle Wi-Fi on. After enabling Wi-Fi, I'll proceed to open the Settings app, which is visible on the home screen.

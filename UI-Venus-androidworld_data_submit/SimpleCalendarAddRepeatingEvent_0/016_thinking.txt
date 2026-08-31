@@ -1,0 +1,2 @@
+
+The current screen displays a disclaimer message regarding reminders. To proceed with saving the event, I need to dismiss this disclaimer by clicking the 'OK' button. This will allow me to finalize the event creation process as per the user's requirements.

@@ -1,0 +1,2 @@
+
+The goal is to delete all but one of any duplicate expenses. In this screenshot, there are two identical 'Public Transit' entries with the same amount and date. To achieve the goal, I need to select and delete one of these duplicate entries while keeping the other. The next logical step is to interact with one of these duplicate entries to initiate the deletion process.

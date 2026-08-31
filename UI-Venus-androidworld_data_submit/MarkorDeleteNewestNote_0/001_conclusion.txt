@@ -1,0 +1,2 @@
+
+"Open the Markor app from the home screen."

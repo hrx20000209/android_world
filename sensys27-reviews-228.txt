@@ -1,0 +1,243 @@
+SenSys 2027 Paper #228 Reviews and Comments
+===========================================================================
+Paper #228 MobileExplorer: Accelerating On-Device Multi-Step Inference for
+Mobile GUI Agents via Online Exploration
+
+
+Review #228A [R1]
+===========================================================================
+
+Overall merit
+-------------
+1. Reject
+
+Reviewer expertise
+------------------
+3. Knowledgeable
+
+Paper summary
+-------------
+This paper proposes MobileExplorer, an on-device mobile GUI agent framework that exploits the long reasoning latency of LLMs/VLMs to perform lightweight online exploration of task-relevant UI branches. During model inference, MobileExplorer speculatively explores semantically relevant UI elements, restores the original UI state through a dual-path recovery mechanism, and distills the resulting observations into structured evidence for future reasoning steps. The goal is to reduce unnecessary trial-and-error interactions and the number of expensive reasoning steps in multi-step mobile GUI tasks. The authors evaluate the system on AndroidWorld and additional real-world case studies, reporting reductions in reasoning steps and end-to-end latency while maintaining or improving task success rates.
+
+Strengths
+---------
+- The paper addresses the important and timely problem of reducing high latency in on-device mobile GUI agents for multi-step tasks.
+
+- The idea of using otherwise idle model reasoning time for online UI exploration is intuitive and interesting.
+
+- The system design considers practical issues in live mobile interaction, including speculative exploration, state recovery, and evidence filtering.
+
+Weaknesses
+----------
+- Several core components are severely underspecified, making it unclear how the heuristic-based design would generalize across diverse apps, UI layouts, and task domains.
+
+- The paper does not clearly explain how MobileExplorer manages the reasoning-time budget, so the claim that online exploration does not introduce additional latency is not fully substantiated.
+
+- The evaluation setup is not sufficiently controlled, as it is unclear whether all implemented baselines use the same backbone models, prompts, quantization, and inference settings.
+
+- Several evaluation results are difficult to interpret due to unclear metric definitions, inconsistent ablation settings, and ambiguous latency measurement boundaries.
+
+Comments for authors
+--------------------
+- My biggest concern is that several core components of the proposed system are severely underspecified. The paper states that reasoning priors, session-local exploration memory, branch utility estimation, confidence scoring, safety checks, and evidence-type classification are handled through lightweight heuristics such as keyword matching, without additional model invocations. However, it is unclear how these signals are actually computed and applied in practice. More importantly, I am not convinced that these heuristic mechanisms are general enough to work across diverse application domains and UI designs. For example, identifying risky UI actions mainly through keywords such as “delete” or “save” seems overly naive, since many dangerous or irreversible actions may be represented by icons, app-specific labels, localized text, or implicit UI flows. Similarly, in the depth-bounded backtracking mechanism, using only the hash-distance check in Eq. (9) to determine whether the original UI state has been restored seems fragile, because visually similar screens may correspond to different latent app states. These issues raise concerns about whether MobileExplorer can robustly generalize beyond the evaluated tasks and applications.
+
+- Another important concern is that the paper does not clearly explain how MobileExplorer manages the reasoning-time budget. The system assumes that exploration and recovery can be completed within the model reasoning window, so that online exploration does not increase user-perceived latency. However, the paper does not specify how the available reasoning time is estimated at each step, how the root and depth budgets are determined, or when exploration is stopped if probing or recovery takes longer than expected. This is particularly important because the latency of on-device model inference can vary across devices, models, prompts, UI states, and runtime resource conditions. Moreover, injecting exploration evidence into the next prompt may increase the prompt length and therefore affect the next-step reasoning latency. This creates a trade-off between the amount of collected evidence, prompt-token overhead, and model inference time, but the paper does not analyze this trade-off. As a result, it is unclear how MobileExplorer can guarantee that online exploration does not introduce additional latency.
+
+- The evaluation does not clearly establish a controlled comparison across baselines. The paper states that the representative baselines are based on 4B VLMs/LLMs, but it does not specify whether all implemented baselines use the same backbone models, quantization settings, prompt templates, decoding configurations, and inference setup. Without this information, it is difficult to determine whether the observed gains come from MobileExplorer’s system design or from differences in the underlying models and implementation choices.
+
+- The paper would benefit from a clearer characterization of its “on-device” deployment setting. While the paper emphasizes on-device mobile GUI agents, the main AndroidWorld experiments execute GUI tasks in an Android emulator on a host machine, while the reasoning model runs on Jetson AGX Orin. In the real-world case study, the smartphone appears to serve mainly as the GUI execution target, with VLM inference still performed on Jetson AGX Orin. This setup is useful and relevant for edge-device-assisted mobile GUI control, but it is not the same as a fully smartphone-local deployment where perception, reasoning, exploration, recovery, and action execution all run on the mobile device. Clarifying this distinction would make the system claims more precise.
+
+- The ablation study is difficult to interpret because the ablated variants are not defined consistently. For adaptive speculative branch search, the paper replaces the proposed method with a naive alternative, i.e., random exploration. However, for dual-path state recovery and certainty-aware evidence distillation, it is unclear whether these components are replaced with simpler alternatives or simply removed/disabled. These choices lead to different interpretations: replacing a component with a naive baseline evaluates the quality of the proposed design, while removing a component only evaluates whether the corresponding functionality is necessary. A more informative ablation would compare MobileExplorer against variants such as random exploration, naive backtracking-only recovery, raw or unfiltered evidence injection, no evidence injection, and no online exploration. This would better isolate the contribution of each design choice.
+
+- The component-level metrics in Fig. 9(c) and Fig. 9(d) need clearer definitions. For rollback success rate, the paper does not explain what ground truth is used to verify that the original UI state has truly been restored, beyond the system’s own pHash/activity-based checks. For hint-follow rate, it is unclear how the authors distinguish actions caused by injected hints from actions that the model would have selected anyway based on its own reasoning. This makes it difficult to interpret whether these figures provide independent evidence for the effectiveness of state recovery and evidence distillation.
+
+- The paper provides limited evidence that MobileExplorer generalizes across model sizes and model families. For example, in Fig. 10(a), MobileExplorer appears to reduce latency for 2B and 8B models, but its success rate seems lower than the baseline in those settings. This raises the question of whether the method consistently improves overall agent performance, or mainly reduces latency with possible accuracy trade-offs for some models. Since the main evaluation is centered on a specific 4B model setup, additional experiments with more diverse model families and sizes would strengthen the claim that MobileExplorer is broadly applicable.
+
+- The paper states that “Since exploration depth is small in practice, the replay sequence is typically short and introduces limited overhead compared to model inference latency.” However, I find this assumption too optimistic for real mobile applications. Even shallow exploration or replay can incur substantial overhead when screen transitions involve server communication, dynamic content loading, advertisements, or slow app-side processing. In addition, the paper does not explain how MobileExplorer detects that a UI transition has completed. If the system relies on conservative post-action timeouts, these delays could accumulate at every exploration and replay step, making the overhead significant even when the exploration depth is small. If MobileExplorer uses a more precise transition-completion detector, the paper should describe it; otherwise, the claim that replay overhead is limited may not generalize to apps with slow or variable UI transitions.
+
+- Fig. 12 is difficult to interpret because the measurement boundaries are unclear. In particular, it is not specified whether the reported latency includes UI transition delays after exploration, rollback, or replay actions. Moreover, the “Total” bar in Fig. 12 is unclear, as it appears smaller than the sum of the individual component latencies, making it difficult to understand how the total overhead is computed.
+
+- The real-world experiment in Section 6.6 is difficult to interpret. The paper states that the smartphone is used as the GUI execution target while VLM inference runs on Jetson AGX Orin. If the application and the model are running on different devices, background workloads on the smartphone, such as video or music playback, do not directly create resource contention for model inference. Therefore, it is unclear what aspect of end-to-end latency this experiment is intended to stress. I also find the results under pop-up and floating-window interference difficult to understand. In Fig. 13(b) and Fig. 13(c), notifications or floating video windows appear to occlude parts of the app UI, which would likely make perception and action selection more difficult. However, Fig. 15(a) reports relatively high success rates in these settings. The paper should clarify how much of the task-relevant UI is occluded and how the agent handles overlays during perception and action execution.
+
+
+
+Review #228B [R1]
+===========================================================================
+
+Overall merit
+-------------
+2. Weak reject
+
+Reviewer expertise
+------------------
+3. Knowledgeable
+
+Paper summary
+-------------
+This paper presents MobileExplorer, a framework for accelerating fully on-device mobile GUI agents on complex multi-step tasks. The key idea is to utilize the reasoning latency of large LLM/VLM models to perform lightweight, parallel online exploration over semantically relevant UI elements. MobileExplorer combines adaptive breadth- and depth-oriented search with a dual-path state recovery mechanism to explore useful UI trajectories without perturbing the main execution path. The resulting exploration traces are distilled into structured, state-aligned evidence and injected into subsequent prompts to improve reasoning efficiency and task completion. Evaluations on AndroidWorld and newly designed complex mobile tasks across multiple on-device platforms show that MobileExplorer reduces reasoning steps and end-to-end latency by 23%, while maintaining or improving success rates by up to 5%.
+
+Strengths
+---------
+- The motivation is clearly presented.
+- The paper is well written and generally easy to follow, with clear and informative figures.
+
+Weaknesses
+----------
+-	The paper does not fully demonstrate that the proposed approach makes on-device reasoning practically usable under realistic mobile latency constraints.
+-	The evaluation lacks a comparison against script-based agents.
+-	Some technical details require further clarification.
+
+Comments for authors
+--------------------
+While the proposed method is technically sound, several limitations remain that warrant further considerations.
+
+ 
+
+\-  **The paper does not fully demonstrate that the proposed approach makes on-device reasoning practically usable under realistic mobile latency constraints.**
+
+ 
+
+A key concern is that the proposed approach primarily reduces the number of model reasoning steps, while each on-device inference step may still incur latency that is too high for practical mobile use. For instance, if Fig. 4 reflects inference on a smartphone, the reported latency of approximately 40 seconds per step implies that even a small number of reasoning iterations could result in unacceptable end-to-end delays for simple tasks. This raises the question of whether MobileExplorer fundamentally addresses the core bottleneck of on-device reasoning, or instead redistributes the cost across executions while still relying on per-step latencies that are too high for current mobile hardware.
+
+\-  **The evaluation lacks a comparison against script-based agents.**
+
+In Section 6.1, the authors state that MobileExplorer is compared against several baselines, including script-based agents. However, I could not find such a comparison in the subsequent experimental results. Since script-based agents, such as AutoDroid-v2, may offer substantially lower end-to-end latency, a direct comparison would be important for assessing the practical benefits of MobileExplorer.
+
+\-  **Some technical details require further clarification.**
+
+(1) A potential concern is how MobileExplorer handles irreversible or high-risk actions during exploration, such as making a payment or sending a private message to another user. Since such actions cannot be safely undone through backtracking or trajectory replay, the paper should clarify whether the system explicitly detects and excludes these actions from speculative exploration, requires user confirmation before executing them, or relies on application-specific safeguards.
+
+(2) Since model reasoning time can vary substantially across mobile devices, backbone LLMs/VLMs, and even compiler/runtime configurations, the paper should clarify how MobileExplorer ensures that the UI state is recovered before the model finishes reasoning. In particular, if exploration and recovery take longer than the current inference step, the primary reasoning trajectory may observe an inconsistent or perturbed UI state, potentially undermining the correctness of subsequent actions.
+
+\-  **Minor Points.**
+
+(1) In Section 6.2, the reference to Fig.8(b) appears to be incorrect and should be revised.
+
+
+
+Review #228C [R1]
+===========================================================================
+
+Overall merit
+-------------
+3. Weak accept
+
+Reviewer expertise
+------------------
+3. Knowledgeable
+
+Paper summary
+-------------
+This paper presents MobileExplorer, an on-device mobile GUI agent framework that accelerates multi-step task execution. The key idea is to exploit the long model reasoning latency by exploring task-relevant UI branches in parallel during inference. To achieve this, MobileExplorer uses a relevance-driven hybrid search to probe UI elements, a dual-path state recovery mechanism to restore the UI after exploration, and certainty-aware distillation that injects only high-confidence evidence into later prompts. Evaluation on AndroidWorld and real-world tasks shows reduced reasoning steps and end-to-end latency while maintaining or improving task success rate.
+
+Strengths
+---------
+- Relatively novel idea of exploring the UI in parallel with model reasoning to use otherwise idle inference time.
+
+- Overall the paper is well-written.
+
+Weaknesses
+----------
+- Parallelism is evaluated with inference and UI on separate devices, ignoring on-device contention overhead.
+
+- pHash-based recovery restores only the screen, not side effects that persist in the app.
+
+- The system's generality is questionable.
+
+Comments for authors
+--------------------
+Thanks for your submission to SenSys. Overall, I enjoyed reading the paper. Although recently there have been a lot of works on GUI agents, the idea of exploring the UI in parallel with model inference seems relatively novel, and overall I feel the study is well-executed. I believe it would be helpful to address the following points.
+
+1. My biggest concern is that, in the experiments the model inference was performed on a Jetson board while the UI was handled separately on a smartphone. In theory the two operations can be performed in parallel, but in practice it is known that heavy foreground UI rendering may slow down AI inference due to GPU and memory contention (e.g., [1]). It is necessary to compare end-to-end latency and success rate while actually performing inference together on a single smartphone.
+
+- In particular, since the current experimental setting ignores the overhead of MobileExplorer's UI exploration altogether when comparing against the baseline, the fairness of the comparison is questionable.
+
+[1] Heimdall: mobile GPU coordination platform for augmented reality applications, MobiCom 2020.
+
+2. The paper detects UI state recovery based on pHash, but the assumption that a similar app screenshot means the actual app state is identical needs more careful validation. For example, in an online shopping app, if UI exploration puts some item into the cart, even if it goes back to the pre-launch screen the item will still be in the cart when the app is reopened, and one could end up mistakenly purchasing the item. Likewise, in an email app, once a mail is read, simply going back cannot change that mail back to the "unread" state. There seem to be many similar examples, it would be helpful to validate the robustness of state recovery.
+
+3. Overall, it would be also helpful to clarify the system's generality. For example,
+
+- Section 5.2 mentions "For each app-task session, MobileExplorer maintains a session-local exploration memory". However, if the task is not long-horizon, there may not be enough time for the exploration memory itself to be built. An evaluation of how long the tasks need to be for the memory to work efficiently is needed.
+
+- Section 5.2 also says "MobileExplorer uses a lightweight reasoning prior extracted from the previous model output," but the reasoning output may differ across models. Validation is needed on whether the information in Equation (4) can always be extracted, and how the system handles the cases where it cannot.
+
+- There are several hyperparameters in the system, such as in Equations (5) and (7); by what criteria are they determined? A sensitivity evaluation is needed.
+
+
+
+Review #228D [R2]
+===========================================================================
+
+Overall merit
+-------------
+3. Weak accept
+
+Reviewer expertise
+------------------
+2. Some familiarity
+
+Paper summary
+-------------
+This paper proposes MobileExplore, a new framework for accelerating on-device multi-step inference for mobile GUI agents via online exploration. The key idea is to utilize the VLM/LLM inference time to perform lightweight parallel exploration of UI elements. Specifically, MobileExplore adopts a breadth- and depth-oriented exploration to search for relevant UI elements, employs a dual-path state recovery mechanism to restore the original UI states, and finally distils the exploration traces into structured, state-aligned evidence to inject into the subsequent model prompt.
+
+Strengths
+---------
+1. The idea to utilize substantial reasoning latency of VLM/LLM is reasonable and intuitive;
+2. The paper is well-written, with every component of the proposed framework being well explained.
+
+Weaknesses
+----------
+1. The paper does not fully validate whether exploration and recovery can always finish within the variable model-inference latency.
+2. The current keyword-based risk filter may not reliably prevent speculative actions from causing irreversible or context-dependent side effects in real applications.
+3. The evaluation separates model inference and GUI execution across devices, so it does not fully capture the resource contention and timing behaviour of a single-device deployment.
+
+Comments for authors
+--------------------
+Overall, this paper proposes a novel and well-motivated approach to accelerating multi-step inference for on-device mobile GUI agents. The paper is clearly written and logically organized. I have several suggestions that could further strengthen the work.
+1.	MobileExplorer relies on using the model inference latency for exploration, but the paper does not explain how this latency is estimated at each step or how this estimate determines the exploration budget. Please clarify how the system selects the number of branches and exploration depth, and what happens if exploration or recovery is not completed before inference finishes. Reporting how often this occurs in practice would help strengthen the robustness of the design.
+2.	The paper filters operations using risk-related labels or operators, which is a useful first step. However, real applications may include icon-only elements or elements whose risk depends on the surrounding context. Please briefly discuss how such elements are handled, and whether any risky exploration cases appeared in the real-world study.
+3.	The current evaluation uses Jetson for model inference and another device for GUI execution. This setup does not fully capture the resource contention and timing interaction of a single-phone deployment. If possible, an additional experiment with both inference and GUI execution on the same phone would further strengthen the practical deployment claim.
+4.	There are a few presentation issues. On page 10, the paragraph below Figure 8 refers to “Fig. ??”. On page 11, the title of Section 6.4.2 contains the typo “Peroformance”.
+
+
+
+Review #228E [R2]
+===========================================================================
+
+Overall merit
+-------------
+3. Weak accept
+
+Reviewer expertise
+------------------
+2. Some familiarity
+
+Paper summary
+-------------
+This paper proposes an online exploration solution for an on-device mobile GUI agent to reduce latency while improving accuracy. The authors propose a dual-path state recovery mechanism to dynamically adjust breadth- and depth-oriented exploration according to task intent and UI complexity. It reduces end-to-end latency while maintaining accuracy as well.
+
+Strengths
+---------
++ The paper is well organized and easy to read.
++ The evaluation is comprehensive and clearly demonstrates the improvements introduced by MobileExplorer.
++ The demo video provides an intuitive illustration of how MobileExplorer works and how it compares with existing approaches.
+
+Weaknesses
+----------
+- Although the proposed idea is reasonable, the overall solution appears relatively straightforward and does not strike me as particularly novel. Background or asynchronous agent execution has already been widely adopted in commercial AI-agent systems, such as Codex, to reduce perceived latency and improve the user experience. The primary contribution here appears to be applying a similar idea to GUI agents, and the paper could better articulate the unique technical challenges and innovations involved in this setting.
+
+- The latency improvement appears somewhat limited. The average number of steps decreases from 10.93 to 9.24, corresponding to an approximately 15.9% reduction. From my perspective, this improvement does not fundamentally address the main bottleneck of on-device GUI agents, which remain too slow for many real-world use cases. The authors should discuss more clearly how this level of improvement could affect the practical deployment and future development of GUI agents.
+
+- I am also uncertain whether the selected baselines are sufficiently strong. Most of the baselines do not appear to have been specifically designed to optimize GUI-agent latency. The authors should provide stronger justification that these methods represent the state of the art for latency-efficient GUI agents or include additional latency-oriented baselines.
+
+Comments for authors
+--------------------
+- It is unclear whether the reported latency reduction is 23% or approximately 15.9%. The abstract and introduction report a 23% reduction, whereas the experimental results in Section 6.2 appear to show an improvement of approximately 15.9%. The authors should explain how the 23% figure is calculated and report this key result consistently throughout the paper.
+
+- Typo on Page 10: The final paragraph of Section 6.2 contains an unresolved reference, “Fig. ??”.
+
+- Section 6.1 introduces several categories of baselines, but the names used in the tables and figures are not consistent with those introduced in the text. This makes it difficult to determine which category each baseline belongs to. The authors should use consistent terminology or explicitly map each method to its corresponding baseline category.
+
+- The solution looks general for text-based GUI agents. I would suggest the authors deploying MobileExplorer to a text-based GUI agent and evaluate it as well.
+

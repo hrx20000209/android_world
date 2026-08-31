@@ -1,0 +1,2 @@
+
+"Switching the search category to 'Songs' to check if there are any available songs related to 'Bob Marley'."

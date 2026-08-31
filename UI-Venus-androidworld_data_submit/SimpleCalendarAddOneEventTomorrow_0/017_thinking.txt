@@ -1,0 +1,2 @@
+
+The event details have been mostly filled out, but there is an issue with the end time being earlier than the start time. The end time needs to be adjusted to 20:30 to ensure the event lasts for 30 minutes. The next step is to click on the end time field to adjust it accordingly.

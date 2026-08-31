@@ -1,0 +1,2 @@
+
+The user's goal is to delete the expenses: Ride-Sharing, Flight Tickets, and Taxi Fare. From the screenshot, these expenses are visible under the 'Recent' section. The next logical step is to interact with the 'Taxi Fare' entry since it appears first in the list. Clicking on this entry should allow us to access options to delete it.

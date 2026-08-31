@@ -1,0 +1,2 @@
+
+The goal is to add a location marker for Planken, Liechtenstein. The search results show an entry for Liechtenstein as a country, but not specifically for Planken. Clicking on the 'SHOW ON MAP' option could help refine the search or display the location on the map where a marker can be added.

@@ -1,0 +1,2 @@
+
+To achieve the goal of saving the drawing in the Pictures folder within the sdk_gphone_x86_64 storage area, I need to navigate to the correct storage location. Currently, the screen shows the Downloads folder, which is not the target location. I should access the menu or navigation options to switch to the correct storage area.

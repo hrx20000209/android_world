@@ -1,0 +1,2 @@
+
+To rename the note as "fair_ant_XOdi.txt", I need to replace the existing text "my_note" with "fair_ant_XOdi". Additionally, I need to change the file extension from ".md" to ".txt". First, I'll clear the current name and type the correct name.

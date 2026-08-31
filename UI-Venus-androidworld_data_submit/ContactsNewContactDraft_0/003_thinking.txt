@@ -1,0 +1,2 @@
+
+To proceed with adding a new contact, I need to click the plus button located at the bottom right corner of the screen. This will take me to the new contact screen where I can enter the required details as specified in the user task.

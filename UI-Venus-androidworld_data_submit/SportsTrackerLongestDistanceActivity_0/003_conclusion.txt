@@ -1,0 +1,2 @@
+
+"Navigate back to the main activity list to view individual mountain biking activities."

@@ -1,0 +1,2 @@
+
+"Click on the 'Add' button to proceed with adding a location marker."

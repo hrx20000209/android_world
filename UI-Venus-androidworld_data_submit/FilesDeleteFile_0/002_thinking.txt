@@ -1,0 +1,2 @@
+
+The current screen shows the file manager app has been opened successfully. The next step involves navigating through the file system to locate the 'Notifications' folder within the 'sdk_gphone_x86_64' storage area. Since the app is now open, I should look for an option to access internal storage or navigate directly to the desired directory.

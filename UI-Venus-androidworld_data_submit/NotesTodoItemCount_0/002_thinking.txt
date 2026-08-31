@@ -1,0 +1,2 @@
+
+The user wants to know the number of to-dos in the 'Ideas' folder. The current screen shows all notes, but we need to navigate to the 'Ideas' folder specifically. The menu icon at the top left likely provides navigation options to different folders, including 'Ideas'. Clicking this icon should allow us to access the 'Ideas' folder.

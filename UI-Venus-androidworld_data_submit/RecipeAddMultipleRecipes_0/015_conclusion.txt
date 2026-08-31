@@ -1,0 +1,2 @@
+
+"Navigate back to the main screen to start adding the next recipe."

@@ -1,0 +1,2 @@
+
+The user wants to delete the expense labeled "Rental Income." The current screen displays the details of this expense, and there is a trash bin icon visible, which typically represents the delete function. Clicking this icon should allow us to remove the expense.

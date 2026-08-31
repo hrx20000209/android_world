@@ -1,0 +1,2 @@
+
+To proceed with the task of transcribing the video, I need to note the text displayed in the current frame, which is "Charlotte." Next, I should advance the video to view the subsequent frames and continue transcribing the text. However, since the task involves writing the transcribed text to a file in Markor, I need to switch applications to Markor and create the text file for transcription. The current screenshot indicates that the video is playing, and I've noted the first word. Now, I should navigate back to the home screen to open Markor.

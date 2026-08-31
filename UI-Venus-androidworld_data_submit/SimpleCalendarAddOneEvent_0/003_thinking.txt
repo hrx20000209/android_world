@@ -1,0 +1,2 @@
+
+To proceed with creating the calendar event, I need to select the 'Event' option from the bottom right corner. This will allow me to enter the necessary details like date, time, title, and description for the event.

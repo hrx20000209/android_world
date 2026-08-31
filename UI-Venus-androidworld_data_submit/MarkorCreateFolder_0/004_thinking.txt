@@ -1,0 +1,2 @@
+
+The user has already typed the desired folder name "folder_20250810_121139" into the input field. The next step is to confirm the creation of the folder by clicking the "FOLDER" button. This will finalize the creation of the new folder in Markor.

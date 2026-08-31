@@ -1,0 +1,2 @@
+
+To add the specified expenses, I need to start by clicking the '+' button again since the previous attempt did not show the form for adding a new expense. Once the form appears, I can fill in the details for each expense as instructed.

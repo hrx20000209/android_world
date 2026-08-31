@@ -1,0 +1,2 @@
+
+"Entering the transaction data in CSV format into the `receipt.md` file."

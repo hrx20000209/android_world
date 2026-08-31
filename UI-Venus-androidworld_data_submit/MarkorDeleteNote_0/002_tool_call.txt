@@ -1,0 +1,1 @@
+{'action': 'LongPress', 'params': {'box': (321, 460)}}

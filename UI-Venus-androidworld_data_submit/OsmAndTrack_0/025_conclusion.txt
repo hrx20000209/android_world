@@ -1,0 +1,2 @@
+
+"Click the 'Add' button to proceed with adding the final waypoints."

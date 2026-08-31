@@ -1,0 +1,2 @@
+
+"The task is complete; the drawing has been saved correctly."

@@ -1,0 +1,2 @@
+
+"Click on the search result showing the coordinates to center the map on the location."

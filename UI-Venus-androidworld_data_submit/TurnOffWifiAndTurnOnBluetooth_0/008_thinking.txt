@@ -1,0 +1,2 @@
+
+The WiFi has been successfully turned off as indicated by the gray toggle switch. The next step is to enable Bluetooth. To do this, I need to navigate back to the main settings menu where I can find the Bluetooth settings. Pressing the back arrow will take me back to the main settings page.

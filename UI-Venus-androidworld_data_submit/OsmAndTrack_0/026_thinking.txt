@@ -1,0 +1,2 @@
+
+The user's goal is to save a track with specific waypoints in the OsmAnd app. The waypoints Schönberg, Triesen, and Bendern have already been added. The current screenshot shows the "Plan a route" interface with the "Done" button at the top right corner. Clicking the "Done" button should finalize and save the track with the specified waypoints.

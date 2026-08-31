@@ -1,0 +1,2 @@
+
+The task requires submitting the entered product of the numbers. The input field already contains the correct value '11250', so the next logical step is to click the 'Submit' button to complete the task.

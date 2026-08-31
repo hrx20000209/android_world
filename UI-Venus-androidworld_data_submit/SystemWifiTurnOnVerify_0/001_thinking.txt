@@ -1,0 +1,2 @@
+
+The user wants to turn on Wi-Fi. To do this, I need to access the settings where Wi-Fi options are located. The Settings app icon is visible on the home screen at coordinates (650, 640). The next step should be to open the Settings app.

@@ -1,0 +1,2 @@
+
+The Markor app is now open, and I need to create a new text file named "ZwUN_moment_70__transcription.txt" to write the transcribed text. The '+' button is typically used to add new files or notes. Clicking this button should allow me to create the new text file needed for transcription.

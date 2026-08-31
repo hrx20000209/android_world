@@ -1,0 +1,2 @@
+
+To move the file 'holiday_photos.jpg' from Podcasts to DCIM, I need to navigate back to the main storage area and locate the DCIM folder. The current screenshot shows the Downloads section, which is not relevant to the task. I should return to the main storage view and find the DCIM folder.

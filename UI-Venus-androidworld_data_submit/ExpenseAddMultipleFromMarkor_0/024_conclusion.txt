@@ -1,0 +1,2 @@
+
+"Adding a note indicating that the 'Business travel' transaction is reimbursable."

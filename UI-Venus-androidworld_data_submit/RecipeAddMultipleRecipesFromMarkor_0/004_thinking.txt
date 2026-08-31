@@ -1,0 +1,2 @@
+
+To add recipes from `recipes.txt` in Markor to the Broccoli app, I need to find an option to create a new recipe entry within the app. The green plus button at the bottom right corner likely provides options to add new recipes. Clicking this button should lead to a form or import option where I can input or import the recipes from `recipes.txt`.

@@ -1,0 +1,2 @@
+
+The user has reached the confirmation dialog for deleting the "Rental Income" expense. To complete the task, the next step is to confirm the deletion by clicking the "CONFIRM" button. This will finalize the removal of the specified expense from the Pro Expense app.

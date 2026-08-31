@@ -1,0 +1,2 @@
+
+"Close the current menu and attempt to select the image again to find sharing options."

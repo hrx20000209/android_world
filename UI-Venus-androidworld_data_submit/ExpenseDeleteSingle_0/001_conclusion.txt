@@ -1,0 +1,2 @@
+
+I am launching the Pro Expense app to proceed with deleting the specified expense.

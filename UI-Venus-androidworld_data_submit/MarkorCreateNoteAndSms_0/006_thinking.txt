@@ -1,0 +1,2 @@
+
+To complete the task, I need to change the file extension from ".md" to ".txt". The current screenshot shows that the file extension field is selected, so I should type ".txt" to update the extension.

@@ -1,0 +1,2 @@
+
+To continue with the task of deleting duplicate recipes, I need to select the 'Delete' option from the menu. This will allow me to remove one of the duplicate instances of the "BBQ Chicken Quesadillas" recipe, ensuring only one remains.

@@ -1,0 +1,2 @@
+
+To continue adding the recipe, I need to fill in the 'Directions' field with the specified information. The 'Directions' field is not visible on the current screen, so I should scroll down to reveal it.

@@ -1,0 +1,2 @@
+
+To add recipes from `recipes.txt` in Markor to the Broccoli app, I need to fill out the fields in this "New Recipe" form. The first field is "Title," which is typically the starting point for entering a new recipe. Clicking on the "Title" field will allow me to begin typing the name of the recipe as specified in `recipes.txt`.

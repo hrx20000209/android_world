@@ -1,0 +1,2 @@
+
+The user's goal is to save a track with specific waypoints in the OsmAnd app. So far, the waypoints Schönberg, Triesen, and Bendern have been added. The current screenshot shows the location of Liechtenstein, confirming that all waypoints have been added. The next logical step is to save the entire track with these waypoints. The "Plan a route" option at the bottom left corner of the screen likely provides options to finalize and save the track.

@@ -1,0 +1,1 @@
+In Simple Calendar Pro, create a calendar event for tomorrow at 20h with the title 'Call with the Team' and the description 'We will prepare for team roles.'. The event should last for 30 mins.

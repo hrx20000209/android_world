@@ -1,0 +1,2 @@
+
+The user wants to log reimbursable transactions from `my_expenses.txt` in Markor. Currently, we're on the home screen, so the first step is to locate and open the Markor app. Since it's not visible here, I should scroll or search for it.

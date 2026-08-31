@@ -1,0 +1,2 @@
+
+"Enter the calculated product 11250 into the input field."

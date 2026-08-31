@@ -1,0 +1,2 @@
+
+"Completed the task as the brightness is already at its minimum value."

@@ -1,0 +1,4 @@
+
+To add recipes from `recipes.txt` in Markor that take 10 minutes to prepare into the Broccoli recipe app, I need to first open the Markor app to access the `recipes.txt` file. Since the Markor app isn't visible on this home screen, I should navigate through the apps or search for it. 
+
+The next step would be to locate and open the Markor app. If it's not immediately visible, I can swipe to another page or open the app drawer to find it.

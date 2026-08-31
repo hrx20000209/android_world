@@ -1,0 +1,2 @@
+
+"Click on the 'Phone' field to enter the phone number."

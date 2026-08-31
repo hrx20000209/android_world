@@ -1,0 +1,2 @@
+
+The VLC app is currently loading, so no further actions can be taken until it finishes. Once loaded, I'll navigate to the 'Browse' section to access the internal memory where the videos are stored. From there, I can select the specified video files to add them to a new playlist.

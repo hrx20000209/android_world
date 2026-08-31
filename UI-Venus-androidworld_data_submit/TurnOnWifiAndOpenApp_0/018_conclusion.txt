@@ -1,0 +1,2 @@
+
+"Navigate back to the home screen to open the settings app."

@@ -1,0 +1,2 @@
+
+The user's task is to turn on Wi-Fi and then open the settings app. From the screenshot, we can see that the "Network & internet" option is available, which includes Wi-Fi settings. Clicking this option will allow us to enable Wi-Fi. Since the settings app is already open, the next step is to navigate to the Wi-Fi settings within the "Network & internet" section.

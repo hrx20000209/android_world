@@ -1,0 +1,2 @@
+
+"Click the search icon to find the available songs for the playlist."

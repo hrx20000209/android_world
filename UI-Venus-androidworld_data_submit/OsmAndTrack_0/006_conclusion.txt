@@ -1,0 +1,2 @@
+
+"Navigate back to the main map interface to continue adding waypoints."

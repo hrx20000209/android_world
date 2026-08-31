@@ -1,0 +1,2 @@
+
+The user's goal is to delete all notes in Markor. The current screen shows a confirmation dialog asking whether to delete the selected document. To proceed with deleting this note, I need to confirm the deletion by clicking "OK". This action aligns with the user's goal of deleting all notes.

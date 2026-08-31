@@ -1,0 +1,2 @@
+
+"Click on the 'Need more stre...' activity to verify if it falls within the specified date range."

@@ -1,0 +1,2 @@
+
+To complete the addition of the "Butternut Squash Soup" recipe, I need to save the entered information. The SAVE button is visible at the top right corner of the screen, indicating that all required fields have been filled. Clicking the SAVE button will finalize the entry of this recipe.

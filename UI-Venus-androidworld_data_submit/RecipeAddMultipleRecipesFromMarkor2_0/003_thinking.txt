@@ -1,0 +1,2 @@
+
+Since the Markor app is still loading, I cannot yet access the `recipes.txt` file. Once the app loads, my next step will be to locate and open the `recipes.txt` file so I can identify the recipes that take 10 minutes to prepare. After identifying these recipes, I'll need to switch to the Broccoli recipe app to add them. For now, I should wait until the Markor app finishes loading.

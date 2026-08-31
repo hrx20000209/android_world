@@ -1,0 +1,1 @@
+{'action': 'Finished', 'params': {'content': 'The "Classic Margherita Pizza" recipe has been successfully deleted.'}}

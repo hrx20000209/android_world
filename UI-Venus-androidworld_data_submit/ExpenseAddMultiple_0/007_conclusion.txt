@@ -1,0 +1,2 @@
+
+"Click on the 'Social' category to select it for the expense."

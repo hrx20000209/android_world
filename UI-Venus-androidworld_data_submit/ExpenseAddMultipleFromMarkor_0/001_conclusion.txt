@@ -1,0 +1,2 @@
+
+"Launched the Markor app to access the `my_expenses.txt` file."

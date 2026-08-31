@@ -1,0 +1,2 @@
+
+"Click on the '30' mark to set the minutes correctly."

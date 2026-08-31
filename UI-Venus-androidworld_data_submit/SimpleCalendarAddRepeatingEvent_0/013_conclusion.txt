@@ -1,0 +1,2 @@
+
+"Click on the 'No repetition' section to configure the event to repeat weekly."

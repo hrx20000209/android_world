@@ -1,0 +1,2 @@
+
+To find the total duration of running activities this week, I need to locate the section specifically for running activities. The current screenshot shows aggregated stats for skateboarding, biking, climbing, and mountain biking but does not include running. I should scroll down to see if there's a section for running activities.

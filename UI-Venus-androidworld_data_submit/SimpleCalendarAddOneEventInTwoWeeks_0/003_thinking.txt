@@ -1,0 +1,2 @@
+
+To proceed with creating a calendar event, I need to select the 'Event' option since the user wants to add a new event to the calendar. This will allow me to enter the necessary details like the title, description, date, and time.

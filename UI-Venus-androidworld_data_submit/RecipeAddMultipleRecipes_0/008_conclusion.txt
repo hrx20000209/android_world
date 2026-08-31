@@ -1,0 +1,2 @@
+
+"Enter '2 servings' into the Servings field."

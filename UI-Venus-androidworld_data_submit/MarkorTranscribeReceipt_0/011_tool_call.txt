@@ -1,0 +1,1 @@
+{'action': 'Type', 'params': {'content': 'Date, Item, Amount\\n2023-08-01, Bread, 2.50\\n2023-08-01, Milk, 3.00\\n2023-08-01, Eggs, 4.00'}}

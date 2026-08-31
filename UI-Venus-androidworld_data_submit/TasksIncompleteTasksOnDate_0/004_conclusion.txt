@@ -1,0 +1,2 @@
+
+"Close the menu to view the tasks due by Thursday."

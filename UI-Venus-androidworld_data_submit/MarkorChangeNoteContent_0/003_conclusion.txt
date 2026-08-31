@@ -1,0 +1,2 @@
+
+"Click the trash icon to delete the existing content."

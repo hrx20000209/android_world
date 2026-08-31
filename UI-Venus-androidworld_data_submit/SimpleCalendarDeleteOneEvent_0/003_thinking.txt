@@ -1,0 +1,2 @@
+
+To delete the event titled 'Workshop on Project X', I need to select it first. The event is clearly listed on the screen for October 24th at 23:00. Clicking on the event should bring up options including the ability to edit or delete it.

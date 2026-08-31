@@ -1,0 +1,2 @@
+
+"Click on the Ingredients field to start entering the ingredients."

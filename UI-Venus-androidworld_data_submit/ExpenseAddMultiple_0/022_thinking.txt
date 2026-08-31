@@ -1,0 +1,2 @@
+
+The current screen shows the expense entry form with the Name field active and ready for input. To add the next expense, "Stationery," I need to start by entering the name in the Name field. The Name field is currently active and ready for input. I'll type "Stationery" into this field as the first step.

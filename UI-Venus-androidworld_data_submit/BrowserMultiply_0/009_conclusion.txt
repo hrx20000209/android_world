@@ -1,0 +1,2 @@
+
+"Select 'Just once' to open the 'task.html' file with Chrome."

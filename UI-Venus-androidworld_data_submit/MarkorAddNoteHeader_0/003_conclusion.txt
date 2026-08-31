@@ -1,0 +1,2 @@
+
+"Placing the cursor at the beginning of the document to prepare for inserting the new text."

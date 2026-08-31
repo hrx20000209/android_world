@@ -1,0 +1,2 @@
+
+The user wants to know the number of tasks due next week. The current screenshot shows a menu with options like 'My Tasks', 'Filters', 'Tags', etc. To find tasks due next week, I need to apply a filter that shows tasks for the upcoming week. The 'Filters' option seems appropriate for filtering tasks by date. Clicking on 'Filters' should allow me to set the necessary filter for next week's tasks.

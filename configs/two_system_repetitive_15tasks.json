@@ -1,0 +1,22 @@
+{
+  "seed": 30,
+  "baseline": "results/4B_2.txt",
+  "selection_policy": "10 repetitive multi-item tasks (stress-test session-memory reuse) + 5 short/simple tasks from the original gate set, fixed before execution",
+  "tasks": [
+    {"name": "ExpenseAddMultiple", "baseline_success": 0, "baseline_steps": 21, "max_steps": 26},
+    {"name": "ExpenseAddMultipleFromGallery", "baseline_success": 0, "baseline_steps": 21, "max_steps": 26},
+    {"name": "ExpenseAddMultipleFromMarkor", "baseline_success": 0, "baseline_steps": 14, "max_steps": 19},
+    {"name": "ExpenseDeleteMultiple", "baseline_success": 1, "baseline_steps": 11, "max_steps": 16},
+    {"name": "ExpenseDeleteMultiple2", "baseline_success": 1, "baseline_steps": 21, "max_steps": 26},
+    {"name": "RecipeAddMultipleRecipes", "baseline_success": 0, "baseline_steps": 21, "max_steps": 26},
+    {"name": "RecipeAddMultipleRecipesFromImage", "baseline_success": 0, "baseline_steps": 21, "max_steps": 26},
+    {"name": "RecipeAddMultipleRecipesFromMarkor", "baseline_success": 0, "baseline_steps": 21, "max_steps": 26},
+    {"name": "RecipeDeleteMultipleRecipes", "baseline_success": 1, "baseline_steps": 14, "max_steps": 19},
+    {"name": "RecipeDeleteMultipleRecipesWithNoise", "baseline_success": 1, "baseline_steps": 18, "max_steps": 23},
+    {"name": "MarkorCreateNoteAndSms", "baseline_success": 0, "baseline_steps": 16, "max_steps": 21},
+    {"name": "MarkorEditNote", "baseline_success": 0, "baseline_steps": 12, "max_steps": 17},
+    {"name": "ContactsAddContact", "baseline_success": 1, "baseline_steps": 9, "max_steps": 14},
+    {"name": "ClockStopWatchRunning", "baseline_success": 1, "baseline_steps": 4, "max_steps": 10},
+    {"name": "SystemBluetoothTurnOn", "baseline_success": 1, "baseline_steps": 4, "max_steps": 10}
+  ]
+}

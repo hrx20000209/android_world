@@ -1,0 +1,2 @@
+
+"Confirm the selected start time of 5:00 AM by clicking the 'OK' button."

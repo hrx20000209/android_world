@@ -1,0 +1,2 @@
+
+The user's goal is to save a track with specific waypoints in the OsmAnd app. The current screenshot shows the menu with the "Plan a route" option selected, indicating that the next step should involve selecting the appropriate transport profile for planning the route. Since the task requires adding waypoints, choosing an appropriate transport profile like "Car," "Bicycle," or "Pedestrian" is necessary before proceeding to add the waypoints.

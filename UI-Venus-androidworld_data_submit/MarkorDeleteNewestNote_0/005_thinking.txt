@@ -1,0 +1,2 @@
+
+The task was to delete the newest note in Markor. According to the history, the newest note was identified, selected, and deleted successfully. The current screenshot shows only one remaining note, confirming that the newest note has been removed. Therefore, the task is complete.

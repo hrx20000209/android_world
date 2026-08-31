@@ -18,6 +18,7 @@ import json
 import os
 from collections import Counter
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import sys
@@ -32,6 +33,7 @@ DEFAULT_ROOT = REPO_ROOT / "results" / "pase_30task_final_single"
 DEFAULT_MAX_STEPS = 16
 DEFAULT_BRANCH_BUDGET = 12
 DEFAULT_MIN_ATTEMPTS = 12
+DEFAULT_PILOT_TASKS = 12
 
 VARIANT_CONFIGS: dict[str, dict[str, Any]] = {
     "B0_BASELINE_RERUN": {
@@ -48,6 +50,7 @@ VARIANT_CONFIGS: dict[str, dict[str, Any]] = {
 
 REQUIRED_FILES = [
     "runtime_config.yaml",
+    "runtime_config.json",
     "frozen_task_selection.md",
     "task_shard.csv",
     "per_task_results.csv",
@@ -59,6 +62,7 @@ REQUIRED_FILES = [
     "candidate_scores.jsonl",
     "candidate_filter_stats.jsonl",
     "evidence_decisions.jsonl",
+    "prompt_hint_decisions.jsonl",
     "prompt_hints.jsonl",
     "prompt_traces.jsonl",
     "hint_hit_follow.jsonl",
@@ -70,12 +74,21 @@ REQUIRED_FILES = [
     "shortcut_shadow_eval.jsonl",
     "state_acquisition_metrics.csv",
     "latency_profile.jsonl",
-    "runtime_config.yaml",
-    "runtime_config.json",
+    "slot_state_records.jsonl",
+    "adaptive_budget_records.jsonl",
+    "depth_decision_records.jsonl",
+    "evidence_memory.jsonl",
+    "promotion_events.jsonl",
     "state_alignment.jsonl",
     "step_decoupling_status.jsonl",
     "checkpoint_rows.jsonl",
 ]
+
+
+def _base_variant_name(variant_name: str) -> str:
+    """Strip staged suffixes like '_P12' from staged variant names."""
+
+    return re.sub(r"_P\d+$", "", variant_name)
 
 SCREENSHOT_DIRS = [
     Path("rollback_timeline_images"),
@@ -157,6 +170,7 @@ def _load_task_rows(tasks_csv: Path) -> tuple[list[dict[str, str]], list[str]]:
 
 def _write_task_files(variant_root: Path, rows: list[dict[str, str]], csv_path: Path) -> None:
     variant_root.mkdir(parents=True, exist_ok=True)
+    rows = rows[:]
     (variant_root / "frozen_task_selection.csv").write_text(
         "task_id,task,app,task_mode,shard\n"
         + "\n".join(
@@ -166,14 +180,22 @@ def _write_task_files(variant_root: Path, rows: list[dict[str, str]], csv_path: 
         + "\n",
         encoding="utf-8",
     )
-    (variant_root / "frozen_30task_selection.csv").write_text(csv_path.read_text(encoding="utf-8"), encoding="utf-8")
+    (variant_root / "frozen_30task_selection.csv").write_text(
+        "task_id,task,app,task_mode,shard\n"
+        + "\n".join(
+            ",".join([str(r.get("task_id", "")), r.get("task", ""), r.get("app", ""), r.get("task_mode", ""), r.get("shard", "")])
+            for r in rows
+        )
+        + "\n",
+        encoding="utf-8",
+    )
     lines = [
-        "# Frozen 30-task selection (generated for final PASE run)",
+        "# Task selection for final PASE run",
         "",
         "| # | task_id | task | app | task_mode | shard |",
         "| ---: | --- | --- | --- | --- | --- |",
     ]
-    for r in rows[:30]:
+    for r in rows:
         lines.append(
             f"| {_to_int(r.get('task_id'))} | `{r.get('task_id', '')}` | `{r.get('task', '')}` | "
             f"{r.get('app', '')} | {r.get('task_mode', '')} | {r.get('shard', '')} |"
@@ -218,6 +240,148 @@ def _concat_jsonl(run_dir: Path, filename: str, out_path: Path) -> int:
             out.write(text)
             count += sum(1 for line in text.splitlines() if line.strip())
     return count
+
+
+def _read_trace_rows(run_dir: Path, filename: str) -> list[dict[str, Any]]:
+    traces_dir = run_dir / "traces"
+    if not traces_dir.exists():
+        return []
+    for p in sorted(traces_dir.rglob(filename)):
+        if p.is_file():
+            rows = _read_jsonl(p)
+            if rows:
+                return rows
+    return []
+
+
+def _write_jsonl_rows(rows: list[dict[str, Any]], out_path: Path) -> None:
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    if not rows:
+        out_path.write_text("", encoding="utf-8")
+        return
+    with out_path.open("w", encoding="utf-8") as f:
+        for row in rows:
+            f.write(json.dumps(row, ensure_ascii=False) + "\n")
+
+
+def _derive_slot_state_records(run_dir: Path, out_path: Path) -> None:
+    rows = _read_trace_rows(run_dir, "evidence_decisions.jsonl")
+    derived: list[dict[str, Any]] = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        derived.append(
+            {
+                "task_id": row.get("task_id"),
+                "step": row.get("step"),
+                "branch_id": row.get("branch_id"),
+                "evidence_type": row.get("evidence_type"),
+                "evidence_depth": row.get("evidence_depth"),
+                "candidate_label": row.get("candidate_label"),
+                "operator": row.get("operator"),
+                "state_match_score": row.get("state_match_score"),
+                "slot_or_target_score": row.get("slot_or_target_score"),
+                "rollback_verified": row.get("rollback_verified"),
+                "target_visible": row.get("target_visible"),
+                "injected": row.get("injected"),
+                "rejected_reason": row.get("rejected_reason"),
+                "injected_reason": row.get("injected_reason"),
+            }
+        )
+    _write_jsonl_rows(derived, out_path)
+
+
+def _derive_adaptive_budget_records(run_dir: Path, out_path: Path) -> None:
+    rows = _read_trace_rows(run_dir, "latency_budget_records.jsonl")
+    if not rows:
+        # Fallback: state acquisition metrics can act as budget proxies for quick diagnostics.
+        metric_rows: list[dict[str, Any]] = []
+        metric_path = run_dir / "state_acquisition_metrics.csv"
+        if not metric_path.exists():
+            fallback = sorted(run_dir.rglob("state_acquisition_metrics.csv"))
+            metric_path = fallback[0] if fallback else metric_path
+        if metric_path.exists():
+            with metric_path.open("r", encoding="utf-8", newline="") as f:
+                for row in csv.DictReader(f):
+                    if row:
+                        metric_rows.append(
+                            {
+                                "step": row.get("step"),
+                                "episode_id": row.get("episode_id"),
+                                "task": row.get("task"),
+                                "candidate_count": row.get("candidate_count"),
+                                "attempted_count": row.get("attempted_count"),
+                                "latency_budget_ms": row.get("a11y_ms")
+                                or row.get("state_fetch_ms")
+                                or row.get("latency_ms"),
+                                "source": "state_acquisition_metrics",
+                            }
+                        )
+        rows = metric_rows
+    _write_jsonl_rows(rows, out_path)
+
+
+def _derive_depth_decision_records(run_dir: Path, out_path: Path) -> None:
+    rows = _read_trace_rows(run_dir, "exploration_step_summary.jsonl")
+    if not rows:
+        rows = _read_trace_rows(run_dir, "exploration_branch_trace.jsonl")
+    derived = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        derived.append(
+            {
+                "task_id": row.get("task_id"),
+                "step": row.get("step"),
+                "branch_id": row.get("branch_id") or row.get("branch_key"),
+                "depth_reached": row.get("depth_reached"),
+                "stop_reason": row.get("stop_reason"),
+                "candidate_label": row.get("selected_candidate", {}).get("label")
+                if isinstance(row.get("selected_candidate"), dict)
+                else row.get("selected_candidate"),
+                "score": row.get("score"),
+                "operator": row.get("operator"),
+                "state_match": row.get("state_match"),
+            }
+        )
+    _write_jsonl_rows(derived, out_path)
+
+
+def _derive_evidence_memory(run_dir: Path, out_path: Path) -> None:
+    rows = _read_trace_rows(run_dir, "evidence_decisions.jsonl")
+    if not rows:
+        rows = _read_trace_rows(run_dir, "prompt_hints.jsonl")
+    memory = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        memory.append(row)
+    _write_jsonl_rows(memory, out_path)
+
+
+def _derive_promotion_events(run_dir: Path, out_path: Path) -> None:
+    rows = _read_trace_rows(run_dir, "evidence_decisions.jsonl")
+    events = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        events.append(
+            {
+                "task_id": row.get("task_id"),
+                "step": row.get("step"),
+                "branch_id": row.get("branch_id"),
+                "event_type": "promote" if row.get("injected") else "reject",
+                "injected": row.get("injected"),
+                "evidence_type": row.get("evidence_type"),
+                "candidate_label": row.get("candidate_label"),
+                "score": row.get("score"),
+                "rejected_reason": row.get("rejected_reason"),
+                "state_match_score": row.get("state_match_score"),
+                "target_visible": row.get("target_visible"),
+                "rollback_verified": row.get("rollback_verified"),
+            }
+        )
+    _write_jsonl_rows(events, out_path)
 
 
 def _concat_markdown(run_dir: Path, filename: str, out_path: Path) -> None:
@@ -302,8 +466,8 @@ def _materialize_variant_outputs(variant_root: Path, run_dir: Path, variant_name
         if name.endswith(".jsonl"):
             _concat_jsonl(run_dir, name, out)
         elif name.endswith(".csv"):
-            src = next(iter(sorted((traces_root).rglob(name)), None)
-            ) if traces_root.exists() else None
+            csv_candidates = sorted(traces_root.rglob(name)) if traces_root.exists() else []
+            src = csv_candidates[0] if csv_candidates else None
             if src and src.exists():
                 shutil.copy2(src, out)
             else:
@@ -316,6 +480,29 @@ def _materialize_variant_outputs(variant_root: Path, run_dir: Path, variant_name
                 shutil.copy2(report_dir / name, out)
             else:
                 _write_placeholder(out)
+
+    # Derived diagnostics for design-specific files.
+    derived_targets = {
+        "slot_state_records.jsonl": _derive_slot_state_records,
+        "adaptive_budget_records.jsonl": _derive_adaptive_budget_records,
+        "depth_decision_records.jsonl": _derive_depth_decision_records,
+        "evidence_memory.jsonl": _derive_evidence_memory,
+        "promotion_events.jsonl": _derive_promotion_events,
+    }
+    for file_name, producer in derived_targets.items():
+        path = variant_root / file_name
+        if path.exists():
+            if path.stat().st_size == 0:
+                producer(run_dir, path)
+            else:
+                try:
+                    txt = path.read_text(encoding="utf-8").strip()
+                    if not txt or txt == "无可用数据":
+                        producer(run_dir, path)
+                except Exception:
+                    producer(run_dir, path)
+        else:
+            producer(run_dir, path)
 
     for file_like in ["candidate_scores.jsonl", "prompt_traces.jsonl"]:
         out = variant_root / file_like
@@ -354,7 +541,7 @@ def _common_args(
         "--task_random_seed=43",
         "--fixed_task_seed",
         "--image_downsample_scale=1.0",
-        "--baseline_table=results/4B_2.txt",
+        "--baseline_table=results/baseline_4b_full_report/task_results_4B_2.txt",
         f"--experiment_root={variant_root}",
         f"--max_cases={max_cases}",
         f"--max_n_steps={max_steps}",
@@ -385,8 +572,9 @@ def _variant_args(
     branch_budget: int,
     min_attempts: int,
 ) -> list[str]:
-    cfg = VARIANT_CONFIGS[variant_name]
-    cmd = _common_args(variant_name, tasks, variant_root, max_cases, max_steps)
+    base_variant = _base_variant_name(variant_name)
+    cfg = VARIANT_CONFIGS[base_variant]
+    cmd = _common_args(base_variant, tasks, variant_root, max_cases, max_steps)
     if not cfg.get("enabled"):
         cmd.extend(
             [
@@ -409,7 +597,7 @@ def _variant_args(
             f"--explore_branch_budget={branch_budget}",
             f"--explore_min_attempts_per_step={min_attempts}",
             "--explore_branch_depth=2",
-            "--explore_back_limit=4",
+            "--explore_back_limit=0",
             "--explore_fallback_safe_candidates",
             "--explore_safe_click_only",
             "--explore_skip_launcher",
@@ -436,9 +624,6 @@ def _variant_args(
     )
     if cfg.get("safe_mcts"):
         cmd.append("--explore_safe_mcts")
-    # Keep this as explicit upper-bound formula control:
-    # if you want richer PASE scoring, remove this line and enable pattern-aware env below.
-    cmd.append("--explore_upper_bound_evidence")
     return cmd
 
 
@@ -480,6 +665,7 @@ def _run_variant(
     env = os.environ.copy()
     env.update(env_overrides)
     # enforce required env for this benchmark
+    base_variant = _base_variant_name(variant_name)
     env.update(
         {
             "ANDROID_WORLD_DECOUPLED_EXPLORATION": "1",
@@ -497,7 +683,7 @@ def _run_variant(
             "ANDROID_WORLD_LIGHT_EXPLORE_T2_LOOKAHEAD": "0",
             "ANDROID_WORLD_LIGHT_EXPLORE_ENABLE_T2_LOOKAHEAD": "0",
             "ANDROID_WORLD_T2_ALLOW_SAFE_SEARCH_INPUT": "0",
-            "ANDROID_WORLD_LIGHT_EXPLORE_PATTERN_AWARE_OPERATOR_BEST_FIRST": "1" if "PASE_" in variant_name else "0",
+            "ANDROID_WORLD_LIGHT_EXPLORE_PATTERN_AWARE_OPERATOR_BEST_FIRST": "1" if "PASE_" in base_variant else "0",
         }
     )
 
@@ -528,6 +714,8 @@ def _run_variant(
         "run_dir": str(run_dir) if run_dir else "",
         "log": str(log_path),
         "env": env_overrides,
+        "task_count": len(tasks),
+        "tasks": tasks,
     }
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
 
@@ -538,7 +726,43 @@ def _run_variant(
     return int(proc.returncode)
 
 
-def _merge_compare_report(run_root: Path, variants: list[str], tasks: list[str]) -> Path:
+def _merge_compare_report(
+    run_root: Path,
+    variants: list[str],
+    tasks: list[str],
+    baseline_variant: str = "B0_BASELINE_RERUN",
+    pase_variant: str = "PASE_PATTERN_AWARE_OPERATOR_BEST_FIRST_BUDGET12",
+    report_name: str = "merged_pase_30task_report_cn.md",
+) -> Path:
+    def _baseline_rows_from_summary(rows: list[dict[str, Any]], task_order: list[str]) -> list[dict[str, str]]:
+        if not rows:
+            return []
+        task_lookup = {r.get("task"): r for r in rows}
+        synthetic: list[dict[str, str]] = []
+        for task in task_order:
+            r = task_lookup.get(task, {})
+            success = _to_bool(r.get("baseline_success_rate"))
+            episode_length = r.get("baseline_episode_length")
+            synthetic.append(
+                {
+                    "task": task,
+                    "success": str(bool(success)),
+                    "episode_length": str(_to_float(episode_length)) if episode_length is not None else "0",
+                    "exception": "",
+                }
+            )
+        return synthetic
+    fallback_baseline_rows: list[dict[str, str]] = []
+    for variant in variants:
+        root = run_root / variant
+        variant_summary = _read_json(root / "summary.json")
+        if not fallback_baseline_rows:
+            baseline_compare = variant_summary.get("baseline_compare", {})
+            if isinstance(baseline_compare, dict):
+                rows = baseline_compare.get("rows", [])
+                if rows:
+                    fallback_baseline_rows = list(rows)
+
     variant_rows: dict[str, dict[str, Any]] = {}
     for variant in variants:
         root = run_root / variant
@@ -548,8 +772,15 @@ def _merge_compare_report(run_root: Path, variants: list[str], tasks: list[str])
         hint_hit_rows = _read_jsonl(root / "hint_hit_follow.jsonl")
         evidence_rows = _read_jsonl(root / "evidence_decisions.jsonl")
         rollback_rows = _read_jsonl(root / "rollback_events.jsonl")
+        variant_summary = _read_json(root / "summary.json")
+        if not fallback_baseline_rows and variant_summary.get("baseline_compare", {}).get("rows"):
+            fallback_baseline_rows = list(variant_summary["baseline_compare"]["rows"])
 
         success_rows = [r for r in task_rows if _to_bool(r.get("success"))]
+        if variant == baseline_variant and not success_rows and fallback_baseline_rows:
+            # 如果该变体没有 per_task 结果，尝试从 baseline_compare 回退（例如只存在 B0_P12 阶段）。
+            task_rows = _baseline_rows_from_summary(fallback_baseline_rows, tasks)
+            success_rows = [r for r in task_rows if _to_bool(r.get("success"))]
         success_rate = _to_float(len(success_rows)) / max(1, len(task_rows))
         avg_steps = 0.0
         if task_rows:
@@ -591,11 +822,14 @@ def _merge_compare_report(run_root: Path, variants: list[str], tasks: list[str])
         # write combined per-task file for merging
         _write_checkpoint_rows(root / "checkpoint_rows.jsonl", task_rows, hint_rows, evidence_rows, rollback_rows)
 
-    base = variant_rows.get("B0_BASELINE_RERUN", {}).get("summary", {})
-    pase = variant_rows.get("PASE_PATTERN_AWARE_OPERATOR_BEST_FIRST_BUDGET12", {}).get("summary", {})
+    base = variant_rows.get(baseline_variant, {}).get("summary", {})
+    pase = variant_rows.get(pase_variant, {}).get("summary", {})
 
+    title = "# merged_pase_30task_report_cn.md"
+    if not report_name.startswith("merged_pase_30task"):
+        title = "# " + report_name.replace(".md", "")
     lines = [
-        "# merged_pase_30task_report_cn.md",
+        title,
         "",
         "## 总体对比",
         "",
@@ -619,8 +853,14 @@ def _merge_compare_report(run_root: Path, variants: list[str], tasks: list[str])
         "| --- | ---: | ---: | ---: | ---: |",
     ]
 
-    base_tasks = {r.get("task") or r.get("task_id"): r for r in variant_rows.get("B0_BASELINE_RERUN", {}).get("per_task", [])}
-    pase_tasks = {r.get("task") or r.get("task_id"): r for r in variant_rows.get("PASE_PATTERN_AWARE_OPERATOR_BEST_FIRST_BUDGET12", {}).get("per_task", [])}
+    base_tasks = {
+        r.get("task") or r.get("task_id"): r
+        for r in variant_rows.get(baseline_variant, {}).get("per_task", [])
+    }
+    pase_tasks = {
+        r.get("task") or r.get("task_id"): r
+        for r in variant_rows.get(pase_variant, {}).get("per_task", [])
+    }
     for t in tasks:
         b = base_tasks.get(t, {})
         p = pase_tasks.get(t, {})
@@ -659,12 +899,15 @@ def _merge_compare_report(run_root: Path, variants: list[str], tasks: list[str])
         )
 
     lines.extend(["", "## Evidence 与 Hint",
-                  "", "- 下列文件可直接用于后续审计：", "", f"  - {run_root}/B0_BASELINE_RERUN/evidence_decisions.jsonl", f"  - {run_root}/PASE_PATTERN_AWARE_OPERATOR_BEST_FIRST_BUDGET12/evidence_decisions.jsonl",
-                  f"  - {run_root}/PASE_PATTERN_AWARE_OPERATOR_BEST_FIRST_BUDGET12/prompt_hints.jsonl",
-                  f"  - {run_root}/PASE_PATTERN_AWARE_OPERATOR_BEST_FIRST_BUDGET12/hint_hit_follow.jsonl", "", "## 输出路径",
-                  "", f"- `per_task_results.csv`: 各变体分别位于 `B0_BASELINE_RERUN/` 与 `PASE_PATTERN_AWARE_OPERATOR_BEST_FIRST_BUDGET12/`", ])
+                  "", "- 下列文件可直接用于后续审计：", "",
+                  f"  - {run_root}/{baseline_variant}/evidence_decisions.jsonl",
+                  f"  - {run_root}/{pase_variant}/evidence_decisions.jsonl",
+                  f"  - {run_root}/{pase_variant}/prompt_hints.jsonl",
+                  f"  - {run_root}/{pase_variant}/hint_hit_follow.jsonl",
+                  "", "## 输出路径", "",
+                  f"- `per_task_results.csv`: 各变体分别位于 `{baseline_variant}/` 与 `{pase_variant}/`", ])
 
-    out = run_root / "merged_pase_30task_report_cn.md"
+    out = run_root / report_name
     out.write_text("\n".join(lines) + "\n", encoding="utf-8")
     return out
 
@@ -690,15 +933,36 @@ def _write_checkpoint_rows(out_path: Path, task_rows: list[dict[str, str]], hint
             f.write(json.dumps(row, ensure_ascii=False) + "\n")
 
 
+def _stage_variant_name(variant_name: str, task_count: int, full_task_count: int) -> str:
+    if task_count >= full_task_count:
+        return variant_name
+    return f"{variant_name}_P{task_count}"
+
+
+def _collect_tasks_for_stage(all_tasks: list[str], stage_size: int) -> list[str]:
+    return all_tasks[:stage_size]
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--tasks_csv", default=str(DEFAULT_TASKS_CSV))
     parser.add_argument("--experiment_root", default=str(DEFAULT_ROOT))
     parser.add_argument("--variants", default=",".join(VARIANT_CONFIGS.keys()))
     parser.add_argument("--max_cases", type=int, default=30)
+    parser.add_argument("--pilot_cases", type=int, default=DEFAULT_PILOT_TASKS)
     parser.add_argument("--max_steps", type=int, default=DEFAULT_MAX_STEPS)
     parser.add_argument("--branch_budget", type=int, default=DEFAULT_BRANCH_BUDGET)
     parser.add_argument("--min_attempts_per_step", type=int, default=DEFAULT_MIN_ATTEMPTS)
+    parser.add_argument(
+        "--run_stages",
+        default="pilot,full",
+        help="Comma-separated execution stages, e.g. pilot,full",
+    )
+    parser.add_argument(
+        "--continue_on_pilot_fail",
+        action="store_true",
+        help="Continue to full stage even if pilot stage has non-zero error return.",
+    )
     parser.add_argument("--force", action="store_true", help="rerun variants even if existing manifest is present")
     parser.add_argument("--report_only", action="store_true", help="skip running, only regenerate merged report")
     args = parser.parse_args()
@@ -713,35 +977,94 @@ def main() -> int:
     task_rows, tasks = _load_task_rows(tasks_csv)
     if len(tasks) < args.max_cases:
         raise SystemExit(f"tasks in csv={len(tasks)} < max_cases={args.max_cases}")
+    if args.pilot_cases < 1:
+        raise SystemExit(f"--pilot_cases must be >= 1, got {args.pilot_cases}")
+    if args.pilot_cases > args.max_cases:
+        args.pilot_cases = args.max_cases
     tasks = tasks[: args.max_cases]
 
-    variants = [v.strip() for v in args.variants.split(",") if v.strip()]
-    unknown = [v for v in variants if v not in VARIANT_CONFIGS]
+    raw_variants = [v.strip() for v in args.variants.split(",") if v.strip()]
+    variants = []
+    for raw in raw_variants:
+        base = _base_variant_name(raw)
+        if base not in VARIANT_CONFIGS:
+            continue
+        if base not in variants:
+            variants.append(base)
+    unknown = [v for v in raw_variants if _base_variant_name(v) not in VARIANT_CONFIGS]
     if unknown:
         raise SystemExit(f"Unknown variants: {', '.join(unknown)}")
 
+    stages = [s.strip() for s in args.run_stages.split(",") if s.strip()]
+    if not stages:
+        stages = ["pilot", "full"]
+    for s in stages:
+        if s not in {"pilot", "full", "none"}:
+            raise SystemExit(f"invalid stage '{s}', expect pilot/full/none")
+
     print(f"[pase] root={run_root}")
     print(f"[pase] tasks={len(tasks)} variants={','.join(variants)}")
+    print(f"[pase] stages={','.join(stages)} pilot={args.pilot_cases} full={args.max_cases}")
 
     if not args.report_only:
-        for variant in variants:
-            rc = _run_variant(
-                run_root=run_root,
-                variant_name=variant,
-                tasks=tasks,
-                task_rows=[r for r in task_rows if str(r.get("task", "")) in set(tasks)],
-                tasks_csv=tasks_csv,
-                max_cases=args.max_cases,
-                max_steps=args.max_steps,
-                branch_budget=args.branch_budget,
-                min_attempts=args.min_attempts_per_step,
-                force=args.force,
-                env_overrides={},
-            )
-            if rc != 0:
-                print(f"[pase] variant {variant} exit={rc}")
+        stage_task_counts = {}
+        for s in stages:
+            if s == "pilot":
+                stage_task_counts[s] = args.pilot_cases
+            elif s == "full":
+                stage_task_counts[s] = args.max_cases
 
-    report = _merge_compare_report(run_root, variants, tasks)
+        pilot_failed = False
+        for stage in stages:
+            if stage == "none":
+                continue
+            stage_tasks = _collect_tasks_for_stage(tasks, stage_task_counts[stage])
+            stage_task_set = set(stage_tasks)
+            stage_rows = [r for r in task_rows if str(r.get("task", "")) in stage_task_set]
+            print(f"[pase] stage={stage} task_count={len(stage_tasks)}")
+            for variant in variants:
+                stage_variant = _stage_variant_name(variant, len(stage_tasks), args.max_cases)
+                rc = _run_variant(
+                    run_root=run_root,
+                    variant_name=stage_variant,
+                    tasks=stage_tasks,
+                    task_rows=stage_rows,
+                    tasks_csv=tasks_csv,
+                    max_cases=len(stage_tasks),
+                    max_steps=args.max_steps,
+                    branch_budget=args.branch_budget,
+                    min_attempts=args.min_attempts_per_step,
+                    force=args.force,
+                    env_overrides={},
+                )
+                if rc != 0:
+                    print(f"[pase] stage={stage} variant={variant} exit={rc}")
+                    pilot_failed = True
+            if stage == "pilot" and pilot_failed and not args.continue_on_pilot_fail:
+                print("[pase] stop at pilot due to failure; use --continue_on_pilot_fail to continue.")
+                return int(pilot_failed)
+
+    report_size = args.max_cases if "full" in stages else args.pilot_cases
+    report_tasks = _collect_tasks_for_stage(tasks, report_size)
+    report_variants = [
+        _stage_variant_name(variant, report_size, args.max_cases)
+        for variant in variants
+    ]
+    baseline_variant = _stage_variant_name("B0_BASELINE_RERUN", report_size, args.max_cases) if "B0_BASELINE_RERUN" in variants else ""
+    pase_variant = _stage_variant_name(
+        "PASE_PATTERN_AWARE_OPERATOR_BEST_FIRST_BUDGET12",
+        report_size,
+        args.max_cases,
+    ) if "PASE_PATTERN_AWARE_OPERATOR_BEST_FIRST_BUDGET12" in variants else ""
+
+    report = _merge_compare_report(
+        run_root=run_root,
+        variants=report_variants,
+        tasks=report_tasks,
+        baseline_variant=baseline_variant or "B0_BASELINE_RERUN",
+        pase_variant=pase_variant or "PASE_PATTERN_AWARE_OPERATOR_BEST_FIRST_BUDGET12",
+        report_name="merged_pase_30task_report_cn.md" if "full" in stages else "merged_pase_pilot_report_cn.md",
+    )
     print(f"[pase] merged report: {report}")
     return 0
 

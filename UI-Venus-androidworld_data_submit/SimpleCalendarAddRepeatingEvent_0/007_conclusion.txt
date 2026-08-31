@@ -1,0 +1,2 @@
+
+"Click on the start time field to change the event start time to 14:00."

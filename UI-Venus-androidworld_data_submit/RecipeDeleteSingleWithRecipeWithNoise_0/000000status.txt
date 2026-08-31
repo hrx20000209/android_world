@@ -1,0 +1,3 @@
+1.0
+RecipeDeleteSingleWithRecipeWithNoise
+90.99056601524353

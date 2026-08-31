@@ -1,0 +1,2 @@
+
+"Select the 'Weekly' option to set the event to recur weekly."

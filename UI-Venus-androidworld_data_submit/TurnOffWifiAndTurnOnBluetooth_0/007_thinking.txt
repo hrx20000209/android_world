@@ -1,0 +1,2 @@
+
+The goal is to turn off WiFi and then enable Bluetooth. Currently, the WiFi is still enabled as indicated by the blue toggle switch. The next logical step is to turn off the WiFi by clicking the toggle switch. Once WiFi is turned off, I can proceed to enable Bluetooth.

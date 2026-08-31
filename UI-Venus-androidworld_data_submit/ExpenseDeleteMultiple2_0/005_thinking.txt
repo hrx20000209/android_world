@@ -1,0 +1,2 @@
+
+To delete the specified expenses, I need to interact with each entry individually. The current screen shows the 'Streaming Services' and 'Pet Supplies' expenses, which are part of the list to be deleted. I should start by selecting the 'Streaming Services' entry to initiate the deletion process. Once 'Streaming Services' is deleted, I'll move on to 'Pet Supplies', and finally, I'll look for 'Unexpected Expenses' if it isn't already visible.

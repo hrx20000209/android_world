@@ -1,0 +1,2 @@
+
+To proceed with creating a new drawing, I need to ensure the canvas is clear. The trash can icon likely represents a delete function, which would clear the current drawing. Clicking it should allow me to start fresh.

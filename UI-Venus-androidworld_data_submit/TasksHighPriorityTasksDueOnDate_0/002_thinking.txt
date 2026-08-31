@@ -1,0 +1,2 @@
+
+To find tasks with high priority due on October 18, 2023, I need to filter the tasks based on their due date and priority level. Currently, the screenshot shows a list of tasks without any indication of filtering options. I should look for a way to filter tasks by date and priority. The menu icon at the bottom left corner could provide filtering options.

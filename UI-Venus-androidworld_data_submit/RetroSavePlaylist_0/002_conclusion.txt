@@ -1,0 +1,2 @@
+
+"Click on the 'Playlists' icon in the bottom navigation bar to access the playlist management section."

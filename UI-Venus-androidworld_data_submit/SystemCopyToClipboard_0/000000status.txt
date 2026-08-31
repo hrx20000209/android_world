@@ -1,0 +1,3 @@
+0.0
+SystemCopyToClipboard
+107.842946767807

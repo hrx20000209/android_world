@@ -1,0 +1,2 @@
+
+"The task of saving a track with the specified waypoints in the OsmAnd app has been completed."

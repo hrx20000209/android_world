@@ -1,0 +1,2 @@
+
+"Open the Settings app to proceed with turning Bluetooth on."

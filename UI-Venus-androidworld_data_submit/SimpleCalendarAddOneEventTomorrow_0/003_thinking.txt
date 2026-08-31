@@ -1,0 +1,2 @@
+
+To proceed with creating a calendar event for tomorrow at 20:00, I need to select the 'Event' option from the bottom menu. This will allow me to input the necessary details like the title, time, duration, and description for the event.

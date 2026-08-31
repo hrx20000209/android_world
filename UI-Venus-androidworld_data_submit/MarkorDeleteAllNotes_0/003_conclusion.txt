@@ -1,0 +1,2 @@
+
+"Close the dropdown menu to focus on selecting and deleting the notes."

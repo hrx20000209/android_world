@@ -1,0 +1,2 @@
+
+The user wants to create a new folder named "folder_20250810_121139" within the Markor app. The current screenshot shows the Markor app interface with a list of files and a red plus button at the bottom right corner. This button likely allows users to add new items such as files or folders. To proceed, I should click this button to initiate the creation of a new folder.

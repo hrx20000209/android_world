@@ -1,0 +1,2 @@
+
+The user's goal is to save a track with specific waypoints in the OsmAnd app. The current screenshot shows the map interface, but it is not centered on the desired locations in Liechtenstein. The next logical step is to search for the starting point, Schönberg, Liechtenstein, to begin adding the waypoints. The search icon at the top left corner appears to be the most suitable option to find the location.

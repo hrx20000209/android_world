@@ -1,0 +1,2 @@
+
+The user wants to identify high-priority tasks. The current screenshot shows that the tasks are already sorted by priority. To view the high-priority tasks, I need to close the sorting menu and check the list of tasks. The high-priority tasks should now be at the top of the list due to the sorting applied.

@@ -1,0 +1,2 @@
+
+"Open the Clock app to access the stopwatch."

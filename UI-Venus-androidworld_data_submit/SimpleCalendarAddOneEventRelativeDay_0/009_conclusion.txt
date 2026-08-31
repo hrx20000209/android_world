@@ -1,0 +1,2 @@
+
+"Confirm the selected date by clicking the 'OK' button."

@@ -30,9 +30,19 @@ from absl import logging
 from android_world import checkpointer as checkpointer_lib
 from android_world import registry
 from android_world import suite_utils
-from android_world.agents import base_agent, human_agent, infer, m3a, random_agent, seeact, t3a, mm_agent, t3a_profiling, explorer_agent, gelab_agent, gelab_agent_resize, gelab_offline_exploration, explorer_agent_gelab, explorer_agent_gelab_light, explorer_agent_gelab_bandit, explorer_agent_gelab_effectiveness, explorer_agent_ablation_random, explorer_agent_ablation_back2, explorer_agent_ablation_no_knowledge
+from android_world.agents import base_agent, human_agent, infer, m3a, random_agent, seeact, t3a, t3a_mobicom, t3a_fast, mm_agent, t3a_profiling, explorer_agent, gelab_agent, gelab_agent_resize, gelab_offline_exploration, explorer_agent_gelab, explorer_agent_gelab_light, explore_agent_text, explorer_agent_gelab_bandit, explorer_agent_gelab_effectiveness, explorer_agent_ablation_random, explorer_agent_ablation_back2, explorer_agent_ablation_no_knowledge
 from android_world.env import env_launcher
 from android_world.env import interface
+
+# Which inference server to talk to. Defaults to the historical
+# localhost:8081; ANDROID_WORLD_LLM_API_URL points runs at a different one
+# (e.g. the LabServer instance on 8083, ~80 tok/s versus the Jetson's ~10)
+# without editing code, so a config difference can never be mistaken for a
+# method difference later.
+_LLM_API_URL = os.environ.get(
+    "ANDROID_WORLD_LLM_API_URL", "http://localhost:8081/v1/chat/completions")
+
+
 
 logging.set_verbosity(logging.WARNING)
 
@@ -211,7 +221,7 @@ def _get_agent(
         agent = mai_ui.MAIUIAgent(
             env,
             infer.LlamaCppWrapper(
-                api_url="http://localhost:8081/v1/chat/completions",
+                api_url=_LLM_API_URL,
                 temperature=0.0,
                 max_tokens=512,
             ),
@@ -223,7 +233,7 @@ def _get_agent(
         agent = gelab_agent.GELABAgent(
             env,
             infer.LlamaCppWrapper(
-                api_url="http://localhost:8081/v1/chat/completions",
+                api_url=_LLM_API_URL,
                 temperature=0.0,
             ),
             "qwen-vl",
@@ -233,7 +243,7 @@ def _get_agent(
         agent = gelab_agent_resize.GELABAgent(
             env,
             infer.LlamaCppWrapper(
-                api_url="http://localhost:8081/v1/chat/completions",
+                api_url=_LLM_API_URL,
                 temperature=0.0,
             ),
             "qwen-vl",
@@ -244,7 +254,7 @@ def _get_agent(
         agent = gelab_offline_exploration.GELABAgent(
             env,
             infer.LlamaCppWrapper(
-                api_url="http://localhost:8081/v1/chat/completions",
+                api_url=_LLM_API_URL,
                 temperature=0.0,
             ),
             "qwen-vl",
@@ -255,7 +265,7 @@ def _get_agent(
         agent = mm_agent.ElementTextAgent(
             env,
             infer.LlamaCppWrapper(
-                api_url="http://localhost:8081/v1/chat/completions",
+                api_url=_LLM_API_URL,
                 temperature=0.0,
                 max_tokens=512,
             )
@@ -264,16 +274,52 @@ def _get_agent(
         agent = t3a.T3A(
             env,
             infer.LlamaCppTextWrapper(
-                api_url="http://localhost:8081/v1/chat/completions",
+                api_url=_LLM_API_URL,
                 temperature=0.0,
                 max_tokens=512,
+            ),
+        )
+    elif _AGENT_NAME.value == 't3a_llamacpp_8082':
+        agent = t3a.T3A(
+            env,
+            infer.LlamaCppTextWrapper(
+                api_url="http://127.0.0.1:8082/v1/chat/completions",
+                temperature=0.0,
+                max_tokens=1024,
+            ),
+        )
+    elif _AGENT_NAME.value == 't3a_mobicom_llamacpp_8082':
+        agent = t3a_mobicom.T3A(
+            env,
+            infer.LlamaCppTextWrapper(
+                api_url="http://127.0.0.1:8082/v1/chat/completions",
+                temperature=0.0,
+                max_tokens=1024,
+            ),
+        )
+    elif _AGENT_NAME.value == 't3a_fast_llamacpp_8082':
+        agent = t3a_fast.FastT3A(
+            env,
+            infer.LlamaCppTextWrapper(
+                api_url="http://127.0.0.1:8082/v1/chat/completions",
+                temperature=0.0,
+                max_tokens=1024,
+            ),
+        )
+    elif _AGENT_NAME.value == 't3a_hybrid_llamacpp_8082':
+        agent = t3a_fast.HybridT3A(
+            env,
+            infer.LlamaCppTextWrapper(
+                api_url="http://127.0.0.1:8082/v1/chat/completions",
+                temperature=0.0,
+                max_tokens=1024,
             ),
         )
     elif _AGENT_NAME.value == 'm3a_llamacpp':
         agent = m3a.M3A(
             env,
             infer.LlamaCppWrapper(
-                api_url="http://localhost:8081/v1/chat/completions",
+                api_url=_LLM_API_URL,
                 temperature=1.0,
                 max_tokens=512,
             )
@@ -284,7 +330,7 @@ def _get_agent(
         agent = explorer_agent.ExplorerElementAgent(
             env,
             infer.LlamaCppWrapper(
-                api_url="http://localhost:8081/v1/chat/completions",
+                api_url=_LLM_API_URL,
                 temperature=0.0,
                 max_tokens=512,
             ),
@@ -294,17 +340,28 @@ def _get_agent(
         agent = explorer_agent_gelab_light.ExplorerElementAgent(
             env,
             infer.LlamaCppWrapper(
-                api_url="http://localhost:8081/v1/chat/completions",
+                api_url=_LLM_API_URL,
                 temperature=0.0,
                 max_tokens=512,
             ),
+            image_downsample_scale=_IMAGE_DOWNSAMPLE_SCALE.value,
+        )
+    elif _AGENT_NAME.value == 'explore_agent_text':
+        agent = explore_agent_text.ExplorerTextAgent(
+            env,
+            infer.LlamaCppTextWrapper(
+                api_url="http://127.0.0.1:8082/v1/chat/completions",
+                temperature=0.0,
+                max_tokens=1024,
+            ),
+            output_path="./output_text",
             image_downsample_scale=_IMAGE_DOWNSAMPLE_SCALE.value,
         )
     elif _AGENT_NAME.value == 'explore_agent_gelab_bandit':
         agent = explorer_agent_gelab_bandit.ExplorerElementAgent(
             env,
             infer.LlamaCppWrapper(
-                api_url="http://localhost:8081/v1/chat/completions",
+                api_url=_LLM_API_URL,
                 temperature=0.0,
                 max_tokens=512,
             ),
@@ -314,7 +371,7 @@ def _get_agent(
         agent = explorer_agent_gelab_effectiveness.ExplorerElementAgent(
             env,
             infer.LlamaCppWrapper(
-                api_url="http://localhost:8081/v1/chat/completions",
+                api_url=_LLM_API_URL,
                 temperature=0.0,
                 max_tokens=512,
             ),
@@ -324,7 +381,7 @@ def _get_agent(
         agent = explorer_agent_ablation_random.ExplorerElementAgent(
             env,
             infer.LlamaCppWrapper(
-                api_url="http://localhost:8081/v1/chat/completions",
+                api_url=_LLM_API_URL,
                 temperature=0.0,
                 max_tokens=512,
             ),
@@ -334,7 +391,7 @@ def _get_agent(
         agent = explorer_agent_ablation_back2.ExplorerElementAgent(
             env,
             infer.LlamaCppWrapper(
-                api_url="http://localhost:8081/v1/chat/completions",
+                api_url=_LLM_API_URL,
                 temperature=0.0,
                 max_tokens=512,
             ),
@@ -344,7 +401,7 @@ def _get_agent(
         agent = explorer_agent_ablation_no_knowledge.ExplorerElementAgent(
             env,
             infer.LlamaCppWrapper(
-                api_url="http://localhost:8081/v1/chat/completions",
+                api_url=_LLM_API_URL,
                 temperature=0.0,
                 max_tokens=512,
             ),

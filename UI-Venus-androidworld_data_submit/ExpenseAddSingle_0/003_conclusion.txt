@@ -1,0 +1,2 @@
+
+"Click on the 'Name' field to start entering the expense name."

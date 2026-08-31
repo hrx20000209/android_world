@@ -1,0 +1,2 @@
+
+The file name has been correctly set to `receipt`, and the type is already selected as Markdown. The next logical step is to confirm the creation of the file by clicking the 'OK' button. This will finalize the creation of the `receipt.md` file, allowing us to proceed with entering the transaction data in CSV format.

@@ -1,0 +1,2 @@
+
+"Confirm the move operation by selecting the 'SELECT THIS FOLDER' button."

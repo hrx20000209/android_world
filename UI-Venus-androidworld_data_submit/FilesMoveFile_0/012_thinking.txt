@@ -1,0 +1,2 @@
+
+To move the file 'holiday_photos.jpg' from Podcasts to DCIM, I need to navigate into the sdk_gphone64_x86_64 storage area. The current screenshot shows the sdk_gphone64_x86_64 option available in the list, so clicking on it will take me to the desired storage area where I can find the DCIM folder.

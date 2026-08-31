@@ -1,0 +1,2 @@
+
+The user wants to know their incomplete tasks due by Thursday in the Tasks app. Currently, we're on the home screen, so the next step is to open the Tasks app. Since the Tasks app isn't visible here, I should scroll or search for it.

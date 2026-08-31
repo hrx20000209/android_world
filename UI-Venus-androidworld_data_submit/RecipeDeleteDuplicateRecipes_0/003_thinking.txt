@@ -1,0 +1,2 @@
+
+To proceed with deleting duplicate recipes, I need to access options related to managing this recipe. The three-dot menu icon typically contains such options. Clicking it could reveal an option to delete the recipe.

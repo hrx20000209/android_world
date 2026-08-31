@@ -1,0 +1,2 @@
+
+The user wants to copy the file "receipt_2023_01_22_sure_frog.jpg" from the DCIM folder and save it in the Download folder. The current screenshot shows the options menu where the "Copy to" option is available. Selecting this option will allow us to choose the destination folder for the copied file.

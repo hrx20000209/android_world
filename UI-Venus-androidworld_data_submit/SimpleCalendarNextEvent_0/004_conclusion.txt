@@ -1,0 +1,2 @@
+
+"Confirm the date selection to proceed with viewing the events."

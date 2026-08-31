@@ -1,0 +1,3 @@
+1.0
+SimpleCalendarDeleteEventsOnRelativeDay
+113.19268488883972

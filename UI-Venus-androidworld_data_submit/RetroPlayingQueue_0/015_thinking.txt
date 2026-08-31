@@ -1,0 +1,2 @@
+
+The current screen shows that the search field is ready for a new query. Since "Forever Young" has already been added to the queue, the next step is to search for the next song, "Whispers of the Past." I need to type "Whispers of the Past" into the search bar to find the song and add it to the queue.

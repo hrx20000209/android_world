@@ -1,0 +1,2 @@
+
+I am selecting "Use without an account" to bypass the account setup and proceed with opening the HTML file in Chrome.

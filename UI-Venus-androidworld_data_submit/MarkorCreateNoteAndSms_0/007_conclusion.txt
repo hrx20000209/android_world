@@ -1,0 +1,2 @@
+
+"I clicked on the file extension field to remove the '.md' part."

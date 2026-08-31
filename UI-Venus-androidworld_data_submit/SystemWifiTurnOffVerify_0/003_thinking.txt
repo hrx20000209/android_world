@@ -1,0 +1,2 @@
+
+The user's goal is to turn off Wi-Fi. The previous actions involved scrolling up, likely to access the settings or quick settings menu. Now, the Settings app is visible on the screen. The next logical step is to open the Settings app to manage Wi-Fi settings.

@@ -1,0 +1,2 @@
+
+The user wants to know the number of to-dos in the 'Ideas' folder. The current screenshot shows the sidebar with various folders, including 'Ideas'. To proceed, I need to click on the 'Ideas' folder to view its contents and count the to-dos.

@@ -1,0 +1,2 @@
+
+To begin adding recipes into the Broccoli app, I need to locate and open the Broccoli app from the home screen or app drawer. Since it's not visible here, I should scroll through the app pages or access the app drawer to find it.

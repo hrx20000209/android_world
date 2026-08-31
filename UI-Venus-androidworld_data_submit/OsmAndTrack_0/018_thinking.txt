@@ -1,0 +1,2 @@
+
+The user's goal is to save a track with specific waypoints in the OsmAnd app. So far, two waypoints, Schönberg and Triesen, have been added. The next step is to add the third waypoint, Bendern, Liechtenstein. The current screenshot shows the map interface with the search icon at the top left corner, which is the appropriate option to search for the next waypoint.

@@ -1,0 +1,2 @@
+
+"Click the '+' button to start a new expense entry for 'Stationery'."

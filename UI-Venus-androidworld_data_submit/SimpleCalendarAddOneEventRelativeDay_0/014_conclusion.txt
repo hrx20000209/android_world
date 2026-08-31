@@ -1,0 +1,2 @@
+
+"Click on the number 6 on the clock face to set the end time to 6:00 AM."

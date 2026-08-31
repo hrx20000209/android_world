@@ -1,0 +1,2 @@
+
+The next step is to enter the phone number '799-802-1530' into the 'Phone' field. The 'Phone' field is already selected, so I can type the number directly. After entering the phone number, I need to change the label from 'Mobile' to 'Work'.

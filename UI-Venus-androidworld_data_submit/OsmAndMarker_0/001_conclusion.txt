@@ -1,0 +1,2 @@
+
+"Launching the OsmAnd app to proceed with adding a location marker."

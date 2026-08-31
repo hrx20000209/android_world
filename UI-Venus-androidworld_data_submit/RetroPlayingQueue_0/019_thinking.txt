@@ -1,0 +1,2 @@
+
+The current screen shows that the search field is ready for a new query. Since "Whispers of the Past" has already been added to the queue, the next step is to search for the final song, "Heartbeat Away." I need to type "Heartbeat Away" into the search bar to find the song and add it to the queue.

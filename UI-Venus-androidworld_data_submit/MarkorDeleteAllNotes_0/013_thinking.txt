@@ -1,0 +1,2 @@
+
+The user's goal was to delete all notes in Markor. Based on the current screenshot, there are no more notes displayed in the list, indicating that all notes have been successfully deleted. Therefore, the task is complete.

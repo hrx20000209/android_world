@@ -2,14 +2,24 @@ package com.androidworld.fasta11y;
 
 import android.accessibilityservice.AccessibilityService;
 import android.graphics.Rect;
+import android.net.LocalServerSocket;
+import android.net.LocalSocket;
 import android.os.Build;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.accessibility.AccessibilityWindowInfo;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public final class FastA11yService extends AccessibilityService {
+  private static final String SOCKET_NAME = "androidworld_fast_a11y";
   private static volatile FastA11yService instance;
+  private volatile boolean socketRunning;
+  private LocalServerSocket serverSocket;
 
   public static FastA11yService getInstance() {
     return instance;
@@ -30,10 +40,12 @@ public final class FastA11yService extends AccessibilityService {
   @Override
   protected void onServiceConnected() {
     instance = this;
+    startSocketServer();
   }
 
   @Override
   public void onDestroy() {
+    stopSocketServer();
     if (instance == this) {
       instance = null;
     }
@@ -48,6 +60,98 @@ public final class FastA11yService extends AccessibilityService {
   @Override
   public void onInterrupt() {
     // No ongoing spoken/audio feedback to interrupt.
+  }
+
+  private synchronized void startSocketServer() {
+    if (socketRunning) {
+      return;
+    }
+    socketRunning = true;
+    Thread thread = new Thread(
+        new Runnable() {
+          @Override
+          public void run() {
+            runSocketServer();
+          }
+        },
+        "FastA11ySocketServer");
+    thread.setDaemon(true);
+    thread.start();
+  }
+
+  private void runSocketServer() {
+    try {
+      serverSocket = new LocalServerSocket(SOCKET_NAME);
+      while (socketRunning) {
+        final LocalSocket client = serverSocket.accept();
+        Thread handler = new Thread(
+            new Runnable() {
+              @Override
+              public void run() {
+                handleSocketClient(client);
+              }
+            },
+            "FastA11ySocketClient");
+        handler.setDaemon(true);
+        handler.start();
+      }
+    } catch (Throwable ignored) {
+      // Closing the server during service shutdown also exits through here.
+    } finally {
+      socketRunning = false;
+    }
+  }
+
+  private void handleSocketClient(LocalSocket client) {
+    try {
+      BufferedReader input = new BufferedReader(
+          new InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
+      DataOutputStream output = new DataOutputStream(client.getOutputStream());
+      String request;
+      while (socketRunning && (request = input.readLine()) != null) {
+        String[] fields = request.trim().split("\\s+");
+        boolean flat = fields.length < 1 || !"tree".equals(fields[0]);
+        boolean compact = fields.length >= 2 && "1".equals(fields[1]);
+        int maxNodes = fields.length >= 3 ? parsePositiveInt(fields[2], 10000) : 10000;
+        byte[] payload = snapshotJson(flat, compact, maxNodes)
+            .getBytes(StandardCharsets.UTF_8);
+        output.writeInt(payload.length);
+        output.write(payload);
+        output.flush();
+      }
+    } catch (Throwable ignored) {
+      // A host-side abort intentionally closes the forwarded connection.
+    } finally {
+      try {
+        client.close();
+      } catch (IOException ignored) {
+        // Nothing else to release.
+      }
+    }
+  }
+
+  private synchronized void stopSocketServer() {
+    socketRunning = false;
+    if (serverSocket != null) {
+      try {
+        serverSocket.close();
+      } catch (IOException ignored) {
+        // Nothing else to release.
+      }
+      serverSocket = null;
+    }
+  }
+
+  private static int parsePositiveInt(String value, int fallback) {
+    if (value == null || value.isEmpty()) {
+      return fallback;
+    }
+    try {
+      int parsed = Integer.parseInt(value);
+      return parsed > 0 ? parsed : fallback;
+    } catch (NumberFormatException e) {
+      return fallback;
+    }
   }
 
   public String snapshotJson(boolean flat, boolean compact, int maxNodes) {
@@ -122,7 +226,7 @@ public final class FastA11yService extends AccessibilityService {
         }
       } else if (activeRoot != null) {
         if (flat) {
-          appendFlatNode(activeRoot, -1, 0, first);
+          appendFlatNode(activeRoot, -1, 0, first, false);
         } else {
           appendTreeRoot(activeRoot, first);
         }
@@ -193,15 +297,35 @@ public final class FastA11yService extends AccessibilityService {
     private void appendFlatWindow(AccessibilityWindowInfo window, int windowIndex, boolean[] first) {
       AccessibilityNodeInfo root = window.getRoot();
       if (root != null) {
-        appendFlatNode(root, windowIndex, 0, first);
+        appendFlatNode(root, windowIndex, 0, first, false);
       }
     }
 
+    // Standard Material Design widget used to render a navigation drawer's
+    // own menu content, not a per-app naming convention. Checked on the
+    // widget's actual class name (same category of signal as the existing
+    // role checks for switch/checkbox/button elsewhere in this pipeline),
+    // not on any label or resource-id text. Deliberately does NOT match
+    // DrawerLayout: that is the whole-screen root container hosting BOTH
+    // the drawer and the main content side by side, so tagging everything
+    // under it would mark essentially the entire screen as "drawer" on any
+    // app using the standard drawer pattern - only NavigationView is
+    // actually scoped to the drawer's own menu items.
+    private static boolean isDrawerContainerClass(CharSequence className) {
+      if (className == null) {
+        return false;
+      }
+      String value = className.toString();
+      return value.contains("NavigationView");
+    }
+
     private void appendFlatNode(
-        AccessibilityNodeInfo node, int windowIndex, int depth, boolean[] first) {
+        AccessibilityNodeInfo node, int windowIndex, int depth, boolean[] first,
+        boolean inNavigationDrawer) {
       if (!beginNode(node)) {
         return;
       }
+      boolean childInNavigationDrawer = inNavigationDrawer || isDrawerContainerClass(node.getClassName());
       boolean emit = !compact || isInteresting(node);
       if (emit) {
         if (!first[0]) {
@@ -210,6 +334,7 @@ public final class FastA11yService extends AccessibilityService {
         first[0] = false;
         out.append('{');
         appendNodeFields(node, depth, windowIndex, true);
+        out.append(",\"inNavigationDrawer\":").append(inNavigationDrawer);
         out.append('}');
         emittedCount++;
       }
@@ -217,7 +342,7 @@ public final class FastA11yService extends AccessibilityService {
       for (int i = 0; i < childCount; i++) {
         AccessibilityNodeInfo child = node.getChild(i);
         if (child != null) {
-          appendFlatNode(child, windowIndex, depth + 1, first);
+          appendFlatNode(child, windowIndex, depth + 1, first, childInNavigationDrawer);
           if (truncated) {
             break;
           }

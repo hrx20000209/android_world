@@ -1,0 +1,2 @@
+
+The user's task is to open the settings app after turning on Wi-Fi. Since Wi-Fi has already been turned on, the next step is to locate and open the settings app. The settings app icon is visible on the home screen, so clicking on it will fulfill the task requirement.

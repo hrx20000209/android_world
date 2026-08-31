@@ -1,0 +1,2 @@
+
+The user wants to identify high-priority tasks. The current screenshot shows the tasks sorted by priority, with the highest priority tasks at the top. The task "Call client for follow-up" is marked with a red checkbox, indicating it is the highest priority task. No other tasks have a red checkbox, so this is the only high-priority task visible.

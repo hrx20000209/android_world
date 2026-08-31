@@ -1,0 +1,2 @@
+
+The video recording has been completed as indicated by the stop button being inactive and the presence of the thumbnail preview. The task of taking one video is now finished. Therefore, the next logical step is to confirm completion of the task.

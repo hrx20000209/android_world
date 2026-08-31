@@ -1,0 +1,2 @@
+
+The user wants to identify high-priority tasks. The current screenshot shows a sorting menu where selecting 'By priority' would organize tasks based on their priority level, making it easier to identify high-priority tasks. This aligns with the user's goal of finding high-priority tasks.

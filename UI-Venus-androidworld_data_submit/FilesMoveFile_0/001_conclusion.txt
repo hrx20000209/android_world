@@ -1,0 +1,2 @@
+
+"Open the file manager app to access the storage."

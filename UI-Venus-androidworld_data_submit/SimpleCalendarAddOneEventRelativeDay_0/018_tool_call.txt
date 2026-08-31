@@ -1,0 +1,1 @@
+{'action': 'Finished', 'params': {'content': 'Calendar event created successfully for this Thursday at 5:00 AM with the title "Call with the Team", description "We will celebrate team roles.", and a duration of 60 minutes.'}}

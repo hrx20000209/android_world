@@ -1,0 +1,2 @@
+
+"Click on the start time field to adjust the time to 17:00."

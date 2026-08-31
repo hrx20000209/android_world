@@ -1,0 +1,2 @@
+
+"Conclude the task as the user has been informed that the skiing activity lasted 135 minutes."

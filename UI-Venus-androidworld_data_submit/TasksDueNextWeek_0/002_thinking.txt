@@ -1,0 +1,2 @@
+
+The user wants to know how many tasks are due next week. From the screenshot, we can see tasks with their respective deadlines. However, the dates shown are relative ("Today," "Fri," etc.), so we need to check for specific dates starting from next Monday. The current view shows tasks with deadlines like "Oct 8" and "Wed," "Thu," "Fri." We need to filter these tasks based on the start date of next week. Since the current view does not show all tasks clearly, scrolling down might reveal more tasks.

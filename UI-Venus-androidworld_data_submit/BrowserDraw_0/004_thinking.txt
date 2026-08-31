@@ -1,0 +1,2 @@
+
+To proceed with the task, I need to open the 'task.html' file. Clicking on the file should prompt an option to open it with a specific application, such as Chrome. This aligns with the user's instruction to open the file with Chrome.

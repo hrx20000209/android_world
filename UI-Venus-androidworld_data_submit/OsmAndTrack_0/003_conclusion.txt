@@ -1,0 +1,2 @@
+
+"Click on 'Plan a route' to start creating a route with the specified waypoints."

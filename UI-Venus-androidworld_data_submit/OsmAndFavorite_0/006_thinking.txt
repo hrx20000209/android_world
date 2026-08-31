@@ -1,0 +1,2 @@
+
+The user has already entered the name for the favorite location and selected an icon. The next logical step is to save the favorite location so that it is added to the list of favorites. The 'Save' button is clearly visible and should be clicked to complete the task.

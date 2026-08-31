@@ -1,0 +1,2 @@
+
+To find out how many running activities were done this week in the OpenTracks app, I need to open the OpenTracks app first. Since it's not visible on the home screen, I should scroll through the apps or search for it.

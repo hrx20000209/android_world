@@ -1,0 +1,2 @@
+
+To turn Bluetooth off, I need to access the 'Connected devices' section where Bluetooth settings are located. The 'Connected devices' option is visible on the screen, so clicking on it will allow me to proceed to the Bluetooth settings.

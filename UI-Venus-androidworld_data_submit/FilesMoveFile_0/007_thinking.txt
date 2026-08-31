@@ -1,0 +1,2 @@
+
+To move the file 'holiday_photos.jpg' from Podcasts to DCIM, I need to first enter the Podcasts folder to locate the file. The current screenshot shows the Podcasts folder clearly visible among other directories. Clicking on the Podcasts folder will allow me to access its contents and find the file 'holiday_photos.jpg'.

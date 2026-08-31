@@ -1,0 +1,2 @@
+
+"Confirm that the brightness is already at its minimum value."

@@ -1,0 +1,2 @@
+
+The user wants to know how many to-dos they have in the 'Ideas' folder within the Joplin app. Currently, the home screen is visible, but there's no sign of the Joplin app on this screen. Therefore, the next step should be to locate and open the Joplin app. Since the app isn't visible here, I'll need to either swipe through the home screens or access the app drawer to find it.

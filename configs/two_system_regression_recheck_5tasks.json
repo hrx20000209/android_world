@@ -1,0 +1,12 @@
+{
+  "seed": 30,
+  "baseline": "results/4B_2.txt",
+  "selection_policy": "5 tasks that regressed from baseline-success to two-system-failure in the 2026-08-28 15-task repetitive batch; re-check after goal-directed multi-hop exploration fix",
+  "tasks": [
+    {"name": "ExpenseDeleteMultiple", "baseline_success": 1, "baseline_steps": 11, "max_steps": 16},
+    {"name": "ExpenseDeleteMultiple2", "baseline_success": 1, "baseline_steps": 21, "max_steps": 26},
+    {"name": "RecipeDeleteMultipleRecipes", "baseline_success": 1, "baseline_steps": 14, "max_steps": 19},
+    {"name": "ContactsAddContact", "baseline_success": 1, "baseline_steps": 9, "max_steps": 14},
+    {"name": "ClockStopWatchRunning", "baseline_success": 1, "baseline_steps": 4, "max_steps": 10}
+  ]
+}

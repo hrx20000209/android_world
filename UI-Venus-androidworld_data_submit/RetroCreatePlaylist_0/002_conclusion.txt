@@ -1,0 +1,2 @@
+
+"I tapped on the playlists/library icon in the bottom navigation bar to access the playlist creation options."

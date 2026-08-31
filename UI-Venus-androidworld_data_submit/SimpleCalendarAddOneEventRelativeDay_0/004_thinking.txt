@@ -1,0 +1,2 @@
+
+To create the calendar event as specified, I need to start by entering the title 'Call with the Team'. The title field is currently active, so I can type directly into it. Once the title is entered, I will move on to set the date and time for this Thursday at 5h, along with the other required details.

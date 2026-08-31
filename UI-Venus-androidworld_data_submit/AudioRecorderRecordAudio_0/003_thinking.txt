@@ -1,0 +1,2 @@
+
+The user needs to apply the selected settings to proceed with recording an audio clip. The 'Apply' button is visible and should be clicked to confirm these settings and move forward to the recording interface.

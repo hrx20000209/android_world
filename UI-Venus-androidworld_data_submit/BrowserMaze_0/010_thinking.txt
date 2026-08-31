@@ -1,0 +1,2 @@
+
+The current screen displays a pop-up asking whether to use Sogou for search in China. To proceed with the task of navigating the X to the bottom-right cell, this pop-up needs to be dismissed. The best option here is to click "Keep Google" to maintain the current search engine settings and continue with the task.

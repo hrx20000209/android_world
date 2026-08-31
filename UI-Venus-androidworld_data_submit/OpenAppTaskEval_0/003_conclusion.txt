@@ -1,0 +1,2 @@
+
+"Navigate back to the 'Contacts' tab to ensure the main contact list is accessible."

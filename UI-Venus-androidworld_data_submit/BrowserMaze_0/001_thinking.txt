@@ -1,0 +1,4 @@
+
+The user needs to open the file manager to access the Downloads folder and find the 'task.html' file. From the screenshot, there is no visible file manager app on the home screen. Therefore, I need to scroll or search for the file manager app.
+
+Action: Scroll down to reveal more apps and locate the file manager.

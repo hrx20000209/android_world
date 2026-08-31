@@ -1,0 +1,2 @@
+
+The user wants to know the number of tasks due next week. The current screenshot shows the sidebar menu with various filters, including 'Today'. To find tasks due next week, I need to select a filter that corresponds to next week's dates. The 'Filters' section likely contains options for filtering by date ranges, including next week. I should look for an option that allows filtering tasks by next week's dates.

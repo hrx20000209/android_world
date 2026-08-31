@@ -1,0 +1,2 @@
+
+The current screen shows the 'Unexpected Expenses' entry, which needs to be deleted as per the user's request. The next step involves selecting the 'Unexpected Expenses' entry to initiate the deletion process. After deleting 'Unexpected Expenses', the task will be complete since the other two expenses have already been removed.

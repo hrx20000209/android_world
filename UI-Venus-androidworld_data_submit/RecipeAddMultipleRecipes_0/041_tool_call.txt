@@ -1,0 +1,1 @@
+{'action': 'Type', 'params': {'content': 'Sauté onions and garlic, add cubed butternut squash and broth. Puree until smooth and season with nutmeg, salt, and pepper. Feel free to substitute with ingredients you have on hand.'}}

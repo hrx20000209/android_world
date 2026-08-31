@@ -1,0 +1,2 @@
+
+To rename the note correctly, I need to replace "my_note" with "2023_09_08_active_umbrella". Also, I need to change the file extension from ".md" to ".txt". The current focus seems to be on the name field, so I'll start by typing the correct name.

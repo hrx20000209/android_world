@@ -1,0 +1,2 @@
+
+The app 'Pro Expense' has been launched but it seems like it is still loading. I cannot see any interface elements yet, so I need to wait until the app fully loads to proceed with adding the expenses as instructed.

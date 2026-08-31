@@ -1,0 +1,2 @@
+
+To delete all events scheduled for this Monday, I need to select and delete the remaining event, "Review session for Project X." This can be done by clicking on the event to access the deletion options.

@@ -1,0 +1,2 @@
+
+The user has entered the coordinates correctly, and the search results show the location in Liechtenstein. The next logical step is to select the location from the search results to proceed with adding it as a favorite location marker. The option "SHOW ON MAP" appears to be available, which likely centers the map on the searched location, allowing us to mark it as a favorite.

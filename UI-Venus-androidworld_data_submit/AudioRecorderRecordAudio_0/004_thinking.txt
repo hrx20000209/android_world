@@ -1,0 +1,2 @@
+
+The user is currently on the main recording screen of the Audio Recorder app. To start recording an audio clip, the next logical step is to click the large circular button at the bottom center of the screen, which typically serves as the record button. Once the recording starts, the user can stop it when desired and then save the recorded clip.

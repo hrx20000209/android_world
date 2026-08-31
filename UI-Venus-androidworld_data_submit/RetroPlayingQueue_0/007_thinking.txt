@@ -1,0 +1,2 @@
+
+The current screen indicates that the search field is ready for a new query. Since "Through the Storm" has already been added to the queue, the next step is to search for the next song, "Hidden Paths." I need to type "Hidden Paths" into the search bar to find the song and add it to the queue.

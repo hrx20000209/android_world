@@ -1,0 +1,2 @@
+
+The user is in the process of entering an expense in the Pro Expense app. The next step is to input the details of the expense as seen in the 'expenses.jpg' file. The current screen shows fields for Name, Amount, Category, and Note. The Name field is active, indicating that the user should start by typing the name of the expense. Based on the previous steps, the user has already viewed the 'expenses.jpg' file, so they should know what to enter.

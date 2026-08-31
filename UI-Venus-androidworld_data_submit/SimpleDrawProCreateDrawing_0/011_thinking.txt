@@ -1,0 +1,2 @@
+
+The task requires saving the drawing with the specified name in the Pictures folder. The current screenshot shows that we are in the correct folder, and the SAVE button is visible. Clicking the SAVE button will finalize the saving process.

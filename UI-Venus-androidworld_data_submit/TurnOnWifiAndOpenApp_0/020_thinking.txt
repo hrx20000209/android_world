@@ -1,0 +1,2 @@
+
+The user's task is to turn on Wi-Fi and then open the settings app. According to the history, Wi-Fi has already been turned on, and the settings app is now open. Therefore, the task requirements have been met.

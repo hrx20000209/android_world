@@ -1,0 +1,2 @@
+
+The current screen is the Help & Feedback section within the Tasks app, which doesn't display any information related to tasks or their deadlines. To find out how many tasks are due next week, I need to navigate back to the main task list or calendar view where tasks are organized by date. Pressing the back button should take me out of this section and closer to the relevant task list.

@@ -1,0 +1,2 @@
+
+"Confirm the end time by clicking 'OK' to finalize the event duration."

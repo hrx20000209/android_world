@@ -1,0 +1,2 @@
+
+The current screen shows the 'Expense Entry' form where I need to enter the details for the new expense. The first field is labeled 'Name', which is where I should type 'Therapy Sessions'. This aligns with the user's request to add an expense named 'Therapy Sessions'.

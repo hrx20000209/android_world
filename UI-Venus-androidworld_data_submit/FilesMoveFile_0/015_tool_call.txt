@@ -1,0 +1,1 @@
+{'action': 'Finished', 'params': {'content': 'The file holiday_photos.jpg has been successfully moved from Podcasts to DCIM within the sdk_gphone_x86_64 storage area.'}}

@@ -1,0 +1,2 @@
+
+The user wants to turn off Wi-Fi. Since we're on the home screen, the next logical step would be to access the settings where network options like Wi-Fi can be managed. The settings app icon is visible at the bottom right corner of the screen. Clicking this will allow us to navigate to the Wi-Fi settings.

@@ -1,0 +1,2 @@
+
+"Click on the Title field to start entering the recipe title."

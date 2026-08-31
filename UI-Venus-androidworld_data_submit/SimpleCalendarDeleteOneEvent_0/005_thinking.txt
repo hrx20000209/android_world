@@ -1,0 +1,2 @@
+
+The confirmation dialog asks if I want to proceed with the deletion of the event. To complete the user's task of deleting the event, I need to confirm the deletion by clicking 'Yes'.

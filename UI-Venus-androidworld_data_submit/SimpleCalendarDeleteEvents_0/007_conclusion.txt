@@ -1,0 +1,2 @@
+
+"Click the trash bin icon to delete the 'Catch up on Project X' event."

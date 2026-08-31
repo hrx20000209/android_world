@@ -1,0 +1,2 @@
+
+The goal is to turn off WiFi and enable Bluetooth. The previous actions attempted to access the quick settings menu but ended up opening the app drawer. Now, I need to navigate back to the home screen or directly open the settings to manage network connections. The Settings app is visible on the screen, which can be used to control both WiFi and Bluetooth.

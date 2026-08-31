@@ -1,0 +1,2 @@
+
+To rename the file, I need to exit the current menu and return to the main file list or find a more appropriate option for renaming. The current menu does not provide a direct rename option. I should close this menu and look for a more suitable option, possibly in the main file view or another menu.

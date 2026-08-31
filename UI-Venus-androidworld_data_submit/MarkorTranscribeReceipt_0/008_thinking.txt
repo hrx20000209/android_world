@@ -1,0 +1,2 @@
+
+To create the `receipt.md` file, I need to initiate the creation of a new file within the Markor app. The red '+' button at the bottom right corner typically represents the option to add a new item, such as a file. Clicking this button should allow me to create the new markdown file where I can input the transaction data in CSV format.

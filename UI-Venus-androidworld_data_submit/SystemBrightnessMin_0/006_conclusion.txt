@@ -1,0 +1,2 @@
+
+"Click on the 'Brightness level' option to access the brightness adjustment slider."

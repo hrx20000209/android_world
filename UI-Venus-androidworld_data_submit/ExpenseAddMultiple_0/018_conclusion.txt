@@ -1,0 +1,2 @@
+
+"Enter the note 'Monthly recurring' in the Note field."

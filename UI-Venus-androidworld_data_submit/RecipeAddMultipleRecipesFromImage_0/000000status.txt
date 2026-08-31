@@ -1,0 +1,3 @@
+0.0
+RecipeAddMultipleRecipesFromImage
+877.4826767444611

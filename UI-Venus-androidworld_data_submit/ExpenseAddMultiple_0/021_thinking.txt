@@ -1,0 +1,2 @@
+
+The current screen shows the main page of the Pro Expense app with the totals and recent expenses listed. The next step is to add the "Stationery" expense. To do this, I need to click the '+' button to start a new expense entry.

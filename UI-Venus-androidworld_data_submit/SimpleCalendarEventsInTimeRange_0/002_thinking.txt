@@ -1,0 +1,2 @@
+
+To find events between 4:15pm and 8pm on Friday, I need to view the details of the specific day. The current screenshot shows a monthly calendar view, so I should click on the date corresponding to the Friday in question to see its events.

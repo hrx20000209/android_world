@@ -1,0 +1,3 @@
+1.0
+SimpleSmsReplyMostRecent
+87.22982978820801

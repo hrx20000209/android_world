@@ -1,0 +1,2 @@
+
+To complete the task of adding the recipe from `recipes.txt` in Markor to the Broccoli app, all necessary fields have been filled except for saving the recipe. The SAVE button is visible at the top right corner of the screen. Clicking this button will save the newly added recipe.

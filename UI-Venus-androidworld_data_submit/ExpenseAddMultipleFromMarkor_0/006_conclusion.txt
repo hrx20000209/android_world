@@ -1,0 +1,2 @@
+
+"Click the plus button to start adding a new reimbursable transaction."

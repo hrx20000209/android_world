@@ -1,0 +1,2 @@
+
+The user's goal is to turn on Wi-Fi. Since we're currently on the home screen with various apps displayed, but no direct access to Wi-Fi settings, the next logical step would be to scroll further or locate the Settings app to access Wi-Fi controls. The previous action involved scrolling up, so continuing to scroll might reveal more apps including the Settings app.

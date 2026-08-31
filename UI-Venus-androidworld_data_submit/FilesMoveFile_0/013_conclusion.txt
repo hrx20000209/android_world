@@ -1,0 +1,2 @@
+
+"Click on the DCIM folder to set it as the destination for moving the file."

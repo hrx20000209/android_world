@@ -1,0 +1,2 @@
+
+"Clicking on the 'Fix & manage' tab to attempt dismissing the pop-up."

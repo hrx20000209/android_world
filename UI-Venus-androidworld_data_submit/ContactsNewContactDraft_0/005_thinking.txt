@@ -1,0 +1,2 @@
+
+The current screen shows the 'Create contact' form with the 'First name' field active. According to the user's instructions, I need to enter 'Grace' into this field. The keyboard is already open, allowing me to type directly into the field. Once the first name is entered, I'll move on to the next fields as per the user's requirements.

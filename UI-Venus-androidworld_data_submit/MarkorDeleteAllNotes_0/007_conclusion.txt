@@ -1,0 +1,2 @@
+
+"Long press on the first note to bring up the delete option."

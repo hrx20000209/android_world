@@ -1,0 +1,2 @@
+
+To merge the contents of the specified notes, I need to create a new note first. The red '+' button at the bottom right corner likely allows me to create a new note. Once the new note is created, I can then proceed to copy and paste the contents from the three specified files into this new note in the required order.

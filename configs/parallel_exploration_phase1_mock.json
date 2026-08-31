@@ -1,0 +1,22 @@
+{
+  "trial_id": "phase1-mock-smoke",
+  "seed": 7,
+  "prompt": "Describe the next safe UI action.",
+  "ready_timeout_s": 5.0,
+  "restore_timeout_s": 5.0,
+  "trial_timeout_s": 10.0,
+  "inference": {
+    "backend": "mock",
+    "model": "mock-vlm",
+    "distribution": "fixed",
+    "duration_s": 1.0,
+    "token_count": 10,
+    "first_token_fraction": 0.25,
+    "decode_progress_every_n_tokens": 3
+  },
+  "explorer": {
+    "poll_interval_ms": 50,
+    "mock_restore_ms": 120,
+    "mock_restore_failure": false
+  }
+}

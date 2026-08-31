@@ -1,0 +1,2 @@
+
+The user wants to edit a note in Markor, but the app isn't visible on the home screen. I need to locate and open the Markor app first. Since it's not on this screen, I should check other screens or the app drawer.

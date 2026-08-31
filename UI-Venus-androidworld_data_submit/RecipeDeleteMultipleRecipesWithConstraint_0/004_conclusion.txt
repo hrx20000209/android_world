@@ -1,0 +1,2 @@
+
+"Clear the search query to explore other options or confirm there are no recipes to delete."

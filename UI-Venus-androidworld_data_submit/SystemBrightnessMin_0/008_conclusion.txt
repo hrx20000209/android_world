@@ -1,0 +1,2 @@
+
+"Click on the leftmost part of the brightness slider to set the brightness to the minimum value."

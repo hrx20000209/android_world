@@ -1,0 +1,2 @@
+
+"Click at the start of the text to place the cursor there for editing."

@@ -1,0 +1,2 @@
+
+The Markor app is currently loading, and once it opens, I need to create a new file named `receipt.md`. Once the app is fully loaded, I can navigate to the option to create a new file and input the required transaction data in CSV format as specified in the task. Since the app is still loading, no further action can be taken at this moment except waiting for the app to load completely.

@@ -1,0 +1,2 @@
+
+The Broccoli app has been opened successfully, but it appears to still be loading. To proceed with adding recipes from `recipes.txt`, I need to wait until the app fully loads and displays its main interface. Once loaded, I can look for an option to import or add new recipes.

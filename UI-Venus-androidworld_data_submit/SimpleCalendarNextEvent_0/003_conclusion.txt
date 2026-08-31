@@ -1,0 +1,2 @@
+
+"Click on 'Go to date' to view the events for today."

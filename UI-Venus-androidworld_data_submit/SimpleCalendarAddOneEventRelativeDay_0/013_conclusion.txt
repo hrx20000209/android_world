@@ -1,0 +1,2 @@
+
+"Click on the end time field to change it to 6:00 AM."

@@ -1,0 +1,2 @@
+
+"Click on 'Connection preferences' to access Bluetooth settings."

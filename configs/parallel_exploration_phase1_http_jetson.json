@@ -1,0 +1,24 @@
+{
+  "trial_id": "phase1-http-jetson-streaming-smoke",
+  "seed": 7,
+  "prompt": "Describe a safe Android UI action in at least twenty English words.",
+  "ready_timeout_s": 5.0,
+  "restore_timeout_s": 5.0,
+  "trial_timeout_s": 60.0,
+  "inference": {
+    "backend": "http",
+    "endpoint": "http://127.0.0.1:8081/v1/chat/completions",
+    "model": "GELAB-ZERO-4B",
+    "timeout_s": 45.0,
+    "decode_progress_every_n_tokens": 2,
+    "request_overrides": {
+      "max_tokens": 48,
+      "temperature": 0
+    }
+  },
+  "explorer": {
+    "poll_interval_ms": 50,
+    "mock_restore_ms": 120,
+    "mock_restore_failure": false
+  }
+}

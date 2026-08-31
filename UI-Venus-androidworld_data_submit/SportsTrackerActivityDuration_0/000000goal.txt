@@ -1,0 +1,1 @@
+How long was my skiing activity October 12 2023 in the OpenTracks app? Express your answer in minutes as a single integer.

@@ -1,0 +1,2 @@
+
+The camera app has been opened successfully, but it seems to be in photo mode rather than video mode. To record a video, I need to switch from photo mode to video mode. Typically, there is an icon or option to toggle between these modes, often located near the top or bottom of the screen.

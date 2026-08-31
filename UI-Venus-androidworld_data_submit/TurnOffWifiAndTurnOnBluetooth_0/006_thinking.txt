@@ -1,0 +1,2 @@
+
+To turn off WiFi, I need to access the "Internet" section where the WiFi toggle is located. The "Internet" option is already highlighted, indicating it was previously selected. The next step is to ensure WiFi is turned off within this section. Once WiFi is off, I can return to the main settings menu to enable Bluetooth.

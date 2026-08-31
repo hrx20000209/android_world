@@ -1,0 +1,2 @@
+
+"Click the 'OK' button to confirm the filename and save the drawing."

@@ -1,0 +1,2 @@
+
+The goal is to add a location marker for Planken, Liechtenstein. The current screen shows the name field containing "LiechtensteinPlanken, Liechtenstein," which needs to be corrected to just "Planken, Liechtenstein." The next logical step is to delete the incorrect part and ensure the name is correctly set. After correcting the name, saving the changes will complete the task.

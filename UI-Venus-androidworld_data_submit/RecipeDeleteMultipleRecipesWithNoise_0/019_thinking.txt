@@ -1,0 +1,2 @@
+
+To complete the task of deleting the specified recipes, I need to confirm the deletion of the 'Tomato Basil Bruschetta' recipe by clicking the 'DELETE' button in the confirmation dialog. This aligns with the task goal of removing all specified recipes from the app. Once this is done, I can then proceed to complete the task.

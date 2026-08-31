@@ -1,0 +1,2 @@
+
+The user wants to delete duplicate expenses in an app called "pro expense." Currently, I am on the home screen, so my first step should be to locate and open the "pro expense" app. Since the app isn't visible here, I need to scroll through the app list or search for it.

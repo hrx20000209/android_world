@@ -1,0 +1,2 @@
+
+"Click the menu icon to explore options for filtering tasks by the completion date."

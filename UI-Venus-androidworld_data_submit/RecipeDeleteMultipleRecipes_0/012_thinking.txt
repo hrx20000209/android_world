@@ -1,0 +1,2 @@
+
+To continue with the task of deleting the specified recipes, I need to select the 'Delete' option from the menu for the "Lentil Soup" recipe. This aligns with the goal of removing the specified recipes from the app.

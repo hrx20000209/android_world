@@ -1,0 +1,2 @@
+
+To run the stopwatch, I need to navigate to the Stopwatch section within the Clock app. The Stopwatch tab is visible at the bottom navigation bar. Clicking on it will take me to the stopwatch interface where I can start the timer.

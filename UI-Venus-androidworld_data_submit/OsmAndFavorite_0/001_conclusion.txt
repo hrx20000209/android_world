@@ -1,0 +1,2 @@
+
+"Launched the OsmAnd app from the home screen."

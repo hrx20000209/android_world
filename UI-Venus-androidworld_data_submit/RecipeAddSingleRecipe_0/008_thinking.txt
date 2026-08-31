@@ -1,0 +1,2 @@
+
+To continue adding the recipe, I need to fill in the 'Servings' field next. The 'Servings' field is visible and ready for input. Clicking on this field will allow me to type in the number of servings.

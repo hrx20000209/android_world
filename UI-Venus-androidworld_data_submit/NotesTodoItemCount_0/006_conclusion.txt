@@ -1,0 +1,2 @@
+
+Inform the user that there are 3 to-dos in the 'Ideas' folder.

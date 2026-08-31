@@ -1,0 +1,2 @@
+
+"All specified expenses have been successfully added."

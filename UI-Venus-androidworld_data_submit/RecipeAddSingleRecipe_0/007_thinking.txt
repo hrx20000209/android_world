@@ -1,0 +1,2 @@
+
+To continue adding the recipe, I need to fill in the remaining fields such as servings, preparation time, ingredients, and directions. Since these fields are not visible on the current screen, I should scroll down to reveal them.

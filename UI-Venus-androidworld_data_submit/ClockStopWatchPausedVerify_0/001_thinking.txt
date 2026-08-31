@@ -1,0 +1,2 @@
+
+The user wants to pause the stopwatch. Currently, we're on the home screen, so I need to open the Clock app where the stopwatch is located. Since the Clock app isn't visible here, I should scroll or search for it.

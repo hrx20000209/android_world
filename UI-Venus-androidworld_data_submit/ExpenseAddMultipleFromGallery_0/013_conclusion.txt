@@ -1,0 +1,2 @@
+
+"Type '25' into the Amount field for the Transport expense."

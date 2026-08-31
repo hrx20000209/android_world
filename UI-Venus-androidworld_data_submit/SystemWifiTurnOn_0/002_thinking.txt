@@ -1,0 +1,2 @@
+
+The user's goal is to turn on Wi-Fi. The previous action involved scrolling up, likely to access the quick settings panel. However, the current screenshot shows the home screen with various apps, indicating that the quick settings panel was not accessed yet. To proceed, I need to scroll up again to reveal the quick settings panel where the Wi-Fi toggle is located.

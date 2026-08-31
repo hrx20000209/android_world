@@ -1,0 +1,2 @@
+
+The user needs to search for the note titled 'To-Do List' within the Joplin app to check if it is marked as a todo item. The current screenshot shows the search interface where I can type the title of the note. Typing 'To-Do List' will help locate the specific note.

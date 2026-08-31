@@ -1,0 +1,17 @@
+{
+  "seed": 30,
+  "baseline": "results/4B_2.txt",
+  "selection_policy": "5 baseline-success + 5 baseline-failure easy/medium tasks, fixed before execution",
+  "tasks": [
+    {"name": "ClockStopWatchRunning", "baseline_success": 1, "baseline_steps": 4, "max_steps": 10},
+    {"name": "SystemBluetoothTurnOn", "baseline_success": 1, "baseline_steps": 4, "max_steps": 10},
+    {"name": "OpenAppTaskEval", "baseline_success": 1, "baseline_steps": 4, "max_steps": 8},
+    {"name": "TasksDueOnDate", "baseline_success": 1, "baseline_steps": 2, "max_steps": 8},
+    {"name": "SimpleCalendarEventsOnDate", "baseline_success": 1, "baseline_steps": 3, "max_steps": 8},
+    {"name": "TasksDueNextWeek", "baseline_success": 0, "baseline_steps": 2, "max_steps": 8},
+    {"name": "SportsTrackerActivitiesCountForWeek", "baseline_success": 0, "baseline_steps": 2, "max_steps": 8},
+    {"name": "NotesRecipeIngredientCount", "baseline_success": 0, "baseline_steps": 5, "max_steps": 10},
+    {"name": "SimpleCalendarNextEvent", "baseline_success": 0, "baseline_steps": 4, "max_steps": 10},
+    {"name": "MarkorEditNote", "baseline_success": 0, "baseline_steps": 12, "max_steps": 15}
+  ]
+}

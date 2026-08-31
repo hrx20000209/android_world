@@ -1,0 +1,3 @@
+0.0
+MarkorCreateNoteFromClipboard
+156.8050332069397

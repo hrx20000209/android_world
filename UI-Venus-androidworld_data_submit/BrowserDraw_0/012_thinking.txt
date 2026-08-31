@@ -1,0 +1,2 @@
+
+The task requires opening the 'task.html' file with Chrome. The current screenshot shows the 'Open with' dialog, and Chrome is already selected. To proceed, I need to confirm the choice by clicking 'Just once' or 'Always'. Choosing 'Just once' will open the file with Chrome without setting it as the default app permanently.

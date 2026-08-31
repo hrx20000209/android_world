@@ -1,0 +1,2 @@
+
+"Scroll up from the bottom of the screen to open the quick settings panel."

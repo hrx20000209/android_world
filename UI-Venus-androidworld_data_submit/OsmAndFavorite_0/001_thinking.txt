@@ -1,0 +1,2 @@
+
+The user wants to add a favorite location marker in the OsmAnd maps app. Currently, the home screen is visible, but there is no sign of the OsmAnd app being open or even present on this screen. Therefore, the next logical step would be to launch the OsmAnd app. Since the app isn't visible here, I should either search for it or navigate through the app drawer.

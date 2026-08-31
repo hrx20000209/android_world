@@ -1,0 +1,2 @@
+
+To delete all events scheduled for this Monday, I need to select each event individually and delete them. The first step is to click on the first event listed for October 16th, "Review session for Budget Planning," to access options for deletion.

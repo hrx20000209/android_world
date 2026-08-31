@@ -1,0 +1,1 @@
+What was the longest distance covered in a mountain biking activity in the OpenTracks app this week? Assume the week starts from Monday. Express your answer as a single number in meters rounded to the nearest integer.

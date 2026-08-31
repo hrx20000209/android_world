@@ -1,0 +1,2 @@
+
+The VLC app is currently loading, so no further actions can be taken until it finishes. Once loaded, I'll navigate to the 'Browse' section to access the internal memory where the video files are located. This will allow me to create the required playlists as per the user's instructions.

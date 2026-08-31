@@ -1,0 +1,2 @@
+
+The user needs to access the `my_expenses.txt` file to review and log reimbursable transactions. The file is visible on the current screen, so the next logical step is to open this file to view its contents.

@@ -1,0 +1,2 @@
+
+To turn Bluetooth off, I need to access the quick settings menu. Since the previous actions involved scrolling but did not reveal the quick settings, I should now navigate to the Settings app where Bluetooth can be managed directly. The Settings app icon is visible on this screen.

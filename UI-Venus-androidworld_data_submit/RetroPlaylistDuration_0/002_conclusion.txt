@@ -1,0 +1,2 @@
+
+"Click on the playlist/library icon in the bottom navigation bar to proceed to the playlist management section."

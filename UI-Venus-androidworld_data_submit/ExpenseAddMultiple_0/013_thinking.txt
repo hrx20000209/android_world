@@ -1,0 +1,2 @@
+
+The current screen shows the expense entry form with the name "Legal Fees" already entered. The next step is to input the amount for this expense. According to the user task, the amount is $10.14. I need to type this value into the Amount field.

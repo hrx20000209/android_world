@@ -1,0 +1,1 @@
+{'action': 'Type', 'params': {'content': 'Cook pasta in boiling water. In a bowl, whisk eggs and cream. Fry bacon and add cheese. Mix egg mixture with bacon. Toss with cooked pasta.'}}

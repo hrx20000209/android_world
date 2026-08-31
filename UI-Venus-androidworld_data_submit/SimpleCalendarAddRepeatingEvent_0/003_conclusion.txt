@@ -1,0 +1,2 @@
+
+"Click on the 'Event' button to start creating the new calendar event."

@@ -1,0 +1,1 @@
+Delete the following expenses from pro expense: Ride-Sharing, Flight Tickets, Taxi Fare.

@@ -1,0 +1,2 @@
+
+To turn Bluetooth on, I need to access the settings menu where Bluetooth options are typically found. Since the Settings app icon is visible on the home screen, clicking it would be the logical next step.

@@ -1,0 +1,2 @@
+
+To turn off Wi-Fi, I need to access the settings menu. Since the settings app isn't visible on this screen, I should scroll down to find it.

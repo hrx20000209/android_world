@@ -1,0 +1,2 @@
+
+To achieve the goal of setting the brightness to the maximum value, I need to interact with the brightness slider. The slider is currently at the minimum position, so I should drag it all the way to the right to reach the maximum value.

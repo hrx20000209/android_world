@@ -1,0 +1,2 @@
+
+"Click the checkmark icon to confirm the entered phone number."

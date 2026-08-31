@@ -1,0 +1,2 @@
+
+The user's goal is to take a photo, and the camera app is already open. The shutter button is visible at the bottom center of the screen. Clicking this button will capture the photo, completing the task.

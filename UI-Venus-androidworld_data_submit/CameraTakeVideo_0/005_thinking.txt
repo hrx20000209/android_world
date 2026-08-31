@@ -1,0 +1,2 @@
+
+To take a video, I need to ensure the camera is set to video mode. The "Video" option is clearly visible and needs to be selected to switch to video mode.

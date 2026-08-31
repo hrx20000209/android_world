@@ -1,0 +1,2 @@
+
+"Scroll down to reveal more fields for entering the recipe details."

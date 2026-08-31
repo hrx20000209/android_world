@@ -1,0 +1,2 @@
+
+To turn off Wi-Fi, I need to access the "Network & internet" section from the settings menu. This option is clearly visible at the top of the list, indicating that it contains the Wi-Fi settings.

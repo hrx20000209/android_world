@@ -1,0 +1,2 @@
+
+To achieve the user's task, I need to start by opening the file manager to access the Downloads folder. Since the file manager app isn't visible on this home screen, I should scroll or navigate to find it. The next step would involve locating the 'task.html' file within the Downloads folder and opening it with Chrome. Once the file is opened, I'll follow the instructions to interact with the webpage as described.

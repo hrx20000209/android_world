@@ -1,0 +1,2 @@
+
+"I will click on the filter icon to view options for filtering tasks by priority."

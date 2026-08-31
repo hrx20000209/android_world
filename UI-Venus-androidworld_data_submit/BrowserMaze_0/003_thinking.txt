@@ -1,0 +1,2 @@
+
+The user has navigated to the Downloads folder where the 'task.html' file is located. The next step is to open this file. Clicking on the 'task.html' file should prompt the user to choose an application to open it with, such as Chrome.

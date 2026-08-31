@@ -1,0 +1,2 @@
+
+To find tasks with high priority due on October 18, 2023, I need to apply filters for both the due date and priority level. The 'Filters' section is currently collapsed, so I should expand it to access the necessary filtering options. This will allow me to narrow down the task list to those meeting the specified criteria.

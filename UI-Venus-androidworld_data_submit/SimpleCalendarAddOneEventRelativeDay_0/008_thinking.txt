@@ -1,0 +1,2 @@
+
+To create the calendar event for this Thursday at 5h, I need to select the correct date corresponding to Thursday. Currently, the calendar shows Sunday, October 15th selected. I should identify the correct Thursday date within the month and select it. Based on the calendar layout, October 19th appears to be the closest Thursday. Selecting this date will align with the user's requirement.

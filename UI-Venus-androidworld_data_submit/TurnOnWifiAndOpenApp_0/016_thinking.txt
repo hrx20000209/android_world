@@ -1,0 +1,2 @@
+
+To turn on Wi-Fi, I need to access the Internet settings. The "Internet" option is visible on the screen, indicating that it leads to the Wi-Fi settings. Clicking on this option will allow me to enable Wi-Fi. Once Wi-Fi is turned on, I can return to the home screen and open the Settings app as required by the task.

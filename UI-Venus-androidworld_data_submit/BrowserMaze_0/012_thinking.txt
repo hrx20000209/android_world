@@ -1,0 +1,2 @@
+
+The task requires moving the 'X' to the bottom-right cell using the direction buttons. Currently, the 'X' is in the top-left cell. The next logical step is to continue moving 'X' downwards. The 'Down' button is available and should be clicked to move 'X' further down towards the bottom row.

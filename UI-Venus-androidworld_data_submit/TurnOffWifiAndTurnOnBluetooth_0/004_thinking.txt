@@ -1,0 +1,2 @@
+
+To achieve the goal of turning off WiFi and enabling Bluetooth, I need to first access the "Network & internet" section to manage the WiFi settings. Once WiFi is turned off, I can then go to the "Connected devices" section to enable Bluetooth. The current screenshot shows the "Network & internet" option at the top, so clicking on it would be the logical next step.

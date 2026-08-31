@@ -1,0 +1,2 @@
+
+The camera is already set to video mode, as indicated by the red circle next to the "Video" option. The next step is to start recording a video. Typically, the record button is located at the bottom center of the screen.

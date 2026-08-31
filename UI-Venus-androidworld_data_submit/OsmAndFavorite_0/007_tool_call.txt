@@ -1,0 +1,1 @@
+{'action': 'Finished', 'params': {'content': 'The favorite location marker has been successfully added at the specified coordinates.'}}

@@ -1,0 +1,2 @@
+
+The goal is to add "Hello, World!" at the top of the note. The cursor is already positioned at the start of the text, so the next step is to type the desired text.

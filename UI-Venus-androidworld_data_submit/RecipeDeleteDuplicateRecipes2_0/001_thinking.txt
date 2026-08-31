@@ -1,0 +1,2 @@
+
+To achieve the goal of deleting duplicate recipes in the Broccoli app, I need to first open the Broccoli app. Since it's not visible on this home screen, I should scroll through the app pages or access the app drawer to find it.

@@ -1,0 +1,2 @@
+
+"Select the remaining note for deletion."

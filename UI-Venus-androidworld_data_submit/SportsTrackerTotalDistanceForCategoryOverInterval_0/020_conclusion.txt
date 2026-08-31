@@ -1,0 +1,2 @@
+
+"Called the user with the total distance covered for kayaking activities between October 09 and October 10, 2023, expressed as 4828 meters."

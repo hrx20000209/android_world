@@ -1,0 +1,2 @@
+
+"Click on the 'Sorting' option to change the sorting method to prioritize high-priority tasks."

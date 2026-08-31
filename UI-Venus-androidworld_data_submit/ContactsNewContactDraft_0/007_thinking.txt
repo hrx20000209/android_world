@@ -1,0 +1,2 @@
+
+The next step is to locate the phone number section to enter the provided phone number and label it as 'Work'. Since the company field is currently active, I need to scroll down to find the phone number section.

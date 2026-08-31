@@ -1,0 +1,2 @@
+
+"Navigate to the Timer section by clicking on the Timer tab."

@@ -1,0 +1,2 @@
+
+To set the event start time to 20:00 as required, I need to click on the number 20 on the clock interface within the time picker dialog. This will update the start time to 20:00, aligning with the user's instruction for the event to begin at 8 PM.

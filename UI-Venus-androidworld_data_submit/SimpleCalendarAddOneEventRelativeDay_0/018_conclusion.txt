@@ -1,0 +1,2 @@
+
+"The calendar event has been successfully created as per the user's request."

@@ -1,0 +1,2 @@
+
+To delete all but one of the duplicate recipes, I need to identify and select the duplicates. The list shows multiple entries for "Caprese Salad Skewers," indicating potential duplicates. I should start by selecting one of these entries to see if there are options to manage or delete them.

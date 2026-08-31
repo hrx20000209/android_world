@@ -1,0 +1,1 @@
+{'action': 'Drag', 'params': {'start': (115, 204), 'end': (1028, 204)}}

@@ -1,0 +1,2 @@
+
+To continue setting up the event, I need to input the title 'Review session for Budget Planning' in the Title field. This is the first step in entering the required details for the event as specified by the user.

@@ -1,0 +1,2 @@
+
+"Enter the amount '50' for the 'Lunch with client' transaction."

@@ -1,0 +1,1 @@
+In Simple Calendar Pro, create a calendar event in two weeks from today at 17h with the title 'Meeting with the Team' and the description 'We will prepare for annual budget.'. The event should last for 30 mins.

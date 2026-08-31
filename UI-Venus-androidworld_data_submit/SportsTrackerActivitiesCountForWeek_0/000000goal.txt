@@ -1,0 +1,1 @@
+How many running activities did I do this week in the OpenTracks app? Assume the week starts from Monday. Express your answer as a single integer.

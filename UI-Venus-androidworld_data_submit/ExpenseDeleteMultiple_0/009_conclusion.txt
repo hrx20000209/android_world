@@ -1,0 +1,2 @@
+
+"Click on the 'Flight Tickets' expense to access options for deletion."

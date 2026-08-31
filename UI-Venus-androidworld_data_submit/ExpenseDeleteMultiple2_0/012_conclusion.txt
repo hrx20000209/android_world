@@ -1,0 +1,2 @@
+
+"Click on the 'Unexpected Expenses' entry to view its details and prepare for deletion."

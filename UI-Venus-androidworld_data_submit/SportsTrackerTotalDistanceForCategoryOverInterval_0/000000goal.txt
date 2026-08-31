@@ -1,0 +1,1 @@
+What was the total distance covered for kayaking activities in the OpenTracks app from October 09 2023 to October 10 2023? Express your answer as a single number in meters rounded to the nearest integer.

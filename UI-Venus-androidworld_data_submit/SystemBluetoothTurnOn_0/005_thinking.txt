@@ -1,0 +1,2 @@
+
+To turn Bluetooth on, I need to toggle the switch labeled "Use Bluetooth." The toggle is currently in the off position, so clicking it should activate Bluetooth.

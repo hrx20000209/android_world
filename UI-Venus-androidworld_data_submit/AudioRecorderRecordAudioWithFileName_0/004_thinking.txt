@@ -1,0 +1,2 @@
+
+To record an audio clip, I need to initiate the recording process. The large white circle at the bottom center appears to be the record button, as it is commonly used for such actions in audio recording apps. Clicking this button should start the recording.

@@ -1,0 +1,2 @@
+
+To create a playlist in VLC, I need to open the VLC app first. Since it's not visible on this home screen, I should look for it either by swiping through other screens or accessing the app drawer.

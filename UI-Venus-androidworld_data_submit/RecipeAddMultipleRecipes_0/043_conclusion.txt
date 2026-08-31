@@ -1,0 +1,2 @@
+
+"All recipes have been successfully added."

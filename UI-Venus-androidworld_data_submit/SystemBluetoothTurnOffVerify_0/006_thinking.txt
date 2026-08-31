@@ -1,0 +1,2 @@
+
+To turn Bluetooth off, I need to navigate back to the main 'Connected devices' settings page where the Bluetooth toggle is available. The current screen shows saved devices, which is not relevant for turning Bluetooth off. I should go back to the previous screen to find the Bluetooth toggle.

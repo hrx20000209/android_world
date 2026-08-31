@@ -1,0 +1,3 @@
+0.0
+SportsTrackerTotalDistanceForCategoryOverInterval
+253.35045766830444

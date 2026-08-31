@@ -1,0 +1,2 @@
+
+"Attempt to launch the Notes app again to proceed with copying the text."

@@ -1,0 +1,2 @@
+
+The user wants to create a new note in Markor. Since the app isn't visible on this home screen, I need to locate and open it. The most likely way to find it is by scrolling through the app drawer or searching for it directly.

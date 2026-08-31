@@ -1,0 +1,2 @@
+
+The user's goal is to turn on Wi-Fi. The current screen displays the "Network & internet" settings, and the "Internet" option is visible, which likely leads to the Wi-Fi settings. Clicking on "Internet" should allow us to access and toggle the Wi-Fi setting.

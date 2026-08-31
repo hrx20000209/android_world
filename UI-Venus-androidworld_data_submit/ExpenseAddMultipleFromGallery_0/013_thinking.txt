@@ -1,0 +1,2 @@
+
+The user has entered the name of the expense as 'Transport'. The next step is to input the amount associated with this expense. According to the 'expenses.jpg' file, the amount for 'Transport' is $25. Therefore, the next logical action is to type '25' into the Amount field.

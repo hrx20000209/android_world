@@ -1,0 +1,2 @@
+
+The user intends to move the file "BIJB_shy_king_copy.md" from the "StudyGuides" folder to the "MeetingMinutes" folder. The current screenshot shows the context menu with the "Move" option available. Selecting this option will allow us to choose the destination folder for the file.

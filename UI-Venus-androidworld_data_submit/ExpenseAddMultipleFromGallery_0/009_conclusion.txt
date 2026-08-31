@@ -1,0 +1,1 @@
+ Entered the amount '30' for the expense 'Food' in the Pro Expense app. 

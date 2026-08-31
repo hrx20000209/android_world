@@ -1,0 +1,2 @@
+
+"Click on the filename field to rename the file."

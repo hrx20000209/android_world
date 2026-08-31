@@ -1,0 +1,3 @@
+0.0
+TasksDueNextWeek
+97.16611552238464

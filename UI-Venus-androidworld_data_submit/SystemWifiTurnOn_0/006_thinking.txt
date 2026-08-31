@@ -1,0 +1,2 @@
+
+The user's goal is to turn on Wi-Fi. The current screenshot shows the Wi-Fi toggle switch, which is currently off. To achieve the user's goal, I need to click on the Wi-Fi toggle switch to turn it on.

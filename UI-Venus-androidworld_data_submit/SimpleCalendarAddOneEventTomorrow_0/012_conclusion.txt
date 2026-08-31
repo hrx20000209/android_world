@@ -1,0 +1,2 @@
+
+"I adjusted the end time to 20:30 by selecting the '30' minute mark."

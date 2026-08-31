@@ -1,0 +1,2 @@
+
+The user's goal is to delete all notes in Markor. Currently, there is one note left in the list, and it has been selected. The next logical step is to delete this remaining note. The trash bin icon at the top right corner likely represents the delete function. Clicking on this icon should initiate the deletion process for the selected note.

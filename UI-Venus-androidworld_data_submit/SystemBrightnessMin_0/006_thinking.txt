@@ -1,0 +1,2 @@
+
+To adjust the brightness to the minimum value, I need to interact with the 'Brightness level' option. This option is visible on the screen, indicating that clicking it will likely bring up a slider to adjust the brightness. Once the slider appears, I can move it to the left until it reaches the minimum value.

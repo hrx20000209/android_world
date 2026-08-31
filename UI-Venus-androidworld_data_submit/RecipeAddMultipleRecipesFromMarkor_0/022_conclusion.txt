@@ -1,0 +1,2 @@
+
+"Type the ingredients 'vegetables, oil, soy sauce, garlic, ginger' into the Ingredients field."

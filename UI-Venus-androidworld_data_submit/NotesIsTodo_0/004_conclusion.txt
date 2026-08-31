@@ -1,0 +1,2 @@
+
+"Click on the 'To-Do List' note to confirm its status as a todo item."

@@ -1,0 +1,2 @@
+
+"Click the plus button to initiate the creation of a new note."

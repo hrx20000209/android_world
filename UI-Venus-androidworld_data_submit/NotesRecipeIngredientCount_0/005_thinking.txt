@@ -1,0 +1,2 @@
+
+The task requires identifying the quantity of spirulina needed for the Chicken Alfredo recipe. From the screenshot, the ingredients section clearly lists "3/4 cup spirulina." This matches the required format as specified in the user task. Therefore, the next step is to communicate this information back to the user.

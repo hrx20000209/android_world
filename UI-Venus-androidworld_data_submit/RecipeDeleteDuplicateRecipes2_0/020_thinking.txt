@@ -1,0 +1,2 @@
+
+To continue with the task of deleting duplicate recipes while ensuring at least one instance of each unique recipe remains, I need to select the 'Delete' option from the menu. This will allow me to remove one of the duplicate entries for "Caprese Salad Skewers."

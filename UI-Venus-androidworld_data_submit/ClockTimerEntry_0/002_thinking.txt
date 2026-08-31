@@ -1,0 +1,2 @@
+
+To create a timer, I need to navigate to the Timer section of the Clock app. The Timer tab is visible at the bottom of the screen, so clicking on it will allow me to proceed with setting the timer as specified in the user task.

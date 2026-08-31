@@ -1,0 +1,2 @@
+
+To set the timer for 0 hours, 16 minutes, and 35 seconds, I need to input these values using the keypad. The first step is to enter '1' for the tens digit of the minutes.

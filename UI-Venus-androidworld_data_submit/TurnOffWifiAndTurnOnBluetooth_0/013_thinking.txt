@@ -1,0 +1,2 @@
+
+The goal is to enable Bluetooth after turning off WiFi. The current screen shows the Bluetooth settings with the toggle switch for "Use Bluetooth" visible. To enable Bluetooth, I need to click the toggle switch to turn it on.

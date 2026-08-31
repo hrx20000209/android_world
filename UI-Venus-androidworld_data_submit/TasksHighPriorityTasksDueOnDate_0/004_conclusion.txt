@@ -1,0 +1,2 @@
+
+"Expanded the 'Filters' section to access filtering options."

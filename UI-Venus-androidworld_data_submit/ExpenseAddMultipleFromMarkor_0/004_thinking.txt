@@ -1,0 +1,2 @@
+
+The user needs to log reimbursable transactions from `my_expenses.txt` into the "pro expense" section. We've already reviewed the `my_expenses.txt` file in Markor. Now, we need to find an appropriate app to log these transactions. Since the current screen doesn't show any specific app for expense tracking, we should look for it by scrolling through the apps or searching for it.

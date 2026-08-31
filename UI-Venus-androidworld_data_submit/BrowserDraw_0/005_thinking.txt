@@ -1,0 +1,2 @@
+
+The current screenshot shows a prompt likely asking how to open the 'task.html' file. Given the user's instructions, the next step is to choose Chrome as the application to open this file. Since the prompt is not fully visible, I assume the next action involves selecting Chrome from the available options.

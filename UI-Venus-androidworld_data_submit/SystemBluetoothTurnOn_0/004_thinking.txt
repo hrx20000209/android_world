@@ -1,0 +1,2 @@
+
+To turn Bluetooth on, I need to select the 'Bluetooth' option from the connection preferences list. This will likely take me to a screen where I can toggle Bluetooth on or off.

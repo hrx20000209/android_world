@@ -1,0 +1,2 @@
+
+"Launched the OpenTracks app to access the activity data."

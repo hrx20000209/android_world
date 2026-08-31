@@ -1,0 +1,2 @@
+
+"I will click on the end time field to set the event duration to 30 minutes."

@@ -1,0 +1,2 @@
+
+The task requires opening the 'task.html' file in Chrome and creating a drawing using the provided colors. Currently, there is a pop-up window asking whether to search with Sogou or keep Google. To proceed with the task, I need to dismiss this pop-up by selecting "Keep Google," which will allow me to continue accessing the file and completing the drawing task.

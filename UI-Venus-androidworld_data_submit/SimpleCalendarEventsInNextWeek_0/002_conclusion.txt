@@ -1,0 +1,2 @@
+
+"Click the forward arrow to navigate to the next week."

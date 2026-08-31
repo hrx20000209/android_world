@@ -1,0 +1,2 @@
+
+The user wants to delete an expense labeled "Rental Income" from the Pro Expense app. Currently, we're on the home screen, so the first step is to locate and open the Pro Expense app. Since it's not visible here, I'll need to scroll through the apps or search for it.

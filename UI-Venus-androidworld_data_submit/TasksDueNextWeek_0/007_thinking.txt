@@ -1,0 +1,2 @@
+
+The user wants to know the number of tasks due next week. The current screenshot shows a menu with a 'Filters' option, which can help narrow down tasks by specific criteria, including due dates. To proceed, I need to expand the 'Filters' section to access options for filtering tasks by next week's dates.

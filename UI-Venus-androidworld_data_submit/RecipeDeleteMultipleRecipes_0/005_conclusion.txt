@@ -1,0 +1,2 @@
+
+"Confirm the deletion of the 'Garlic Butter Shrimp' recipe by clicking the 'DELETE' button."

@@ -1,0 +1,2 @@
+
+To find the next upcoming event, I need to close the menu and view the details of the events for today. The menu is currently obstructing the view of the calendar.

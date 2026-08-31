@@ -1,0 +1,2 @@
+
+To create a new playlist, I need to look for an option that allows me to add or create a playlist. The three-dot menu icon at the top right corner often contains additional options like creating a new playlist. Clicking this icon could reveal the necessary option to proceed with creating the playlist.

@@ -1,0 +1,2 @@
+
+The user wants to see their high-priority tasks. The current screenshot shows a list of tasks with varying priorities indicated by the color of the checkboxes. Red indicates high priority. Based on this, "Call client for follow-up" is marked as high priority. There may be more high-priority tasks further down the list, so scrolling might be necessary.

@@ -1,0 +1,2 @@
+
+"Updated the name field to 'Planken, Liechtenstein' to correctly label the location."

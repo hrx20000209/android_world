@@ -1,0 +1,2 @@
+
+Waiting for the camera interface to load completely so that I can switch to video mode.

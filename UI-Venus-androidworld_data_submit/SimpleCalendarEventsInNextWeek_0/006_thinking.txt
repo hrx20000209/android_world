@@ -1,0 +1,2 @@
+
+The user wants to know the events for the next week starting from Monday. The current screenshot shows a menu with various options, including "Go to date." This option could help us navigate to the correct week. However, since the weekly view already displays the relevant week, we should focus on confirming the events shown. The "Product demo" event is visible for Wednesday. No further navigation seems necessary unless more events are hidden.

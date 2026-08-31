@@ -1,0 +1,2 @@
+
+The user wants to add a location marker for Planken, Liechtenstein in the OsmAnd maps app. Currently, the home screen is visible, but there is no indication of the OsmAnd app being open or even present on this screen. The next logical step would be to locate and launch the OsmAnd app from the app drawer or home screen if available.

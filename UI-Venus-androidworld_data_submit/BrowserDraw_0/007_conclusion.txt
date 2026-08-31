@@ -1,0 +1,2 @@
+
+"Select Chrome from the 'Open with' dialog to open the 'task.html' file."

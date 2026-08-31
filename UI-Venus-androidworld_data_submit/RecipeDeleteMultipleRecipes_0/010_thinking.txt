@@ -1,0 +1,2 @@
+
+To complete the task of deleting all specified recipes, I now need to delete the "Lentil Soup" recipe. Following the same steps as before, I should click on the "Lentil Soup" recipe to access its details and then look for the delete option.

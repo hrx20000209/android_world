@@ -1,0 +1,2 @@
+
+"Click on the Description field to enter the event description."

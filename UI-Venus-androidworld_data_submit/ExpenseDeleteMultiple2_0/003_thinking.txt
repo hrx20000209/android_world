@@ -1,0 +1,2 @@
+
+To delete the specified expenses, I need to access the full list of expenses. The current screen shows recent transactions, but I don't see the expenses we need to delete yet. The menu icon at the top left likely provides navigation options, including a list of all expenses. Clicking this icon could help me find the detailed expense list where I can locate and delete the specified items.

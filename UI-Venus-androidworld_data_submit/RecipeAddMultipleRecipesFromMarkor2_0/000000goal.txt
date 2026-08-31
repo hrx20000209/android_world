@@ -1,0 +1,1 @@
+Add the recipes from recipes.txt in Markor that take 10 mins to prepare into the Broccoli recipe app.

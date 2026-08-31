@@ -1,0 +1,2 @@
+
+To turn off Wi-Fi, I need to interact with the Wi-Fi toggle switch. The toggle is currently in the 'on' position, as indicated by its blue color. Clicking on the toggle will change its state to 'off', thereby disabling Wi-Fi.

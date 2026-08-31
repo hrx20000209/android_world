@@ -1,0 +1,2 @@
+
+To delete the "Classic Margherita Pizza" recipe, I need to select the 'Delete' option from the menu that appears after clicking the three-dot menu icon. This will initiate the deletion process for the selected recipe.

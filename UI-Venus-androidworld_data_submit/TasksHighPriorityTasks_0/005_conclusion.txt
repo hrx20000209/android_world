@@ -1,0 +1,2 @@
+
+"Click on 'By priority' to sort the tasks by their priority level."

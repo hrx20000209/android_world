@@ -1,0 +1,2 @@
+
+The user's goal is to pause the stopwatch. From the current screenshot, the app is on the clock tab, but the stopwatch tab needs to be selected to access the stopwatch controls. The next logical step is to navigate to the Stopwatch tab.

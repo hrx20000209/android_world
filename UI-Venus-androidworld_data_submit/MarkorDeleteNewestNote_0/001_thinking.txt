@@ -1,0 +1,2 @@
+
+The user wants to delete the newest note in Markor. Currently, we're on the home screen, so the first step is to locate and open the Markor app. Since Markor isn't visible here, I should scroll through the apps or access the app drawer to find it.

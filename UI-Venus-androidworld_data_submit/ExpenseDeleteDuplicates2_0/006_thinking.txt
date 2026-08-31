@@ -1,0 +1,2 @@
+
+To delete exact duplicate expenses while ensuring at least one instance of each unique expense remains, I need to identify any entries that are completely identical. In the current view, no exact duplicates are visible. However, I should continue scrolling through the list to ensure I haven't missed any. If duplicates are found, I'll select and delete them accordingly.

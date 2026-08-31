@@ -1,0 +1,3 @@
+0.0
+ExpenseAddMultipleFromGallery
+310.2556345462799

@@ -1,0 +1,2 @@
+
+To set the end time to 20:30, I need to adjust the hour from 15 to 20. The current screenshot shows the time picker dialog with the hour set to 15. I should click on the '20' mark to set the hour correctly. After setting the hour, I will confirm the changes by clicking 'OK'.

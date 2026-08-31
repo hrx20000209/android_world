@@ -1,0 +1,2 @@
+
+To transcribe the video, I need to open VLC Player from the Downloads folder. Since the home screen does not show VLC Player or Downloads directly, I should navigate to the app drawer or find the Downloads folder first.

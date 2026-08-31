@@ -1,0 +1,2 @@
+
+The current screen is set up for entering a new expense. The next step is to fill in the details for another reimbursable transaction from `my_expenses.txt`. The Name field is currently active, so I should start by typing the name of the next reimbursable transaction.

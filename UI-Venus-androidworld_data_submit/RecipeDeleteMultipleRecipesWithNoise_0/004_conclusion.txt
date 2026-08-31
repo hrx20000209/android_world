@@ -1,0 +1,2 @@
+
+"Click on the three-dot menu icon to access the options for deleting the recipe."

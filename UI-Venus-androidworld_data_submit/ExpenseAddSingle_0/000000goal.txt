@@ -1,0 +1,5 @@
+Add the following expenses into the pro expense:
+Expense: Therapy Sessions
+ amount_dollars: $307.01
+ category_name: Health Care
+ note: I may repeat this

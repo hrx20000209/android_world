@@ -1,0 +1,2 @@
+
+The user wants to delete specific expenses from an app called "pro expense." Currently, we're on the home screen, so the first step is to locate and open the "pro expense" app. Since the app isn't visible here, I should scroll through the app list or search for it.

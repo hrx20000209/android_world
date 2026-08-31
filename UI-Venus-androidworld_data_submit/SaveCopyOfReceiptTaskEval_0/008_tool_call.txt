@@ -1,0 +1,1 @@
+{'action': 'Finished', 'params': {'content': 'The file "receipt_2023_01_22_sure_frog.jpg" has been successfully copied from the DCIM folder to the Download folder.'}}

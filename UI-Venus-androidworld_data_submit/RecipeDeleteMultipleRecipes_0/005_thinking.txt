@@ -1,0 +1,2 @@
+
+To proceed with deleting the "Garlic Butter Shrimp" recipe as part of the user's request, I need to confirm the deletion by clicking the 'DELETE' button in the confirmation dialog. This step is necessary to ensure the recipe is removed from the app.

@@ -1,0 +1,1 @@
+{'action': 'Finished', 'params': {'content': 'The note named "bold_king_edited" has been successfully deleted.'}}

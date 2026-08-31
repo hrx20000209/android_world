@@ -1,0 +1,3 @@
+0.0
+TasksCompletedTasksForDate
+125.81287479400635

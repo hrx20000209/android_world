@@ -105,6 +105,13 @@ def _java_tool(name: str) -> str:
                 Path(r"C:\Program Files\Android Studio\jbr\bin") / f"{name}.exe",
             ]
         )
+    else:
+        candidates.extend(
+            [
+                Path("/Applications/Android Studio.app/Contents/jbr/Contents/Home/bin") / name,
+                Path("/Applications/Android Studio.app/Contents/jre/Contents/Home/bin") / name,
+            ]
+        )
     found = shutil.which(name)
     if found:
         candidates.append(Path(found))

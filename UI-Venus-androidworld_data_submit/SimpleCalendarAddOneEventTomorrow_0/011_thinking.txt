@@ -1,0 +1,2 @@
+
+To complete the event setup according to the user's requirements, I need to adjust the end time to 20:30 to ensure the event lasts for 30 minutes. Currently, both the start and end times are set to 20:00, so I must click on the end time field to modify it.

@@ -1,0 +1,2 @@
+
+"Navigate to the song library to start adding songs to the playlist."

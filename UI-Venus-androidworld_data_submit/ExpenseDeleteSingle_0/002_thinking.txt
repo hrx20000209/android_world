@@ -1,0 +1,2 @@
+
+The user wants to delete an expense labeled "Rental Income." We are currently on the home screen of the Pro Expense app. To find and delete the specific expense, we should navigate to the section where expenses are listed. The menu icon at the top left corner likely provides access to more options, including viewing all expenses.

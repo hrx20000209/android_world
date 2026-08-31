@@ -1,0 +1,2 @@
+
+"Click the save icon to initiate saving the current drawing."

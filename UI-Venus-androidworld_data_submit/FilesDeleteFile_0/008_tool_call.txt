@@ -1,0 +1,1 @@
+{'action': 'Scroll', 'params': {'start': (514, 2174), 'end': (514, 1279), 'direction': ''}}

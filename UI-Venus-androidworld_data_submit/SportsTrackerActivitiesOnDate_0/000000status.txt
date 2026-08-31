@@ -1,0 +1,3 @@
+0.0
+SportsTrackerActivitiesOnDate
+61.366109132766724

@@ -1,0 +1,2 @@
+
+The goal was to turn Bluetooth on. The screenshot shows that the 'Use Bluetooth' toggle is already enabled, confirming that Bluetooth is turned on. Therefore, the task has been successfully completed.

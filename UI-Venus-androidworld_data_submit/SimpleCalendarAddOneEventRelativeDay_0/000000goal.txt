@@ -1,0 +1,1 @@
+In Simple Calendar Pro, create a calendar event for this Thursday at 5h with the title 'Call with the Team' and the description 'We will celebrate team roles.'. The event should last for 60 mins.

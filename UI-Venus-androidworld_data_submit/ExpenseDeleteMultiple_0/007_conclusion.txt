@@ -1,0 +1,2 @@
+
+"Click on the trash bin icon to delete the 'Ride-Sharing' expense."

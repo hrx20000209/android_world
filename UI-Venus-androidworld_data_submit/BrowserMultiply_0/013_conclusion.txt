@@ -1,0 +1,2 @@
+
+"I clicked the button a third time and recorded the number displayed."

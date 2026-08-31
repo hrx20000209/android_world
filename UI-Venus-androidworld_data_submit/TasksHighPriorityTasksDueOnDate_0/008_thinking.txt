@@ -1,0 +1,2 @@
+
+To find tasks with high priority due on October 18, 2023, I need to apply a filter for the specific date and priority level. The current view shows tasks for today, so I need to adjust the filter settings to focus on October 18, 2023. The menu icon at the bottom left corner can help me access the filter options.

@@ -1,0 +1,2 @@
+
+The Pro Expense app has been launched as per the previous action, but the app interface is still loading. Once the app loads, I need to navigate to the section where expenses are listed so I can find and delete the specified expenses: Streaming Services, Unexpected Expenses, and Pet Supplies. Since the app is currently loading, the best course of action is to wait until the app fully loads and displays its contents.

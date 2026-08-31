@@ -1,0 +1,2 @@
+
+The user wants to open the Contacts app. Since the Contacts app icon is not visible on this home screen, I need to scroll or navigate to find it. Scrolling down could reveal more apps including the Contacts app.

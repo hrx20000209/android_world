@@ -1,0 +1,2 @@
+
+The user's goal is to copy the text "Tracking #: 5K672F4C" to the clipboard. In Step 0, the plan was to launch the Notes app, but the screenshot shows the home screen without the Notes app visible. To proceed, I need to access the app drawer or search for the Notes app to open it so that the text can be typed and copied from there.

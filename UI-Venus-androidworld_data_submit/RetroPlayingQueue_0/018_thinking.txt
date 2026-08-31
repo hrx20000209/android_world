@@ -1,0 +1,2 @@
+
+The next step is to search for the fifth song, "Heartbeat Away," since "Whispers of the Past" has been successfully added to the playing queue. To do this, I need to clear the current search query and type the new song name.

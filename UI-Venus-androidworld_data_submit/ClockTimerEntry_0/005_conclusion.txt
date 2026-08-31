@@ -1,0 +1,2 @@
+
+"Click on the '3' key to add the tens digit for the seconds."

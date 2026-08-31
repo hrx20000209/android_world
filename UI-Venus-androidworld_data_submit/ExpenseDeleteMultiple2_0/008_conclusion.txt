@@ -1,0 +1,2 @@
+
+"Click on the 'Pet Supplies' expense entry to proceed with its deletion."

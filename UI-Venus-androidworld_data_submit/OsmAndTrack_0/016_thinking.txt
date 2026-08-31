@@ -1,0 +1,2 @@
+
+The user's goal is to save a track with specific waypoints in the OsmAnd app. The current screenshot shows the location of Liechtenstein, but the specific waypoints have not been added yet. The next logical step is to add the second waypoint, Triesen, Liechtenstein, to the route. The "Add" button at the bottom of the screen seems to be the appropriate option to proceed with adding waypoints.

@@ -1,0 +1,1 @@
+What was the total duration of running activities in the OpenTracks app this week? Assume the week starts from Monday. Express your answer in minutes as a single integer.

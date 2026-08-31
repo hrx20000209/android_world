@@ -1,0 +1,2 @@
+
+To delete the note named "bold_king_edited," I need to select it first. Long pressing the file should bring up options like delete. This aligns with the goal of removing the specified note from the list.

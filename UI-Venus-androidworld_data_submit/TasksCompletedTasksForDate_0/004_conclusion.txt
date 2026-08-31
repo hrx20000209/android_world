@@ -1,0 +1,2 @@
+
+"Navigate back from the settings page to return to the main task list."

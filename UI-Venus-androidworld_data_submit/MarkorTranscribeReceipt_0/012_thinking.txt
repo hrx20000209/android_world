@@ -1,0 +1,2 @@
+
+The task requires saving the file `receipt.md` with the entered transaction data. The screenshot shows that the content has been typed correctly. The next logical step is to save the file to ensure the changes are not lost. The save icon is visible at the top of the screen, which needs to be clicked to save the file.

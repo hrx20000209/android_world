@@ -1,0 +1,2 @@
+
+The message has been typed correctly, and now I need to send it. The send button is typically represented by an arrow icon located near the text input field. In this case, the arrow icon is visible on the right side of the text input area.

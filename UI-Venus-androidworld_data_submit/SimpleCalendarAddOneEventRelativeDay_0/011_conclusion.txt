@@ -1,0 +1,2 @@
+
+"Click on the number 5 on the clock face to set the start time to 5:00 AM."

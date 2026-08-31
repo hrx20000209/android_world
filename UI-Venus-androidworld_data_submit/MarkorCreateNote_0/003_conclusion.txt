@@ -1,0 +1,2 @@
+
+"Click on the name field to change the default name to '2023_01_26_wise_yacht'."

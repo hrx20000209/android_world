@@ -1,0 +1,2 @@
+
+To determine the number of running activities completed this week, I need to apply the filter for "running" activities. The screenshot shows the filter menu with the "running" option available. Selecting this option will filter the activities to show only those related to running. Once filtered, I can confirm the date range matches the current week and proceed to count the relevant activities. The next step involves clicking the "running" option from the filter menu.

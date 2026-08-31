@@ -1,0 +1,2 @@
+
+The user wants to add an expense entry into the Pro Expense app. Currently, we're on the home screen, so the first step is to locate and open the Pro Expense app. Since the app isn't visible here, I should scroll through the app list or search for it.

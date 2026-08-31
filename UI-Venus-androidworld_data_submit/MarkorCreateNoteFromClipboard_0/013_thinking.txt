@@ -1,0 +1,2 @@
+
+To complete the task, I need to change the file extension from ".md" to ".txt". The current screenshot shows the file name has been updated, but the extension still needs to be changed. I should delete the existing ".md" and type ".txt".

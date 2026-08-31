@@ -1,0 +1,2 @@
+
+To send the message with the clipboard content, I need to paste the text from the clipboard into the message input field. The clipboard suggestion is visible above the keyboard, indicating that I can tap it to paste the content.

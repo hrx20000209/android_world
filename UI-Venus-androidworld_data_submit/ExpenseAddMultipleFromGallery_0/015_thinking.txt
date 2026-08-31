@@ -1,0 +1,2 @@
+
+The user has successfully added the 'Food' and 'Transport' expenses from the 'expenses.jpg' file. The next step is to continue adding any remaining expenses from the same file. Since the current screen shows the Pro Expense app's home page, the next logical step is to click the '+' button again to add another expense.

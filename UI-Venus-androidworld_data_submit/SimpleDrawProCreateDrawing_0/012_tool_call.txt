@@ -1,0 +1,1 @@
+{'action': 'Finished', 'params': {'content': 'The drawing has been successfully created and saved as adipiscing_fair_jelly_final.png in the Pictures folder within the sdk_gphone_x86_64 storage area.'}}

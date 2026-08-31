@@ -1,0 +1,2 @@
+
+"Click on the message input field to start typing the reply."

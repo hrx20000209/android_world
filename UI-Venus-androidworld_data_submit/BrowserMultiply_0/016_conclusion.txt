@@ -1,0 +1,2 @@
+
+"Click on the input field to enter the calculated product."

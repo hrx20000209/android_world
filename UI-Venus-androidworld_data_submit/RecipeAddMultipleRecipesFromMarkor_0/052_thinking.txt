@@ -1,0 +1,2 @@
+
+To continue adding more recipes from `recipes.txt` in Markor to the Broccoli app, I need to initiate the process of creating a new recipe. The green plus button at the bottom right corner is likely used to add a new recipe. Clicking this button will allow me to start filling in the details for the next recipe.

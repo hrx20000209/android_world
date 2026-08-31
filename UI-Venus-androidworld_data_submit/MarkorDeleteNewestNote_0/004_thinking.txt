@@ -1,0 +1,2 @@
+
+The goal is to delete the newest note in Markor, and the confirmation dialog indicates that the system is ready to delete the selected note. To proceed with the deletion, I need to confirm by clicking the 'OK' button in the dialog.

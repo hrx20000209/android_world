@@ -1,0 +1,7 @@
+Add the following recipes into the Broccoli app:
+Recipe: Chicken Caesar Salad Wrap
+ description: An ideal recipe for experimenting with different flavors and ingredients.
+ servings: 3-4 servings
+ preparationTime: 2 hrs
+ ingredients: as desired
+ directions: Toss chopped romaine lettuce with Caesar dressing, grilled chicken strips, and Parmesan cheese. Wrap in a large tortilla. Feel free to substitute with ingredients you have on hand.

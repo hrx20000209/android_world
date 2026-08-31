@@ -1,0 +1,2 @@
+
+To delete the specified recipes, I need to locate them within the list. Since they aren't visible on the current screen, I should scroll down to see more recipes.

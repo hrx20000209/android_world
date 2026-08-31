@@ -1,0 +1,2 @@
+
+To add a new recipe, I need to find the option to create or add a recipe. The green plus button at the bottom right corner seems like the appropriate option to proceed with adding a new recipe.

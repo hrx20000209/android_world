@@ -1,0 +1,2 @@
+
+"Select the 'Video' option to switch the camera to video mode."

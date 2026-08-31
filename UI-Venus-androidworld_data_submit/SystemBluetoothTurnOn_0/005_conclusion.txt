@@ -1,0 +1,2 @@
+
+"Click the toggle switch next to 'Use Bluetooth' to turn it on."

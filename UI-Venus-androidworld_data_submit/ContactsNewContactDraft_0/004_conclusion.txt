@@ -1,0 +1,2 @@
+
+"I clicked on the 'First name' field to begin entering the contact information."

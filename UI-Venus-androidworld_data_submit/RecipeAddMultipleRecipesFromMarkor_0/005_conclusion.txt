@@ -1,0 +1,2 @@
+
+"I clicked on the 'Title' field to start entering the recipe information."

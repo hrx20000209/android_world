@@ -1,0 +1,2 @@
+
+The user wants to open the 'task.html' file with Chrome. The current screen shows a prompt asking whether to open the file with Chrome or another app. To proceed with the user's request, I need to select "Just once" to open the file with Chrome temporarily without setting it as the default app.

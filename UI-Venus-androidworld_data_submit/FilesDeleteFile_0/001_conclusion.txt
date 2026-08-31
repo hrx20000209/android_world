@@ -1,0 +1,2 @@
+
+"Open the file manager app to start navigating towards the Notifications folder."

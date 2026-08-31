@@ -1,0 +1,2 @@
+
+The current screen confirms that the "Social Club Dues" expense has been successfully added. The next step is to add the second expense, "Legal Fees." To do this, I need to click the '+' button to start a new expense entry.

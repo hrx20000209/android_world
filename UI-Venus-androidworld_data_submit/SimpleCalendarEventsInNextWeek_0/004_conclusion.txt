@@ -1,0 +1,2 @@
+
+"Select the 'Weekly view' option to display the events for the next week."

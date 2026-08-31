@@ -1,0 +1,2 @@
+
+The user's goal is to add a new expense entry for "Therapy Sessions" with specific details. From the screenshot, the '+' button at the bottom right corner seems to be the option to add a new expense. Clicking this button should lead to a form where the user can input the required details such as the expense name, amount, category, and notes.

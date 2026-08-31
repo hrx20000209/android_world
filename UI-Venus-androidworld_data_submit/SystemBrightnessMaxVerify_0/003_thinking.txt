@@ -1,0 +1,2 @@
+
+To turn the brightness to the maximum value, I need to access the device's settings. The Settings app is visible on the screen, so clicking on it will allow me to proceed to the next step where I can adjust the brightness.

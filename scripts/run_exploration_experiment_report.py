@@ -50,6 +50,28 @@ FAST_A11Y_BUILD_SCRIPT = REPO_ROOT / "tools" / "fast_a11y_dumper" / "build_apk.s
 FAST_A11Y_BUILD_SCRIPT_PY = REPO_ROOT / "tools" / "fast_a11y_dumper" / "build_apk.py"
 
 
+def _resolve_adb_path(raw_path: str) -> str:
+    if raw_path and Path(raw_path).exists():
+        return str(raw_path)
+    for candidate in (
+        os.environ.get("ADB_PATH"),
+        os.environ.get("ANDROID_ADB_PATH"),
+        os.environ.get("ANDROID_SDK_ROOT"),
+        os.environ.get("ANDROID_HOME"),
+    ):
+        if not candidate:
+            continue
+        adb_path = Path(candidate).expanduser() / "platform-tools" / "adb"
+        if adb_path.exists():
+            return str(adb_path)
+        if Path(candidate).exists() and Path(candidate).name == "adb":
+            return str(candidate)
+    which_adb = shutil.which("adb")
+    if which_adb:
+        return which_adb
+    return raw_path
+
+
 def _run_cmd(
     cmd: list[str],
     env: dict[str, str] | None = None,
@@ -187,8 +209,17 @@ def _ensure_fast_a11y_provider(adb_path: str, serial: str) -> str:
 
 def _select_a11y_method(args: argparse.Namespace, log_path: Path) -> str:
     requested = str(args.a11y_method).lower()
+    if requested in {"default", "androidworld", "androidworld_default", "none"}:
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+        log_path.write_text(
+            "requested=androidworld_default\n"
+            "preflight=skipped\n"
+            "ANDROID_WORLD_A11Y_METHOD is intentionally unset; AndroidWorld will use its built-in default state acquisition path.\n",
+            encoding="utf-8",
+        )
+        return "androidworld_default"
     if requested not in {"auto", "grpc", "uiautomator", "fast_provider"}:
-        raise ValueError("--a11y_method must be one of auto, grpc, uiautomator, fast_provider")
+        raise ValueError("--a11y_method must be one of auto, grpc, uiautomator, fast_provider, androidworld_default")
 
     serial = f"emulator-{int(args.console_port)}"
     preflight_log: list[str] = []
@@ -2069,7 +2100,12 @@ def _run_androidworld(args: argparse.Namespace, run_dir: Path, trace_root: Path,
     with log_path.open("w", encoding="utf-8") as log_file:
         log_file.write("$ " + " ".join(cmd) + "\n")
         log_file.write(f"ANDROID_WORLD_EXPLORATION_TRACE_ROOT={trace_root}\n\n")
-        log_file.write(f"ANDROID_WORLD_A11Y_METHOD={env.get('ANDROID_WORLD_A11Y_METHOD', 'grpc')}\n\n")
+        logged_a11y = env.get("ANDROID_WORLD_A11Y_METHOD")
+        if logged_a11y is None and getattr(args, "_selected_a11y_method", "") == "androidworld_default":
+            logged_a11y = "androidworld_default(unset)"
+        elif logged_a11y is None:
+            logged_a11y = "grpc"
+        log_file.write(f"ANDROID_WORLD_A11Y_METHOD={logged_a11y}\n\n")
         for key in sorted(
             k
             for k in env
@@ -2123,8 +2159,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--a11y_method",
         default="auto",
-        choices=("auto", "grpc", "uiautomator", "fast_provider"),
-        help="auto tries gRPC first and falls back to uiautomator dump; fast_provider uses the lightweight a11y app.",
+        choices=("auto", "grpc", "uiautomator", "fast_provider", "androidworld_default"),
+        help="auto tries gRPC first and falls back to uiautomator dump; fast_provider uses the lightweight a11y app; androidworld_default skips preflight and lets AndroidWorld choose.",
     )
     parser.add_argument("--a11y_preflight_timeout", type=float, default=60.0)
     parser.add_argument("--perform_emulator_setup", action="store_true")
@@ -2207,7 +2243,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--explore_search_policy", choices=("current", "operator", "task_gate"), default="current")
     parser.add_argument(
         "--explore_search_strategy",
-        choices=("greedy", "stratified_bfs", "iddfs", "best_first", "beam", "mcts"),
+        choices=("greedy", "stratified_bfs", "iddfs", "best_first", "beam", "mcts", "value_of_computation"),
         default="greedy",
     )
     parser.add_argument("--explore_rollback_policy", choices=("current", "improved"), default="current")
@@ -2257,6 +2293,13 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
+    resolved_adb = _resolve_adb_path(args.adb_path)
+    if not Path(resolved_adb).exists():
+        raise SystemExit(f"adb executable not found at configured path: {args.adb_path}")
+    if resolved_adb != str(args.adb_path):
+        print(f"[experiment] resolved adb path: {resolved_adb}")
+    args.adb_path = resolved_adb
+
     experiment_root = Path(args.experiment_root).expanduser().resolve()
     run_dir = experiment_root / f"run_{_timestamp()}"
     checkpoint_dir = Path(args.checkpoint_dir).expanduser().resolve() if args.checkpoint_dir else run_dir / "checkpoints"
@@ -2268,7 +2311,10 @@ def main() -> int:
         print(f"[experiment] run_dir={run_dir}")
         print(f"[experiment] checkpoint_dir={checkpoint_dir}")
         print(f"[experiment] trace_root={trace_root}")
-        print("[experiment] running a11y preflight...")
+        if str(args.a11y_method).lower() == "androidworld_default":
+            print("[experiment] skipping a11y preflight; using AndroidWorld default state acquisition")
+        else:
+            print("[experiment] running a11y preflight...")
         args._selected_a11y_method = _select_a11y_method(
             args,
             log_path=run_dir / "a11y_preflight.log",

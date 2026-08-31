@@ -1,0 +1,2 @@
+
+The current screen shows the details of the 'Ride-Sharing' expense. To proceed with deleting this expense, I need to click on the trash bin icon located near the expense detail. This action aligns with the user's request to remove specific expenses, including 'Ride-Sharing'.

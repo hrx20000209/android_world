@@ -1,0 +1,2 @@
+
+"The task of deleting the newest note in Markor is complete."

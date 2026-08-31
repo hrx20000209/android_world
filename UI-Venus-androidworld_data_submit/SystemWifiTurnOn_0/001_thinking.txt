@@ -1,0 +1,2 @@
+
+The user wants to turn on Wi-Fi. Since we're on the home screen, the most direct way to access Wi-Fi settings is through the quick settings panel or the Settings app. Given the current screen, I can either swipe down from the top to open the quick settings panel or tap the Settings app icon to navigate to the Wi-Fi settings. Since the quick settings panel is more immediate for this task, I'll proceed with swiping down.

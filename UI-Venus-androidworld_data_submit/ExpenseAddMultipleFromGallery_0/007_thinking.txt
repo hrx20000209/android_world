@@ -1,0 +1,2 @@
+
+The user has successfully opened the Pro Expense app and is currently on the home screen. The next step is to add the expenses from the 'expenses.jpg' file. To do this, the user needs to initiate the process of adding new expenses. The '+' button at the bottom right corner is typically used to add new entries, so clicking it would be the logical next step.

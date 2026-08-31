@@ -1,0 +1,2 @@
+
+"The recipe has been successfully added and saved in the Broccoli app."

@@ -1,0 +1,2 @@
+
+To add the recipes from 'recipes.jpg' to the Broccoli recipe app, I need to find a way to share or export the image. The current menu doesn't show any sharing options. I should close this menu and try selecting the image again to see if sharing options become available.

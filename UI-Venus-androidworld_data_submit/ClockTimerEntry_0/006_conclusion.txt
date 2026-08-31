@@ -1,0 +1,2 @@
+
+"Click on the '5' key to set the correct number of seconds."

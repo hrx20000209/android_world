@@ -1,0 +1,2 @@
+
+The user wants to identify high-priority tasks from the list. In the current screenshot, the red checkbox indicates a high-priority task. The task titled "Call client for follow-up" has a red checkbox, indicating it is high priority. No other tasks seem to have a red checkbox, suggesting they are not high priority. Thus, the high-priority task title is "Call client for follow-up."

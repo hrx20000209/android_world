@@ -1,0 +1,2 @@
+
+The Wi-Fi has been successfully turned on as indicated by the toggle being active. The next step according to the user's task is to open the settings app. Since we are currently in the network settings, we need to navigate back to the main settings page or the home screen to access the settings app.

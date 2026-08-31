@@ -1,0 +1,2 @@
+
+"Click the backspace key to remove the '.md' extension."

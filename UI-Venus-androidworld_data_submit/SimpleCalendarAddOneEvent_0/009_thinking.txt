@@ -1,0 +1,2 @@
+
+To proceed with creating the calendar event, I need to confirm the selected date by clicking the 'OK' button. This will finalize the date selection and allow me to move on to setting the time for the event.

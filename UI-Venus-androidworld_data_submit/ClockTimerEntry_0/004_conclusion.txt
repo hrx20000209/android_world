@@ -1,0 +1,2 @@
+
+"Click on the '6' key to add the second digit for the minutes."

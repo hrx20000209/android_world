@@ -1,0 +1,2 @@
+
+"Launched the OsmAnd app to start adding waypoints."

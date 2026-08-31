@@ -1,0 +1,2 @@
+
+The goal is to turn off WiFi and enable Bluetooth. The previous action involved scrolling up, likely to access the quick settings menu. However, the current screenshot shows the app drawer instead of the quick settings. To proceed, I need to scroll further or swipe down again to reveal the quick settings panel where I can manage WiFi and Bluetooth.

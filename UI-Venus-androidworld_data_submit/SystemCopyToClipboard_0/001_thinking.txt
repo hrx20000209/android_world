@@ -1,0 +1,2 @@
+
+The user wants to copy the text "Tracking #: 5K672F4C" to the clipboard. Since this is a home screen, I need to open an app where I can input or find this text. A logical step would be to open a note-taking app, browser, or any other application where text can be entered and copied. However, none of these apps are visible on the current screen. Therefore, I should scroll through the app drawer to locate such an app.

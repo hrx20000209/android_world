@@ -1,0 +1,2 @@
+
+To continue with the task, I've successfully viewed the receipt image and noted the transaction details. Now, I need to switch to Markor to create the file `receipt.md` and input the transaction data in CSV format. Since I'm currently in the Simple Gallery app, I should return to the home screen to launch Markor.

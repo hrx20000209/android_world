@@ -1,0 +1,2 @@
+
+To proceed with creating the calendar event, I need to adjust the end time to 17:30 to ensure the event lasts for 30 minutes as requested by the user. The current time displayed is 17:00, so I should click on the minute field to change it to 30. After adjusting the end time, I will need to confirm the changes by clicking the 'OK' button.

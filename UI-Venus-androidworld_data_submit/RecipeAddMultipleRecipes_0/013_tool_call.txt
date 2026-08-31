@@ -1,0 +1,1 @@
+{'action': 'Type', 'params': {'content': 'Cook fettuccine pasta, toss with Alfredo sauce and grilled chicken strips. Serve with a sprinkle of Parmesan cheese. Try adding a pinch of your favorite spices for extra flavor.'}}

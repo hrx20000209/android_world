@@ -1,0 +1,2 @@
+
+"Click on the 'Outdoor Adventure' entry to check if it contains details about the skiing activity."

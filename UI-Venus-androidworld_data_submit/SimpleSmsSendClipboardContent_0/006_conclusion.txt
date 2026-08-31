@@ -1,0 +1,2 @@
+
+"Tap the clipboard suggestion to paste the message content."

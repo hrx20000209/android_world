@@ -1,0 +1,1 @@
+{'action': 'Finished', 'params': {'content': 'Brightness is already at the maximum value.'}}

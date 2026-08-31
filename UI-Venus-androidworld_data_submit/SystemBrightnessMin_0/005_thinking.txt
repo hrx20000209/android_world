@@ -1,0 +1,2 @@
+
+To adjust the brightness to its minimum value, I need to access the 'Display' settings as it contains the brightness control. The 'Display' option is clearly visible on the screen, so clicking on it will take me to the relevant settings page where I can adjust the brightness slider.

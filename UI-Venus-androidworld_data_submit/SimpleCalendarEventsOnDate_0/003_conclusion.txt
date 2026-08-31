@@ -1,0 +1,2 @@
+
+Inform the user that the event on October 24 is titled "Trivia Night."

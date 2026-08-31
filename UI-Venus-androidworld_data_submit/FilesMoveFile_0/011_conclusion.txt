@@ -1,0 +1,2 @@
+
+"Navigate back to the main storage view to locate the DCIM folder."

@@ -1,0 +1,2 @@
+
+The goal is to set the brightness to the maximum value. The current screenshot shows that the 'Brightness level' is already at 100%, indicating that the brightness is at its maximum. Therefore, no further action is needed to adjust the brightness.

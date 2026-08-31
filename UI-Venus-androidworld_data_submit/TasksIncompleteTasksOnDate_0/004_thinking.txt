@@ -1,0 +1,2 @@
+
+The user wants to know their incomplete tasks due by Thursday. The current screenshot shows a menu overlaying the task list. To view the tasks due by Thursday, this menu needs to be closed. The tasks already identified as incomplete and due by Thursday are "Attend training session" and "Call client for follow-up."

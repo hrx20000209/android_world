@@ -1,0 +1,2 @@
+
+The user wants to create a new folder in Markor. Currently, we're on the home screen, and there's no visible Markor app icon here. We need to locate and open the Markor app first. Since the app isn't visible, I should scroll through the app drawer or search for it.

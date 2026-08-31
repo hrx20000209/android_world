@@ -1,0 +1,2 @@
+
+The user's goal is to delete all notes in Markor. Currently, there is only one note left in the list. To proceed, I need to select and delete this remaining note. Long pressing on the note should bring up an option to delete it.

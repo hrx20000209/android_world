@@ -1,0 +1,2 @@
+
+The user wants to know the number of tasks due next week. The current screenshot shows tasks with deadlines, but they are not filtered by next week's dates. To find tasks due next week, I need to switch to a weekly view or filter tasks by next week's dates. The bottom navigation bar contains icons that might represent different views, such as a calendar or list view, which could help organize tasks by week.

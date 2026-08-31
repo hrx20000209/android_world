@@ -1,0 +1,2 @@
+
+"Navigate back from the Help & Feedback section to access the main task list."

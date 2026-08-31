@@ -1,0 +1,2 @@
+
+"Return to the home screen to proceed with adding the expenses to the pro expense application."

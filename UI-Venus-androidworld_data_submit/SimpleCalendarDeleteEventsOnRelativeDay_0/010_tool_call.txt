@@ -1,0 +1,1 @@
+{'action': 'Finished', 'params': {'content': 'All events scheduled for this Monday have been deleted.'}}

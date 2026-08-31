@@ -1,0 +1,2 @@
+
+"Click on the 'Select All' option to highlight the existing text for deletion."

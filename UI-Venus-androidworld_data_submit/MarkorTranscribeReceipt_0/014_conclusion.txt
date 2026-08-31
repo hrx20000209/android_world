@@ -1,0 +1,2 @@
+
+"Click the save icon to ensure the file `receipt.md` is saved with the entered transaction data."

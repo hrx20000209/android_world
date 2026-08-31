@@ -1,0 +1,2 @@
+
+The goal is to set the brightness to its minimum value. According to the screenshot, the 'Brightness level' is already at 0%, which indicates that the brightness is at its lowest possible setting. No further action is required to achieve the task.

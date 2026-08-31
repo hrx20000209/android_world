@@ -1,0 +1,2 @@
+
+The Markor app is currently opening, and once it loads, I will need to create a new text file named "ZwUN_moment_70__transcription.txt" to write the transcribed text. Since the app is still loading, I should wait until it fully loads and then proceed to create the file.

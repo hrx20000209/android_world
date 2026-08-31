@@ -1,0 +1,2 @@
+
+"Renamed the file to `receipt.md` in preparation for entering the transaction data."

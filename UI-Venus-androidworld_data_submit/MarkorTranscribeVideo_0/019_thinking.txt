@@ -1,0 +1,2 @@
+
+To proceed with the task of transcribing the video, I need to rename the file being created in Markor to match the required name "ZwUN_moment_70__transcription.txt". The current filename is set to "my_note.md", so I need to change it to the correct name and adjust the extension to ".txt".

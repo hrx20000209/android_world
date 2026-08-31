@@ -1,0 +1,2 @@
+
+"Click on the number '1' to begin setting the timer."

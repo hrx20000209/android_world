@@ -1,0 +1,2 @@
+
+"Launched the Markor app to find the note named 'bold_king_edited'."

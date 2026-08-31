@@ -1,0 +1,2 @@
+
+To add the Raspberry Almond Smoothie recipe that takes 10 minutes to prepare into the Broccoli recipe app, I need to start by entering the title of the recipe. The current screen shows the "Title" field is active and ready for input. The next logical step is to type the name of the recipe into this field.

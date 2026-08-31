@@ -1,0 +1,2 @@
+
+The goal is to add "Hello, World!" at the top of the note. Currently, the note is open and ready for editing. The next step is to position the cursor at the beginning of the text so that the new content can be added at the top.

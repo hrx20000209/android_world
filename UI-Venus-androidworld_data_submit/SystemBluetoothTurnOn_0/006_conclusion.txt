@@ -1,0 +1,2 @@
+
+"Bluetooth is turned on; the task is complete."

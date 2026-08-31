@@ -1,0 +1,2 @@
+
+To delete duplicate recipes while ensuring at least one instance of each unique recipe remains, I need to identify the duplicates first. In this screenshot, "Chicken Alfredo Pasta" appears twice, indicating it is a duplicate. The next step would be to select one of these duplicates for deletion.

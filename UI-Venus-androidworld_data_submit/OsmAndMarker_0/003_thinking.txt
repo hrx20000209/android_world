@@ -1,0 +1,2 @@
+
+The goal is to add a location marker for Planken, Liechtenstein. The search bar is active, and the keyboard is ready for input. The next logical step is to type "Planken, Liechtenstein" into the search bar so that we can find the location and proceed with adding a marker.

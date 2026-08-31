@@ -1,0 +1,2 @@
+
+"Confirm the deletion of the last note by clicking 'OK' to complete the task."

@@ -1,0 +1,2 @@
+
+I launched the Broccoli app to proceed with deleting the specified recipe.

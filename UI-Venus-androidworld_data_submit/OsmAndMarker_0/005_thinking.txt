@@ -1,0 +1,2 @@
+
+The goal is to add a location marker for Planken, Liechtenstein. The current screen shows the location of Liechtenstein on the map, but it does not specify Planken. The 'Add' button at the bottom appears to be the next logical step to add a marker for the specific location. Clicking on 'Add' should allow us to place a marker on the map.

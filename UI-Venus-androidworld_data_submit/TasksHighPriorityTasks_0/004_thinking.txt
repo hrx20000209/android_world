@@ -1,0 +1,2 @@
+
+The user wants to identify high-priority tasks. The current screenshot shows a menu with sorting options. To find high-priority tasks, we need to ensure the tasks are sorted by priority. Since the menu is open, clicking on 'Sorting' could allow us to sort tasks by priority, making it easier to identify high-priority tasks.

@@ -1,0 +1,2 @@
+
+"Inserted a new line after the content from the first note."

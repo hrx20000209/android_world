@@ -1,0 +1,2 @@
+
+To continue with the task of deleting the specified recipes, I need to locate the 'Tomato Basil Bruschetta' recipe. It is now visible on the current screen. I should select it to access the options menu where the delete option is likely located. Once selected, I can proceed with the deletion process similar to the previous recipes.

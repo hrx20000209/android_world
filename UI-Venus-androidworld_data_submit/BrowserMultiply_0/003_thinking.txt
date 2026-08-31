@@ -1,0 +1,2 @@
+
+To proceed with the task, I need to open the 'task.html' file from the Downloads folder. This aligns with the user's instruction to open the file in Chrome. Clicking on the file should prompt me to choose an application to open it with, allowing me to select Chrome.

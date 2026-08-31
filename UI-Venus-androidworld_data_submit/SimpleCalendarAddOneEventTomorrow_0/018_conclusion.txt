@@ -1,0 +1,2 @@
+
+"Click on the '20' mark to set the hour to 20."

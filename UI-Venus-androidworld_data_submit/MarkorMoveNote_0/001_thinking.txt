@@ -1,0 +1,2 @@
+
+The user wants to move a note within the Markor app. Currently, we're on the home screen, so the first step is to locate and open the Markor app. Since it's not visible here, I should scroll through the apps or search for it.

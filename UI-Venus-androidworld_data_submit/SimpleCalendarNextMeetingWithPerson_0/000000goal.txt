@@ -1,0 +1,1 @@
+When is my next meeting with Ava in Simple Calendar Pro? Express your answer in the format <month name> <day> <year> <hour in 24-hour format>:<minutes>.

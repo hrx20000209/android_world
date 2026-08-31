@@ -1,0 +1,2 @@
+
+"Select the 'Country Liechtenstein' search result to proceed with adding the next waypoint."

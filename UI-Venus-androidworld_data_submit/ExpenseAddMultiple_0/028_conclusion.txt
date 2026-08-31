@@ -1,0 +1,2 @@
+
+"Enter the note 'Remember to transfer funds' in the Note field."

@@ -1,0 +1,1 @@
+{'action': 'Type', 'params': {'content': 'We will understand business objectives. Remember to confirm attendance.'}}

@@ -1,0 +1,2 @@
+
+"Select 'running' from the filter options to focus on running activities."

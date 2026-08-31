@@ -1,0 +1,1 @@
+{'action': 'Type', 'params': {'content': 'Preheat oven to 200°C. Place the pizza base on a baking tray. Spread sauce evenly on the base. Add chicken, bacon, and cheese. Bake for 15 minutes.'}}

@@ -1,0 +1,2 @@
+
+The user wants to know if the note titled 'To-Do List' in the Joplin app is marked as a todo item. Currently, I am on the home screen and need to open the Joplin app to check this information. Since the Joplin app icon is not visible here, I should scroll through the apps to find it.

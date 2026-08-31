@@ -1,0 +1,2 @@
+
+"Navigate back to the main activity list to verify if there are any more relevant kayaking activities."

@@ -1,0 +1,2 @@
+
+"Click the 'Delete' option to remove one of the duplicate recipes."

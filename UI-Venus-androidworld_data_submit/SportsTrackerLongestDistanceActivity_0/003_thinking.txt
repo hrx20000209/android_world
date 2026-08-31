@@ -1,0 +1,2 @@
+
+To find the longest distance covered in a mountain biking activity this week, I need to view individual mountain biking activities and their distances. The current screen shows aggregated stats but does not break down each activity's details. I should go back to the main activity list to see specific mountain biking activities and their distances.

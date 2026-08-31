@@ -1,0 +1,2 @@
+
+The user wants to delete an expense labeled "Rental Income." From the current screen, the next logical step is to navigate to the "Expense Logs" section where individual expenses can be viewed and managed. This option is clearly visible in the sidebar menu.

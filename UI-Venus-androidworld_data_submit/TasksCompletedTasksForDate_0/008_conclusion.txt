@@ -1,0 +1,2 @@
+
+"Click on the 'Today' filter to explore options for viewing completed tasks or filtering by date."

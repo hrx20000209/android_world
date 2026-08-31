@@ -1,0 +1,2 @@
+
+The goal is to add a location marker for Planken, Liechtenstein. Since the app has been launched, the next step should involve searching for the location within the app. The search icon at the top left corner seems like the appropriate option to start the search for Planken, Liechtenstein.

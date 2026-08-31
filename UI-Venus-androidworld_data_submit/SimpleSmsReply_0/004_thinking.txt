@@ -1,0 +1,2 @@
+
+The user wants to send a message to the contact with the number +18407874306. The conversation is already open, and the message input field is visible at the bottom of the screen. The next logical step is to click on the message input field to start typing the message.

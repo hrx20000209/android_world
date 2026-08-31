@@ -1,0 +1,2 @@
+
+The user wants to know the events for the next week starting from Monday. The current screenshot shows the weekly view with an event titled "Product demo" scheduled for Wednesday at 14:00. There are no other visible events for the rest of the week. Therefore, the next step is to inform the user about this event.

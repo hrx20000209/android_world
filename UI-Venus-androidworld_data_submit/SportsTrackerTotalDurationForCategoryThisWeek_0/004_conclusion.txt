@@ -1,0 +1,2 @@
+
+"I clicked on the filter icon to refine the view to only show running activities for this week."

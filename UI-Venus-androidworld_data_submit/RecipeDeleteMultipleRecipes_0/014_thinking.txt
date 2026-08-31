@@ -1,0 +1,2 @@
+
+The user's task was to delete specific recipes from the Broccoli app. Based on the screenshot, there are no recipes found, indicating that the specified recipes have been successfully deleted. The confirmation message further supports this conclusion. Therefore, the task has been completed successfully.

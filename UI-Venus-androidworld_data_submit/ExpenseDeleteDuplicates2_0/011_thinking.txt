@@ -1,0 +1,2 @@
+
+To delete the duplicate "Jeans" entry while ensuring at least one instance remains, I need to interact with the delete option available in the "Expense Detail" section. The trash bin icon is visible, indicating the option to delete this specific entry. By clicking the trash bin icon, I can remove this duplicate expense.

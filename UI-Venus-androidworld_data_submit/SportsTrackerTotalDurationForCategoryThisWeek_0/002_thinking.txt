@@ -1,0 +1,14 @@
+
+To calculate the total duration of running activities this week, I need to identify all running activities listed for this week and sum their durations. From the screenshot, the relevant running activities are:
+
+- "More tired than usual today" - 30:00 (yesterday)
+- "Quick Sweat" - 1:15:00 (Friday)
+
+The other activities listed are not running activities. Now, I'll convert these times into minutes and add them together:
+
+- "More tired than usual today": 30 minutes
+- "Quick Sweat": 75 minutes
+
+Total duration = 30 + 75 = 105 minutes.
+
+Since there are no more running activities visible for this week, I can conclude the total duration of running activities this week is 105 minutes.

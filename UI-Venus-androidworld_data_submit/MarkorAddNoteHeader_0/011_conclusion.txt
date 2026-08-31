@@ -1,0 +1,2 @@
+
+"I am accessing the 'File settings' to find the rename option."

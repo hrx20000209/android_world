@@ -1,0 +1,2 @@
+
+To continue with the task of deleting duplicate recipes, I need to confirm the deletion of this duplicate recipe. The dialog box provides two options: 'CANCEL' and 'DELETE'. Selecting 'DELETE' will remove this instance of the duplicate recipe, leaving at least one instance of the recipe as required.

@@ -1,0 +1,2 @@
+
+To find the location of the "Family reunion" event, I need to click on the date where the event is listed. The event appears to be on October 16th. Clicking on this date should display more details about the event, including its location.

@@ -1,0 +1,2 @@
+
+To create a new playlist as required by the user task, I need to select the 'New playlist' option from the menu. This will allow me to enter the details for the new playlist, including its title and the songs to be added.

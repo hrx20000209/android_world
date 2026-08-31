@@ -1,0 +1,2 @@
+
+To proceed with creating the calendar event, I need to confirm the selected start time of 13:00 by clicking the 'OK' button. This will finalize the time selection and allow me to move on to setting the duration of the event.

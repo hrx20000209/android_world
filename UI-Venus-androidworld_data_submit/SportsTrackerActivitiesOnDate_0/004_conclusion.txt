@@ -1,0 +1,2 @@
+
+"I identified the activities the user did on October 01 as 'Active Rest Day' and 'Mindful Movement' and informed the user."

@@ -1,0 +1,2 @@
+
+To proceed with sending a message to the specified phone number, I need to enter the recipient's number in the input field. The keyboard is already active, so I can directly type the number.

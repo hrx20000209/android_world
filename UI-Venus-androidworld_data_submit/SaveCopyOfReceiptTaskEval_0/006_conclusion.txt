@@ -1,0 +1,2 @@
+
+"Click on 'Other folder' to navigate to the Download folder."

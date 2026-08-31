@@ -1,0 +1,2 @@
+
+To complete the task of deleting the "Classic Margherita Pizza" recipe, I need to confirm the deletion by selecting the 'DELETE' option in the confirmation dialog. This will finalize the removal of the recipe from the app.

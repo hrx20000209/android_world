@@ -1,0 +1,2 @@
+
+"Type the message 'Yoga class every Tuesday and Thursday at 6 PM.' into the input field."

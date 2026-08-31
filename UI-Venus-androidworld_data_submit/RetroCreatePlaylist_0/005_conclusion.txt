@@ -1,0 +1,2 @@
+
+"I tapped on the 'Playlist name' text field to start entering the playlist title."

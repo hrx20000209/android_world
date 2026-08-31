@@ -1,0 +1,1 @@
+{'action': 'Type', 'params': {'content': 'Heat oil in a pan. Add garlic and ginger. Stir in vegetables. Pour in soy sauce. Cook for 5 minutes.'}}

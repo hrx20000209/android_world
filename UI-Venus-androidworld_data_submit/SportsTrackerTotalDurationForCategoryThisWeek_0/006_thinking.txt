@@ -1,0 +1,2 @@
+
+To find the total duration of running activities this week, I need to ensure that only running activities are selected. The filter menu currently displays various activity types, including "running." Selecting "running" will help filter out only the running activities. Additionally, I need to confirm the date range covers this week starting from Monday. The next logical step is to select "running" from the list.

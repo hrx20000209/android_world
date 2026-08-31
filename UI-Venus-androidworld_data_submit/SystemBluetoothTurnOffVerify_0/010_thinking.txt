@@ -1,0 +1,2 @@
+
+The goal was to turn Bluetooth off. The screenshot confirms that the 'Use Bluetooth' toggle is in the 'off' position, indicating that Bluetooth has been successfully turned off. Therefore, the task is complete.

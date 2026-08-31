@@ -1,0 +1,2 @@
+
+"I clicked 'Don't allow' to dismiss the notification permission request."

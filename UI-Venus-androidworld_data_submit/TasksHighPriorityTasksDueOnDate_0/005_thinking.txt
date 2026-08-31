@@ -1,0 +1,2 @@
+
+To find tasks with high priority due on October 18, 2023, I need to apply a filter for the specific date and priority level. The 'Filters' section is already expanded, but I need to select an option that allows me to filter by date and priority. The 'Today' option seems like a starting point, but I need to find a way to specify October 18, 2023, and high priority. I should explore further options within the 'Filters' section.

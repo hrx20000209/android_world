@@ -1,0 +1,2 @@
+
+"Type the description 'A quick and healthy vegetable stir fry.' into the Description field."

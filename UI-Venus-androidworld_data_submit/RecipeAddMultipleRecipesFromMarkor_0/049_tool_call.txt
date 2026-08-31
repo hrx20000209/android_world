@@ -1,0 +1,1 @@
+{'action': 'Type', 'params': {'content': 'Brown the beef and mix in taco seasoning. Warm the tortilla shells. Assemble the tacos with beef and desired toppings. Serve hot.'}}

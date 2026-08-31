@@ -1,0 +1,2 @@
+
+To ensure I'm viewing all potential duplicate expenses, I need to apply the filter settings currently configured. This will allow me to check the entire list of expenses between October 1st and October 15th, sorted in descending order by date. Once the filter is applied, I can scroll through the list to identify and delete any exact duplicates while keeping at least one instance of each unique expense.

@@ -1,0 +1,2 @@
+
+The user has already viewed the 'expenses.jpg' file in Simple Gallery Pro and now needs to add the expenses to the pro expense application. The next step is to find and open the pro expense app. Since it is not visible on the current screen, scrolling down to reveal more apps could help locate it.

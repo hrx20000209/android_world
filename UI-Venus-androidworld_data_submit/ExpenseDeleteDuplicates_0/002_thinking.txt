@@ -1,0 +1,2 @@
+
+To identify and delete duplicate expenses, I need to access a detailed view where I can see all entries and their specifics. The current screen shows recent expenses but lacks the ability to manage duplicates directly. The menu icon at the top left likely provides navigation options to a more detailed expense list or settings where I can manage duplicates.

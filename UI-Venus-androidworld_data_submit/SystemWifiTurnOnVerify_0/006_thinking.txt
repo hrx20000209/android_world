@@ -1,0 +1,2 @@
+
+The user's goal is to turn on Wi-Fi. However, the current screen shows "Calls & SMS," which is unrelated to Wi-Fi settings. To proceed towards enabling Wi-Fi, I need to navigate back to the main "Network & internet" settings page. The back arrow at the top left corner suggests a way to return to the previous menu.

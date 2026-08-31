@@ -1,0 +1,2 @@
+
+"Adding a note indicating that the 'Office supplies' transaction is reimbursable."

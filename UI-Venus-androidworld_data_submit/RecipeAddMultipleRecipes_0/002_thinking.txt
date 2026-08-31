@@ -1,0 +1,2 @@
+
+To add new recipes, I need to find an option to create or add a new recipe. The green plus button at the bottom right corner likely serves this purpose, as it is a common design pattern for adding new items in apps.

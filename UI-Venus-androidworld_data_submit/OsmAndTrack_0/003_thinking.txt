@@ -1,0 +1,2 @@
+
+The user's goal is to save a track with specific waypoints in the OsmAnd app. From the current screenshot, the menu is open, and the "Plan a route" option is visible. This option seems relevant for creating a route with waypoints. Selecting this option should allow us to add the specified waypoints and save the track.

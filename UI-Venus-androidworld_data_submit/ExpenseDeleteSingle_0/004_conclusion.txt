@@ -1,0 +1,2 @@
+
+"Click on the 'Rental Income' expense entry to view options for deletion."

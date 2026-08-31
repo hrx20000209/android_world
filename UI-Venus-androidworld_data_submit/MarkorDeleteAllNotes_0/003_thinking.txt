@@ -1,0 +1,2 @@
+
+The user's goal is to delete all notes in Markor. The current screen shows a dropdown menu with options like "Import from device" and "Settings." These options do not directly help in deleting notes. The next logical step is to close this menu and focus on selecting and deleting the notes listed below. Clicking outside the menu can close it and allow us to proceed with selecting and deleting the notes.

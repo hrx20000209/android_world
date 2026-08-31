@@ -1,0 +1,2 @@
+
+The current screenshot shows a blank screen, likely indicating that the Joplin app has been launched but hasn't fully loaded yet. Given the user's task, I need to ensure the app is fully loaded so I can locate the meeting titled 'Employee Performance Evaluation'. Since there is no visible content, I should wait for the app to load properly.

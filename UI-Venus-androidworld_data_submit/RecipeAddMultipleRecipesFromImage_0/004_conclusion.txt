@@ -1,0 +1,2 @@
+
+"Close the menu and select the image file again to find sharing or export options."

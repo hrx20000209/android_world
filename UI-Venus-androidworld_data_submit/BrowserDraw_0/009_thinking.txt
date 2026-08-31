@@ -1,0 +1,2 @@
+
+The task requires opening the 'task.html' file in Chrome and creating a drawing using the provided colors. Currently, the Chrome welcome screen is displayed, prompting to add an account or use without an account. To proceed, I need to select "Use without an account" to quickly move forward and access the file.

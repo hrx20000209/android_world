@@ -1,0 +1,2 @@
+
+"Inserted a new line at the beginning of the document."

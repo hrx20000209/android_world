@@ -1,0 +1,2 @@
+
+"Click the 'MOVE' button to finalize moving the file 'holiday_photos.jpg' to the DCIM folder."

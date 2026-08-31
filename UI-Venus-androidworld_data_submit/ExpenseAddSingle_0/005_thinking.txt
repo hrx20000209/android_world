@@ -1,0 +1,2 @@
+
+The current screen shows the 'Expense Entry' form with the 'Amount' field active, indicating that the next step is to input the amount for the expense. According to the user's request, the amount is $307.01. Therefore, I need to type '307.01' into the 'Amount' field.

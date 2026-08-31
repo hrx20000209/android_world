@@ -1,0 +1,2 @@
+
+"Close the sorting menu to confirm the count of to-dos."

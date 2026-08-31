@@ -1,0 +1,1 @@
+How many tasks do I have due next week in Tasks app? Assume the week starts from Monday. Express your answer as a single integer.

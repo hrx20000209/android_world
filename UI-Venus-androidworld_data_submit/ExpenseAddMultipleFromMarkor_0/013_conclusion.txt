@@ -1,0 +1,2 @@
+
+"Enter the amount '35' for the 'Office supplies' transaction."

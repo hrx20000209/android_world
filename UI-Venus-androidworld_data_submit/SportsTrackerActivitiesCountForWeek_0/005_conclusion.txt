@@ -1,0 +1,2 @@
+
+"Select the 'running' option from the filter menu to view only running activities."

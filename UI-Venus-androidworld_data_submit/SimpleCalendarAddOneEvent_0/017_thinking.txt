@@ -1,0 +1,2 @@
+
+To complete the creation of the calendar event, I need to dismiss the disclaimer pop-up by clicking the 'OK' button. This will allow me to proceed with saving the event.

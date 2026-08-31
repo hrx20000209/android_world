@@ -1,0 +1,2 @@
+
+To adjust the brightness to its maximum value, I need to access the 'Display' settings as it contains the brightness control. The 'Display' option is clearly visible on the screen, so clicking on it will allow me to proceed to the next step where I can adjust the brightness slider.

@@ -1,0 +1,2 @@
+
+To continue creating the calendar event, I need to fill in the title field with 'Call with the Team'. The keyboard is already active, so I can directly type the title.

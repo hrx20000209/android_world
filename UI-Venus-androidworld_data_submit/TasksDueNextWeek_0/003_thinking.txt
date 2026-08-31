@@ -1,0 +1,2 @@
+
+The user wants to know the number of tasks due next week. The current screenshot shows tasks with various deadlines, but none specifically mention next week. To find tasks due next week, I need to navigate to the correct view or filter tasks accordingly. The bottom navigation bar has an icon that likely represents a calendar or list view, which could help in viewing tasks by week.

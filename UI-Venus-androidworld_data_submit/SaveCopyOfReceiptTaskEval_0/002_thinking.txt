@@ -1,0 +1,2 @@
+
+The user needs to copy the file "receipt_2023_01_22_sure_frog.jpg" from the DCIM folder and save it in the Download folder. The current screenshot shows the main interface of the Simple Gallery Pro app with the DCIM folder visible. The next logical step is to enter the DCIM folder to locate the specific file.

@@ -1,0 +1,2 @@
+
+The current screen shows a prompt asking whether to open the 'task.html' file with Chrome. To proceed with the user's task, I need to select 'Just once' to open the file temporarily with Chrome without setting it as the default option. This aligns with the user's instruction to open the file with Chrome and continue interacting with the webpage.

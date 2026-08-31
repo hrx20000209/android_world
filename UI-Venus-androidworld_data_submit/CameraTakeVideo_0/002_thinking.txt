@@ -1,0 +1,2 @@
+
+To take a video, I need to open the Camera app. It is visible on the screen now, so I can directly click on it to proceed with recording a video.

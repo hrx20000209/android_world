@@ -1,0 +1,2 @@
+
+The goal is to enable Bluetooth after turning off WiFi. We are currently in the "Connected devices" section, where we can see options related to pairing new devices and connection preferences. To enable Bluetooth, we need to access the "Connection preferences" section, which is visible on the screen. Clicking on "Connection preferences" will likely lead us to the Bluetooth settings where we can enable it.

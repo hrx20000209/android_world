@@ -1,0 +1,2 @@
+
+To delete the specified recipes from the Broccoli app, I need to first open the app. Since the app isn't visible on this home screen, I should scroll through the app pages or access the app drawer to find it.

@@ -1,0 +1,2 @@
+
+To create a new calendar event for tomorrow at 20:00, I need to start by clicking the '+' button to initiate the event creation process. This will likely bring up a form where I can enter the details such as the title, time, duration, and description of the event.

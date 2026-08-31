@@ -1,0 +1,2 @@
+
+The user's task requires opening the file manager to access the Downloads folder and find the 'task.html' file. The Files app icon is visible on the screen, so clicking it will allow us to proceed with the task.

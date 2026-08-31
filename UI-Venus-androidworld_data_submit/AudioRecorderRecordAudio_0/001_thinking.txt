@@ -1,0 +1,2 @@
+
+The user wants to record an audio clip using the Audio Recorder app. Currently, the home screen is visible, but there is no indication of the Audio Recorder app being present on this screen. Therefore, I need to locate and open the Audio Recorder app. Since it's not visible here, I should try accessing the app drawer or searching for the app.

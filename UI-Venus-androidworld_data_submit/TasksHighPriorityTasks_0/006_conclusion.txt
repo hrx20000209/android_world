@@ -1,0 +1,2 @@
+
+"Close the sorting menu to view the high-priority tasks."

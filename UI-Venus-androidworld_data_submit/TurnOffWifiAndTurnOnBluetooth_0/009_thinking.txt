@@ -1,0 +1,2 @@
+
+The goal is to enable Bluetooth after turning off WiFi. Since WiFi has already been turned off, the next step is to navigate back to the main settings menu to find the Bluetooth settings. The current screen shows the "Network & internet" settings, so I need to go back to the main settings page.

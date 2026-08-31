@@ -1,0 +1,2 @@
+
+The user's goal is to delete all notes in Markor. The current screen displays a list of notes/files. To delete these notes, I need to select each one and perform a delete action. The next logical step is to select the first note in the list for deletion. Long pressing on the first note should bring up an option to delete it.

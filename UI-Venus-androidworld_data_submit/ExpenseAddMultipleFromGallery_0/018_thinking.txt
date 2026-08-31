@@ -1,0 +1,2 @@
+
+The user has entered the name and amount for the 'Shopping' expense. The next logical step is to save this entry to ensure it is recorded in the Pro Expense app. The 'SAVE' button is clearly visible and should be clicked to finalize the entry.

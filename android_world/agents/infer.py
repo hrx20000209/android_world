@@ -406,12 +406,14 @@ class LlamaCppWrapper(LlmWrapper, MultimodalLlmWrapper):
             api_url: str = "http://localhost:8081/v1/chat/completions",
             max_retry: int = 3,
             temperature: float = 0.0,
-            max_tokens: int = 16384,
+            max_tokens: int = 1024,
+            model_name: str | None = None,
     ):
         self.api_url = api_url
         self.temperature = temperature
-        self.max_tokens = max_tokens
+        self.max_tokens = int(os.environ.get("ANDROID_WORLD_LLAMACPP_MAX_TOKENS", max_tokens))
         self.max_retry = max(1, min(max_retry, 5))
+        self.model_name = model_name or os.environ.get("ANDROID_WORLD_LLAMACPP_MODEL")
 
     @staticmethod
     def encode_image(image: np.ndarray) -> str:
@@ -423,15 +425,13 @@ class LlamaCppWrapper(LlmWrapper, MultimodalLlmWrapper):
         headers = {"Content-Type": "application/json"}
         payload = {
             "messages": messages,
-            # "temperature": self.temperature,
-            # "max_tokens": self.max_tokens,
-            "history_n": 3,
-            "temperature": 0.0,
-            "top_k": -1,
+            "temperature": self.temperature,
             "top_p": 1.0,
-            "max_tokens": 2048,
+            "max_tokens": self.max_tokens,
             "stream": False,
         }
+        if self.model_name:
+            payload["model"] = self.model_name
 
         counter = self.max_retry
         wait = self.RETRY_WAITING_SECONDS
@@ -503,11 +503,13 @@ class LlamaCppTextWrapper(LlmWrapper):
             max_retry: int = 3,
             temperature: float = 0.0,
             max_tokens: int = 512,
+            model_name: str | None = None,
     ):
         self.api_url = api_url
         self.temperature = temperature
         self.max_tokens = max_tokens
         self.max_retry = max(1, min(max_retry, 5))
+        self.model_name = model_name or os.environ.get("ANDROID_WORLD_LLAMACPP_MODEL")
 
     def predict(self, text_prompt: str) -> Tuple[str, Optional[bool], Any]:
         """
@@ -535,6 +537,8 @@ class LlamaCppTextWrapper(LlmWrapper):
             "max_tokens": self.max_tokens,
             "stream": False,
         }
+        if self.model_name:
+            payload["model"] = self.model_name
 
         counter = self.max_retry
         wait = self.RETRY_WAITING_SECONDS

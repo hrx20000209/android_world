@@ -1,0 +1,1 @@
+In Simple Calendar Pro, create a calendar event on 2023-10-29 at 13h with the title 'Call with the Team' and the description 'We will understand upcoming project milestones.'. The event should last for 60 mins.

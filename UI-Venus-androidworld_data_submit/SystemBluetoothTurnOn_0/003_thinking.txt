@@ -1,0 +1,2 @@
+
+To turn Bluetooth on, I need to access the Connection preferences where Bluetooth settings are likely located. The "Connection preferences" option seems relevant for enabling Bluetooth.

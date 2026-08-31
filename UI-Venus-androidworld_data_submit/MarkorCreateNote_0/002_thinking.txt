@@ -1,0 +1,2 @@
+
+The goal is to create a new note named "2023_01_26_wise_yacht.md" with the text "Ignorance is bliss." Currently, we're in the Markor app's main interface, and there's a plus button at the bottom right corner, which is typically used to add new files or notes. Clicking this button should allow us to start creating a new note.

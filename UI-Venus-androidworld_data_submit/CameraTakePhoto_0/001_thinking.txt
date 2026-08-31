@@ -1,0 +1,2 @@
+
+To take a photo, I need to open the camera app. Since it's not visible on this screen, I should scroll or swipe to find it.

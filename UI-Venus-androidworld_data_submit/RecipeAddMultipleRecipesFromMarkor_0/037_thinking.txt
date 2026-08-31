@@ -1,0 +1,2 @@
+
+To continue adding the recipe from `recipes.txt` in Markor to the Broccoli app, I need to fill in the Directions field. The current screenshot shows that the Directions field is active and ready for input. According to the task, I should type the cooking steps of the recipe as specified in `recipes.txt`.

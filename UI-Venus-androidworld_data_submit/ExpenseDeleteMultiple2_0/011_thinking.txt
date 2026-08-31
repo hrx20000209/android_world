@@ -1,0 +1,2 @@
+
+The current screen shows a list of expense logs, but the 'Unexpected Expenses' entry is not visible. To locate and delete the 'Unexpected Expenses' entry, I need to scroll down the list to see more entries. Once found, I can follow the same steps used previously to delete the other expenses.

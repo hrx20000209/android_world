@@ -1,0 +1,2 @@
+
+"Navigate back to the 'Connected devices' settings page to locate the Bluetooth toggle."

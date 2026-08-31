@@ -1,0 +1,2 @@
+
+"Enter the amount '200' for the 'Business travel' transaction."

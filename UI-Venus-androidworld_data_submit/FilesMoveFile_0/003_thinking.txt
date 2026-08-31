@@ -1,0 +1,2 @@
+
+To move the file 'holiday_photos.jpg' from Podcasts to DCIM within the sdk_gphone_x86_64 storage, I need to first navigate into the sdk_gphone_x86_64 storage area. This will allow me to access the Podcasts and DCIM directories. The current screenshot shows the sdk_gphone64_x86_64 option available in the list, so clicking on it will take me to the desired storage area.

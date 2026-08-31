@@ -1,0 +1,15 @@
+Add the following expenses into the pro expense:
+Expense: Social Club Dues
+ amount_dollars: $67.41
+ category_name: Social
+ note: Monthly recurring
+
+Expense: Legal Fees
+ amount_dollars: $10.14
+ category_name: Others
+ note: Monthly recurring
+
+Expense: Stationery
+ amount_dollars: $118.93
+ category_name: Others
+ note: Remember to transfer funds

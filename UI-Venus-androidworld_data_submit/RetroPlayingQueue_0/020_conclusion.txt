@@ -1,0 +1,2 @@
+
+"Clear the current search query to correct the typo and prepare to type the correct song name."

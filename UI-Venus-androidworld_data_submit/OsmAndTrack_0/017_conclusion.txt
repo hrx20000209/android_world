@@ -1,0 +1,2 @@
+
+"Click the 'Save' button to save the location as a favorite."

@@ -1,0 +1,2 @@
+
+The user's goal is to save a track with specific waypoints in the OsmAnd app. The current screenshot shows the map interface of the OsmAnd app, but it does not display any waypoints or tracks yet. The next logical step would be to start creating a new route or track and add the specified waypoints. Typically, this involves accessing the menu options where routing or track creation features are located.

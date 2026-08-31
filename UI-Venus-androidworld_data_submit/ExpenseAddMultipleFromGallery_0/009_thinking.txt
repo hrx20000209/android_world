@@ -1,0 +1,2 @@
+
+The user has entered the name of the expense as 'Food'. The next step is to input the amount associated with this expense. According to the 'expenses.jpg' file, the amount for 'Food' is $30. Therefore, the next logical action is to type '30' into the Amount field.

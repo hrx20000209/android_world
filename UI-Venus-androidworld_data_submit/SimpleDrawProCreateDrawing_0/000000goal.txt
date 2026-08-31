@@ -1,0 +1,1 @@
+Create a new drawing in Simple Draw Pro. Name it adipiscing_fair_jelly_final.png. Save it in the Pictures folder within the sdk_gphone_x86_64 storage area.

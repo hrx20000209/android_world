@@ -1,0 +1,2 @@
+
+To add the specified expenses, I need to open the Pro Expense app. Since it's not visible on this home screen, I should look for it either by swiping through other screens or searching for it directly if there’s an app drawer available.

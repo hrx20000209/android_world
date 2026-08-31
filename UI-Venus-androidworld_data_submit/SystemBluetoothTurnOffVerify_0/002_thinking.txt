@@ -1,0 +1,2 @@
+
+To turn Bluetooth off, I need to access the quick settings menu. Since the previous action was a scroll up, it seems like we're trying to reveal more options or settings. However, the current screen shows app icons rather than the quick settings. I should attempt another swipe down from the top of the screen to open the notification shade and quick settings panel.

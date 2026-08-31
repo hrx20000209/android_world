@@ -1,0 +1,2 @@
+
+The user wants to resend the last message they sent to Noa Mohammed. We are currently in the Simple SMS Messenger app, and we can see the conversation with Noa Mohammed listed. The next logical step is to open this conversation to access the message options.

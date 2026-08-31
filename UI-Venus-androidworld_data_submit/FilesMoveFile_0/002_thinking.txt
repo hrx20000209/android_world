@@ -1,0 +1,2 @@
+
+To move the file 'holiday_photos.jpg' from Podcasts to DCIM within the sdk_gphone_x86_64 storage, I need to navigate to the correct storage location. Currently, the Downloads section is open, but I need to access the main storage directory where Podcasts and DCIM folders are located. Clicking on the menu icon (three horizontal lines) at the top left corner should allow me to switch to the main storage view.

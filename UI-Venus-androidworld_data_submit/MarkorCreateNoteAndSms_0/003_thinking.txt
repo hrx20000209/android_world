@@ -1,0 +1,2 @@
+
+To create a new note named "fair_ant_XOdi.txt", I need to change the default name from "my_note" to "fair_ant_XOdi". Additionally, I must ensure the file extension is ".txt" instead of ".md". This involves clicking on the name field to edit the name and changing the file type accordingly.

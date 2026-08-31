@@ -1,0 +1,2 @@
+
+The current recipe has been successfully saved in the Broccoli app. To continue adding more recipes from `recipes.txt`, I need to return to the main menu or list of recipes in the Broccoli app. Pressing the back arrow will likely take me back to the main screen where I can add another recipe.

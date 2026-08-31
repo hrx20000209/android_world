@@ -1,0 +1,2 @@
+
+To delete duplicate recipes while keeping at least one instance of each unique recipe, I need to identify the duplicates first. In this screenshot, "Avocado Toast with Egg" appears three times and "BBQ Chicken Quesadillas" appears twice. I should start by selecting one of these duplicates to see options for deletion.

@@ -1,0 +1,3 @@
+1.0
+MarkorDeleteNote
+65.10803961753845

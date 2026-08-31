@@ -1,0 +1,2 @@
+
+"Click 'No thanks' to bypass the sync prompt and continue."

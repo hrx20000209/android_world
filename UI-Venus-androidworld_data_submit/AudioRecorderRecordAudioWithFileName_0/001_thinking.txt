@@ -1,0 +1,2 @@
+
+To record an audio clip using the Audio Recorder app, I need to locate and open the app first. Since it's not visible on this home screen, I should check other screens or the app drawer.

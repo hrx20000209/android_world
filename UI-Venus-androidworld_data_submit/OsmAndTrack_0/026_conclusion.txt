@@ -1,0 +1,2 @@
+
+"Click the 'Done' button to finalize and save the track with the specified waypoints."

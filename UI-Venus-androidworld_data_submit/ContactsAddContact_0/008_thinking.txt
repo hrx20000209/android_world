@@ -1,0 +1,2 @@
+
+To create a new contact for Hugo Pereira, I need to enter the phone number in the 'Phone' field. The 'Phone' field is visible and ready for input. Clicking on this field will allow me to type in the phone number +13920741751.

@@ -1,0 +1,2 @@
+
+"Tapping the play button to start the stopwatch."

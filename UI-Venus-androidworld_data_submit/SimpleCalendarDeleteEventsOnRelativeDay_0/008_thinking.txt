@@ -1,0 +1,2 @@
+
+To delete all events scheduled for this Monday, I need to remove the currently selected event. The trash bin icon at the top right corner of the screen is used for deleting the event. Clicking this icon will allow me to delete the event.

@@ -1,0 +1,2 @@
+
+The task requires opening the 'task.html' file from the Downloads folder using Chrome. The file is visible on the current screen, and the next logical step is to click on it to initiate the opening process. Once opened, the subsequent steps will involve navigating the X to the bottom-right cell using the direction buttons within the HTML file interface.

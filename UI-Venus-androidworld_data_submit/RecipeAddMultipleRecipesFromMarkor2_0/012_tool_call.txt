@@ -1,0 +1,1 @@
+{'action': 'Type', 'params': {'content': 'A quick and healthy smoothie made with fresh raspberries and almond milk.'}}

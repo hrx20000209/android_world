@@ -1,0 +1,2 @@
+
+To proceed with viewing the receipt image, I need to access the folder containing the receipt.png file. The screenshot shows a folder named 'DCIM', which likely contains images. Clicking on this folder should allow me to view the receipt image needed for extracting transaction details.

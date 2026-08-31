@@ -1,0 +1,2 @@
+
+The user wants to know their incomplete tasks due by Thursday. Based on the screenshot, the incomplete tasks due by Thursday are "Attend training session," "Call client for follow-up," and "Research market trends." These tasks are clearly listed with their respective due dates and are unchecked, indicating they are incomplete. Thus, these are the tasks the user needs to complete by Thursday.

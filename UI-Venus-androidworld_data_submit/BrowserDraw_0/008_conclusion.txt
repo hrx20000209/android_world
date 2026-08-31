@@ -1,0 +1,2 @@
+
+"Confirm opening the 'task.html' file with Chrome by clicking 'Just once'."

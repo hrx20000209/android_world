@@ -1,0 +1,2 @@
+
+"Click the trash can icon to clear the current drawing."

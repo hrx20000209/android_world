@@ -1,0 +1,1 @@
+{'action': 'Click', 'params': {'box': (231, 1931)}}

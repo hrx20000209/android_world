@@ -1,0 +1,2 @@
+
+"Enter the amount $10.14 for the 'Legal Fees' expense."

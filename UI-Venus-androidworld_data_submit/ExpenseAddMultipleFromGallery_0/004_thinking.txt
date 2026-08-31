@@ -1,0 +1,2 @@
+
+The user has returned to the home screen after viewing the 'expenses.jpg' file in Simple Gallery Pro. The next step is to open the pro expense application to add the expenses extracted from the image. Since the pro expense app isn't visible on the current screen, I need to scroll through the app list or search for it.

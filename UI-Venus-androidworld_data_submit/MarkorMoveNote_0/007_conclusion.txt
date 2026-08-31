@@ -1,0 +1,2 @@
+
+"Select the 'MeetingMinutes' folder as the destination for moving the file."

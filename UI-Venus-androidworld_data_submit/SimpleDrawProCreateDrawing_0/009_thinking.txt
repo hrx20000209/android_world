@@ -1,0 +1,2 @@
+
+To save the drawing in the correct location, I need to navigate into the Pictures folder within the sdk_gphone_x86_64 storage area. The current screenshot shows the storage area is open, but I need to find and select the Pictures folder. Scrolling down or looking for the Pictures folder is necessary to proceed.

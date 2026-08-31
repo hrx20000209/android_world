@@ -1,0 +1,2 @@
+
+"Click the 'Down' button to move 'X' further down towards the bottom row."

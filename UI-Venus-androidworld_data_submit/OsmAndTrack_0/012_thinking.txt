@@ -1,0 +1,2 @@
+
+The user's goal is to save a track with specific waypoints in the OsmAnd app. The current screenshot shows the location of Liechtenstein, but the specific waypoints have not been added yet. The next logical step is to search for the second waypoint, Triesen, Liechtenstein, and add it to the route. The search icon at the top left corner appears to be the most suitable option to find the location.

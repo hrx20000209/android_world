@@ -1,0 +1,2 @@
+
+To add the recipes that take 10 minutes to prepare into the Broccoli recipe app, I need to create a new recipe entry. The green plus button at the bottom right corner likely allows me to add a new recipe. Clicking this button should lead me to a form where I can input the details of the Raspberry Almond Smoothie recipe.

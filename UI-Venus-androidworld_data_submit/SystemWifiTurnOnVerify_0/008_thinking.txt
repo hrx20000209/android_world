@@ -1,0 +1,2 @@
+
+The user's goal is to turn on Wi-Fi. The current screen indicates that the Internet settings are still loading. Once loaded, the Wi-Fi toggle should be available for interaction. The best course of action is to wait until the page finishes loading to ensure the Wi-Fi toggle becomes accessible.

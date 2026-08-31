@@ -1,0 +1,2 @@
+
+To delete duplicate expenses while ensuring at least one instance of each unique expense remains, I need to access the list of all expenses. This can likely be done through a menu option or a specific section within the app. The hamburger menu icon at the top left corner suggests navigation options that could lead to the expense list.

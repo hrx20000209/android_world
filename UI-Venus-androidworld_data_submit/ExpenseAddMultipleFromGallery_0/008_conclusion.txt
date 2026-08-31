@@ -1,0 +1,2 @@
+
+"Type the name of the expense 'Food' into the Name field."

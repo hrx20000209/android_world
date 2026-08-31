@@ -1,0 +1,2 @@
+
+The user needs to see the events for the next week starting from Monday. The current screenshot shows a menu where I can choose between different views. To proceed, I should select the 'Weekly view' option to display the events for the next week.

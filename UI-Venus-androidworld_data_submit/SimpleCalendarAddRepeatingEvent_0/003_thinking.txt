@@ -1,0 +1,2 @@
+
+To proceed with creating the recurring event, I need to select the 'Event' option from the bottom menu. This will allow me to enter the details for the 'Review session for Budget Planning' event as specified by the user.

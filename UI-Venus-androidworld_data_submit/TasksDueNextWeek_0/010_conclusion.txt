@@ -1,0 +1,2 @@
+
+"Click on the 'Next 7 days' filter to view tasks due next week."

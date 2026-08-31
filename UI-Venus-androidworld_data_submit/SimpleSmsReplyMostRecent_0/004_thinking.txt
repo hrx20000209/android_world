@@ -1,0 +1,2 @@
+
+The user's goal is to reply to the most recent message with "A quick brown fox." The input field is already active, so the next step is to type the message and send it.

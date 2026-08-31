@@ -1,0 +1,2 @@
+
+To find the location of the "Family reunion" event, I need to click on the event entry to view its detailed information. The event is listed at the top of the screen, so clicking on it should reveal the location.

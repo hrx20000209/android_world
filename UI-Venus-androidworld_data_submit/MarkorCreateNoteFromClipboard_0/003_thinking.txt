@@ -1,0 +1,2 @@
+
+To proceed with the task, I need to change the name of the note from "my_note" to "2023_09_08_active_umbrella". Additionally, I need to ensure the file extension is ".txt" instead of ".md". This involves clicking on the name field to edit the text and selecting the correct file type.

@@ -1,0 +1,2 @@
+
+To achieve the user's task, I need to navigate to the Contacts app where I can add a new contact. Since the Contacts app isn't visible on this home screen, I should scroll or search for it. The most likely way to find it is by scrolling down through the app list.

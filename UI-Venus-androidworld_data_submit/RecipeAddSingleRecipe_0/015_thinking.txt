@@ -1,0 +1,2 @@
+
+The recipe details have been filled out according to the user's instructions. The final step is to save the recipe so that it is added to the Broccoli app. The SAVE button is located at the top right corner of the screen.

@@ -49,7 +49,7 @@ from android_world.agents import slot_complete_evidence
 from android_world.env import adb_utils
 from android_world.env import json_action
 
-MAX_EXPLORER_STEPS = int(os.environ.get("ANDROID_WORLD_EXPLORER_MAX_STEPS", "21") or "21")
+MAX_EXPLORER_STEPS = int(os.environ.get("ANDROID_WORLD_EXPLORER_MAX_STEPS", "16") or "16")
 PAGE_CHANGED_HASH_DIFF = 6
 PROMPT_RESULT_LIMIT = 3
 TRACE_A11Y_LIMIT = 80
@@ -123,10 +123,27 @@ def _clean_text(value: Any) -> str:
 
 
 def _to_user_text(goal: str, history: str, hint: str) -> str:
+    goal_l = _clean_text(goal).lower()
+    media_capture_note = ""
+    if re.search(
+        r"\b(record (?:an? )?(?:audio|video|clip)|take (?:a |the )?(?:photo|picture|video)|capture (?:a |the )?(?:photo|picture|video))\b",
+        goal_l,
+    ):
+        media_capture_note = (
+            "- For recording/photo/video capture tasks, once the current screen shows the clip/photo/video was captured, saved, or appears in the media/recording list, choose COMPLETE instead of repeatedly starting/stopping/capturing again.\n"
+        )
+    destructive_note = ""
+    if re.search(r"\b(delete|remove|trash|discard|clear all|erase)\b", goal_l):
+        destructive_note = (
+            "- For delete/remove tasks involving files, expenses, recipes, notes, events, tasks, contacts, playlists, or list rows, do not COMPLETE immediately after a dialog confirmation; first verify on the current screen that each exact target item is absent from the relevant list/search/folder.\n"
+        )
     decision_constraints = (
         "Decision constraints:\n"
         "- Do not choose COMPLETE, ANSWER, or task_complete unless the current screen visibly proves the requested final state.\n"
+        "- For pure operation tasks, if the current screen already visibly proves the requested action is done, choose COMPLETE rather than repeating the same click/type action.\n"
+        f"{media_capture_note}"
         "- For file delete or file move tasks, do not complete immediately after a destructive dialog or one list observation; first verify the folder/path and the exact source absence or destination presence on the current screen.\n"
+        f"{destructive_note}"
         "- If exploration context conflicts with the current screen, ignore exploration context and act only on the current screen.\n\n"
     )
     if hint:
@@ -246,6 +263,14 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             "ANDROID_WORLD_LIGHT_EXPLORE_TRANSACTION_SAFE",
             True,
         )
+        # Legacy experiments accumulated English label allow/deny lists and
+        # app-specific keyword fixes.  They are disabled by default because
+        # they do not generalize to icons, localization, or unseen apps.  Keep
+        # the switch only so historical runs remain reproducible.
+        self.light_explore_lexical_rules = _env_bool(
+            "ANDROID_WORLD_LIGHT_EXPLORE_LEXICAL_RULES",
+            False,
+        )
         self.light_explore_action_settle_s = max(
             0.0,
             _env_float(
@@ -293,6 +318,10 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             "evidence_best_first": "best_first",
             "beam_search": "beam",
             "uct": "mcts",
+            "voc": "value_of_computation",
+            "adaptive_voc": "value_of_computation",
+            "value_computation": "value_of_computation",
+            "value_of_computation_guided": "value_of_computation",
         }
         self.light_explore_search_strategy = strategy_aliases.get(
             self.light_explore_search_strategy,
@@ -305,8 +334,10 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             "best_first",
             "beam",
             "mcts",
+            "value_of_computation",
         }:
             self.light_explore_search_strategy = "greedy"
+        self._active_voc_depth_budget: int | None = None
         self.light_explore_rollback_policy = _clean_text(
             os.environ.get("ANDROID_WORLD_LIGHT_EXPLORE_ROLLBACK_POLICY", "current")
         ).lower()
@@ -414,6 +445,11 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                 "failure+level2+depth2+injected+sampled",
             )
         )
+        self.reasoning_prior_enabled = _env_bool("ANDROID_WORLD_REASONING_PRIOR_ENABLE", True)
+        self.reasoning_prior_delayed = _env_bool("ANDROID_WORLD_REASONING_PRIOR_DELAYED", True)
+        self.reasoning_prior_promotion = _env_bool("ANDROID_WORLD_REASONING_PRIOR_PROMOTION", True)
+        self.reasoning_prior_template_fill = _env_bool("ANDROID_WORLD_REASONING_PRIOR_TEMPLATE_FILL", True)
+        self.reasoning_prior_ewma_ms = _env_float("ANDROID_WORLD_REASONING_PRIOR_EWMA_MS", 10000.0)
         self.light_explore_quality_filters = _env_bool(
             "ANDROID_WORLD_LIGHT_EXPLORE_QUALITY_FILTERS",
             True,
@@ -545,6 +581,14 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         self._all_shortcut_events: list[dict[str, Any]] = []
         self._all_shortcut_shadow_evals: list[dict[str, Any]] = []
         self._all_direct_answer_candidates: list[dict[str, Any]] = []
+        self._reasoning_prior_for_next_step: dict[str, Any] | None = None
+        self._last_reasoning_prior: dict[str, Any] | None = None
+        self._reasoning_prior_ewma_ms: float = 10000.0
+        self._pending_promotion: dict[str, Any] | None = None
+        self._pending_promotion_guidance_context: str = ""
+        self._pending_promotion_events: list[dict[str, Any]] = []
+        self._all_pending_promotion_events: list[dict[str, Any]] = []
+        self._session_exploration_memory: dict[str, Any] = {}
         self._state_acquisition_metrics: dict[str, float] = {
             "full_a11y_calls": 0.0,
             "screenshot_calls": 0.0,
@@ -572,6 +616,14 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         self._search_policy_stats: dict[str, dict[str, float]] = {}
         self._last_hint_harmful: bool = False
 
+    @staticmethod
+    def _normalize_for_matching(value: Any) -> str:
+        if value is None:
+            return ""
+        if isinstance(value, (int, float, bool)):
+            return str(value)
+        return _clean_text(value).lower()
+
     def reset(self, go_home: bool = False) -> None:
         super().reset(go_home=go_home)
         self.enable_light_exploration = bool(self._initial_enable_light_exploration)
@@ -590,6 +642,12 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         self._shortcut_events = []
         self._shortcut_shadow_evals = []
         self._direct_answer_candidates = []
+        self._reasoning_prior_for_next_step = None
+        self._last_reasoning_prior = None
+        self._reasoning_prior_ewma_ms = 10000.0
+        self._pending_promotion = None
+        self._pending_promotion_guidance_context = ""
+        self._session_exploration_memory = {}
         self._last_strict_not_injected_reasons = []
         self._search_policy_stats = {}
 
@@ -815,6 +873,7 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             "quality_filters": bool(getattr(self, "light_explore_quality_filters", True)),
             "safe_click_only": bool(self.light_explore_safe_click_only),
             "transaction_safe": bool(self.light_explore_transaction_safe),
+            "lexical_rules": bool(self.light_explore_lexical_rules),
             "a11y_method": _clean_text(os.environ.get("ANDROID_WORLD_A11Y_METHOD", "")),
         }
         for base in self._diagnostic_targets(goal):
@@ -828,7 +887,1096 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
-    def _candidate_score_components(self, candidate: dict[str, Any], goal: str) -> dict[str, float | str]:
+    def _tokenize_for_prior(self, text: str) -> list[str]:
+        raw = _clean_text(text).lower()
+        if not raw:
+            return []
+        tokens = re.findall(r"[a-z0-9._'-]+|\[[^\]]+\]|\d{1,4}-\d{1,2}-\d{1,2}|\b\d{1,2} [a-z]{3}\b", raw)
+        out = []
+        stopwords = {
+            "the",
+            "a",
+            "an",
+            "and",
+            "or",
+            "to",
+            "for",
+            "with",
+            "on",
+            "in",
+            "from",
+            "file",
+            "files",
+            "note",
+            "notes",
+            "task",
+            "tasks",
+            "app",
+            "application",
+            "status",
+            "bar",
+            "container",
+        }
+        for token in tokens:
+            token = _clean_text(token).lower()
+            if not token or token in stopwords:
+                continue
+            if re.fullmatch(r"[._-]+", token):
+                continue
+            out.append(token)
+        return out
+
+    def _extract_reasoning_prior_block(self, raw_text: str) -> dict[str, str]:
+        block = {"keywords": "", "expected_ui": "", "template_answer": "", "template_action": "", "template_schema": "", "template_avoid": "", "template_risk": ""}
+        normalized = _clean_text(raw_text)
+        if not normalized:
+            return block
+        match = re.search(r"<exploration_prior>(.*?)</exploration_prior>", normalized, flags=re.IGNORECASE | re.DOTALL)
+        if not match:
+            return block
+        body = match.group(1)
+        for key in block:
+            pattern = rf"{re.escape(key)}\s*:\s*(.*?)(?:\n\w|$)"
+            found = re.search(pattern, body, flags=re.IGNORECASE | re.DOTALL)
+            if found:
+                value = found.group(1)
+                block[key] = _clean_text(value).replace("\n", " ")
+        return block
+
+    def _derive_reasoning_prior_from_regex(
+        self,
+        goal: str,
+        raw_vlm_output: str,
+        parsed_action: dict[str, Any],
+    ) -> dict[str, Any]:
+        raw = _clean_text(raw_vlm_output)
+        goal_summary = _clean_text(
+            _clean_text(parsed_action.get("summary") or parsed_action.get("action") or goal)
+        )
+        next_intent = goal_summary
+        quoted_patterns = re.findall(r"\"([^\"]{2,120})\"|\'([^\']{2,120})\'", raw)
+        candidates = [item for pair in quoted_patterns for item in pair if item]
+        target_keywords: list[str] = []
+        for item in candidates:
+            if item and item not in target_keywords:
+                target_keywords.append(item)
+        for item in self._extract_goal_entry_text(goal):
+            if _clean_text(item) and item not in target_keywords:
+                target_keywords.append(item)
+        expected_ui_elements: list[str] = []
+        expected_tokens = re.findall(
+            r"\b(search|find|lookup|detail|stats|form|filter|list|result|file|note|recipe|event|folder|calendar)\b",
+            raw.lower(),
+        )
+        for token in expected_tokens:
+            token = token[0] if isinstance(token, tuple) else token
+            if token and token not in expected_ui_elements:
+                expected_ui_elements.append(token)
+        derived_parameters: list[str] = []
+        for text in (
+            self._extract_goal_search_text(goal),
+            self._extract_goal_entry_text(goal),
+            parsed_action.get("value") or parsed_action.get("return"),
+            parsed_action.get("action"),
+        ):
+            item = _clean_text(text)
+            if item and item not in derived_parameters:
+                derived_parameters.append(item)
+        avoid_keywords: list[str] = [
+            key
+            for key in ("new event", "marker", "wrong page", "irrelevant", "do not")
+            if key in raw.lower()
+        ]
+        risk_keywords: list[str] = [
+            key
+            for key in ("delete", "remove", "save", "confirm", "toggle", "permission", "share", "send")
+            if key in raw.lower()
+        ]
+        risk_keywords = list(dict.fromkeys(risk_keywords))
+        if not derived_parameters and target_keywords:
+            derived_parameters = target_keywords[:1]
+        return {
+            "target_keywords": target_keywords,
+            "expected_ui_elements": expected_ui_elements,
+            "derived_parameters": derived_parameters,
+            "avoid_keywords": avoid_keywords,
+            "risk_keywords": risk_keywords,
+            "goal_summary": goal_summary,
+            "next_intent": next_intent,
+            "expected_ui_role": "",
+            "preferred_operators": self._infer_preferred_operators(raw, parsed_action),
+            "evidence_template": {
+                "template_answer": "",
+                "template_action": "",
+                "template_schema": "",
+                "template_avoid": "",
+                "template_risk": "",
+            },
+            "parse_method": "regex_fallback",
+            "parse_success": True,
+        }
+
+    def _infer_preferred_operators(self, raw_text: str, parsed_action: dict[str, Any]) -> list[str]:
+        text = (_clean_text(raw_text) + " " + _clean_text(parsed_action.get("explain") or parsed_action.get("cot") or "")).lower()
+        operators: list[str] = []
+        if any(token in text for token in ("search", "find", "lookup", "query")):
+            operators.append("SearchPeek")
+        if any(token in text for token in ("open", "click", "select", "result", "row")):
+            operators.append("DetailPeek")
+        if any(token in text for token in ("detail", "open detail", "open file", "open note")):
+            operators.append("DetailPeek")
+        if any(token in text for token in ("stats", "statistics", "duration", "distance")):
+            operators.append("StatsPeek")
+        if any(token in text for token in ("form", "field", "title", "name", "phone", "amount", "date")):
+            operators.append("FormSchema")
+        if any(token in text for token in ("avoid", "wrong", "not useful")):
+            operators.append("AvoidPath")
+        if any(token in text for token in ("delete", "confirm", "toggle", "send", "save", "permission")):
+            operators.append("RiskBoundary")
+        if not operators:
+            operators = ["NavigationPeek"]
+        # dedupe but keep order
+        return [item for idx, item in enumerate(operators) if item not in operators[:idx]]
+
+    def _build_reasoning_prior(self, goal: str, raw_vlm_output: str, parsed_action: dict[str, Any], previous_screen_summary: str) -> tuple[dict[str, Any], dict[str, Any]]:
+        step_idx = len(self._actions) + 1
+        prior_block = self._extract_reasoning_prior_block(raw_vlm_output)
+        parse_success = False
+        parse_method = "empty"
+        if any(value for value in prior_block.values()):
+            parse_success = True
+            parse_method = "json_block"
+            prior = {
+                "task_id": _clean_text(goal)[:200],
+                "source_step": int(step_idx),
+                "raw_text": _clean_text(raw_vlm_output),
+                "parse_method": parse_method,
+                "parse_success": True,
+                "goal_summary": _clean_text(
+                    prior_block.get("goal_summary")
+                    or parsed_action.get("summary")
+                    or parsed_action.get("action")
+                    or _clean_text(goal)
+                ),
+                "next_intent": _clean_text(prior_block.get("next_intent") or parsed_action.get("action") or goal),
+                "target_keywords": [
+                    item for item in self._tokenize_for_prior(prior_block.get("keywords") or "") if item
+                ],
+                "expected_ui_elements": [
+                    item for item in self._tokenize_for_prior(prior_block.get("expected_ui") or "") if item
+                ],
+                "expected_ui_role": _clean_text(prior_block.get("expected_ui") or "unknown").lower() if prior_block.get("expected_ui") else "unknown",
+                "preferred_operators": [
+                    _clean_text(item) for item in self._infer_preferred_operators(
+                        _clean_text(prior_block.get("keywords") + " " + prior_block.get("template_answer")),
+                        parsed_action,
+                    )
+                ],
+                "derived_parameters": [
+                    item for item in [
+                        self._extract_goal_entry_text(goal),
+                        self._extract_goal_search_text(goal),
+                        parsed_action.get("value"),
+                    ] if _clean_text(item)
+                ],
+                "avoid_keywords": [
+                    item for item in [
+                        "wrong", "avoid", "irrelevant", "not relevant", "do not"
+                    ] if item in (_clean_text(raw_vlm_output) + " " + _clean_text(parsed_action.get("explain", "")).lower())
+                ],
+                "risk_keywords": [
+                    item
+                    for item in ["delete", "confirm", "toggle", "permission", "save", "send"]
+                    if item in _clean_text(raw_vlm_output).lower()
+                ],
+                "evidence_template": {
+                    "template_answer": _clean_text(prior_block.get("template_answer")),
+                    "template_action": _clean_text(prior_block.get("template_action")),
+                    "template_schema": _clean_text(prior_block.get("template_schema")),
+                    "template_avoid": _clean_text(prior_block.get("template_avoid")),
+                    "template_risk": _clean_text(prior_block.get("template_risk")),
+                },
+                "confidence": 0.3,
+                "parse_error": "",
+            }
+        else:
+            prior = self._derive_reasoning_prior_from_regex(
+                goal,
+                raw_vlm_output,
+                parsed_action,
+            )
+            prior["task_id"] = _clean_text(goal)[:200]
+            prior["source_step"] = int(step_idx)
+            prior["raw_text"] = _clean_text(raw_vlm_output)
+            prior["parse_method"] = "regex_fallback"
+            parse_method = "regex_fallback"
+            prior["parse_error"] = ""
+            prior_success = bool(prior.get("parse_success", False))
+            prior["parse_success"] = bool(prior_success)
+            prior["confidence"] = 0.3
+            if prior["target_keywords"]:
+                prior["confidence"] += 0.2
+            if prior["derived_parameters"]:
+                prior["confidence"] += 0.2
+            if prior["expected_ui_elements"]:
+                prior["confidence"] += 0.1
+            prior["confidence"] = max(0.0, min(1.0, float(prior["confidence"])))
+            prior["goal_summary"] = prior.get("goal_summary", "") or _clean_text(goal)
+            prior["next_intent"] = prior.get("next_intent", _clean_text(goal))
+
+        prior["goal_id"] = _clean_text(goal)[:200]
+        prior["raw_text"] = _clean_text(prior.get("raw_text", ""))
+        prior["expected_ui_role"] = _clean_text(prior.get("expected_ui_role") or "unknown")
+        prior["evidence_template"] = prior.get("evidence_template") or {}
+        prior["parse_success"] = bool(prior.get("parse_success"))
+        prior["parse_method"] = parse_method
+
+        if not parse_success:
+            prior["parse_success"] = bool(_clean_text(raw_vlm_output) or _clean_text(previous_screen_summary))
+
+        prior["parse_error"] = "" if prior.get("parse_success") else "prior_parse_empty"
+
+        if previous_screen_summary:
+            prior["goal_summary"] = prior.get("goal_summary") or previous_screen_summary
+        # confidence rules
+        confidence = 0.3
+        txt = f"{prior.get('goal_summary','')} {prior.get('next_intent','')} {_clean_text(raw_vlm_output)}"
+        if re.search(r"\b(open|click|select|find|search|navigate|detail|stats|form|schema|avoid)\b", txt.lower()):
+            confidence += 0.2
+        if prior.get("target_keywords"):
+            confidence += 0.2
+        if prior.get("derived_parameters"):
+            confidence += 0.2
+        if prior.get("expected_ui_elements"):
+            confidence += 0.1
+        prior["confidence"] = max(0.0, min(1.0, float(confidence)))
+
+        template_record = {
+            "task_id": _clean_text(goal)[:200],
+            "step": int(step_idx),
+            "source_prior_step": int(step_idx),
+            "template_source": parse_method,
+            "template_parse_success": bool(prior.get("parse_success")),
+            "template_answer": _clean_text(prior.get("evidence_template", {}).get("template_answer") or ""),
+            "template_action": _clean_text(prior.get("evidence_template", {}).get("template_action") or ""),
+            "template_schema": _clean_text(prior.get("evidence_template", {}).get("template_schema") or ""),
+            "template_avoid": _clean_text(prior.get("evidence_template", {}).get("template_avoid") or ""),
+            "template_risk": _clean_text(prior.get("evidence_template", {}).get("template_risk") or ""),
+        }
+        return prior, template_record
+
+    def _append_reasoning_prior_record(self, goal: str, prior: dict[str, Any]) -> None:
+        if not getattr(self, "reasoning_prior_enabled", False):
+            return
+        row = {
+            "task_id": _clean_text(goal)[:200],
+            "source_step": int(prior.get("source_step") or 0),
+            "raw_text": _clean_text(prior.get("raw_text") or ""),
+            "parse_method": _clean_text(prior.get("parse_method") or "empty"),
+            "parse_success": bool(prior.get("parse_success")),
+            "goal_summary": _clean_text(prior.get("goal_summary") or ""),
+            "next_intent": _clean_text(prior.get("next_intent") or ""),
+            "target_keywords": list(prior.get("target_keywords") or []),
+            "expected_ui_elements": list(prior.get("expected_ui_elements") or []),
+            "expected_screen_role": _clean_text(prior.get("expected_ui_role") or prior.get("expected_screen_role") or ""),
+            "preferred_operators": list(prior.get("preferred_operators") or []),
+            "derived_parameters": list(prior.get("derived_parameters") or []),
+            "avoid_keywords": list(prior.get("avoid_keywords") or []),
+            "risk_keywords": list(prior.get("risk_keywords") or []),
+            "evidence_template": prior.get("evidence_template") or {},
+            "confidence": float(prior.get("confidence") or 0.0),
+            "parse_error": _clean_text(prior.get("parse_error") or ""),
+        }
+        self._append_diagnostic_jsonl(goal, "reasoning_prior_records.jsonl", row)
+
+    def _append_prompt_template_record(self, goal: str, template_record: dict[str, Any]) -> None:
+        if not getattr(self, "reasoning_prior_template_fill", False):
+            return
+        row = {
+            "task_id": _clean_text(goal)[:200],
+            "step": int(template_record.get("step") or 0),
+            "source_prior_step": int(template_record.get("source_prior_step") or 0),
+            "template_source": _clean_text(template_record.get("template_source") or "fallback"),
+            "template_parse_success": bool(template_record.get("template_parse_success")),
+            "template_answer": _clean_text(template_record.get("template_answer") or ""),
+            "template_action": _clean_text(template_record.get("template_action") or ""),
+            "template_schema": _clean_text(template_record.get("template_schema") or ""),
+            "template_avoid": _clean_text(template_record.get("template_avoid") or ""),
+            "template_risk": _clean_text(template_record.get("template_risk") or ""),
+        }
+        self._append_diagnostic_jsonl(goal, "prompt_templates.jsonl", row)
+
+    def _delayed_reasoning_prior_for_exploration(self, goal: str, step_idx: int) -> dict[str, Any]:
+        if not getattr(self, "reasoning_prior_enabled", False):
+            return {}
+        if getattr(self, "reasoning_prior_delayed", True) and step_idx <= 0:
+            return {}
+        prior = self._reasoning_prior_for_next_step if isinstance(self._reasoning_prior_for_next_step, dict) else {}
+        if not prior or not prior.get("parse_success"):
+            return {}
+        if _clean_text(prior.get("task_id") or prior.get("goal_id")) and _clean_text(prior.get("task_id") or prior.get("goal_id")) != _clean_text(goal)[:200]:
+            return {}
+        source_step = int(prior.get("source_step") or 0)
+        current_one_based = int(step_idx + 1)
+        if getattr(self, "reasoning_prior_delayed", True) and source_step >= current_one_based:
+            return {}
+        return dict(prior)
+
+    def _prior_has_exact_search_keyword(self, prior: dict[str, Any], goal: str) -> bool:
+        if not isinstance(prior, dict) or not prior.get("parse_success"):
+            return False
+        expected = _clean_text(self._extract_goal_search_text(goal)).lower()
+        if not expected:
+            entries = self._extract_goal_entry_text(goal)
+            if isinstance(entries, (list, tuple)):
+                expected = _clean_text(next((x for x in entries if _clean_text(x)), "")).lower()
+            else:
+                expected = _clean_text(entries).lower()
+        if not expected:
+            return False
+        prior_values = [
+            _clean_text(x).lower()
+            for x in (
+                list(prior.get("target_keywords") or [])
+                + list(prior.get("derived_parameters") or [])
+                + list(prior.get("expected_ui_elements") or [])
+            )
+            if _clean_text(x)
+        ]
+        preferred_ops = {_clean_text(x) for x in list(prior.get("preferred_operators") or []) if _clean_text(x)}
+        has_search_operator = bool(preferred_ops & {"SearchPeek", "FilterPeek"})
+        exact = any(expected == value or expected in value or value in expected for value in prior_values)
+        return bool(has_search_operator and exact)
+
+    def _protected_task_passive_only(self, goal: str, prior: dict[str, Any]) -> bool:
+        task_mode = self._task_mode(goal)
+        if task_mode not in {"FORM_CREATE_EDIT", "DELETE_COMMIT", "SIMPLE_VERIFY", "MEDIA_CAPTURE"}:
+            return False
+        if not _env_bool("ANDROID_WORLD_ADAPTIVE_ALLOW_RISKY_SEARCH_PROBES", False):
+            return True
+        return not self._prior_has_exact_search_keyword(prior, goal)
+
+    def _goal_search_reference_text(self, goal: str) -> str:
+        search_text = _clean_text(self._extract_goal_search_text(goal))
+        if search_text:
+            return search_text.lower()
+        entry_text = self._extract_goal_entry_text(goal)
+        return _clean_text(entry_text).lower()
+
+    def _candidate_search_term_match(self, candidate: dict[str, Any], goal: str) -> bool:
+        expected = _clean_text(self._goal_search_reference_text(goal)).lower()
+        if not expected:
+            return False
+        candidate_text = _clean_text(candidate.get("text") or candidate.get("label") or candidate.get("merged") or "").lower()
+        if not candidate_text:
+            return False
+        if expected == candidate_text:
+            return True
+        if expected in candidate_text or candidate_text in expected:
+            return True
+        expected_tokens = set(expected.split())
+        candidate_tokens = set(candidate_text.split())
+        if expected_tokens and candidate_tokens:
+            overlap = len(expected_tokens.intersection(candidate_tokens))
+            return overlap / float(len(expected_tokens) + 1e-9) >= 0.66
+        return False
+
+    def _is_search_only_candidate(self, candidate: dict[str, Any], goal: str, prior: dict[str, Any]) -> bool:
+        if not isinstance(candidate, dict):
+            return False
+        operator = _clean_text(candidate.get("operator") or self._candidate_operator(candidate, goal)[0])
+        if operator not in {"SearchPeek", "FilterPeek"}:
+            return False
+        if not self._prior_has_exact_search_keyword(prior, goal):
+            return False
+        action_kind = _clean_text(candidate.get("action_kind") or json_action.CLICK).lower()
+        if action_kind in {"type", json_action.INPUT_TEXT}:
+            return self._candidate_search_term_match(candidate, goal)
+        return self._candidate_search_term_match(candidate, goal)
+
+    def _apply_protected_task_candidate_policy(
+        self,
+        candidates: list[dict[str, Any]],
+        goal: str,
+        prior: dict[str, Any],
+    ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+        task_mode = self._task_mode(goal)
+        if task_mode not in {"FORM_CREATE_EDIT", "DELETE_COMMIT", "SIMPLE_VERIFY", "MEDIA_CAPTURE"}:
+            return list(candidates), {
+                "applied": False,
+                "mode": "unprotected",
+                "before_count": int(len(candidates)),
+                "after_count": int(len(candidates)),
+                "filtered_count": 0,
+            }
+        has_exact_search = bool(self._prior_has_exact_search_keyword(prior, goal))
+        allowed_operators = {"SearchPeek", "FilterPeek", "FormSchema", "RiskBoundary"}
+        if self._protected_task_passive_only(goal, prior):
+            filtered_candidates = [
+                candidate
+                for candidate in candidates
+                if (
+                    _clean_text(candidate.get("operator")) in allowed_operators
+                    and (
+                        _clean_text(candidate.get("operator")) not in {"SearchPeek", "FilterPeek"}
+                        or self._is_search_only_candidate(candidate, goal, prior)
+                    )
+                )
+            ]
+            return filtered_candidates, {
+                "applied": True,
+                "mode": "passive_only",
+                "before_count": int(len(candidates)),
+                "after_count": int(len(filtered_candidates)),
+                "filtered_count": int(len(candidates) - len(filtered_candidates)),
+            }
+        filtered_candidates = []
+        for candidate in candidates:
+            candidate_operator = _clean_text(candidate.get("operator"))
+            if candidate_operator not in allowed_operators:
+                continue
+            if candidate_operator in {"SearchPeek", "FilterPeek"} and not has_exact_search:
+                continue
+            if candidate_operator in {"SearchPeek", "FilterPeek"} and not self._is_search_only_candidate(candidate, goal, prior):
+                continue
+            filtered_candidates.append(candidate)
+        return filtered_candidates, {
+            "applied": True,
+            "mode": "schema_risk_only" if not has_exact_search else "search_schema_risk_only",
+            "before_count": int(len(candidates)),
+            "after_count": int(len(filtered_candidates)),
+            "filtered_count": int(len(candidates) - len(filtered_candidates)),
+        }
+
+    @staticmethod
+    def _candidate_reasoning_signature_text(
+        candidate: dict[str, Any],
+        goal: str,
+        current_screen_role: str,
+        app_name: str,
+    ) -> str:
+        try:
+            candidate_text = " ".join(
+                str(x)
+                for x in (
+                    candidate.get("text"),
+                    candidate.get("content_description"),
+                    candidate.get("merged"),
+                    candidate.get("label"),
+                    candidate.get("resource_id") if not isinstance(candidate.get("resource_id"), dict) else None,
+                    candidate.get("class_name"),
+                    current_screen_role,
+                    app_name,
+                )
+                if _clean_text(x)
+            )
+            a11y = candidate.get("a11y") if isinstance(candidate.get("a11y"), dict) else {}
+            sibling = a11y.get("sibling_labels") if isinstance(a11y.get("sibling_labels"), (list, tuple)) else []
+            candidate_text = f"{candidate_text} {' '.join(_clean_text(x) for x in sibling if _clean_text(x))}"
+            return _clean_text(candidate_text).lower()
+        except Exception:  # pylint: disable=broad-exception-caught
+            return _clean_text(candidate.get("label") or candidate.get("merged") or "").lower()
+
+    def _evaluate_candidate_priors(
+        self,
+        candidates: list[dict[str, Any]],
+        goal: str,
+        reasoning_prior: dict[str, Any],
+        current_screen_role: str,
+        app_name: str,
+        step_idx: int,
+        trace_step: dict[str, Any] | None = None,
+    ) -> tuple[list[dict[str, Any]], float, str, dict[str, Any]]:
+        has_prior = bool(reasoning_prior and reasoning_prior.get("parse_success"))
+        if not has_prior:
+            return candidates, 0.0, "none", {}
+        target = [
+            _clean_text(x).lower()
+            for x in list(reasoning_prior.get("target_keywords") or []) + list(reasoning_prior.get("derived_parameters") or [])
+            if _clean_text(x)
+        ]
+        ui_expected = [
+            _clean_text(x).lower()
+            for x in list(reasoning_prior.get("expected_ui_elements") or [])
+            if _clean_text(x)
+        ]
+        prior_ops = {
+            _clean_text(op)
+            for op in list(reasoning_prior.get("preferred_operators") or [])
+            if _clean_text(op)
+        }
+        query = " ".join(
+            _clean_text(v)
+            for v in (
+                _clean_text(reasoning_prior.get("goal_summary") or ""),
+                _clean_text(reasoning_prior.get("next_intent") or ""),
+                " ".join(target),
+                " ".join(ui_expected),
+            )
+            if _clean_text(v)
+        )
+        query_tokens = set(self._tokenize_for_prior(query))
+        if not query_tokens:
+            return candidates, 0.0, "none", {}
+        scored: list[tuple[float, dict[str, Any]]] = []
+        for candidate in candidates:
+            candidate_text = self._candidate_reasoning_signature_text(
+                candidate,
+                goal=goal,
+                current_screen_role=current_screen_role,
+                app_name=app_name,
+            )
+            candidate_tokens = set(self._tokenize_for_prior(candidate_text))
+            token_overlap_score = 0.0
+            if candidate_tokens and query_tokens:
+                token_overlap_score = len(candidate_tokens.intersection(query_tokens)) / float(len(query_tokens))
+            exact_match_count = 0
+            matched_keywords: list[str] = []
+            matched_derived: list[str] = []
+            for item in target:
+                if item and item in candidate_text:
+                    exact_match_count += 1
+                    matched_keywords.append(item)
+            for item in list(reasoning_prior.get("derived_parameters") or []):
+                norm = _clean_text(item).lower()
+                if norm and norm in candidate_text:
+                    matched_derived.append(norm)
+            operator = _clean_text(candidate.get("operator") or self._candidate_operator(candidate, goal)[0])
+            safe = not self._is_transaction_unsafe_candidate(candidate) and not self._is_risky_probe_text(_clean_text(candidate.get("label") or ""))
+            rollback_risk_level = float(
+                min(
+                    1.0,
+                    self._candidate_rollback_risk(
+                        candidate,
+                        goal,
+                        operator=operator,
+                        label=_clean_text(candidate.get("label") or candidate.get("merged") or ""),
+                    ),
+                )
+            )
+            operator_match = operator in prior_ops
+            s = float(exact_match_count) + token_overlap_score + (1.0 if operator_match else 0.0)
+            # lower rollback risk preferred
+            s = float(s) - 0.5 * float(rollback_risk_level)
+            candidate_sc = {
+                "reasoning_prior_score": float(s),
+                "exact_match_count": int(exact_match_count),
+                "matched_keywords": matched_keywords,
+                "matched_derived_parameters": matched_derived,
+                "candidate_text": candidate_text,
+                "candidate_id": _clean_text(candidate.get("index") or candidate.get("key") or candidate.get("label") or ""),
+                "operator": operator,
+                "token_overlap_score": float(token_overlap_score),
+                "operator_prior_match": bool(operator_match),
+                "safe_to_execute": bool(safe),
+                "rollback_risk_level": float(rollback_risk_level),
+                "score": float(s),
+            }
+            candidate.update(candidate_sc)
+            self._append_diagnostic_jsonl(
+                self._current_goal_for_depth,
+                "candidate_reasoning_prior_scores.jsonl",
+                {
+                    "task_id": _clean_text(goal)[:200],
+                    "step": int(step_idx),
+                    "prior_source_step": int(reasoning_prior.get("source_step") or 0),
+                    "candidate_id": _clean_text(candidate_sc["candidate_id"]),
+                    "label": _clean_text(candidate.get("label") or candidate.get("merged")),
+                    "candidate_text": candidate_text,
+                    "operator": operator,
+                    "exact_match_count": int(exact_match_count),
+                    "matched_keywords": matched_keywords,
+                    "matched_derived_parameters": matched_derived,
+                    "token_overlap_score": float(token_overlap_score),
+                    "operator_prior_match": bool(operator_match),
+                    "safe_to_execute": bool(safe),
+                    "rollback_risk_level": float(rollback_risk_level),
+                    "selected": False,
+                    "selected_rank": 0,
+                    "rejected_reason": "",
+                },
+            )
+            scored.append((s, candidate))
+        if not scored:
+            return candidates, 0.0, "none", {}
+        # sort and rank
+        scored.sort(key=lambda item: (
+            float(item[0]),
+            float(item[1].get("exact_match_count") or 0),
+            float(item[1].get("token_overlap_score") or 0),
+            1 if item[1].get("operator_prior_match") else 0,
+            -float(item[1].get("rollback_risk_level") or 0),
+            -int(self._explored_element_visits.get(_clean_text(item[1].get("key") or item[1].get("index") or ""), 0)),
+        ), reverse=True)
+        ordered = [row[1] for row in scored]
+        for idx, cand in enumerate(ordered, start=1):
+            cand["reason_selected"] = cand.get("reason_selected") or "reasoning_prior_guided"
+            row = {
+                "task_id": _clean_text(goal)[:200],
+                "step": int(step_idx),
+                "prior_source_step": int(reasoning_prior.get("source_step") or 0),
+                "candidate_id": _clean_text(cand.get("index") or cand.get("key") or cand.get("label") or ""),
+                "label": _clean_text(cand.get("label") or cand.get("merged")),
+                "candidate_text": _clean_text(cand.get("candidate_text") or ""),
+                "operator": _clean_text(cand.get("operator") or ""),
+                "exact_match_count": int(cand.get("exact_match_count") or 0),
+                "matched_keywords": list(cand.get("matched_keywords") or []),
+                "matched_derived_parameters": list(cand.get("matched_derived_parameters") or []),
+                "token_overlap_score": float(cand.get("token_overlap_score") or 0.0),
+                "operator_prior_match": bool(cand.get("operator_prior_match")),
+                "safe_to_execute": bool(cand.get("safe_to_execute")),
+                "rollback_risk_level": float(cand.get("rollback_risk_level") or 0.0),
+                "selected": False,
+                "selected_rank": int(idx),
+                "rejected_reason": "",
+            }
+            self._append_diagnostic_jsonl(self._current_goal_for_depth, "candidate_reasoning_prior_scores.jsonl", row)
+
+        mode = self._choose_reasoning_adaptive_mode(
+            reasoning_prior=reasoning_prior,
+            candidates=ordered,
+            step_idx=step_idx,
+        )
+        return ordered, mode.get("prior_entropy", 0.0), mode.get("mode", "broad_shallow"), mode
+
+    def _choose_reasoning_adaptive_mode(
+        self,
+        reasoning_prior: dict[str, Any],
+        candidates: list[dict[str, Any]],
+        step_idx: int,
+    ) -> dict[str, Any]:
+        top_scores = [
+            float(c.get("score") or 0.0)
+            for c in candidates
+            if isinstance(c, dict)
+        ]
+        if not top_scores:
+            return {
+                "mode": "broad_shallow",
+                "prior_entropy": 0.0,
+                "root_budget": int(getattr(self, "light_explore_branch_budget", 12)),
+                "depth2_required_for_top1": False,
+                "depth2_policy": "semantic_changed_only",
+                "latency_budget_ms": float(max(2000.0, 0.8 * self._reasoning_prior_ewma_ms)),
+            }
+        temp = max(0.1, min(2.0, float(self._reasoning_prior_ewma_ms or 1.0) / 12000.0 * 1.0))
+        exp_scores = [math.exp(max(-20.0, float(v) / temp)) for v in top_scores]
+        norm = sum(exp_scores) or 1.0
+        probs = [float(v) / norm for v in exp_scores]
+        entropy = float(-sum(p * math.log(max(1e-9, p)) for p in probs))
+        confidence = float(reasoning_prior.get("confidence") or 0.0)
+        mode = "broad_shallow"
+        root_budget = int(getattr(self, "light_explore_branch_budget", 12))
+        depth2_req = False
+        depth2_policy = "semantic_changed_only"
+        if confidence >= 0.7 and entropy <= 0.6:
+            mode = "focused_depth"
+            root_budget = 2
+            depth2_req = True
+            depth2_policy = "focused_depth"
+        elif confidence >= 0.4:
+            mode = "balanced"
+            root_budget = 4
+            depth2_policy = "semantic_changed_only"
+        else:
+            mode = "broad_shallow"
+            root_budget = max(6, int(getattr(self, "light_explore_branch_budget", 12)))
+            depth2_policy = "disabled_except_search"
+        budget_ms = max(2000.0, min(12000.0, 0.8 * float(self._reasoning_prior_ewma_ms or 10000.0)))
+        return {
+            "mode": mode,
+            "prior_entropy": float(entropy),
+            "root_budget": int(root_budget),
+            "depth2_required_for_top1": bool(depth2_req),
+            "depth2_policy": depth2_policy,
+            "latency_budget_ms": float(budget_ms),
+            "candidates": list(candidates[:root_budget]),
+        }
+
+    def _append_adaptive_search_record(self, goal: str, record: dict[str, Any]) -> None:
+        if not getattr(self, "reasoning_prior_enabled", False):
+            return
+        self._append_diagnostic_jsonl(goal, "adaptive_search_records.jsonl", record)
+
+    @staticmethod
+    def _safe_action_signature_from_candidate(candidate: dict[str, Any]) -> dict[str, Any]:
+        action = ExplorerElementAgent._probe_action_from_candidate(candidate)
+        a11y = candidate.get("a11y") if isinstance(candidate.get("a11y"), dict) else {}
+        bbox = a11y.get("bbox") if isinstance(a11y.get("bbox"), dict) else {}
+        signature = {
+            "action_type": _clean_text(candidate.get("action_kind") or (action.action_type if action else "")),
+            "normalized_label": _clean_text(candidate.get("label") or candidate.get("merged") or ""),
+            "resource_id": _clean_text(a11y.get("resource_id") or candidate.get("resource_id") or ""),
+            "typed_text": _clean_text(action.text if action else (candidate.get("text") or "")),
+            "center": [int(action.x), int(action.y)] if action and action.x is not None and action.y is not None else [],
+            "bbox": {
+                "x_min": float(bbox.get("x_min", 0.0)),
+                "y_min": float(bbox.get("y_min", 0.0)),
+                "x_max": float(bbox.get("x_max", 0.0)),
+                "y_max": float(bbox.get("y_max", 0.0)),
+            } if isinstance(bbox, dict) else {},
+        }
+        return signature
+
+    @staticmethod
+    def _safe_signature_match_reason(candidate_sig: dict[str, Any], action: json_action.JSONAction) -> float:
+        if not isinstance(action, json_action.JSONAction):
+            return 0.0
+        if _clean_text(candidate_sig.get("action_type") or "") == json_action.CLICK:
+            if action.action_type == json_action.CLICK and int(action.x or 0) and int(action.y or 0):
+                center = candidate_sig.get("center")
+                if isinstance(center, (list, tuple)) and len(center) >= 2:
+                    try:
+                        dist = math.dist([float(center[0]), float(center[1])], [float(action.x), float(action.y)])
+                    except Exception:  # pylint: disable=broad-exception-caught
+                        dist = 1e9
+                    if dist <= 120.0:
+                        return 1.0
+                    if dist <= 220.0:
+                        return 0.8
+                    return 0.4
+                return 0.4
+        if _clean_text(candidate_sig.get("action_type") or "") == json_action.OPEN_APP:
+            cand_app = _clean_text(candidate_sig.get("typed_text") or candidate_sig.get("normalized_label"))
+            real_app = _clean_text(getattr(action, "app_name", ""))
+            if cand_app and real_app and (cand_app in real_app or real_app in cand_app):
+                return 1.0
+        if _clean_text(candidate_sig.get("action_type") or "") in {json_action.INPUT_TEXT, "type"}:
+            cand_text = _clean_text(candidate_sig.get("typed_text") or "")
+            real_text = _clean_text(getattr(action, "text", ""))
+            if cand_text and real_text and cand_text == real_text:
+                return 1.0
+            if cand_text and real_text and cand_text in real_text:
+                return 0.8
+        return 0.0
+
+    def _promote_signature_match_reason(self, target_signature: dict[str, Any], state: Any, current_activity: str) -> tuple[float, str]:
+        if not isinstance(target_signature, dict):
+            return 0.0, "invalid_signature"
+        current_activity = _clean_text(current_activity or "")
+        target_activity = _clean_text(target_signature.get("activity") or "")
+        target_role = _clean_text(target_signature.get("role") or "")
+        target_labels = [
+            _clean_text(item).lower()
+            for item in list(target_signature.get("anchor_labels") or [])
+            if _clean_text(item)
+        ]
+        try:
+            current_labels = [
+                _clean_text(item).lower()
+                for item in list(self._state_semantic_summary(state, limit=80))
+                if _clean_text(item)
+            ]
+        except Exception:  # pylint: disable=broad-exception-caught
+            current_labels = []
+        target_set = {_normalize for _normalize in target_labels}
+        curr_set = {_normalize for _normalize in current_labels}
+        overlap = len(target_set.intersection(curr_set)) / float(max(1, len(target_set) or 1))
+        same_activity = bool(
+            _clean_text(target_activity) and _clean_text(current_activity)
+            and _clean_text(target_activity).lower() == _clean_text(current_activity).lower()
+        )
+        current_screen_role = _clean_text(self._screen_role_from_state(state))
+        if same_activity and overlap >= 0.60:
+            return float(overlap), f"activity_match:overlap={overlap:.3f}"
+        if target_role and current_screen_role and target_role == current_screen_role and overlap >= 0.45:
+            return float(overlap), f"role_match:overlap={overlap:.3f}"
+        return 0.0, f"no_match:activity={bool(same_activity)} overlap={overlap:.3f}"
+
+    def _build_promotion_record(
+        self,
+        goal: str,
+        step_idx: int,
+        prior_source_step: int,
+        branch_observation: dict[str, Any],
+        root_match_score: float,
+        state_match_score: float,
+        state_match_reason: str,
+        depth2_entropy: float,
+        state_match: bool,
+    ) -> dict[str, Any]:
+        return {
+            "task_id": _clean_text(goal)[:200],
+            "step": int(step_idx + 1),
+            "prior_source_step": int(prior_source_step),
+            "branch_id": branch_observation.get("branch_id"),
+            "root_action_signature": dict(branch_observation.get("root_action_signature") or {}),
+            "depth1_state_signature": dict(branch_observation.get("depth1_state_signature") or {}),
+            "depth2_action_signature": dict(branch_observation.get("depth2_action_signature") or {}),
+            "depth2_state_signature": dict(branch_observation.get("depth2_state_signature") or {}),
+            "depth1_candidate": dict(branch_observation.get("depth1_candidate") or {}),
+            "depth2_candidate": dict(branch_observation.get("depth2_candidate") or {}),
+            "root_action_match_score": float(root_match_score),
+            "state_match_score": float(state_match_score),
+            "state_match_reason": state_match_reason,
+            "state_matched": bool(state_match),
+            "depth2_action_locatable": bool(branch_observation.get("depth2_action_locatable") or False),
+            "promotable": bool(branch_observation.get("promotable_for_promotion") or False),
+            "stored": bool(state_match and bool(branch_observation.get("promotable_for_promotion") or False)),
+            "stored_reason": "promotion_candidate" if bool(state_match and branch_observation.get("promotable_for_promotion")) else state_match_reason,
+            "entropy": float(depth2_entropy),
+        }
+
+    def _append_pending_promotion_record(self, goal: str, record: dict[str, Any]) -> None:
+        if not getattr(self, "reasoning_prior_promotion", False):
+            return
+        self._pending_promotion_events.append(dict(record))
+        self._all_pending_promotion_events.append(dict(record))
+        self._append_diagnostic_jsonl(goal, "pending_promotion_records.jsonl", record)
+
+    def _append_promotion_event(self, goal: str, record: dict[str, Any]) -> None:
+        self._append_diagnostic_jsonl(goal, "promotion_events.jsonl", record)
+
+    def _state_signature_overlap(
+        self,
+        state: Any,
+        signature: dict[str, Any],
+    ) -> tuple[float, str, list[str], list[str], list[str]]:
+        current_activity = _clean_text(signature.get("activity") or "")
+        signature_anchors = [
+            _clean_text(x).lower()
+            for x in list(signature.get("anchor_labels") or [])
+            if _clean_text(x)
+        ]
+        current_anchors = [
+            _clean_text(x).lower()
+            for x in list(signature.get("_current_anchors", []) or [])
+            if _clean_text(x)
+        ]
+        if not signature_anchors:
+            signature_anchors = [
+                _clean_text(x).lower()
+                for x in list(signature.get("anchor_labels", []))
+                if _clean_text(x)
+            ]
+        if not current_anchors:
+            try:
+                current_anchors = [
+                    _clean_text(x).lower() for x in self._state_semantic_summary(state, limit=80)
+                ]
+            except Exception:  # pylint: disable=broad-exception-caught
+                current_anchors = []
+        overlap_set = set(signature_anchors).intersection(current_anchors)
+        overlap = float(len(overlap_set)) / float(max(1, len(set(signature_anchors))))
+        reason_parts = [
+            f"activity:{current_activity}",
+            f"anchor_overlap:{overlap:.3f}",
+        ]
+        return overlap, current_activity, signature_anchors, current_anchors, reason_parts
+
+    def _append_filled_exploration_block(self, goal: str, block: str, step_idx: int, prior: dict[str, Any], matches: list[dict[str, Any]]) -> None:
+        if not block:
+            return
+        answer_count = 0
+        action_count = 0
+        avoid_count = 0
+        schema_count = 0
+        risk_count = 0
+        for item in matches or []:
+            hint_type = _clean_text(item.get("evidence_type") or item.get("hint_type") or "")
+            if hint_type == "ANSWER_HINT":
+                answer_count += 1
+            elif hint_type == "ACTION_HINT":
+                action_count += 1
+            elif hint_type == "AVOID_HINT":
+                avoid_count += 1
+            elif hint_type == "SCHEMA_HINT":
+                schema_count += 1
+            elif hint_type == "RISK_HINT":
+                risk_count += 1
+        self._append_diagnostic_jsonl(
+            goal,
+            "filled_exploration_blocks.jsonl",
+            {
+                "task_id": _clean_text(goal)[:200],
+                "step": int(step_idx),
+                "prior_source_step": int(prior.get("source_step") or 0),
+                "evidence_count": int(len(matches) or 0),
+                "answer_count": int(answer_count),
+                "action_count": int(action_count),
+                "avoid_count": int(avoid_count),
+                "schema_count": int(schema_count),
+                "risk_count": int(risk_count),
+                "rendered_block": block,
+            },
+        )
+
+    def _append_depth_decision_record(self, goal: str, record: dict[str, Any]) -> None:
+        self._append_diagnostic_jsonl(goal, "depth_decision_records.jsonl", record)
+
+    def _append_evidence_decision_record(self, goal: str, record: dict[str, Any]) -> None:
+        self._append_diagnostic_jsonl(goal, "evidence_decisions.jsonl", record)
+
+    def _append_hint_record_with_template(self, goal: str, record: dict[str, Any]) -> None:
+        self._append_diagnostic_jsonl(goal, "prompt_hints.jsonl", record)
+
+    @staticmethod
+    def _avoid_target_from_reason(reason: str) -> str:
+        text = _clean_text(reason)
+        if not text:
+            return ""
+        quoted = re.search(r"[\"'`](.{1,80}?)[\"'`]", text)
+        if quoted:
+            return _clean_text(quoted.group(1))
+        avoid = re.search(r"\bavoid\s+(.{1,80}?)(?:[:.;]| because |$)", text, flags=re.IGNORECASE)
+        if avoid:
+            return _clean_text(avoid.group(1)).strip("\"'` ")
+        return ""
+
+    def _build_reasoning_template_render(self, hint_type: str, item: dict[str, Any], prior: dict[str, Any]) -> str:
+        fallback_map = {
+            "ANSWER_HINT": "Exploration found: {fact}",
+            "ACTION_HINT": "A safe next action may be: {action}",
+            "SCHEMA_HINT": "The explored page exposes {schema_fields}",
+            "AVOID_HINT": "Avoid {target}: {reason}",
+            "RISK_HINT": "Do not speculatively execute {target}: {reason}",
+        }
+        template_key_map = {
+            "ANSWER_HINT": "template_answer",
+            "ACTION_HINT": "template_action",
+            "SCHEMA_HINT": "template_schema",
+            "AVOID_HINT": "template_avoid",
+            "RISK_HINT": "template_risk",
+        }
+        template_key = template_key_map.get(hint_type, "")
+        template = _clean_text((prior.get("evidence_template") or {}).get(template_key))
+        template = template or fallback_map.get(hint_type, "")
+        fact = _clean_text(item.get("fact") or _clean_text(item.get("observed") or ""))
+        action = _clean_text(item.get("suggested_action") or _clean_text(item.get("candidate_label") or item.get("matched_prefix") or ""))
+        schema_fields = "; ".join(_clean_text(x) for x in (item.get("observed_elements") or []) if _clean_text(x))
+        reason = _clean_text(item.get("avoid_reason") or "unknown")
+        target = _clean_text(item.get("target") or item.get("next_label") or item.get("label") or "")
+        screen = _clean_text(item.get("screen") or "")
+        confidence = f"{float(item.get('confidence') or 0.0):.2f}"
+        rendered = template.replace("{fact}", fact).replace("{action}", action).replace("{schema_fields}", schema_fields).replace(
+            "{reason}", reason
+        ).replace("{target}", target).replace("{screen}", screen).replace("{confidence}", confidence)
+        return rendered if rendered else template
+
+    def _candidate_reasoning_prior_record(self, candidate: dict[str, Any], selected_rank: int, rejected_reason: str = "") -> dict[str, Any]:
+        return {
+            "candidate_id": _clean_text(candidate.get("index") or candidate.get("key") or candidate.get("label") or ""),
+            "label": _clean_text(candidate.get("label") or candidate.get("merged") or ""),
+            "operator": _clean_text(candidate.get("operator") or ""),
+            "selected_rank": int(selected_rank),
+            "rejected_reason": _clean_text(rejected_reason),
+        }
+
+    def _append_candidate_prior_score_row(self, goal: str, row: dict[str, Any]) -> None:
+        if not getattr(self, "reasoning_prior_enabled", False):
+            return
+        payload = dict(row)
+        payload.setdefault("task_id", _clean_text(goal)[:200])
+        self._append_diagnostic_jsonl(goal, "candidate_reasoning_prior_scores.jsonl", payload)
+
+    def _build_state_signature_from_probe(self, state: Any, step: int = 0) -> dict[str, Any]:
+        activity = self._foreground_activity_name()
+        anchors = self._informative_observed_elements(self._state_semantic_summary(state, limit=80))
+        return {
+            "activity": activity,
+            "anchor_labels": anchors,
+            "role": self._screen_role_from_state(state),
+            "phash": self._state_hash(state),
+            "_current_anchors": anchors,
+        }
+
+    def _candidate_signature_from_candidate(self, candidate: dict[str, Any], state: Any) -> dict[str, Any]:
+        root_action = self._safe_action_signature_from_candidate(candidate)
+        root_action["normalized_label"] = _clean_text(candidate.get("label") or candidate.get("merged") or "")
+        root_action["resource_id"] = _clean_text((candidate.get("a11y") or {}).get("resource_id") or candidate.get("resource_id") or "")
+        state_sig = self._build_state_signature_from_probe(state)
+        return {
+            "action_signature": root_action,
+            "state_signature": state_sig,
+            "safe": bool(not self._is_transaction_unsafe_candidate(candidate)),
+            "candidate": dict(candidate),
+        }
+
+    def _candidate_root_match_score(self, root_sig: dict[str, Any], action: json_action.JSONAction) -> float:
+        if not isinstance(root_sig, dict):
+            return 0.0
+        candidate_sig = root_sig.get("action_signature") if isinstance(root_sig.get("action_signature"), dict) else {}
+        if not candidate_sig:
+            return 0.0
+        target_type = _clean_text(candidate_sig.get("action_type") or json_action.CLICK)
+        action_type = _clean_text(action.action_type)
+        if target_type and action_type and target_type != action_type:
+            return 0.0
+        if action.action_type == json_action.CLICK:
+            cand_label = _clean_text(candidate_sig.get("normalized_label"))
+            act_x = int(getattr(action, "x", -1) or -1)
+            act_y = int(getattr(action, "y", -1) or -1)
+            if cand_label and any(token in cand_label for token in (_clean_text(getattr(action, "summary", "")), _clean_text(getattr(action, "label", "")))):
+                return 0.9
+            center = candidate_sig.get("center")
+            if isinstance(center, (list, tuple)) and len(center) >= 2 and act_x >= 0 and act_y >= 0:
+                try:
+                    dist = math.dist([float(center[0]), float(center[1])], [float(act_x), float(act_y)])
+                except Exception:  # pylint: disable=broad-exception-caught
+                    dist = 1e9
+                if dist <= 120:
+                    return 1.0
+                if dist <= 220:
+                    return 0.7
+        elif action.action_type == json_action.INPUT_TEXT:
+            typed = _clean_text(candidate_sig.get("typed_text") or "")
+            act_text = _clean_text(getattr(action, "text", ""))
+            if typed and act_text and typed == act_text:
+                return 1.0
+            if typed and act_text and typed in act_text:
+                return 0.8
+        elif action.action_type == json_action.OPEN_APP:
+            app_name = _clean_text(getattr(action, "app_name", ""))
+            cand_name = _clean_text(candidate_sig.get("typed_text") or candidate_sig.get("normalized_label"))
+            if app_name and cand_name and (app_name in cand_name or cand_name in app_name):
+                return 1.0
+        # typed text exact by fallback
+        if action.action_type != candidate_sig.get("action_type"):
+            return 0.0
+        return 0.4
+
+    def _locate_candidate_action_in_state(self, state: Any, signature: dict[str, Any]) -> bool:
+        if not isinstance(signature, dict):
+            return False
+        if state is None:
+            return False
+        action_type = _clean_text(signature.get("action_type") or "").lower()
+        target_label = _clean_text(signature.get("normalized_label") or signature.get("typed_text") or "")
+        target_resource = _clean_text(signature.get("resource_id") or "")
+        if action_type == json_action.OPEN_APP:
+            return bool(target_label)
+        ui_elements = list(getattr(state, "ui_elements", None) or [])
+        for element in ui_elements:
+            txt = _clean_text(getattr(element, "text", ""))
+            content = _clean_text(getattr(element, "content_description", ""))
+            rid = _clean_text(getattr(element, "resource_id", ""))
+            if target_label and (target_label in txt or target_label in content):
+                return True
+            if target_resource and target_resource in rid:
+                return True
+        return False
+
+    def _candidate_score_components(self, candidate: dict[str, Any] | None, goal: str = "") -> dict[str, float | str]:
+        if not isinstance(candidate, dict):
+            return {
+                "MissingSlotGain": 0.0,
+                "TaskEntityMatch": 0.0,
+                "OperatorPriority": 0.0,
+                "TaskProgress": 0.0,
+                "Novelty": 1.0,
+                "RiskPenalty": 1.0,
+                "RollbackRisk": 1.0,
+                "PatternPrior": 0.0,
+                "RollbackCost": 1.0,
+                "WrongScreenRolePenalty": 0.0,
+                "RevisitPenalty": 0.0,
+                "final_score": 0.0,
+                "final_score_or_utility": 0.0,
+                "operator": "Unknown",
+                "operator_reason": "invalid_candidate",
+                "quality_filter_reason": "invalid_candidate",
+                "filtered_by_quality": True,
+            }
         operator, operator_reason = self._candidate_operator(candidate, goal)
         task_mode = self._task_mode(goal)
         label = _clean_text(candidate.get("label") or candidate.get("merged")).lower()
@@ -837,7 +1985,7 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         missing_slot_gain = min(1.0, float(candidate.get("estimated_evidence_gain") or candidate.get("score") or 0.0) / 5.0)
         task_entity_match = 1.0 if any(entity and entity in label for entity in task_entities) else 0.0
         operator_priority_map = {
-            "INFO_QUERY_COUNT": {
+            "INFO_QUERY": {
                 "ListInspect": 1.0,
                 "SearchPeek": 0.9,
                 "FilterPeek": 0.8,
@@ -867,7 +2015,7 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             },
             "FORM_CREATE_EDIT": {"FormSchema": 1.0, "RiskBoundary": 0.2},
             "DELETE_COMMIT": {"RiskBoundary": 1.0, "ListInspect": 0.35},
-            "SIMPLE_VERIFY_OPEN": {"Other": 0.2, "NavigationPeek": 0.15},
+            "SIMPLE_VERIFY": {"Other": 0.2, "NavigationPeek": 0.15},
         }
         operator_priority = float(operator_priority_map.get(task_mode, {}).get(operator, 0.5))
         if operator == "RiskBoundary":
@@ -958,9 +2106,9 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             return 0.75
         if operator == "ListInspect" and exact_entity:
             return 1.0
-        if operator in {"DetailPeek", "StatsPeek"} and task_mode in {"ACTIVITY_STATS", "RECIPE_INGREDIENT", "INFO_QUERY_COUNT"}:
+        if operator in {"DetailPeek", "StatsPeek"} and task_mode in {"ACTIVITY_STATS", "RECIPE_INGREDIENT", "INFO_QUERY"}:
             return 1.0 if exact_entity or operator == "StatsPeek" else 0.5
-        if operator == "ListInspect" and task_mode in {"INFO_QUERY_COUNT", "EVENT_QUERY", "ACTIVITY_STATS"}:
+        if operator == "ListInspect" and task_mode in {"INFO_QUERY", "EVENT_QUERY", "ACTIVITY_STATS"}:
             return 0.5
         if task_mode == "EVENT_QUERY" and any(token in text for token in ("new event", "add event", "create event")):
             return 1.0
@@ -1021,6 +2169,8 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                     return "invalid_bbox"
             except (TypeError, ValueError):
                 return "invalid_bbox"
+        if not getattr(self, "light_explore_lexical_rules", False):
+            return ""
         generic = {
             "content",
             "container",
@@ -1117,6 +2267,7 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
     ) -> None:
         if not match_trace:
             match_trace = {}
+        selected_ids = {id(item) for item in list(matched_prompt_results or [])}
         # Per-hint records for traceability in phase-A style analysis.
         for idx, item in enumerate(list(matched_prompt_results) or []):
             candidate = item.get("next_candidate") if isinstance(item, dict) else {}
@@ -1124,7 +2275,7 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             hint_id = f"hint_{int(step_idx + 1)}_{idx + 1}"
             item["hint_id"] = hint_id
             hint_type = _clean_text(item.get("hint_type") or item.get("evidence_type") or "EVIDENCE")
-            injected = bool(hint_for_prompt and item in matched_prompt_results)
+            injected = bool(hint_for_prompt and id(item) in selected_ids)
             threshold = float(item.get("threshold") or self._upper_bound_threshold(hint_type, bool(getattr(self, "light_explore_summary_all_debug", False))))
             rendered_text = _clean_text(item.get("rendered_prompt_text") or item.get("prompt_line") or item.get("path") or item.get("next_label") or item.get("matched_prefix") or "")[:1200]
             record = {
@@ -1140,7 +2291,7 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                 "hint_type": hint_type,
                 "candidate_label": _clean_text(item.get("next_label") or candidate.get("label")),
                 "operator": _clean_text(item.get("operator") or candidate.get("operator")),
-                "injected": injected,
+                "injected": bool(hint_for_prompt and id(item) in selected_ids),
                 "confidence": float(item.get("confidence") or 0.0),
                 "threshold": threshold,
                 "source_branch_id": item.get("branch_id"),
@@ -1185,6 +2336,54 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                     "threshold": record["threshold"],
                     "injected": injected,
                     "rejected_reason": "" if injected else "not_selected_for_prompt",
+                    "rendered_prompt_text": rendered_text,
+                },
+            )
+        rejected_samples = list(getattr(self, "_last_strict_not_injected_reasons", []) or [])
+        for ridx, rejected in enumerate(rejected_samples, start=1):
+            hint_type = _clean_text(rejected.get("evidence_type") or rejected.get("hint_type") or "NONE")
+            rendered_text = _clean_text(rejected.get("rendered_text") or rejected.get("prompt_line") or "")
+            rejected_reason = _clean_text(rejected.get("reason") or rejected.get("rejected_reason") or "strict_conditions_not_met")
+            record = {
+                "record_type": "PromptHintRecord",
+                "step": int(step_idx + 1),
+                "task_id": _clean_text(goal)[:200],
+                "app": ",".join(self._goal_app_keywords(goal)[:3]),
+                "task_mode": self._task_mode(goal),
+                "variant": self.light_explore_variant,
+                "hint_id": f"hint_{int(step_idx + 1)}_rejected_{ridx}",
+                "hint_type": hint_type,
+                "candidate_label": _clean_text(rejected.get("next_label") or rejected.get("candidate_label")),
+                "operator": _clean_text(rejected.get("operator") or ""),
+                "injected": False,
+                "confidence": float(rejected.get("confidence") or 0.0),
+                "threshold": float(rejected.get("threshold") or 0.0),
+                "rendered_text": rendered_text,
+                "rejected_reason": rejected_reason,
+                "state_match_score": float(rejected.get("state_match_score") or 0.0),
+                "rollback_verified": bool(rejected.get("rollback_verified")),
+                "action_safe": bool(rejected.get("action_safe")),
+            }
+            self._append_diagnostic_jsonl(goal, "prompt_hints.jsonl", record)
+            self._append_diagnostic_jsonl(
+                goal,
+                "evidence_decisions.jsonl",
+                {
+                    "record_type": "EvidenceDecision",
+                    "step": int(step_idx + 1),
+                    "source_exploration_step": rejected.get("source_step"),
+                    "branch_id": rejected.get("branch_id"),
+                    "candidate_label": record["candidate_label"],
+                    "operator": record["operator"],
+                    "evidence_type_candidate": hint_type,
+                    "final_evidence_type": hint_type,
+                    "state_match_score": record["state_match_score"],
+                    "rollback_verified": record["rollback_verified"],
+                    "action_safe": record["action_safe"],
+                    "confidence": record["confidence"],
+                    "threshold": record["threshold"],
+                    "injected": False,
+                    "rejected_reason": rejected_reason,
                     "rendered_prompt_text": rendered_text,
                 },
             )
@@ -1321,9 +2520,18 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         task_mode = self._task_mode(goal)
         label = _clean_text(candidate.get("label") or candidate.get("merged")).lower()
         operator = _clean_text(candidate.get("operator") or obs.get("operator"))
+        source_type = _clean_text(obs.get("evidence_type") or obs.get("hint_type"))
+        if source_type == "ANSWER_HINT":
+            return "ANSWER_HINT", 0.65
+        if source_type == "AVOID_HINT":
+            return "AVOID_HINT", 0.55
+        if source_type == "SCHEMA_HINT":
+            return "SCHEMA_HINT", 0.35
+        if source_type == "RISK_HINT":
+            return "RISK_HINT", 0.60
         if operator == "RiskBoundary" or self._is_transaction_unsafe_candidate(candidate):
             return "RISK_HINT", 0.65
-        if task_mode in {"RECIPE_INGREDIENT", "ACTIVITY_STATS", "EVENT_QUERY", "INFO_QUERY_COUNT"}:
+        if task_mode in {"RECIPE_INGREDIENT", "ACTIVITY_STATS", "EVENT_QUERY", "INFO_QUERY"}:
             if bool(obs.get("answer_complete")) or bool(obs.get("slot_complete")):
                 return "ANSWER_HINT", 0.75
             if task_mode == "ACTIVITY_STATS" and "marker" in label:
@@ -1332,8 +2540,8 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                 return "AVOID_HINT", 0.70
         if task_mode in {"FORM_CREATE_EDIT"}:
             return "SCHEMA_HINT", 0.65
-        if int(obs.get("depth_reached") or 0) >= 2 or bool(obs.get("target_visible")) or str(obs.get("boundary_type") or "").endswith("BOUNDARY"):
-            return "ACTION_HINT", 0.70
+        if int(obs.get("depth_reached") or 0) >= 1 or bool(obs.get("target_visible")) or str(obs.get("boundary_type") or "").endswith("BOUNDARY"):
+            return "ACTION_HINT", 0.35
         return "NONE", 1.0
 
     @staticmethod
@@ -1380,17 +2588,24 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             and evidence_type
             in {
                 "ACTION_HINT",
+                "AVOID_HINT",
                 "SHORTCUT_BOUNDARY",
                 "TARGET_BOUNDARY",
                 "CHOICE_BOUNDARY",
                 "SCHEMA_BOUNDARY",
                 "ANSWER_BOUNDARY",
+                "NEGATIVE_BOUNDARY",
             }
         )
         if safe_action_boundary:
+            state_match = max(state_match, 0.55)
             slot_coverage = max(slot_coverage, 0.65)
             target_or_answer = max(target_or_answer, 0.65)
             score_margin = max(score_margin, 0.50)
+        if evidence_type in {"SCHEMA_HINT", "AVOID_HINT", "RISK_HINT"} and rollback_verified >= 1.0:
+            state_match = max(state_match, 0.70)
+            slot_coverage = max(slot_coverage, 0.60)
+            target_or_answer = max(target_or_answer, 0.60)
         confidence = (
             0.30 * state_match
             + 0.20 * slot_coverage
@@ -1419,11 +2634,11 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         if evidence_type == "NONE":
             return "evidence_only_but_no_injection_rule"
         if not bool(rollback_info.get("success")):
-            return "rollback_not_verified"
+            return "rollback_failed"
         if confidence < threshold:
             return "low_confidence"
         if evidence_type == "ANSWER_HINT" and not bool(obs.get("answer_complete") or obs.get("slot_complete")):
-            return "missing_slot"
+            return "answer_fact_incomplete"
         operator = _clean_text(candidate.get("operator") or obs.get("operator"))
         safe_action_boundary_operators = {
             "SearchPeek",
@@ -1439,13 +2654,21 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             and int(obs.get("depth_reached") or 0) >= 1
             and operator in safe_action_boundary_operators
         )
+        if evidence_type == "ACTION_HINT" and self._is_transaction_unsafe_candidate(candidate):
+            return "action_not_safe"
         if evidence_type == "ACTION_HINT" and not bool(
-            obs.get("target_visible") or int(obs.get("depth_reached") or 0) >= 2 or safe_action_boundary
+            obs.get("target_visible") or int(obs.get("depth_reached") or 0) >= 1 or safe_action_boundary
         ):
-            return "not_visible_target"
+            return "no_visible_target"
+        if evidence_type == "SCHEMA_HINT":
+            return ""
+        if evidence_type in {"AVOID_HINT", "RISK_HINT"}:
+            return ""
+        if evidence_type == "ACTION_HINT":
+            return ""
         if self._is_transaction_unsafe_candidate(candidate) and evidence_type != "RISK_HINT":
-            return "unsafe_action"
-        return "pending_state_match_for_t_plus_1"
+            return "action_not_safe"
+        return "state_mismatch"
 
     @staticmethod
     def _infer_level2_trigger_reason(rollback: dict[str, Any]) -> str:
@@ -1493,10 +2716,10 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         exploration_latency = {
             "step": trace.get("step"),
             "status": trace.get("status"),
-            "strategy_name": "Operator-Stratified Best-First Exploration",
-            "root_level_strategy": "stratified breadth-first",
-            "branch_continuation": "gated depth-first-to-depth-2",
-            "ranking": "best-first score",
+            "strategy_name": "Selective Consumable Exploration",
+            "root_level_strategy": "consume-or-promote gate",
+            "branch_continuation": "depth2 only for consumable search/filter/result/detail/schema states",
+            "ranking": "consumable evidence first",
             "exploration_total_ms": float(trace.get("latency_ms") or 0.0),
             "candidate_collection_ms": float(trace.get("candidate_collection_ms") or 0.0),
             "candidate_scoring_ms": float(trace.get("candidate_scoring_ms") or 0.0),
@@ -2615,8 +3838,9 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             or getattr(element, "is_editable", False)
         )
 
-    @staticmethod
-    def _is_risky_probe_text(merged: str) -> bool:
+    def _is_risky_probe_text(self, merged: str) -> bool:
+        if not getattr(self, "light_explore_lexical_rules", False):
+            return False
         low = _clean_text(merged).lower()
         if not low:
             return False
@@ -2630,8 +3854,9 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         )
         return any(re.search(pattern, low) for pattern in risky_patterns)
 
-    @staticmethod
-    def _is_answer_or_lookup_goal(goal: str) -> bool:
+    def _is_answer_or_lookup_goal(self, goal: str) -> bool:
+        if not getattr(self, "light_explore_lexical_rules", False):
+            return False
         low = _clean_text(goal).lower()
         if not low:
             return False
@@ -2639,40 +3864,287 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             return True
         return low.rstrip().endswith("?")
 
-    @staticmethod
-    def _task_mode(goal: str) -> str:
+    def _task_mode(self, goal: str) -> str:
+        if not getattr(self, "light_explore_lexical_rules", False):
+            return "GENERAL"
         low = _clean_text(goal).lower()
-        media_capture = bool(
-            re.search(
-                r"\b(take (?:one |a |the )?(?:photo|picture|video)|record (?:an? )?(?:audio|video|clip)|"
-                r"capture (?:an? )?(?:photo|picture|video)|start recording)\b",
-                low,
-            )
-        )
-        explicit_form = bool(
-            re.search(r"\b(create|add|edit|change|rename|enter|fill|input|type|new folder|new contact|draft)\b", low)
-        )
-        query_like = bool(
-            re.search(
-                r"\b(how many|how long|what|which|who|where|when|answer with|count|duration|total distance|total|"
-                r"longest|next upcoming|next meeting|events?|tasks?|activities?|activity type|do i have|is the)\b",
-                low,
-            )
-            or low.rstrip().endswith("?")
-        )
-        if re.search(r"\b(delete|remove|trash|discard|clear all|erase)\b", low):
+        if re.search(r"\b(delete|remove|clear|trash|erase|discard)\b", low):
             return "DELETE_COMMIT"
-        if media_capture:
-            return "SIMPLE_VERIFY_OPEN"
-        if explicit_form:
+        if re.search(r"\b(take (?:one |a |the )?(?:photo|picture|video)|record (?:an? )?(?:audio|video|clip)|capture (?:an? )?(?:photo|picture|video)|start recording)\b", low):
+            return "MEDIA_CAPTURE"
+        if re.search(r"\b(turn on|turn off|verify|brightness|wifi|wi-fi|bluetooth|stopwatch|timer|toggle)\b", low):
+            return "SIMPLE_VERIFY"
+        if re.search(r"\b(create|add|edit|enter|fill|write|transcribe|playlist|recipe|contact|calendar event|rename|type|input|draft|new folder|new contact)\b", low):
             return "FORM_CREATE_EDIT"
-        if query_like:
-            return "INFO_QUERY_COUNT"
-        if re.search(r"\b(open .* app|run the stopwatch|verify|turn on|turn off|toggle)\b", low):
-            return "SIMPLE_VERIFY_OPEN"
-        if re.search(r"\b(find|search|open .*file|open .*note|recipe named|note titled|named)\b", low):
+        if re.search(r"\b(what|when|how many|how long|duration|distance|count|total|longest|first|next|is|do i have|answer with|which|who|where)\b", low) or low.rstrip().endswith("?"):
+            return "INFO_QUERY"
+        if re.search(r"\b(open|find|search|locate|file|folder|note|titled|named|move the file|in downloads|in markor|in joplin)\b", low):
             return "NAVIGATION_SEARCH"
-        return "NAVIGATION_SEARCH"
+        return "UNKNOWN"
+
+    @staticmethod
+    def _mode_is_deterministic_or_risky(task_mode: str) -> bool:
+        return _clean_text(task_mode) in {"FORM_CREATE_EDIT", "DELETE_COMMIT", "SIMPLE_VERIFY", "MEDIA_CAPTURE"}
+
+    def _selective_visible_flags(self, goal: str, labels: list[str], page_stalled: bool = False) -> dict[str, Any]:
+        labels_low = " ".join(_clean_text(x).lower() for x in labels if _clean_text(x))
+        entities = [e for e in self._task_entities(goal) if len(e) >= 3][:10]
+        target_hits = [e for e in entities if e.lower() in labels_low]
+        facts = self._extract_answer_facts_from_labels(labels, goal, limit=5) if self.light_explore_answer_extractors else []
+        useful_facts = [x for x in facts if not _clean_text(x).lower().startswith("avoid ")]
+        schema_visible = bool(re.search(r"\b(search|find|filter|query|title|name|date|time|description|phone|email|amount|folder|file|field)\b", labels_low))
+        return {
+            "target_visible": bool(target_hits),
+            "answer_visible": bool(useful_facts),
+            "schema_visible": bool(schema_visible),
+            "repeated_or_stuck": bool(page_stalled),
+            "target_hits": target_hits,
+            "answer_facts": useful_facts,
+        }
+
+    def _task_derived_schema_labels(self, goal: str, task_mode: str, labels: list[str] | None = None) -> list[str]:
+        """Derive no-action schema guidance from the task when UI labels are sparse."""
+        low = _clean_text(goal).lower()
+        observed_low = " ".join(_clean_text(x).lower() for x in list(labels or []))
+        rows: list[str] = []
+
+        def add(text: str) -> None:
+            text = _clean_text(text)
+            if text and text not in rows:
+                rows.append(text)
+
+        for entity in self._task_entities(goal)[:8]:
+            if len(entity) >= 3:
+                add(f"target name/entity field: {entity}")
+
+        if task_mode == "FORM_CREATE_EDIT":
+            add("form schema fields: name title date time description note amount category phone email folder file")
+            field_rules = (
+                ("title", r"\b(title|titled|subject|event)\b"),
+                ("name", r"\b(name|contact|person|recipe|playlist)\b"),
+                ("date", r"\b(date|20\\d\\d-|jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\b"),
+                ("time", r"\b(time|\\d{1,2}h|\\d{1,2}:\\d{2}|minutes?|mins?)\b"),
+                ("description", r"\b(description|describe)\b"),
+                ("note", r"\b(note|notes?)\b"),
+                ("amount", r"\b(amount|dollars?|\\$)\b"),
+                ("category", r"\b(category|type)\b"),
+                ("phone", r"\b(phone|number|\\+\\d)\b"),
+                ("email", r"\b(email|mail)\b"),
+                ("folder", r"\b(folder|directory)\b"),
+                ("file", r"\b(file|filename|rename)\b"),
+            )
+            for field, pattern in field_rules:
+                if re.search(pattern, low) or re.search(pattern, observed_low):
+                    add(f"required form field: {field}")
+            add("safe completion schema: fill exact task fields first; save/complete only after visible confirmation")
+        elif task_mode == "DELETE_COMMIT":
+            add("delete schema fields: target name row search filter list absence verification")
+            add("safe delete schema: delete exact targets only; after confirm, verify each target name is absent before COMPLETE")
+        elif task_mode == "SIMPLE_VERIFY":
+            add("verification schema fields: current setting state target state visible confirmation")
+            add("safe verify schema: toggle only if current state differs; COMPLETE only after the requested state is visible")
+        elif task_mode == "MEDIA_CAPTURE":
+            add("media schema fields: record capture stop save filename saved item confirmation")
+            add("safe media schema: capture/record once; stop/save only when prompted; COMPLETE after saved/list confirmation")
+        elif task_mode in {"INFO_QUERY", "NAVIGATION_SEARCH"}:
+            add("search schema fields: search query filter result list detail answer")
+
+        for label in list(labels or [])[:24]:
+            cleaned = _clean_text(label)
+            if re.search(
+                r"\b(name|title|date|time|phone|email|amount|description|note|folder|file|field|search|filter|query)\b",
+                cleaned.lower(),
+            ):
+                add(f"visible schema/control: {cleaned}")
+        return rows[:32]
+
+    def _passive_schema_observation(
+        self,
+        *,
+        goal: str,
+        strategy_id: str,
+        step_id: int,
+        branch_id: int,
+        root_state: Any,
+        root_activity: str,
+        root_hash: int,
+        root_screenshot: str,
+        observed_elements: list[str],
+        task_mode: str,
+        reason: str,
+    ) -> tuple[dict[str, Any], dict[str, Any]] | None:
+        schema_labels = self._task_derived_schema_labels(goal, task_mode, observed_elements)
+        if not schema_labels:
+            return None
+        schema_observed = list(dict.fromkeys(schema_labels + list(observed_elements or [])))[:96]
+        pseudo_candidate = {
+            "label": "Task-derived visible schema",
+            "merged": "Task-derived visible schema",
+            "operator": "FormSchema",
+            "action_kind": "inspect",
+            "risk_boundary": False,
+            "layout_region": "root_page",
+            "semantic_role": "schema_observation",
+        }
+        schema_assessment = {
+            "evidence_gain": 1.0,
+            "confidence": 0.72,
+            "evidence_type": "SCHEMA_HINT",
+            "boundary_type": "SCHEMA_BOUNDARY",
+            "stop_reason": reason or "passive_task_schema",
+            "schema_labels": schema_observed[:32],
+            "new_labels": schema_labels[:16],
+            "depth": 1,
+        }
+        schema_rollback = {"success": True, "mode": "passive_no_action", "level": "level0"}
+        schema_capsule = self._build_evidence_capsule(
+            goal=goal,
+            strategy_id=strategy_id,
+            step_id=step_id,
+            branch_id=branch_id,
+            depth=1,
+            parent_state=root_state,
+            parent_activity=root_activity,
+            child_state=root_state,
+            child_activity=root_activity,
+            candidate=pseudo_candidate,
+            assessment=schema_assessment,
+            rollback_info=schema_rollback,
+        )
+        schema_step = {
+            "depth": 1,
+            "candidate": self._candidate_trace(pseudo_candidate),
+            "changed": False,
+            "semantic_changed": False,
+            "after_activity": root_activity,
+            "after_hash": root_hash,
+            "hash_diff_from_root": 0,
+            "screenshot": root_screenshot or "",
+            "observed_elements": schema_observed,
+            "a11y": [],
+            "stop_reason": reason or "passive_task_schema",
+        }
+        schema_observation = {
+            "branch_id": branch_id,
+            "labels": ["Task-derived visible schema"],
+            "changed": False,
+            "after_activity": root_activity,
+            "score": 1.0,
+            "depth_reached": 1,
+            "observed_elements": schema_observed,
+            "steps": [schema_step],
+            "rollback": schema_rollback,
+            "operator": "FormSchema",
+            "operator_reason": reason or "passive_task_schema",
+            "layout_region": "root_page",
+            "semantic_role": "schema_observation",
+            "boundary_type": "SCHEMA_BOUNDARY",
+            "stop_reason": reason or "passive_task_schema",
+            "evidence_type": "SCHEMA_HINT",
+            "evidence_gain": 1.0,
+            "confidence": 0.72,
+            "slot_evidence": {},
+            "evidence_capsule": schema_capsule,
+            "no_action_inspect": True,
+            "passive_task_schema": True,
+        }
+        return schema_observation, schema_capsule
+
+    def _selective_task_phase(
+        self,
+        goal: str,
+        step_idx: int,
+        labels: list[str],
+        page_stalled: bool,
+        prior: dict[str, Any] | None = None,
+    ) -> tuple[str, str, dict[str, Any]]:
+        del prior
+        task_mode = self._task_mode(goal)
+        flags = self._selective_visible_flags(goal, labels, page_stalled)
+        if step_idx <= 0:
+            return "BOOTSTRAP", "step1_or_no_prior", flags
+        if flags["repeated_or_stuck"]:
+            return "STUCK_RECOVERY", "repeated_or_stuck" , flags
+        if task_mode in {"INFO_QUERY", "NAVIGATION_SEARCH"}:
+            if not flags["target_visible"]:
+                return "TARGET_ACQUISITION", "target_entity_not_visible", flags
+            if not flags["answer_visible"]:
+                return "EVIDENCE_GATHERING", "target_visible_answer_incomplete", flags
+            return "VERIFICATION", "answer_visible", flags
+        if task_mode in {"FORM_CREATE_EDIT", "DELETE_COMMIT", "SIMPLE_VERIFY", "MEDIA_CAPTURE"}:
+            if flags["answer_visible"]:
+                return "VERIFICATION", "final_state_or_answer_visible", flags
+            return "ACTION_EXECUTION", f"deterministic_mode:{task_mode}", flags
+        if flags["schema_visible"] and not flags["answer_visible"]:
+            return "TARGET_ACQUISITION", "unknown_with_schema_visible", flags
+        return "TARGET_ACQUISITION", "default_unknown_target_acquisition", flags
+
+    def _selective_exploration_gate(
+        self,
+        goal: str,
+        task_mode: str,
+        task_phase: str,
+        page_stalled: bool,
+    ) -> dict[str, Any]:
+        active_allowed = False
+        passive_allowed = True
+        reason = "passive_schema_risk_only"
+        if task_mode in {"INFO_QUERY", "NAVIGATION_SEARCH"} and task_phase in {"TARGET_ACQUISITION", "EVIDENCE_GATHERING"}:
+            active_allowed = True
+            reason = "query_navigation_consumable_active"
+        elif task_phase == "STUCK_RECOVERY" and not self._mode_is_deterministic_or_risky(task_mode):
+            active_allowed = True
+            reason = "stuck_recovery_safe_active"
+        elif task_phase == "STUCK_RECOVERY" and page_stalled:
+            active_allowed = True
+            reason = "deterministic_stuck_two_state_escape"
+        elif task_mode in {"FORM_CREATE_EDIT", "DELETE_COMMIT", "SIMPLE_VERIFY", "MEDIA_CAPTURE"}:
+            active_allowed = False
+            reason = f"deterministic_or_risky_passive_only:{task_mode}"
+        return {
+            "active_allowed": bool(active_allowed),
+            "passive_allowed": bool(passive_allowed),
+            "gate_reason": reason,
+        }
+
+    def _append_selective_phase_gate_records(
+        self,
+        goal: str,
+        step_idx: int,
+        task_mode: str,
+        task_phase: str,
+        phase_reason: str,
+        flags: dict[str, Any],
+        gate: dict[str, Any],
+    ) -> None:
+        phase_row = {
+            "step": int(step_idx + 1),
+            "task_mode": task_mode,
+            "task_phase": task_phase,
+            "target_visible": bool(flags.get("target_visible")),
+            "answer_visible": bool(flags.get("answer_visible")),
+            "schema_visible": bool(flags.get("schema_visible")),
+            "repeated_or_stuck": bool(flags.get("repeated_or_stuck")),
+            "phase_reason": phase_reason,
+            "target_hits": list(flags.get("target_hits") or [])[:8],
+            "answer_facts": list(flags.get("answer_facts") or [])[:4],
+        }
+        self._append_diagnostic_jsonl(goal, "task_phase_records.jsonl", phase_row)
+        self._append_diagnostic_jsonl(goal, "exploration_gate_records.jsonl", {
+            "step": int(step_idx + 1),
+            "task_mode": task_mode,
+            "task_phase": task_phase,
+            "active_allowed": bool(gate.get("active_allowed")),
+            "passive_allowed": bool(gate.get("passive_allowed")),
+            "gate_reason": _clean_text(gate.get("gate_reason")),
+        })
+        if task_mode in {"FORM_CREATE_EDIT", "DELETE_COMMIT", "SIMPLE_VERIFY", "MEDIA_CAPTURE"}:
+            self._append_diagnostic_jsonl(goal, "deterministic_task_gate_records.jsonl", {
+                "step": int(step_idx + 1),
+                "task_mode": task_mode,
+                "active_disabled": not bool(gate.get("active_allowed")),
+                "reason": _clean_text(gate.get("gate_reason")),
+            })
 
     @staticmethod
     def _candidate_operator(candidate: dict[str, Any] | None, goal: str = "") -> tuple[str, str]:
@@ -2698,7 +4170,7 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             return "StatsPeek" if re.search(r"\b(stats|statistics|duration|distance|summary)\b", low) else "DetailPeek", "detail_or_stats"
         if re.search(r"\b(row|item|entry|result|record|receipt|transaction|expense|event|ingredient)\b", low):
             return "DetailPeek", "result_or_detail_row"
-        if task_mode == "INFO_QUERY_COUNT" and not re.search(r"\b(add|new|create|edit)\b", low):
+        if task_mode == "INFO_QUERY" and not re.search(r"\b(add|new|create|edit)\b", low):
             return "ListInspect", "query_visible_list"
         if task_mode == "FORM_CREATE_EDIT":
             return "FormSchema", "form_or_create_schema"
@@ -2803,9 +4275,9 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                     gain += 3.0
                 elif operator == "ListInspect":
                     gain += 1.0
-        if operator in {"SearchPeek", "FilterPeek"} and task_mode in {"INFO_QUERY_COUNT", "NAVIGATION_SEARCH"}:
+        if operator in {"SearchPeek", "FilterPeek"} and task_mode in {"INFO_QUERY", "NAVIGATION_SEARCH"}:
             gain += 3.0
-        if operator == "ListInspect" and task_mode == "INFO_QUERY_COUNT":
+        if operator == "ListInspect" and task_mode == "INFO_QUERY":
             gain += 3.0
         if operator == "FormSchema" and task_mode == "FORM_CREATE_EDIT":
             gain += 3.0
@@ -2821,21 +4293,22 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
     def _search_strategy_candidate_score(self, candidate: dict[str, Any], goal: str) -> float:
         strategy = self.light_explore_search_strategy
         components = self._candidate_score_components(candidate, goal)
+        prior_boost = float(candidate.get("reasoning_prior_score") or 0.0)
         candidate["score_components"] = components
-        candidate["final_score"] = float(components.get("final_score") or 0.0)
+        candidate["final_score"] = float(components.get("final_score") or 0.0) + prior_boost
         if strategy == "best_first":
-            return float(components.get("final_score") or 0.0)
+            return float(candidate["final_score"])
         base = float(candidate.get("score") or 0.0)
         estimated_gain = self._estimate_candidate_evidence_gain(candidate, goal)
         operator, _ = self._candidate_operator(candidate, goal)
         risk = 1.0 if operator == "RiskBoundary" or self._is_transaction_unsafe_candidate(candidate) else 0.0
         novelty = 1.0 / float(int(candidate.get("visits") or 0) + 1)
         if strategy == "best_first":
-            return 1.5 * estimated_gain + base + 0.5 * novelty - 2.0 * risk
+            return 1.5 * estimated_gain + base + 0.5 * novelty + prior_boost - 2.0 * risk
         if strategy == "beam":
-            return estimated_gain + 0.75 * base + 0.25 * novelty - 1.5 * risk
+            return estimated_gain + 0.75 * base + 0.25 * novelty + prior_boost - 1.5 * risk
         if strategy == "iddfs":
-            return estimated_gain + base - 1.0 * risk
+            return estimated_gain + base + prior_boost - 1.0 * risk
         if strategy == "mcts":
             key = _clean_text(candidate.get("key") or candidate.get("merged") or candidate.get("label"))
             stats = self._search_policy_stats.get(key, {})
@@ -2844,8 +4317,8 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             q_value = float(stats.get("q") or estimated_gain)
             risk_value = float(stats.get("risk") or risk)
             risk_penalty = 1.5 if self.light_explore_safe_mcts else 1.0
-            return q_value + 1.4 * math.sqrt(math.log(parent_visits + 1.0) / (visits + 1.0)) - risk_penalty * risk_value
-        return base + 0.5 * estimated_gain - risk
+            return q_value + prior_boost + 1.4 * math.sqrt(math.log(parent_visits + 1.0) / (visits + 1.0)) - risk_penalty * risk_value
+        return base + 0.5 * estimated_gain + prior_boost - risk
 
     def _lb_mcts_operator_name(self, candidate: dict[str, Any], goal: str) -> str:
         operator, _ = self._candidate_operator(candidate, goal)
@@ -3281,6 +4754,13 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
     def _search_strategy_depth_limit(self, task_mode: str) -> int:
         configured = max(1, int(self.light_explore_branch_depth))
         strategy = self.light_explore_search_strategy
+        if strategy == "value_of_computation":
+            active_budget = getattr(self, "_active_voc_depth_budget", None)
+            if active_budget is not None:
+                try:
+                    return max(1, min(configured, int(active_budget)))
+                except (TypeError, ValueError):
+                    return configured
         if self.light_explore_fixed_framework:
             if self.light_explore_slot_complete:
                 slots = slot_complete_evidence.parse_task_slots(getattr(self, "_current_goal_for_depth", ""))
@@ -3290,18 +4770,18 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                     and slots.metric_type in {"duration", "distance", "count", "activity_type"}
                 ):
                     return min(configured, 3)
-                if task_mode in {"INFO_QUERY_COUNT", "NAVIGATION_SEARCH", "FORM_CREATE_EDIT"}:
+                if task_mode in {"INFO_QUERY", "NAVIGATION_SEARCH", "FORM_CREATE_EDIT"}:
                     return min(configured, 2)
                 return 1
             if self.light_explore_safe_mcts and strategy == "mcts" and task_mode in {
-                "INFO_QUERY_COUNT",
+                "INFO_QUERY",
                 "NAVIGATION_SEARCH",
             }:
                 return min(configured, 3)
-            if strategy in {"iddfs", "beam", "mcts"} and task_mode in {"INFO_QUERY_COUNT", "NAVIGATION_SEARCH"}:
+            if strategy in {"iddfs", "beam", "mcts"} and task_mode in {"INFO_QUERY", "NAVIGATION_SEARCH"}:
                 return min(configured, 3)
             if strategy in {"stratified_bfs", "best_first", "greedy"} and task_mode in {
-                "INFO_QUERY_COUNT",
+                "INFO_QUERY",
                 "NAVIGATION_SEARCH",
                 "FORM_CREATE_EDIT",
             }:
@@ -3309,7 +4789,7 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             return 1
         if strategy == "stratified_bfs":
             return min(configured, 2)
-        if strategy in {"iddfs", "beam", "mcts", "best_first"} and task_mode in {"INFO_QUERY_COUNT", "NAVIGATION_SEARCH"}:
+        if strategy in {"iddfs", "beam", "mcts", "best_first"} and task_mode in {"INFO_QUERY", "NAVIGATION_SEARCH"}:
             return min(configured, 3)
         if strategy in {"iddfs", "beam", "mcts", "best_first"}:
             return min(configured, 2)
@@ -3369,7 +4849,7 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         gain = 0.0
         if new_task_entities:
             gain += 4.0
-        if task_mode == "INFO_QUERY_COUNT" and query_facts:
+        if task_mode == "INFO_QUERY" and query_facts:
             gain += 3.0
         if self.light_explore_slot_complete and slot_evidence:
             coverage = float(slot_evidence.get("slot_coverage") or 0.0)
@@ -3444,10 +4924,10 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                 boundary_type = "NONE"
                 stop_reason = "slot_no_complete_evidence"
             evidence_type = "NONE"
-        elif new_task_entities or (task_mode == "INFO_QUERY_COUNT" and query_facts):
+        elif new_task_entities or (task_mode == "INFO_QUERY" and query_facts):
             boundary_type = "TARGET_BOUNDARY"
             stop_reason = "target_entity_or_answer_fact_observed"
-            evidence_type = "ANSWER_HINT" if task_mode == "INFO_QUERY_COUNT" else "ACTION_HINT"
+            evidence_type = "ANSWER_HINT" if task_mode == "INFO_QUERY" else "ACTION_HINT"
         elif task_mode == "FORM_CREATE_EDIT" and schema_labels:
             boundary_type = "SCHEMA_BOUNDARY"
             stop_reason = "form_schema_observed"
@@ -3532,11 +5012,11 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         if strategy == "iddfs":
             if depth == 1:
                 return gain >= 1.0 and branch_operator in {"NavigationPeek", "SearchPeek", "FilterPeek", "ListInspect"}
-            return task_mode in {"INFO_QUERY_COUNT", "NAVIGATION_SEARCH"} and gain >= 2.0
+            return task_mode in {"INFO_QUERY", "NAVIGATION_SEARCH"} and gain >= 2.0
         if strategy == "best_first":
             return gain >= 1.5 and branch_operator in {"NavigationPeek", "SearchPeek", "FilterPeek", "ListInspect"}
         if strategy == "beam":
-            return gain >= 1.0 and (branch_index <= 2 or task_mode in {"INFO_QUERY_COUNT", "NAVIGATION_SEARCH"})
+            return gain >= 1.0 and (branch_index <= 2 or task_mode in {"INFO_QUERY", "NAVIGATION_SEARCH"})
         if strategy == "mcts":
             if self.light_explore_safe_mcts:
                 if branch_operator not in {"NavigationPeek", "SearchPeek", "FilterPeek", "ListInspect"}:
@@ -3557,7 +5037,7 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                     )
                     gain_delta = float(assessment.get("evidence_gain_delta") or 0.0)
                     return bool(
-                        task_mode in {"INFO_QUERY_COUNT", "NAVIGATION_SEARCH"}
+                        task_mode in {"INFO_QUERY", "NAVIGATION_SEARCH"}
                         and recent_failures == 0
                         and gain_delta > 0.0
                         and boundary_type not in {"RISK_BOUNDARY", "NEGATIVE_BOUNDARY", "DEAD_END"}
@@ -3567,7 +5047,7 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         return bool(
             depth < max_depth
             and branch_operator in {"NavigationPeek", "SearchPeek", "FilterPeek"}
-            and task_mode in {"INFO_QUERY_COUNT", "NAVIGATION_SEARCH", "FORM_CREATE_EDIT"}
+            and task_mode in {"INFO_QUERY", "NAVIGATION_SEARCH", "FORM_CREATE_EDIT"}
         )
 
     def _state_capsule_summary(self, state: Any, activity: str = "") -> dict[str, Any]:
@@ -4076,7 +5556,7 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         root_screenshot: str,
         root_labels: list[str],
     ) -> tuple[dict[str, Any] | None, dict[str, Any] | None]:
-        if self._task_mode(goal) != "INFO_QUERY_COUNT":
+        if self._task_mode(goal) != "INFO_QUERY":
             return None, None
         facts = self._extract_answer_facts_from_labels(root_labels, goal, limit=8)
         if not facts:
@@ -4400,8 +5880,9 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             f"phash_diff={diff};target_visible={target_visible}"
         )
 
-    @staticmethod
-    def _is_noise_probe_text(merged: str) -> bool:
+    def _is_noise_probe_text(self, merged: str) -> bool:
+        if not getattr(self, "light_explore_lexical_rules", False):
+            return False
         low = _clean_text(merged).lower()
         if not low:
             return True
@@ -4434,8 +5915,9 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         )
         return any(phrase in low for phrase in noise_phrases)
 
-    @staticmethod
-    def _is_commit_probe_label(label: str) -> bool:
+    def _is_commit_probe_label(self, label: str) -> bool:
+        if not getattr(self, "light_explore_lexical_rules", False):
+            return False
         low = re.sub(r"^planned:\s*", "", _clean_text(label).lower()).strip()
         if not low:
             return False
@@ -4476,8 +5958,9 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             return True
         return self._is_risky_probe_text(combined)
 
-    @staticmethod
-    def _is_goal_irrelevant_probe_text(merged: str, goal: str) -> bool:
+    def _is_goal_irrelevant_probe_text(self, merged: str, goal: str) -> bool:
+        if not getattr(self, "light_explore_lexical_rules", False):
+            return False
         low = _clean_text(merged).lower()
         goal_low = _clean_text(goal).lower()
         if not low:
@@ -5781,6 +7264,8 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             return False, "destructive_goal_skipped"
         if self.light_explore_skip_launcher and self._is_launcher_activity(root_activity):
             return False, "launcher_skipped"
+        if step_idx <= 0:
+            return False, "first_step_no_exploration"
         if self.light_explore_diagnostic_full:
             return True, "diagnostic_full_every_step"
         if self.light_explore_fixed_framework:
@@ -5802,13 +7287,9 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                 )
                 if slots.task_subtype == "MEDIA_CAPTURE":
                     return False, f"slot_gate_disabled:{slots.task_subtype}:media_capture_no_speculation"
-                if task_mode == "DELETE_COMMIT":
-                    return False, f"slot_gate_disabled:{task_mode}:commit_safe"
-                if task_mode == "SIMPLE_VERIFY_OPEN" and not page_stalled:
-                    return False, f"slot_gate_disabled:{task_mode}:obvious_simple"
-                if task_mode == "FORM_CREATE_EDIT":
-                    return False, f"slot_gate_disabled:{task_mode}:form_no_speculative_action"
-                if task_mode == "INFO_QUERY_COUNT":
+                if task_mode in {"FORM_CREATE_EDIT", "DELETE_COMMIT", "SIMPLE_VERIFY", "MEDIA_CAPTURE"}:
+                    return True, f"slot_gate_enabled:{task_mode}:passive_schema_risk_only"
+                if task_mode == "INFO_QUERY":
                     if slot_evidence.get("hint_type") in {"ANSWER_HINT", "AVOID_HINT"} or float(slot_evidence.get("slot_coverage") or 0.0) > 0.0:
                         return True, f"slot_gate_enabled:{slots.task_subtype}:passive_or_partial_slots"
                     if page_stalled or not target_visible or int(complexity.get("clickable", 0)) >= 8:
@@ -5818,15 +7299,9 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                     if page_stalled or not target_visible or int(complexity.get("clickable", 0)) >= 8:
                         return True, f"slot_gate_enabled:{task_mode}:navigation_search"
                     return False, f"slot_gate_disabled:{task_mode}:target_visible_low_branching"
-            if task_mode == "SIMPLE_VERIFY_OPEN" and not page_stalled:
-                return False, f"fixed_gate_disabled:{task_mode}:obvious_simple"
-            if task_mode == "DELETE_COMMIT":
-                if target_visible or step_idx > 0:
-                    return False, f"fixed_gate_disabled:{task_mode}:target_or_commit_stage"
-                return False, f"fixed_gate_disabled:{task_mode}:avoid_delete_side_effects"
-            if task_mode == "FORM_CREATE_EDIT":
-                return False, f"fixed_gate_disabled:{task_mode}:form_no_speculative_action"
-            if task_mode in {"INFO_QUERY_COUNT", "NAVIGATION_SEARCH"}:
+            if task_mode in {"FORM_CREATE_EDIT", "DELETE_COMMIT", "SIMPLE_VERIFY", "MEDIA_CAPTURE"}:
+                return True, f"fixed_gate_enabled:{task_mode}:passive_schema_risk_only"
+            if task_mode in {"INFO_QUERY", "NAVIGATION_SEARCH"}:
                 if page_stalled:
                     return True, f"fixed_gate_enabled:{task_mode}:stalled_page"
                 if not target_visible:
@@ -5839,14 +7314,12 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             return False, f"fixed_gate_disabled:{task_mode}"
         if self.light_explore_search_policy == "task_gate":
             task_mode = self._task_mode(goal)
-            if task_mode == "SIMPLE_VERIFY_OPEN" and not page_stalled and step_idx <= 2:
-                return False, f"task_gate_disabled:{task_mode}:obvious_simple"
-            if task_mode in {"INFO_QUERY_COUNT", "NAVIGATION_SEARCH"}:
+            if task_mode == "SIMPLE_VERIFY" and not page_stalled and step_idx <= 2:
+                return True, f"task_gate_enabled:{task_mode}:passive_schema_risk_only"
+            if task_mode in {"INFO_QUERY", "NAVIGATION_SEARCH"}:
                 return True, f"task_gate_enabled:{task_mode}"
             if task_mode in {"FORM_CREATE_EDIT", "DELETE_COMMIT"}:
-                if page_stalled or step_idx == 0:
-                    return True, f"task_gate_enabled:{task_mode}:schema_or_target_discovery"
-                return False, f"task_gate_disabled:{task_mode}:avoid_commit_stage"
+                return True, f"task_gate_enabled:{task_mode}:passive_schema_risk_only"
             if page_stalled:
                 return True, f"task_gate_enabled:{task_mode}:stalled_page"
             return False, f"task_gate_disabled:{task_mode}"
@@ -5866,8 +7339,6 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             return True, "stalled_page"
         if self._is_launcher_activity(root_activity):
             return True, "launcher_page"
-        if step_idx == 0:
-            return True, "first_step_sync"
         return True, "post_planning_for_next_step"
 
     @staticmethod
@@ -6161,6 +7632,15 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             "reason_selected": _clean_text(candidate.get("reason_selected")),
             "reason_rejected": _clean_text(candidate.get("reason_rejected")),
             "strategy_group": _clean_text(candidate.get("strategy_group")),
+            "session_branch_key": _clean_text(candidate.get("session_branch_key")),
+            "session_branch_utility": float(candidate.get("session_branch_utility") or 0.0),
+            "session_depth2_utility": float(candidate.get("session_depth2_utility") or 0.0),
+            "session_value_features": candidate.get("session_value_features")
+            if isinstance(candidate.get("session_value_features"), dict)
+            else {},
+            "session_adaptive_weights": candidate.get("session_adaptive_weights")
+            if isinstance(candidate.get("session_adaptive_weights"), dict)
+            else {},
         }
 
     @staticmethod
@@ -6921,7 +8401,7 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             return "RISK_HINT"
         if source_type in {"ANSWER_HINT", "ACTION_HINT", "AVOID_HINT", "SCHEMA_HINT", "RISK_HINT"}:
             return source_type
-        if task_mode == "INFO_QUERY_COUNT":
+        if task_mode == "INFO_QUERY":
             facts = self._extract_answer_facts_from_labels(observed, goal, limit=3)
             if facts:
                 if any(_clean_text(x).lower().startswith("avoid ") for x in facts):
@@ -6930,7 +8410,7 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         if operator in {"SearchPeek", "FilterPeek", "FormSchema"}:
             return "SCHEMA_HINT"
         if operator in {"NavigationPeek", "DetailPeek", "StatsPeek", "ListInspect"}:
-            if task_mode in {"INFO_QUERY_COUNT", "NAVIGATION_SEARCH"}:
+            if task_mode in {"INFO_QUERY", "NAVIGATION_SEARCH"}:
                 return "ACTION_HINT"
         if task_mode == "EVENT_QUERY" and re.search(r"\b(new event|add event|create)\b", label):
             return "AVOID_HINT"
@@ -6976,7 +8456,6 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         goal: str = "",
         current_state: Any | None = None,
     ) -> tuple[str, list[dict[str, Any]]]:
-        del current_state
         buckets: dict[str, list[dict[str, Any]]] = {
             "ANSWER_HINT": [],
             "ACTION_HINT": [],
@@ -6985,10 +8464,46 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             "RISK_HINT": [],
         }
         rejected: list[dict[str, Any]] = []
+        task_normalized = _clean_text(goal)
+        current_activity = _clean_text(self._foreground_activity_name())
+        current_package = current_activity.split("/", 1)[0] if "/" in current_activity else current_activity
+
+        def _same_task_or_app(trace_goal: str, trace_activity: str) -> bool:
+            trace_goal_clean = _clean_text(trace_goal)
+            if trace_goal_clean and trace_goal_clean == task_normalized:
+                return True
+            trace_activity_norm = _clean_text(trace_activity)
+            trace_package = trace_activity_norm.split("/", 1)[0] if "/" in trace_activity_norm else trace_activity_norm
+            return bool(current_package and trace_package and current_package == trace_package)
+
+        def _status_or_system_label(label: str) -> bool:
+            low = _clean_text(label).lower()
+            if not low:
+                return True
+            noise_markers = (
+                "android system notification",
+                "systemui",
+                "system ui",
+                "status bar",
+                "notification icon",
+                "switch input method",
+                "more features",
+                "battery ",
+                "airplane mode",
+                "no phone",
+            )
+            if any(marker in low for marker in noise_markers):
+                return True
+            if re.fullmatch(r"\d{1,2}:\d{2}", low):
+                return True
+            return False
+
         for item in sorted(matches, key=lambda x: float(x.get("confidence") or x.get("score") or 0.0), reverse=True):
             candidate = item.get("next_candidate") if isinstance(item.get("next_candidate"), dict) else {}
-            observed = self._evidence_observed_elements(list(item.get("observed_elements") or []), goal=goal)
+            observed_raw = self._evidence_observed_elements(list(item.get("observed_elements") or []), goal=goal)
+            observed = [x for x in observed_raw if not _status_or_system_label(x)]
             evidence_type = self._upper_bound_evidence_type(item, candidate, observed, goal)
+            source_type = _clean_text(item.get("evidence_type") or evidence_type)
             state_match_score = self._float01(item.get("state_match_score"), 1.0 if bool(item.get("matched")) else 0.0)
             slot_or_target_score = self._upper_bound_slot_or_target_score(item, evidence_type, observed, goal)
             rollback_verified_score = 1.0 if bool(item.get("rollback_verified")) else 0.0
@@ -7003,6 +8518,80 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                 required_slot_or_target_score = 0.60
             elif evidence_type in {"SCHEMA_HINT", "RISK_HINT"}:
                 required_slot_or_target_score = 0.60
+            facts = [
+                x
+                for x in self._extract_answer_facts_from_labels(observed, goal, limit=5)
+                if not _clean_text(x).lower().startswith("avoid ")
+            ]
+            schema_fields = [
+                x
+                for x in observed
+                if re.search(
+                    r"\b(name|title|date|time|phone|email|amount|description|note|folder|file|field|search|filter|query)\b",
+                    x.lower(),
+                )
+            ]
+            operator = _clean_text(item.get("operator") or candidate.get("operator"))
+            action_safe = bool(candidate) and not self._is_transaction_unsafe_candidate(candidate)
+            if action_safe and current_state is not None:
+                action_safe = (
+                    self._candidate_visible_in_state(candidate, current_state)
+                    or operator in {"SearchPeek", "FilterPeek"}
+                )
+            stop_reason_low = _clean_text(item.get("stop_reason") or item.get("boundary_type") or "").lower()
+            source_goal = _clean_text(item.get("source_goal") or item.get("goal") or item.get("source") or "")
+            source_activity = _clean_text(item.get("after_activity") or item.get("source_activity") or "")
+            same_task_or_app = bool(_same_task_or_app(source_goal, source_activity))
+            hard_negative = bool(
+                item.get("hard_negative")
+                or (
+                    isinstance(item.get("slot_evidence"), dict)
+                    and bool((item.get("slot_evidence") or {}).get("hard_negative"))
+                )
+                or _clean_text(item.get("boundary_type")).upper() == "NEGATIVE_BOUNDARY"
+                or any(
+                    _clean_text(x).lower().startswith("avoid ")
+                    for x in observed_raw
+                )
+            )
+            globally_valid_avoid = bool(
+                same_task_or_app
+                and (
+                    hard_negative
+                    or any(
+                        token in stop_reason_low
+                        for token in (
+                            "hard_negative",
+                            "wrong_target",
+                            "wrong_app",
+                            "not_found",
+                            "dead_end",
+                            "dead-end",
+                            "negative_boundary",
+                            "slot_complete_hard_negative",
+                            "root_visible_hard_negative",
+                        )
+                    )
+                    or source_type == "AVOID_HINT"
+                )
+            )
+            globally_valid_risk = bool(
+                same_task_or_app
+                and (
+                    operator == "RiskBoundary"
+                    or any(token in stop_reason_low for token in ("risk", "unsafe", "destructive", "delete", "commit"))
+                    or source_type == "RISK_HINT"
+                )
+            )
+            schema_visible = bool(
+                schema_fields
+                or operator in {"SearchPeek", "FilterPeek", "FormSchema"}
+            )
+            answer_complete = bool(
+                item.get("answer_complete")
+                or item.get("slot_complete")
+                or (isinstance(item.get("slot_evidence"), dict) and item.get("slot_evidence", {}).get("slot_complete"))
+            )
             reason = ""
             if evidence_type == "NONE":
                 reason = "no_supported_evidence_type"
@@ -7010,9 +8599,7 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                 reason = "empty_rendered_text"
             elif not bool(item.get("rollback_verified")):
                 reason = "rollback_not_verified"
-            elif state_match_score < 0.50:
-                reason = "state_not_aligned"
-            elif evidence_type == "ACTION_HINT" and self._is_transaction_unsafe_candidate(candidate):
+            elif evidence_type == "ACTION_HINT" and not action_safe:
                 reason = "unsafe_action"
             elif slot_or_target_score < required_slot_or_target_score:
                 reason = (
@@ -7020,21 +8607,42 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                     if evidence_type == "ACTION_HINT"
                     else "no_exact_target_or_entity_match"
                 )
+            elif evidence_type == "ANSWER_HINT":
+                if not answer_complete:
+                    reason = "answer_fact_incomplete"
+                elif not facts:
+                    reason = "answer_hint_no_fact_found"
+            elif evidence_type == "SCHEMA_HINT":
+                if not schema_visible:
+                    reason = "schema_not_visible"
+            elif evidence_type == "RISK_HINT":
+                if not globally_valid_risk:
+                    reason = "risk_not_globally_valid"
+            elif evidence_type == "AVOID_HINT":
+                if not globally_valid_avoid:
+                    reason = "avoid_not_globally_valid"
             elif self._upper_bound_observed_noise_only(observed):
                 reason = "system_or_status_bar_only"
             elif confidence < threshold:
                 reason = "low_confidence"
+            elif evidence_type in {"ACTION_HINT", "SCHEMA_HINT", "ANSWER_HINT"} and state_match_score < 0.50:
+                reason = "state_not_aligned"
             if reason:
                 rejected.append(
                     {
                         "source_step": item.get("source_step"),
                         "branch_id": item.get("branch_id"),
                         "next_label": _clean_text(candidate.get("label") or item.get("next_label")),
-                        "operator": item.get("operator") or candidate.get("operator"),
+                        "operator": _clean_text(item.get("operator") or candidate.get("operator")),
                         "reason": reason,
                         "evidence_type": evidence_type,
                         "confidence": confidence,
                         "threshold": threshold,
+                        "state_match_score": float(state_match_score),
+                        "rollback_verified": bool(item.get("rollback_verified")),
+                        "action_safe": bool(action_safe),
+                        "same_task_or_app": bool(same_task_or_app),
+                        "rendered_text": rendered,
                     }
                 )
                 continue
@@ -7045,11 +8653,14 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                     "hint_kind": "actionable" if evidence_type == "ACTION_HINT" else "evidence_only",
                     "prompt_line": rendered,
                     "rendered_prompt_text": rendered,
+                    "source_type": source_type,
                     "confidence": float(confidence),
                     "threshold": float(threshold),
                     "state_match_score": float(state_match_score),
                     "slot_or_target_score": float(slot_or_target_score),
                     "rollback_verified": bool(item.get("rollback_verified")),
+                    "action_safe": bool(action_safe),
+                    "same_task_or_app": bool(same_task_or_app),
                 }
             )
             buckets[evidence_type].append(trace)
@@ -7108,6 +8719,304 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         self._last_strict_not_injected_reasons = rejected
         return "\n".join(lines).strip(), selected
 
+    def _build_rule_prompt_context_from_state_aligned_matches(
+        self,
+        matches: list[dict[str, Any]],
+        goal: str = "",
+        current_state: Any | None = None,
+    ) -> tuple[str, list[dict[str, Any]]]:
+        buckets: dict[str, list[dict[str, Any]]] = {
+            "ANSWER_HINT": [],
+            "ACTION_HINT": [],
+            "AVOID_HINT": [],
+            "SCHEMA_HINT": [],
+            "RISK_HINT": [],
+        }
+        rejected: list[dict[str, Any]] = []
+        prior = self._reasoning_prior_for_next_step if isinstance(self._reasoning_prior_for_next_step, dict) else {}
+        task_mode = self._task_mode(goal)
+        goal_normalized = _clean_text(goal)
+        current_activity = _clean_text(self._foreground_activity_name())
+        current_package = current_activity.split("/", 1)[0] if "/" in current_activity else current_activity
+
+        def _status_or_system_label(label: str) -> bool:
+            low = _clean_text(label).lower()
+            if not low:
+                return True
+            noise_markers = (
+                "android system notification",
+                "systemui",
+                "system ui",
+                "status bar",
+                "notification icon",
+                "switch input method",
+                "more features",
+                "battery ",
+                "airplane mode",
+                "no phone",
+            )
+            if any(marker in low for marker in noise_markers):
+                return True
+            if re.fullmatch(r"\d{1,2}:\d{2}", low):
+                return True
+            return False
+
+        def _same_task_or_app(trace_goal: str, trace_activity: str) -> bool:
+            trace_goal_clean = _clean_text(trace_goal)
+            if trace_goal_clean and trace_goal_clean == goal_normalized:
+                return True
+            trace_activity_norm = _clean_text(trace_activity)
+            trace_package = trace_activity_norm.split("/", 1)[0] if "/" in trace_activity_norm else trace_activity_norm
+            return bool(current_package and trace_package and current_package == trace_package)
+
+        for item in sorted(matches, key=lambda x: float(x.get("confidence") or x.get("score") or 0.0), reverse=True):
+            candidate = item.get("next_candidate") if isinstance(item.get("next_candidate"), dict) else {}
+            observed_raw = self._evidence_observed_elements(list(item.get("observed_elements") or []), goal=goal)
+            observed = [x for x in observed_raw if not _status_or_system_label(x)]
+            source_type = _clean_text(item.get("evidence_type") or "")
+            operator = _clean_text(item.get("operator") or candidate.get("operator"))
+            state_match_score = self._float01(item.get("state_match_score"), 1.0 if item.get("matched") else 0.0)
+            source_confidence = self._float01(item.get("confidence") or item.get("score"), 0.0)
+            rollback_verified = bool(item.get("rollback_verified"))
+            action_safe = bool(candidate) and not self._is_transaction_unsafe_candidate(candidate)
+            if current_state is not None and candidate:
+                action_safe = bool(
+                    action_safe
+                    and (
+                        self._candidate_visible_in_state(candidate, current_state)
+                        or operator in {"SearchPeek", "FilterPeek"}
+                    )
+                )
+            slot_evidence = item.get("slot_evidence") if isinstance(item.get("slot_evidence"), dict) else {}
+            if not slot_evidence and self.light_explore_slot_complete:
+                slot_evidence = slot_complete_evidence.extract_slot_evidence(
+                    list(item.get("observed_elements") or []),
+                    goal,
+                    activity=_clean_text(item.get("after_activity") or ""),
+                )
+            facts = [
+                x
+                for x in self._extract_answer_facts_from_labels(observed, goal, limit=5)
+                if not _clean_text(x).lower().startswith("avoid ")
+            ]
+            schema_fields = [
+                x
+                for x in observed
+                if re.search(
+                    r"\b(name|title|date|time|phone|email|amount|description|note|folder|file|field|search|filter|query)\b",
+                    x.lower(),
+                )
+            ]
+            stop_reason = _clean_text(item.get("stop_reason") or item.get("boundary_type") or item.get("reason") or "")
+            stop_reason_low = stop_reason.lower()
+            slot_hard_negative = _clean_text(slot_evidence.get("hard_negative") if isinstance(slot_evidence, dict) else "")
+            observed_avoid_text = next(
+                (
+                    _clean_text(x)
+                    for x in observed
+                    if _clean_text(x).lower().startswith("avoid ")
+                ),
+                "",
+            )
+            hard_negative = bool(
+                item.get("hard_negative")
+                or item.get("is_hard_negative")
+                or item.get("negative_evidence")
+                or slot_hard_negative
+                or observed_avoid_text
+            )
+            same_task_or_app = bool(
+                _same_task_or_app(
+                    _clean_text(item.get("source_goal") or item.get("goal") or item.get("source") or ""),
+                    _clean_text(item.get("after_activity") or item.get("source_activity") or ""),
+                )
+            )
+            globally_valid_avoid = bool(
+                same_task_or_app
+                and (
+                    hard_negative
+                    or any(
+                        token in stop_reason_low
+                        for token in (
+                            "hard_negative",
+                            "wrong_target",
+                            "wrong_app",
+                            "not_found",
+                            "dead_end",
+                            "dead-end",
+                            "negative_boundary",
+                            "slot_complete_hard_negative",
+                            "root_visible_hard_negative",
+                        )
+                    )
+                    or _clean_text(item.get("boundary_type")).upper() == "NEGATIVE_BOUNDARY"
+                )
+            )
+            globally_valid_risk = bool(
+                same_task_or_app
+                and (
+                    operator == "RiskBoundary"
+                    or self._is_transaction_unsafe_candidate(candidate)
+                    or any(token in stop_reason_low for token in ("risk", "unsafe", "destructive", "delete", "commit"))
+                )
+            )
+            schema_visible = bool(
+                schema_fields
+                or operator in {"SearchPeek", "FilterPeek", "FormSchema"}
+            )
+            system_or_status_only = bool(observed_raw and not observed)
+            answer_complete = bool(
+                item.get("answer_complete")
+                or item.get("slot_complete")
+                or (isinstance(slot_evidence, dict) and slot_evidence.get("slot_complete"))
+            )
+
+            hint_type = "NONE"
+            reason = ""
+            if not rollback_verified:
+                reason = "rollback_failed"
+            elif source_type == "ANSWER_HINT" and state_match_score < 0.50:
+                reason = "state_mismatch"
+            elif source_type == "ACTION_HINT" and state_match_score < 0.35:
+                reason = "state_mismatch"
+            elif source_type == "ANSWER_HINT" and answer_complete:
+                hint_type = "ANSWER_HINT"
+            elif source_type == "ACTION_HINT" and state_match_score >= 0.50 and action_safe:
+                hint_type = "ACTION_HINT"
+            elif source_type in {"AVOID_HINT", "RISK_HINT"}:
+                if source_type == "RISK_HINT":
+                    if not globally_valid_risk:
+                        reason = "risk_not_globally_valid"
+                    elif source_confidence < 0.60:
+                        reason = "low_confidence_risk"
+                    else:
+                        hint_type = "RISK_HINT"
+                else:
+                    if system_or_status_only:
+                        reason = "system_or_status_bar_only"
+                    elif not globally_valid_avoid:
+                        reason = "avoid_not_globally_valid"
+                    elif source_confidence < (0.50 if hard_negative else 0.65):
+                        reason = "low_confidence_avoid"
+                    else:
+                        hint_type = "AVOID_HINT"
+            elif operator == "RiskBoundary":
+                if globally_valid_risk:
+                    hint_type = "RISK_HINT"
+                else:
+                    reason = "risk_not_globally_valid"
+            elif source_type == "SCHEMA_HINT":
+                if rollback_verified and schema_visible and same_task_or_app:
+                    hint_type = "SCHEMA_HINT"
+                else:
+                    reason = "schema_not_visible_or_wrong_app"
+            elif source_type == "ANSWER_HINT":
+                reason = "answer_fact_incomplete"
+            elif source_type == "ACTION_HINT":
+                reason = "unsafe_or_unlocatable_action"
+            else:
+                reason = "unsupported_evidence_type"
+            if hint_type == "NONE":
+                rejected.append(
+                    {
+                        "source_step": item.get("source_step"),
+                        "branch_id": item.get("branch_id"),
+                        "next_label": _clean_text(candidate.get("label") or item.get("next_label")),
+                        "operator": operator,
+                        "reason": reason or "strict_conditions_not_met",
+                        "evidence_type": source_type or "NONE",
+                        "state_match_score": state_match_score,
+                        "rollback_verified": rollback_verified,
+                        "action_safe": action_safe,
+                        "same_task_or_app": same_task_or_app,
+                        "rendered_text": "",
+                    }
+                )
+                continue
+            enriched = dict(item)
+            enriched.update(
+                {
+                    "hint_type": hint_type,
+                    "hint_kind": "actionable" if hint_type == "ACTION_HINT" else "evidence_only",
+                    "operator": operator,
+                    "fact": "; ".join(facts[:5] or observed[:5]),
+                    "suggested_action": _clean_text(
+                        item.get("suggested_action")
+                        or self._upper_bound_render_evidence(item, hint_type, candidate, observed, goal)
+                        or _clean_text(candidate.get("label") or item.get("next_label") or "")
+                    ),
+                    "candidate_label": _clean_text(candidate.get("label") or item.get("next_label")),
+                    "observed_elements": observed,
+                    "avoid_reason": slot_hard_negative
+                    or observed_avoid_text
+                    or "; ".join(observed[:3])
+                    or _clean_text(item.get("stop_reason") or item.get("boundary_type") or "risk"),
+                    "target": self._avoid_target_from_reason(slot_hard_negative or observed_avoid_text)
+                    or _clean_text(candidate.get("label") or item.get("next_label")),
+                    "confidence": float(max(float(item.get("confidence") or 0.0), state_match_score)),
+                    "threshold": 0.50,
+                    "state_match_score": state_match_score,
+                    "rollback_verified": rollback_verified,
+                    "action_safe": action_safe,
+                    "slot_complete": bool(item.get("slot_complete") or (isinstance(slot_evidence, dict) and slot_evidence.get("slot_complete"))),
+                    "answer_complete": bool(answer_complete),
+                    "same_task_or_app": same_task_or_app,
+                }
+            )
+            rendered = self._build_reasoning_template_render(hint_type, enriched, prior)
+            if not rendered:
+                rejected.append(
+                    {
+                        "source_step": item.get("source_step"),
+                        "branch_id": item.get("branch_id"),
+                        "next_label": enriched["candidate_label"],
+                        "operator": operator,
+                        "reason": "empty_rendered_text",
+                        "evidence_type": hint_type,
+                        "state_match_score": state_match_score,
+                        "rollback_verified": rollback_verified,
+                        "action_safe": action_safe,
+                        "same_task_or_app": same_task_or_app,
+                        "rendered_text": "",
+                    }
+                )
+                continue
+            enriched["prompt_line"] = rendered
+            enriched["rendered_prompt_text"] = rendered
+            buckets[hint_type].append(enriched)
+
+        limits = {
+            "ANSWER_HINT": 3,
+            "ACTION_HINT": 2,
+            "AVOID_HINT": 2,
+            "SCHEMA_HINT": 2,
+            "RISK_HINT": 2,
+        }
+        selected: list[dict[str, Any]] = []
+        lines = ["[Exploration Evidence from Previous Step]"]
+        for hint_type, title in (
+            ("ANSWER_HINT", "Useful facts"),
+            ("ACTION_HINT", "Suggested safe actions"),
+            ("SCHEMA_HINT", "Schema"),
+            ("AVOID_HINT", "Avoid"),
+            ("RISK_HINT", "Risk"),
+        ):
+            entries = buckets.get(hint_type, [])[: limits[hint_type]]
+            if not entries:
+                continue
+            lines.append("")
+            lines.append(f"{title}:")
+            for entry in entries:
+                entry["rank"] = len(selected) + 1
+                selected.append(entry)
+                lines.append(f"{len(selected)}. {entry['prompt_line']}")
+        self._last_strict_not_injected_reasons = rejected
+        if not selected:
+            return "", []
+        for entry in selected:
+            entry["not_injected_reasons_sample"] = rejected[:5]
+        return "\n".join(lines).strip(), selected
+
     def _build_strict_prompt_context_from_state_aligned_matches(
         self,
         matches: list[dict[str, Any]],
@@ -7120,6 +9029,11 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                 goal=goal,
                 current_state=current_state,
             )
+        return self._build_rule_prompt_context_from_state_aligned_matches(
+            matches=matches,
+            goal=goal,
+            current_state=current_state,
+        )
         task_mode = self._task_mode(goal)
         matches.sort(
             key=lambda item: (
@@ -7177,7 +9091,7 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                     f"Observed effect: {effect or 'the next screen changed after this action'}.\n"
                     "Use only if the target is visible in the current screenshot."
                 )
-            elif task_mode == "INFO_QUERY_COUNT":
+            elif task_mode == "INFO_QUERY":
                 if self.light_explore_slot_complete:
                     facts = list(slot_evidence.get("facts") or [])[:5]
                     if facts and slot_evidence.get("hint_type") == "AVOID_HINT":
@@ -7243,7 +9157,7 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                     reason = "schema_hint_no_fields"
             if not line and (operator == "RiskBoundary" or source_evidence_type == "RISK_HINT"):
                 rollback_verified = bool(item.get("rollback_verified", True))
-                near_commit = task_mode in {"DELETE_COMMIT", "SIMPLE_VERIFY_OPEN", "FORM_CREATE_EDIT"}
+                near_commit = task_mode in {"DELETE_COMMIT", "SIMPLE_VERIFY", "FORM_CREATE_EDIT"}
                 if rollback_verified and near_commit:
                     hint_type = "RISK_HINT"
                     line = (
@@ -7437,7 +9351,7 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         operator, _ = self._candidate_operator(candidate, goal)
         task_mode = self._task_mode(goal)
         operator_priority = 0.0
-        if task_mode == "INFO_QUERY_COUNT" and operator in {"ListInspect", "NavigationPeek", "SearchPeek", "FilterPeek"}:
+        if task_mode == "INFO_QUERY" and operator in {"ListInspect", "NavigationPeek", "SearchPeek", "FilterPeek"}:
             operator_priority = 1.0
         elif task_mode == "NAVIGATION_SEARCH" and operator in {"NavigationPeek", "SearchPeek", "FilterPeek"}:
             operator_priority = 1.0
@@ -7471,9 +9385,9 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         task_mode = self._task_mode(goal)
         if task_mode in {"DELETE_COMMIT", "FORM_CREATE_EDIT"}:
             return False, f"task_mode_disabled:{task_mode}"
-        if task_mode == "SIMPLE_VERIFY_OPEN":
+        if task_mode == "SIMPLE_VERIFY":
             return False, "task_mode_disabled:SIMPLE_VERIFY_OPEN"
-        if task_mode in {"INFO_QUERY_COUNT", "NAVIGATION_SEARCH", "SIMPLE_VERIFY_OPEN"}:
+        if task_mode in {"INFO_QUERY", "NAVIGATION_SEARCH", "SIMPLE_VERIFY"}:
             return True, "task_mode_allowed"
         operator, _ = self._candidate_operator(candidate, goal)
         if operator in {"NavigationPeek", "SearchPeek", "FilterPeek", "ListInspect"}:
@@ -8125,6 +10039,320 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         self._append_shortcut_shadow_eval(goal, evaluation)
         return evaluation
 
+    def _json_action_from_promotion(
+        self,
+        candidate: dict[str, Any],
+        signature: dict[str, Any],
+    ) -> json_action.JSONAction | None:
+        action = self._json_action_from_shortcut_candidate(candidate) if isinstance(candidate, dict) else None
+        if action is not None:
+            return action
+        if not isinstance(signature, dict):
+            return None
+        action_type = _clean_text(signature.get("action_type") or json_action.CLICK).lower()
+        center = signature.get("center")
+        if action_type in {"type", json_action.INPUT_TEXT}:
+            return json_action.JSONAction(
+                action_type=json_action.INPUT_TEXT,
+                x=int(center[0]) if isinstance(center, (list, tuple)) and len(center) >= 2 and int(center[0]) > 0 else None,
+                y=int(center[1]) if isinstance(center, (list, tuple)) and len(center) >= 2 and int(center[1]) > 0 else None,
+                text=_clean_text(signature.get("typed_text") or ""),
+            )
+        if isinstance(center, (list, tuple)) and len(center) >= 2:
+            return json_action.JSONAction(action_type=json_action.CLICK, x=int(center[0]), y=int(center[1]))
+        return None
+
+    def _maybe_store_pending_promotion_from_trace(
+        self,
+        goal: str,
+        step_idx: int,
+        action: json_action.JSONAction,
+        explore_trace: dict[str, Any],
+    ) -> None:
+        if not isinstance(explore_trace, dict):
+            self._append_promotion_event(
+                goal,
+                {
+                    "event_type": "promotion_not_stored",
+                    "step": int(step_idx + 1),
+                    "reason": "missing_explore_trace",
+                    "unsafe_promotion": False,
+                },
+            )
+            return
+        if not getattr(self, "reasoning_prior_promotion", False):
+            self._append_promotion_event(
+                goal,
+                {
+                    "event_type": "promotion_not_stored",
+                    "step": int(step_idx + 1),
+                    "reason": "reasoning_prior_promotion_disabled",
+                    "unsafe_promotion": False,
+                },
+            )
+            return
+        if explore_trace.get("status") == "rollback_failed":
+            self._append_promotion_event(
+                goal,
+                {
+                    "event_type": "promotion_not_stored",
+                    "step": int(step_idx + 1),
+                    "reason": "exploration_rollback_failed",
+                    "unsafe_promotion": False,
+                },
+            )
+            return
+        candidates: list[dict[str, Any]] = []
+        guidance_candidates: list[dict[str, Any]] = []
+        for obs in list(explore_trace.get("observations") or []):
+            if not isinstance(obs, dict):
+                continue
+            if not bool((obs.get("rollback") or {}).get("success")):
+                continue
+            root_sig = obs.get("root_action_signature") if isinstance(obs.get("root_action_signature"), dict) else {}
+            depth2_candidate = obs.get("depth2_candidate") if isinstance(obs.get("depth2_candidate"), dict) else {}
+            root_match = self._safe_signature_match_reason(root_sig, action)
+            if not bool(obs.get("promotable_for_promotion")):
+                evidence_type_for_guidance = _clean_text(obs.get("evidence_type"))
+                if root_match >= 0.8 and evidence_type_for_guidance in {"ACTION_HINT", "SCHEMA_HINT", "ANSWER_HINT"}:
+                    guidance_candidates.append({
+                        "event_type": "promotion_stored",
+                        "promotion_level": "guidance",
+                        "stored_at_step": int(step_idx + 1),
+                        "fire_at_step": int(step_idx + 2),
+                        "step": int(step_idx + 1),
+                        "branch_id": obs.get("branch_id"),
+                        "root_action_match_score": float(root_match),
+                        "depth1_state_signature": obs.get("depth1_state_signature") if isinstance(obs.get("depth1_state_signature"), dict) else {},
+                        "guidance_context": _clean_text(obs.get("evidence_type")) + ": " + _clean_text((obs.get("labels") or [""])[-1] if isinstance(obs.get("labels"), list) else obs.get("stop_reason")),
+                        "reason": "guidance_promotion_available",
+                        "unsafe_promotion": False,
+                    })
+                continue
+            safe, safe_reason = self._shortcut_candidate_safe(depth2_candidate, goal, None)
+            if root_match < 0.8 or not safe:
+                self._append_promotion_event(
+                    goal,
+                    {
+                        "event_type": "promotion_not_stored",
+                        "step": int(step_idx + 1),
+                        "branch_id": obs.get("branch_id"),
+                        "root_action_match_score": float(root_match),
+                        "depth2_safe": bool(safe),
+                        "safe_reason": safe_reason,
+                        "reason": "root_mismatch_or_depth2_unsafe",
+                        "unsafe_promotion": bool(not safe),
+                    },
+                )
+                continue
+            record = self._build_promotion_record(
+                goal=goal,
+                step_idx=step_idx,
+                prior_source_step=int(explore_trace.get("reasoning_prior_source_step") or 0),
+                branch_observation=obs,
+                root_match_score=float(root_match),
+                state_match_score=0.0,
+                state_match_reason="deferred_to_next_step",
+                depth2_entropy=float(explore_trace.get("reasoning_prior_entropy") or 0.0),
+                state_match=True,
+            )
+            record.update(
+                {
+                    "event_type": "promotion_stored",
+                    "stored_at_step": int(step_idx + 1),
+                    "fire_at_step": int(step_idx + 2),
+                    "depth2_safe": True,
+                    "safe_reason": safe_reason,
+                    "unsafe_promotion": False,
+                }
+            )
+            candidates.append(record)
+        if not candidates and guidance_candidates:
+            guidance_candidates.sort(key=lambda row: float(row.get("root_action_match_score") or 0.0), reverse=True)
+            self._pending_promotion = dict(guidance_candidates[0])
+            self._append_pending_promotion_record(goal, guidance_candidates[0])
+            self._append_promotion_event(goal, guidance_candidates[0])
+            return
+        if not candidates:
+            self._append_promotion_event(
+                goal,
+                {
+                    "event_type": "promotion_not_stored",
+                    "step": int(step_idx + 1),
+                    "reason": "no_depth2",
+                    "unsafe_promotion": False,
+                },
+            )
+            return
+        candidates.sort(
+            key=lambda row: (
+                float(row.get("root_action_match_score") or 0.0),
+                float(row.get("entropy") or 0.0) * -1.0,
+            ),
+            reverse=True,
+        )
+        self._pending_promotion = dict(candidates[0])
+        self._append_pending_promotion_record(goal, candidates[0])
+        self._append_promotion_event(goal, candidates[0])
+
+    def _try_execute_pending_promotion(
+        self,
+        *,
+        goal: str,
+        step_idx: int,
+        start_time: float,
+        state: Any,
+        current_activity: str,
+        current_hash: int,
+    ) -> base_agent.AgentInteractionResult | None:
+        del current_hash
+        pending = self._pending_promotion if isinstance(self._pending_promotion, dict) else {}
+        self._pending_promotion = None
+        if not pending:
+            return None
+        state_sig = pending.get("depth1_state_signature") if isinstance(pending.get("depth1_state_signature"), dict) else {}
+        if _clean_text(pending.get("promotion_level")) == "guidance":
+            state_score, state_reason = self._promote_signature_match_reason(state_sig, state, current_activity)
+            event = dict(pending)
+            event.update({
+                "event_type": "promotion_guidance_injected" if state_score >= 0.60 else "promotion_eval",
+                "step": int(step_idx + 1),
+                "state_match_score": float(state_score),
+                "state_match_reason": state_reason,
+                "would_fire": False,
+                "fired": False,
+                "no_fire_reason": "" if state_score >= 0.60 else "state_mismatch",
+                "unsafe_promotion": False,
+            })
+            if state_score >= 0.60:
+                self._pending_promotion_guidance_context = _clean_text(pending.get("guidance_context"))
+            self._append_promotion_event(goal, event)
+            return None
+        action_sig = pending.get("depth2_action_signature") if isinstance(pending.get("depth2_action_signature"), dict) else {}
+        candidate = pending.get("depth2_candidate") if isinstance(pending.get("depth2_candidate"), dict) else {}
+        state_score, state_reason = self._promote_signature_match_reason(state_sig, state, current_activity)
+        locatable = self._locate_candidate_action_in_state(state, action_sig) or self._candidate_visible_in_state(candidate, state)
+        safe, safe_reason = self._shortcut_candidate_safe(candidate, goal, state)
+        action = self._json_action_from_promotion(candidate, action_sig)
+        no_fire_reasons: list[str] = []
+        if state_score < 0.80:
+            no_fire_reasons.append(f"depth1_state_mismatch:{state_reason}")
+        if not locatable:
+            no_fire_reasons.append("depth2_action_not_locatable")
+        if not safe:
+            no_fire_reasons.append(f"depth2_action_unsafe:{safe_reason}")
+        if action is None:
+            no_fire_reasons.append("promotion_action_build_failed")
+        event = dict(pending)
+        event.update(
+            {
+                "event_type": "promotion_eval",
+                "step": int(step_idx + 1),
+                "state_match_score": float(state_score),
+                "state_match_reason": state_reason,
+                "depth2_action_locatable_now": bool(locatable),
+                "depth2_safe_now": bool(safe),
+                "safe_reason_now": safe_reason,
+                "would_fire": not no_fire_reasons,
+                "fired": False,
+                "no_fire_reason": ";".join(no_fire_reasons),
+                "unsafe_promotion": bool(not safe),
+            }
+        )
+        if no_fire_reasons or action is None:
+            self._append_promotion_event(goal, event)
+            return None
+        extras = {
+            "promotion_id": _clean_text(pending.get("plan_id") or f"promotion_{step_idx + 1}"),
+            "skipped_vlm_reasoning": True,
+            "reasoning_prior_promotion": True,
+        }
+        active_action_start = time.time()
+        self._execute_action(action, extras)
+        self._append_latency_profile_event(
+            goal,
+            {
+                "event": "promotion_action_execute",
+                "step": int(step_idx + 1),
+                "prompt_mode": "promotion_active",
+                "action_type": str(action.action_type),
+                "latency_ms": float(max(0.0, time.time() - active_action_start) * 1000.0),
+                "skipped_vlm_reasoning": True,
+            },
+        )
+        event["fired"] = True
+        event["active_action_dict"] = dict(action.__dict__)
+        event["unsafe_promotion"] = False
+        self._append_promotion_event(goal, event)
+        summary = f"Executed rollback-verified promotion from step {pending.get('stored_at_step')}"
+        parsed_action = {
+            "action": "PROMOTION",
+            "summary": summary,
+            "skipped_vlm_reasoning": True,
+        }
+        tool_call = {"name": "mobile_use", "arguments": {"action": action.action_type, "promotion": True}}
+        screenshot = Image.fromarray(state.pixels)
+        latency_sec = float(max(0.0, time.time() - start_time))
+        step_record = {
+            "goal": goal,
+            "response": "",
+            "parsed_action": parsed_action,
+            "tool_call": tool_call,
+            "action_dict": action.__dict__,
+            "summary": summary,
+            "latency_sec": latency_sec,
+            "prompt_mode": "promotion_active",
+            "prompt_hint": "",
+            "matched_exploration_status": "promotion_fired",
+            "matched_exploration_count": 0,
+            "matched_exploration_results": [],
+            "light_explore_runs": self._light_explore_runs,
+            "start_page_activity": current_activity,
+            "start_page_hash": self._state_hash(state),
+            "page_stalled": False,
+            "task_mode": self._task_mode(goal),
+            "ablation_variant": self.light_explore_variant,
+            "exploration_status": "promotion_fired",
+            "exploration_trigger_reason": "pending_promotion",
+            "exploration_candidate_count": 0,
+            "exploration_selected_target_count": 0,
+            "exploration_observation_count": 0,
+            "rollback_success": None,
+            "rollback_levels": [],
+            "planned_action_suppressed": False,
+            "shortcut_fired": False,
+            "promotion_fired": True,
+            "skipped_vlm_call": True,
+            "skipped_vlm_calls": 1,
+            "promotion_event": event,
+            "state_acquisition_metrics": dict(self._state_acquisition_metrics),
+        }
+        self._actions.append(step_record)
+        self._summaries.append(summary)
+        self._responses.append("")
+        task_dir = self._task_output_dir(goal)
+        if task_dir:
+            os.makedirs(task_dir, exist_ok=True)
+            screenshot.save(os.path.join(task_dir, f"screenshot_{len(self._actions) - 1}.png"))
+            self._write_action_log(goal)
+        print(f"[PROMOTION {_now_hms()}] step: {step_idx + 1} fired action={action.action_type}")
+        return base_agent.AgentInteractionResult(
+            done=False,
+            data={
+                "response": "",
+                "parsed_action": parsed_action,
+                "tool_call": tool_call,
+                "action": repr(action),
+                "action_dict": action.__dict__,
+                "summary": summary,
+                "hints": [],
+                "latency_sec": latency_sec,
+                "prompt_mode": "promotion_active",
+                "promotion_fired": True,
+                "skipped_vlm_calls": 1,
+            },
+        )
+
     def _execute_active_shortcut_step(
         self,
         *,
@@ -8317,6 +10545,18 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             self._append_match_trace(goal, match_trace)
             return "", [], match_trace
 
+        goal_normalized = _clean_text(goal)
+        current_activity_norm = _clean_text(current_activity)
+        current_package = current_activity_norm.split("/", 1)[0] if "/" in current_activity_norm else current_activity_norm
+
+        def _same_task_or_app(trace_goal: str, trace_activity: str) -> bool:
+            trace_goal_clean = _clean_text(trace_goal)
+            if trace_goal_clean and trace_goal_clean == goal_normalized:
+                return True
+            trace_activity_norm = _clean_text(trace_activity)
+            trace_package = trace_activity_norm.split("/", 1)[0] if "/" in trace_activity_norm else trace_activity_norm
+            return bool(current_package and trace_package and current_package == trace_package)
+
         matches: list[dict[str, Any]] = []
         all_attempts: list[dict[str, Any]] = []
         for trace in pending:
@@ -8335,24 +10575,125 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                 )
                 if not depth1:
                     continue
-                if evidence_step is None and self.light_explore_fixed_framework:
+                source_type_for_depth1 = _clean_text(obs.get("evidence_type") or obs.get("boundary_type"))
+                if (
+                    evidence_step is None
+                    and (
+                        self.light_explore_fixed_framework
+                        or bool(obs.get("no_action_inspect"))
+                        or source_type_for_depth1
+                        in {"ANSWER_HINT", "ACTION_HINT", "SCHEMA_HINT", "AVOID_HINT", "RISK_HINT"}
+                    )
+                ):
                     evidence_step = depth1
                 if not evidence_step:
                     continue
                 if not bool(depth1.get("changed")):
                     labels = [_clean_text(x) for x in list(obs.get("labels") or []) if _clean_text(x)]
-                    all_attempts.append(
-                        {
-                            "source_step": trace.get("step"),
-                            "branch_id": obs.get("branch_id"),
-                            "path": " -> ".join(labels),
-                            "matched_prefix": labels[0] if labels else "depth1",
-                            "matched": False,
-                            "matched_by": "depth1_no_state_change",
-                            "depth_reached": int(obs.get("depth_reached") or 0),
-                            "score": float(obs.get("score") or 0.0),
-                        }
+                    alignment = self._anchor_overlap_alignment(state, current_activity, depth1)
+                    observed_elements = list(evidence_step.get("observed_elements") or obs.get("observed_elements") or [])
+                    observed_low = " ".join(_clean_text(x).lower() for x in observed_elements)
+                    stop_reason = _clean_text(obs.get("stop_reason") or obs.get("boundary_type") or "")
+                    stop_reason_low = stop_reason.lower()
+                    source_type = _clean_text(obs.get("evidence_type") or obs.get("boundary_type"))
+                    operator = _clean_text(obs.get("operator"))
+                    trace_goal = _clean_text(trace.get("goal"))
+                    trace_activity = _clean_text(obs.get("after_activity") or depth1.get("after_activity"))
+                    hard_negative = bool(
+                        obs.get("hard_negative")
+                        or (
+                            isinstance(obs.get("slot_evidence"), dict)
+                            and bool((obs.get("slot_evidence") or {}).get("hard_negative"))
+                        )
+                        or _clean_text(obs.get("boundary_type")).upper() == "NEGATIVE_BOUNDARY"
+                        or "hard_negative" in stop_reason_low
+                        or observed_low.startswith("avoid ")
+                        or " avoid " in f" {observed_low} "
                     )
+                    risk_global = bool(
+                        source_type == "RISK_HINT"
+                        or operator == "RiskBoundary"
+                        or any(token in stop_reason_low for token in ("risk", "unsafe", "destructive", "delete", "commit"))
+                    )
+                    schema_global = bool(
+                        source_type == "SCHEMA_HINT"
+                        and re.search(
+                            r"\b(name|title|date|time|phone|email|amount|description|note|folder|file|field|search|filter|query)\b",
+                            observed_low,
+                        )
+                    )
+                    same_task_app = _same_task_or_app(trace_goal, trace_activity)
+                    global_promptable = bool(
+                        same_task_app
+                        and (
+                            (source_type == "AVOID_HINT" and hard_negative)
+                            or risk_global
+                            or schema_global
+                        )
+                    )
+                    next_candidate = evidence_step.get("candidate") if isinstance(evidence_step.get("candidate"), dict) else {}
+                    matched_by = "depth1_no_state_change"
+                    state_match_score = float(alignment.get("state_match_score") or 0.0)
+                    if global_promptable:
+                        if source_type == "AVOID_HINT" or hard_negative:
+                            matched_by = "global_avoid_same_task_app"
+                        elif risk_global:
+                            matched_by = "global_risk_same_task_app"
+                        else:
+                            matched_by = "global_schema_same_task_app"
+                        state_match_score = max(0.55, state_match_score)
+                    record = {
+                        "source_step": trace.get("step"),
+                        "source_goal": trace_goal,
+                        "branch_id": obs.get("branch_id"),
+                        "path": " -> ".join(labels),
+                        "matched_prefix": labels[0] if labels else "depth1",
+                        "next_label": _clean_text(next_candidate.get("label") or (labels[0] if labels else "")),
+                        "matched": bool(global_promptable),
+                        "matched_by": matched_by,
+                        "state_match_score": float(state_match_score),
+                        "anchor_overlap": float(alignment.get("anchor_overlap") or 0.0),
+                        "depth_reached": int(obs.get("depth_reached") or 0),
+                        "evidence_depth": int(evidence_step.get("depth") or 0),
+                        "evidence_changed": bool(evidence_step.get("changed")),
+                        "score": float(obs.get("score") or 0.0),
+                        "next_candidate": next_candidate,
+                        "observed_elements": observed_elements,
+                        "depth1_screenshot": depth1.get("screenshot"),
+                        "depth2_screenshot": evidence_step.get("screenshot"),
+                        "evidence_screenshot": evidence_step.get("screenshot"),
+                        "after_activity": obs.get("after_activity") or evidence_step.get("after_activity"),
+                        "rollback_level": (obs.get("rollback") or {}).get("level"),
+                        "rollback_mode": (obs.get("rollback") or {}).get("mode"),
+                        "rollback_verified": bool((obs.get("rollback") or {}).get("success")),
+                        "operator": obs.get("operator"),
+                        "operator_reason": obs.get("operator_reason"),
+                        "boundary_type": obs.get("boundary_type"),
+                        "stop_reason": obs.get("stop_reason"),
+                        "evidence_type": obs.get("evidence_type"),
+                        "evidence_gain": obs.get("evidence_gain"),
+                        "confidence": obs.get("confidence"),
+                        "slot_evidence": obs.get("slot_evidence") if isinstance(obs.get("slot_evidence"), dict) else {},
+                        "hard_negative": hard_negative,
+                        "global_promptable_no_state_change": bool(global_promptable),
+                        "same_task_or_app": bool(same_task_app),
+                    }
+                    self._append_diagnostic_jsonl(
+                        goal,
+                        "state_alignment.jsonl",
+                        {
+                            "step": int(step_idx + 1),
+                            "source_exploration_step": trace.get("step"),
+                            "branch_id": obs.get("branch_id"),
+                            **alignment,
+                            "aligned": bool(global_promptable),
+                            "matched_by": matched_by,
+                            "global_promptable_no_state_change": bool(global_promptable),
+                        },
+                    )
+                    all_attempts.append(record)
+                    if global_promptable:
+                        matches.append(record)
                     continue
                 same, matched_by = self._state_matches_explored_step(state, current_activity, depth1)
                 alignment = self._anchor_overlap_alignment(state, current_activity, depth1)
@@ -8367,13 +10708,80 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                             else f"anchor_overlap_low:{float(alignment.get('anchor_overlap') or 0.0):.2f}"
                         )
                     )
+                source_type = _clean_text(obs.get("evidence_type") or obs.get("boundary_type") or "")
+                same_task_app = bool(_same_task_or_app(trace.get("goal"), obs.get("after_activity") or depth1.get("after_activity")))
+                stop_reason_low = _clean_text(obs.get("stop_reason") or obs.get("boundary_type") or "").lower()
+                operator = _clean_text(obs.get("operator"))
+                hard_negative = bool(
+                    obs.get("hard_negative")
+                    or (
+                        isinstance(obs.get("slot_evidence"), dict)
+                        and bool((obs.get("slot_evidence") or {}).get("hard_negative"))
+                    )
+                    or _clean_text(obs.get("boundary_type")).upper() == "NEGATIVE_BOUNDARY"
+                )
+                observed_for_match = " ".join(_clean_text(x).lower() for x in list(evidence_step.get("observed_elements") or obs.get("observed_elements") or []))
+                schema_promptable = bool(
+                    source_type == "SCHEMA_HINT"
+                    and same_task_app
+                    and re.search(
+                        r"\b(name|title|date|time|phone|email|amount|description|note|folder|file|field|search|filter|query)\b",
+                        observed_for_match,
+                    )
+                )
+                action_promptable = bool(
+                    source_type == "ACTION_HINT"
+                    and same_task_app
+                    and same
+                    and not self._is_transaction_unsafe_candidate(obs.get("depth1_candidate") if isinstance(obs.get("depth1_candidate"), dict) else {})
+                )
+                global_promptable_no_state_match = bool(
+                    same_task_app
+                    and (
+                        action_promptable
+                        or schema_promptable
+                        or (
+                            source_type == "AVOID_HINT"
+                            and (
+                                hard_negative
+                                or any(
+                                    token in stop_reason_low
+                                    for token in ("hard_negative", "wrong_target", "wrong_app", "not_found", "dead_end", "negative_boundary")
+                                )
+                            )
+                        )
+                        or (
+                            source_type == "RISK_HINT"
+                            and (
+                                operator == "RiskBoundary"
+                                or any(token in stop_reason_low for token in ("risk", "unsafe", "destructive", "delete", "commit"))
+                            )
+                        )
+                    )
+                )
+                if not same and global_promptable_no_state_match:
+                    same = True
+                    alignment = dict(alignment)
+                    alignment["state_match_score"] = max(float(alignment.get("state_match_score") or 0.0), 0.55)
+                    alignment["state_match_anchor_reason"] = "global_prompt_no_state_match"
+                    matched_by = (
+                        "global_avoid_same_task_app"
+                        if source_type == "AVOID_HINT"
+                        else "global_risk_same_task_app"
+                    )
                 labels = [_clean_text(x) for x in list(obs.get("labels") or []) if _clean_text(x)]
                 evidence_depth = int(evidence_step.get("depth") or 0)
                 next_candidate = evidence_step.get("candidate") if isinstance(evidence_step.get("candidate"), dict) else {}
                 if self.light_explore_fixed_framework and evidence_depth <= 1 and obs.get("evidence_type") != "RISK_HINT":
                     next_candidate = {}
+                if global_promptable_no_state_match and source_type in {"ACTION_HINT", "SCHEMA_HINT"}:
+                    same = True
+                    matched_by = "state_aligned_action" if source_type == "ACTION_HINT" else "same_app_schema"
+                    alignment = dict(alignment)
+                    alignment["state_match_score"] = max(0.55, float(alignment.get("state_match_score") or 0.0))
                 record = {
                     "source_step": trace.get("step"),
+                    "source_goal": _clean_text(trace.get("goal")),
                     "branch_id": obs.get("branch_id"),
                     "path": " -> ".join(labels),
                     "matched_prefix": labels[0] if labels else "depth1",
@@ -8402,9 +10810,20 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                     "operator": obs.get("operator"),
                     "operator_reason": obs.get("operator_reason"),
                     "boundary_type": obs.get("boundary_type"),
+                    "stop_reason": obs.get("stop_reason"),
                     "evidence_type": obs.get("evidence_type"),
                     "evidence_gain": obs.get("evidence_gain"),
                     "confidence": obs.get("confidence"),
+                    "slot_evidence": obs.get("slot_evidence") if isinstance(obs.get("slot_evidence"), dict) else {},
+                    "hard_negative": bool(
+                        obs.get("hard_negative")
+                        or (
+                            isinstance(obs.get("slot_evidence"), dict)
+                            and bool((obs.get("slot_evidence") or {}).get("hard_negative"))
+                        )
+                        or _clean_text(obs.get("boundary_type")).upper() == "NEGATIVE_BOUNDARY"
+                    ),
+                    "same_task_or_app": bool(same_task_app),
                 }
                 self._append_diagnostic_jsonl(
                     goal,
@@ -8440,6 +10859,9 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                 match_trace["status"] = "matched" if context else "matched_no_actionable_hint"
             match_trace["prompt_context"] = context
             match_trace["selected_prompt_results"] = selected
+            if context and selected:
+                prior_for_block = self._reasoning_prior_for_next_step if isinstance(self._reasoning_prior_for_next_step, dict) else {}
+                self._append_filled_exploration_block(goal, context, step_idx + 1, prior_for_block, selected)
             if self.light_explore_hint_policy == "strict" and not selected:
                 match_trace["not_injected_reasons"] = list(getattr(self, "_last_strict_not_injected_reasons", []))
         else:
@@ -8447,6 +10869,666 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             match_trace["status"] = "no_match"
         self._append_match_trace(goal, match_trace)
         return context, selected, match_trace
+
+    @staticmethod
+    def _voc_norm(value: Any, default: float = 0.0) -> float:
+        try:
+            return max(0.0, min(1.0, float(value)))
+        except (TypeError, ValueError):
+            return float(default)
+
+    def _voc_task_phase(
+        self,
+        goal: str,
+        step_idx: int,
+        root_labels: list[str],
+        page_stalled: bool,
+        prior: dict[str, Any] | None = None,
+    ) -> tuple[str, str]:
+        phase, reason, _ = self._selective_task_phase(
+            goal=goal,
+            step_idx=step_idx,
+            labels=root_labels,
+            page_stalled=page_stalled,
+            prior=prior,
+        )
+        return phase, reason
+
+    def _voc_information_deficit(
+        self,
+        goal: str,
+        root_labels: list[str],
+        phase: str,
+    ) -> tuple[float, dict[str, Any]]:
+        labels_low = " ".join(_clean_text(x).lower() for x in root_labels if _clean_text(x))
+        entities = [e for e in self._task_entities(goal) if len(e) >= 3][:8]
+        missing_entities = [e for e in entities if e.lower() not in labels_low]
+        entity_deficit = len(missing_entities) / float(max(1, len(entities)))
+        facts = self._extract_answer_facts_from_labels(root_labels, goal, limit=4) if self.light_explore_answer_extractors else []
+        useful_facts = [x for x in facts if not _clean_text(x).lower().startswith("avoid ")]
+        answer_deficit = 0.0 if useful_facts else 1.0
+        phase_bias = {
+            "TARGET_ACQUISITION": 0.90,
+            "EVIDENCE_GATHERING": 0.75,
+            "STUCK_RECOVERY": 0.85,
+            "ACTION_EXECUTION": 0.35,
+            "VERIFICATION": 0.25,
+            "BOOTSTRAP": 0.50,
+        }.get(phase, 0.60)
+        deficit = max(0.0, min(1.0, 0.40 * entity_deficit + 0.35 * answer_deficit + 0.25 * phase_bias))
+        return deficit, {
+            "entity_deficit": float(entity_deficit),
+            "answer_deficit": float(answer_deficit),
+            "phase_bias": float(phase_bias),
+            "missing_entities": missing_entities,
+            "visible_answer_facts": useful_facts[:4],
+        }
+
+    def _voc_candidate_ambiguity(
+        self,
+        candidate: dict[str, Any],
+        candidates: list[dict[str, Any]],
+        goal: str,
+    ) -> tuple[float, list[str]]:
+        label = _clean_text(candidate.get("label") or candidate.get("merged"))
+        label_low = label.lower()
+        reasons: list[str] = []
+        score = 0.0
+        if not label_low or label_low in {"android.view.view", "android.widget.imageview", "view", "imageview", "simple"}:
+            score += 0.35
+            reasons.append("generic_or_empty_label")
+        same_label_count = sum(
+            1
+            for other in candidates
+            if _clean_text(other.get("label") or other.get("merged")).lower() == label_low and label_low
+        )
+        if same_label_count >= 2:
+            score += min(0.30, 0.08 * same_label_count)
+            reasons.append(f"duplicate_label_count:{same_label_count}")
+        lexical = self._lexical_overlap_score(
+            merged=label,
+            goal_tokens=self._goal_tokens(goal),
+            app_keywords=self._goal_app_keywords(goal),
+        )
+        if lexical < 0.05:
+            score += 0.20
+            reasons.append("low_task_lexical_grounding")
+        a11y = candidate.get("a11y") if isinstance(candidate.get("a11y"), dict) else {}
+        if not any(_clean_text(a11y.get(k)) for k in ("text", "content_description", "hint_text", "resource_id")):
+            score += 0.15
+            reasons.append("weak_a11y_grounding")
+        return max(0.0, min(1.0, score)), reasons
+
+    def _voc_candidate_grounding(
+        self,
+        candidate: dict[str, Any],
+        goal: str,
+    ) -> dict[str, Any]:
+        label = _clean_text(candidate.get("label") or candidate.get("merged"))
+        a11y = candidate.get("a11y") if isinstance(candidate.get("a11y"), dict) else {}
+        lexical = self._lexical_overlap_score(
+            merged=label,
+            goal_tokens=self._goal_tokens(goal),
+            app_keywords=self._goal_app_keywords(goal),
+        )
+        entity_hits = [
+            e
+            for e in self._task_entities(goal)[:8]
+            if e and e.lower() in label.lower()
+        ]
+        return {
+            "label": label,
+            "operator": _clean_text(candidate.get("operator")),
+            "action_kind": _clean_text(candidate.get("action_kind") or "click"),
+            "layout_region": _clean_text(candidate.get("layout_region")),
+            "semantic_role": _clean_text(candidate.get("semantic_role")),
+            "lexical_overlap": float(lexical),
+            "entity_hits": entity_hits,
+            "resource_id": _clean_text(a11y.get("resource_id")),
+            "class_name": _clean_text(a11y.get("class_name")),
+            "center": candidate.get("center"),
+        }
+
+    def _voc_estimated_rollback_cost(self, candidate: dict[str, Any], operator: str) -> tuple[float, list[str]]:
+        reasons: list[str] = []
+        cost = 0.15
+        action_kind = _clean_text(candidate.get("action_kind") or "click").lower()
+        layout = _clean_text(candidate.get("layout_region")).lower()
+        role = _clean_text(candidate.get("semantic_role")).lower()
+        label = _clean_text(candidate.get("label") or candidate.get("merged")).lower()
+        if operator in {"SearchPeek", "FilterPeek", "ListInspect"}:
+            cost -= 0.05
+            reasons.append("low_cost_information_operator")
+        if action_kind in {"type", json_action.INPUT_TEXT}:
+            cost += 0.20
+            reasons.append("text_input_requires_precise_restore")
+        if layout in {"top_bar", "nav_bar", "bottom_nav"}:
+            cost += 0.05
+            reasons.append(f"navigation_region:{layout}")
+        if role in {"button", "menu_item"} and re.search(r"\b(add|new|create|save|delete|remove|ok|done)\b", label):
+            cost += 0.30
+            reasons.append("commit_like_label")
+        if operator == "RiskBoundary":
+            cost = 1.0
+            reasons.append("risk_boundary_not_executable")
+        return max(0.0, min(1.0, cost)), reasons
+
+    def _selective_depth2_consumable_decision(
+        self,
+        *,
+        goal: str,
+        task_mode: str,
+        task_phase: str,
+        state_after_depth1: Any,
+        observed_elements: list[str],
+        branch_operator: str,
+        candidate: dict[str, Any],
+        rollback_cost: float = 0.0,
+    ) -> dict[str, Any]:
+        label_blob = " ".join(_clean_text(x).lower() for x in observed_elements if _clean_text(x))
+        operator = _clean_text(branch_operator or candidate.get("operator"))
+        if self._is_transaction_unsafe_candidate(candidate) or operator == "RiskBoundary":
+            return {"depth2_allowed": False, "depth1_result_type": "unsafe", "depth2_reason": "", "depth2_block_reason": "root_action_unsafe"}
+        if task_mode in {"FORM_CREATE_EDIT", "DELETE_COMMIT", "SIMPLE_VERIFY", "MEDIA_CAPTURE"} and task_phase != "STUCK_RECOVERY":
+            schema = bool(re.search(r"\b(search|filter|field|title|name|date|time|description|phone|email)\b", label_blob) or operator == "FormSchema")
+            return {"depth2_allowed": False, "depth1_result_type": "form_schema" if schema else "passive_only", "depth2_reason": "schema_record_only", "depth2_block_reason": "deterministic_passive_only"}
+        if rollback_cost and rollback_cost > 0.75:
+            return {"depth2_allowed": False, "depth1_result_type": "high_rollback_risk", "depth2_reason": "", "depth2_block_reason": "rollback_risk_too_high"}
+        if self._state_has_search_ui(state_after_depth1):
+            return {"depth2_allowed": True, "depth1_result_type": "search_field", "depth2_action_type": "type_search_query", "depth2_reason": "search_field_appeared", "depth2_block_reason": ""}
+        if operator == "FilterPeek" or re.search(r"\b(filter|category|date|october|snow boarding|kayaking|climbing|activity type)\b", label_blob):
+            return {"depth2_allowed": True, "depth1_result_type": "filter_page", "depth2_action_type": "select_exact_filter", "depth2_reason": "filter_page_appeared", "depth2_block_reason": ""}
+        target_terms = [e.lower() for e in self._task_entities(goal) if len(e) >= 3][:10]
+        if target_terms and any(term in label_blob for term in target_terms):
+            return {"depth2_allowed": True, "depth1_result_type": "result_list", "depth2_action_type": "click_exact_target", "depth2_reason": "target_result_visible", "depth2_block_reason": ""}
+        if re.search(r"\b(duration|distance|total|longest|count|statistics|stats|details|summary)\b", label_blob):
+            return {"depth2_allowed": False, "depth1_result_type": "detail_or_stats_page", "depth2_action_type": "extract_answer", "depth2_reason": "detail_stats_extract_answer", "depth2_block_reason": "extract_answer_no_click"}
+        if re.search(r"\b(title|name|date|time|description|phone|email|field|form)\b", label_blob):
+            return {"depth2_allowed": False, "depth1_result_type": "form_schema", "depth2_action_type": "record_schema", "depth2_reason": "form_schema_record_only", "depth2_block_reason": "schema_no_content_input"}
+        return {"depth2_allowed": False, "depth1_result_type": "no_consumable_state", "depth2_reason": "", "depth2_block_reason": "no_target_query_schema_detail"}
+
+    def _session_memory_key(self, goal: str, app_name: str) -> str:
+        app = _clean_text(app_name or ",".join(self._goal_app_keywords(goal)[:2]) or "unknown_app").lower()
+        return "|".join([app, self._task_mode(goal), _clean_text(goal)[:120].lower()])
+
+    def _branch_memory_key(self, candidate: dict[str, Any], goal: str) -> str:
+        operator = _clean_text(candidate.get("operator") or self._candidate_operator(candidate, goal)[0] or "Other")
+        label = _clean_text(candidate.get("label") or candidate.get("merged") or "")
+        a11y = candidate.get("a11y") if isinstance(candidate.get("a11y"), dict) else {}
+        rid = _clean_text(a11y.get("resource_id") or candidate.get("resource_id") or "")
+        role = _clean_text(candidate.get("semantic_role") or "")
+        return "|".join([operator.lower(), role.lower(), rid.lower(), label.lower()[:80]])
+
+    def _session_memory_for(self, goal: str, app_name: str) -> dict[str, Any]:
+        key = self._session_memory_key(goal, app_name)
+        memory = self._session_exploration_memory.setdefault(
+            key,
+            {
+                "session_key": key,
+                "branch_stats": {},
+                "component_history": [],
+                "reward_history": [],
+                "latency_ewma_ms": float(getattr(self, "_reasoning_prior_ewma_ms", 10000.0) or 10000.0),
+                "rollback_success": 0.0,
+                "rollback_total": 0.0,
+            },
+        )
+        return memory
+
+    @staticmethod
+    def _clip01(value: Any, default: float = 0.0) -> float:
+        try:
+            return max(0.0, min(1.0, float(value)))
+        except (TypeError, ValueError):
+            return float(default)
+
+    def _session_component_weights(self, memory: dict[str, Any], feature_names: list[str]) -> dict[str, float]:
+        history = [
+            row for row in list(memory.get("component_history") or [])
+            if isinstance(row, dict) and isinstance(row.get("features"), dict)
+        ]
+        if len(history) < 3:
+            uniform = 1.0 / float(max(1, len(feature_names)))
+            return {name: uniform for name in feature_names}
+        rewards = [float(row.get("reward") or 0.0) for row in history[-24:]]
+        mean_reward = sum(rewards) / float(max(1, len(rewards)))
+        weights: dict[str, float] = {}
+        for name in feature_names:
+            values = [self._clip01((row.get("features") or {}).get(name)) for row in history[-24:]]
+            mean_value = sum(values) / float(max(1, len(values)))
+            covariance = sum(
+                (value - mean_value) * (reward - mean_reward)
+                for value, reward in zip(values, rewards)
+            ) / float(max(1, len(values)))
+            weights[name] = max(0.0, covariance)
+        total = sum(weights.values())
+        if total <= 1e-9:
+            uniform = 1.0 / float(max(1, len(feature_names)))
+            return {name: uniform for name in feature_names}
+        return {name: float(value) / total for name, value in weights.items()}
+
+    def _session_adaptive_candidate_value(
+        self,
+        *,
+        goal: str,
+        step_idx: int,
+        candidate: dict[str, Any],
+        candidates: list[dict[str, Any]],
+        memory: dict[str, Any],
+        phase: str,
+        info_deficit: float,
+        grounding: dict[str, Any],
+        ambiguity: float,
+        rollback_cost: float,
+        score_components: dict[str, Any],
+        prior: dict[str, Any] | None,
+    ) -> dict[str, Any]:
+        branch_key = self._branch_memory_key(candidate, goal)
+        branch_stats = (memory.get("branch_stats") or {}).get(branch_key, {})
+        total_rollbacks = float(memory.get("rollback_total") or 0.0)
+        rollback_success_rate = (
+            float(memory.get("rollback_success") or 0.0) / total_rollbacks
+            if total_rollbacks > 0
+            else 1.0
+        )
+        prior_confidence = self._clip01((prior or {}).get("confidence"), 0.0)
+        feature_names = [
+            "prior_alignment",
+            "slot_gain",
+            "entity_match",
+            "state_grounding",
+            "evidence_gain",
+            "ambiguity_resolution",
+            "rollback_safety",
+            "latency_fit",
+            "novelty",
+            "session_success",
+        ]
+        latency_budget_ms = max(1000.0, float(memory.get("latency_ewma_ms") or self._reasoning_prior_ewma_ms or 10000.0))
+        estimated_latency_ms = latency_budget_ms * (0.40 + rollback_cost)
+        session_n = float(branch_stats.get("n") or 0.0)
+        session_q = float(branch_stats.get("q") or 0.0)
+        features = {
+            "prior_alignment": self._clip01(candidate.get("reasoning_prior_score"), 0.0) * max(0.25, prior_confidence),
+            "slot_gain": self._clip01(score_components.get("MissingSlotGain"), 0.0),
+            "entity_match": self._clip01(score_components.get("TaskEntityMatch"), 0.0),
+            "state_grounding": max(
+                self._clip01(grounding.get("lexical_overlap"), 0.0),
+                self._clip01(candidate.get("relevance"), 0.0),
+            ),
+            "evidence_gain": self._clip01(float(candidate.get("estimated_evidence_gain") or 0.0) / 10.0, 0.0),
+            "ambiguity_resolution": self._clip01(float(info_deficit) * float(ambiguity), 0.0),
+            "rollback_safety": self._clip01((1.0 - rollback_cost) * rollback_success_rate, 0.0),
+            "latency_fit": self._clip01(1.0 - (estimated_latency_ms / max(1.0, latency_budget_ms * 2.0)), 0.0),
+            "novelty": self._clip01(1.0 / float(session_n + 1.0), 0.0),
+            "session_success": self._clip01((session_q + 1.0) / 2.0, 0.5),
+        }
+        weights = self._session_component_weights(memory, feature_names)
+        utility = sum(float(weights.get(name) or 0.0) * float(features.get(name) or 0.0) for name in feature_names)
+        if phase in {"action_execution", "verification"} and float(info_deficit) < 0.35:
+            utility = min(utility, 0.0)
+        if rollback_cost >= 0.75:
+            utility = min(utility, 0.0)
+        depth2_features = dict(features)
+        depth2_features["novelty"] = self._clip01(depth2_features["novelty"] * 0.75, 0.0)
+        depth2_features["latency_fit"] = self._clip01(depth2_features["latency_fit"] - 0.15, 0.0)
+        depth2_utility = sum(float(weights.get(name) or 0.0) * float(depth2_features.get(name) or 0.0) for name in feature_names)
+        depth2_utility = float(depth2_utility - max(0.0, rollback_cost - (1.0 - rollback_success_rate)))
+        entropy = self._candidate_score_entropy(candidates)
+        row = {
+            "branch_key": branch_key,
+            "feature_names": feature_names,
+            "features": features,
+            "adaptive_weights": weights,
+            "branch_utility": float(utility),
+            "depth2_utility": float(depth2_utility),
+            "prior_confidence": float(prior_confidence),
+            "candidate_entropy": float(entropy),
+            "session_branch_n": float(session_n),
+            "session_branch_q": float(session_q),
+            "session_rollback_success_rate": float(rollback_success_rate),
+            "estimated_latency_ms": float(estimated_latency_ms),
+            "latency_budget_ms": float(latency_budget_ms),
+            "selection_policy": "session_local_adaptive_utility",
+            "step": int(step_idx + 1),
+        }
+        candidate["session_branch_key"] = branch_key
+        candidate["session_value_features"] = features
+        candidate["session_adaptive_weights"] = weights
+        candidate["session_branch_utility"] = float(utility)
+        candidate["session_depth2_utility"] = float(depth2_utility)
+        return row
+
+    def _candidate_score_entropy(self, candidates: list[dict[str, Any]]) -> float:
+        scores = [float(c.get("reasoning_prior_score") or c.get("search_strategy_score") or c.get("score") or 0.0) for c in candidates[:12]]
+        if not scores:
+            return 0.0
+        shifted = [score - max(scores) for score in scores]
+        exps = [math.exp(max(-20.0, value)) for value in shifted]
+        denom = sum(exps) or 1.0
+        probs = [value / denom for value in exps]
+        return float(-sum(p * math.log(max(1e-9, p)) for p in probs))
+
+    def _session_adaptive_budget(
+        self,
+        *,
+        memory: dict[str, Any],
+        configured_budget: int,
+        min_attempts: int,
+        positive_count: int,
+        info_deficit: float,
+        candidate_entropy: float,
+        prior_confidence: float,
+        task_mode: str,
+        protected_passive: bool,
+    ) -> int:
+        if protected_passive or task_mode in {"FORM_CREATE_EDIT", "DELETE_COMMIT", "SIMPLE_VERIFY", "MEDIA_CAPTURE"}:
+            return 0
+        total_rollbacks = float(memory.get("rollback_total") or 0.0)
+        rollback_success_rate = (
+            float(memory.get("rollback_success") or 0.0) / total_rollbacks
+            if total_rollbacks > 0
+            else 1.0
+        )
+        value_pressure = max(0.0, min(1.0, 0.5 * float(info_deficit) + 0.5 * min(1.0, float(candidate_entropy))))
+        confidence_focus = max(0.0, min(1.0, float(prior_confidence)))
+        if confidence_focus >= 0.70 and candidate_entropy <= 0.70:
+            desired = 1 + int(value_pressure > 0.45)
+        else:
+            desired = 1 + int(value_pressure > 0.25) + int(value_pressure > 0.55) + int(candidate_entropy > 1.20)
+        if rollback_success_rate < 0.80:
+            desired = max(1, desired - 1)
+        desired = max(desired, min_attempts if value_pressure > 0.55 else min(1, min_attempts))
+        return int(max(0, min(max(1, configured_budget), desired, max(1, positive_count))))
+
+    def _update_session_exploration_memory(self, goal: str, root_activity: str, observation: dict[str, Any]) -> None:
+        memory = self._session_memory_for(goal, root_activity)
+        steps = [s for s in list(observation.get("steps") or []) if isinstance(s, dict)]
+        rb = observation.get("rollback") if isinstance(observation.get("rollback"), dict) else {}
+        rollback_success = bool(rb.get("success", True))
+        memory["rollback_total"] = float(memory.get("rollback_total") or 0.0) + 1.0
+        memory["rollback_success"] = float(memory.get("rollback_success") or 0.0) + (1.0 if rollback_success else 0.0)
+        latency_ms = float(observation.get("branch_state_fetch_ms") or 0.0) + float(observation.get("branch_a11y_latency_ms") or 0.0)
+        previous_latency = float(memory.get("latency_ewma_ms") or self._reasoning_prior_ewma_ms or 10000.0)
+        if latency_ms > 0.0:
+            memory["latency_ewma_ms"] = 0.7 * previous_latency + 0.3 * latency_ms
+        evidence_type = _clean_text(observation.get("evidence_type") or "")
+        confidence = self._clip01(observation.get("confidence"), 0.0)
+        evidence_gain = self._clip01(float(observation.get("evidence_gain") or 0.0) / 5.0, 0.0)
+        reward = 0.0
+        if rollback_success:
+            reward += confidence
+            reward += evidence_gain
+            if evidence_type in {"ANSWER_HINT", "ACTION_HINT"}:
+                reward += 1.0
+            elif evidence_type in {"SCHEMA_HINT", "AVOID_HINT", "RISK_HINT"}:
+                reward += 0.5
+        else:
+            reward -= 1.0
+        if not observation.get("observed_elements"):
+            reward -= 0.25
+        reward = max(-1.0, min(2.0, reward))
+        branch_stats = memory.setdefault("branch_stats", {})
+        for step in steps:
+            cand = step.get("candidate") if isinstance(step.get("candidate"), dict) else {}
+            branch_key = _clean_text(cand.get("session_branch_key") or self._branch_memory_key(cand, goal))
+            if not branch_key:
+                continue
+            stats = branch_stats.setdefault(branch_key, {"n": 0.0, "q": 0.0, "rollback_fail": 0.0})
+            n = float(stats.get("n") or 0.0)
+            q = float(stats.get("q") or 0.0)
+            stats["n"] = n + 1.0
+            stats["q"] = ((q * n) + reward) / (n + 1.0)
+            stats["rollback_fail"] = float(stats.get("rollback_fail") or 0.0) + (0.0 if rollback_success else 1.0)
+            features = cand.get("session_value_features") if isinstance(cand.get("session_value_features"), dict) else {}
+            if features:
+                memory.setdefault("component_history", []).append(
+                    {
+                        "branch_key": branch_key,
+                        "features": dict(features),
+                        "reward": float(reward),
+                        "evidence_type": evidence_type,
+                        "rollback_success": bool(rollback_success),
+                    }
+                )
+        memory.setdefault("reward_history", []).append(float(reward))
+        memory["last_update"] = {
+            "reward": float(reward),
+            "evidence_type": evidence_type,
+            "rollback_success": bool(rollback_success),
+            "branch_count": int(len(steps)),
+        }
+        self._append_diagnostic_jsonl(
+            goal,
+            "session_adaptive_memory_updates.jsonl",
+            {
+                "task_id": _clean_text(goal)[:200],
+                "session_key": memory.get("session_key"),
+                "root_activity": _clean_text(root_activity),
+                "branch_id": observation.get("branch_id"),
+                "reward": float(reward),
+                "evidence_type": evidence_type,
+                "confidence": float(confidence),
+                "rollback_success": bool(rollback_success),
+                "latency_ms": float(latency_ms),
+                "memory": {
+                    "rollback_total": memory.get("rollback_total"),
+                    "rollback_success": memory.get("rollback_success"),
+                    "latency_ewma_ms": memory.get("latency_ewma_ms"),
+                    "branch_stats_count": len(memory.get("branch_stats") or {}),
+                    "component_history_count": len(memory.get("component_history") or []),
+                },
+            },
+        )
+
+    def _select_voc_branch_candidates(
+        self,
+        *,
+        goal: str,
+        step_idx: int,
+        candidates: list[dict[str, Any]],
+        root_state: Any,
+        root_activity: str,
+        page_stalled: bool,
+        prior: dict[str, Any] | None,
+        budget: int,
+        trace: dict[str, Any],
+    ) -> list[dict[str, Any]]:
+        root_labels = self._state_semantic_summary(root_state, limit=80)
+        phase, phase_reason = self._voc_task_phase(goal, step_idx, root_labels, page_stalled, prior)
+        info_deficit, deficit_components = self._voc_information_deficit(goal, root_labels, phase)
+        task_mode = self._task_mode(goal)
+        memory = self._session_memory_for(goal, root_activity)
+        prior_confidence = self._clip01((prior or {}).get("confidence"), 0.0)
+        candidate_entropy = self._candidate_score_entropy(candidates)
+        phase2, phase_reason2, flags = self._selective_task_phase(goal, step_idx, root_labels, page_stalled, prior)
+        phase, phase_reason = phase2, phase_reason2
+        gate = self._selective_exploration_gate(goal, task_mode, phase, page_stalled)
+        self._append_selective_phase_gate_records(goal, step_idx, task_mode, phase, phase_reason, flags, gate)
+        protected_passive = self._protected_task_passive_only(goal, prior or {}) or not bool(gate.get("active_allowed"))
+        trace["selective_gate"] = dict(gate)
+        trace["selective_task_mode"] = task_mode
+        trace["selective_task_phase"] = phase
+        value_rows: list[dict[str, Any]] = []
+        frontier: list[dict[str, Any]] = []
+        safe_rows: list[tuple[float, dict[str, Any], dict[str, Any]]] = []
+        for idx, candidate in enumerate(candidates):
+            operator = _clean_text(candidate.get("operator") or self._candidate_operator(candidate, goal)[0] or "Other")
+            grounding = self._voc_candidate_grounding(candidate, goal)
+            consumable_operator = operator in {"SearchPeek", "FilterPeek", "DetailPeek", "StatsPeek", "ListInspect", "NavigationPeek", "FormSchema"}
+            safety_rejected = bool(
+                self._is_transaction_unsafe_candidate(candidate)
+                or bool(candidate.get("risk_boundary"))
+                or operator == "RiskBoundary"
+                or not bool(gate.get("active_allowed"))
+                or not consumable_operator
+            )
+            ambiguity, ambiguity_reasons = self._voc_candidate_ambiguity(candidate, candidates, goal)
+            rollback_cost, rollback_cost_reasons = self._voc_estimated_rollback_cost(candidate, operator)
+            score_components = candidate.get("score_components") if isinstance(candidate.get("score_components"), dict) else {}
+            missing_slot_gain = self._voc_norm(score_components.get("MissingSlotGain"), 0.0)
+            task_entity_match = self._voc_norm(score_components.get("TaskEntityMatch"), 0.0)
+            prior_score = self._voc_norm(candidate.get("reasoning_prior_score") or score_components.get("PatternPrior"), 0.0)
+            evidence_gain = min(1.0, max(0.0, float(candidate.get("estimated_evidence_gain") or 0.0) / 10.0))
+            grounding_score = max(
+                self._voc_norm(grounding.get("lexical_overlap"), 0.0),
+                task_entity_match,
+                self._voc_norm(candidate.get("relevance"), 0.0),
+            )
+            adaptive_value = self._session_adaptive_candidate_value(
+                goal=goal,
+                step_idx=step_idx,
+                candidate=candidate,
+                candidates=candidates,
+                memory=memory,
+                phase=phase,
+                info_deficit=info_deficit,
+                grounding=grounding,
+                ambiguity=ambiguity,
+                rollback_cost=rollback_cost,
+                score_components=score_components,
+                prior=prior,
+            )
+            information_value = float(adaptive_value.get("branch_utility") or 0.0)
+            latency_cost = 1.0 - self._clip01((adaptive_value.get("features") or {}).get("latency_fit"), 0.0)
+            expected_value = float(adaptive_value.get("branch_utility") or 0.0)
+            depth2_ev = float(adaptive_value.get("depth2_utility") or 0.0)
+            depth2_allowed = bool(
+                depth2_ev > 0.0
+                and info_deficit >= 0.35
+                and rollback_cost <= 0.60
+                and task_mode not in {"FORM_CREATE_EDIT", "DELETE_COMMIT", "SIMPLE_VERIFY", "MEDIA_CAPTURE"}
+                and phase in {"TARGET_ACQUISITION", "EVIDENCE_GATHERING", "STUCK_RECOVERY"}
+            )
+            row = {
+                "record_type": "VOCFrontierValue",
+                "step": int(step_idx + 1),
+                "candidate_rank_input": int(idx + 1),
+                "task_id": _clean_text(goal)[:200],
+                "task_mode": task_mode,
+                "task_phase": phase,
+                "phase_reason": phase_reason,
+                "information_deficit": float(info_deficit),
+                "deficit_components": deficit_components,
+                "candidate_label": grounding.get("label"),
+                "operator": operator,
+                "grounding": grounding,
+                "candidate_ambiguity": float(ambiguity),
+                "ambiguity_reasons": ambiguity_reasons,
+                "rollback_cost": float(rollback_cost),
+                "rollback_cost_reasons": rollback_cost_reasons,
+                "missing_slot_gain": float(missing_slot_gain),
+                "task_entity_match": float(task_entity_match),
+                "prior_score": float(prior_score),
+                "evidence_gain": float(evidence_gain),
+                "grounding_score": float(grounding_score),
+                "phase_weight": 1.0,
+                "information_value": float(information_value),
+                "latency_cost": float(latency_cost),
+                "expected_value": float(expected_value),
+                "branch_utility": float(expected_value),
+                "depth2_expected_value": float(depth2_ev),
+                "depth2_utility": float(depth2_ev),
+                "depth2_allowed": bool(depth2_allowed),
+                "safety_rejected": bool(safety_rejected),
+                "rejected_reason": ("exploration_gate_or_safety_reject" if safety_rejected else ""),
+                "session_key": memory.get("session_key"),
+                "session_branch_key": adaptive_value.get("branch_key"),
+                "session_value_features": adaptive_value.get("features"),
+                "session_adaptive_weights": adaptive_value.get("adaptive_weights"),
+                "prior_confidence": float(prior_confidence),
+                "candidate_entropy": float(candidate_entropy),
+                "selection_policy": adaptive_value.get("selection_policy"),
+            }
+            value_rows.append(row)
+            if safety_rejected:
+                candidate["reason_rejected"] = "safety_policy_reject"
+                continue
+            candidate["voc_expected_value"] = float(expected_value)
+            candidate["voc_information_value"] = float(information_value)
+            candidate["voc_latency_cost"] = float(latency_cost)
+            candidate["voc_rollback_cost"] = float(rollback_cost)
+            candidate["voc_candidate_ambiguity"] = float(ambiguity)
+            candidate["voc_task_phase"] = phase
+            candidate["voc_depth2_decision"] = {
+                "allow": bool(depth2_allowed),
+                "expected_value": float(depth2_ev),
+                "reason": "positive_depth2_value" if depth2_allowed else "depth2_value_or_safety_below_threshold",
+            }
+            safe_rows.append((float(expected_value), candidate, row))
+        safe_rows.sort(key=lambda item: item[0], reverse=True)
+        positive_count = sum(1 for value, _, _ in safe_rows if value > 0.0)
+        configured_budget = max(1, int(budget))
+        min_attempts = max(0, int(getattr(self, "light_explore_min_attempts_per_step", 0) or 0))
+        adaptive_budget = self._session_adaptive_budget(
+            memory=memory,
+            configured_budget=configured_budget,
+            min_attempts=min_attempts,
+            positive_count=positive_count,
+            info_deficit=info_deficit,
+            candidate_entropy=candidate_entropy,
+            prior_confidence=prior_confidence,
+            task_mode=task_mode,
+            protected_passive=protected_passive,
+        )
+        selected = [candidate for _, candidate, _ in safe_rows[:adaptive_budget]]
+        selected_keys = {_clean_text(c.get("key") or c.get("label") or c.get("merged")) for c in selected}
+        for rank, candidate in enumerate(selected, start=1):
+            candidate["reason_selected"] = "selective_consumable_expected_value"
+            candidate["voc_selected_rank"] = int(rank)
+        for candidate in candidates:
+            key = _clean_text(candidate.get("key") or candidate.get("label") or candidate.get("merged"))
+            if key not in selected_keys and not _clean_text(candidate.get("reason_rejected")):
+                candidate["reason_rejected"] = "not_selected_after_voc_budget"
+        depth2_allowed_count = sum(1 for c in selected if bool((c.get("voc_depth2_decision") or {}).get("allow")))
+        active_depth_budget = 2 if depth2_allowed_count > 0 else 1
+        self._active_voc_depth_budget = int(active_depth_budget)
+        budget_record = {
+            "record_type": "VOCAdaptiveBudgetDecision",
+            "step": int(step_idx + 1),
+            "task_id": _clean_text(goal)[:200],
+            "task_phase": phase,
+            "phase_reason": phase_reason,
+            "information_deficit": float(info_deficit),
+            "configured_root_budget": int(configured_budget),
+            "adaptive_root_budget": int(adaptive_budget),
+            "positive_value_candidate_count": int(positive_count),
+            "selected_candidate_count": int(len(selected)),
+            "active_depth_budget": int(active_depth_budget),
+            "depth2_allowed_count": int(depth2_allowed_count),
+            "candidate_entropy": float(candidate_entropy),
+            "prior_confidence": float(prior_confidence),
+            "session_key": memory.get("session_key"),
+            "session_rollback_total": float(memory.get("rollback_total") or 0.0),
+            "session_rollback_success": float(memory.get("rollback_success") or 0.0),
+            "session_memory_branch_count": int(len(memory.get("branch_stats") or {})),
+            "selection_policy": "session_local_adaptive_utility",
+            "root_activity": _clean_text(root_activity),
+            "safety_rejected_count": int(sum(1 for row in value_rows if row["safety_rejected"])),
+        }
+        trace["search_strategy_name"] = "Selective Consumable Exploration"
+        trace["search_strategy_cn"] = "可消费证据优先的选择性探索"
+        trace["root_level_strategy"] = "only explore branches consumable by next prompt or promotion"
+        trace["branch_continuation"] = "depth2 only for search/filter/result/detail/schema consumable states"
+        trace["ranking"] = "consumable evidence/promotion gate before utility"
+        trace["voc_task_phase"] = phase
+        trace["voc_phase_reason"] = phase_reason
+        trace["voc_information_deficit"] = float(info_deficit)
+        trace["voc_deficit_components"] = deficit_components
+        trace["voc_adaptive_root_budget"] = int(adaptive_budget)
+        trace["voc_active_depth_budget"] = int(active_depth_budget)
+        trace["voc_depth2_allowed_count"] = int(depth2_allowed_count)
+        trace["session_adaptive_candidate_entropy"] = float(candidate_entropy)
+        trace["session_adaptive_prior_confidence"] = float(prior_confidence)
+        trace["session_adaptive_memory_key"] = memory.get("session_key")
+        trace["voc_frontier_values"] = value_rows[:80]
+        trace["frontier_values"] = value_rows[:80]
+        trace["adaptive_budget_decision"] = budget_record
+        for row in value_rows:
+            self._append_diagnostic_jsonl(goal, "voc_candidate_values.jsonl", row)
+            self._append_diagnostic_jsonl(goal, "frontier_values.jsonl", row)
+        self._append_diagnostic_jsonl(goal, "adaptive_budget_decisions.jsonl", budget_record)
+        return selected
 
     def _run_light_exploration(
         self,
@@ -8458,9 +11540,11 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         root_activity: str = "",
         root_hash: int | None = None,
         planning_text: str = "",
+        reasoning_prior_snapshot: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         self._last_probe_candidates = []
         self._current_goal_for_depth = goal
+        self._active_voc_depth_budget = None
         if self.light_explore_decouple_planned and self.exploration_timing != "invalid_post_planned_action":
             if not getattr(self, "light_explore_use_current_action", False):
                 current_action = None
@@ -8488,7 +11572,7 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             "exploration_timing_mode": getattr(self, "exploration_timing", "parallel_shadow"),
             "parallel_with_vlm": bool(self.light_explore_parallel_vlm),
             "shadow_only": bool(getattr(self, "light_explore_shadow_only", False)),
-            "search_strategy_name": "Operator-Stratified Best-First Exploration",
+            "search_strategy_name": "Selective Consumable Exploration",
             "strategy": self.light_explore_strategy,
             "search_strategy": self.light_explore_search_strategy,
             "depth_budget": int(self.light_explore_branch_depth),
@@ -8549,6 +11633,25 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
         }
         previous_state_acquisition_context = self._state_acquisition_context
         try:
+            reasoning_prior = (
+                dict(reasoning_prior_snapshot)
+                if isinstance(reasoning_prior_snapshot, dict)
+                else self._delayed_reasoning_prior_for_exploration(goal, step_idx)
+            )
+            protected_passive_only = self._protected_task_passive_only(goal, reasoning_prior)
+            trace["reasoning_prior_enabled"] = bool(getattr(self, "reasoning_prior_enabled", False))
+            trace["reasoning_prior_delayed"] = bool(getattr(self, "reasoning_prior_delayed", True))
+            trace["reasoning_prior_available"] = bool(reasoning_prior)
+            trace["reasoning_prior_source_step"] = int(reasoning_prior.get("source_step") or 0) if reasoning_prior else 0
+            trace["protected_passive_only"] = bool(protected_passive_only)
+            if getattr(self, "reasoning_prior_delayed", True) and step_idx <= 0:
+                trace["status"] = "skipped"
+                trace["trigger_reason"] = "reasoning_prior_delayed_step1_no_exploration"
+                return trace
+            if getattr(self, "reasoning_prior_enabled", False) and getattr(self, "reasoning_prior_delayed", True) and not reasoning_prior:
+                trace["status"] = "skipped"
+                trace["trigger_reason"] = "reasoning_prior_delayed_no_previous_prior"
+                return trace
             action_skip_reason = (
                 ""
                 if current_action is None or self.light_explore_decouple_planned
@@ -8603,6 +11706,82 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                 f"light_explore_should_run={should_run} reason={reason} page_stalled={page_stalled}"
             )
             if not should_run:
+                skip_observed_start = time.time()
+                skip_observed_elements = self._state_semantic_summary(root_state, limit=TRACE_OBSERVED_ELEMENT_LIMIT)
+                trace["root_summary_ms"] = float(max(0.0, time.time() - skip_observed_start) * 1000.0)
+                skip_task_mode = self._task_mode(goal)
+                skip_phase, skip_phase_reason, skip_flags = self._selective_task_phase(
+                    goal,
+                    step_idx,
+                    skip_observed_elements,
+                    page_stalled,
+                    reasoning_prior,
+                )
+                skip_gate = self._selective_exploration_gate(goal, skip_task_mode, skip_phase, page_stalled)
+                trace["selective_task_mode"] = skip_task_mode
+                trace["selective_task_phase"] = skip_phase
+                trace["selective_phase_reason"] = skip_phase_reason
+                trace["selective_gate"] = dict(skip_gate)
+                self._append_selective_phase_gate_records(
+                    goal,
+                    step_idx,
+                    skip_task_mode,
+                    skip_phase,
+                    skip_phase_reason,
+                    skip_flags,
+                    skip_gate,
+                )
+                passive_skip_allowed = bool(
+                    step_idx > 0
+                    and bool(skip_gate.get("passive_allowed"))
+                    and skip_task_mode in {"FORM_CREATE_EDIT", "DELETE_COMMIT", "SIMPLE_VERIFY", "MEDIA_CAPTURE"}
+                    and "launcher" not in _clean_text(reason).lower()
+                    and "keyboard" not in _clean_text(reason).lower()
+                )
+                if passive_skip_allowed:
+                    passive_pair = self._passive_schema_observation(
+                        goal=goal,
+                        strategy_id=self.light_explore_search_strategy,
+                        step_id=step_idx + 1,
+                        branch_id=1,
+                        root_state=root_state,
+                        root_activity=root_activity,
+                        root_hash=int(root_hash or -1),
+                        root_screenshot=str(trace.get("root_screenshot") or ""),
+                        observed_elements=list(skip_observed_elements),
+                        task_mode=skip_task_mode,
+                        reason=f"passive_schema_on_skipped_exploration:{reason}",
+                    )
+                    produced_schema = bool(passive_pair)
+                    self._append_diagnostic_jsonl(goal, "passive_observation_records.jsonl", {
+                        "step": int(step_idx + 1),
+                        "observed_labels": list(skip_observed_elements)[:80],
+                        "produced_evidence": produced_schema,
+                        "injected": False,
+                        "reason": (
+                            f"passive_schema_on_skipped_exploration:{reason}"
+                            if produced_schema
+                            else f"skipped_without_schema:{reason}"
+                        ),
+                    })
+                    if passive_pair:
+                        schema_observation, schema_capsule = passive_pair
+                        trace["observations"] = [schema_observation]
+                        trace["evidence_capsules"] = [schema_capsule]
+                        trace["speculative_results"] = []
+                        trace["speculative_context"] = ""
+                        trace["selected_prompt_results"] = []
+                        trace["prompt_context"] = ""
+                        trace["available_for_next_prompt"] = True
+                        trace["rollback_success"] = True
+                        trace["passive_only_reason"] = f"should_run_false_but_schema_consumable:{reason}"
+                        trace["status"] = "passive_schema_only"
+                        self._pending_speculative_traces = [trace]
+                        print(
+                            f"[EXPLORE {_now_hms()}] step: {step_idx + 1} "
+                            "light_explore_passive_schema_cached_on_skip"
+                        )
+                        return trace
                 trace["status"] = "skipped"
                 return trace
 
@@ -8620,6 +11799,40 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             candidates = self._collect_probe_candidates(root_state, goal, planning_text=planning_text)
             trace["candidate_collection_ms"] = float(max(0.0, time.time() - candidate_collection_start) * 1000.0)
             trace["candidate_quality"] = dict(getattr(self, "_last_candidate_quality_stats", {}) or {})
+            current_screen_role = self._screen_role_from_state(root_state)
+            candidates, prior_entropy, prior_mode, prior_mode_record = self._evaluate_candidate_priors(
+                candidates,
+                goal=goal,
+                reasoning_prior=reasoning_prior,
+                current_screen_role=current_screen_role,
+                app_name=root_activity,
+                step_idx=step_idx + 1,
+                trace_step=trace,
+            )
+            trace["reasoning_prior_entropy"] = float(prior_entropy)
+            trace["reasoning_prior_mode"] = prior_mode
+            trace["reasoning_prior_root_budget"] = int(prior_mode_record.get("root_budget") or self.light_explore_branch_budget)
+            trace["reasoning_prior_depth2_policy"] = _clean_text(prior_mode_record.get("depth2_policy") or "semantic_changed_only")
+            self._append_adaptive_search_record(
+                goal,
+                {
+                    "step": int(step_idx + 1),
+                    "prior_source_step": int(reasoning_prior.get("source_step") or 0),
+                    "mode": prior_mode,
+                    "prior_entropy": float(prior_entropy),
+                    "prior_confidence": float(reasoning_prior.get("confidence") or 0.0),
+                    "root_budget": int(trace["reasoning_prior_root_budget"]),
+                    "depth2_policy": trace["reasoning_prior_depth2_policy"],
+                    "candidate_count": int(len(candidates)),
+                    "protected_passive_only": bool(protected_passive_only),
+                },
+            )
+            candidates, protected_candidate_policy = self._apply_protected_task_candidate_policy(
+                candidates,
+                goal=goal,
+                prior=reasoning_prior,
+            )
+            trace["protected_candidate_policy"] = dict(protected_candidate_policy)
             candidates = self._rank_candidates_for_planned_action(candidates, current_action)
             planned_candidate = (
                 None
@@ -8721,6 +11934,13 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                 candidate["risk_boundary"] = operator == "RiskBoundary"
             candidate_scoring_start = time.time()
             candidates = self._prepare_search_strategy_candidates(candidates, goal)
+            if protected_candidate_policy.get("applied"):
+                trace["protected_task_mode"] = self._task_mode(goal)
+                trace["protected_passive_only"] = bool(protected_passive_only)
+                trace["protected_mode_before_count"] = int(protected_candidate_policy.get("before_count", 0))
+                trace["protected_mode_after_count"] = int(protected_candidate_policy.get("after_count", 0))
+                trace["protected_mode_filtered_count"] = int(protected_candidate_policy.get("filtered_count", 0))
+                trace["protected_mode_reason"] = _clean_text(protected_candidate_policy.get("mode") or "")
             trace["candidate_scoring_ms"] = float(max(0.0, time.time() - candidate_scoring_start) * 1000.0)
             self._last_probe_candidates = list(candidates)
             trace["candidate_count"] = int(len(candidates))
@@ -8764,8 +11984,20 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                 candidates = relevant_candidates
                 trace["candidate_count_after_launcher_relevance_filter"] = int(len(candidates))
             replay_actions = self._select_replay_actions_for_probe(current_action=None)
-            budget = max(1, int(self.light_explore_branch_budget))
-            if bool(getattr(self, "light_explore_lb_mcts", False)) and self.light_explore_search_strategy == "mcts":
+            budget = max(1, int(trace.get("reasoning_prior_root_budget") or self.light_explore_branch_budget))
+            if self.light_explore_search_strategy == "value_of_computation":
+                branch_candidates = self._select_voc_branch_candidates(
+                    goal=goal,
+                    step_idx=step_idx,
+                    candidates=candidates,
+                    root_state=root_state,
+                    root_activity=root_activity,
+                    page_stalled=page_stalled,
+                    prior=reasoning_prior,
+                    budget=budget,
+                    trace=trace,
+                )
+            elif bool(getattr(self, "light_explore_lb_mcts", False)) and self.light_explore_search_strategy == "mcts":
                 self._record_lb_mcts_candidate_filter_stats(
                     goal=goal,
                     step=step_idx + 1,
@@ -8860,8 +12092,112 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             root_summary_start = time.time()
             root_observed_elements = self._state_semantic_summary(root_state, limit=answer_label_limit)
             trace["root_summary_ms"] = float(max(0.0, time.time() - root_summary_start) * 1000.0)
+            if self.light_explore_search_strategy == "value_of_computation" and "voc_task_phase" not in trace:
+                phase, phase_reason = self._voc_task_phase(goal, step_idx, root_observed_elements, page_stalled, reasoning_prior)
+                info_deficit, deficit_components = self._voc_information_deficit(goal, root_observed_elements, phase)
+                trace["voc_task_phase"] = phase
+                trace["voc_phase_reason"] = phase_reason
+                trace["voc_information_deficit"] = float(info_deficit)
+                trace["voc_deficit_components"] = deficit_components
             task_mode = self._task_mode(goal)
-            if self.light_explore_fixed_framework and task_mode == "INFO_QUERY_COUNT":
+            selective_phase, selective_phase_reason, selective_flags = self._selective_task_phase(goal, step_idx, root_observed_elements, page_stalled, reasoning_prior)
+            selective_gate = self._selective_exploration_gate(goal, task_mode, selective_phase, page_stalled)
+            trace["selective_task_mode"] = task_mode
+            trace["selective_task_phase"] = selective_phase
+            trace["selective_phase_reason"] = selective_phase_reason
+            trace["selective_gate"] = dict(selective_gate)
+            self._append_selective_phase_gate_records(goal, step_idx, task_mode, selective_phase, selective_phase_reason, selective_flags, selective_gate)
+            if protected_passive_only:
+                branch_candidates = []
+                trace["selected_targets"] = []
+                trace["passive_attempt_count"] = 0
+                trace["executed_attempt_count"] = 0
+                trace["passive_only_reason"] = f"protected_or_selective_gate:{task_mode}:{(trace.get('selective_gate') or {}).get('gate_reason', '')}"
+                passive_schema_flags = self._selective_visible_flags(goal, root_observed_elements, page_stalled)
+                passive_schema_labels = self._task_derived_schema_labels(goal, task_mode, root_observed_elements)
+                produced_schema = bool(passive_schema_flags.get("schema_visible") or passive_schema_labels)
+                self._append_diagnostic_jsonl(goal, "passive_observation_records.jsonl", {
+                    "step": int(step_idx + 1),
+                    "observed_labels": list(root_observed_elements)[:80],
+                    "produced_evidence": produced_schema,
+                    "injected": False,
+                    "reason": trace["passive_only_reason"] if not produced_schema else "passive_schema_hint_visible",
+                })
+                if produced_schema:
+                    pseudo_candidate = {
+                        "label": "Visible screen schema",
+                        "merged": "Visible screen schema",
+                        "operator": "FormSchema",
+                        "action_kind": "inspect",
+                        "risk_boundary": False,
+                        "layout_region": "root_page",
+                        "semantic_role": "schema_observation",
+                    }
+                    schema_assessment = {
+                        "evidence_gain": 1.0,
+                        "confidence": 0.70,
+                        "evidence_type": "SCHEMA_HINT",
+                        "boundary_type": "SCHEMA_BOUNDARY",
+                        "stop_reason": "passive_schema_visible",
+                        "schema_labels": list(dict.fromkeys(passive_schema_labels + list(root_observed_elements)))[:32],
+                        "new_labels": list(passive_schema_labels)[:16],
+                        "depth": 1,
+                    }
+                    schema_rollback = {"success": True, "mode": "passive_no_action", "level": "level0"}
+                    schema_capsule = self._build_evidence_capsule(
+                        goal=goal,
+                        strategy_id=self.light_explore_search_strategy,
+                        step_id=step_idx + 1,
+                        branch_id=len(observations) + 1,
+                        depth=1,
+                        parent_state=root_state,
+                        parent_activity=root_activity,
+                        child_state=root_state,
+                        child_activity=root_activity,
+                        candidate=pseudo_candidate,
+                        assessment=schema_assessment,
+                        rollback_info=schema_rollback,
+                    )
+                    schema_step = {
+                        "depth": 1,
+                        "candidate": self._candidate_trace(pseudo_candidate),
+                        "changed": False,
+                        "semantic_changed": False,
+                        "after_activity": root_activity,
+                        "after_hash": root_hash,
+                        "hash_diff_from_root": 0,
+                        "screenshot": trace.get("root_screenshot") or "",
+                        "observed_elements": list(dict.fromkeys(passive_schema_labels + list(root_observed_elements)))[:96],
+                        "a11y": [],
+                        "stop_reason": "passive_schema_visible",
+                    }
+                    schema_observation = {
+                        "branch_id": len(observations) + 1,
+                        "labels": ["Visible screen schema"],
+                        "changed": False,
+                        "after_activity": root_activity,
+                        "score": 1.0,
+                        "depth_reached": 1,
+                        "observed_elements": list(dict.fromkeys(passive_schema_labels + list(root_observed_elements)))[:96],
+                        "steps": [schema_step],
+                        "rollback": schema_rollback,
+                        "operator": "FormSchema",
+                        "operator_reason": "passive_schema_visible",
+                        "layout_region": "root_page",
+                        "semantic_role": "schema_observation",
+                        "boundary_type": "SCHEMA_BOUNDARY",
+                        "stop_reason": "passive_schema_visible",
+                        "evidence_type": "SCHEMA_HINT",
+                        "evidence_gain": 1.0,
+                        "confidence": 0.70,
+                        "slot_evidence": {},
+                        "evidence_capsule": schema_capsule,
+                        "no_action_inspect": True,
+                    }
+                    observations.append(schema_observation)
+                    evidence_capsules.append(schema_capsule)
+                attempted_any = False
+            if self.light_explore_fixed_framework and task_mode == "INFO_QUERY":
                 root_observation, root_capsule = self._root_list_inspect_observation(
                     goal=goal,
                     strategy_id=self.light_explore_search_strategy,
@@ -8924,6 +12260,12 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                 boundary_type = "none"
                 stop_reason = "not_started"
                 evidence_type = "none"
+                root_action_signature = self._safe_action_signature_from_candidate(first_candidate)
+                depth1_state_signature: dict[str, Any] = {}
+                depth2_action_signature: dict[str, Any] = {}
+                depth2_state_signature: dict[str, Any] = {}
+                depth2_candidate_for_promotion: dict[str, Any] = {}
+                depth2_action_locatable = False
 
                 if self.light_explore_search_policy in {"operator", "task_gate"} and branch_operator == "RiskBoundary":
                     risk_rollback = {"success": True, "mode": "not_executed", "level": "risk_boundary"}
@@ -9009,6 +12351,7 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                 state_after_first = self._get_probe_state(wait_to_stabilize=True)
                 state_fetch_ms = float(max(0.0, time.time() - state_fetch_start) * 1000.0)
                 last_branch_state = state_after_first
+                depth1_state_signature = self._build_state_signature_from_probe(state_after_first)
                 changed1, activity1, hash_diff1 = self._probe_page_changed(root_activity, root_hash, state_after_first)
                 semantic1 = self._semantic_state_change_details(
                     root_state=root_state,
@@ -9125,13 +12468,48 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                     )
                 if force_searchinput_t2:
                     should_expand_depth2 = True
+                depth2_policy = _clean_text(trace.get("reasoning_prior_depth2_policy") or "semantic_changed_only")
+                if depth2_policy == "disabled_except_search" and not force_searchinput_t2:
+                    should_expand_depth2 = False
+                voc_depth2_decision = (
+                    first_candidate.get("voc_depth2_decision")
+                    if isinstance(first_candidate.get("voc_depth2_decision"), dict)
+                    else {}
+                )
+                if (
+                    self.light_explore_search_strategy == "value_of_computation"
+                    and voc_depth2_decision
+                    and not bool(voc_depth2_decision.get("allow"))
+                    and not force_searchinput_t2
+                ):
+                    should_expand_depth2 = False
+                session_depth2_utility = float(first_candidate.get("session_depth2_utility") or 0.0)
+                if (
+                    self.light_explore_search_strategy == "value_of_computation"
+                    and session_depth2_utility <= 0.0
+                    and not force_searchinput_t2
+                ):
+                    should_expand_depth2 = False
+                rollback_cost_for_depth2 = float(first_candidate.get("voc_rollback_cost") or 0.0)
+                consumable_depth2 = self._selective_depth2_consumable_decision(
+                    goal=goal,
+                    task_mode=task_mode,
+                    task_phase=_clean_text(trace.get("selective_task_phase") or trace.get("voc_task_phase")),
+                    state_after_depth1=state_after_first,
+                    observed_elements=list(observed_elements),
+                    branch_operator=branch_operator,
+                    candidate=first_candidate,
+                    rollback_cost=rollback_cost_for_depth2,
+                )
+                force_consumable_t2 = bool(consumable_depth2.get("depth2_allowed"))
                 allow_depth2 = bool(
                     self.light_explore_enable_t2_lookahead
                     and int(self.light_explore_branch_depth) >= 2
                     and depth2_root_eligible
                     and not self._is_transaction_unsafe_candidate(first_candidate)
-                    and (semantic_changed1 or force_searchinput_t2)
-                    and (b_idx == 0 or len(branch_candidates) == 1 or force_searchinput_t2)
+                    and (semantic_changed1 or force_searchinput_t2 or force_consumable_t2)
+                    and (should_expand_depth2 or force_consumable_t2)
+                    and (b_idx == 0 or len(branch_candidates) == 1 or force_searchinput_t2 or force_consumable_t2)
                     and not self._is_launcher_activity(activity1)
                 )
                 t2_debug = {
@@ -9149,7 +12527,12 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                     "search_ui_transition": bool(semantic1.get("search_ui_transition")),
                     "force_searchinput_t2": bool(force_searchinput_t2),
                     "should_expand_depth2": bool(should_expand_depth2),
+                    "reasoning_prior_depth2_policy": depth2_policy,
+                    "voc_depth2_decision": voc_depth2_decision,
+                    "session_branch_utility": float(first_candidate.get("session_branch_utility") or 0.0),
+                    "session_depth2_utility": float(session_depth2_utility),
                     "allow_depth2": bool(allow_depth2),
+                    "consumable_depth2": dict(consumable_depth2),
                     "depth2_attempted": False,
                     "depth2_candidate_found": False,
                     "depth2_candidate_kind": "",
@@ -9177,6 +12560,18 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                         )
                     if not should_expand_depth2:
                         reason_parts.append("should_expand_false")
+                        if voc_depth2_decision:
+                            reason_parts.append(
+                                "voc_depth2:"
+                                + _clean_text(voc_depth2_decision.get("reason") or "blocked")
+                            )
+                        if (
+                            self.light_explore_search_strategy == "value_of_computation"
+                            and session_depth2_utility <= 0.0
+                        ):
+                            reason_parts.append("session_depth2_utility_non_positive")
+                        if depth2_policy:
+                            reason_parts.append(f"prior_depth2_policy:{depth2_policy}")
                         trace["depth2_blocked_by_should_expand_count"] += 1
                         self._state_acquisition_metrics["depth2_blocked_by_should_expand_count"] = (
                             float(self._state_acquisition_metrics.get("depth2_blocked_by_should_expand_count") or 0.0) + 1.0
@@ -9189,7 +12584,19 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                         )
                     if self._is_launcher_activity(activity1):
                         reason_parts.append("launcher_after_depth1")
+                    if not bool(consumable_depth2.get("depth2_allowed")):
+                        reason_parts.append(_clean_text(consumable_depth2.get("depth2_block_reason") or "not_consumable"))
                     t2_debug["depth2_block_reason"] = ",".join(reason_parts) or "blocked"
+                self._append_diagnostic_jsonl(goal, "depth2_consumable_records.jsonl", {
+                    "step": int(step_idx + 1),
+                    "branch_id": int(b_idx + 1),
+                    "depth1_result_type": _clean_text(consumable_depth2.get("depth1_result_type")),
+                    "depth2_candidate": _clean_text(first_candidate.get("label") or first_candidate.get("merged")),
+                    "depth2_action_type": _clean_text(consumable_depth2.get("depth2_action_type")),
+                    "depth2_allowed": bool(allow_depth2),
+                    "depth2_reason": _clean_text(consumable_depth2.get("depth2_reason")),
+                    "depth2_block_reason": _clean_text(t2_debug.get("depth2_block_reason") or consumable_depth2.get("depth2_block_reason")),
+                })
                 if allow_depth2:
                     state_for_deeper = state_after_first
                     previous_candidate = first_candidate
@@ -9198,6 +12605,7 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                         goal,
                         planning_text=planning_text,
                     )
+                    selective_safe_search_t2 = bool(consumable_depth2.get("depth1_result_type") == "search_field")
                     if force_searchinput_t2 and second_candidate is None:
                         trace["depth2_blocked_by_no_typed_candidate_count"] += 1
                         self._state_acquisition_metrics["depth2_blocked_by_no_typed_candidate_count"] = (
@@ -9207,7 +12615,7 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                         second_candidate is not None
                         and self._is_transaction_unsafe_candidate(second_candidate)
                         and not (
-                            self.t2_allow_safe_search_input
+                            (self.t2_allow_safe_search_input or selective_safe_search_t2)
                             and self._is_safe_search_input_candidate(second_candidate, goal, state_after_first)
                         )
                     ):
@@ -9217,6 +12625,24 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                             state_after_first,
                             goal,
                             planning_text=planning_text,
+                        )
+                        second_candidates, second_protection_trace = self._apply_protected_task_candidate_policy(
+                            second_candidates,
+                            goal=goal,
+                            prior=reasoning_prior,
+                        )
+                        if second_protection_trace.get("applied"):
+                            t2_debug["depth2_protection_applied"] = True
+                            t2_debug["depth2_protection_mode"] = _clean_text(second_protection_trace.get("mode") or "")
+                            t2_debug["depth2_protection_before_count"] = int(second_protection_trace.get("before_count", 0))
+                            t2_debug["depth2_protection_after_count"] = int(second_protection_trace.get("after_count", 0))
+                        second_candidates, _, _, _ = self._evaluate_candidate_priors(
+                            second_candidates,
+                            goal=goal,
+                            reasoning_prior=reasoning_prior,
+                            current_screen_role=self._screen_role_from_state(state_after_first),
+                            app_name=activity1,
+                            step_idx=step_idx + 1,
                         )
                         second_candidates = self._prepare_search_strategy_candidates(second_candidates, goal)
                         second_candidate = self._choose_secondary_probe_candidate(
@@ -9260,11 +12686,18 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                             second_action = self._probe_action_from_candidate(second_candidate)
                             if second_action is None:
                                 break
+                            depth2_action_signature = self._safe_action_signature_from_candidate(second_candidate)
+                            depth2_candidate_for_promotion = dict(second_candidate)
+                            depth2_action_locatable = self._locate_candidate_action_in_state(
+                                state_after_first,
+                                depth2_action_signature,
+                            ) or self._candidate_visible_in_state(second_candidate, state_after_first)
                             self._execute_probe_action(second_action)
                             state_fetch_start = time.time()
                             state_after_second = self._get_probe_state(wait_to_stabilize=True)
                             state_fetch_ms = float(max(0.0, time.time() - state_fetch_start) * 1000.0)
                             last_branch_state = state_after_second
+                            depth2_state_signature = self._build_state_signature_from_probe(state_after_second)
                             state_for_deeper = state_after_second
                             previous_candidate = second_candidate
                             last_evidence_candidate = second_candidate
@@ -9367,6 +12800,24 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                                     state_for_deeper,
                                     goal,
                                     planning_text=planning_text,
+                                )
+                                deeper_candidates, deeper_protection_trace = self._apply_protected_task_candidate_policy(
+                                    deeper_candidates,
+                                    goal=goal,
+                                    prior=reasoning_prior,
+                                )
+                                if deeper_protection_trace.get("applied"):
+                                    t2_debug["deeper_protection_applied"] = True
+                                    t2_debug["deeper_protection_mode"] = _clean_text(deeper_protection_trace.get("mode") or "")
+                                    t2_debug["deeper_protection_before_count"] = int(deeper_protection_trace.get("before_count", 0))
+                                    t2_debug["deeper_protection_after_count"] = int(deeper_protection_trace.get("after_count", 0))
+                                deeper_candidates, _, _, _ = self._evaluate_candidate_priors(
+                                    deeper_candidates,
+                                    goal=goal,
+                                    reasoning_prior=reasoning_prior,
+                                    current_screen_role=self._screen_role_from_state(state_for_deeper),
+                                    app_name=final_activity,
+                                    step_idx=step_idx + 1,
                                 )
                                 deeper_candidates = self._prepare_search_strategy_candidates(deeper_candidates, goal)
                                 deeper_candidate = self._choose_secondary_probe_candidate(
@@ -9571,6 +13022,20 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                     "stop_reason": stop_reason,
                     "evidence_type": evidence_type,
                     "discarded_due_to_rollback_failed": not rollback_verified,
+                    "root_action_signature": dict(root_action_signature),
+                    "depth1_state_signature": dict(depth1_state_signature),
+                    "depth2_action_signature": dict(depth2_action_signature),
+                    "depth2_state_signature": dict(depth2_state_signature),
+                    "depth1_candidate": self._candidate_trace(first_candidate),
+                    "depth2_candidate": dict(depth2_candidate_for_promotion),
+                    "depth2_action_locatable": bool(depth2_action_locatable),
+                    "promotable_for_promotion": bool(
+                        rollback_verified
+                        and depth_reached >= 2
+                        and bool(depth2_action_signature)
+                        and bool(depth2_candidate_for_promotion)
+                        and depth2_action_locatable
+                    ),
                     "evidence_gain": float(final_assessment.get("evidence_gain") or 0.0),
                     "confidence": float(final_assessment.get("confidence") or 0.0),
                     "slot_evidence": final_assessment.get("slot_evidence") or {},
@@ -9583,6 +13048,8 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                 }
                 observations.append(observation)
                 self._update_search_strategy_stats(observation)
+                if self.light_explore_search_strategy == "value_of_computation":
+                    self._update_session_exploration_memory(goal, root_activity, observation)
                 if not rollback_verified:
                     all_rollback_success = False
                     print(
@@ -9596,26 +13063,18 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                 current_attempt_count = len(observations) + int(trace.get("risk_candidate_count") or 0)
                 padding_needed = max(0, min_attempts - current_attempt_count)
                 if padding_needed:
-                    passive_observations, passive_capsules = self._passive_coverage_observations(
-                        goal=goal,
-                        strategy_id=self.light_explore_search_strategy,
-                        step_id=step_idx + 1,
-                        root_state=root_state,
-                        root_activity=root_activity,
-                        root_hash=int(root_hash or -1),
-                        root_screenshot=str(trace.get("root_screenshot") or ""),
-                        root_labels=root_observed_elements,
-                        start_branch_id=len(observations) + 1,
-                        count=padding_needed,
-                    )
-                    observations.extend(passive_observations)
-                    evidence_capsules.extend(passive_capsules)
-                    trace["passive_attempt_count"] = int(len(passive_observations))
-                    trace["passive_padding_reason"] = "safe_executable_candidates_below_min_attempts"
-                    trace["no_candidate_reason"] = ""
+                    trace["passive_attempt_count"] = 0
+                    trace["passive_padding_reason"] = "selective_consumable_skips_empty_passive_padding"
+                    self._append_diagnostic_jsonl(goal, "passive_observation_records.jsonl", {
+                        "step": int(step_idx + 1),
+                        "observed_labels": list(root_observed_elements)[:80],
+                        "produced_evidence": False,
+                        "injected": False,
+                        "reason": "empty_passive_padding_skipped",
+                    })
                     print(
                         f"[EXPLORE {_now_hms()}] step: {step_idx + 1} "
-                        f"passive_coverage_padding={len(passive_observations)}"
+                        f"passive_coverage_padding_skipped={padding_needed}"
                     )
 
             if attempted_any:
@@ -9698,8 +13157,12 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             trace["prompt_context"] = ""
             trace["status"] = "completed" if all_rollback_success else "rollback_failed"
             trace["rollback_success"] = bool(all_rollback_success)
+            has_consumable_observation = any(
+                _clean_text(obs.get("evidence_type")) in {"ANSWER_HINT", "ACTION_HINT", "SCHEMA_HINT", "AVOID_HINT", "RISK_HINT"}
+                for obs in observations if isinstance(obs, dict)
+            )
             trace["available_for_next_prompt"] = bool(
-                all_rollback_success and (has_depth2_observation or has_fixed_prompt_candidate)
+                all_rollback_success and (has_depth2_observation or has_fixed_prompt_candidate or has_consumable_observation)
             )
             if not all_rollback_success:
                 trace["exploration_step_stopped_after_rollback_failed"] = True
@@ -9870,6 +13333,17 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             current_hash=start_page_hash,
         )
 
+        promotion_result = self._try_execute_pending_promotion(
+            goal=goal,
+            step_idx=step_idx,
+            start_time=start_time,
+            state=state,
+            current_activity=start_page_activity,
+            current_hash=start_page_hash,
+        )
+        if promotion_result is not None:
+            return promotion_result
+
         shortcut_event = self._evaluate_pending_shortcut_pre_reasoning(
             goal=goal,
             step_idx=step_idx,
@@ -9976,6 +13450,7 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             "wait_after_vlm_ms": 0.0,
             "future_error": "",
         }
+        delayed_prior_snapshot = self._delayed_reasoning_prior_for_exploration(goal, step_idx)
         if self.light_explore_parallel_vlm and self.light_explore_decouple_planned:
             exploration_async["started_before_vlm_response"] = True
             exploration_start = time.time()
@@ -9993,6 +13468,7 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                 start_page_activity,
                 start_page_hash,
                 "",
+                delayed_prior_snapshot,
             )
             exploration_async["future_start_ms"] = float(max(0.0, time.time() - exploration_start) * 1000.0)
 
@@ -10041,6 +13517,38 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             tool_call=tool_call,
             extras=extras,
         )
+        action, tool_call, parsed_action, extras = gelab_agent.sanitize_launcher_action(
+            goal=goal,
+            state=state,
+            action=action,
+            tool_call=tool_call,
+            parsed_action=parsed_action,
+            extras=extras,
+        )
+        if getattr(self, "reasoning_prior_enabled", False):
+            try:
+                previous_screen_summary = "; ".join(self._state_semantic_summary(state, limit=40))
+                reasoning_prior, template_record = self._build_reasoning_prior(
+                    goal=goal,
+                    raw_vlm_output=str(response),
+                    parsed_action=dict(parsed_action),
+                    previous_screen_summary=previous_screen_summary,
+                )
+                self._last_reasoning_prior = dict(reasoning_prior)
+                self._reasoning_prior_for_next_step = dict(reasoning_prior)
+                self._append_reasoning_prior_record(goal, reasoning_prior)
+                self._append_prompt_template_record(goal, template_record)
+            except Exception as exc:  # pylint: disable=broad-exception-caught
+                self._append_diagnostic_jsonl(
+                    goal,
+                    "reasoning_prior_records.jsonl",
+                    {
+                        "task_id": _clean_text(goal)[:200],
+                        "source_step": int(step_idx + 1),
+                        "parse_success": False,
+                        "parse_error": f"reasoning_prior_build_failed:{_clean_text(exc)}",
+                    },
+                )
         task_dir_for_prompt = self._task_output_dir(goal)
         current_screenshot_path = (
             os.path.join(task_dir_for_prompt, f"screenshot_{len(self._actions)}.png")
@@ -10154,12 +13662,13 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
             explore_trace = self._run_light_exploration(
                 goal=goal,
                 step_idx=step_idx,
-                current_action=None if self.light_explore_decouple_planned else action,
+                current_action=None,
                 page_stalled=page_stalled,
                 root_state=state,
                 root_activity=start_page_activity,
                 root_hash=start_page_hash,
-                planning_text="" if self.light_explore_decouple_planned else planning_text,
+                planning_text="",
+                reasoning_prior_snapshot=delayed_prior_snapshot,
             )
             if isinstance(explore_trace, dict):
                 explore_trace["vlm_latency_ms"] = float(vlm_latency_ms)
@@ -10188,10 +13697,27 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                         "no_plan_reason": f"plan_build_exception:{_clean_text(exc)}",
                     }
                     self._append_shortcut_plan(goal, failed_plan)
+            try:
+                self._maybe_store_pending_promotion_from_trace(
+                    goal=goal,
+                    step_idx=step_idx,
+                    action=action,
+                    explore_trace=explore_trace,
+                )
+            except Exception as exc:  # pylint: disable=broad-exception-caught
+                self._append_promotion_event(
+                    goal,
+                    {
+                        "event_type": "promotion_store_failed",
+                        "step": int(step_idx + 1),
+                        "reason": _clean_text(exc),
+                        "unsafe_promotion": False,
+                    },
+                )
             if isinstance(explore_trace, dict) and explore_trace.get("status") == "rollback_failed":
                 planned_action_dict = dict(action.__dict__)
                 precondition_ok = False
-                precondition_reason = "rollback_policy_current"
+                precondition_reason = "rollback_failed_conservative_gate"
                 if self.light_explore_rollback_policy == "improved":
                     try:
                         current_state_after_rollback = self._get_probe_state(wait_to_stabilize=True)
@@ -10220,31 +13746,23 @@ class ExplorerElementAgent(gelab_agent_resize.GELABResizeAgent):
                         precondition_reason = f"fixed_safe_non_target_action:{action.action_type}"
                 explore_trace["planned_action_precondition_satisfied"] = bool(precondition_ok)
                 explore_trace["planned_action_precondition_reason"] = precondition_reason
-                if self.light_explore_rollback_policy == "improved" and precondition_ok:
-                    parsed_action["exploration_rollback_uncertain_but_planned_action_executed"] = planned_action_dict
-                    parsed_action["rollback_precondition_reason"] = precondition_reason
-                    extras["exploration_rollback_uncertain_but_planned_action_executed"] = True
-                    extras["rollback_precondition_reason"] = precondition_reason
-                    explore_trace["planned_action_suppressed"] = False
-                    explore_trace["suppression_reason"] = "precondition_satisfied_execute_planned"
-                else:
-                    parsed_action["exploration_rollback_gate_blocked_action"] = planned_action_dict
-                    parsed_action["action"] = "WAIT"
-                    parsed_action["summary"] = "Internal rollback-gate no-op; not added to prompt history."
-                    action = json_action.JSONAction(action_type=json_action.WAIT)
-                    tool_call = {"name": "mobile_use", "arguments": {"action": "wait", "value": 1}}
-                    extras = {
-                        "wait_seconds": 1,
-                        "internal_exploration_rollback_gate_noop": True,
-                        "suppress_history_append": True,
-                        "planned_action": planned_action_dict,
-                        "planned_action_precondition_satisfied": bool(precondition_ok),
-                        "rollback_gate_reason": precondition_reason,
-                    }
-                    explore_trace["planned_action_suppressed"] = False
-                    explore_trace["main_action_blocked_by_rollback_gate"] = True
-                    explore_trace["suppression_reason"] = ""
-                    explore_trace["rollback_gate_reason"] = precondition_reason
+                parsed_action["exploration_rollback_gate_blocked_action"] = planned_action_dict
+                parsed_action["action"] = "WAIT"
+                parsed_action["summary"] = "Internal rollback-gate no-op; not added to prompt history."
+                action = json_action.JSONAction(action_type=json_action.WAIT)
+                tool_call = {"name": "mobile_use", "arguments": {"action": "wait", "value": 1}}
+                extras = {
+                    "wait_seconds": 1,
+                    "internal_exploration_rollback_gate_noop": True,
+                    "suppress_history_append": True,
+                    "planned_action": planned_action_dict,
+                    "planned_action_precondition_satisfied": bool(precondition_ok),
+                    "rollback_gate_reason": precondition_reason,
+                }
+                explore_trace["planned_action_suppressed"] = True
+                explore_trace["main_action_blocked_by_rollback_gate"] = True
+                explore_trace["suppression_reason"] = "rollback_failed_conservative_gate"
+                explore_trace["rollback_gate_reason"] = precondition_reason
 
         main_action_start = time.time()
         self._execute_action(action, extras)

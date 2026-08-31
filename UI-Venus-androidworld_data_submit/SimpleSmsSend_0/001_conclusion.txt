@@ -1,0 +1,2 @@
+
+"Launched the Simple SMS Messenger app to start sending the message."

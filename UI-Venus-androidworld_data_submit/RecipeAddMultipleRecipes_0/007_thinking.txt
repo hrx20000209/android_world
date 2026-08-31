@@ -1,0 +1,2 @@
+
+To continue adding the "Chicken Alfredo Pasta" recipe, I need to fill in the Servings field next. The Servings field is visible and ready for input, so clicking on it will allow me to enter the number of servings.

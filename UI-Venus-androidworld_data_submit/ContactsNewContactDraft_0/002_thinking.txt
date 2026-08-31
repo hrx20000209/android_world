@@ -1,0 +1,2 @@
+
+To proceed with adding a new contact, I need to dismiss this notification permission request. Choosing "Don't allow" will let me continue without enabling notifications, which is unrelated to the task at hand.

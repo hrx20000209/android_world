@@ -1,0 +1,1 @@
+{'action': 'Finished', 'params': {'content': 'The Contacts app is open and ready for use. No further action needed.'}}

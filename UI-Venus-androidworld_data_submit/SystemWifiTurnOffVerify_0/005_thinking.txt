@@ -1,0 +1,2 @@
+
+The user's goal is to turn off Wi-Fi. We are currently in the "Network & internet" settings page, and the "Internet" option is visible, which should lead to the Wi-Fi settings. The next logical step is to click on the "Internet" option to access the Wi-Fi toggle.

@@ -1,0 +1,2 @@
+
+To continue adding the recipe from `recipes.txt` in Markor to the Broccoli app, I need to scroll down further to access any remaining fields like cooking steps or images. The current screenshot shows that the Ingredients field is filled, but there might be more fields below that need attention.

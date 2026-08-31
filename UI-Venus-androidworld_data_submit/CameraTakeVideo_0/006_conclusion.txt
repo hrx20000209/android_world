@@ -1,0 +1,2 @@
+
+"Click the record button to start taking a video."

@@ -1,0 +1,2 @@
+
+The goal is to delete the newest note in Markor. From the screenshot, the newest note appears to be "final_friendly_king.md" based on its timestamp. To delete this note, I need to select it first, likely by long pressing it, and then look for an option to delete it.

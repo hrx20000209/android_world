@@ -1,0 +1,2 @@
+
+The task now requires navigating the 'X' to the bottom-right cell using the direction buttons. The current position of 'X' is in the top-left cell. To reach the bottom-right cell, I need to move 'X' downwards and to the right. The available buttons are Up, Down, Left, and Right. The immediate next step is to click the 'Down' button to start moving 'X' towards the bottom row.

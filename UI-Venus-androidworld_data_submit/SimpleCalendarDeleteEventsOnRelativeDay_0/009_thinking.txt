@@ -1,0 +1,2 @@
+
+To delete all events scheduled for this Monday, I need to confirm the deletion of the current event. The confirmation dialog asks if I want to proceed with the deletion. Selecting "Yes" will finalize the deletion of this event.

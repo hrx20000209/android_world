@@ -1,0 +1,2 @@
+
+"Removed the '.md' part from the file extension."

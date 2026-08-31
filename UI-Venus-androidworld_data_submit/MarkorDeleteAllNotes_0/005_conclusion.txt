@@ -1,0 +1,2 @@
+
+"Click the delete icon to remove the selected note."

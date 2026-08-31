@@ -1,0 +1,2 @@
+
+To find the total duration of running activities this week, I need to focus on the "RUNNING" section in the screenshot. The aggregated stats show two running activities with a total duration of 1 hour and 45 minutes. Converting this time into minutes gives us 105 minutes. This matches the previously calculated total duration of running activities this week. Therefore, the total duration of running activities this week is 105 minutes.

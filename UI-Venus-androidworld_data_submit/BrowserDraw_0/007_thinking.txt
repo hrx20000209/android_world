@@ -1,0 +1,2 @@
+
+The task requires opening the 'task.html' file with Chrome. The current screenshot shows the 'Open with' dialog, listing several applications including Chrome. Selecting Chrome here will fulfill the requirement to open the file with Chrome as specified in the user's instructions.

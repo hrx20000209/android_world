@@ -1,0 +1,2 @@
+
+The user's goal is to turn on Wi-Fi. We've navigated to the Settings app, and the "Network & internet" option is visible, which contains the Wi-Fi settings. The next logical step is to click on "Network & internet" to access the Wi-Fi toggle.

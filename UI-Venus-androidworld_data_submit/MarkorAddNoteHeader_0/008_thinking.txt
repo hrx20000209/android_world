@@ -1,0 +1,2 @@
+
+To rename the file, I need to find an option within the menu that allows me to change the file name. The current menu does not show a direct 'Rename' option, but it might be under 'File settings' or another submenu. I should explore these options further to locate the rename function.

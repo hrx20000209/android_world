@@ -1,0 +1,2 @@
+
+To continue adding the recipe from `recipes.txt` in Markor to the Broccoli app, I need to scroll down to access other fields such as ingredients, steps, etc., since they are not visible on the current screen. Scrolling will help reveal these fields so I can fill them in according to the information in `recipes.txt`.

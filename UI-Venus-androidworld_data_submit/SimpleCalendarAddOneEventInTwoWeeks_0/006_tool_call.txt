@@ -1,0 +1,1 @@
+{'action': 'Type', 'params': {'content': 'We will prepare for annual budget.'}}

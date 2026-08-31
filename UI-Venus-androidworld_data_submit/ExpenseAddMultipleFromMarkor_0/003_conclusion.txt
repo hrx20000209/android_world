@@ -1,0 +1,2 @@
+
+"Navigate back to the home screen to proceed with logging reimbursable transactions."

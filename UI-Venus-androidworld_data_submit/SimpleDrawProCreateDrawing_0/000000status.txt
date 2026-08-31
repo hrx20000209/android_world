@@ -1,0 +1,3 @@
+0.0
+SimpleDrawProCreateDrawing
+141.90971612930298

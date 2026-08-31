@@ -14,6 +14,7 @@
 
 """A Multimodal Autonomous Agent for Android (M3A)."""
 
+import os
 import time
 
 from absl import logging
@@ -567,12 +568,26 @@ Action: {{"action_type": "status", "goal_status": "infeasible"}}"""
             # 1. 统一干掉坐标
             action_dict = agent_utils.sanitize_coordinate_actions(action_dict)
 
-            # 2. click → 用 Thought 选 element
-            if action_dict["action_type"] == "click" and "index" not in action_dict:
+            if action_dict.get("action_type") == "open_app":
+                action_dict["app_name"] = agent_utils.normalize_open_app_name(
+                    action_dict.get("app_name")
+                )
+
+            # 2. click → prefer Thought+A11y element grounding.  Coordinates
+            # emitted by small VLMs are often normalized or refer to the
+            # resized screenshot and are less stable than element identity.
+            if (
+                action_dict["action_type"] == "click"
+                and "index" not in action_dict
+            ):
                 idx = agent_utils.match_click_element(reason, before_ui_elements_list)
-                if idx is None:
+                if idx is not None:
+                    action_dict = {"action_type": "click", "index": idx}
+                elif "x" not in action_dict or "y" not in action_dict:
                     raise ValueError("Cannot find clickable element from thought")
-                action_dict["index"] = idx
+                elif max(abs(float(action_dict["x"])), abs(float(action_dict["y"]))) <= 1000:
+                    action_dict["x"] = int(float(action_dict["x"]) * logical_screen_size[0] / 1000)
+                    action_dict["y"] = int(float(action_dict["y"]) * logical_screen_size[1] / 1000)
 
             if action_dict is None:
                 raise ValueError(f"Cannot parse action: {action}")
@@ -653,6 +668,17 @@ Action: {{"action_type": "status", "goal_status": "infeasible"}}"""
             )
 
         time.sleep(self.wait_after_action_seconds)
+
+        # The original M3A performs a second multimodal inference only to
+        # summarize the step.  The two-system runtime keeps authoritative
+        # actions as structured history, so this extra request is optional.
+        # Default remains unchanged for baseline reproducibility.
+        if os.environ.get('ANDROID_WORLD_M3A_DISABLE_SUMMARY', '').strip().lower() in {
+            '1', 'true', 'yes', 'on'
+        }:
+            step_data['summary'] = f'Action selected: {action}. Reason: {reason}'
+            self.history.append(step_data)
+            return base_agent.AgentInteractionResult(False, step_data)
 
         state = self.env.get_state(wait_to_stabilize=False)
         logical_screen_size = self.env.logical_screen_size

@@ -1,0 +1,2 @@
+
+"Apply the filter to view the expense logs between October 1st and October 15th."

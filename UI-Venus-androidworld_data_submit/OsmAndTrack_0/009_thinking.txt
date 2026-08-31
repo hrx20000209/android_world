@@ -1,0 +1,2 @@
+
+The user has entered 'Schönberg, Liechtenstein' in the search bar, but the search results do not show the specific location. It seems the search result only displays 'Liechtenstein' as a country. The next logical step is to select the available search result to see if it leads to the correct location or provides further options to refine the search.

@@ -1,0 +1,2 @@
+
+"Perform a long press on the 'receipt_2023_01_22_sure_frog.jpg' file to bring up the options menu."

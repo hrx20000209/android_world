@@ -1,0 +1,2 @@
+
+To continue adding recipes from `recipes.txt` in Markor to the Broccoli app, I need to type the title of the recipe as specified in `recipes.txt`. The current screenshot shows that the Title field is active and ready for input. I should type the appropriate recipe title here.

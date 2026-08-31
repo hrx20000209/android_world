@@ -1,0 +1,2 @@
+
+The user wants to delete specific expenses from an app called "pro expense." Currently, I am on the home screen, and there is no visible icon for the "pro expense" app. Therefore, my next step should be to locate and open this app. Since it's not visible here, I need to scroll through the app list or search for it.

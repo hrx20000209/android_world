@@ -1,0 +1,2 @@
+
+The user wants to know the number of tasks due next week. The current screenshot shows tasks with various deadlines, but they are not filtered by next week's dates. To find tasks due next week, I need to ensure the correct filter is applied. The previous steps indicate that the 'Next 7 days' filter was selected, but the current view still shows tasks with today's and this week's deadlines. I should verify if the filter is correctly applied or if further adjustments are needed.

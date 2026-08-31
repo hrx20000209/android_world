@@ -1,0 +1,2 @@
+
+"Drag the brightness slider to the maximum value."

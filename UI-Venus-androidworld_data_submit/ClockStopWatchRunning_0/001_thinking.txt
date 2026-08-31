@@ -1,0 +1,2 @@
+
+To run the stopwatch, I need to open the Clock app or a similar application that contains a stopwatch feature. Since the Clock app isn't visible on this home screen, I should look for it either by swiping through other screens or accessing the app drawer.

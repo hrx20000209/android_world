@@ -1,0 +1,2 @@
+
+To proceed with creating the calendar event, I need to confirm the selected end time of 14:00 by clicking the 'OK' button. This will finalize the time selection and ensure the event lasts for 60 minutes as specified by the user.

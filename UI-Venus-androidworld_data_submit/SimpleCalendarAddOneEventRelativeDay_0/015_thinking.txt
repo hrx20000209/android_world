@@ -1,0 +1,2 @@
+
+To finalize the calendar event, I need to confirm the end time of 6:00 AM by clicking the 'OK' button. This will ensure the event duration is set to 60 minutes as requested. After confirming the end time, I can proceed to save the event.

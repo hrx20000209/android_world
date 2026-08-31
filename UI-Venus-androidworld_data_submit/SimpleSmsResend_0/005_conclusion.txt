@@ -1,0 +1,2 @@
+
+"Click on the 'Forward' option to proceed with resending the message."

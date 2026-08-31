@@ -1,0 +1,2 @@
+
+The current screen shows the expense entry form with the name "Legal Fees," the amount "$10.14," and the category "Others" already filled in. The next step is to add the note "Monthly recurring" in the Note field. After entering the note, I will save the entry and proceed to add the next expense.

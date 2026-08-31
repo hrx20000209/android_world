@@ -1,0 +1,2 @@
+
+The user has typed the message "A quick brown fox." and now needs to send it. The send button is typically represented by an arrow icon located near the input field. Clicking this button will complete the task of sending the message.

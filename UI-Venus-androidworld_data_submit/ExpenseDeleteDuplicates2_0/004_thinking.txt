@@ -1,0 +1,2 @@
+
+To delete duplicate expenses while ensuring at least one instance of each unique expense remains, I need to identify any exact duplicates in the list. Currently, I see two entries labeled "Dividends" with different amounts, so they are not exact duplicates. I should continue scrolling through the list to find any exact duplicates.

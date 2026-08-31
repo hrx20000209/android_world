@@ -1,0 +1,1 @@
+{'action': 'Type', 'params': {'content': 'A quick and healthy vegetable stir fry.'}}

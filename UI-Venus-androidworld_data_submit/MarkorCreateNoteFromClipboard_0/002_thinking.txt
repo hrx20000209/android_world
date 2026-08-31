@@ -1,0 +1,2 @@
+
+To create a new note named "2023_09_08_active_umbrella.txt", I need to initiate the creation of a new file. The red plus button at the bottom right corner likely allows me to add a new file. Clicking this button should lead to options for creating a new note or file.

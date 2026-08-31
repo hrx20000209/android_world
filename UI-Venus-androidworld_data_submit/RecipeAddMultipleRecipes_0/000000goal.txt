@@ -1,0 +1,21 @@
+Add the following recipes into the Broccoli app:
+Recipe: Chicken Alfredo Pasta
+ description: A delicious and healthy choice for any time of the day.
+ servings: 2 servings
+ preparationTime: 10 mins
+ ingredients: as desired
+ directions: Cook fettuccine pasta, toss with Alfredo sauce and grilled chicken strips. Serve with a sprinkle of Parmesan cheese. Try adding a pinch of your favorite spices for extra flavor.
+
+Recipe: Quinoa Salad with Vegetables
+ description: A quick and easy meal, perfect for busy weekdays.
+ servings: 8 servings
+ preparationTime: 30 mins
+ ingredients: to your liking
+ directions: Mix cooked quinoa with diced vegetables, feta cheese, and a lemon olive oil dressing. Try adding a pinch of your favorite spices for extra flavor.
+
+Recipe: Butternut Squash Soup
+ description: A delicious and healthy choice for any time of the day.
+ servings: 1 serving
+ preparationTime: 45 mins
+ ingredients: per individual taste
+ directions: Sauté onions and garlic, add cubed butternut squash and broth. Puree until smooth and season with nutmeg, salt, and pepper. Feel free to substitute with ingredients you have on hand.

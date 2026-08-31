@@ -32,10 +32,9 @@ def extract_json(s: str) -> dict[str, Any] | None:
   Returns:
     JSON object.
   """
-    pattern = r'\{.*?\}'
-    match = re.search(pattern, s)
-    # print(f"[DEBUG] Match: {match} ")
-    if match:
+    pattern = r'\{[^{}]*\}'
+    matches = list(re.finditer(pattern, s, flags=re.DOTALL))
+    for match in reversed(matches):
         try:
             return ast.literal_eval(match.group())
         except (SyntaxError, ValueError) as error:
@@ -43,10 +42,36 @@ def extract_json(s: str) -> dict[str, Any] | None:
                 # Try conversion with json module.
                 return json.loads(match.group())
             except (SyntaxError, ValueError) as error2:
-                print('Cannot extract JSON, skipping due to errors %s and %s', error, error2,)
-                return None
-    else:
-        return None
+                del error, error2
+
+        # Model-tolerant fallback for a single flat action object.  This is
+        # intentionally schema-based rather than task/label based.
+        raw = match.group()
+        action_match = re.search(
+            r'["\']?action_type["\']?\s*:\s*["\']([A-Za-z_]+)["\']', raw,
+            flags=re.IGNORECASE,
+        )
+        if not action_match:
+            continue
+        parsed: dict[str, Any] = {"action_type": action_match.group(1).lower()}
+        point_match = re.search(
+            r'["\']?(?:point|coordinate)["\']?\s*:\s*\[?\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*\]?',
+            raw, flags=re.IGNORECASE,
+        )
+        if point_match:
+            parsed["point"] = [float(point_match.group(1)), float(point_match.group(2))]
+        index_match = re.search(r'["\']?index["\']?\s*:\s*(\d+)', raw, flags=re.IGNORECASE)
+        if index_match:
+            parsed["index"] = int(index_match.group(1))
+        for key in ("app_name", "text", "goal_status", "direction"):
+            value_match = re.search(
+                rf'["\']?{key}["\']?\s*:\s*["\']([^"\']+)["\']', raw,
+                flags=re.IGNORECASE,
+            )
+            if value_match:
+                parsed[key] = value_match.group(1)
+        return parsed
+    return None
 
 
 _DIR_WORDS = {"up", "down", "left", "right"}
@@ -280,10 +305,53 @@ COORD_KEYS = {
 
 COORDINATE_ACTIONS = {
     "click",
+    "double_tap",
+    "input_text",
     "long_press",
     "drag",
     "swipe",
 }
+
+OPEN_APP_ALIASES = {
+    "alarm": "Clock",
+    "clock": "Clock",
+    "stopwatch": "Clock",
+    "timer": "Clock",
+    "calendar": "Simple Calendar Pro",
+    "simple calendar": "Simple Calendar Pro",
+    "simple calendar pro": "Simple Calendar Pro",
+    "contacts": "Contacts",
+    "contact": "Contacts",
+    "audio recorder": "Audio Recorder",
+    "recorder": "Audio Recorder",
+    "notes": "Joplin",
+    "joplin": "Joplin",
+    "markor": "Markor",
+    "files": "Files",
+    "file manager": "Files",
+    "pro expense": "Pro Expense",
+    "expense": "Pro Expense",
+    "broccoli": "Broccoli",
+    "recipes": "Broccoli",
+    "recipe": "Broccoli",
+    "sms": "Simple SMS Messenger",
+    "messages": "Simple SMS Messenger",
+    "simple sms": "Simple SMS Messenger",
+    "vlc": "VLC",
+    "retro music": "Retro Music",
+    "opentracks": "OpenTracks",
+    "open tracks": "OpenTracks",
+    "sports tracker": "OpenTracks",
+    "activity tracker": "OpenTracks",
+    "tasks": "Tasks",
+}
+
+
+def normalize_open_app_name(app_name: Any) -> Any:
+    if not isinstance(app_name, str):
+        return app_name
+    cleaned = app_name.strip().strip('"').strip("'")
+    return OPEN_APP_ALIASES.get(cleaned.lower(), cleaned)
 
 
 def sanitize_coordinate_actions(action_dict: Dict[str, Any]) -> Dict[str, Any]:
@@ -296,9 +364,48 @@ def sanitize_coordinate_actions(action_dict: Dict[str, Any]) -> Dict[str, Any]:
     if action_type in COORDINATE_ACTIONS:
         clean = {"action_type": action_type}
 
-        # index 是唯一允许保留的定位方式
+        # Some VLMs put absolute coordinates into the AndroidWorld `index`
+        # field, e.g. {"action_type": "click", "index": [430, 2156]}.
+        # JSONAction supports coordinate clicks via x/y, but cannot coerce a
+        # list-valued index. Preserve this as a coordinate action instead of
+        # turning it into a parse failure loop.
+        index = action_dict.get("index")
+        if isinstance(index, (list, tuple)) and len(index) >= 2:
+            try:
+                clean["x"] = int(float(index[0]))
+                clean["y"] = int(float(index[1]))
+            except (TypeError, ValueError):
+                pass
+        elif "coordinate" in action_dict:
+            coord = action_dict.get("coordinate")
+            if isinstance(coord, (list, tuple)) and len(coord) >= 2:
+                try:
+                    clean["x"] = int(float(coord[0]))
+                    clean["y"] = int(float(coord[1]))
+                except (TypeError, ValueError):
+                    pass
+        elif "point" in action_dict:
+            point = action_dict.get("point")
+            if isinstance(point, (list, tuple)) and len(point) >= 2:
+                try:
+                    clean["x"] = int(float(point[0]))
+                    clean["y"] = int(float(point[1]))
+                except (TypeError, ValueError):
+                    pass
+        elif "x" in action_dict and "y" in action_dict:
+            try:
+                clean["x"] = int(float(action_dict["x"]))
+                clean["y"] = int(float(action_dict["y"]))
+            except (TypeError, ValueError):
+                pass
+
+        if action_type == "input_text" and "text" in action_dict:
+            clean["text"] = action_dict["text"]
+
+        # Otherwise index is the semantic AndroidWorld element selector.
         if "index" in action_dict:
-            clean["index"] = action_dict["index"]
+            if "x" not in clean and "y" not in clean:
+                clean["index"] = action_dict["index"]
 
         return clean
 

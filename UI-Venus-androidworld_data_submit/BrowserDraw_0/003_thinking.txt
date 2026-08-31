@@ -1,0 +1,2 @@
+
+To continue with the task, I need to locate the 'task.html' file within the Downloads folder. Since the current view does not show any files, I should scroll down to see more contents of the Downloads directory. This will help me find the specific file needed for the task.

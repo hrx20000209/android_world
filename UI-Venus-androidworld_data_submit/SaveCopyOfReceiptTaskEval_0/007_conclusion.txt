@@ -1,0 +1,2 @@
+
+"Confirm the selection of the Download folder by clicking the 'OK' button."

@@ -1,0 +1,2 @@
+
+"Enter the amount '45' for the 'Shopping' expense."

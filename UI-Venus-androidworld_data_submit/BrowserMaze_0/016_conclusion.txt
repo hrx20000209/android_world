@@ -1,0 +1,2 @@
+
+"Click the 'Right' button to move 'X' to the bottom-right cell."

@@ -1,0 +1,1 @@
+{'action': 'Finished', 'params': {'content': 'All expenses from expenses.jpg have been successfully added.'}}

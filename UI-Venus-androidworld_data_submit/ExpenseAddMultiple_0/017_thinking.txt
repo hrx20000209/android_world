@@ -1,0 +1,2 @@
+
+The current screen shows the expense entry form with the name "Legal Fees" and the amount "$10.14" already filled in. The next step is to select the correct category for this expense, which is "Others." The "Others" category is now visible, so I can select it. After selecting the category, I will need to add the note "Monthly recurring."

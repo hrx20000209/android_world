@@ -1,0 +1,2 @@
+
+To determine the number of running activities completed this week, I need to identify entries marked with a running icon and check their dates. From the screenshot, there is only one entry with a running icon ("Trying and failing to keep up with John") dated "Yesterday." No other running activities are listed for this week so far. Therefore, the count of running activities this week is 1.

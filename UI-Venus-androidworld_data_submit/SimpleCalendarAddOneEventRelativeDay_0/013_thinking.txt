@@ -1,0 +1,2 @@
+
+To complete the calendar event setup, I need to adjust the end time to ensure the event lasts for 60 minutes. The current end time is set to 5:00 AM, which matches the start time. I should click on the end time field to change it to 6:00 AM, thereby setting the duration correctly.

@@ -1,0 +1,2 @@
+
+The next step is to change the phone label from 'Mobile' to 'Work'. The dropdown menu for the label is visible, and I need to click on it to select 'Work'.

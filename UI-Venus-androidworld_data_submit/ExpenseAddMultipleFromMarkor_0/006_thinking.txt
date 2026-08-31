@@ -1,0 +1,2 @@
+
+The Pro Expense app is now open, and the next step is to log reimbursable transactions identified from `my_expenses.txt`. To add new transactions, I should look for an option to create a new entry. The plus button at the bottom right corner seems like the most likely option to add a new transaction.

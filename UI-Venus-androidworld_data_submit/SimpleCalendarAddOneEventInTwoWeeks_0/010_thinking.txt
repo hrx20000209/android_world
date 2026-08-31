@@ -1,0 +1,2 @@
+
+To proceed with creating the calendar event, I need to adjust the end time to 17:30 to ensure the event lasts for 30 minutes as requested by the user. Currently, both the start and end times are set to 17:00. I should click on the end time field to change it to 17:30.

@@ -1,0 +1,2 @@
+
+"I typed '2 hrs' into the 'Time' field to specify the preparation time for the recipe."

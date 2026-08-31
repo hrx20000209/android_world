@@ -1,0 +1,2 @@
+
+"Click on the 'Filters' dropdown to expand it and access filtering options."

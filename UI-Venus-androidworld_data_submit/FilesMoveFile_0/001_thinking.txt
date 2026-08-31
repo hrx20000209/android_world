@@ -1,0 +1,2 @@
+
+To move the file 'holiday_photos.jpg' from Podcasts to DCIM within the sdk_gphone_x86_64 storage, I need to open the file manager app. Since the home screen is visible, I should locate and launch the file manager application. The folder icon at the bottom right likely represents the file manager.

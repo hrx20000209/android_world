@@ -1,0 +1,2 @@
+
+"Click on the file extension field to change the extension."

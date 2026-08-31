@@ -1,0 +1,2 @@
+
+"Click the 'Move' option in the context menu to proceed with moving the file."

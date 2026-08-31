@@ -1,0 +1,2 @@
+
+"Click on the file extension field to change it from '.md' to '.txt'."

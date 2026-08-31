@@ -1,0 +1,2 @@
+
+"Click the filter icon to ensure only to-dos are displayed."

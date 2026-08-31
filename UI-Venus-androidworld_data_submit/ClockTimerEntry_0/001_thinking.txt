@@ -1,0 +1,2 @@
+
+To create a timer as requested, I need to open the Clock app. Since it's not visible on this home screen, I should either swipe to another page or access the app drawer to find it.

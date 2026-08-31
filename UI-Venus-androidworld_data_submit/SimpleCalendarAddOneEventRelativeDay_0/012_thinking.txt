@@ -1,0 +1,2 @@
+
+To proceed with creating the calendar event, I need to confirm the selected start time of 5:00 AM by clicking the 'OK' button. This will finalize the time setting and allow me to move on to setting the duration of the event to 60 minutes.

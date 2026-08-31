@@ -1,0 +1,2 @@
+
+"I clicked the plus button to start creating a new note."

@@ -1,0 +1,2 @@
+
+"Click the 'SAVE' button to log the 'Client meeting coffee' transaction."

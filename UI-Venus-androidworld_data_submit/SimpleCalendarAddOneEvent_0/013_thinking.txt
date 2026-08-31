@@ -1,0 +1,2 @@
+
+To proceed with creating the calendar event, I need to set the end time correctly to ensure the event lasts for 60 minutes. Currently, both the start and end times are set to 13:00, so I should click on the end time field to adjust it to 14:00.

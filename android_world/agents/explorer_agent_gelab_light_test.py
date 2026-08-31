@@ -141,5 +141,34 @@ class HomeReplayAnchorTest(absltest.TestCase):
       self.assertLess(len(os.path.abspath(context_path)), 240)
 
 
+class LexicalRuleDefaultTest(absltest.TestCase):
+
+  def test_disabled_lexical_rules_do_not_classify_labels(self):
+    agent = object.__new__(ExplorerElementAgent)
+    agent.light_explore_lexical_rules = False
+    agent.light_explore_quality_filters = True
+
+    self.assertFalse(agent._is_risky_probe_text("Delete and send"))
+    self.assertFalse(agent._is_commit_probe_label("Save"))
+    self.assertFalse(agent._is_noise_probe_text("Google Lens"))
+    self.assertFalse(agent._is_goal_irrelevant_probe_text("camera", "write note"))
+    self.assertEqual(agent._task_mode("Delete every message"), "GENERAL")
+    self.assertEqual(
+        agent._candidate_quality_filter_reason(
+            {
+                "label": "Simple Calendar",
+                "center": [100, 100],
+                "a11y": {
+                    "resource_id": "calendar_fab",
+                    "class_name": "android.widget.TextView",
+                    "bbox": {"x_min": 0, "y_min": 0, "x_max": 200, "y_max": 200},
+                },
+            },
+            "Find an event",
+        ),
+        "",
+    )
+
+
 if __name__ == "__main__":
   absltest.main()

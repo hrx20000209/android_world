@@ -1,0 +1,701 @@
+{
+  "seed": 30,
+  "tasks": [
+    {
+      "name": "AudioRecorderRecordAudio",
+      "baseline_success": 0,
+      "baseline_steps": 12,
+      "max_steps": 17
+    },
+    {
+      "name": "AudioRecorderRecordAudioWithFileName",
+      "baseline_success": 0,
+      "baseline_steps": 20,
+      "max_steps": 25
+    },
+    {
+      "name": "BrowserDraw",
+      "baseline_success": 0,
+      "baseline_steps": 20,
+      "max_steps": 25
+    },
+    {
+      "name": "BrowserMaze",
+      "baseline_success": 0,
+      "baseline_steps": 20,
+      "max_steps": 25
+    },
+    {
+      "name": "BrowserMultiply",
+      "baseline_success": 0,
+      "baseline_steps": 21,
+      "max_steps": 26
+    },
+    {
+      "name": "CameraTakePhoto",
+      "baseline_success": 0,
+      "baseline_steps": 10,
+      "max_steps": 15
+    },
+    {
+      "name": "CameraTakeVideo",
+      "baseline_success": 0,
+      "baseline_steps": 10,
+      "max_steps": 15
+    },
+    {
+      "name": "ClockStopWatchPausedVerify",
+      "baseline_success": 0,
+      "baseline_steps": 10,
+      "max_steps": 15
+    },
+    {
+      "name": "ClockStopWatchRunning",
+      "baseline_success": 1,
+      "baseline_steps": 4,
+      "max_steps": 10
+    },
+    {
+      "name": "ClockTimerEntry",
+      "baseline_success": 0,
+      "baseline_steps": 10,
+      "max_steps": 15
+    },
+    {
+      "name": "ContactsAddContact",
+      "baseline_success": 1,
+      "baseline_steps": 9,
+      "max_steps": 14
+    },
+    {
+      "name": "ContactsNewContactDraft",
+      "baseline_success": 1,
+      "baseline_steps": 10,
+      "max_steps": 15
+    },
+    {
+      "name": "ExpenseAddMultiple",
+      "baseline_success": 0,
+      "baseline_steps": 21,
+      "max_steps": 26
+    },
+    {
+      "name": "ExpenseAddMultipleFromGallery",
+      "baseline_success": 0,
+      "baseline_steps": 21,
+      "max_steps": 26
+    },
+    {
+      "name": "ExpenseAddMultipleFromMarkor",
+      "baseline_success": 0,
+      "baseline_steps": 14,
+      "max_steps": 19
+    },
+    {
+      "name": "ExpenseAddSingle",
+      "baseline_success": 1,
+      "baseline_steps": 10,
+      "max_steps": 15
+    },
+    {
+      "name": "ExpenseDeleteDuplicates",
+      "baseline_success": 1,
+      "baseline_steps": 7,
+      "max_steps": 12
+    },
+    {
+      "name": "ExpenseDeleteDuplicates2",
+      "baseline_success": 1,
+      "baseline_steps": 12,
+      "max_steps": 17
+    },
+    {
+      "name": "ExpenseDeleteMultiple",
+      "baseline_success": 1,
+      "baseline_steps": 11,
+      "max_steps": 16
+    },
+    {
+      "name": "ExpenseDeleteMultiple2",
+      "baseline_success": 1,
+      "baseline_steps": 21,
+      "max_steps": 26
+    },
+    {
+      "name": "ExpenseDeleteSingle",
+      "baseline_success": 1,
+      "baseline_steps": 5,
+      "max_steps": 10
+    },
+    {
+      "name": "FilesDeleteFile",
+      "baseline_success": 0,
+      "baseline_steps": 9,
+      "max_steps": 14
+    },
+    {
+      "name": "FilesMoveFile",
+      "baseline_success": 0,
+      "baseline_steps": 20,
+      "max_steps": 25
+    },
+    {
+      "name": "MarkorAddNoteHeader",
+      "baseline_success": 0,
+      "baseline_steps": 12,
+      "max_steps": 17
+    },
+    {
+      "name": "MarkorChangeNoteContent",
+      "baseline_success": 0,
+      "baseline_steps": 12,
+      "max_steps": 17
+    },
+    {
+      "name": "MarkorCreateFolder",
+      "baseline_success": 1,
+      "baseline_steps": 5,
+      "max_steps": 10
+    },
+    {
+      "name": "MarkorCreateNote",
+      "baseline_success": 1,
+      "baseline_steps": 8,
+      "max_steps": 13
+    },
+    {
+      "name": "MarkorCreateNoteAndSms",
+      "baseline_success": 0,
+      "baseline_steps": 16,
+      "max_steps": 21
+    },
+    {
+      "name": "MarkorCreateNoteFromClipboard",
+      "baseline_success": 0,
+      "baseline_steps": 14,
+      "max_steps": 19
+    },
+    {
+      "name": "MarkorDeleteAllNotes",
+      "baseline_success": 1,
+      "baseline_steps": 7,
+      "max_steps": 12
+    },
+    {
+      "name": "MarkorDeleteNewestNote",
+      "baseline_success": 1,
+      "baseline_steps": 5,
+      "max_steps": 10
+    },
+    {
+      "name": "MarkorDeleteNote",
+      "baseline_success": 1,
+      "baseline_steps": 5,
+      "max_steps": 10
+    },
+    {
+      "name": "MarkorEditNote",
+      "baseline_success": 0,
+      "baseline_steps": 12,
+      "max_steps": 17
+    },
+    {
+      "name": "MarkorMergeNotes",
+      "baseline_success": 0,
+      "baseline_steps": 21,
+      "max_steps": 26
+    },
+    {
+      "name": "MarkorMoveNote",
+      "baseline_success": 0,
+      "baseline_steps": 14,
+      "max_steps": 19
+    },
+    {
+      "name": "MarkorTranscribeReceipt",
+      "baseline_success": 0,
+      "baseline_steps": 18,
+      "max_steps": 23
+    },
+    {
+      "name": "MarkorTranscribeVideo",
+      "baseline_success": 0,
+      "baseline_steps": 20,
+      "max_steps": 25
+    },
+    {
+      "name": "NotesIsTodo",
+      "baseline_success": 1,
+      "baseline_steps": 2,
+      "max_steps": 10
+    },
+    {
+      "name": "NotesMeetingAttendeeCount",
+      "baseline_success": 1,
+      "baseline_steps": 6,
+      "max_steps": 11
+    },
+    {
+      "name": "NotesRecipeIngredientCount",
+      "baseline_success": 0,
+      "baseline_steps": 5,
+      "max_steps": 10
+    },
+    {
+      "name": "NotesTodoItemCount",
+      "baseline_success": 1,
+      "baseline_steps": 4,
+      "max_steps": 10
+    },
+    {
+      "name": "OpenAppTaskEval",
+      "baseline_success": 1,
+      "baseline_steps": 4,
+      "max_steps": 10
+    },
+    {
+      "name": "OsmAndFavorite",
+      "baseline_success": 1,
+      "baseline_steps": 8,
+      "max_steps": 13
+    },
+    {
+      "name": "OsmAndMarker",
+      "baseline_success": 0,
+      "baseline_steps": 8,
+      "max_steps": 13
+    },
+    {
+      "name": "OsmAndTrack",
+      "baseline_success": 0,
+      "baseline_steps": 21,
+      "max_steps": 26
+    },
+    {
+      "name": "RecipeAddMultipleRecipes",
+      "baseline_success": 0,
+      "baseline_steps": 21,
+      "max_steps": 26
+    },
+    {
+      "name": "RecipeAddMultipleRecipesFromImage",
+      "baseline_success": 0,
+      "baseline_steps": 21,
+      "max_steps": 26
+    },
+    {
+      "name": "RecipeAddMultipleRecipesFromMarkor",
+      "baseline_success": 0,
+      "baseline_steps": 21,
+      "max_steps": 26
+    },
+    {
+      "name": "RecipeAddMultipleRecipesFromMarkor2",
+      "baseline_success": 0,
+      "baseline_steps": 21,
+      "max_steps": 26
+    },
+    {
+      "name": "RecipeAddSingleRecipe",
+      "baseline_success": 1,
+      "baseline_steps": 16,
+      "max_steps": 21
+    },
+    {
+      "name": "RecipeDeleteDuplicateRecipes",
+      "baseline_success": 1,
+      "baseline_steps": 6,
+      "max_steps": 11
+    },
+    {
+      "name": "RecipeDeleteDuplicateRecipes2",
+      "baseline_success": 0,
+      "baseline_steps": 21,
+      "max_steps": 26
+    },
+    {
+      "name": "RecipeDeleteDuplicateRecipes3",
+      "baseline_success": 0,
+      "baseline_steps": 18,
+      "max_steps": 23
+    },
+    {
+      "name": "RecipeDeleteMultipleRecipes",
+      "baseline_success": 1,
+      "baseline_steps": 14,
+      "max_steps": 19
+    },
+    {
+      "name": "RecipeDeleteMultipleRecipesWithConstraint",
+      "baseline_success": 1,
+      "baseline_steps": 4,
+      "max_steps": 10
+    },
+    {
+      "name": "RecipeDeleteMultipleRecipesWithNoise",
+      "baseline_success": 1,
+      "baseline_steps": 18,
+      "max_steps": 23
+    },
+    {
+      "name": "RecipeDeleteSingleRecipe",
+      "baseline_success": 1,
+      "baseline_steps": 6,
+      "max_steps": 11
+    },
+    {
+      "name": "RecipeDeleteSingleWithRecipeWithNoise",
+      "baseline_success": 1,
+      "baseline_steps": 8,
+      "max_steps": 13
+    },
+    {
+      "name": "RetroCreatePlaylist",
+      "baseline_success": 0,
+      "baseline_steps": 18,
+      "max_steps": 23
+    },
+    {
+      "name": "RetroPlayingQueue",
+      "baseline_success": 0,
+      "baseline_steps": 21,
+      "max_steps": 26
+    },
+    {
+      "name": "RetroPlaylistDuration",
+      "baseline_success": 0,
+      "baseline_steps": 21,
+      "max_steps": 26
+    },
+    {
+      "name": "RetroSavePlaylist",
+      "baseline_success": 0,
+      "baseline_steps": 21,
+      "max_steps": 26
+    },
+    {
+      "name": "SaveCopyOfReceiptTaskEval",
+      "baseline_success": 1,
+      "baseline_steps": 9,
+      "max_steps": 14
+    },
+    {
+      "name": "SimpleCalendarAddOneEvent",
+      "baseline_success": 1,
+      "baseline_steps": 16,
+      "max_steps": 21
+    },
+    {
+      "name": "SimpleCalendarAddOneEventInTwoWeeks",
+      "baseline_success": 1,
+      "baseline_steps": 18,
+      "max_steps": 23
+    },
+    {
+      "name": "SimpleCalendarAddOneEventRelativeDay",
+      "baseline_success": 0,
+      "baseline_steps": 21,
+      "max_steps": 26
+    },
+    {
+      "name": "SimpleCalendarAddOneEventTomorrow",
+      "baseline_success": 0,
+      "baseline_steps": 15,
+      "max_steps": 20
+    },
+    {
+      "name": "SimpleCalendarAddRepeatingEvent",
+      "baseline_success": 0,
+      "baseline_steps": 15,
+      "max_steps": 20
+    },
+    {
+      "name": "SimpleCalendarAnyEventsOnDate",
+      "baseline_success": 1,
+      "baseline_steps": 4,
+      "max_steps": 10
+    },
+    {
+      "name": "SimpleCalendarDeleteEvents",
+      "baseline_success": 1,
+      "baseline_steps": 9,
+      "max_steps": 14
+    },
+    {
+      "name": "SimpleCalendarDeleteEventsOnRelativeDay",
+      "baseline_success": 1,
+      "baseline_steps": 12,
+      "max_steps": 17
+    },
+    {
+      "name": "SimpleCalendarDeleteOneEvent",
+      "baseline_success": 1,
+      "baseline_steps": 7,
+      "max_steps": 12
+    },
+    {
+      "name": "SimpleCalendarEventOnDateAtTime",
+      "baseline_success": 1,
+      "baseline_steps": 4,
+      "max_steps": 10
+    },
+    {
+      "name": "SimpleCalendarEventsInNextWeek",
+      "baseline_success": 0,
+      "baseline_steps": 8,
+      "max_steps": 13
+    },
+    {
+      "name": "SimpleCalendarEventsInTimeRange",
+      "baseline_success": 0,
+      "baseline_steps": 4,
+      "max_steps": 10
+    },
+    {
+      "name": "SimpleCalendarEventsOnDate",
+      "baseline_success": 1,
+      "baseline_steps": 3,
+      "max_steps": 10
+    },
+    {
+      "name": "SimpleCalendarFirstEventAfterStartTime",
+      "baseline_success": 1,
+      "baseline_steps": 4,
+      "max_steps": 10
+    },
+    {
+      "name": "SimpleCalendarLocationOfEvent",
+      "baseline_success": 1,
+      "baseline_steps": 4,
+      "max_steps": 10
+    },
+    {
+      "name": "SimpleCalendarNextEvent",
+      "baseline_success": 0,
+      "baseline_steps": 4,
+      "max_steps": 10
+    },
+    {
+      "name": "SimpleCalendarNextMeetingWithPerson",
+      "baseline_success": 0,
+      "baseline_steps": 6,
+      "max_steps": 11
+    },
+    {
+      "name": "SimpleDrawProCreateDrawing",
+      "baseline_success": 1,
+      "baseline_steps": 18,
+      "max_steps": 23
+    },
+    {
+      "name": "SimpleSmsReply",
+      "baseline_success": 1,
+      "baseline_steps": 6,
+      "max_steps": 11
+    },
+    {
+      "name": "SimpleSmsReplyMostRecent",
+      "baseline_success": 1,
+      "baseline_steps": 6,
+      "max_steps": 11
+    },
+    {
+      "name": "SimpleSmsResend",
+      "baseline_success": 0,
+      "baseline_steps": 12,
+      "max_steps": 17
+    },
+    {
+      "name": "SimpleSmsSend",
+      "baseline_success": 1,
+      "baseline_steps": 7,
+      "max_steps": 12
+    },
+    {
+      "name": "SimpleSmsSendClipboardContent",
+      "baseline_success": 0,
+      "baseline_steps": 8,
+      "max_steps": 13
+    },
+    {
+      "name": "SimpleSmsSendReceivedAddress",
+      "baseline_success": 0,
+      "baseline_steps": 18,
+      "max_steps": 23
+    },
+    {
+      "name": "SportsTrackerActivitiesCountForWeek",
+      "baseline_success": 0,
+      "baseline_steps": 2,
+      "max_steps": 10
+    },
+    {
+      "name": "SportsTrackerActivitiesOnDate",
+      "baseline_success": 0,
+      "baseline_steps": 6,
+      "max_steps": 11
+    },
+    {
+      "name": "SportsTrackerActivityDuration",
+      "baseline_success": 0,
+      "baseline_steps": 4,
+      "max_steps": 10
+    },
+    {
+      "name": "SportsTrackerLongestDistanceActivity",
+      "baseline_success": 1,
+      "baseline_steps": 4,
+      "max_steps": 10
+    },
+    {
+      "name": "SportsTrackerTotalDistanceForCategoryOverInterval",
+      "baseline_success": 0,
+      "baseline_steps": 4,
+      "max_steps": 10
+    },
+    {
+      "name": "SportsTrackerTotalDurationForCategoryThisWeek",
+      "baseline_success": 0,
+      "baseline_steps": 10,
+      "max_steps": 15
+    },
+    {
+      "name": "SystemBluetoothTurnOff",
+      "baseline_success": 0,
+      "baseline_steps": 10,
+      "max_steps": 15
+    },
+    {
+      "name": "SystemBluetoothTurnOffVerify",
+      "baseline_success": 1,
+      "baseline_steps": 7,
+      "max_steps": 12
+    },
+    {
+      "name": "SystemBluetoothTurnOn",
+      "baseline_success": 1,
+      "baseline_steps": 4,
+      "max_steps": 10
+    },
+    {
+      "name": "SystemBluetoothTurnOnVerify",
+      "baseline_success": 1,
+      "baseline_steps": 7,
+      "max_steps": 12
+    },
+    {
+      "name": "SystemBrightnessMax",
+      "baseline_success": 1,
+      "baseline_steps": 10,
+      "max_steps": 15
+    },
+    {
+      "name": "SystemBrightnessMaxVerify",
+      "baseline_success": 0,
+      "baseline_steps": 10,
+      "max_steps": 15
+    },
+    {
+      "name": "SystemBrightnessMin",
+      "baseline_success": 0,
+      "baseline_steps": 10,
+      "max_steps": 15
+    },
+    {
+      "name": "SystemBrightnessMinVerify",
+      "baseline_success": 1,
+      "baseline_steps": 6,
+      "max_steps": 11
+    },
+    {
+      "name": "SystemCopyToClipboard",
+      "baseline_success": 0,
+      "baseline_steps": 8,
+      "max_steps": 13
+    },
+    {
+      "name": "SystemWifiTurnOff",
+      "baseline_success": 1,
+      "baseline_steps": 4,
+      "max_steps": 10
+    },
+    {
+      "name": "SystemWifiTurnOffVerify",
+      "baseline_success": 1,
+      "baseline_steps": 3,
+      "max_steps": 10
+    },
+    {
+      "name": "SystemWifiTurnOn",
+      "baseline_success": 1,
+      "baseline_steps": 7,
+      "max_steps": 12
+    },
+    {
+      "name": "SystemWifiTurnOnVerify",
+      "baseline_success": 1,
+      "baseline_steps": 6,
+      "max_steps": 11
+    },
+    {
+      "name": "TasksCompletedTasksForDate",
+      "baseline_success": 0,
+      "baseline_steps": 10,
+      "max_steps": 15
+    },
+    {
+      "name": "TasksDueNextWeek",
+      "baseline_success": 0,
+      "baseline_steps": 2,
+      "max_steps": 10
+    },
+    {
+      "name": "TasksDueOnDate",
+      "baseline_success": 1,
+      "baseline_steps": 2,
+      "max_steps": 10
+    },
+    {
+      "name": "TasksHighPriorityTasks",
+      "baseline_success": 0,
+      "baseline_steps": 2,
+      "max_steps": 10
+    },
+    {
+      "name": "TasksHighPriorityTasksDueOnDate",
+      "baseline_success": 0,
+      "baseline_steps": 4,
+      "max_steps": 10
+    },
+    {
+      "name": "TasksIncompleteTasksOnDate",
+      "baseline_success": 0,
+      "baseline_steps": 2,
+      "max_steps": 10
+    },
+    {
+      "name": "TurnOffWifiAndTurnOnBluetooth",
+      "baseline_success": 1,
+      "baseline_steps": 6,
+      "max_steps": 11
+    },
+    {
+      "name": "TurnOnWifiAndOpenApp",
+      "baseline_success": 1,
+      "baseline_steps": 16,
+      "max_steps": 21
+    },
+    {
+      "name": "VlcCreatePlaylist",
+      "baseline_success": 0,
+      "baseline_steps": 21,
+      "max_steps": 26
+    },
+    {
+      "name": "VlcCreateTwoPlaylists",
+      "baseline_success": 0,
+      "baseline_steps": 21,
+      "max_steps": 26
+    }
+  ]
+}

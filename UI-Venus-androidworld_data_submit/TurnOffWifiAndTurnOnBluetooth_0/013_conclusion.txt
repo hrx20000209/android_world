@@ -1,0 +1,2 @@
+
+"Click the toggle switch to enable Bluetooth."

@@ -1,0 +1,2 @@
+
+To add the specified songs to the newly created playlist, I need to navigate to the section where songs are listed. The bottom navigation bar includes icons that likely represent different sections of the app. The music note icon typically represents the song library, which is where I can find individual songs to add to the playlist.

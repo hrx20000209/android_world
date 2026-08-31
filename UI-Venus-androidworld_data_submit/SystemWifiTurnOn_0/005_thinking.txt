@@ -1,0 +1,2 @@
+
+The user's goal is to turn on Wi-Fi. We have navigated to the "Network & internet" section, and the "Internet" option is visible, which likely leads to the Wi-Fi settings. The next logical step is to click on the "Internet" option to access the Wi-Fi toggle.

@@ -1,0 +1,2 @@
+
+The goal was to turn off WiFi and enable Bluetooth. According to the history, WiFi has been turned off, and Bluetooth has been enabled as shown by the active toggle switch in the current screenshot. Therefore, the task is complete.

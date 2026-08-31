@@ -1,0 +1,2 @@
+
+The goal is to delete the newest note, which has already been selected as indicated by the red checkmark next to "final_friendly_king.md". The next logical step is to find and click the delete icon to remove this note.

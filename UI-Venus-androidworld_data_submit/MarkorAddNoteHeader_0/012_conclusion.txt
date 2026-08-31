@@ -1,0 +1,2 @@
+
+"Close the current menu to return to the main file view and find the rename option."

@@ -1,0 +1,2 @@
+
+To move the file 'holiday_photos.jpg' from Podcasts to DCIM, I need to select the 'Move to...' option from the menu. This will allow me to choose the destination folder, which is DCIM. The current screenshot shows the 'Move to...' option available in the dropdown menu, indicating that selecting it is the next logical step.

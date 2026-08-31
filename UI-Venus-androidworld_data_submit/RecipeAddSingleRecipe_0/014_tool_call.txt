@@ -1,0 +1,1 @@
+{'action': 'Type', 'params': {'content': 'Toss chopped romaine lettuce with Caesar dressing, grilled chicken strips, and Parmesan cheese. Wrap in a large tortilla. Feel free to substitute with ingredients you have on hand.'}}

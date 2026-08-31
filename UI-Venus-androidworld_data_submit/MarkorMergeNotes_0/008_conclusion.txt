@@ -1,0 +1,2 @@
+
+"Click the clipboard icon to paste the content from the second note 'proud_cat_edited.txt' into the new note."

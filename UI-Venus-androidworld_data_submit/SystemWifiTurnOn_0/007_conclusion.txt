@@ -1,0 +1,2 @@
+
+"The task to turn on Wi-Fi has been completed as the Wi-Fi toggle is already on."

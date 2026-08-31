@@ -1,0 +1,2 @@
+
+The current screen shows the expense entry form with the name "Social Club Dues" and the amount "$67.41" already filled in. The next step is to select the correct category for this expense, which is "Social." After selecting the category, I will need to add the note "Monthly recurring."

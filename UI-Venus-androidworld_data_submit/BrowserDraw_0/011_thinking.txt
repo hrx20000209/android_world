@@ -1,0 +1,2 @@
+
+The task requires opening the 'task.html' file in Chrome. The file is visible in the Downloads section, and based on previous actions, it seems necessary to click on the file to proceed. This will likely prompt the system to open it with Chrome, allowing us to continue with the drawing task.

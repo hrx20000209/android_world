@@ -1,0 +1,2 @@
+
+The user's goal is to save a track with specific waypoints in the OsmAnd app. The current screenshot shows the search interface with the query set to "Schonberg, Liechtenstein." However, the search result only shows "Liechtenstein" as a country, not the specific location of Schönberg. The next logical step is to clear the current search query and enter the next waypoint, Triesen, Liechtenstein, to continue building the route. The "X" button at the top right corner of the screen allows clearing the current search query.

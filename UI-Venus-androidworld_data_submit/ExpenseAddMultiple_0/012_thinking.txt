@@ -1,0 +1,2 @@
+
+The current screen displays the expense entry form, ready for input. To add the next expense, "Legal Fees," I need to start by entering the name in the Name field. The Name field is currently active and ready for input. I'll type "Legal Fees" into this field as the first step.

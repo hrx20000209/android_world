@@ -1,0 +1,2 @@
+
+Inform the user that the event for the next week is "Product demo".

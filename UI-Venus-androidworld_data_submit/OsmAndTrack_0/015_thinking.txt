@@ -1,0 +1,2 @@
+
+The user's goal is to save a track with specific waypoints in the OsmAnd app. The current screenshot shows the search interface with the query set to "Triesen, Liechtenstein," but the search result only shows "Country Liechtenstein." The next logical step is to select the available search result to see if it leads to the correct location or provides further options to refine the search. The "Country Liechtenstein" result is likely the closest match available for now.

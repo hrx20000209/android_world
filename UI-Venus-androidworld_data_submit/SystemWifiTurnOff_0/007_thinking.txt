@@ -1,0 +1,2 @@
+
+The Wi-Fi has been successfully turned off as indicated by the grey toggle switch. There are no further steps needed to complete the task since the goal was to turn off Wi-Fi, and this has been achieved.

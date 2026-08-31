@@ -1,0 +1,2 @@
+
+"Click on the Stopwatch tab to access the stopwatch interface."

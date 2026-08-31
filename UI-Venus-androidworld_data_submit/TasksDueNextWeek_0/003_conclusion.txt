@@ -1,0 +1,2 @@
+
+"Click on the icon in the bottom navigation bar that likely represents a calendar or list view to filter tasks by week."

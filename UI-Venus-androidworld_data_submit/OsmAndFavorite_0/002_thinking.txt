@@ -1,0 +1,2 @@
+
+The user's goal is to add a favorite location marker at specific coordinates within the OsmAnd app. The current screenshot shows the map interface of the app, but the map is not yet centered on the desired coordinates. The next logical step is to search for the specified coordinates so that they can be marked as a favorite location. The search icon is visible at the top left corner of the screen, indicating where we should start the search process.

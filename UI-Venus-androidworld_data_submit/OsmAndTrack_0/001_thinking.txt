@@ -1,0 +1,2 @@
+
+The user wants to save a track with specific waypoints in the OsmAnd maps app. Currently, the home screen is visible, and there is no indication that the OsmAnd app is open or even present on this screen. Therefore, the next logical step is to launch the OsmAnd app so that we can proceed with adding waypoints and saving the track.

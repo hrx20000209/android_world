@@ -1,0 +1,2 @@
+
+The user has successfully entered all the required details: First Name, Last Name, Phone Number, and Phone Label. The final step is to ensure that no further actions are taken, specifically not hitting the 'Save' button, as instructed by the user. All necessary information has been correctly inputted according to the user's specifications.
