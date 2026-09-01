@@ -521,6 +521,13 @@ def main() -> int:
                       help="Probes allowed across the whole episode.")
   parser.add_argument("--max_path", type=int, default=3,
                       help="Hops replayed inside one counted step.")
+  parser.add_argument("--no_bootstrap", dest="bootstrap", action="store_false",
+                      help="disable the launch collapse. Separate from "
+                           "--enable_skip: collapsing open_app into the first "
+                           "decision is fixed by the task text and measured at "
+                           "96/96, while replaying a remembered edge is a "
+                           "prediction - an ablation of one must not silently "
+                           "disable the other")
   parser.add_argument("--dump_graph_steps", action="store_true",
                       help="write the belief graph after every step, for "
                            "reconstructing how it grew")
@@ -1084,7 +1091,7 @@ def main() -> int:
     # actions on 2026-08-31, entirely inside the "no probe expresses this"
     # bucket). Only from the launcher, and only before any action has been
     # taken, so it cannot fire mid-task.
-    if (args.enable_skip and step == 0 and not getattr(self, "_actions", [])
+    if (args.bootstrap and step == 0 and not getattr(self, "_actions", [])
         and "nexuslauncher" in before.activity.component):
       target = _target_app_from_goal(goal, installed_apps)
       if target:
