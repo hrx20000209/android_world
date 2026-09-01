@@ -32,7 +32,39 @@ class NodeStatus(str, enum.Enum):
 
 
 def canonical_action(action: Mapping[str, Any]) -> str:
-  return json.dumps(dict(action), sort_keys=True, ensure_ascii=False, separators=(",", ":"))
+  """A stable key for "the same decision, taken again".
+
+  Keyed on the control when one is known, not on the tap coordinate. The model
+  predicts coordinates in a normalised space and they wobble: on
+  ExpenseAddMultiple (2026-09-01) it pressed the same button 11 times as
+  (540,1063) six times and (540,1068) five times, and the graph recorded two
+  edges of six and five instead of one of eleven. The node was visited 33
+  times and its only recorded transition still read one execution, so the
+  "has the model done this here before" test could never pass. The same shape
+  of bug as putting the destination in the edge id, one level down.
+
+  `control_key` deliberately excludes the element's bounds, which move with
+  scroll position and layout, and excludes the coordinate entirely. Action
+  type is lower-cased so a probe's CLICK and the agent's click are one thing.
+  """
+  a = dict(action)
+  control = a.get("control_key")
+  if control:
+    return json.dumps({
+        "action_type": str(a.get("action_type", "")).lower(),
+        "control_key": control,
+        "text": a.get("text"),
+        "direction": a.get("direction"),
+        "app_name": a.get("app_name"),
+    }, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
+  return json.dumps(a, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
+
+
+def control_key_from_identity(identity: str) -> str:
+  """resource_id|text|content_desc|class from a UiElement.identity, dropping bounds."""
+  parts = str(identity or "").split("|")
+  key = "|".join(parts[:4]).strip("|")
+  return key if key.strip("|") else ""
 
 
 @dataclasses.dataclass
@@ -92,6 +124,8 @@ class GraphEdge:
   # distillation decision actually needs - "rolled back once, failed twice" is
   # a different situation from "rolled back once" even though both leave
   # rollback_success True.
+  # Every node this transition has been seen to reach, most recent last.
+  observed_destinations: tuple[str, ...] = ()
   probe_count: int = 0
   skip_attempt_count: int = 0
   skip_success_count: int = 0
@@ -100,6 +134,11 @@ class GraphEdge:
   cumulative_realized_ig: float = 0.0
   cumulative_exploration_cost: float = 0.0
   last_updated_generation: int = 0
+  # How many screens the graph knew about the last time the agent itself
+  # executed this transition. A replay is licensed by the task iterating, not
+  # merely by the action recurring, and the two look identical from the edge
+  # alone - see nodes_known in the runner's reusable_edge.
+  nodes_at_last_execution: int = 0
 
   @property
   def alignment_rate(self) -> float | None:
@@ -184,13 +223,34 @@ class ProgressiveBeliefGraph:
       discovered_labels: tuple[str, ...] = (), inverse_level: str = "",
   ) -> GraphEdge:
     with self._lock:
-      key = f"{src_node}\0{canonical_action(action)}\0{dst_node or ''}"
+      # Identity is (source screen, action) - the destination is something
+      # this transition was observed to do, not part of what it is.
+      #
+      # Including dst_node split one repeated decision into several edges.
+      # RecipeDeleteMultipleRecipes (2026-08-31) is the clean example: on the
+      # recipe-detail screen the model chose the same control on all three
+      # passes, but each pass left a list with one fewer recipe, so the three
+      # landings hashed to three nodes and the graph recorded three separate
+      # edges of one execution each instead of one edge of three. Every test
+      # of "has the model done this here before" then read 1, and the
+      # repetitive tasks that progressive memory exists to serve were exactly
+      # the ones it could never fire on.
+      key = f"{src_node}\0{canonical_action(action)}"
       edge_id = hashlib.sha256(key.encode()).hexdigest()[:24]
       edge = self.edges.get(edge_id)
       if edge is None:
         edge = GraphEdge(edge_id, src_node, dict(action), dst_node)
         self.edges[edge_id] = edge
         self._outgoing[src_node].add(edge_id)
+      if dst_node:
+        # Keep the whole set. One destination means the transition is
+        # deterministic and a replay can be verified against it; several mean
+        # the action is still the right one to take but where it lands depends
+        # on state the graph does not model, and the verification has to be
+        # correspondingly weaker.
+        edge.observed_destinations = tuple(
+            dict.fromkeys(edge.observed_destinations + (dst_node,)))
+        edge.dst_node = dst_node
       edge.status = EdgeStatus.SPECULATIVE
       edge.path_probability = max(0.0, min(1.0, path_probability))
       edge.confidence = max(edge.confidence, max(0.0, min(1.0, confidence)))

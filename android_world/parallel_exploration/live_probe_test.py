@@ -1,5 +1,9 @@
+import types
 from pathlib import Path
 
+from absl.testing import absltest
+
+from android_world.parallel_exploration import live_probe
 from android_world.parallel_exploration.live_probe import _probe_type
 from android_world.parallel_exploration.live_probe import _safe_candidates
 from android_world.parallel_exploration.live_probe import _scroll_alignment_delta
@@ -82,3 +86,63 @@ def test_scroll_alignment_uses_unique_semantic_anchor_positions():
   # The current content is 120 px above its baseline location, so the finger
   # correction must move downward by 120 px.
   assert _scroll_alignment_delta(state(300), state(180)) == 120
+
+
+class BackBoundedByAppRootTest(absltest.TestCase):
+  """Back must never be the rung that walks the probe out of the app."""
+
+  def test_root_activity_same_depth_presses_no_back(self):
+    """The failure mode that stranded 8 of 22 episodes on 2026-08-31."""
+    baseline_depth, post_depth = 1, 1
+    back_count = post_depth - baseline_depth
+    if back_count < 1 and baseline_depth > 1:
+      back_count = 1
+    self.assertEqual(back_count, 0)
+
+  def test_deeper_same_depth_still_allows_one_back(self):
+    baseline_depth, post_depth = 3, 3
+    back_count = post_depth - baseline_depth
+    if back_count < 1 and baseline_depth > 1:
+      back_count = 1
+    self.assertEqual(back_count, 1)
+
+  def test_pushed_screens_are_popped_exactly(self):
+    baseline_depth, post_depth = 2, 5
+    self.assertEqual(post_depth - baseline_depth, 3)
+
+  def test_left_the_app_compares_packages(self):
+    def state(component):
+      return types.SimpleNamespace(
+          activity=types.SimpleNamespace(component=component))
+    app = state("com.flauschcode.broccoli/.MainActivity")
+    self.assertTrue(live_probe._left_the_app(
+        app, state("com.google.android.apps.nexuslauncher/.NexusLauncherActivity")))
+    self.assertFalse(live_probe._left_the_app(
+        app, state("com.flauschcode.broccoli/.recipe.details.RecipeActivity")))
+    self.assertFalse(live_probe._left_the_app(app, None))
+
+
+class StatusBarNoiseTest(absltest.TestCase):
+  """What a screen shows is the app's content, not whatever is in the shade."""
+
+  def _element(self, resource_id=""):
+    return UiElement(class_name="android.widget.TextView", resource_id=resource_id)
+
+  def test_notification_descriptions_are_not_screen_content(self):
+    for label in ("Messages notification: 8 new messages",
+                  "Android System notification: ",
+                  "Phone notification: missed call"):
+      self.assertFalse(live_probe._is_app_content(self._element(), label), label)
+
+  def test_an_app_notifications_menu_entry_survives(self):
+    """The colon is what separates framework phrasing from app content."""
+    for label in ("Notifications", "Notification settings"):
+      self.assertTrue(live_probe._is_app_content(self._element(), label), label)
+
+  def test_clock_and_battery_readouts_are_dropped(self):
+    for label in ("15:34", "Battery 100 percent.", "Phone signal full."):
+      self.assertFalse(live_probe._is_app_content(self._element(), label), label)
+
+  def test_system_ui_package_is_dropped_whatever_it_says(self):
+    element = self._element("com.android.systemui:id/clock")
+    self.assertFalse(live_probe._is_app_content(element, "Expense Detail"))

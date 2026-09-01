@@ -96,10 +96,25 @@ def replay_navigation_trajectory(adb: AdbClient, actions: Sequence[Mapping[str, 
   such as ``open app -> click Search -> enter query``. The caller always
   verifies the resulting full state signature before accepting recovery.
   """
-  adb.run(["shell", "input", "keyevent", "HOME"], timeout_s=2.0)
-  time.sleep(0.20)
+  # Only start from HOME when the trajectory itself contains a launch that can
+  # be resolved to a package. Going HOME without one leaves every following
+  # coordinate to be tapped on the launcher, which is how a recovery for an
+  # expense-app probe twice ended up in YouTube (2026-08-31); replaying in
+  # place is both safe and closer to the state being reconstructed.
+  from_home = any(
+      _APP_PACKAGES.get(str(
+          (dict(r.get("action_dict") or r.get("action") or r)).get("app_name")
+          or (dict(r.get("tool_call") or {}).get("arguments") or {}).get("text")
+          or "").casefold())
+      for r in actions
+      if str((dict(r.get("action_dict") or r.get("action") or r)).get(
+          "action_type") or "").lower() == "open_app")
+  if from_home:
+    adb.run(["shell", "input", "keyevent", "HOME"], timeout_s=2.0)
+    time.sleep(0.20)
   replayed = 0
   skipped = 0
+  launched = not from_home
   for record in actions:
     action = dict(record.get("action_dict") or record.get("action") or record)
     tool = dict(record.get("tool_call") or {})
@@ -114,14 +129,28 @@ def replay_navigation_trajectory(adb: AdbClient, actions: Sequence[Mapping[str, 
         # transition frame. This is especially important for toolbar actions.
         time.sleep(0.35)
         replayed += 1
+        launched = True
       else:
+        # Every action after this one is a coordinate whose meaning depends on
+        # the app being open. Skipping the launch and replaying them anyway
+        # taps those coordinates on the launcher - which is how a recovery for
+        # an expense-app probe ended up in YouTube, twice, on 2026-08-31.
+        # Nothing further can be reconstructed, so stop.
         skipped += 1
+        return {"replayed": replayed, "skipped_non_idempotent": skipped,
+                "aborted": "unresolved_open_app", "app_name": app_name}
     elif kind == "click":
       coordinate = arguments.get("coordinate")
       x = action.get("x")
       y = action.get("y")
       if coordinate and len(coordinate) >= 2:
         x, y = coordinate[0], coordinate[1]
+      if not launched:
+        # A coordinate replayed before any app has been launched lands on the
+        # launcher. There is nothing to reconstruct from here.
+        skipped += 1
+        return {"replayed": replayed, "skipped_non_idempotent": skipped,
+                "aborted": "coordinate_before_launch"}
       if x is not None and y is not None:
         adb.run(["shell", "input", "tap", str(int(x)), str(int(y))], timeout_s=2.0)
         time.sleep(0.12)

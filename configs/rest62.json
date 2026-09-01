@@ -1,0 +1,191 @@
+{
+  "seed": 30,
+  "tasks": [
+    {
+      "name": "AudioRecorderRecordAudio"
+    },
+    {
+      "name": "AudioRecorderRecordAudioWithFileName"
+    },
+    {
+      "name": "BrowserDraw"
+    },
+    {
+      "name": "BrowserMaze"
+    },
+    {
+      "name": "BrowserMultiply"
+    },
+    {
+      "name": "CameraTakePhoto"
+    },
+    {
+      "name": "CameraTakeVideo"
+    },
+    {
+      "name": "ClockStopWatchPausedVerify"
+    },
+    {
+      "name": "ClockTimerEntry"
+    },
+    {
+      "name": "ExpenseAddMultiple"
+    },
+    {
+      "name": "ExpenseAddMultipleFromGallery"
+    },
+    {
+      "name": "ExpenseAddMultipleFromMarkor"
+    },
+    {
+      "name": "FilesDeleteFile"
+    },
+    {
+      "name": "FilesMoveFile"
+    },
+    {
+      "name": "MarkorAddNoteHeader"
+    },
+    {
+      "name": "MarkorChangeNoteContent"
+    },
+    {
+      "name": "MarkorCreateNoteAndSms"
+    },
+    {
+      "name": "MarkorCreateNoteFromClipboard"
+    },
+    {
+      "name": "MarkorEditNote"
+    },
+    {
+      "name": "MarkorMergeNotes"
+    },
+    {
+      "name": "MarkorMoveNote"
+    },
+    {
+      "name": "MarkorTranscribeReceipt"
+    },
+    {
+      "name": "MarkorTranscribeVideo"
+    },
+    {
+      "name": "NotesRecipeIngredientCount"
+    },
+    {
+      "name": "OsmAndMarker"
+    },
+    {
+      "name": "OsmAndTrack"
+    },
+    {
+      "name": "RecipeAddMultipleRecipes"
+    },
+    {
+      "name": "RecipeAddMultipleRecipesFromImage"
+    },
+    {
+      "name": "RecipeAddMultipleRecipesFromMarkor"
+    },
+    {
+      "name": "RecipeAddMultipleRecipesFromMarkor2"
+    },
+    {
+      "name": "RecipeDeleteDuplicateRecipes2"
+    },
+    {
+      "name": "RecipeDeleteDuplicateRecipes3"
+    },
+    {
+      "name": "RetroCreatePlaylist"
+    },
+    {
+      "name": "RetroPlayingQueue"
+    },
+    {
+      "name": "RetroPlaylistDuration"
+    },
+    {
+      "name": "RetroSavePlaylist"
+    },
+    {
+      "name": "SimpleCalendarAddOneEventRelativeDay"
+    },
+    {
+      "name": "SimpleCalendarAddOneEventTomorrow"
+    },
+    {
+      "name": "SimpleCalendarAddRepeatingEvent"
+    },
+    {
+      "name": "SimpleCalendarEventsInNextWeek"
+    },
+    {
+      "name": "SimpleCalendarEventsInTimeRange"
+    },
+    {
+      "name": "SimpleCalendarNextEvent"
+    },
+    {
+      "name": "SimpleCalendarNextMeetingWithPerson"
+    },
+    {
+      "name": "SimpleSmsResend"
+    },
+    {
+      "name": "SimpleSmsSendClipboardContent"
+    },
+    {
+      "name": "SimpleSmsSendReceivedAddress"
+    },
+    {
+      "name": "SportsTrackerActivitiesCountForWeek"
+    },
+    {
+      "name": "SportsTrackerActivitiesOnDate"
+    },
+    {
+      "name": "SportsTrackerActivityDuration"
+    },
+    {
+      "name": "SportsTrackerTotalDistanceForCategoryOverInterval"
+    },
+    {
+      "name": "SportsTrackerTotalDurationForCategoryThisWeek"
+    },
+    {
+      "name": "SystemBluetoothTurnOff"
+    },
+    {
+      "name": "SystemBrightnessMaxVerify"
+    },
+    {
+      "name": "SystemBrightnessMin"
+    },
+    {
+      "name": "SystemCopyToClipboard"
+    },
+    {
+      "name": "TasksCompletedTasksForDate"
+    },
+    {
+      "name": "TasksDueNextWeek"
+    },
+    {
+      "name": "TasksHighPriorityTasks"
+    },
+    {
+      "name": "TasksHighPriorityTasksDueOnDate"
+    },
+    {
+      "name": "TasksIncompleteTasksOnDate"
+    },
+    {
+      "name": "VlcCreatePlaylist"
+    },
+    {
+      "name": "VlcCreateTwoPlaylists"
+    }
+  ]
+}

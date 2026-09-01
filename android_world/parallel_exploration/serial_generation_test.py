@@ -32,14 +32,17 @@ def _graph_with_verified_edge():
       path_probability=1.0, confidence=1.0, expected_information_gain=1.0,
       risk_level="LOW", exploration_cost=0.0)
   graph.record_execution_verification(edge.edge_id, True)
+  # Twice: one execution says the transition worked here, two say it keeps
+  # being the answer here, and only the second licenses a replay.
+  graph.record_execution_verification(edge.edge_id, True)
   return graph, edge
 
 
 def test_exploration_from_this_step_is_invisible_to_this_step():
   """The whole point: step i cannot see what step i explored."""
   graph = ProgressiveBeliefGraph("task")
-  graph.upsert_node(_node("list"), visited=True)
-  graph.upsert_node(_node("list"), visited=True)
+  for _ in range(3):
+    graph.upsert_node(_node("list"), visited=True)
   guarded = GenerationGuardedGraph(graph)
 
   # Exploration during step 0 writes to the live graph.
@@ -47,6 +50,9 @@ def test_exploration_from_this_step_is_invisible_to_this_step():
       "list", {"action_type": "CLICK", "x": 1, "y": 2}, "form",
       path_probability=1.0, confidence=1.0, expected_information_gain=1.0,
       risk_level="LOW", exploration_cost=0.0)
+  graph.record_execution_verification(edge.edge_id, True)
+  # Twice: one execution says the transition worked here, two say it keeps
+  # being the answer here, and only the second licenses a replay.
   graph.record_execution_verification(edge.edge_id, True)
 
   # Step 0 still sees nothing: in the parallel design this probe would not
@@ -87,6 +93,9 @@ def test_unvisited_screen_offers_nothing_even_with_a_verified_edge():
       "list", {"action_type": "CLICK", "x": 1, "y": 2}, "form",
       path_probability=1.0, confidence=1.0, expected_information_gain=1.0,
       risk_level="LOW", exploration_cost=0.0)
+  graph.record_execution_verification(edge.edge_id, True)
+  # Twice: one execution says the transition worked here, two say it keeps
+  # being the answer here, and only the second licenses a replay.
   graph.record_execution_verification(edge.edge_id, True)
   guarded = GenerationGuardedGraph(graph)
   guarded.commit_step()
@@ -232,8 +241,20 @@ def test_low_entropy_skip_needs_a_revisit_not_just_one_mapped_edge():
   assert snap.reusable_edge("screen") is None      # ...but seen only once
 
   graph.upsert_node(_node("screen"), visited=True)  # second visit
+  graph.upsert_node(_node("screen"), visited=True)  # third
   guarded.commit_step()
-  offered = guarded.snapshot(for_step=2).reusable_edge("screen")
+  # Still refused: a revisit shows the screen was mapped, not that the single
+  # mapped transition is the one to take. Separating skip outcomes by source
+  # on 2026-08-31 measured graph-based skips at 3/17 against 80/80 for the
+  # launch collapse, and every step regression against the control was a
+  # mis-skip of this kind.
+  assert guarded.snapshot(for_step=2).reusable_edge("screen") is None
+
+  # The model itself having taken it is the evidence that was missing.
+  graph.record_execution_verification(only.edge_id, True)
+  graph.record_execution_verification(only.edge_id, True)
+  guarded.commit_step()
+  offered = guarded.snapshot(for_step=3).reusable_edge("screen")
   assert offered is not None and offered["edge_id"] == only.edge_id
 
 
@@ -265,15 +286,207 @@ def test_skip_refuses_to_walk_back_into_the_recent_path():
   graph = ProgressiveBeliefGraph("task")
   for name in ("a", "b"):
     graph.upsert_node(_node(name), visited=True)
-  graph.upsert_node(_node("a"), visited=True)   # revisited
+  for _ in range(2):
+    graph.upsert_node(_node("a"), visited=True)   # revisited, twice
   back = graph.add_speculative_transition(
       "a", {"action_type": "CLICK", "x": 1, "y": 1}, "b",
       path_probability=1.0, confidence=1.0, expected_information_gain=0.0,
       risk_level="LOW", exploration_cost=0.0)
   graph.record_execution_verification(back.edge_id, True)
+  graph.record_execution_verification(back.edge_id, True)  # twice: replayable
   guarded = GenerationGuardedGraph(graph)
   guarded.commit_step()
   snap = guarded.snapshot(for_step=1)
 
   assert snap.reusable_edge("a") is not None            # nothing known yet
-  assert snap.reusable_edge("a", recent=("b",)) is None  # b is where we came from
+  # A promoted lookahead edge is still refused when it points back into the
+  # recent path. The exemption is only for transitions the model itself has
+  # executed repeatedly - see reusable_edge - so make this one speculative.
+  lookahead = graph.add_speculative_transition(
+      "a", {"action_type": "CLICK", "x": 9, "y": 9}, "b",
+      path_probability=1.0, confidence=1.0, expected_information_gain=0.0,
+      risk_level="LOW", exploration_cost=0.0)
+  graph.edges[lookahead.edge_id].status = EdgeStatus.REUSABLE
+  guarded.commit_step()
+  assert guarded.snapshot(for_step=2).reusable_edge(
+      "a", recent=("b",)) is None  # b is where we came from
+
+
+def test_skip_needs_two_executions_not_one():
+  """One execution says it worked here; two say it keeps being the answer.
+
+  Separating 28 graph-based skips by their edge's execution history on
+  2026-08-31: all 21 misses replayed an edge the model had executed exactly
+  once, while every hit came from an edge it had executed at least twice.
+  """
+  graph = ProgressiveBeliefGraph("task")
+  for name in ("screen", "next"):
+    graph.upsert_node(_node(name), visited=True)
+  graph.upsert_node(_node("screen"), visited=True)   # revisited
+  graph.upsert_node(_node("screen"), visited=True)   # and again
+  edge = graph.add_speculative_transition(
+      "screen", {"action_type": "CLICK", "x": 1, "y": 1}, "next",
+      path_probability=1.0, confidence=1.0, expected_information_gain=0.0,
+      risk_level="LOW", exploration_cost=0.0)
+  guarded = GenerationGuardedGraph(graph)
+
+  graph.record_execution_verification(edge.edge_id, True)
+  guarded.commit_step()
+  assert guarded.snapshot(for_step=1).reusable_edge("screen") is None
+
+  graph.record_execution_verification(edge.edge_id, True)
+  guarded.commit_step()
+  assert guarded.snapshot(for_step=2).reusable_edge("screen") is not None
+
+
+def test_same_control_at_wobbling_coordinates_is_one_edge():
+  """The model's tap coordinate moves between visits; the control does not.
+
+  Measured on ExpenseAddMultiple (2026-09-01): the same button was pressed 11
+  times as (540,1063) six times and (540,1068) five times, and the graph
+  recorded two edges of six and five. The node was visited 33 times and its
+  only recorded transition still read one execution.
+  """
+  graph = ProgressiveBeliefGraph("task")
+  for name in ("screen", "next"):
+    graph.upsert_node(_node(name), visited=True)
+  key = "com.app:id/save|Save||android.widget.Button"
+  first = graph.add_speculative_transition(
+      "screen", {"action_type": "click", "x": 540, "y": 1063, "control_key": key},
+      "next", path_probability=1.0, confidence=1.0,
+      expected_information_gain=0.0, risk_level="LOW", exploration_cost=0.0)
+  second = graph.add_speculative_transition(
+      "screen", {"action_type": "click", "x": 540, "y": 1068, "control_key": key},
+      "next", path_probability=1.0, confidence=1.0,
+      expected_information_gain=0.0, risk_level="LOW", exploration_cost=0.0)
+  assert first.edge_id == second.edge_id
+  assert len(graph.edges) == 1
+
+
+def test_a_probe_and_the_model_taking_it_are_the_same_edge():
+  """Probe records CLICK, the agent records click; one control, one edge."""
+  graph = ProgressiveBeliefGraph("task")
+  for name in ("screen", "next"):
+    graph.upsert_node(_node(name), visited=True)
+  key = "com.app:id/details|Details||android.widget.TextView"
+  probed = graph.add_speculative_transition(
+      "screen", {"action_type": "CLICK", "x": 100, "y": 200, "control_key": key,
+                 "probe_type": "TAP_NAV"},
+      "next", path_probability=0.5, confidence=0.2,
+      expected_information_gain=0.5, risk_level="LOW", exploration_cost=1.0)
+  taken = graph.add_speculative_transition(
+      "screen", {"action_type": "click", "x": 103, "y": 198, "control_key": key},
+      "next", path_probability=1.0, confidence=1.0,
+      expected_information_gain=0.0, risk_level="LOW", exploration_cost=0.0)
+  assert probed.edge_id == taken.edge_id
+
+
+def test_actions_without_a_control_keep_their_own_identity():
+  """No control resolved: fall back to the whole action, as before."""
+  graph = ProgressiveBeliefGraph("task")
+  for name in ("screen", "next"):
+    graph.upsert_node(_node(name), visited=True)
+  a = graph.add_speculative_transition(
+      "screen", {"action_type": "input_text", "text": "hello"}, "next",
+      path_probability=1.0, confidence=1.0, expected_information_gain=0.0,
+      risk_level="LOW", exploration_cost=0.0)
+  b = graph.add_speculative_transition(
+      "screen", {"action_type": "input_text", "text": "world"}, "next",
+      path_probability=1.0, confidence=1.0, expected_information_gain=0.0,
+      risk_level="LOW", exploration_cost=0.0)
+  assert a.edge_id != b.edge_id
+
+
+def test_tap_resolves_to_the_smallest_control_containing_it():
+  """Containers enclose their children; the child is what was pressed."""
+  import types
+  from scripts.run_serial_exploration_task import _control_key_at
+  from android_world.parallel_exploration.rankers import UiElement
+  container = UiElement(resource_id="com.app:id/row", class_name="android.widget.LinearLayout",
+                        bounds=(0, 1000, 1080, 1200))
+  button = UiElement(resource_id="com.app:id/save", text="Save",
+                     class_name="android.widget.Button", bounds=(500, 1040, 600, 1090))
+  state = types.SimpleNamespace(elements=(container, button))
+  assert _control_key_at(state, {"x": 540, "y": 1063}) == \
+      _control_key_at(state, {"x": 540, "y": 1068})
+  assert "Save" in _control_key_at(state, {"x": 540, "y": 1063})
+  # Outside every element, and actions with no coordinate, resolve to nothing.
+  assert _control_key_at(state, {"x": 5, "y": 5}) == ""
+  assert _control_key_at(state, {"action_type": "input_text", "text": "x"}) == ""
+
+
+def test_unnamed_controls_are_separated_by_position():
+  """A bare widget class is not an identity; two of them must not merge."""
+  import types
+  from scripts.run_serial_exploration_task import _control_key_at
+  from android_world.parallel_exploration.rankers import UiElement
+  left_box = UiElement(class_name="android.widget.RelativeLayout", bounds=(0, 0, 200, 200))
+  right_box = UiElement(class_name="android.widget.RelativeLayout", bounds=(800, 0, 1000, 200))
+  state = types.SimpleNamespace(elements=(left_box, right_box))
+  a = _control_key_at(state, {"x": 100, "y": 100})
+  b = _control_key_at(state, {"x": 900, "y": 100})
+  assert a and b and a != b
+  # ...while a few pixels of wobble on the same one still resolves the same.
+  assert a == _control_key_at(state, {"x": 106, "y": 94})
+
+
+def test_an_edge_is_not_replayed_more_than_twice():
+  """A learned loop replays perfectly and still goes nowhere.
+
+  SimpleSmsReplyMostRecent (2026-09-01): the model looped between two screens,
+  the graph learned the loop, and skipping replayed it twelve times with every
+  hop matching its predicted destination while the episode made no progress.
+  """
+  graph = ProgressiveBeliefGraph("task")
+  for name in ("a", "b"):
+    graph.upsert_node(_node(name), visited=True)
+  graph.upsert_node(_node("a"), visited=True)
+  edge = graph.add_speculative_transition(
+      "a", {"action_type": "CLICK", "x": 1, "y": 1}, "b",
+      path_probability=1.0, confidence=1.0, expected_information_gain=0.0,
+      risk_level="LOW", exploration_cost=0.0)
+  for _ in range(2):
+    graph.record_execution_verification(edge.edge_id, True)
+  guarded = GenerationGuardedGraph(graph)
+  guarded.commit_step()
+  assert guarded.snapshot(for_step=1).reusable_edge("a") is not None
+
+  graph.record_skip_result(edge.edge_id, True)
+  guarded.commit_step()
+  assert guarded.snapshot(for_step=2).reusable_edge("a") is not None
+
+  graph.record_skip_result(edge.edge_id, True)
+  guarded.commit_step()
+  assert guarded.snapshot(for_step=3).reusable_edge("a") is None
+
+
+def test_replay_requires_the_task_to_have_moved():
+  """Repeating an action is only evidence when the task iterated meanwhile.
+
+  Two full runs of identical code (2026-09-01): on tasks where skipping fired
+  in both, this arm scored 6 and 6 against a control's 13, and every task that
+  saw a mis-skip was lost twice over. Iterating discovers screens - a list with
+  one fewer item is a different screen - while spinning discovers nothing.
+  """
+  graph = ProgressiveBeliefGraph("task")
+  for name in ("a", "b"):
+    graph.upsert_node(_node(name), visited=True)
+  graph.upsert_node(_node("a"), visited=True)
+  edge = graph.add_speculative_transition(
+      "a", {"action_type": "CLICK", "x": 1, "y": 1}, "b",
+      path_probability=1.0, confidence=1.0, expected_information_gain=0.0,
+      risk_level="LOW", exploration_cost=0.0)
+  for _ in range(2):
+    graph.record_execution_verification(edge.edge_id, True)
+  guarded = GenerationGuardedGraph(graph)
+
+  # Spinning: the graph knew these two screens when the edge last ran, and
+  # still knows only those two.
+  edge.nodes_at_last_execution = len(graph.nodes)
+  guarded.commit_step()
+  assert guarded.snapshot(for_step=1).reusable_edge("a") is None
+
+  # Iterating: the trajectory has since reached a screen never seen before.
+  graph.upsert_node(_node("c"), visited=True)
+  guarded.commit_step()
+  assert guarded.snapshot(for_step=2).reusable_edge("a") is not None

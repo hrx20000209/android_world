@@ -59,3 +59,22 @@ def test_replay_reconstructs_committed_click_and_input_actions():
   ])
   assert result == {"replayed": 3, "skipped_non_idempotent": 0}
   assert any("secret" in command for command, _ in adb.commands)
+
+
+def test_replay_aborts_instead_of_tapping_the_launcher():
+  """An unresolvable launch makes every later coordinate meaningless."""
+  adb = FakeAdb()
+  result = replay_navigation_trajectory(adb, [
+      {"action_dict": {"action_type": "open_app", "app_name": "Not An App"}},
+      {"action_dict": {"action_type": "click", "x": 300, "y": 900}},
+  ])
+  assert result["aborted"] == "unresolved_open_app"
+  assert not any("tap" in " ".join(cmd) for cmd, _ in adb.commands)
+
+
+def test_replay_without_any_launch_does_not_go_home_first():
+  adb = FakeAdb()
+  replay_navigation_trajectory(adb, [
+      {"action_dict": {"action_type": "click", "x": 3, "y": 4}},
+  ])
+  assert not any("HOME" in " ".join(cmd) for cmd, _ in adb.commands)

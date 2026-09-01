@@ -168,6 +168,30 @@ class _SnapshotView:
     )
 
 
+def _package_of(state) -> str:
+  return state.activity.component.split("/", 1)[0] if state is not None else ""
+
+
+def _left_the_app(baseline, current) -> bool:
+  return bool(current is not None
+              and _package_of(current) != _package_of(baseline))
+
+
+def _reenter_app(adb: AdbClient, capture, baseline):
+  """Bring the app back to the foreground mid-ladder.
+
+  A rung that leaves the app invalidates every rung after it: relaunching the
+  baseline component, replaying the trajectory, even the verification capture
+  would all be reading a different app. Re-entering costs one command and
+  restores the precondition the rest of the ladder assumes.
+  """
+  component = baseline.activity.component
+  if component:
+    adb.run(["shell", "am", "start", "-n", component], timeout_s=3.0)
+    time.sleep(0.15)
+  return capture.capture()
+
+
 def _record_filtered(path: Path, row, reason: str) -> None:
   """PART E: every candidate the safety gate removed, and why."""
   _write_jsonl(path, {
@@ -179,22 +203,26 @@ def _record_filtered(path: Path, row, reason: str) -> None:
   })
 
 
-def _record_scored(path: Path, scored) -> None:
+def _record_scored(path: Path, scored, rank: int, context: Mapping[str, Any],
+                   node_id: str, selected: bool) -> None:
   """PART E: the chosen candidate with every scoring term kept separate.
 
   Logged component-wise on purpose - a regression has to be attributable to
   path probability, information gain or cost, not just to "the score moved".
   """
   row = scored.row
-  _write_jsonl(path, {
-      "stage": "predictive_scorer", "utility": scored.utility,
-      "element_identity": row.element_identity, "probe_type": row.probe_type,
-      "role": row.role, "text": row.text,
-      "has_exact_history": row.has_exact_history,
-      "session_alignment_hits": row.session_alignment_hits,
-      "exploration_coverage": row.exploration_coverage,
+  record = row.as_log_record()
+  record.update({
+      "stage": "predictive_scorer",
+      "task_id": context.get("trial_id", ""),
+      "step": context.get("step_idx"),
+      "node_id": node_id,
+      "rank": rank,
+      "selected_for_probe": selected,
+      "final_exploration_score": scored.utility,
       **scored.components,
   })
+  _write_jsonl(path, record)
 
 
 def _is_app_content(element: UiElement, label: str) -> bool:
@@ -225,6 +253,16 @@ def _is_app_content(element: UiElement, label: str) -> bool:
   if re.fullmatch(r"(phone|wifi|wi-fi)\s+signal.*", text, flags=re.I):
     return False
   if text.lower() in {"no internet", "do not disturb", ":"}:
+    return False
+  if re.search(r"\bnotifications?\s*:", text, flags=re.I):
+    # Android describes every status-bar notification as
+    # "<App> notification: <text>". The colon is what separates that fixed
+    # framework phrasing from an app's own "Notifications" menu entry, which
+    # is real content. Without this the distilled context carried lines like
+    # "Streaming Services -> {Messages notification: 8 new messages, Android
+    # System notification: , Expense Detail}" - two thirds of the evidence
+    # about a screen being whatever happened to be in the shade
+    # (2026-09-01).
     return False
   return True
 
@@ -413,12 +451,24 @@ def _safe_candidates(
       # label there is no way to tell an icon-only nav control (back arrow,
       # tab) from an icon-only action trigger (sync, camera, swipe-delete
       # handle), so require the same semantic-inverse evidence as buttons.
-      _write_jsonl(filtered_path, {
-          **context, "element": _element_dict(element, 0, 0.0),
-          "reason": "icon_only_no_accessible_label",
-          "risk_level": RiskLevel.UNKNOWN.value,
-      })
-      continue
+      if not context.get("allow_icon_only_probes"):
+        # PART G ablation. The 89% figure above was measured on 2026-08-28,
+        # before two recovery bugs were found and fixed: BACK_N pressed a
+        # floor of one Back even when the probe had pushed nothing, walking
+        # out of the app from its own root activity, and TRAJECTORY_REPLAY
+        # went HOME and then replayed coordinates that landed on the launcher
+        # when an open_app could not be resolved. Both were the mechanism by
+        # which an icon probe became an unrecoverable state, so that evidence
+        # no longer describes the current system - and the rule is expensive:
+        # icon-only controls are 55% of everything the filter removes, while
+        # the model's own next click is inside the candidate set only 16% of
+        # the time (measured 2026-08-31). Off by default until measured.
+        _write_jsonl(filtered_path, {
+            **context, "element": _element_dict(element, 0, 0.0),
+            "reason": "icon_only_no_accessible_label",
+            "risk_level": RiskLevel.UNKNOWN.value,
+        })
+        continue
     navigation_click = bool(context.get("allow_navigation_click", True)) and role != "edittext"
     structurally_invertible = reversible_toggle or navigation_click
     if not structurally_invertible:
@@ -722,21 +772,42 @@ def _recover(
 
   baseline_depth = baseline.activity.stack_depth or 1
   post_depth = (post.activity.stack_depth if post else None) or baseline_depth
-  back_count = max(1, post_depth - baseline_depth)
-  for _ in range(back_count):
-    adb.run(["shell", "input", "keyevent", "BACK"], timeout_s=2.0)
-  time.sleep(0.10)
-  verify_started = time.monotonic_ns()
-  current = capture.capture()
-  verify_ms += (time.monotonic_ns() - verify_started) / 1e6
-  ok, matches, details = _strictly_restored(baseline, current)
-  if ok:
-    return "BACK_N", True, matches, details, (time.monotonic_ns() - recovery_started) / 1e6, verify_ms
+  # Back pops the stack. When the probe pushed nothing onto it - the screen is
+  # the same one it started from, changed only in scroll offset or selection -
+  # there is nothing to pop, and from the app's own root the single Back the
+  # old `max(1, ...)` floor forced went straight out to the launcher. That is
+  # where the strandings came from: measured 2026-08-31, 8 of 22 episodes were
+  # repaired off the launcher or another app, and the probe trace shows almost
+  # every one of them had reached an ordinary in-app activity and been walked
+  # out by its own recovery. Falling through to DEEPLINK relaunches the same
+  # component in place, which is both safer and more likely to work.
+  back_count = post_depth - baseline_depth
+  if back_count < 1 and baseline_depth > 1:
+    # Same depth but deeper than the root: one Back can still legitimately
+    # dismiss a same-activity overlay without leaving the app.
+    back_count = 1
+  if back_count >= 1:
+    for _ in range(back_count):
+      adb.run(["shell", "input", "keyevent", "BACK"], timeout_s=2.0)
+    time.sleep(0.10)
+    verify_started = time.monotonic_ns()
+    current = capture.capture()
+    verify_ms += (time.monotonic_ns() - verify_started) / 1e6
+    ok, matches, details = _strictly_restored(baseline, current)
+    if ok:
+      return "BACK_N", True, matches, details, (time.monotonic_ns() - recovery_started) / 1e6, verify_ms
+    if _left_the_app(baseline, current):
+      # Back has walked out of the app. Every further rung would run against
+      # the wrong app, so re-enter before continuing down the ladder.
+      current = _reenter_app(adb, capture, baseline)
 
   # Same-activity overlays can consume one Back for the IME and another for
   # the overlay itself. Apply one additional, verified Back before escalating
   # to relaunch/trajectory reconstruction.
-  if post is not None and post.activity.component == baseline.activity.component:
+  if (post is not None
+      and post.activity.component == baseline.activity.component
+      and not _left_the_app(baseline, current)
+      and (baseline.activity.stack_depth or 1) > 1):
     adb.run(["shell", "input", "keyevent", "BACK"], timeout_s=2.0)
     time.sleep(0.10)
     verify_started = time.monotonic_ns()
@@ -745,6 +816,8 @@ def _recover(
     ok, matches, details = _strictly_restored(baseline, current)
     if ok:
       return "BACK_OVERLAY", True, matches, details, (time.monotonic_ns() - recovery_started) / 1e6, verify_ms
+    if _left_the_app(baseline, current):
+      current = _reenter_app(adb, capture, baseline)
 
   component = baseline.activity.component
   if component:
@@ -766,6 +839,13 @@ def _recover(
     details["trajectory_replay"] = replay_details
     if ok:
       return "TRAJECTORY_REPLAY", True, matches, details, (time.monotonic_ns() - recovery_started) / 1e6, verify_ms
+  if _left_the_app(baseline, current):
+    # The ladder is out of rungs, but where it leaves the device still
+    # matters: the next real inference reads this screen. Reporting FAILED
+    # from the launcher costs the episode far more than reporting it from the
+    # app's own entry screen, which is at least somewhere the model can act.
+    current = _reenter_app(adb, capture, baseline)
+    details["reentered_after_failure"] = not _left_the_app(baseline, current)
   return "FAILED", False, matches, details, (time.monotonic_ns() - recovery_started) / 1e6, verify_ms
 
 
@@ -996,6 +1076,7 @@ def explorer_window_process(
         "allowed_probe_types": list(config.get("allowed_probe_types") or ("TAP_NAV", "SCROLL")),
         "known_inverse_levels": dict(config.get("known_inverse_levels") or {}),
         "recent_nodes": list(config.get("recent_nodes") or ()),
+        "allow_icon_only_probes": bool(config.get("allow_icon_only_probes")),
         # Already on record from a prior round revisiting this same node
         # (outcome known either way): re-probing it spends budget and fresh
         # rollback risk to relearn something already known, so the ranker
@@ -1056,13 +1137,22 @@ def explorer_window_process(
     goal_relevance_threshold = float(config.get("goal_relevance_threshold", 0.0))
     max_stack_depth_increase = int(config.get("max_stack_depth_increase", 1))
 
+    def depth1_tap_needs_evidence(state) -> bool:
+      """Has any probe on this screen already come back exactly?"""
+      prefix = f"{state.activity.component}|"
+      return not any(
+          key.startswith(prefix)
+          and level in ("NOOP", "INVERSE", "INVERSE_ANCHOR")
+          for key, level in known_inverse_levels.items())
+
     graph_view = _SnapshotView.from_payload(config.get("graph_snapshot"))
     scored_path = Path(config.get("scored_path")
                        or filtered_path.parent / "scored_candidates.jsonl")
     use_scorer = bool(config.get("predictive_scorer", True)) and graph_view is not None
-    matrix = sgi.StateGraphInformationMatrix()
-    safety = sgi.SafetyGate()
-    scorer = sgi.PredictiveElementScorer()
+    scoring_config = sgi.ScoringConfig(**(config.get("scoring_config") or {}))
+    matrix = sgi.StateGraphInformationMatrix(scoring_config)
+    safety = sgi.SafetyGate(scoring_config)
+    scorer = sgi.PredictiveElementScorer(scoring_config)
 
     # Where the chosen candidate's rank and score are handed back for the
     # trace row, so the probe record still says how it was picked regardless
@@ -1114,8 +1204,16 @@ def explorer_window_process(
           _record_filtered(filtered_path, row, verdict.reason)
       if not safe:
         return None
-      best = scorer.rank(safe)[0]
-      _record_scored(scored_path, best)
+      ranked = scorer.rank(safe)
+      # Every candidate, ranked, not only the winner. PART F's central metric
+      # is where the model's real action later turns up in this ranking, and
+      # that cannot be recovered from a log of the choice alone - a selector
+      # that ranks the right element second is a very different thing from one
+      # that never considered it.
+      for position, scored in enumerate(ranked, start=1):
+        _record_scored(scored_path, scored, position, context, node_id,
+                       selected=position == 1)
+      best = ranked[0]
       out["rank"], out["score"] = 1, best.utility
       return best.row.element
 
@@ -1149,6 +1247,22 @@ def explorer_window_process(
         # keeps the reliable kinds and drops the rest rather than stopping
         # altogether - the coverage loss is small because most candidates on
         # a screen are ordinary navigation targets.
+        continue
+      if probe_type == "TAP_NAV" and depth1_tap_needs_evidence(baseline):
+        # TAP_NAV at depth 1 is where exploration's damage lives. Across 264
+        # probes (2026-08-31): SCROLL recovered 91% of the time and 48 of its
+        # 52 recoveries were exact - the reverse gesture or nothing to undo -
+        # while TAP_NAV at depth 1 recovered 72% and supplied 39 of the 55
+        # total failures. The difference is structural: a scroll's inverse is
+        # the same gesture reversed, a tap's inverse is Back, which restores
+        # navigation but not what the screen was showing.
+        #
+        # So a screen has to earn a tap. A probe on it must first have come
+        # back exactly (NOOP or INVERSE, not the approximate rungs), which the
+        # graph already records per screen as known_inverse_levels. Scrolling
+        # is what usually earns it, and scrolling stays available everywhere,
+        # so exploration still runs on every eligible step - it just does the
+        # cheap, exactly-reversible thing first on a screen it has not tested.
         continue
       if f"{baseline.activity.component}|{probe_type}" in blocked_recovery_contexts:
         # This screen has already swallowed a probe of this kind this episode

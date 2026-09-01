@@ -475,3 +475,21 @@ class InjectionThresholdTest(absltest.TestCase):
     out = graph_distiller.GraphDistiller().distill("n1", snap, {},
                                                    taken_edges=["e1"])
     self.assertEqual(out, "")
+
+
+class AuthoritativeEdgeLabelTest(absltest.TestCase):
+  """Edges the model itself took must be nameable, or nothing can be injected."""
+
+  def test_control_key_names_an_authoritative_edge(self):
+    edge = _edge("e1", "n1", "", status="VERIFIED")
+    edge["action"] = {"action_type": "click", "x": 540, "y": 1063,
+                      "control_key": "com.app:id/save|Save||android.widget.Button"}
+    snap = _Snapshot(outgoing={"n1": ["e1"]}, edges={"e1": edge})
+    out = graph_distiller.GraphDistiller().distill("n1", snap, {"target_entity": "phone"})
+    self.assertIn("Save -> {Phone, Address}.", out)
+
+  def test_coordinates_alone_still_yield_nothing(self):
+    edge = _edge("e1", "n1", "", status="VERIFIED")
+    edge["action"] = {"action_type": "click", "x": 540, "y": 1063}
+    snap = _Snapshot(outgoing={"n1": ["e1"]}, edges={"e1": edge})
+    self.assertEqual(graph_distiller.GraphDistiller().distill("n1", snap, {}), "")

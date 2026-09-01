@@ -149,14 +149,23 @@ def _need_line(need: Mapping[str, Any]) -> list[str]:
 
 
 def _action_label(edge: Mapping[str, Any]) -> str:
-  """A name for the control this edge acts on, as the user would see it."""
+  """A name for the control this edge acts on, as the user would see it.
+
+  Reads control_key as well as element_identity. Both are
+  resource_id|text|content_desc|class(|bounds), so the two human-readable
+  middle fields are the name in either case - but only probe edges ever
+  carried element_identity, so before control_key existed an edge the model
+  itself had taken could only be named by its coordinates, and coordinates are
+  filtered out as unusable. That is the whole reason no graph context was ever
+  injected across 116 tasks: the facts worth stating were all on authoritative
+  edges, and not one of them could be given a name.
+  """
   action = edge.get("action", {})
-  anchor = str(action.get("element_identity", "")).split("|")
-  # identity is resource_id|text|content_desc|class|bounds - prefer the two
-  # human-readable middle fields over the resource id.
-  name = next((part for part in anchor[1:3] if part.strip()), "")
-  if name:
-    return name.strip()
+  for field in ("control_key", "element_identity"):
+    anchor = str(action.get(field, "")).split("|")
+    name = next((part for part in anchor[1:3] if part.strip()), "")
+    if name:
+      return name.strip()
   if action.get("x") is not None:
     return f"the control at ({action['x']},{action['y']})"
   return "an unlabeled control"
@@ -269,6 +278,7 @@ class GraphDistiller:
       taken_edges: Iterable[str] = (),
       recent_nodes: Sequence[str] = (),
       token_budget: int | None = None,
+      stats: dict | None = None,
   ) -> str:
     del recent_nodes  # reserved: cycle context is handled by the skip gate.
     if graph_snapshot is None:
@@ -280,9 +290,11 @@ class GraphDistiller:
     taken = set(taken_edges)
     budget = token_budget or self._config.max_graph_context_tokens
 
+    raw = self._retrieve(current_node_id, graph_snapshot)
     facts = [f for f in (
         self._to_fact(e, need_tokens, taken, graph_snapshot.generation)
-        for e in self._retrieve(current_node_id, graph_snapshot)) if f]
+        for e in raw) if f]
+    candidate_count = len(facts)
     facts = [f for f in facts if f.utility_score >= self._config.min_fact_utility]
     facts.sort(key=lambda f: f.utility_score, reverse=True)
 
@@ -304,6 +316,14 @@ class GraphDistiller:
         continue
       chosen.append(fact)
       used += cost
+    if stats is not None:
+      stats.update({
+          "raw_fact_count": len(raw),
+          "candidate_fact_count": candidate_count,
+          "selected_fact_count": len(chosen),
+          "selected_fact_types": [f.fact_type for f in chosen],
+          "selected_edge_ids": [f.source_edge_id for f in chosen],
+      })
     if not any(f.fact_type in ("VERIFIED", "OBSERVED") for f in chosen):
       # B9.3, sharpened by measurement. A positive fact - "X was observed to
       # lead to {A, B}" - is the only kind that tells the model something the
@@ -409,9 +429,17 @@ class ReasoningGate:
     if consecutive_skips >= self._config.max_consecutive_skips:
       return "consecutive skip cap reached"
     dst = edge.get("dst_node")
-    if dst and dst in set(recent_nodes):
+    if (dst and dst in set(recent_nodes)
+        and (edge.get("execution_hit_count") or 0) < 2):
       # Replaying into a screen just visited is how a graph walk turns into a
       # loop; the model is the only thing that can break out of one.
+      #
+      # Unless the model is the one who made the loop. A transition it has
+      # executed twice or more from this screen is the task repeating itself -
+      # delete a recipe, land back on the list, delete the next - and refusing
+      # it blocked the mechanism precisely where it had finally accumulated
+      # the evidence to act (RecipeDeleteMultipleRecipes, 2026-08-31: the edge
+      # was found and then declined on this rule alone).
       return "destination forms a recent cycle"
     if str(edge.get("risk_level", "LOW")).upper() in ("HIGH", "IRREVERSIBLE"):
       return "edge risk"

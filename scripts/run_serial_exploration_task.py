@@ -155,10 +155,17 @@ class GraphSnapshot:
     is required, because the licence comes from the alignment, not from
     having been here before.
 
-    VERIFIED on a revisited screen - the model's own past decision in this
-    same situation. Cannot lead anywhere new, but is the most reliable thing
-    available (75% landed as predicted, against 37-48% for skips built on
-    unaligned speculative edges).
+    A settled screen - one whose map, across repeated visits, still shows a
+    single viable continuation, and whose one edge the model itself took.
+    This does not get ahead of the model, but it does not need to guess
+    either: there is nothing left to decide.
+
+    Replaying the model's past choice on any revisited screen used to qualify
+    as a third source. It was removed on 2026-08-31 after separating skip
+    outcomes by kind: the launch collapse was 80/80 correct while graph-based
+    skips were 3/17, and every task where this arm cost steps against its
+    control was a mis-skip of that third kind. A screen looking the same is
+    not the situation being the same.
     """
     # Nothing left to decide here: the map of this screen shows a single
     # viable continuation, so H = 0 and an inference would be choosing
@@ -177,21 +184,94 @@ class GraphSnapshot:
     # mechanism is built on.
     entropy = self.node_entropy.get(node_id, float("inf"))
     if entropy <= 1e-9 and self.node_visits.get(node_id, 0) > 1:
+      # No recent-path exclusion here, unlike the promoted-lookahead branch
+      # below. That guard exists because a speculative walk cannot tell it is
+      # going in circles - every hop verifies on its own - and CameraTakeVideo
+      # spent 13 skips that way. It does not apply to a transition the model
+      # itself has taken repeatedly: returning to the recipe list after each
+      # deletion IS the task, and excluding it blocked the mechanism at
+      # exactly the moment it was finally able to fire (measured 2026-08-31,
+      # RecipeDeleteMultipleRecipes: two nodes reached hits=3 with a single
+      # outgoing action and were refused on this rule alone).
       settled = [
           self.edges[eid] for eid in self.outgoing.get(node_id, ())
-          if self.edges[eid]["status"] not in ("INVALID",)
+          if self.edges[eid]["status"] in ("VERIFIED", "REUSABLE")
           and self.edges[eid]["dst_node"] not in (None, node_id)
-          and self.edges[eid]["dst_node"] not in recent
           and self.edges[eid]["risk_level"] in {"SAFE", "LOW"}
       ]
-      if len(settled) == 1:
+      # Only the model's own choices count towards "this screen is decided".
+      # A speculative edge says an action is possible here, never that it is
+      # the one to take.
+      settled = [e for e in settled if e.get("execution_hit_count", 0) >= 1]
+      # Twice per episode, then hand it back. The cycle exemption above lets a
+      # transition the model repeats be replayed even though it returns to a
+      # screen just left, because in a repetitive task that IS the task. It
+      # cannot tell that apart from the model being stuck, and on
+      # SimpleSmsReplyMostRecent (2026-09-01) the model itself looped between
+      # two screens, the graph learned the loop, and replayed it twelve times
+      # with every single hop landing exactly where predicted while the
+      # episode went nowhere. A cap bounds the damage to one extra lap without
+      # blocking the three-iteration tasks this mechanism exists for, which
+      # never need a third replay of the same edge.
+      settled = [e for e in settled if e.get("skip_replays", 0) < 2]
+      # The task has to have moved between the two executions this edge is
+      # trusted for. Repeating an action from a screen looks the same whether
+      # the task is iterating - delete a recipe, come back to a list that now
+      # has one fewer - or the agent is stuck repeating something that is not
+      # working. The graph tells them apart: iterating discovers screens
+      # (a shorter list is a different screen), spinning does not.
+      #
+      # Measured over two full runs of the same code (2026-09-01): on the 39
+      # tasks where the mechanism fired in both, this arm scored 6 and 6
+      # against the control's 13, and every one of the 13 tasks that saw a
+      # mis-skip was lost in both runs while the control won 6 of them. Even
+      # the 16 tasks whose skips all landed exactly as predicted yielded only
+      # 1-2 wins - landing where the graph said proves the dynamics, not that
+      # the action was the right one to take now.
+      settled = [e for e in settled
+                 if len(self.node_visits) > e.get("nodes_at_last_execution", 0)]
+      if (len(settled) == 1
+          and settled[0].get("execution_hit_count", 0) >= 2
+          and self.node_visits.get(node_id, 0) >= 2):
+        # The model itself must have taken this transition at least twice
+        # before it may be taken without the model. Separating 28 graph-based
+        # skips by their edge's execution history on 2026-08-31: every one of
+        # the 21 misses replayed an edge the model had executed exactly once,
+        # while the hits came from edges it had executed twice or more. Once
+        # is "this worked here"; twice is "this keeps being the answer here",
+        # which is the property a replay actually depends on and the thing
+        # that makes repetitive tasks - delete three recipes, add three
+        # expenses - the case progressive memory can serve.
+        #
+        # Two executions of one action, and no other action ever chosen here.
+        # That conjunction is what the repeated suffix of a repetitive task
+        # looks like from inside the graph: RecipeDeleteMultipleRecipes runs
+        # (1025,197) -> (652,602) -> (860,1295) three times over, differing
+        # only in which recipe the cycle starts on, and ExpenseDeleteMultiple2
+        # repeats (967,1658) -> (540,2221) the same way. Requiring a third
+        # visit as well was tried and is redundant once edges merge by action:
+        # it only delayed the same decision by one cycle.
         return settled[0]
 
-    revisited = self.node_visits.get(node_id, 0) > 1
+    # Only prefix-aligned lookahead qualifies. Replaying the model's own past
+    # choice on a revisited screen sounded like the safe source and measured
+    # as the opposite: separating the two kinds of skip across 107 episodes on
+    # 2026-08-31 gave the launch collapse 80 of 80 correct and graph-based
+    # skips 3 of 17 (18%), and every task where this arm cost steps against
+    # its control - MarkorCreateFolder +8, SaveCopyOfReceipt +8,
+    # ExpenseDeleteDuplicates2 +7 - was a mis-skip of exactly this kind. The
+    # earlier 88% figure was the two pooled, with the launch collapse
+    # supplying the volume.
+    #
+    # A revisit means the screen looks the same, not that the situation is:
+    # standing on the recipe list having deleted one recipe is not standing on
+    # it having deleted none, and the action that was right the first time is
+    # the reason the second visit exists. Prefix alignment carries evidence
+    # about the current step - the explorer's guess matched what the model
+    # then actually did - which is the property that was missing.
     candidates = [
         self.edges[edge_id] for edge_id in self.outgoing.get(node_id, ())
-        if (self.edges[edge_id]["status"] == "REUSABLE"
-            or (revisited and self.edges[edge_id]["status"] == "VERIFIED"))
+        if self.edges[edge_id]["status"] == "REUSABLE"
         and self.edges[edge_id]["dst_node"] not in (None, node_id)
         # Never skip back onto a screen the trajectory just came from. Reusing
         # a remembered edge is only progress if it leads somewhere new; an
@@ -245,6 +325,7 @@ class GenerationGuardedGraph:
             "action": dict(edge.action),
             "discovered_labels": tuple(edge.discovered_labels),
             "inverse_level": edge.inverse_level,
+            "observed_destinations": tuple(edge.observed_destinations),
             "probe_count": edge.probe_count,
             "inference_alignment_count": edge.inference_alignment_count,
             "execution_hit_count": edge.execution_hit_count,
@@ -253,6 +334,8 @@ class GenerationGuardedGraph:
             "skip_success_count": edge.skip_success_count,
             "rollback_success_count": edge.rollback_success_count,
             "rollback_failure_count": edge.rollback_failure_count,
+            "skip_replays": edge.skip_attempt_count,
+            "nodes_at_last_execution": edge.nodes_at_last_execution,
             "cumulative_realized_ig": edge.cumulative_realized_ig,
             "cumulative_exploration_cost": edge.cumulative_exploration_cost,
             "last_updated_generation": edge.last_updated_generation,
@@ -284,6 +367,76 @@ class GenerationGuardedGraph:
     """End of step: this step's writes become visible to the next one."""
     self._generation += 1
     self._snapshot = self._capture(self._generation)
+
+
+def _settled_capture(capture, budget_s: float = 2.0):
+  """Capture once the screen has stopped changing.
+
+  Collapsing the launch into this step means the model reads the post-launch
+  screen in the same step that launches it - so that screen has to actually
+  be there. A fixed 0.4s wait was enough for a list to appear but not for a
+  month grid: SimpleCalendarFirstEventAfterStartTime, which 4B_2 answers in
+  four steps, ran to the 20-step cap with no probe, no injection and no skip
+  but the launch collapse (2026-08-31), and its sibling
+  SimpleCalendarAnyEventsOnDate answered wrong on step one.
+
+  Polls the layout signature instead of waiting longer unconditionally, so an
+  app that is ready immediately still costs one capture.
+  """
+  state = capture.capture()
+  deadline = time.monotonic() + budget_s
+  while time.monotonic() < deadline:
+    time.sleep(0.25)
+    try:
+      following = capture.capture()
+    except Exception:  # pylint: disable=broad-exception-caught
+      return state
+    if following.layout_sig == state.layout_sig:
+      return following
+    state = following
+  return state
+
+
+def _control_key_at(state, action: dict[str, Any]) -> str:
+  """Which control the agent's tap landed on, as a stable key.
+
+  The agent reports a coordinate; the graph needs to know which control that
+  was, because the coordinate wobbles between visits while the control does
+  not. Resolves against the screen captured immediately before the action, and
+  picks the SMALLEST element containing the point - containers enclose their
+  children, and the child is the thing that was pressed.
+  """
+  # Imported here rather than at module scope: this file defers every
+  # parallel_exploration import into main() to keep import order controlled.
+  from android_world.parallel_exploration.belief_graph import control_key_from_identity
+  x, y = action.get("x"), action.get("y")
+  if x is None or y is None:
+    return ""
+  best, best_area = None, None
+  for element in getattr(state, "elements", ()) or ():
+    left, top, right, bottom = element.bounds
+    if not (left <= x <= right and top <= y <= bottom):
+      continue
+    area = max(0, right - left) * max(0, bottom - top)
+    if area <= 0:
+      continue
+    if best_area is None or area < best_area:
+      best, best_area = element, area
+  if best is None:
+    return ""
+  key = control_key_from_identity(best.identity)
+  resource_id, text, content_desc = best.resource_id, best.text, best.content_desc
+  if not (resource_id or text or content_desc):
+    # Nothing names this control but its widget class, and a bare class name
+    # is not an identity - two RelativeLayouts on one screen would merge into
+    # one edge. Anchor it on the element's OWN centre, coarsely: the element's
+    # bounds are stable across visits of the same screen (that is what the
+    # layout signature asserts), while the tap coordinate is not, so this
+    # still absorbs the model's wobble without colliding across the screen.
+    left, top, right, bottom = best.bounds
+    cell = 96
+    key = f"{key}@{int((left + right) / 2) // cell},{int((top + bottom) / 2) // cell}"
+  return key
 
 
 def _has_unsaved_input(state) -> bool:
@@ -368,6 +521,30 @@ def main() -> int:
                       help="Probes allowed across the whole episode.")
   parser.add_argument("--max_path", type=int, default=3,
                       help="Hops replayed inside one counted step.")
+  parser.add_argument("--dump_graph_steps", action="store_true",
+                      help="write the belief graph after every step, for "
+                           "reconstructing how it grew")
+  parser.add_argument("--allow_icon_only_probes", action="store_true",
+                      help="PART G: let the explorer probe clickable controls "
+                           "that carry no accessible label. These are 55%% of "
+                           "everything the safety filter removes and much of "
+                           "what the model actually clicks")
+  parser.add_argument("--exploration_policy",
+                      choices=("information_need", "graph_matrix"),
+                      default="graph_matrix",
+                      help="PART G: how probe candidates are ranked")
+  parser.add_argument("--graph_reasoning",
+                      choices=("off", "briefing", "distill", "skip_only",
+                               "distill_and_skip"),
+                      default=None,
+                      help="PART G: how the graph reaches reasoning. Sets "
+                           "--graph_context and --enable_skip together; "
+                           "overrides both when given")
+  for group in ("exact_history", "contextual_history", "information_need",
+                "cost", "recovery_history"):
+    parser.add_argument(f"--disable_{group}", action="store_true",
+                        help=f"PART G: drop the {group} feature group from the "
+                             "candidate matrix")
   parser.add_argument("--graph_context", choices=("off", "briefing", "distill"),
                       default="distill",
                       help="how graph knowledge reaches the prompt (PART G ablation): "
@@ -390,6 +567,16 @@ def main() -> int:
 
   os.environ["ANDROID_WORLD_A11Y_METHOD"] = "fast_provider"
   os.environ["ANDROID_WORLD_FAST_A11Y_SOCKET_PORT"] = str(args.a11y_socket_port)
+  if args.graph_reasoning is not None:
+    # One flag for the reasoning-side ablation grid, expanded into the two
+    # switches the runner already reads, so the older flags keep working and
+    # every combination stays expressible.
+    args.graph_context = {
+        "off": "off", "briefing": "briefing", "distill": "distill",
+        "skip_only": "off", "distill_and_skip": "distill",
+    }[args.graph_reasoning]
+    args.enable_skip = args.graph_reasoning in ("skip_only", "distill_and_skip")
+  args.predictive_scorer = args.exploration_policy == "graph_matrix"
   os.environ["ANDROID_WORLD_LLM_API_URL"] = args.api_url
   import runpy
   import subprocess
@@ -407,6 +594,7 @@ def main() -> int:
   from android_world.parallel_exploration.information import parse_reasoning_prior
   from android_world.parallel_exploration import graph_distiller as gd
   from android_world.parallel_exploration.live_probe import _is_app_content
+  from android_world.parallel_exploration.belief_graph import control_key_from_identity
   from android_world.parallel_exploration import state_graph_information as sgi
   from android_world.parallel_exploration.live_probe import element_identity_from_dict
   from android_world.parallel_exploration.live_probe import await_explorer_ready
@@ -432,6 +620,13 @@ def main() -> int:
   # exploration" and "exploration improves reasoning" one mechanism rather
   # than two.
   contextual_history = sgi.ContextualHistoryTable()
+  scoring_config = sgi.ScoringConfig(
+      use_exact_history=not args.disable_exact_history,
+      use_contextual_history=not args.disable_contextual_history,
+      use_information_need=not args.disable_information_need,
+      use_cost=not args.disable_cost,
+      use_recovery_history=not args.disable_recovery_history,
+  )
   distiller = gd.GraphDistiller()
   reasoning_gate = gd.ReasoningGate(
       distiller,
@@ -470,9 +665,22 @@ def main() -> int:
   # "unexplored nodes only" rule that removed it from 82% of them.
   blocked_recovery_contexts: set[str] = set()
   blocked_element_identities: set[str] = set()
-  # Set the first time a probe leaves the app and has to be repaired. After
-  # that this episode stops probing entirely - see may_probe.
-  stranded_once = {"value": False}
+  # Set the first time an exploration round cannot restore the screen it
+  # started from. After that this episode stops probing entirely - see
+  # may_probe. Measured over 35 tasks on 2026-08-31, bucketed by what
+  # exploration did:
+  #
+  #   no probing at all              16 win / 2 loss   89%
+  #   probed, every round restored    8 win / 1 loss   89%
+  #   probed, some round did not      6 win / 3 loss   67%
+  #
+  # Exploration that comes back is free; exploration that does not costs a
+  # fifth of the success rate. The episode cannot know in advance which kind
+  # it will get, but it knows the moment it has had the second kind, and that
+  # is the point to stop - the per-(activity, probe_type) blocklist only rules
+  # out the exact combination that just failed, so episodes kept failing again
+  # through a different control on a different screen.
+  unrecovered_once = {"value": False}
   # This step's depth-1 probes, carried to the next step where the real
   # landing state can confirm or refute them.
   pending_prefix_edge_ids: list[str] = []
@@ -602,6 +810,10 @@ def main() -> int:
               else ("LOW" if role in {"imagebutton", "tabwidget"} else "UNKNOWN"))
       action_with_kind = dict(item["action"])
       action_with_kind["probe_type"] = row.get("probe_type")
+      probe_control = control_key_from_identity(
+          str(action_with_kind.get("element_identity", "")))
+      if probe_control:
+        action_with_kind["control_key"] = probe_control
       edge = graph.add_speculative_transition(
           sid, action_with_kind, did,
           path_probability=max(0.05, float(element.get("score", 0.0))),
@@ -659,10 +871,19 @@ def main() -> int:
     Executed outside the agent's action history, like the bootstrap launch, so
     the repair does not consume a step of the episode's budget.
     """
+    if outcome.get("restore_status") != "RESTORED":
+      unrecovered_once["value"] = True
     stranded = capture.capture()
     expected_pkg = before.activity.component.split("/", 1)[0]
     actual_pkg = stranded.activity.component.split("/", 1)[0]
-    if outcome.get("restore_status") == "RESTORED" and actual_pkg == expected_pkg:
+    if actual_pkg == expected_pkg:
+      # Still in the right app. The exploration round may not have restored
+      # the exact screen, and dirty_from_last_step already suppresses the next
+      # round for that; relaunching here would additionally throw away
+      # whatever in-app progress is on screen. Measured 2026-08-31: repairing
+      # on any unrestored round rather than only on an escape pushed the
+      # successful-task mean from 7.2 to 10.4 steps while three of the four
+      # "strandings" were the app's own main activity.
       return
     target = next((name for name in installed_apps
                    if name.casefold().replace(" ", "") in expected_pkg.casefold()
@@ -700,26 +921,78 @@ def main() -> int:
         via = "relaunch"
       ok = after_repair.activity.component.split("/", 1)[0] == expected_pkg
       dirty_from_last_step["value"] = not ok
-      # One escape ends probing for this episode. Measured on the 22 tasks
-      # completed 2026-08-31: every one of the 4 losses had been stranded at
-      # least once, against 39% of the 18 wins. Repair puts the app back on
-      # screen but cannot put back what was on it, and the per-(activity,
-      # probe_type) blocklist only rules out the exact combination that just
-      # failed - which is why episodes kept escaping again through a
-      # different control. Exploration still runs on every step up to that
-      # point, and on episodes that never escape it runs throughout.
-      stranded_once["value"] = True
+      # Leaving the app ends probing for this episode, exactly as a failed
+      # restore does. The latch was keyed only on restore_status, and the
+      # explorer reports RESTORED whenever its own ladder believes it
+      # succeeded - which it can, while the device is nonetheless sitting in
+      # another app. On 2026-09-01 that let five SMS tasks bounce in and out
+      # of the app 10 to 17 times each (76 repairs across the run) with the
+      # latch never arming, and all five were lost.
+      unrecovered_once["value"] = True
+
       log("repair", step=step, ok=ok, app=target, via=via,
           stranded=stranded.activity.component,
           landed=after_repair.activity.component)
     except Exception as exc:  # pylint: disable=broad-exception-caught
       log("repair_failed", step=step, error=str(exc)[:300])
 
+  def dump_node_screenshot(agent, node_id: str) -> None:
+    """One screenshot per screen the graph knows about, the first time it is seen.
+
+    Keyed by node rather than by step on purpose: the node IS the screen, and
+    a reader looking at a node wants to see what the agent was looking at.
+    Repeated visits reuse the first capture, which is also the honest thing to
+    show - the node exists precisely because those visits looked the same.
+    """
+    if not args.dump_graph_steps:
+      return
+    folder = root / "screens"
+    folder.mkdir(parents=True, exist_ok=True)
+    target = folder / f"{node_id[:12]}.png"
+    if target.exists():
+      return
+    try:
+      from PIL import Image
+      pixels = agent.env.get_state(wait_to_stabilize=False).pixels
+      image = Image.fromarray(pixels)
+      image.thumbnail((300, 300))
+      image.save(target)
+    except Exception as exc:  # pylint: disable=broad-exception-caught
+      log("screenshot_failed", step=None, node=node_id[:12], error=str(exc)[:200])
+
+  def dump_graph_snapshot(step: int) -> None:
+    """One graph file per step, for reconstructing how the belief grew.
+
+    The end-of-episode dump shows what was learned but not when, and the
+    when is the whole claim: a node has to be revisited and an action
+    repeated before a skip becomes available, so the counts at the moment of
+    the decision are what a reader needs to see.
+    """
+    if not args.dump_graph_steps:
+      return
+    folder = root / "graph_steps"
+    folder.mkdir(parents=True, exist_ok=True)
+    snap = guarded.snapshot(for_step=step + 1)
+    (folder / f"step{step:02d}.json").write_text(json.dumps({
+        "step": step,
+        "generation": snap.generation,
+        "nodes": [
+            {"node_id": nid, "activity": node.activity,
+             "visit_count": snap.node_visits.get(nid, 0),
+             "decision_entropy": snap.node_entropy.get(nid),
+             "labels": list(node.salient_ui_labels)[:6]}
+            for nid, node in graph.nodes.items()],
+        "edges": list(snap.edges.values()),
+    }, ensure_ascii=False, default=str, indent=1), encoding="utf-8")
+
   original_step = gelab_agent.GELABAgent.step
   original_build = gelab_agent.build_gelab_messages
   step_counter = {"i": 0}
   dirty_from_last_step = {"value": False}
   taken_edge_ids: set[str] = set()
+  # Edges used during the current uninterrupted stay on one screen.
+  taken_here: set[str] = set()
+  last_context_node = {"id": None}
   briefing_now = {"text": ""}
   gate_mode = {"value": gd.NORMAL_INFERENCE, "context": ""}
 
@@ -751,6 +1024,7 @@ def main() -> int:
     before = capture.capture()
     src_id = node_id_of(before)
     upsert(before, src_id, visited=True)
+    dump_node_screenshot(self, src_id)
 
     # Prefix alignment: did last step's probe guess land where the model's
     # real action then landed? If so the explorer read the intent correctly
@@ -853,7 +1127,7 @@ def main() -> int:
         # the smoke command had not exported ANDROID_WORLD_LLM_API_URL, so the
         # runner fell back to its old default on 8083, a port still listening
         # from a dead VSCode forward, and every inference hung there.
-        before = capture.capture()
+        before = _settled_capture(capture)
         src_id = node_id_of(before)
         upsert(before, src_id, visited=True)
 
@@ -888,7 +1162,8 @@ def main() -> int:
       # and let each be verified.
       hops = args.max_path if (skip_record["n"] >= 2 and
                                skip_record["ok"] == skip_record["n"]) else 1
-      candidate_path = (guarded.snapshot(for_step=step).reusable_path(
+      gate_snapshot = guarded.snapshot(for_step=step)
+      candidate_path = (gate_snapshot.reusable_path(
                             src_id, tuple(recent_nodes[-4:]), max_len=hops)
                         if allowed else [])
       # B9: one gate decides all three consumption modes from the same belief
@@ -899,17 +1174,28 @@ def main() -> int:
       # subsequent hop against the state it predicted.
       gate_decision = reasoning_gate.decide(
           current_node_id=src_id,
-          graph_snapshot=guarded.snapshot(for_step=step),
+          graph_snapshot=gate_snapshot,
           information_need=current_need.to_dict(),
           reusable_edge=candidate_path[0] if candidate_path else None,
-          taken_edges=taken_edge_ids,
+          taken_edges=taken_here,
           recent_nodes=tuple(recent_nodes[-4:]),
           consecutive_skips=consecutive_skips["n"])
       gate_mode["value"] = gate_decision.mode
       gate_mode["context"] = gate_decision.graph_context
+      first_hop = candidate_path[0] if candidate_path else {}
       log("gate", step=step, mode=gate_decision.mode, reason=gate_decision.reason,
           had_reusable=bool(candidate_path),
-          context_tokens=len(gate_decision.graph_context.split()))
+          context_tokens=len(gate_decision.graph_context.split()),
+          # Decision-time edge statistics, not the end-of-episode ones. The
+          # graph dump only holds final counts, and a skip's own outcome is
+          # written into them, so post-hoc analysis cannot recover what the
+          # gate actually saw.
+          edge_status=first_hop.get("status"),
+          edge_execution_hits=first_hop.get("execution_hit_count"),
+          edge_execution_misses=first_hop.get("execution_miss_count"),
+          edge_probe_count=first_hop.get("probe_count"),
+          node_visits=gate_snapshot.node_visits.get(src_id, 0),
+          node_entropy=gate_snapshot.node_entropy.get(src_id))
       path = candidate_path if gate_decision.mode == gd.SKIP_INFERENCE else []
       if path:
         started = time.perf_counter()
@@ -923,7 +1209,16 @@ def main() -> int:
           time.sleep(0.2)
           after = capture.capture()
           landed = node_id_of(after)
-          matched = landed == edge["dst_node"]
+          # An action the model repeats does not have to land in the same
+          # place each time - deleting the second recipe leaves a different
+          # list than deleting the first - so a replay is judged against every
+          # destination this transition has been seen to reach, and against
+          # having moved at all. Demanding the single most recent destination
+          # would score the mechanism's best case as a miss.
+          seen_destinations = set(edge.get("observed_destinations") or ())
+          seen_destinations.add(edge["dst_node"])
+          matched = landed in seen_destinations or (
+              len(seen_destinations) > 1 and landed != edge["src_node"])
           graph.record_execution_verification(edge["edge_id"], matched)
           graph.record_skip_result(edge["edge_id"], matched,
                                    generation=guarded.generation)
@@ -1024,7 +1319,18 @@ def main() -> int:
                  and not dirty_from_last_step["value"]
                  and step >= 2
                  and probe_total["n"] < args.probe_budget
-                 and not stranded_once["value"]
+                 and not unrecovered_once["value"]
+                 # Only screens the trajectory has actually come back to.
+                 # What exploration learns about a screen is worth something
+                 # exactly when that screen is seen again - and measured on
+                 # 2026-08-31, every edge any skip ever replayed had
+                 # probe_count 0, so exploration had never once supplied the
+                 # thing skipping runs on. Probing screens the episode passes
+                 # through once therefore paid nothing while carrying the full
+                 # rollback risk that cost 22 points of success rate on the
+                 # episodes where a round failed to restore. Exploration still
+                 # runs, on the revisits where progressive memory can pay.
+                 and snapshot.node_visits.get(src_id, 0) >= 2
                  and not _has_unsaved_input(before))
     pending_explorer = None
     explorer_config = {
@@ -1052,8 +1358,10 @@ def main() -> int:
         # current-step findings" even by accident.
         "graph_snapshot": dataclasses.asdict(snapshot),
         "predictive_scorer": args.predictive_scorer,
+        "allow_icon_only_probes": args.allow_icon_only_probes,
         "recent_nodes": list(recent_nodes[-4:]),
         "scored_path": str(root / "scored_candidates.jsonl"),
+        "scoring_config": dataclasses.asdict(scoring_config),
         "blocked_element_identities": sorted(blocked_element_identities),
         # (activity, probe_type) -> the ladder rung that actually undid this
         # kind of transition here before. The explorer starts from that rung
@@ -1067,6 +1375,17 @@ def main() -> int:
       except Exception as exc:  # pylint: disable=broad-exception-caught
         log("explore_spawn_failed", step=step, error=str(exc)[:300])
 
+    # "Already used" has to mean "used on this visit". Scoped to the current
+    # contiguous stay on this screen: an edge taken two visits ago is not a
+    # repeat to warn against, it is the most useful thing the graph holds
+    # about a screen the task keeps coming back to - "last time you were here
+    # you pressed X and it led to {...}". Keeping it episode-global made every
+    # edge at a revisited node a Done fact, which is why nothing positive was
+    # ever left to inject.
+    if last_context_node["id"] != src_id:
+      taken_here.clear()
+      last_context_node["id"] = src_id
+
     # B9.2/B9.3: what the graph knows reaches the prompt only when it holds
     # facts worth the space. Read from the step i-1 snapshot, like the skip
     # decision, so this step's own probes cannot influence this step.
@@ -1078,15 +1397,22 @@ def main() -> int:
           gd.GRAPH_ENHANCED_INFERENCE) else distiller.distill(
               current_node_id=src_id, graph_snapshot=snapshot,
               information_need=current_need.to_dict(),
-              taken_edges=taken_edge_ids, recent_nodes=tuple(recent_nodes[-4:]))
+              taken_edges=taken_here, recent_nodes=tuple(recent_nodes[-4:]))
     elif args.graph_context == "briefing":
-      briefing_now["text"] = snapshot.screen_briefing(src_id, taken_edge_ids)
+      briefing_now["text"] = snapshot.screen_briefing(src_id, taken_here)
     else:
       briefing_now["text"] = ""
-    if briefing_now["text"]:
-      log("graph_context", step=step, mode=args.graph_context,
-          chars=len(briefing_now["text"]), tokens=len(briefing_now["text"].split()),
-          text=briefing_now["text"])
+    distiller_stats: dict[str, Any] = {}
+    if args.graph_context == "distill":
+      distiller.distill(
+          current_node_id=src_id, graph_snapshot=snapshot,
+          information_need=current_need.to_dict(), taken_edges=taken_here,
+          recent_nodes=tuple(recent_nodes[-4:]), stats=distiller_stats)
+    log("graph_context", step=step, mode=args.graph_context,
+        graph_mode=gate_mode["value"], injected=bool(briefing_now["text"]),
+        chars=len(briefing_now["text"]),
+        tokens=len(briefing_now["text"].split()),
+        text=briefing_now["text"], **distiller_stats)
 
     # (4) Inference on the clean pre-exploration state.
     inference_started = time.perf_counter()
@@ -1135,12 +1461,20 @@ def main() -> int:
             label for element in after.elements
             for label in (element.text, element.content_desc)
             if label and len(label) < 40 and _is_app_content(element, label)))[:8]
+        # Record the control, not the pixel. A copy, so the agent's own action
+        # (returned to the harness, replayed by recovery) is untouched.
+        edge_action = dict(action_dict)
+        control = _control_key_at(before, action_dict)
+        if control:
+          edge_action["control_key"] = control
         observed = graph.add_speculative_transition(
-            src_id, action_dict, dst_id, path_probability=1.0, confidence=0.0,
+            src_id, edge_action, dst_id, path_probability=1.0, confidence=0.0,
             expected_information_gain=0.0, risk_level="SAFE",
             exploration_cost=0.0, rollback_success=True, discovered_labels=labels)
         graph.record_execution_verification(observed.edge_id, True)
+        observed.nodes_at_last_execution = len(graph.nodes)
         taken_edge_ids.add(observed.edge_id)
+        taken_here.add(observed.edge_id)
         # Any explored edge out of this node whose action the model just took
         # counts as used too: the briefing should stop offering it.
         for eid in list(graph._outgoing.get(src_id, ())):  # pylint: disable=protected-access
@@ -1173,6 +1507,7 @@ def main() -> int:
         exploration_s=exploration_s, action=action_dict, done=result.done)
     step_counter["i"] += 1
     guarded.commit_step()
+    dump_graph_snapshot(step)
     return result
 
   gelab_agent.GELABAgent.step = serial_step

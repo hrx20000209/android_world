@@ -109,6 +109,15 @@ class ScoringConfig:
   # repeated.
   irrelevant_branch_penalty: float = 0.5
 
+  # PART G feature-group ablations. Each one removes a whole source of
+  # evidence from the row while leaving the pipeline shape untouched, so an
+  # ablation measures the signal rather than a different code path.
+  use_exact_history: bool = True
+  use_contextual_history: bool = True
+  use_information_need: bool = True
+  use_cost: bool = True
+  use_recovery_history: bool = True
+
 
 DEFAULT_SCORING = ScoringConfig()
 
@@ -466,11 +475,13 @@ class StateGraphInformationMatrix:
       row.session_alignment_hits = int((known_good_identities or {}).get(
           element.identity, 0))
       self._fill_exact_history(row, by_identity.get(
-          _match_key(element.identity, probe_type, role, current_node_id)))
+          _match_key(element.identity, probe_type, role, current_node_id))
+          if self._config.use_exact_history else None)
       self._fill_destination(row, graph_snapshot, recent_nodes)
-      for key, value in self.contextual_history.lookup(
-          ContextualHistoryTable.key(probe_type, role, need_type)).items():
-        setattr(row, key, value)
+      if self._config.use_contextual_history:
+        for key, value in self.contextual_history.lookup(
+            ContextualHistoryTable.key(probe_type, role, need_type)).items():
+          setattr(row, key, value)
       self._fill_need(row, element, need_tokens, information_need)
       self._fill_safety(row, element, activity, blocked_elements,
                         blocked_contexts, cross_package)
@@ -590,6 +601,8 @@ class StateGraphInformationMatrix:
     }
 
   def _fill_need(self, row, element, need_tokens, need) -> None:
+    if not self._config.use_information_need:
+      return
     label = _tokens(f"{element.text} {element.content_desc}")
     row.target_match = _overlap(need_tokens["target"], label)
     row.expected_affordance_match = _overlap(need_tokens["affordance"], label)
@@ -615,7 +628,8 @@ class StateGraphInformationMatrix:
     if contextual is not None:
       prior = contextual
     roll_seen = ((row.rollback_success_count or 0) + (row.rollback_failure_count or 0)
-                 if row.has_exact_history else 0)
+                 if row.has_exact_history and self._config.use_recovery_history
+                 else 0)
     row.estimated_recoverability = _shrink(
         row.rollback_success_count if row.has_exact_history else None,
         roll_seen, prior, self._config.prior_strength)
@@ -627,6 +641,14 @@ class StateGraphInformationMatrix:
   # -- A1.8 ----------------------------------------------------------------
   def _fill_cost(self, row) -> None:
     cfg = self._config
+    if not cfg.use_cost:
+      # Ablation: every candidate priced identically, so utility reduces to
+      # predictive value alone.
+      row.expected_probe_latency = cfg.generic_probe_latency
+      row.expected_rollback_latency = cfg.rollback_latency
+      row.expected_total_exploration_cost = (
+          cfg.generic_probe_latency + cfg.rollback_latency)
+      return
     if row.mean_exploration_cost:
       row.expected_probe_latency = row.mean_exploration_cost
     else:
