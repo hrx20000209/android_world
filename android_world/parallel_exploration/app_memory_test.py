@@ -510,7 +510,9 @@ def _goal_executed(memory, sig, control, goal, dst_sig, dst_activity="com.app/.B
                            control_key=control, action={"action_type": "click"},
                            dst_activity=dst_activity, dst_layout_signature=dst_sig,
                            goal=goal)
+  # 一个进程就是一个任务，测试里用清空这两个集合来模拟"换了一个任务"
   memory._executed_this_task.clear()  # pylint: disable=protected-access
+  memory._seen_this_task.clear()  # pylint: disable=protected-access
 
 
 def _overlap(goal, candidates):
@@ -530,10 +532,13 @@ def test_retrieve_control_separates_tasks_that_share_a_screen():
   _goal_executed(memory, "S", "id|Add||B", "Create a new event tomorrow", "D1")
   _goal_executed(memory, "S", "id|Add||B", "Add a calendar event next week", "D1")
   _goal_executed(memory, "S", "id|Search||B", "Find the note about groceries", "D2")
+  # 通过率门控在这里关掉：这是一块岔路口（三个任务站过、两种走法），生产配置下
+  # 它本来就该被拒——见 test_retrieve_control_refuses_a_fork_screen。这个用例
+  # 单独检验的是"以目标为条件能不能区分开"，那是另一道门。
   add = memory.retrieve_control("S", "Add an event on Friday", _overlap,
-                                threshold=0.1, margin=0.05)
+                                threshold=0.1, margin=0.05, min_pass_rate=0.0)
   find = memory.retrieve_control("S", "Find my note", _overlap,
-                                 threshold=0.1, margin=0.05)
+                                 threshold=0.1, margin=0.05, min_pass_rate=0.0)
   assert add is not None and add[0] == "id|Add||B" and add[4] == "goal"
   assert find is not None and find[0] == "id|Search||B"
 
@@ -586,6 +591,7 @@ def test_retrieve_control_refuses_a_fork_screen():
   for _ in range(6):
     memory.observe_screen("com.app/.A", "S")
     memory._seen_this_task.clear()  # pylint: disable=protected-access
+  memory._seen_this_task.clear()  # pylint: disable=protected-access
   _goal_executed(memory, "S", "id|Add||B", "Create an event tomorrow", "D1")
   _goal_executed(memory, "S", "id|Add||B", "Add an event next week", "D1")
   assert memory.screens["S"].tasks_seen >= 6
