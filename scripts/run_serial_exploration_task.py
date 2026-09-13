@@ -2543,12 +2543,16 @@ def main() -> int:
         # 2026-09-13) - a signature check calls a third of the working hops
         # wrong, which cuts the chain short and, with rollback on, undoes
         # actions that were right.
-        if landed == sig_now:
+        unmoved = landed == sig_now
+        if unmoved:
           # Nothing moved. Matching on activity is what makes the chain
           # usable, but it also makes a press that did nothing look like a
           # hit, because the activity is then trivially unchanged - and a
           # chain that keeps "succeeding" on one screen is the replay loop
-          # this guard exists to stop.
+          # this guard exists to stop. It must not trigger a rollback: there
+          # is nothing to undo, and Back navigates away from a screen we were
+          # correctly standing on. Seen twice in 29 tasks (2026-09-13), both
+          # with the expected activity already reached.
           matched = False
         elif expected_activity:
           matched = landed_activity == expected_activity
@@ -2585,7 +2589,7 @@ def main() -> int:
           # ~1.5s of wall clock and no step at all. Verified, not assumed: if
           # Back does not return us to sig_now we really have moved, and the
           # summary has to stand.
-          if args.prefill_rollback:
+          if args.prefill_rollback and not unmoved:
             try:
               self._execute_action(
                   json_action.JSONAction(action_type=json_action.NAVIGATE_BACK), {})
@@ -2604,6 +2608,9 @@ def main() -> int:
                 landed=state_back.layout_sig[:12])
             if restored:
               break
+          if unmoved:
+            log("prefill_unmoved", step=step, source=source,
+                control=control[:80])
           break
         sig_now = landed
 
