@@ -607,3 +607,19 @@ def test_retrieve_control_allows_a_pass_through_screen():
   got = memory.retrieve_control("S", "Add an event Friday", _overlap,
                                 threshold=0.1, margin=0.05, min_pass_rate=0.7)
   assert got is not None and got[0] == "id|Next||B"
+
+
+def test_pass_rate_excludes_the_asking_task():
+  """The gate asks what *other* tasks did here, so this task's own visit is out.
+
+  Two prior tasks stood here and both pressed Next; this task is standing here
+  now and has not. Counting its visit would read 2/3 = 67% and refuse.
+  """
+  memory = AppMemory("com.app")
+  _goal_executed(memory, "S", "id|Next||B", "Create an event tomorrow", "D1")
+  _goal_executed(memory, "S", "id|Next||B", "Add an event next week", "D1")
+  memory.observe_screen("com.app/.A", "S")   # 现在轮到本任务站在这里
+  assert memory.screens["S"].tasks_seen == 3
+  got = memory.retrieve_control("S", "Add an event Friday", _overlap,
+                                threshold=0.1, margin=0.05, min_pass_rate=0.7)
+  assert got is not None and got[0] == "id|Next||B"

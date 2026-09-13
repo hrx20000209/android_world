@@ -436,8 +436,8 @@ class AppMemory:
     return (control, dict(known.action), known.dst_layout_signature,
             known.dst_activity, "goal")
 
-  @staticmethod
-  def _passes_through(screen: "RememberedScreen", known: RememberedTransition,
+  def _passes_through(self, screen: "RememberedScreen",
+                      known: RememberedTransition,
                       min_pass_rate: float) -> bool:
     """Did the tasks that stood on this screen mostly press this control?
 
@@ -461,11 +461,22 @@ class AppMemory:
     """
     if min_pass_rate <= 0:
       return True
-    seen = max(screen.tasks_seen, known.tasks_executed)
+    # This task's own visit must come out of both counts. The question is
+    # what *other* tasks did here, the same exclusion `retrieve_control`
+    # already applies to goals. Leaving self in dilutes the ratio by one on
+    # both sides and, at the counts a cold-start store actually holds,
+    # suppressed firing sevenfold: 0.16 hops per task live against 1.13
+    # projected (2026-09-13). Of 53 transitions in a live store, 39 cleared
+    # 0.7 with self counted and 52 with it removed.
+    mine_seen = 1 if screen.layout_signature in self._seen_this_task else 0
+    mine_ran = 1 if f"{known.control_key}\0EXECUTED" in self._executed_this_task else 0
+    seen = max(screen.tasks_seen - mine_seen, 0)
+    ran = max(known.tasks_executed - mine_ran, 0)
+    seen = max(seen, ran)
     if seen <= 1:
       # A single prior visit says nothing about whether this is a fork.
-      return known.tasks_executed >= 1
-    return (known.tasks_executed / seen) >= min_pass_rate
+      return ran >= 1
+    return (ran / seen) >= min_pass_rate
 
   def known_routes(self, layout_signature: str,
                    limit: int = 4) -> list[tuple[str, str]]:
