@@ -493,3 +493,124 @@ class AuthoritativeEdgeLabelTest(absltest.TestCase):
     edge["action"] = {"action_type": "click", "x": 540, "y": 1063}
     snap = _Snapshot(outgoing={"n1": ["e1"]}, edges={"e1": edge})
     self.assertEqual(graph_distiller.GraphDistiller().distill("n1", snap, {}), "")
+
+
+class PerItemNeedMatchTest(absltest.TestCase):
+  """The semantic half of the ranking has to survive a talkative model."""
+
+  def test_named_control_beats_pooled_dilution(self):
+    # Taken from MarkorCreateFolder (2026-09-02): the model's own <THINK> named
+    # the "Plain Text" dropdown outright, and pooling every slot into one bag
+    # scored it 0.15 - below the noise of the structural priors.
+    slots = ("Create new", "my_note", "Plain Text", "Folder",
+             "change the creation type from plain text to folder")
+    named = sgi._best_item_overlap(slots, sgi._tokens("Plain Text"))
+    unrelated = sgi._best_item_overlap(slots, sgi._tokens("Wrap words"))
+    self.assertEqual(named, 1.0)
+    self.assertEqual(unrelated, 0.0)
+    self.assertLess(sgi._overlap(sgi._tokens(" ".join(slots)),
+                                 sgi._tokens("Plain Text")), 0.2)
+
+  def test_generic_word_alone_is_not_a_match(self):
+    # "Sort by" shared only "by" with a subgoal ending "required by the task".
+    subgoal = ("I need to change the type to 'Folder' as required by the task.",)
+    self.assertEqual(sgi._best_item_overlap(subgoal, sgi._tokens("Sort by")), 0.0)
+    self.assertEqual(sgi._best_item_overlap(subgoal, sgi._tokens("New")), 0.0)
+    self.assertEqual(sgi._best_item_overlap(subgoal, sgi._tokens("Folder")), 1.0)
+
+  def test_ablation_flag_restores_pooled_behaviour(self):
+    need = {"required_information_slots": ("Plain Text", "Folder"),
+            "current_subgoal": "click the Plain Text dropdown"}
+    element = _element(text="Plain Text")
+    for flag, expect_high in ((True, True), (False, False)):
+      matrix = sgi.StateGraphInformationMatrix(
+          config=dataclasses.replace(sgi.DEFAULT_SCORING,
+                                     use_per_item_need_match=flag))
+      row = matrix.build(_State(), "n1", [element], None, need)[0]
+      if expect_high:
+        self.assertEqual(row.unresolved_information_match, 1.0)
+      else:
+        self.assertLess(row.unresolved_information_match, 1.0)
+
+
+class AuthoritativeEdgeHistoryTest(absltest.TestCase):
+  """The history the graph accumulates has to reach the ranker.
+
+  It never did: an authoritative edge is written from the model's own action,
+  which carries a control_key but no element_identity and no probe_type, so it
+  never entered the match index; and the exact key embeds UiElement.identity,
+  whose last field is the element's bounds, so even a probe edge matched only
+  when the control had not moved a pixel. has_exact_history was False on all
+  21,519 scored candidates of five full runs (2026-09-04).
+  """
+
+  CONTROL = "app:id/send|Send||android.widget.Button"
+
+  def _snapshot(self):
+    edge = _edge("e1", "n1", "", status="VERIFIED",
+                 execution_hit_count=3, execution_miss_count=1, probe_count=0)
+    # An authoritative edge as the runner writes it: the model's action fields
+    # plus control_key, and no element_identity / probe_type / role at all.
+    edge["action"] = {"action_type": "click", "control_key": self.CONTROL}
+    return _Snapshot(edges={"e1": edge}, outgoing={"n1": ["e1"]})
+
+  def _element_elsewhere_on_screen(self):
+    return _element(text="Send", cls="android.widget.Button",
+                    resource_id="app:id/send")
+
+  def test_execution_history_found_for_authoritative_edge(self):
+    row = sgi.StateGraphInformationMatrix().build(
+        _State(), "n1", [self._element_elsewhere_on_screen()],
+        self._snapshot(), {})[0]
+    self.assertTrue(row.has_exact_history)
+    self.assertEqual(row.execution_hit_count, 3)
+    self.assertEqual(row.execution_miss_count, 1)
+
+  def test_ablation_flag_restores_exact_only_matching(self):
+    matrix = sgi.StateGraphInformationMatrix(
+        config=dataclasses.replace(sgi.DEFAULT_SCORING,
+                                   use_loose_control_match=False))
+    row = matrix.build(_State(), "n1", [self._element_elsewhere_on_screen()],
+                       self._snapshot(), {})[0]
+    self.assertFalse(row.has_exact_history)
+    self.assertIsNone(row.execution_hit_count)
+
+
+class ActionLikelihoodPriorTest(absltest.TestCase):
+  """Predicting the model's next control is not the same as learning the most.
+
+  Vertical position was computed and never scored, while a known destination
+  and one on the recent path were scored with the wrong sign - both were
+  discounted as information when the measurement says the model is markedly
+  MORE likely to take them (2026-09-04).
+  """
+
+  def _row_prob(self, config=None, **overrides):
+    element = _element(text="Send", cls="android.widget.Button")
+    matrix = sgi.StateGraphInformationMatrix(config=config or sgi.DEFAULT_SCORING)
+    row = matrix.build(_State(), "n1", [element], None, {})[0]
+    for key, value in overrides.items():
+      setattr(row, key, value)
+    scorer = sgi.PredictiveElementScorer(config=config or sgi.DEFAULT_SCORING)
+    return scorer.path_probability(row)
+
+  def test_high_on_screen_beats_low(self):
+    high = self._row_prob(norm_y=0.15)
+    low = self._row_prob(norm_y=0.85)
+    self.assertGreater(high, low)
+
+  def test_known_destination_raises_action_likelihood(self):
+    self.assertGreater(self._row_prob(norm_y=0.5, destination_known=True),
+                       self._row_prob(norm_y=0.5, destination_known=False))
+
+  def test_recent_path_raises_action_likelihood(self):
+    self.assertGreater(self._row_prob(norm_y=0.5, destination_in_recent_path=True),
+                       self._row_prob(norm_y=0.5, destination_in_recent_path=False))
+
+  def test_ablation_flag_removes_every_term(self):
+    off = dataclasses.replace(sgi.DEFAULT_SCORING,
+                              use_action_likelihood_prior=False)
+    self.assertEqual(self._row_prob(off, norm_y=0.15),
+                     self._row_prob(off, norm_y=0.85))
+    self.assertEqual(self._row_prob(off, norm_y=0.5, destination_known=True),
+                     self._row_prob(off, norm_y=0.5, destination_known=False))

@@ -12,14 +12,23 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Closeable;
 import java.nio.charset.StandardCharsets;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.List;
 
 public final class FastA11yService extends AccessibilityService {
   private static final String SOCKET_NAME = "androidworld_fast_a11y";
+  private static final int LOOPBACK_PORT = 8766;
   private static volatile FastA11yService instance;
   private volatile boolean socketRunning;
   private LocalServerSocket serverSocket;
+  private ServerSocket tcpServerSocket;
 
   public static FastA11yService getInstance() {
     return instance;
@@ -77,6 +86,26 @@ public final class FastA11yService extends AccessibilityService {
         "FastA11ySocketServer");
     thread.setDaemon(true);
     thread.start();
+    Thread tcpThread = new Thread(new Runnable() {@Override public void run(){runTcpServer();}}, "FastA11yTcpServer");
+    tcpThread.setDaemon(true);
+    tcpThread.start();
+  }
+
+  private void runTcpServer() {
+    try {
+      tcpServerSocket = new ServerSocket();
+      tcpServerSocket.setReuseAddress(true);
+      tcpServerSocket.bind(new InetSocketAddress(InetAddress.getByName("127.0.0.1"), LOOPBACK_PORT));
+      while (socketRunning) {
+        final Socket client = tcpServerSocket.accept();
+        Thread handler = new Thread(new Runnable(){@Override public void run(){handleTcpClient(client);}}, "FastA11yTcpClient");
+        handler.setDaemon(true);handler.start();
+      }
+    } catch (Throwable ignored) {
+    } finally {
+      try { if (tcpServerSocket != null) tcpServerSocket.close(); } catch (IOException ignored) {}
+      tcpServerSocket = null;
+    }
   }
 
   private void runSocketServer() {
@@ -104,30 +133,38 @@ public final class FastA11yService extends AccessibilityService {
 
   private void handleSocketClient(LocalSocket client) {
     try {
-      BufferedReader input = new BufferedReader(
-          new InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
-      DataOutputStream output = new DataOutputStream(client.getOutputStream());
+      handleStreams(client.getInputStream(), client.getOutputStream());
+    } catch (Throwable ignored) {
+    } finally {
+      try { client.close(); } catch (IOException ignored) {}
+    }
+  }
+
+  private void handleTcpClient(Socket client) {
+    try {
+      client.setTcpNoDelay(true);handleStreams(client.getInputStream(),client.getOutputStream());
+    } catch (Throwable ignored) {
+    } finally {
+      try { client.close(); } catch (IOException ignored) {}
+    }
+  }
+
+  private void handleStreams(InputStream rawInput, OutputStream rawOutput) throws IOException {
+      BufferedReader input = new BufferedReader(new InputStreamReader(rawInput, StandardCharsets.UTF_8));
+      DataOutputStream output = new DataOutputStream(rawOutput);
       String request;
       while (socketRunning && (request = input.readLine()) != null) {
         String[] fields = request.trim().split("\\s+");
         boolean flat = fields.length < 1 || !"tree".equals(fields[0]);
-        boolean compact = fields.length >= 2 && "1".equals(fields[1]);
+        boolean compact = fields.length >= 2 && ("1".equals(fields[1]) || "2".equals(fields[1]));
+        boolean minimal = fields.length >= 2 && "2".equals(fields[1]);
         int maxNodes = fields.length >= 3 ? parsePositiveInt(fields[2], 10000) : 10000;
-        byte[] payload = snapshotJson(flat, compact, maxNodes)
+        byte[] payload = snapshotJson(flat, compact, minimal, maxNodes)
             .getBytes(StandardCharsets.UTF_8);
         output.writeInt(payload.length);
         output.write(payload);
         output.flush();
       }
-    } catch (Throwable ignored) {
-      // A host-side abort intentionally closes the forwarded connection.
-    } finally {
-      try {
-        client.close();
-      } catch (IOException ignored) {
-        // Nothing else to release.
-      }
-    }
   }
 
   private synchronized void stopSocketServer() {
@@ -139,6 +176,10 @@ public final class FastA11yService extends AccessibilityService {
         // Nothing else to release.
       }
       serverSocket = null;
+    }
+    if (tcpServerSocket != null) {
+      try { tcpServerSocket.close(); } catch (IOException ignored) {}
+      tcpServerSocket = null;
     }
   }
 
@@ -155,6 +196,10 @@ public final class FastA11yService extends AccessibilityService {
   }
 
   public String snapshotJson(boolean flat, boolean compact, int maxNodes) {
+    return snapshotJson(flat, compact, false, maxNodes);
+  }
+
+  public synchronized String snapshotJson(boolean flat, boolean compact, boolean minimal, int maxNodes) {
     long startedNs = System.nanoTime();
     List<AccessibilityWindowInfo> windows = getWindows();
     AccessibilityNodeInfo activeRoot = null;
@@ -163,7 +208,7 @@ public final class FastA11yService extends AccessibilityService {
     }
     long capturedNs = System.nanoTime();
 
-    SnapshotWriter writer = new SnapshotWriter(flat, compact, maxNodes);
+    SnapshotWriter writer = new SnapshotWriter(flat, compact, minimal, maxNodes);
     String body = writer.write(windows, activeRoot);
     long serializedNs = System.nanoTime();
 
@@ -171,6 +216,7 @@ public final class FastA11yService extends AccessibilityService {
     out.append("{\"ok\":true");
     out.append(",\"format\":\"").append(flat ? "flat" : "tree").append("\"");
     out.append(",\"compact\":").append(compact);
+    out.append(",\"minimal\":").append(minimal);
     out.append(",\"captureMs\":").append(ms(capturedNs - startedNs));
     out.append(",\"serializeMs\":").append(ms(serializedNs - capturedNs));
     out.append(",\"serviceMs\":").append(ms(serializedNs - startedNs));
@@ -191,6 +237,7 @@ public final class FastA11yService extends AccessibilityService {
   private static final class SnapshotWriter {
     private final boolean flat;
     private final boolean compact;
+    private final boolean minimal;
     private final int maxNodes;
     private final StringBuilder out = new StringBuilder(64 * 1024);
     private final Rect bounds = new Rect();
@@ -198,9 +245,10 @@ public final class FastA11yService extends AccessibilityService {
     int emittedCount = 0;
     boolean truncated = false;
 
-    SnapshotWriter(boolean flat, boolean compact, int maxNodes) {
+    SnapshotWriter(boolean flat, boolean compact, boolean minimal, int maxNodes) {
       this.flat = flat;
       this.compact = compact;
+      this.minimal = minimal;
       this.maxNodes = maxNodes;
     }
 
@@ -295,6 +343,9 @@ public final class FastA11yService extends AccessibilityService {
     }
 
     private void appendFlatWindow(AccessibilityWindowInfo window, int windowIndex, boolean[] first) {
+      if (compact && !window.isActive() && !window.isFocused()) {
+        return;
+      }
       AccessibilityNodeInfo root = window.getRoot();
       if (root != null) {
         appendFlatNode(root, windowIndex, 0, first, false);
@@ -325,6 +376,13 @@ public final class FastA11yService extends AccessibilityService {
       if (!beginNode(node)) {
         return;
       }
+      if (compact && !node.isVisibleToUser()) {
+        return;
+      }
+      if (minimal) {
+        appendFlatNodeMinimal(node, windowIndex, depth, first, inNavigationDrawer);
+        return;
+      }
       boolean childInNavigationDrawer = inNavigationDrawer || isDrawerContainerClass(node.getClassName());
       boolean emit = !compact || isInteresting(node);
       if (emit) {
@@ -346,6 +404,41 @@ public final class FastA11yService extends AccessibilityService {
           if (truncated) {
             break;
           }
+        }
+      }
+    }
+
+    /** Low-overhead tree for exploration control under model/GPU contention. */
+    private void appendFlatNodeMinimal(
+        AccessibilityNodeInfo node, int windowIndex, int depth, boolean[] first,
+        boolean inNavigationDrawer) {
+      CharSequence text = node.getText();
+      CharSequence description = node.getContentDescription();
+      boolean clickable = node.isClickable();
+      boolean childInNavigationDrawer = inNavigationDrawer || isDrawerContainerClass(node.getClassName());
+      if (hasText(text) || hasText(description) || clickable) {
+        if (!first[0]) out.append(',');
+        first[0] = false;
+        out.append('{');
+        out.append("\"id\":").append(nodeCount - 1);
+        out.append(",\"windowIndex\":").append(windowIndex);
+        out.append(",\"depth\":").append(depth);
+        appendStringField("text", text);
+        appendStringField("contentDescription", description);
+        node.getBoundsInScreen(bounds);
+        out.append(",\"bounds\":[").append(bounds.left).append(',').append(bounds.top)
+            .append(',').append(bounds.right).append(',').append(bounds.bottom).append(']');
+        out.append(",\"clickable\":").append(clickable);
+        out.append(",\"inNavigationDrawer\":").append(inNavigationDrawer);
+        out.append('}');
+        emittedCount++;
+      }
+      int childCount = node.getChildCount();
+      for (int i = 0; i < childCount; i++) {
+        AccessibilityNodeInfo child = node.getChild(i);
+        if (child != null) {
+          appendFlatNode(child, windowIndex, depth + 1, first, childInNavigationDrawer);
+          if (truncated) break;
         }
       }
     }

@@ -68,12 +68,19 @@ class GraphFact:
   already_taken: bool = False
   risk_level: str = "LOW"
   utility_score: float = 0.0
+  # What the destination screen IS, in one line. Naming the destination is the
+  # only thing an injected fact can say that the screenshot does not already
+  # show - the labels behind a control are read off the next screen, but which
+  # screen that is cannot be seen from this one.
+  destination_summary: str = ""
 
   def render(self) -> str:
     if self.fact_type == "DONE":
       return f"{self.action_label} already used."
     if self.fact_type == "NO_RELEVANT_EVIDENCE":
       return f"no relevant evidence observed under {self.action_label}."
+    if self.destination_summary:
+      return f"{self.action_label} -> {self.destination_summary.rstrip('.')}."
     if self.evidence_labels:
       return f"{self.action_label} -> {{{', '.join(self.evidence_labels)}}}."
     return f"{self.action_label} leads to another screen."
@@ -188,7 +195,8 @@ class GraphDistiller:
     return [snapshot.edges[e] for e in snapshot.outgoing.get(node_id, ())]
 
   # -- filter + score -----------------------------------------------------
-  def _to_fact(self, edge, need_tokens, taken_edges, generation) -> GraphFact | None:
+  def _to_fact(self, edge, need_tokens, taken_edges, generation,
+               dst_summary: str = "") -> GraphFact | None:
     status = str(edge.get("status", ""))
     if status in ("INVALID", "STALE"):
       return None
@@ -244,6 +252,7 @@ class GraphDistiller:
 
     fact = GraphFact(
         fact_type=fact_type, action_label=label,
+        destination_summary=dst_summary,
         source_edge_id=str(edge.get("edge_id", "")),
         evidence_labels=labels, edge_status=status,
         certainty=certainty, certainty_weight=weight,
@@ -279,6 +288,7 @@ class GraphDistiller:
       recent_nodes: Sequence[str] = (),
       token_budget: int | None = None,
       stats: dict | None = None,
+      onclick_form: bool = False,
   ) -> str:
     del recent_nodes  # reserved: cycle context is handled by the skip gate.
     if graph_snapshot is None:
@@ -292,7 +302,9 @@ class GraphDistiller:
 
     raw = self._retrieve(current_node_id, graph_snapshot)
     facts = [f for f in (
-        self._to_fact(e, need_tokens, taken, graph_snapshot.generation)
+        self._to_fact(e, need_tokens, taken, graph_snapshot.generation,
+                      dst_summary=getattr(graph_snapshot, "node_summaries", {}).get(
+                          e.get("dst_node") or "", ""))
         for e in raw) if f]
     candidate_count = len(facts)
     facts = [f for f in facts if f.utility_score >= self._config.min_fact_utility]
@@ -324,6 +336,20 @@ class GraphDistiller:
           "selected_fact_types": [f.fact_type for f in chosen],
           "selected_edge_ids": [f.source_edge_id for f in chosen],
       })
+    if onclick_form:
+      # AutoDroid's form (MobiCom'24 S3.2.2): rather than a block that has to
+      # earn the right to speak, annotate each control the graph already knows
+      # a destination for, the way AutoDroid adds an "onclick" property to the
+      # element in its HTML screen representation. This agent is given only a
+      # screenshot, so the anchor is the control's visible label instead of an
+      # HTML attribute, but the gating difference is the point: the block form
+      # requires at least one positive fact and fires 10 times per 1010 steps,
+      # while 31% of steps have a candidate fact available. Same per-fact
+      # quality filters - new labels only, nameable control, utility floor -
+      # applied per control instead of per block.
+      lines = [f.render() for f in chosen
+               if f.fact_type in ("VERIFIED", "OBSERVED")]
+      return "\n".join(lines)
     if not any(f.fact_type in ("VERIFIED", "OBSERVED") for f in chosen):
       # B9.3, sharpened by measurement. A positive fact - "X was observed to
       # lead to {A, B}" - is the only kind that tells the model something the
@@ -381,6 +407,38 @@ class GateConfig:
   max_skip_entropy: float = 0.4
 
 
+SKIP_SEMANTIC_PORT = 0        # 0 disables; set from the runner
+SKIP_SEMANTIC_FLOOR = 0.15    # cosine below this blocks the skip
+
+
+def _semantic_skip_block(reusable_edge, information_need):
+  """Block a structurally-licensed skip that does not match the current need.
+
+  Returns a reason string to block, or None to allow. Never raises and never
+  blocks when it cannot judge: an unnameable control or an unreachable encoder
+  must leave the existing behaviour exactly as it was, because the structural
+  licence is the one mechanism with measured value (48/48 graph skips came
+  from edges the model itself walked).
+  """
+  need = information_need or {}
+  need_text = " ".join(str(x) for x in (
+      need.get("target_entity") or "",
+      " ".join(need.get("required_information_slots") or ()),
+      need.get("current_subgoal") or "") if x).strip()
+  if not need_text:
+    return None
+  label = _action_label(reusable_edge)
+  if not label or label.startswith(("an unlabeled", "the control at (")):
+    return None
+  from android_world.parallel_exploration import semantic_service
+  scores = semantic_service.query(SKIP_SEMANTIC_PORT, need_text, [label])
+  if not scores:
+    return None
+  if scores[0] < SKIP_SEMANTIC_FLOOR:
+    return f"semantic mismatch ({scores[0]:.2f} < {SKIP_SEMANTIC_FLOOR})"
+  return None
+
+
 class ReasoningGate:
   """Chooses NORMAL / GRAPH_ENHANCED / SKIP for one step, from one snapshot."""
 
@@ -407,6 +465,15 @@ class ReasoningGate:
       blocked = self._skip_blocked(reusable_edge, current_node_id,
                                    graph_snapshot, recent_nodes,
                                    consecutive_skips)
+      if blocked is None and SKIP_SEMANTIC_PORT:
+        # Every condition above is structural: this screen was revisited, the
+        # model only ever chose this action here, it was executed twice. None
+        # of them asks whether that remembered action is what the task needs
+        # NOW. Measured skip hit rate is 57-85%, so something is wrong on
+        # roughly a quarter of the fires, and a repeated screen inside a
+        # repetitive task is exactly where the same control can be right on
+        # one iteration and wrong on the next.
+        blocked = _semantic_skip_block(reusable_edge, information_need)
       if blocked is None:
         return GateDecision(SKIP_INFERENCE, "reusable edge",
                             reusable_edge=reusable_edge)

@@ -39,10 +39,13 @@ from __future__ import annotations
 
 import argparse
 import dataclasses
+import datetime
 import json
+import pathlib
 import os
 from pathlib import Path
 import re
+import statistics
 import sys
 import time
 from typing import Any
@@ -70,6 +73,8 @@ class GraphSnapshot:
   node_entropy: dict[str, float]
   edges: dict[str, dict[str, Any]]
   outgoing: dict[str, list[str]]
+  node_summaries: dict[str, str]
+  node_elements: dict[str, tuple] = dataclasses.field(default_factory=dict)
 
   def screen_briefing(self, node_id: str, taken: set[str]) -> str:
     """What the graph knows about the screen in front of the model.
@@ -353,7 +358,36 @@ class GenerationGuardedGraph:
         node_entropy={n: node.decision_entropy for n, node in self._graph.nodes.items()},
         edges=edges,
         outgoing=outgoing,
+        # What each screen IS, so a fact can name where a control leads instead
+        # of listing labels the model can already read off the screenshot.
+        node_summaries={n: node.semantic_summary
+                        for n, node in self._graph.nodes.items()
+                        if (node.semantic_summary or "").strip()},
+        # The screen's whole named-control inventory, with how often each was
+        # pressed and probed here. Consumers used to see only the 0.85 controls
+        # per node the graph had an edge for.
+        node_elements={n: node.ui_elements
+                       for n, node in self._graph.nodes.items()
+                       if node.ui_elements},
     )
+
+  def refresh_before_exploration(self) -> None:
+    """Re-capture the current generation's view, without advancing it.
+
+    Prefix alignment is resolved at the top of a step: the probes taken during
+    the previous window are compared against the screen the model actually
+    landed on, and the children of a probe that guessed right are promoted to
+    REUSABLE. That promotion is exactly the thing the skip gate exists to
+    consume, and it is derived only from information this step already had -
+    last window's probes plus an observed landing - so withholding it until
+    the next step would delay a decision by one window for no reason.
+
+    Safe because it is called before this step's explorer runs: there is
+    nothing from the current window in the graph yet, so the generation number
+    still describes the view honestly and the guard in snapshot() is
+    unaffected.
+    """
+    self._snapshot = self._capture(self._generation)
 
   def snapshot(self, for_step: int) -> GraphSnapshot:
     """The view step `for_step` is allowed to see."""
@@ -395,6 +429,362 @@ def _settled_capture(capture, budget_s: float = 2.0):
       return following
     state = following
   return state
+
+
+# Packages that put a system decision in front of the app rather than being
+# an app the task could be in: role requests ("make this your default SMS
+# app"), install prompts, and the "open with" chooser.
+_SYSTEM_DIALOG_PACKAGES = frozenset({
+    "com.google.android.permissioncontroller",
+    "com.android.permissioncontroller",
+    "com.android.packageinstaller",
+    "com.google.android.packageinstaller",
+    "android",
+})
+
+
+# Packages whose controls change device state that no rollback can undo. A
+# toggle is not put back by Back, by relaunching the activity, or by replaying
+# the trajectory - the recovery ladder reverses navigation, and a flipped
+# switch is not navigation. Settings is also where the tasks that read those
+# switches live, so a probe here does not merely risk the episode, it can
+# invalidate the very thing being checked. Structural, not a task list: this
+# says which surfaces are unprobeable, the same kind of statement as
+# "TAP_MENU rolls back 84% of the time".
+_UNPROBEABLE_PACKAGES = frozenset({
+    "com.android.settings",
+    "com.google.android.settings",
+    "com.android.systemui",
+})
+
+# The launcher is not an app the task works in, so nothing learned there
+# transfers to anything - and it is the surface the model navigates by
+# swiping. A SCROLL probe moves the app drawer's page; the probe reports
+# INVERSE success because layout_signature is deliberately blind to scroll
+# offset, while the model is left hunting for an icon that moved.
+#
+# Measured 2026-09-02: 14 of 65 probes in a full run happened on the
+# launcher. On SystemBrightnessMin and SystemBrightnessMaxVerify the model
+# swiped the home screen for all 15 steps and never opened Settings, while
+# the control opened it at step 2 and finished in 6-8.
+def _unprobeable(package: str) -> bool:
+  return package in _UNPROBEABLE_PACKAGES or "launcher" in package.casefold()
+
+
+def _decision_constraints(goal: str, variant: str = "full") -> str:
+  """Guardrails against the two failure modes that dominate this agent.
+
+  Ported verbatim in substance from explorer_agent_gelab_light, which reaches
+  58/116 against this base agent's 53 on the same suite. That gap turned out
+  to be prompt, not exploration: the light agent injects these constraints on
+  every step while the plain gelab_agent prompt has none, so every comparison
+  between the two designs was also a comparison between two prompts.
+
+  Both clauses name failures we measured independently. Premature completion:
+  SimpleCalendarAnyEventsOnDate declared task_complete on step 0 with no
+  action taken. Repeating a done action: MarkorCreateFolder looped between "+"
+  and the filename field for ten steps. The last clause is the one that
+  matters for this design specifically - it tells the model that the injected
+  graph context loses to the screenshot whenever the two disagree, which is
+  exactly the right precedence for a memory that can be stale.
+
+  The two goal-triggered clauses are matched on verbs, not on task names.
+  """
+  lowered = (goal or "").lower()
+  capture_note = ""
+  if re.search(r"\b(record (?:an? )?(?:audio|video|clip)|take (?:a |the )?"
+               r"(?:photo|picture|video)|capture (?:a |the )?(?:photo|picture|video))\b",
+               lowered):
+    capture_note = ("- For recording/photo/video capture tasks, once the current screen shows "
+                    "the clip/photo/video was captured, saved, or appears in the "
+                    "media/recording list, choose COMPLETE instead of repeatedly "
+                    "starting/stopping/capturing again.\n")
+  destructive_note = ""
+  if re.search(r"\b(delete|remove|trash|discard|clear all|erase)\b", lowered):
+    destructive_note = ("- For delete/remove tasks involving files, expenses, recipes, notes, "
+                        "events, tasks, contacts, playlists, or list rows, do not COMPLETE "
+                        "immediately after a dialog confirmation; first verify on the current "
+                        "screen that each exact target item is absent from the relevant "
+                        "list/search/folder.\n")
+  # The completion gate is the single clause measured to cost tasks whose end
+  # state is not legible on screen: with it on, seven System* toggles/sliders
+  # burned all 15 steps; with it off they finished in 4-7 (2026-09-02, v24 vs
+  # v29). It is separated out rather than deleted because it is also the clause
+  # that stops premature ANSWERs, so which way it nets out is a measurement.
+  completion_gate = (
+      "- Do not choose COMPLETE, ANSWER, or task_complete unless the current screen "
+      "visibly proves the requested final state.\n"
+      if variant == "full" else "")
+  return (
+      "Decision constraints:\n"
+      f"{completion_gate}"
+      "- For pure operation tasks, if the current screen already visibly proves the "
+      "requested action is done, choose COMPLETE rather than repeating the same "
+      "click/type action.\n"
+      f"{capture_note}"
+      "- For file delete or file move tasks, do not complete immediately after a "
+      "destructive dialog or one list observation; first verify the folder/path and "
+      "the exact source absence or destination presence on the current screen.\n"
+      f"{destructive_note}"
+      "- If exploration context conflicts with the current screen, ignore exploration "
+      "context and act only on the current screen.\n"
+  )
+
+
+def _clean_label(text: str) -> str:
+  """A label as it would read on screen: whitespace collapsed, junk dropped.
+
+  Accessibility text arrives padded and sometimes unformatted - the graph held
+  "      Share,       Information" and "Recording: %s", a resource format
+  string the app never renders (2026-09-04).
+  """
+  cleaned = " ".join(str(text or "").split())
+  if not cleaned or "%s" in cleaned or "%d" in cleaned or "%1$" in cleaned:
+    return ""
+  return cleaned
+
+
+def _replay_label(edge: Mapping[str, Any]) -> str:
+  """Name the replayed control the way the screen names it."""
+  action = edge.get("action") or {}
+  control = str(action.get("control_key") or "")
+  if control:
+    # control_key is "<resource-id>|<text>|<desc>|<class>"-ish; the readable
+    # part is whichever of text/desc is present.
+    parts = [p for p in control.split("|") if p and not p.startswith("(")]
+    for part in parts[1:]:
+      if part and not part.startswith("android.") and "." not in part:
+        return _clean_label(part)
+    # Falling back to the widget class produced lines like "ImageButton ->
+    # a screen showing: Share, Rename": true, and useless, because the model
+    # cannot find "ImageButton" on a screenshot. A control with no name is
+    # better left out than named by its type.
+    return ""
+  kind = str(action.get("action_type") or "the control").lower()
+  if action.get("text"):
+    return f'{kind} "{action["text"]}"'
+  return kind
+
+
+def screen_history_context(snapshot, node_id: str, taken_here: set[str],
+                           max_items: int = 4, max_tokens: int = 120,
+                           include_available: bool = True) -> str:
+  """What this screen has already done, stated as history rather than advice.
+
+  The distilled context speaks about 9 times in a 1000-step run because it
+  demands a labelled positive fact, and an authoritative edge only carries
+  labels when the landing screen showed something new. Yet the graph knows
+  something far more often than that, and the cheapest useful thing it knows
+  is which controls on this screen have already been pressed and where they
+  went: repeated_action_rate was 6-10% across every measured run, so the model
+  is re-deriving that by hand.
+
+  Phrased as observation, never as suggestion. An earlier briefing said
+  "Tapping X opens Y" and the model read it as an instruction, looping between
+  "+" and the filename field for ten steps (MarkorCreateFolder, 2026-08-30) -
+  which is why what is already done is named first and separately.
+
+  Reads only the step i-1 snapshot, so it carries nothing from this window's
+  exploration or inference.
+  """
+  used: list[str] = []
+  unused: list[str] = []
+  for edge_id in snapshot.outgoing.get(node_id, ()):
+    edge = snapshot.edges[edge_id]
+    if edge.get("status") == "INVALID":
+      continue
+    name = _replay_label(edge)
+    if not name or name in ("click", "the control") or name.startswith("android."):
+      # A control the model cannot find from its name is not worth a line.
+      continue
+    labels = [c for c in (_clean_label(x)
+                          for x in (edge.get("discovered_labels") or ())) if c][:3]
+    dst = edge.get("dst_node")
+    if labels:
+      where = "a screen showing: " + ", ".join(labels)
+    elif dst and dst != node_id and dst in snapshot.node_visits:
+      where = "a screen this episode has already been on"
+    elif dst and dst == node_id:
+      where = "this same screen"
+    else:
+      continue
+    entry = f"{name} -> {where}"
+    (used if edge_id in taken_here else unused).append(entry)
+  parts: list[str] = []
+  if used:
+    parts.append("Already used on this screen this visit: "
+                 + "; ".join(used[:max_items]) + ".")
+  if unused and include_available:
+    # Measured 2026-09-04: listing the exits the model has NOT taken reads as
+    # a menu, and it takes them. Injection rose to 17.6% of steps and the
+    # repeated-action rate rose with it, 19.2% -> 22.9%, while success fell
+    # 2-4 - the same failure the old screen_briefing recorded in 2026-08-30.
+    # Only the half that names what is already done is an observation.
+    parts.append("Also known to lead somewhere from this screen: "
+                 + "; ".join(unused[:max_items]) + ".")
+  if not parts:
+    return ""
+  text = "[Screen memory]\n" + "\n".join(parts)
+  words = text.split()
+  if len(words) > max_tokens:
+    text = " ".join(words[:max_tokens])
+  return text
+
+
+def _git_head() -> str:
+  """Which commit this run was made from; uncommitted work is flagged."""
+  import subprocess
+  try:
+    head = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True,
+                          text=True, timeout=5).stdout.strip()
+    dirty = subprocess.run(["git", "status", "--porcelain"], capture_output=True,
+                           text=True, timeout=10).stdout.strip()
+  except Exception:
+    return "unknown"
+  return f"{head}{'+dirty' if dirty else ''}"
+
+
+def _screen_sentence(model_output: str) -> str:
+  """The model's own one-line description of the screen it is looking at.
+
+  A node currently carries a hash and nothing readable: `semantic_summary` was
+  never populated on any of 1175 nodes, and `salient_ui_labels` only by
+  cross-task seeding. The description is already paid for - at step i the model
+  looks at S_i and its <THINK> opens by saying what it sees ("I see a 'Confirm
+  Delete' dialog on the screen", "I am currently viewing the root directory of
+  the 'sdk_gphone64_arm64' storage") - so reading it costs no model call.
+
+  Attached after inference, which is also what keeps the temporal rule intact:
+  exploration for step i has already run by then and cannot see this.
+  """
+  text = str(model_output or "")
+  think = re.findall(r"<THINK>(.*?)</THINK>", text, flags=re.S | re.I)
+  body = think[0] if think else " ".join(re.findall(r"explain:([^\t\n]*)", text))
+  body = re.sub(r"\s+", " ", body).strip()
+  if not body:
+    return ""
+  match = re.match(r"(.{10,140}?[.!?])\s", body + " ")
+  sentence = (match.group(1) if match else body[:140]).strip()
+  # A <THINK> does not always open by saying what is on screen; 35% of the
+  # sentences it yields are progress or intent ("I have successfully navigated
+  # to the correct date", "I need to turn on Bluetooth"), measured over 438
+  # descriptions. Stored as a screen description those mislead every later task
+  # that lands there - "New Event -> I need to create an event two weeks from
+  # today" says nothing about the screen. Only observational openings are kept.
+  if not _OBSERVATION.match(sentence):
+    return ""
+  return sentence
+
+
+# "I see the file list", "The main settings page", "A confirmation dialog".
+_OBSERVATION = re.compile(
+    r"^(i see\b|i am (on|looking|currently|in|viewing)\b|"
+    r"the (screen|current|app|main|note|file|list|page|dialog)\b|"
+    r"a |an )", re.I)
+
+
+def _actionable_labels(state, limit: int = 10) -> tuple[str, ...]:
+  """What a person would say is on this screen, in on-screen order.
+
+  Only actionable controls, only ones that carry a name. Two screens of the
+  same Activity that differ solely in list content share a layout_signature by
+  design; this is the record of what actually differed, which is what a later
+  audit of that merge needs.
+  """
+  # Only what the app under test is showing. The a11y tree of a screen with
+  # the keyboard up also carries the IME's own controls, and they are what a
+  # describer sees: measured 2026-09-11 over a 453-screen store, 48 screens
+  # across 8 different apps were described as "A screen with More features,
+  # Sticker Keyboard, GIF Keyboard..." - one of those sentences stood on 23
+  # different screens - and 32% of remembered transitions pointed at a screen
+  # so described, making the fact simply wrong. Structural, not a phrase list:
+  # an element belonging to another package is the keyboard, the status bar,
+  # or a system overlay, none of which are what this screen is.
+  app_package = str(getattr(getattr(state, "activity", None), "component", "")
+                    or "").split("/", 1)[0]
+  out: list[str] = []
+  seen: set[str] = set()
+  for element in getattr(state, "elements", ()) or ():
+    if not (element.clickable or element.scrollable or element.checked is not None):
+      continue
+    if app_package and getattr(element, "package", "") and (
+        element.package != app_package):
+      continue
+    label = (element.text or element.content_desc or "").strip()
+    if not label or len(label) > 40:
+      continue
+    key = label.casefold()
+    if key in seen:
+      continue
+    seen.add(key)
+    out.append(label)
+    if len(out) >= limit:
+      break
+  return tuple(out)
+
+
+def _canonical_scroll(action: Mapping[str, Any]) -> str:
+  """Every way of expressing a vertical scroll, on one key.
+
+  AndroidWorld's `scroll` and `swipe` are inverses of each other, and its own
+  source says so (`actuation.py:172`, "Inverse of scroll."): `scroll down`
+  ends at `y_min`, dragging the finger UP to reveal content below, while
+  `swipe down` starts at `0` and ends at `height//2`, dragging the finger DOWN
+  to reveal content above. A probe's SCROLL always drags 75% -> 25% of the
+  element, finger up, so it is a `scroll down`.
+
+  Comparing the raw `direction` string across the two verbs would therefore
+  call two OPPOSITE gestures identical - measured 2026-09-09 on
+  FilesDeleteFile step 4, where a SCROLL probe and the model's `swipe down`
+  landed on the same node by taking opposite actions.
+
+  Horizontal is deliberately not normalised: the two verbs agree there (both
+  end up dragging the same way), and a probe never scrolls horizontally, so
+  there is nothing to compare against.
+  """
+  kind = str(action.get("action_type") or "").lower()
+  direction = str(action.get("direction") or "").lower()
+  if direction in ("down", "up"):
+    if kind == "scroll":
+      return "scroll|forward" if direction == "down" else "scroll|back"
+    if kind == "swipe":
+      return "scroll|back" if direction == "down" else "scroll|forward"
+    return ""
+  if direction:
+    return ""
+  # A probe edge names no direction; its probe_type does. Non-inverse SCROLL
+  # is the only scroll a probe records - the inverse one is the rollback.
+  if str(action.get("probe_type") or "").upper() == "SCROLL":
+    return "scroll|forward"
+  return ""
+
+
+def _canonical_control(action: Mapping[str, Any]) -> str:
+  """The control an action names, for comparing two actions as the same choice.
+
+  control_key when the action carries one, otherwise the action's own shape -
+  text for typing, direction for a swipe, app for a launch. Never coordinates:
+  the model predicts them in a normalised space and they wobble between
+  identical decisions, which is why edge identity stopped using them.
+  """
+  if not action:
+    return ""
+  # Scrolls first: a probe records one as a control_key naming the scrollable
+  # container, the model records one as a direction, and the two verbs invert
+  # each other. Falling through to control_key would compare a container name
+  # against a direction and never match, whichever gesture was actually taken.
+  scroll = _canonical_scroll(action)
+  if scroll:
+    return scroll
+  control = str(action.get("control_key") or "")
+  kind = str(action.get("action_type") or "").lower()
+  if control:
+    return f"{kind}|{control}"
+  for field in ("text", "direction", "app_name", "keycode"):
+    value = action.get(field)
+    if value not in (None, ""):
+      return f"{kind}|{field}={value}"
+  return ""
 
 
 def _control_key_at(state, action: dict[str, Any]) -> str:
@@ -506,11 +896,439 @@ def _committed_actions(history: Any) -> list[dict[str, Any]]:
   return out
 
 
+def _backfill_descriptions(graph, app_store, port: int, log=None) -> int:
+  """Name every screen the episode left blank, after the episode is over.
+
+  Measured on desc2 (2026-09-10): of the nodes with no description, 16 of 18
+  sampled could be described perfectly well from the labels already stored on
+  them. They were blank not because the describer failed but because the write
+  point is never reached for them - the description is attached after an
+  inference on the screen the model reasoned about, and a node that is only
+  ever landed on, skipped over, or reached during bootstrap is never that
+  screen. A seeded node is never even visited.
+
+  So it runs here instead: after run.py has returned, on no critical path at
+  all, where a 1.15 s call per unnamed screen costs the episode nothing. The
+  descriptions go into app memory as well as the graph, which is the point -
+  a screen this task only passed through is a screen the next task may have to
+  reason on, and it will now arrive named.
+  """
+  from android_world.parallel_exploration import semantic_service
+  filled = 0
+  for node in graph.nodes.values():
+    if (node.semantic_summary or "").strip():
+      continue
+    labels = list(node.salient_ui_labels or ())
+    if not labels:
+      # Never stood on, so no capture of its own - but whatever probe or step
+      # reached it recorded what it saw there.
+      labels = _incoming_labels(graph, node.node_id)
+    if not labels:
+      continue
+    sentence = semantic_service.query_describe(
+        port, "", node.activity, labels, timeout_s=20.0)
+    if not sentence:
+      continue
+    node.semantic_summary = sentence
+    filled += 1
+    if app_store is not None:
+      memory = app_store.get(node.package or node.activity.split("/", 1)[0])
+      if memory is not None:
+        memory.observe_screen(node.activity, node.layout_signature,
+                              labels, description=sentence)
+  if log is not None and filled:
+    log("description_backfill", step=None, filled=filled,
+        nodes=len(graph.nodes))
+  return filled
+
+
+def _incoming_labels(graph, node_id: str) -> list[str]:
+  """What the transitions that reach this node saw there."""
+  out: list[str] = []
+  seen: set[str] = set()
+  for edge in graph.edges.values():
+    if edge.dst_node != node_id:
+      continue
+    for label in edge.discovered_labels or ():
+      text = str(label).strip()
+      if text and text.casefold() not in seen:
+        seen.add(text.casefold())
+        out.append(text)
+  return out[:12]
+
+
+def _clip(sentence: str, words: int = 13) -> str:
+  """At most `words` words, cut at a clause boundary rather than mid-phrase.
+
+  A hard cap leaves dangling fragments - "I see the 'New name' dialog on the
+  screen, which is the final" - and the identifying half of a reasoning
+  sentence is almost always the first clause anyway.
+  """
+  parts = sentence.split()
+  if len(parts) <= words:
+    return sentence
+  head = parts[:words]
+  for i in range(len(head) - 1, 2, -1):
+    if head[i].endswith(","):
+      return " ".join(head[:i + 1]).rstrip(",") + "."
+  return " ".join(head)
+
+
+def _store_routes_context(memory, layout_signature: str,
+                          budget: int = 64) -> str:
+  """What earlier tasks found leading out of THIS screen, from the store.
+
+  Every previous injection form read the episode's own graph, which is the one
+  place that has nothing when it matters: 68% of steps stand on a node with no
+  outgoing edge, and the funnel then died on a utility threshold an OBSERVED
+  edge cannot mathematically clear. The persistent store is the opposite -
+  the current screen is in it on 86% of steps and has a known transition on
+  55% - because it was filled by every task that ran before this one.
+
+  Stated destination-first. The control names are weak (38% of remembered
+  transitions carry only a resource id and are dropped upstream) while the
+  destinations carry real sentences (92% of stored screens have a
+  description), so the description is the part worth the tokens.
+  """
+  if memory is None or not layout_signature:
+    return ""
+  routes = memory.known_routes(layout_signature)
+  if not routes:
+    return ""
+  lines = ["[Known] Earlier tasks on this screen found:"]
+  for name, description in routes:
+    short = " ".join(description.split()[:12]).rstrip(".")
+    line = f'- "{name}" led to {short}.'
+    if len(" ".join(lines + [line]).split()) > budget:
+      break
+    lines.append(line)
+  return "\n".join(lines) if len(lines) > 1 else ""
+
+
+def _loop_context(snapshot, node_id: str, min_repeats: int = 3) -> str:
+  """A control this episode keeps pressing here while nothing new is found.
+
+  12% of the episodes that run out of steps (11 of 94) contain an edge executed
+  four or more times and waste 7.9 steps each. They are NOT self-loops - zero
+  edges in any run have dst == src, because a screen that "looks unchanged"
+  still re-hashes (a clock, a list redraw). FilesMoveFile is the real shape:
+  6e6c38 -> 23ce90 -> 2bf0cc -> 1a909d, each edge taken four times, the model
+  walking one cycle four times over.
+
+  So the test is repetition plus stagnation, which is the distinction the skip
+  gate already draws: iterating discovers screens - delete a recipe, land on a
+  list with one fewer - while spinning does not. `nodes_at_last_execution`
+  records how large the graph was when the edge was last taken.
+
+  The model cannot see this for itself: its history keeps eight entries and the
+  cycle is longer. Stated as a record, never as an instruction; the one block
+  that told the model what to do cost 12 tasks.
+  """
+  if snapshot is None or not node_id:
+    return ""
+  seen_now = len(getattr(snapshot, "node_visits", {}) or {})
+  worst = None
+  for eid in (getattr(snapshot, "outgoing", {}) or {}).get(node_id, ()):
+    edge = (getattr(snapshot, "edges", {}) or {}).get(eid) or {}
+    hits = int(edge.get("execution_hit_count") or 0)
+    if hits < min_repeats:
+      continue
+    if seen_now > int(edge.get("nodes_at_last_execution") or 0):
+      continue          # the task found something new since; it is iterating
+    if worst is None or hits > worst[1]:
+      worst = (edge, hits)
+  if worst is None:
+    return ""
+  label = _control_display_label((worst[0].get("action") or {}).get("control_key") or "")
+  return (f'[Loop] "{label}" has been used here {worst[1]} times and no new '
+          "screen has been reached since.")
+
+
+def _elements_context(snapshot, node_id: str, summaries, budget: int = 64) -> str:
+  """What this screen's controls have done, from the node's own inventory.
+
+  Every earlier injection form spoke in terms of edges, and a node carries
+  0.85 of those against 9 to 14 named controls - so 37% of visited screens had
+  nothing to say. The inventory turns the whole screen into the surface: a
+  control that has been pressed here carries its count, and one that leads
+  somewhere named carries the destination.
+
+  Controls never pressed here are deliberately left out. They are what
+  exploration needs (coverage), not what the model needs: it can read them off
+  the screenshot, and listing nine of them would spend the budget on nothing.
+  """
+  if snapshot is None or not node_id:
+    return ""
+  inventory = (getattr(snapshot, "node_elements", {}) or {}).get(node_id) or ()
+  used = [e for e in inventory if int(e.get("clicks") or 0) > 0]
+  if not used:
+    return ""
+  used.sort(key=lambda e: -int(e.get("clicks") or 0))
+  lines = ["[Screen] What has been pressed here before:"]
+  for entry in used:
+    label = str(entry.get("label") or "").strip()
+    if not label:
+      continue
+    times = int(entry.get("clicks") or 0)
+    dst = _destination_of(snapshot, node_id, str(entry.get("control_key") or ""),
+                          summaries)
+    line = f"- {label} ({times}x)" + (f" led to {dst}" if dst else "")
+    if len(" ".join(lines + [line]).split()) > budget:
+      break
+    lines.append(line)
+  return "\n".join(lines) if len(lines) > 1 else ""
+
+
+def _destination_of(snapshot, node_id: str, control_key: str, summaries) -> str:
+  """The described screen this control led to from here, or ""."""
+  if not control_key:
+    return ""
+  for eid in (getattr(snapshot, "outgoing", {}) or {}).get(node_id, ()):
+    edge = (getattr(snapshot, "edges", {}) or {}).get(eid) or {}
+    if ((edge.get("action") or {}).get("control_key") or "") != control_key:
+      continue
+    dst = edge.get("dst_node") or ""
+    text = str((summaries or {}).get(dst) or "").strip()
+    if text:
+      return " ".join(text.split()[:11]).rstrip(".")
+  return ""
+
+
+def _ui_inventory(state, graph, node_id: str, limit: int = 14):
+  """Every named actionable control on this screen, with its history HERE.
+
+  The graph used to know only the controls it had an edge for: 0.85 per node,
+  and 37% of visited nodes had none, against 9 to 14 named controls on a
+  screen. Every consumer read that 0.85 - which is why ranking candidates by
+  embedding measured 40% top-1 against a 38% random baseline, and why a
+  coverage ranker could not tell "probed one of ten here" from "probed all
+  ten".
+
+  Same package rule as the labels: an element belonging to another package is
+  the keyboard or the status bar, not this screen.
+  """
+  from android_world.parallel_exploration.belief_graph import control_key_from_identity
+  app_package = str(getattr(getattr(state, "activity", None), "component", "")
+                    or "").split("/", 1)[0]
+  clicks: dict[str, int] = {}
+  probes: dict[str, int] = {}
+  for edge in graph.edges.values():
+    if edge.src_node != node_id:
+      continue
+    key = (edge.action or {}).get("control_key") or ""
+    if not key:
+      continue
+    clicks[key] = clicks.get(key, 0) + int(edge.execution_hit_count or 0)
+    probes[key] = probes.get(key, 0) + int(edge.probe_count or 0)
+  out = []
+  seen: set[str] = set()
+  for element in getattr(state, "elements", ()) or ():
+    if not (element.clickable or element.scrollable or element.checked is not None):
+      continue
+    if app_package and getattr(element, "package", "") and (
+        element.package != app_package):
+      continue
+    label = (element.text or element.content_desc or "").strip()
+    if not label or len(label) > 40:
+      continue
+    identity = getattr(element, "identity", "")
+    key = control_key_from_identity(identity) if identity else ""
+    dedupe = (key or label).casefold()
+    if dedupe in seen:
+      continue
+    seen.add(dedupe)
+    out.append({"label": label[:40], "control_key": key,
+                "role": (element.class_name or "").rsplit(".", 1)[-1],
+                "clicks": clicks.get(key, 0), "probes": probes.get(key, 0)})
+    if len(out) >= limit:
+      break
+  return tuple(out)
+
+
+def _control_display_label(control_key: str) -> str:
+  """What to call this control when telling the model it was pressed."""
+  parts = (control_key or "").split("|")
+  for index in (1, 2):
+    if len(parts) > index and parts[index].strip():
+      return " ".join(parts[index].split())[:40]
+  tail = parts[0].rsplit("/", 1)[-1] if parts else ""
+  return re.sub(r"[_\-.]+", " ", tail).strip()[:40] or "a control"
+
+
+def _episode_decided(graph, node_id: str, min_exec: int) -> tuple[str, str] | None:
+  """(control_key, dst_node) when THIS episode has settled this screen.
+
+  The screen counts as settled when the model has executed exactly one control
+  on it and nothing else. Measured 2026-09-12 over 116 tasks: with one prior
+  execution the next visit repeats that control **83%** of the time (96/115),
+  with two it is 93% (42/45) - but the one-execution gate has 115 chances
+  against 45, which is why it is the default here.
+
+  The skip gate cannot use one execution: it replaces the inference, so a miss
+  costs a step and every task that saw a mis-skip was lost in both runs of a
+  2026-09-01 pair. Prefill executes and then still runs the inference, so a
+  miss costs one extra action.
+
+  Reads only what earlier steps executed - never this step's inference - so it
+  sits on the same side of the generation guard as every other graph read.
+  """
+  if graph is None or not node_id:
+    return None
+  executed = [graph.edges[eid] for eid in graph.outgoing.get(node_id, ())
+              if (graph.edges[eid].get("execution_hit_count") or 0) > 0]
+  if len(executed) != 1:
+    return None
+  edge = executed[0]
+  if (edge.get("execution_hit_count") or 0) < min_exec:
+    return None
+  control = (edge.get("action") or {}).get("control_key") or ""
+  dst = edge.get("dst_node") or ""
+  if not control or dst == node_id:
+    return None
+  return control, dst
+
+
+def _element_for_control(state, control_key: str, by_resource_id: bool = False):
+  """The element on this screen whose control_key matches, or None.
+
+  A control key is `resource_id|text|content_desc|class`, so a button whose
+  label carries a count or a date fails to match itself across screens - 43
+  prefill attempts were refused as "control absent" over 50 tasks (2026-09-13)
+  against 29 that fired. `by_resource_id` falls back to the resource id alone,
+  but only when exactly one element on the screen carries it: ids repeat inside
+  list rows, and picking an arbitrary row is worse than not prefilling.
+  """
+  from android_world.parallel_exploration.belief_graph import control_key_from_identity
+  elements = list(getattr(state, "elements", ()) or ())
+  for element in elements:
+    identity = getattr(element, "identity", "")
+    if identity and control_key_from_identity(identity) == control_key:
+      return element
+  if not by_resource_id:
+    return None
+  wanted = control_key.split("|")[0]
+  if not wanted:
+    return None
+  same = [element for element in elements
+          if (getattr(element, "resource_id", "") or "") == wanted]
+  return same[0] if len(same) == 1 else None
+
+
+def _click_on(element):
+  """A click at the element's centre."""
+  from android_world.env import json_action
+  left, top, right, bottom = element.bounds
+  return json_action.JSONAction(action_type=json_action.CLICK,
+                                x=int((left + right) / 2),
+                                y=int((top + bottom) / 2))
+
+
+def _risk_of(element) -> str:
+  """SAFE/LOW only for controls a Back press can undo.
+
+  Same structural test the probe filter uses: a role of "button" acts and may
+  not be undoable, a checked control toggles state, and anything without a
+  name cannot be reasoned about at all.
+  """
+  cls = (getattr(element, "class_name", "") or "").lower()
+  if getattr(element, "checked", None) is not None:
+    return "UNKNOWN"
+  if "button" in cls and "imagebutton" not in cls:
+    return "UNKNOWN"
+  if not ((element.text or "").strip() or (element.content_desc or "").strip()):
+    return "UNKNOWN"
+  return "SAFE"
+
+
+def _prefill_risk_of(element, mode: str) -> str:
+  """Risk gate for a prefilled control, which is not the probe gate.
+
+  `_risk_of` exists for probing: a probe is a speculative press taken purely
+  to learn, so it may only touch controls a Back press can undo. Applied to
+  prefill it throws away 59% of everything a prefill could ever fire on -
+  measured over the 419 executed edges of a 115-task run (2026-09-13): 42%
+  rejected for having no text or content-desc (they have a resource id, which
+  is what the control key matches on), 17% for being an android.widget.Button.
+
+  A prefilled control is a different object. It is not speculative: the store
+  only holds controls a real task pressed, `observe_execution` drops any
+  transition that left the app, the recorded destination is checked after the
+  hop, and a mismatch is rolled back. "loose" keeps the one structural
+  rejection that still applies - a control carrying checked state toggles
+  something rather than navigating - and lets the destination check do the
+  rest.
+  """
+  if mode == "probe":
+    return _risk_of(element)
+  if getattr(element, "checked", None) is not None:
+    return "UNKNOWN"
+  return "SAFE"
+
+
+def _walked_path_lines(snapshot, current_node_id: str,
+                       limit: int = 4) -> list[str]:
+  """Descriptions of the screens this episode stood on, most recent last."""
+  if snapshot is None or not current_node_id:
+    return []
+  visits = getattr(snapshot, "node_visits", {}) or {}
+  summaries = getattr(snapshot, "node_summaries", {}) or {}
+  seen: set[str] = set()
+  walked: list[str] = []
+  for node_id, count in visits.items():
+    if node_id == current_node_id or not count:
+      continue
+    text = str(summaries.get(node_id) or "").strip()
+    if text and text.casefold() not in seen:
+      seen.add(text.casefold())
+      walked.append(text)
+  return walked[-limit:]
+
+
+def _walked_path_context(snapshot, current_node_id: str,
+                         limit: int = 4) -> str:
+  """The screens this episode has already stood on, named, most recent last.
+
+  Every earlier injection form said "control X leads to Y", which needs the
+  current node to have outgoing edges - and measured on desc2 (2026-09-10),
+  68% of steps stand on a node that has none, so 76 steps produced 0
+  injections with the funnel dying before the utility threshold was even
+  consulted. This form needs no edges at all, only node descriptions, so it
+  has material on every step where the episode has been anywhere before.
+
+  It is also the one thing the model provably cannot recover for itself: its
+  own history window keeps 8 entries and 48% of episodes exceed it, the
+  entries are actions rather than screen identities, and a screen visited
+  three times appears three times there and once here. Descriptions written
+  by earlier tasks count too, so a screen this episode never described can
+  still be named.
+
+  Read from the step i-1 snapshot like every other graph read, so this step's
+  own probes cannot reach it.
+  """
+  walked = _walked_path_lines(snapshot, current_node_id, limit)
+  if not walked:
+    return ""
+  lines = "\n".join("- " + _clip(t) for t in walked)
+  # Stated as record, never as instruction. The one prompt block that told the
+  # model what to do with what it was given cost 12 tasks (v29 vs the ported
+  # decision-constraints prompt), so this says only what was visited.
+  return f"[Memory] Screens already visited on this task:\n{lines}"
+
+
 def main() -> int:
   parser = argparse.ArgumentParser()
   parser.add_argument("--output", type=Path, required=True)
   parser.add_argument("--task", required=True)
-  parser.add_argument("--max_steps", type=int, default=20)
+  parser.add_argument("--max_steps", type=int, default=20,
+                      help="per-task step cap. 0 hands the decision back to "
+                           "AndroidWorld, whose own budget is 10 x the task's "
+                           "complexity (suite_utils.py:525). A flat 15 was used "
+                           "for every arm up to 2026-09-13 and it is what made "
+                           "43 tasks look impossible: 72%% of those have an "
+                           "official budget above 15 and 42%% have 30 or more "
+                           "(OsmAndTrack gets 120, MarkorMergeNotes 78, nine "
+                           "tasks 50-78). Those 43 were not unwinnable, they "
+                           "were starved.")
   parser.add_argument("--seed", type=int, default=30)
   parser.add_argument("--probes_per_step", type=int, default=3,
                       help="Fixed probe count; serial exploration is on the "
@@ -521,6 +1339,67 @@ def main() -> int:
                       help="Probes allowed across the whole episode.")
   parser.add_argument("--max_path", type=int, default=3,
                       help="Hops replayed inside one counted step.")
+  parser.add_argument("--downsample", type=float, default=1.0,
+                      help="send the model a screenshot divided by this factor. "
+                           "The reference arm this is measured against runs on "
+                           "GELABResizeAgent, whose step() the plain agent's "
+                           "monkeypatch cannot reach - so any value above 1.0 "
+                           "switches which class is patched as well")
+  parser.add_argument("--align_requires_action_match", action="store_true",
+                      help="Promote a prefix only when the probe took the same "
+                           "control the model then chose, not merely when it "
+                           "landed on the same screen. Node identity is loose "
+                           "on purpose, so landing-only alignment accepts a "
+                           "different action that happened to reach the same "
+                           "screen.")
+  parser.add_argument("--no_align_promotes_current_step",
+                      dest="align_promotes_current_step", action="store_false",
+                      help="Make a prefix-alignment promotion wait a step "
+                           "before the skip gate can use it.")
+  parser.add_argument("--depth2_needs_known_inverse", action="store_true",
+                      help="Descend to depth 2 only from a root whose inverse "
+                           "is known here (20%% of depth-2 tap probes could not "
+                           "be rolled back, against 7%% at depth 1).")
+  parser.add_argument("--min_node_visits", type=int, default=2,
+                      help="How many times this episode must have stood on a "
+                           "screen before it may be probed. 2 restricts "
+                           "exploration to revisits, which is where it was "
+                           "measured to pay - but that measurement predates "
+                           "the node-id and timing fixes that made a probe "
+                           "able to pay at all. 1 allows first visits.")
+  parser.add_argument("--explore_interval", type=int, default=1,
+                      help="Minimum number of steps between exploration "
+                           "rounds. 1 explores whenever eligible; larger "
+                           "values spread a smaller amount of exploration "
+                           "across more of the episode.")
+  parser.add_argument("--cross_task_revisit", action="store_true",
+                      help="Treat a screen this app met in an earlier task as a "
+                           "revisit for the purpose of allowing exploration. "
+                           "Exploration only; the skip gate stays episode-local.")
+  parser.add_argument("--no_deep_rollback_blocks", dest="deep_rollback_blocks",
+                      action="store_false",
+                      help="Stop treating a probe that recovered via a deep "
+                           "recovery rung as proof that this (activity, probe "
+                           "type) can never be probed again. The working rung "
+                           "is remembered either way.")
+  parser.add_argument("--constraints_variant", default="full",
+                      choices=("full", "no_completion_gate"),
+                      help="'no_completion_gate' drops the one clause that forbids "
+                           "COMPLETE without on-screen proof; every other clause "
+                           "stays. Ignored when --no_decision_constraints is set.")
+  parser.add_argument("--no_decision_constraints", dest="decision_constraints",
+                      action="store_false",
+                      help="drop the per-step decision constraints. They are a "
+                           "base-agent prompt improvement, not part of the "
+                           "exploration design, and the reference arm this is "
+                           "measured against already has them")
+  parser.add_argument("--app_memory", default=None,
+                      help="directory holding per-package structural memory "
+                           "kept across tasks. Carries what the APP is - "
+                           "transitions, labels, which ladder rung undoes a "
+                           "probe here, which probes proved unrecoverable - "
+                           "and deliberately not what the MODEL decided, "
+                           "which is task-specific. Unset = current behaviour")
   parser.add_argument("--no_bootstrap", dest="bootstrap", action="store_false",
                       help="disable the launch collapse. Separate from "
                            "--enable_skip: collapsing open_app into the first "
@@ -536,10 +1415,51 @@ def main() -> int:
                            "that carry no accessible label. These are 55%% of "
                            "everything the safety filter removes and much of "
                            "what the model actually clicks")
+  parser.add_argument("--skip_semantic_check", action="store_true",
+                      help="before taking a structurally-licensed skip, require the remembered action's label to match the current information need above a cosine floor. Every existing skip condition is structural (revisited screen, one action ever chosen, executed twice) and none asks whether that action is what the task needs now; measured skip hit rate is 57-85%%. Blocks nothing it cannot judge - an unnameable control or an unreachable encoder leaves the skip exactly as it was.")
+  parser.add_argument("--entropy_over", choices=("all", "executed"),
+                      default="all",
+                      help="which outgoing edges decision entropy counts. 'all' is the historical behaviour and lets probe and memory-seeded edges raise H, which closes the skip gate: mean finite H ordered every arm's skip count on 2026-09-10 (semantic 0.224->14, probes-off 0.246->13, probes-on 0.295->7, warm memory 0.324->2). 'executed' counts only edges the model has actually taken, which is what the skip gate's claim is about.")
+  parser.add_argument("--node_summary", choices=("off", "reasoning", "model"),
+                      default="reasoning",
+                      help="fill each node's semantic_summary with the model's own one-line description of that screen, taken from the <THINK> it wrote while standing on it. Free - no extra model call - and attached after inference, so exploration for that step cannot see it. 'off' restores the historical behaviour, where the field was never populated on any of 1175 nodes. 'model' additionally asks a 0.6B running beside the encoder to describe the 42.5%% of steps that emit a bare tool call with no reasoning at all.")
+  parser.add_argument("--semantic_port", type=int, default=8766,
+                      help="port of the 22M encoder service used by "
+                      "--exploration_policy semantic; exploration falls back to "
+                      "its cheap ranker if the service is unreachable")
+  parser.add_argument("--visited_discount", type=float, default=0.0,
+                      help="weight on the walked-path term of the semantic "
+                      "exploration ranker: a candidate whose text reads like a "
+                      "screen this episode has already stood on is discounted "
+                      "by this much. Reads the node descriptions written by "
+                      "earlier steps and by earlier tasks, never this step's "
+                      "inference. 0.0 (default) is the measured labels-only "
+                      "ranker, unchanged.")
+  parser.add_argument("--min_fact_utility", type=float, default=0.15,
+                      help="a graph fact is only eligible for injection "
+                      "above this utility score. 0.15 is the historical "
+                      "value and discards 93%% of the steps that have a "
+                      "fact available (measured 2026-09-09).")
+  parser.add_argument("--exploration_budget_s", default="120.0",
+                      help="seconds a single exploration round may spend "
+                      "before it stops starting new probes; 'auto' uses "
+                      "the median inference latency observed so far in "
+                      "this episode, which is the window exploration has "
+                      "to stay inside to remain free. Default 120.0 is "
+                      "the historical value, i.e. effectively no budget.")
   parser.add_argument("--exploration_policy",
-                      choices=("information_need", "graph_matrix"),
+                      choices=("information_need", "graph_matrix", "random",
+                               "coverage", "semantic", "llm_choice"),
                       default="graph_matrix",
-                      help="PART G: how probe candidates are ranked")
+                      help="PART G: how probe candidates are ranked. 'random' "
+                           "is the control the exploration claim needs: same "
+                           "safety filter, same budget, same rollback, but the "
+                           "candidate is drawn uniformly instead of ranked. "
+                           "'coverage' drops the prediction objective the other "
+                           "three share - random ranks as well as any of them, "
+                           "so prediction buys nothing - and ranks by what the "
+                           "graph does not know: controls with no outgoing edge "
+                           "yet, preferring ones that can be named at all.")
   parser.add_argument("--graph_reasoning",
                       choices=("off", "briefing", "distill", "skip_only",
                                "distill_and_skip"),
@@ -552,11 +1472,137 @@ def main() -> int:
     parser.add_argument(f"--disable_{group}", action="store_true",
                         help=f"PART G: drop the {group} feature group from the "
                              "candidate matrix")
-  parser.add_argument("--graph_context", choices=("off", "briefing", "distill"),
+  parser.add_argument("--loop_notice", action="store_true",
+                      help="append a one-line record when a control has been "
+                           "used on this screen >= --loop_repeats times without "
+                           "the screen changing. 12%% of the episodes that run "
+                           "out of steps contain such an edge and waste 7.9 "
+                           "steps each; the model cannot see it because its "
+                           "history keeps eight entries and the loop is longer")
+  parser.add_argument("--loop_repeats", type=int, default=3,
+                      help="how many uses of one control on one screen, with no "
+                           "change, count as a loop")
+  parser.add_argument("--store_prefill", action="store_true",
+                      help="before each inference, if the persistent store has "
+                           "seen exactly one control executed on this screen by "
+                           ">=2 different tasks, execute it and then run the "
+                           "step's inference on the resulting screen. Measured "
+                           "87%% accurate (39/45 over 116 tasks); safe at that "
+                           "accuracy only because it falls through rather than "
+                           "replacing the inference, so a miss costs one extra "
+                           "action and not a step of the 15-step budget.")
+  parser.add_argument("--prefill_by_resource_id", action="store_true",
+                      help="when the full control key does not match any "
+                           "element, fall back to the resource id alone, but "
+                           "only if exactly one element on the screen carries "
+                           "it (97%% of ids are unique on their screen). A "
+                           "label that carries a count or a date otherwise "
+                           "stops a control from matching itself.")
+  parser.add_argument("--prefill_sources", default="store",
+                      help="comma-separated: 'store' (what other tasks pressed "
+                           "here, via uniqueness and goal retrieval) and/or "
+                           "'episode' (what this episode already pressed here). "
+                           "Measured live over 50 tasks (2026-09-13) the store "
+                           "sources land 26/29 = 90%% and episode 9/30 = 30%%, "
+                           "and episode supplied half the hops - the arm lost 8 "
+                           "successes against no-graph on precisely the tasks "
+                           "where prefill fired. Default is store only.")
+  parser.add_argument("--prefill_retrieval", default="both",
+                      choices=("uniq", "goal", "both", "off"),
+                      help="how the store picks the control to prefill. "
+                           "'uniq' is the screen-uniqueness gate (leave-one-out "
+                           "over 419 executed steps, 2026-09-13: covers 17%% of "
+                           "them at 90%%); 'goal' retrieves what the most "
+                           "goal-similar earlier tasks pressed here (42%% at "
+                           "84%%); 'both' runs uniqueness first and the goal "
+                           "vote on the screens it refuses (44%% at 84%%). For "
+                           "contrast a plain screen-majority vote is 45%% at "
+                           "66%%, which is 65 wrong hops against this 30.")
+  parser.add_argument("--prefill_k", type=int, default=3,
+                      help="neighbours in the goal vote (k=1 gives 76%%, k=3 "
+                           "84%%, k=5 80%%)")
+  parser.add_argument("--prefill_sim_thr", type=float, default=0.5,
+                      help="goal similarity the nearest neighbour must clear "
+                           "(0.0 gives 76%%, 0.5 gives 84%%)")
+  parser.add_argument("--prefill_margin", type=float, default=0.6,
+                      help="weighted-vote margin the winning control must hold "
+                           "over the runner-up. A near-tie is exactly the case "
+                           "a screen vote gets wrong: 0.0 gives 76%%, 0.3 82%%, "
+                           "0.6 84%%, 1.0 86%% at falling coverage.")
+  parser.add_argument("--prefill_after_bootstrap", action="store_true",
+                      help="also prefill immediately after the step-0 app "
+                           "launch. The app home screen is the best-covered "
+                           "screen in the store (47%% of first in-app screens "
+                           "answered at 75%% cold-start, against 34%%/76%% "
+                           "averaged over all screens) and no other call site "
+                           "reaches it: without this, step 0 spends its "
+                           "inference there and the first navigation waits for "
+                           "step 1")
+  parser.add_argument("--prefill_risk", default="loose",
+                      choices=("probe", "loose"),
+                      help="which risk gate a prefilled control must clear. "
+                           "'probe' reuses the probe filter, which rejects 59%% "
+                           "of all executed edges (42%% unnamed, 17%% Button); "
+                           "'loose' rejects only controls carrying checked "
+                           "state, on the grounds that a prefill is not "
+                           "speculative - the store only holds controls a real "
+                           "task pressed inside this app, and the hop is "
+                           "verified against the recorded destination")
+  parser.add_argument("--prefill_rollback", action="store_true",
+                      help="when a prefilled hop does not land where the store "
+                           "recorded, press Back and drop the summary, so a "
+                           "miss costs wall clock instead of handing the model "
+                           "a screen it never navigated to")
+  parser.add_argument("--prefill_min_exec", type=int, default=1,
+                      help="how many times THIS episode must have executed the "
+                           "screen's only control before it may be prefilled. "
+                           "1 gives 83%% over 115 chances, 2 gives 93%% over 45 "
+                           "- the looser gate wins because a miss costs an "
+                           "action, not a step")
+  parser.add_argument("--prefill_min_tasks", type=int, default=2,
+                      help="how many different tasks must have executed the "
+                           "control before it may be prefilled (2 gives 87%%, "
+                           "1 gives 71%%)")
+  parser.add_argument("--max_prefill", type=int, default=3,
+                      help="most prefill hops in one step. 59%% of decided "
+                           "screens lead to another decided screen, which takes "
+                           "the collapsible total from 39 to 64 steps over 116 "
+                           "tasks; each hop is verified against the recorded "
+                           "destination before the next fires, and a screen is "
+                           "prefilled at most once per episode because a "
+                           "learned two-screen loop was once replayed twelve "
+                           "times")
+  parser.add_argument("--graph_context",
+                      choices=("off", "briefing", "distill", "history",
+                               "history_done", "onclick", "path",
+                               "distill_path", "llm", "store",
+                               "store_path", "elements", "elements_store"),
                       default="distill",
                       help="how graph knowledge reaches the prompt (PART G ablation): "
+                           "store = what earlier TASKS found leading out of "
+                           "this screen, read from the persistent app memory "
+                           "rather than the episode graph - the screen is in "
+                           "the store on 86%% of steps and has a known "
+                           "transition on 55%%, against 32%% for the episode "
+                           "graph; store_path = that plus the walked path; "
+                           "llm = the same walked path, compressed to "
+                           "one line by the 0.6B beside the encoder; "
+                           "path = the screens this episode already stood "
+                           "on, named, most recent last - the only form that "
+                           "needs no outgoing edges, and 68%% of steps stand "
+                           "on a node that has none; distill_path = both, "
                            "off = never, briefing = the old screen_briefing, "
-                           "distill = GraphDistiller facts under a token budget")
+                           "distill = GraphDistiller facts under a token budget, "
+                           "history = what this screen has already done plus "
+                           "its known exits, history_done = only the half that "
+                           "names what is already done (the exits read as a "
+                           "menu and the model takes them), onclick = "
+                           "AutoDroid's form (MobiCom'24): one line per control "
+                           "the graph knows a destination for, with no "
+                           "block-level positive-fact gate - that gate fires 10 "
+                           "times per 1010 steps while 31%% of steps have a "
+                           "candidate fact, so the block form discards 97%% of "
+                           "what the graph knows")
   parser.add_argument("--predictive_scorer", action="store_true", default=True,
                       help="rank probe candidates with PredictiveElementScorer")
   parser.add_argument("--no_predictive_scorer", dest="predictive_scorer",
@@ -598,8 +1644,11 @@ def main() -> int:
   from android_world.parallel_exploration.belief_graph import GraphNode
   from android_world.parallel_exploration.belief_graph import NodeStatus
   from android_world.parallel_exploration.belief_graph import ProgressiveBeliefGraph
+  from android_world.parallel_exploration import belief_graph as _bg
+  _bg.ENTROPY_OVER_EXECUTED_ONLY = args.entropy_over == "executed"
   from android_world.parallel_exploration.information import parse_reasoning_prior
   from android_world.parallel_exploration import graph_distiller as gd
+  gd.SKIP_SEMANTIC_PORT = args.semantic_port if args.skip_semantic_check else 0
   from android_world.parallel_exploration.live_probe import _is_app_content
   from android_world.parallel_exploration.belief_graph import control_key_from_identity
   from android_world.parallel_exploration import state_graph_information as sgi
@@ -607,13 +1656,35 @@ def main() -> int:
   from android_world.parallel_exploration.live_probe import await_explorer_ready
   from android_world.parallel_exploration.live_probe import spawn_explorer
   from android_world.parallel_exploration.live_probe import run_serial_exploration
-  from android_world.parallel_exploration.live_probe import stop_prepared_explorer
   from android_world.parallel_exploration.state import create_optimized_state_capture
 
   root = args.output.resolve()
   root.mkdir(parents=True, exist_ok=True)
+  # Every run records the configuration it ran under. Eleven full 116-task runs
+  # were made without this, and the question "was this arm configured like
+  # v48?" then had no answer on disk - one success-rate difference (2026-09-09,
+  # -4.8 against six references) stayed permanently unattributable because
+  # config, build and device state could not be told apart after the fact.
+  (root / "run_args.json").write_text(json.dumps(
+      {"argv": sys.argv[1:],
+       "args": {k: (str(v) if isinstance(v, pathlib.Path) else v)
+                for k, v in sorted(vars(args).items())},
+       "git_head": _git_head(),
+       "started_at": datetime.datetime.now().isoformat(timespec="seconds")},
+      indent=2, ensure_ascii=False))
   trace_path = root / "probe_trace.jsonl"
   graph = ProgressiveBeliefGraph(args.task)
+  from android_world.parallel_exploration.app_memory import AppMemoryStore
+  from android_world.parallel_exploration.app_memory import _is_app_destination
+  app_store = AppMemoryStore(args.app_memory) if args.app_memory else None
+  seeded_nodes: set[str] = set()
+
+  def memory_for(activity: str):
+    """Per-package memory for whatever app this screen belongs to."""
+    if app_store is None:
+      return None
+    package = (activity or "").split("/", 1)[0]
+    return app_store.get(package) if package else None
   guarded = GenerationGuardedGraph(graph)
   capture = create_optimized_state_capture(
       serial="emulator-5554", console_port=5554,
@@ -634,7 +1705,13 @@ def main() -> int:
       use_cost=not args.disable_cost,
       use_recovery_history=not args.disable_recovery_history,
   )
-  distiller = gd.GraphDistiller()
+  # One number decides whether the graph speaks at all. Measured
+  # 2026-09-09 over 1010 steps: 207 steps had candidate facts, 15
+  # survived this threshold, 10 were injected - it alone discards 93%
+  # of what the graph knows, against 5 for the positive-fact gate and
+  # 55% for facts that cannot be named at all.
+  distiller = gd.GraphDistiller(dataclasses.replace(
+      gd.DEFAULT_DISTILLER, min_fact_utility=args.min_fact_utility))
   reasoning_gate = gd.ReasoningGate(
       distiller,
       gd.GateConfig(enable_skip=args.enable_skip,
@@ -652,7 +1729,14 @@ def main() -> int:
   def node_id_of(signature) -> str:
     return graph.make_node_id(signature.activity.component, signature.layout_sig)
 
+  def _remembered_description(signature) -> str:
+    memory = memory_for(signature.activity.component)
+    if memory is None:
+      return ""
+    return memory.recall_description(signature.layout_sig)
+
   def upsert(signature, node_id: str, visited: bool) -> None:
+    existing = graph.nodes.get(node_id)
     graph.upsert_node(GraphNode(
         node_id=node_id, activity=signature.activity.component,
         package=signature.activity.component.split("/", 1)[0],
@@ -660,7 +1744,59 @@ def main() -> int:
         structural_signature=signature.struct_sig.digest,
         layout_signature=signature.layout_sig,
         status=NodeStatus.COMMITTED,
+        salient_ui_labels=_actionable_labels(signature),
+        ui_elements=_ui_inventory(signature, graph, node_id),
+        # A description already written for this node survives a revisit: the
+        # first time the model described this screen is as good as the second,
+        # and overwriting would lose it on steps that emit no reasoning.
+        # Falling back to app memory is what makes a description readable
+        # *before* this step's inference - the episode graph resets every
+        # task, the store does not, and exploration runs first.
+        semantic_summary=((existing.semantic_summary if existing else "")
+                          or _remembered_description(signature)),
     ), visited=visited)
+    memory = memory_for(signature.activity.component)
+    if memory is not None:
+      # Same package rule as _actionable_labels: what the store remembers about
+      # a screen must be what the app showed, not what the IME did.
+      app_package = signature.activity.component.split("/", 1)[0]
+      memory.observe_screen(
+          signature.activity.component, signature.layout_sig,
+          [label for element in signature.elements
+           if not (getattr(element, "package", "") and
+                   element.package != app_package)
+           for label in (element.text, element.content_desc)
+           if label and len(label) < 40 and _is_app_content(element, label)][:12])
+      if node_id not in seeded_nodes:
+        seeded_nodes.add(node_id)
+        n = memory.seed_graph(graph, node_id, signature.activity.component,
+                              signature.layout_sig)
+        if n:
+          log("app_memory_seed", step=None, node=node_id[:8],
+              activity=signature.activity.component, edges=n)
+
+  prefilled_screens: set[str] = set()
+  # Goal-to-goal similarity for the store's retrieval, memoised per screen's
+  # candidate list because the same screen is asked about repeatedly and the
+  # encoder round trip is the only cost the retrieval has.
+  _goal_sim_cache: dict[tuple[str, tuple[str, ...]], list[float] | None] = {}
+
+  def _goal_similarity(goal: str, candidates: list[str]) -> list[float] | None:
+    """Scores in [0,1], or None when the encoder cannot answer."""
+    if not candidates:
+      return []
+    key = (goal, tuple(candidates))
+    if key in _goal_sim_cache:
+      return _goal_sim_cache[key]
+    scores = None
+    try:
+      from android_world.parallel_exploration import semantic_service
+      scores = semantic_service.query(
+          args.semantic_port, goal, list(candidates), timeout_s=3.0)
+    except Exception:  # pylint: disable=broad-exception-caught
+      scores = None
+    _goal_sim_cache[key] = scores
+    return scores
 
   trace_cursor = {"n": 0}
   episode_goal = {"text": ""}
@@ -672,6 +1808,56 @@ def main() -> int:
   # "unexplored nodes only" rule that removed it from 82% of them.
   blocked_recovery_contexts: set[str] = set()
   blocked_element_identities: set[str] = set()
+  # Layout signatures this app was already standing on in some EARLIER task,
+  # snapshotted before this episode writes anything back. Exploration is
+  # otherwise limited to screens revisited inside one episode, which measured
+  # here blocks 62.9% of all steps - and that limit was set when memory was
+  # episode-local, so "a screen seen once" really did mean "nothing to gain".
+  # With per-package memory it no longer does: 40.6% of the 478 screen nodes
+  # in a full run recur across tasks, and the apps recur harder still
+  # (Calendar 17 tasks, Markor 15, Broccoli 11), so what a probe learns on a
+  # first visit here is read by the next task that opens the same screen.
+  # This gates EXPLORATION only. The skip gate keeps reading episode-local
+  # visit and execution counts, so cross-task knowledge still cannot license
+  # replaying an action without the model.
+  preknown_layouts: set[str] = set()
+  # Step index of the most recent exploration round, for --explore_interval.
+  last_explored_step = {"n": -10**6}
+  # Observed inference latencies this episode. Exploration is only free
+  # while it fits inside the window inference is already occupying, and
+  # that window is the one thing the runner can measure directly. The
+  # budget defaulted to 120s, i.e. no budget at all: a coverage round
+  # with 8 probes ran 5.45s against a 3.42s median window (2026-09-09).
+  inference_latencies: list[float] = []
+
+  def seed_safety_from_memory() -> None:
+    """Start the episode already knowing what has hurt before.
+
+    The blocklist is otherwise relearned from scratch every task, and
+    relearning costs one unrecoverable probe each time. Across three runs
+    (2026-09-01) nine (activity, probe_type) combinations failed to roll back
+    in more than one task - fourteen accidents that this seeding skips
+    outright, on episodes whose success rate drops from 89% to 67% the moment
+    one of them lands.
+    """
+    if app_store is None:
+      return
+    for path in sorted(pathlib.Path(app_store.root).glob("*.json")) if pathlib.Path(app_store.root).exists() else []:
+      try:
+        package = json.loads(path.read_text(encoding="utf-8")).get("package")
+      except (OSError, ValueError):
+        continue
+      if package:
+        app_store.get(package)
+    for memory in app_store._loaded.values():  # pylint: disable=protected-access
+      blocked_recovery_contexts.update(memory.blocked_contexts)
+      blocked_element_identities.update(memory.blocked_elements)
+      preknown_layouts.update(memory.screens)
+    if blocked_recovery_contexts or blocked_element_identities:
+      log("app_memory_load", step=None,
+          seeded_blocked_contexts=len(blocked_recovery_contexts),
+          seeded_blocked_elements=len(blocked_element_identities),
+          store=app_store.stats())
   # Set the first time an exploration round cannot restore the screen it
   # started from. After that this episode stops probing entirely - see
   # may_probe. Measured over 35 tasks on 2026-08-31, bucketed by what
@@ -706,6 +1892,7 @@ def main() -> int:
   probe_total = {"n": 0}
 
   def known_inverse_levels() -> dict[str, str]:
+    """This episode's evidence first, then what earlier tasks learned."""
     """What undid each kind of transition, per screen, so far this episode."""
     out: dict[str, str] = {}
     for edge in graph.edges.values():
@@ -717,6 +1904,10 @@ def main() -> int:
       probe = str(edge.action.get("probe_type") or "")
       if probe:
         out.setdefault(f"{node.activity}|{probe}", edge.inverse_level)
+    if app_store is not None:
+      for memory in app_store._loaded.values():  # pylint: disable=protected-access
+        for key, level in memory.inverse_levels.items():
+          out.setdefault(key, level)
     return out
 
   def ingest_probe_trace(trial_id: str) -> None:
@@ -756,10 +1947,31 @@ def main() -> int:
       # per new combination, none of them repeats.
       deep_recovery = str(row.get("recovery_level") or "") in {
           "BACK_N", "BACK_OVERLAY", "DEEPLINK", "TRAJECTORY_REPLAY"}
-      if deep_recovery and row.get("recovery_ok"):
+      if row.get("recovery_ok") and row.get("recovery_level"):
+        src_act0 = str(((row.get("graph") or {}).get("src") or {}).get("activity") or "")
+        m0 = memory_for(src_act0)
+        if m0 is not None and src_act0:
+          m0.observe_rollback(src_act0, str(row.get("probe_type") or ""),
+                              ok=True, level=str(row.get("recovery_level")))
+      if deep_recovery and row.get("recovery_ok") and args.deep_rollback_blocks:
+        # A rollback that needed a deep rung but DID come back is expensive,
+        # not impossible - and the rung that worked is already remembered in
+        # known_inverse_levels, so the next probe here starts from it instead
+        # of walking the ladder again. Blocking the context outright made a
+        # successful recovery indistinguishable from a failed one: the same
+        # probe was recorded ok=True with its level a few lines above and
+        # ok=False here. Measured 2026-09-02 on 103 probe rows: 6 of the 24
+        # blocking events came from probes that recovered, and because a block
+        # is keyed on (activity, probe_type) and is carried across tasks by app
+        # memory, those 24 events removed ~886 of 1842 candidates - the single
+        # largest reason the candidate set misses what the model goes on to
+        # click. Genuine RESTORE_FAILED still blocks on one demonstration.
         src_act = str(((row.get("graph") or {}).get("src") or {}).get("activity") or "")
         if src_act:
           blocked_recovery_contexts.add(f"{src_act}|{row.get('probe_type')}")
+          m = memory_for(src_act)
+          if m is not None:
+            m.observe_rollback(src_act, str(row.get("probe_type") or ""), ok=False)
           if int(row.get("depth", 1)) >= 2:
             blocked_recovery_contexts.add(f"{src_act}|DEPTH2")
 
@@ -778,8 +1990,14 @@ def main() -> int:
         src_act = str(((row.get("graph") or {}).get("src") or {}).get("activity") or "")
         if src_act:
           blocked_recovery_contexts.add(f"{src_act}|{row.get('probe_type')}")
-        blocked_element_identities.add(
-            element_identity_from_dict(row.get("element", {})))
+          m = memory_for(src_act)
+          if m is not None:
+            m.observe_rollback(src_act, str(row.get("probe_type") or ""), ok=False)
+        identity = element_identity_from_dict(row.get("element", {}))
+        blocked_element_identities.add(identity)
+        m = memory_for(src_act)
+        if m is not None:
+          m.observe_escape(identity)
         continue
 
       if row.get("notes") in {"RESTORE_FAILED", "NESTED_RESTORE_FAILED"}:
@@ -789,6 +2007,9 @@ def main() -> int:
         src_act = str(((row.get("graph") or {}).get("src") or {}).get("activity") or "")
         if src_act:
           blocked_recovery_contexts.add(f"{src_act}|{row.get('probe_type')}")
+          m = memory_for(src_act)
+          if m is not None:
+            m.observe_rollback(src_act, str(row.get("probe_type") or ""), ok=False)
           # A depth-2 failure closes depth 2 on this screen for every control
           # type: the deeper hop is where the recovery ladder runs out (20% of
           # TAP_NAV probes at depth 2 could not be rolled back, against 7% at
@@ -840,6 +2061,20 @@ def main() -> int:
       cost_s = float((row.get("timings_ms") or {}).get("total", 0.0)) / 1000.0
       realized_ig = min(
           1.0, (row.get("discovered") or {}).get("new_element_count", 0) / 10.0)
+      memory = memory_for(src["activity"])
+      if memory is not None:
+        memory.observe_probe(
+            activity=src["activity"],
+            layout_signature=src.get("layout_signature", ""),
+            control_key=str(action_with_kind.get("control_key", "")),
+            probe_type=str(row.get("probe_type") or ""),
+            action={k: v for k, v in action_with_kind.items()
+                    if k in {"action_type", "x", "y", "direction"}},
+            dst_activity=dst["activity"],
+            dst_layout_signature=dst.get("layout_signature", ""),
+            discovered_labels=(row.get("discovered") or {}).get("new_texts", [])[:8],
+            rollback_ok=bool(row.get("recovery_ok")),
+            inverse_level=str(row.get("recovery_level") or ""))
       graph.record_probe(edge.edge_id, rollback_ok=bool(row.get("recovery_ok")),
                          cost_s=cost_s, realized_ig=realized_ig,
                          generation=guarded.generation)
@@ -853,6 +2088,34 @@ def main() -> int:
         nonlocal_ids.append(edge.edge_id)
     depth1_edge_ids.clear()
     depth1_edge_ids.extend(nonlocal_ids)
+
+  def episode_app_package(before) -> str:
+    """The package this episode is supposed to be working in.
+
+    Deliberately not "whatever was on screen before exploration ran". Two
+    attempts at this fix failed on that definition (2026-09-01, SimpleSmsSend):
+    the episode was already stranded in the role-request dialog, so repairing
+    back to the dialog scored as success; then it was stranded on the
+    launcher, so returning to the launcher scored as success. Neither is a
+    screen a task wants to be on.
+
+    Taken instead from the graph: the package of the screen this episode has
+    stood on most, excluding the launcher and system dialogs. That is the app
+    the task has actually been working in, whatever the current screen says.
+    """
+    counts: dict[str, int] = {}
+    for node in graph.nodes.values():
+      package = node.package or ""
+      if not package or package in _SYSTEM_DIALOG_PACKAGES or "nexuslauncher" in package:
+        continue
+      counts[package] = counts.get(package, 0) + max(1, node.visit_count)
+    if counts:
+      return max(counts, key=counts.get)
+    # Nothing in the graph yet: fall back to the screen in front of us. Not
+    # returning at all was tried and is worse - it skipped the repair
+    # entirely 18 times in one episode (2026-09-01), leaving the device
+    # wherever exploration had put it.
+    return before.activity.component.split("/", 1)[0]
 
   def repair_after_exploration(agent, before, outcome, step: int) -> None:
     """Put the app back in front before the next step reasons about it.
@@ -881,7 +2144,7 @@ def main() -> int:
     if outcome.get("restore_status") != "RESTORED":
       unrecovered_once["value"] = True
     stranded = capture.capture()
-    expected_pkg = before.activity.component.split("/", 1)[0]
+    expected_pkg = episode_app_package(before)
     actual_pkg = stranded.activity.component.split("/", 1)[0]
     if actual_pkg == expected_pkg:
       # Still in the right app. The exploration round may not have restored
@@ -926,6 +2189,31 @@ def main() -> int:
         time.sleep(0.6)
         after_repair = capture.capture()
         via = "relaunch"
+        # Relaunching an app can put the system in front of it. Launching an
+        # SMS app fresh makes Android ask to be made the default handler
+        # (permissioncontroller/RequestRoleActivity); a chooser or an install
+        # prompt behaves the same. The repair used to notice only that the
+        # package was wrong, record dirty, and hand the dialog to the model -
+        # which then spent the rest of the episode pressing the same button.
+        # All five SMS tasks were lost that way in v21 (2026-09-01), while the
+        # control, never going HOME mid-task, never saw the dialog at all.
+        # Dismissing it is a framework-level fact about system dialogs, not a
+        # rule about any app.
+        # Checked independently of expected_pkg. That expectation is taken
+        # from whatever was on screen before exploration ran, and if the
+        # episode was already sitting in the role-request dialog then
+        # "returning" to it scores as a successful repair - which is exactly
+        # what happened on the first attempt at this fix (2026-09-01,
+        # SimpleSmsSend: repaired to permissioncontroller, ok=True, task
+        # lost). A system dialog is never a screen the task wants to be on.
+        for _ in range(2):
+          package = after_repair.activity.component.split("/", 1)[0]
+          if package not in _SYSTEM_DIALOG_PACKAGES:
+            break
+          agent._execute_action(json_action.JSONAction(action_type="navigate_back"), {})
+          time.sleep(0.35)
+          after_repair = capture.capture()
+          via = "relaunch+dismiss"
       ok = after_repair.activity.component.split("/", 1)[0] == expected_pkg
       dirty_from_last_step["value"] = not ok
       # Leaving the app ends probing for this episode, exactly as a failed
@@ -992,7 +2280,13 @@ def main() -> int:
         "edges": list(snap.edges.values()),
     }, ensure_ascii=False, default=str, indent=1), encoding="utf-8")
 
-  original_step = gelab_agent.GELABAgent.step
+  seed_safety_from_memory()
+
+  if args.downsample > 1.0:
+    from android_world.agents import gelab_agent_resize as _resize
+    original_step = _resize.GELABResizeAgent.step
+  else:
+    original_step = gelab_agent.GELABAgent.step
   original_build = gelab_agent.build_gelab_messages
   step_counter = {"i": 0}
   dirty_from_last_step = {"value": False}
@@ -1012,8 +2306,11 @@ def main() -> int:
     convention.
     """
     messages = original_build(goal_text, history, screenshot)
-    text = briefing_now["text"]
-    if not text:
+    extra = "\n\n".join(x for x in (briefing_now["text"],
+                                     _decision_constraints(
+                                         goal_text, args.constraints_variant)
+                                     if args.decision_constraints else "") if x)
+    if not extra:
       return messages
     for message in messages:
       content = message.get("content")
@@ -1021,7 +2318,12 @@ def main() -> int:
         continue
       for item in content:
         if isinstance(item, dict) and item.get("type") == "text":
-          item["text"] = f"{item['text']}\n\n{text}"
+          item["text"] = f"{item['text']}\n\n{extra}"
+          if args.dump_graph_steps:
+            folder = root / "prompts"
+            folder.mkdir(parents=True, exist_ok=True)
+            (folder / f"step{step_counter['i']:02d}.txt").write_text(
+                item["text"], encoding="utf-8")
           return messages
     return messages
 
@@ -1041,17 +2343,46 @@ def main() -> int:
     # landing state rather than by comparing coordinates, so it holds for
     # every action type.
     aligned_now = 0
+    aligned_by_action_now = 0
+    aligned_unresolved_now = 0
     for edge_id in list(pending_prefix_edge_ids):
       edge = graph.edges.get(edge_id)
       if (edge is None or edge.dst_node is None or edge.dst_node == edge.src_node
           or edge.rollback_success is not True or edge.dst_node != src_id):
         continue
+      # Two different claims, logged apart because they have very different
+      # strength. by_node says the probe LANDED where the model then landed;
+      # node identity is deliberately loose, so a different action that
+      # happens to reach the same screen satisfies it. by_action says the
+      # probe took the SAME control the model then chose, compared on
+      # control_key - the key edge identity already uses - rather than on
+      # coordinates, which wobble.
+      probe_key = _canonical_control(edge.action)
+      model_key = _canonical_control(last_real_action)
+      by_action = bool(probe_key) and probe_key == model_key
+      # A blank model_key means the tap resolved to no named control, not
+      # that the two actions differ; counting it as a mismatch would report a
+      # measurement gap as a finding. Logged apart, with the raw points, so
+      # the three outcomes stay separable offline.
+      log("prefix_candidate", step=step, edge_id=edge_id,
+          aligned_by_node=True, aligned_by_action=by_action,
+          model_key_resolved=bool(model_key),
+          probe_canonical_action=probe_key, model_canonical_action=model_key,
+          probe_xy=[edge.action.get("x"), edge.action.get("y")],
+          model_xy=[last_real_action.get("x"), last_real_action.get("y")],
+          node_id=src_id, probe_dst_node=edge.dst_node, model_dst_node=src_id)
+      aligned_now += 1
+      aligned_by_action_now += int(by_action)
+      aligned_unresolved_now += int(not model_key)
+      # Rejects an unresolved model_key too: promoting on evidence that could
+      # not be verified is the very failure this arm exists to remove.
+      if args.align_requires_action_match and not by_action:
+        continue
       graph.record_inference_alignment(edge.src_node, edge.action, True)
       promoted = graph.promote_children_of_aligned_prefix(edge.edge_id)
       graph.record_execution_verification(edge.edge_id, True)
-      aligned_now += 1
       if promoted:
-        log("prefix_aligned", step=step, edge_id=edge_id,
+        log("prefix_aligned", step=step, edge_id=edge_id, by_action=by_action,
             promoted=[c.edge_id for c in promoted])
     if pending_prefix_edge_ids:
       # Also record whether the model's action was among the probed
@@ -1080,9 +2411,204 @@ def main() -> int:
             last_real_action.get("app_name") or "") and edge.action.get("app_name"):
           guessed += 1
       log("prefix_check", step=step, candidates=len(pending_prefix_edge_ids),
-          aligned=aligned_now, action_was_guessed=guessed,
+          aligned=aligned_now, aligned_by_action=aligned_by_action_now,
+          aligned_action_unresolved=aligned_unresolved_now,
+          action_was_guessed=guessed,
           real_action=last_real_action.get("action_type"))
     pending_prefix_edge_ids.clear()
+
+    # Store prefill. Same shape as the app launch below, and safe for the same
+    # reason: it EXECUTES and then falls through to this step's inference on
+    # the resulting screen, so it never spends a step of the 15-step budget.
+    # That is what makes an 87%-accurate predictor usable where the skip gate -
+    # which replaces the inference - could not be: a miss costs one extra safe
+    # action instead of a step, and 65% of all failures are episodes that ran
+    # out of steps.
+    #
+    # Fires only where the persistent store has seen exactly ONE control
+    # executed on this screen, by at least two different tasks. Uniqueness is
+    # the whole signal (2026-09-12, 116 tasks): 39/45 = 87% under that gate,
+    # against 54-58% for "the most frequently executed control", which is
+    # barely above chance on a screen with two or three candidates.
+    #
+    # Once per screen per episode, and at most three per episode: the graph
+    # learned a two-screen loop and replayed it twelve times on
+    # SimpleSmsReplyMostRecent (2026-09-01), every hop landing exactly where
+    # predicted while the episode went nowhere.
+    prefill_sources = {x.strip() for x in args.prefill_sources.split(",") if x.strip()}
+
+    def _prefill_from(state_start, node_start, step):
+      """Execute the hops the store is confident about, then fall through.
+
+      Called twice per step: once before the inference, and once right
+      after the step-0 app launch, because the app's own home screen is
+      the single best-covered screen in the store - every task in that app
+      stands on it. Measured cold-start over 112 tasks (2026-09-13) the
+      store answers there for 47% of tasks at 75%, against 34%/76% averaged
+      over all screens, and those 40 correct first hops are steps no other
+      call site can reach: before this, step 0 spent its inference on the
+      home screen and the first navigation waited for step 1.
+      """
+      # Generation-guarded like every other graph read: this sees what
+      # earlier steps executed, never this step's inference.
+      prefill_view = guarded.snapshot(for_step=step)
+      memory = memory_for(state_start.activity.component)
+      state_now, sig_now = state_start, state_start.layout_sig
+      node_now = node_start
+      for _ in range(args.max_prefill):
+        if sig_now in prefilled_screens:
+          break
+        # Two sources, episode-local first because it has three times the
+        # chances: 115 against 39 over 116 tasks, at 83% against 87%. What
+        # this episode just did on a screen is a stronger and far more
+        # available signal than what other tasks did on it.
+        source = "episode"
+        # Off by default. This source - "this episode already executed exactly
+        # one control on this node" - carried an 83% figure measured under the
+        # old signature rule on a different population. Live over 50 tasks
+        # (2026-09-13) it lands 9/30 = 30%, against 23/26 = 88% for the goal
+        # retrieval and 3/3 for uniqueness, and it supplied half of all hops:
+        # the arm lost 8 successes against no-graph on exactly the tasks where
+        # prefill fired. Part of the reason is visible right here - it sets no
+        # expected activity, so its landing check falls back to node id, which
+        # is the layout signature this whole change moved off.
+        local = (_episode_decided(prefill_view, node_now, args.prefill_min_exec)
+                 if "episode" in prefill_sources else None)
+        expected_activity = ""
+        if local is not None:
+          control, expected_dst = local[0], ""
+          expected_node = local[1]
+        else:
+          expected_node = ""
+          if memory is None:
+            log("prefill_refused", step=step, why="no_memory")
+            break
+          # Uniqueness first, then the goal vote for the screens it refuses.
+          # Measured leave-one-out over 419 executed steps (2026-09-13):
+          # uniqueness alone covers 17% at 90%, the union covers 44% at 84%,
+          # and a plain screen vote covers 45% at 66% - the difference between
+          # the last two is 30 wrong hops against 65.
+          decided = None
+          if "store" not in prefill_sources:
+            log("prefill_refused", step=step, why="store_source_off")
+            break
+          if args.prefill_retrieval in ("uniq", "both"):
+            got = memory.prefill_control(sig_now, args.prefill_min_tasks)
+            if got is not None:
+              decided, source = got, "unique"
+          if decided is None and args.prefill_retrieval in ("goal", "both"):
+            got = memory.retrieve_control(
+                sig_now, goal, _goal_similarity,
+                k=args.prefill_k, threshold=args.prefill_sim_thr,
+                margin=args.prefill_margin,
+                min_tasks=args.prefill_min_tasks)
+            if got is not None:
+              decided, source = got[:4], got[4]
+          if decided is None:
+            log("prefill_refused", step=step, why="no_candidate",
+                screen_known=sig_now in getattr(memory, "screens", {}))
+            break
+          control, _remembered, expected_dst, expected_activity = decided
+        element = _element_for_control(state_now, control)
+        loosened = False
+        if element is None and args.prefill_by_resource_id:
+          element = _element_for_control(state_now, control, by_resource_id=True)
+          loosened = element is not None
+        if element is None:
+          log("prefill_refused", step=step, why="control_absent",
+              source=source, control=control[:80],
+              resource_id_seen=any(
+                  (getattr(el, "resource_id", "") or "") == control.split("|")[0]
+                  for el in (getattr(state_now, "elements", ()) or ())))
+          break
+        if _prefill_risk_of(element, args.prefill_risk) not in ("SAFE", "LOW"):
+          log("prefill_refused", step=step, why="risky", source=source,
+              control=control[:80],
+              risk=_prefill_risk_of(element, args.prefill_risk))
+          break
+        prefilled_screens.add(sig_now)
+        started = time.perf_counter()
+        try:
+          self._execute_action(_click_on(element), {})
+          time.sleep(0.35)
+          state_now = capture.capture()
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+          log("store_prefill_failed", step=step, error=str(exc)[:200])
+          break
+        landed = state_now.layout_sig
+        landed_activity = state_now.activity.component
+        # Activity, not layout signature. The same control on the same screen
+        # re-lands on the same signature only 66% of the time and on the same
+        # activity 96% (480 repeat observations over two 116-task runs,
+        # 2026-09-13) - a signature check calls a third of the working hops
+        # wrong, which cuts the chain short and, with rollback on, undoes
+        # actions that were right.
+        if landed == sig_now:
+          # Nothing moved. Matching on activity is what makes the chain
+          # usable, but it also makes a press that did nothing look like a
+          # hit, because the activity is then trivially unchanged - and a
+          # chain that keeps "succeeding" on one screen is the replay loop
+          # this guard exists to stop.
+          matched = False
+        elif expected_activity:
+          matched = landed_activity == expected_activity
+        else:
+          matched = bool(expected_dst) and landed == expected_dst
+        # The model must be told what was pressed on its behalf. The step-0
+        # app launch appends a summary for exactly this reason: without it the
+        # model reads a screen it never navigated to, and its own history says
+        # it is still on the previous one.
+        name = _control_display_label(control)
+        self._summaries.append(str({"action": "click", "text": name}))
+        node_now = node_id_of(state_now)
+        if expected_node:
+          matched = node_now == expected_node
+        log("skip", step=step, kind_detail="store_prefill", matched=matched,
+            source=source, control=control[:80],
+            expected_dst=(expected_dst or expected_node)[:12],
+            expected_activity=expected_activity[-40:],
+            landed=landed[:12], landed_activity=landed_activity[-40:],
+            sig_matched=bool(expected_dst) and landed == expected_dst,
+            by_resource_id=loosened,
+            latency_s=time.perf_counter() - started)
+        # Chaining is verified hop by hop, the way reusable_path is: 59% of
+        # decided screens lead to another decided screen (23 of 39), which
+        # takes the collapsible total from 39 steps to 64 over 116 tasks - but
+        # 87% per hop compounds to 76% over two, so a hop that does not land
+        # where the store recorded ends the chain and hands the screen to
+        # inference.
+        if not matched:
+          # A hop that did not land where the store recorded used to hand the
+          # model a screen it never asked for, and the model then had to climb
+          # back - the expensive half of a 84%-precise predictor. Pressing
+          # Back restores the screen the step started on, so a miss costs
+          # ~1.5s of wall clock and no step at all. Verified, not assumed: if
+          # Back does not return us to sig_now we really have moved, and the
+          # summary has to stand.
+          if args.prefill_rollback:
+            try:
+              self._execute_action(
+                  json_action.JSONAction(action_type=json_action.NAVIGATE_BACK), {})
+              time.sleep(0.35)
+              state_back = capture.capture()
+            except Exception as exc:  # pylint: disable=broad-exception-caught
+              log("prefill_rollback_failed", step=step, error=str(exc)[:200])
+              break
+            restored = state_back.layout_sig == sig_now
+            if restored:
+              # The model must not be told about an action that no longer
+              # happened; leaving the summary in is what made a miss cost two
+              # wrong beliefs instead of none.
+              self._summaries.pop()
+            log("prefill_rollback", step=step, restored=restored,
+                landed=state_back.layout_sig[:12])
+            if restored:
+              break
+          break
+        sig_now = landed
+
+    if args.store_prefill and step > 0:
+      _prefill_from(before, src_id, step)
 
     # Step 0 is open_app on the app the goal names. That decision is fixed by
     # the task text, so spending an inference on it buys nothing - and unlike
@@ -1120,6 +2646,20 @@ def main() -> int:
         self._summaries.append(summary)
         log("skip", step=step, kind_detail="app_bootstrap", matched=opened,
             latency_s=time.perf_counter() - started, action=action.__dict__)
+        # The app is now open, and its home screen is the best-covered screen
+        # the store has: every task in this app stands on it. Prefilling from
+        # here is the only way to reach that screen at all - step 0 used to
+        # spend its inference on it and leave the first navigation to step 1.
+        # Cold-start over 112 tasks (2026-09-13): the store answers on 47% of
+        # first in-app screens at 75%, against 34%/76% averaged over all
+        # screens, worth 40 further collapsed steps.
+        if opened and args.store_prefill and args.prefill_after_bootstrap:
+          try:
+            launched = capture.capture()
+            _prefill_from(launched, node_id_of(launched), step)
+          except Exception as exc:  # pylint: disable=broad-exception-caught
+            log("prefill_after_bootstrap_failed", step=step,
+                error=str(exc)[:200])
         # No return, and self._actions is left alone on purpose. Launching the
         # app is fixed by the task text, so it is setup rather than a decision
         # worth a step of the episode's budget: falling through runs this same
@@ -1146,6 +2686,12 @@ def main() -> int:
     # would let a mode decided on a screen we have since left govern this one.
     gate_mode["value"], gate_mode["context"] = gd.NORMAL_INFERENCE, ""
 
+    # Fold this step's prefix-alignment promotions into the view the gate
+    # reads. Nothing from this window's exploration exists yet - the explorer
+    # has not been started - so this cannot leak forward.
+    if args.align_promotes_current_step:
+      guarded.refresh_before_exploration()
+
     # (2) Skip decision, against last step's snapshot only.
     if args.enable_skip:
       # A run of skips means several moves in a row that no model looked at.
@@ -1161,8 +2707,24 @@ def main() -> int:
       # were mostly at or above it. Reading back the episode's own record is
       # self-correction from observation, not another tuned knob.
       attempted, correct = skip_record["n"], skip_record["ok"]
-      accurate = attempted < 3 or correct * 2 >= attempted
-      allowed = consecutive_skips["n"] < 3 and accurate
+      # Two per episode, and the first miss ends it. Pooling five full runs
+      # (2026-09-01): of 109 episodes where graph skipping fired, six
+      # succeeded. Much of that gap is the tasks themselves - skipping needs
+      # revisits, revisits happen in the long episodes, and the control scores
+      # 28% on exactly those tasks against 59% on the rest - but on that same
+      # 40-task set the control still took 11 while the best arm took 10 and
+      # the worst 3, so the mechanism is not carrying its own weight either.
+      #
+      # Within the episodes that did succeed, the only signal that survives is
+      # volume: 5/68 at one or two skips, 1/32 at three or four, 0/9 at five
+      # or more. Evidence strength runs the wrong way - every episode whose
+      # replayed edge had three or more executions behind it failed (0/65) -
+      # so a stronger confidence bar would make this worse, not better. What
+      # is left is to let it fire where it has ever helped and stop it the
+      # moment it is wrong.
+      accurate = correct == attempted
+      allowed = (consecutive_skips["n"] < 3 and accurate
+                 and skip_record["n"] < 2)
       # Earn the right to chain. A multi-hop replay commits several moves on
       # one prediction, so it is only worth the exposure once this episode's
       # skips have actually been landing; before that, take one hop at a time
@@ -1230,7 +2792,21 @@ def main() -> int:
           graph.record_skip_result(edge["edge_id"], matched,
                                    generation=guarded.generation)
           upsert(after, landed, visited=True)
-          summary = str(action_dict)
+          # The agent's prompt is built from this history, so what goes in it
+          # has to read like what the model itself writes. Putting the raw
+          # action dict there - "{'action_type': 'click', 'x': 540, 'y': 600}"
+          # - hands the next inference a step with no task-level meaning, and
+          # on multi-step stateful tasks that is enough to derail it: the five
+          # SMS tasks v37 lost to skipping (2026-09-02) all had 100% action
+          # match and still went from 6-7 steps to 13-15. A skip that is
+          # action-correct can still be history-destructive, which is why
+          # match rate alone was never the right measure of it.
+          label = _replay_label(edge)
+          leads_to = ", ".join(str(x) for x in
+                               (edge.get("discovered_labels") or ())[:3])
+          summary = (f"Selected {label} again, repeating a step this episode "
+                     f"has already taken here"
+                     + (f"; it leads to {leads_to}." if leads_to else "."))
           self._actions.append(action_dict)
           self._summaries.append(summary)
           recent_nodes.append(landed)
@@ -1323,6 +2899,7 @@ def main() -> int:
     # The per-episode probe ceiling bounds the outlier case: ExpenseAddSingle
     # spent 30 probes where every other lost task spent 1-7, and lost.
     may_probe = (args.probes_per_step > 0
+                 and not _unprobeable(before.activity.component.split("/", 1)[0])
                  and not dirty_from_last_step["value"]
                  and step >= 2
                  and probe_total["n"] < args.probe_budget
@@ -1337,20 +2914,56 @@ def main() -> int:
                  # rollback risk that cost 22 points of success rate on the
                  # episodes where a round failed to restore. Exploration still
                  # runs, on the revisits where progressive memory can pay.
-                 and snapshot.node_visits.get(src_id, 0) >= 2
+                 and (snapshot.node_visits.get(src_id, 0) >= args.min_node_visits
+                      or (args.cross_task_revisit
+                          and before.layout_sig in preknown_layouts))
+                 # Spread a fixed amount of exploration over the whole episode
+                 # instead of concentrating it on whichever screens happen to
+                 # satisfy the revisit rule. The revisit rule reaches only 51
+                 # of 115 tasks (measured over five full runs); an interval
+                 # reaches every task that lasts long enough, at a cost the
+                 # episode chooses rather than the app's shape.
+                 and (args.explore_interval <= 1
+                      or step - last_explored_step["n"] >= args.explore_interval)
                  and not _has_unsaved_input(before))
     pending_explorer = None
+    if may_probe:
+      last_explored_step["n"] = step
+    def _exploration_budget() -> float:
+      """How long this round may run before it stops starting new probes.
+
+      'auto' tracks the window inference is actually taking in this episode -
+      the median of what has been observed so far, so it adapts per app and
+      per model without a hand-set constant. A probe already in flight still
+      finishes, so a round can overrun by at most one probe (~0.6s median).
+
+      The pre-existing default (120s) is kept as the explicit numeric option:
+      it is no budget at all, which is what every run before 2026-09-09 used.
+      """
+      if args.exploration_budget_s != "auto":
+        return float(args.exploration_budget_s)
+      if not inference_latencies:
+        return 3.0  # before the first observation, near the measured median
+      return statistics.median(inference_latencies)
+
     explorer_config = {
         "trial_id": f"{args.task}-step{step}", "task": goal, "step_idx": step,
         "trace_path": str(root / "probe_trace.jsonl"),
         "filtered_path": str(root / "filtered_elements.jsonl"),
-        "ranker": "InformationNeedRanker", "seed": args.seed + step,
+        "ranker": {"random": "RandomRanker",
+                   "coverage": "CoverageRanker",
+                   "semantic": "GraphKeywordRanker",
+                   "llm_choice": "LlmChoiceRanker"}.get(
+                       args.exploration_policy, "InformationNeedRanker"),
+        "semantic_port": args.semantic_port,
+        "visited_discount": args.visited_discount,
+        "seed": args.seed + step,
         "information_need": current_need.to_dict(),
         "serial": "emulator-5554", "console_port": 5554,
         "a11y_local_port": args.a11y_socket_port, "restore_timeout_s": 30.0,
         "max_probes": args.probes_per_step, "min_probes": 0,
         "post_inference_grace_s": 0.0, "max_depth": args.max_depth,
-        "max_exploration_time_s": 120.0,
+        "max_exploration_time_s": _exploration_budget(),
         # Required for TRAJECTORY_REPLAY, the deepest and most reliable rung
         # of the recovery ladder: it reconstructs the committed state by
         # replaying the agent's own actions from HOME, and without them the
@@ -1375,6 +2988,7 @@ def main() -> int:
         # instead of walking the ladder from the top, which is the difference
         # between remembering an inverse and rediscovering it.
         "known_inverse_levels": known_inverse_levels(),
+        "depth2_needs_known_inverse": args.depth2_needs_known_inverse,
     }
     if may_probe:
       try:
@@ -1396,7 +3010,15 @@ def main() -> int:
     # B9.2/B9.3: what the graph knows reaches the prompt only when it holds
     # facts worth the space. Read from the step i-1 snapshot, like the skip
     # decision, so this step's own probes cannot influence this step.
-    if args.graph_context == "distill":
+    if args.graph_context == "onclick":
+      # AutoDroid's form: annotate every control the graph knows a destination
+      # for, instead of a block that must first earn the right to speak. The
+      # gate's own context is not reused here - it was rendered in block form.
+      briefing_now["text"] = distiller.distill(
+          current_node_id=src_id, graph_snapshot=snapshot,
+          information_need=current_need.to_dict(), taken_edges=taken_here,
+          recent_nodes=tuple(recent_nodes[-4:]), onclick_form=True)
+    elif args.graph_context == "distill":
       # Already computed by the gate when it decided this step was not certain
       # enough to skip; recomputing it would just repeat the same deterministic
       # pass over the same snapshot.
@@ -1407,48 +3029,102 @@ def main() -> int:
               taken_edges=taken_here, recent_nodes=tuple(recent_nodes[-4:]))
     elif args.graph_context == "briefing":
       briefing_now["text"] = snapshot.screen_briefing(src_id, taken_here)
+    elif args.graph_context == "llm":
+      # One call, one line. The deterministic forms are both true and both
+      # long: the walked path renders at ~50 tokens and the distiller at up to
+      # 64, and prompt space spent on the graph is space not spent on the
+      # screenshot. Reads the same step i-1 snapshot as every other graph
+      # read, so this step's own probes cannot reach it.
+      lines = _walked_path_lines(snapshot, src_id, limit=8)
+      from android_world.parallel_exploration import semantic_service
+      one = semantic_service.query_summarize(args.semantic_port, goal, lines)
+      briefing_now["text"] = (
+          f"[Memory] {one}" if one else _walked_path_context(snapshot, src_id))
+    elif args.graph_context in ("elements", "elements_store"):
+      summaries = getattr(snapshot, "node_summaries", {}) or {}
+      parts = [_elements_context(snapshot, src_id, summaries)]
+      if args.graph_context == "elements_store":
+        parts.append(_store_routes_context(
+            memory_for(before.activity.component), before.layout_sig))
+      briefing_now["text"] = "\n\n".join(p for p in parts if p)
+    elif args.graph_context in ("store", "store_path"):
+      parts = [_store_routes_context(memory_for(before.activity.component),
+                                     before.layout_sig)]
+      if args.graph_context == "store_path":
+        parts.append(_walked_path_context(snapshot, src_id))
+      briefing_now["text"] = "\n\n".join(p for p in parts if p)
+    elif args.graph_context in ("path", "distill_path"):
+      parts = []
+      if args.graph_context == "distill_path":
+        parts.append(gate_mode["context"] if gate_mode["value"] == (
+            gd.GRAPH_ENHANCED_INFERENCE) else distiller.distill(
+                current_node_id=src_id, graph_snapshot=snapshot,
+                information_need=current_need.to_dict(),
+                taken_edges=taken_here, recent_nodes=tuple(recent_nodes[-4:])))
+      parts.append(_walked_path_context(snapshot, src_id))
+      briefing_now["text"] = "\n\n".join(p for p in parts if p)
+    elif args.graph_context in ("history", "history_done"):
+      briefing_now["text"] = screen_history_context(
+          snapshot, src_id, taken_here,
+          include_available=args.graph_context == "history")
     else:
       briefing_now["text"] = ""
+    if args.loop_notice:
+      loop = _loop_context(snapshot, src_id, args.loop_repeats)
+      if loop:
+        briefing_now["text"] = (briefing_now["text"] + "\n\n" + loop
+                                if briefing_now["text"] else loop)
     distiller_stats: dict[str, Any] = {}
-    if args.graph_context == "distill":
+    if args.graph_context in ("distill", "onclick"):
       distiller.distill(
           current_node_id=src_id, graph_snapshot=snapshot,
           information_need=current_need.to_dict(), taken_edges=taken_here,
-          recent_nodes=tuple(recent_nodes[-4:]), stats=distiller_stats)
+          recent_nodes=tuple(recent_nodes[-4:]), stats=distiller_stats,
+          onclick_form=args.graph_context == "onclick")
     log("graph_context", step=step, mode=args.graph_context,
         graph_mode=gate_mode["value"], injected=bool(briefing_now["text"]),
         chars=len(briefing_now["text"]),
         tokens=len(briefing_now["text"].split()),
         text=briefing_now["text"], **distiller_stats)
 
-    # (4) Inference on the clean pre-exploration state.
-    inference_started = time.perf_counter()
-    result = original_step(self, goal)
-    inference_s = time.perf_counter() - inference_started
-
-    # (3) Exploration from S_i, AFTER inference on purpose: in the parallel
-    # design the model's screenshot is taken at window start, so it always
-    # sees the clean state even while probes run. Exploring first serially
-    # would show it a post-restore - possibly dirty - screen, a failure mode
-    # the parallel design does not have. No action has executed yet, so the
-    # probes still start from exactly S_i.
+    # (3) Exploration from S_i, BEFORE inference. Both start from the screen
+    # this window opened on, which is what "parallel" means here: the explorer
+    # cannot see this step's inference, and this step's decision may use what
+    # the explorer found. Running it after inference - as this did until
+    # 2026-09-04 - was not that. GELABAgent.step() executes the action it
+    # chooses (gelab_agent.py:1215), so by the time it returned the device was
+    # already on S_{i+1} and every probe explored the NEXT screen. The prefix
+    # check is written for the other timing - it asks whether a probe's
+    # destination equals the screen the model then landed on - which for
+    # probes taken from S_{i+1} can never hold. Prefix alignment was 0 in all
+    # five full runs, and with it the SPECULATIVE -> REUSABLE promotion the
+    # whole lookahead depends on.
     exploration_s = 0.0
     if pending_explorer is not None:
       started = time.perf_counter()
       try:
-        if result.done:
-          # The episode ends here; probing would only risk the final state.
-          stop_prepared_explorer(pending_explorer)
-        else:
-          outcome = run_serial_exploration(await_explorer_ready(pending_explorer))
-          dirty_from_last_step["value"] = outcome.get("restore_status") != "RESTORED"
-          probe_total["n"] += int(outcome.get("probes_completed", 0) or 0)
-          ingest_probe_trace(explorer_config["trial_id"])
-          log("explore", step=step, depth1_edges=len(depth1_edge_ids), **outcome)
-          repair_after_exploration(self, before, outcome, step)
+        outcome = run_serial_exploration(
+            await_explorer_ready(pending_explorer),
+            fresh_need=current_need.to_dict())
+        dirty_from_last_step["value"] = outcome.get("restore_status") != "RESTORED"
+        probe_total["n"] += int(outcome.get("probes_completed", 0) or 0)
+        ingest_probe_trace(explorer_config["trial_id"])
+        log("explore", step=step, depth1_edges=len(depth1_edge_ids), **outcome)
+        # Repair before the model reads the screen, not after. The parallel
+        # design hands inference a screenshot taken at window start, so a
+        # stranding probe costs it nothing; serially the model reads whatever
+        # the probe left behind, so the repair has to come first or the
+        # disturbance lands on this step instead of the next.
+        repair_after_exploration(self, before, outcome, step)
       except Exception as exc:  # pylint: disable=broad-exception-caught
         log("explore_failed", step=step, error=str(exc)[:300])
       exploration_s = time.perf_counter() - started
+
+    # (4) Inference. The explorer has finished and the app has been put
+    # back, so the model reads the screen this window opened on.
+    inference_started = time.perf_counter()
+    result = original_step(self, goal)
+    inference_s = time.perf_counter() - inference_started
 
     # (5) Record the authoritative transition, then make this step visible.
     raw = result.data.get("action_dict") or {}
@@ -1464,10 +3140,34 @@ def main() -> int:
         # and those labels then fed both the distilled prompt context and the
         # destination features the scorer reads (observed on
         # ClockStopWatchRunning, 2026-08-31: 6 of 8 labels were status bar).
+        # Nothing is learned about an app by leaving it. A transition that
+        # lands on the launcher or a system dialog still gets recorded - the
+        # graph needs to know the agent went there - but it carries no
+        # evidence labels, because the labels would be the home screen's.
+        # Without this the distiller injected "Verified: Cancel -> {Sun, Oct
+        # 15, 0, Gmail, Photos}" into every SMS task (2026-09-02), a true and
+        # useless fact learned from an earlier episode escaping a system
+        # dialog. Filtering it out of cross-task memory alone was not enough:
+        # the edge is rebuilt inside each episode, and the distiller reads the
+        # episode's own graph.
+        # Only what the transition ADDED. Taking every label on the landing
+        # screen makes persistent chrome the content of the fact: on
+        # MarkorCreateFolder (2026-09-02) the graph injected "Verified: FOLDER
+        # -> {Markor, Go to, Sort by, Search}" - the app's own toolbar, present
+        # before and after the tap - three times, and the task went from 5
+        # steps to 15. A destination described entirely by what was already on
+        # screen carries no information, so it is not worth a claim; the probe
+        # path has always used new_texts for exactly this reason.
+        before_labels = frozenset(
+            label.strip().casefold()
+            for element in before.elements
+            for label in (element.text, element.content_desc) if label)
         labels = tuple(dict.fromkeys(
             label for element in after.elements
             for label in (element.text, element.content_desc)
-            if label and len(label) < 40 and _is_app_content(element, label)))[:8]
+            if label and len(label) < 40 and _is_app_content(element, label)
+            and label.strip().casefold() not in before_labels
+        ))[:8] if _is_app_destination(after.activity.component) else ()
         # Record the control, not the pixel. A copy, so the agent's own action
         # (returned to the harness, replayed by recovery) is untouched.
         edge_action = dict(action_dict)
@@ -1480,6 +3180,26 @@ def main() -> int:
             exploration_cost=0.0, rollback_success=True, discovered_labels=labels)
         graph.record_execution_verification(observed.edge_id, True)
         observed.nodes_at_last_execution = len(graph.nodes)
+        # The dynamics of what the agent just did belong to the app and outlive
+        # the task; the fact that the model chose it does not. Only probes fed
+        # app memory at first, and probes are rare - 19 tasks produced 7
+        # remembered transitions against 70-odd screens (2026-09-01), so almost
+        # nothing could be seeded back. Every real step is also an observation
+        # of where a control leads. What is deliberately NOT carried across is
+        # the execution count: seed_graph writes those as zero, so a remembered
+        # transition can describe the app without ever licensing a replay.
+        memory = memory_for(before.activity.component)
+        if memory is not None and control:
+          memory.observe_execution(
+              activity=before.activity.component,
+              layout_signature=before.layout_sig,
+              control_key=control,
+              action={k: v for k, v in action_dict.items()
+                      if k in {"action_type", "x", "y", "direction"}},
+              dst_activity=after.activity.component,
+              dst_layout_signature=after.layout_sig,
+              labels=labels,
+              goal=goal)
         taken_edge_ids.add(observed.edge_id)
         taken_here.add(observed.edge_id)
         # Any explored edge out of this node whose action the model just took
@@ -1505,11 +3225,42 @@ def main() -> int:
     responses = getattr(self, "_responses", None) or []
     if responses:
       last_model_output["text"] = str(responses[-1])
+      if args.node_summary != "off":
+        node = graph.nodes.get(src_id)
+        if node is not None and not (node.semantic_summary or "").strip():
+          sentence = _screen_sentence(last_model_output["text"])
+          if not sentence and args.node_summary == "model":
+            # 42.5% of steps emit a bare tool call with no <THINK>, leaving the
+            # screen blank. Only those reach the small model: a description the
+            # agent wrote itself is better and already paid for.
+            from android_world.parallel_exploration import semantic_service
+            sentence = semantic_service.query_describe(
+                args.semantic_port, goal, node.activity,
+                list(node.salient_ui_labels or ()))
+          node.semantic_summary = sentence
+          # Cross-task too: the model's per-episode history resets, this does
+          # not, and 39% of screens are seen by more than one task.
+          memory = memory_for(node.activity)
+          if memory is not None and sentence:
+            memory.observe_screen(node.activity, node.layout_signature,
+                                  description=sentence)
     consecutive_skips["n"] = 0
     recent_nodes.append(src_id)
     pending_prefix_edge_ids.extend(depth1_edge_ids)
     last_real_action.clear()
     last_real_action.update(action_dict)
+    # The model reports a coordinate, a probe edge carries a control_key, and
+    # _canonical_control reads control_key first. Without resolving the tap to
+    # the control it landed on, every click compares a real key against "" and
+    # the by_action arm of prefix alignment is structurally false - measured
+    # 2026-09-09, every prefix_candidate logged model_canonical_action="".
+    # Same resolution the authoritative edge above uses, against the same
+    # pre-action screen, so the two keys are directly comparable.
+    real_control = _control_key_at(before, action_dict)
+    if real_control:
+      last_real_action["control_key"] = real_control
+    if inference_s > 0:
+      inference_latencies.append(inference_s)
     log("inference", step=step, inference_s=inference_s,
         exploration_s=exploration_s, action=action_dict, done=result.done)
     step_counter["i"] += 1
@@ -1517,11 +3268,27 @@ def main() -> int:
     dump_graph_snapshot(step)
     return result
 
-  gelab_agent.GELABAgent.step = serial_step
-  if args.inject_briefing:
+  # Which class carries step() depends on whether the screenshot is
+  # downsampled: GELABResizeAgent overrides step() rather than extending it, so
+  # patching gelab_agent.GELABAgent leaves the resize path untouched and the
+  # whole design would silently not run.
+  if args.downsample > 1.0:
+    from android_world.agents import gelab_agent_resize
+    original_step = gelab_agent_resize.GELABResizeAgent.step
+    gelab_agent_resize.GELABResizeAgent.step = serial_step
+  else:
+    gelab_agent.GELABAgent.step = serial_step
+  # Install whenever anything wants to reach the prompt. This used to be gated
+  # on --inject_briefing alone, a flag no batch ever passed, so the distiller
+  # computed its context on every step and the result was thrown away - module
+  # three never ran end to end in any full run, and the "injection is neutral"
+  # measurement was measuring nothing (2026-09-02).
+  if args.inject_briefing or args.graph_context != "off" or args.decision_constraints:
     gelab_agent.build_gelab_messages = build_with_briefing
   sys.argv = [
-      "run.py", "--suite_family=android_world", "--agent_name=gelab_agent",
+      "run.py", "--suite_family=android_world",
+      f"--agent_name={'gelab_agent_resize' if args.downsample > 1.0 else 'gelab_agent'}",
+      f"--image_downsample_scale={args.downsample}",
       f"--tasks={args.task}", "--n_task_combinations=1", "--fixed_task_seed",
       f"--task_random_seed={args.seed}", f"--max_n_steps={args.max_steps}",
       "--console_port=5554", f"--output_path={root}",
@@ -1529,8 +3296,18 @@ def main() -> int:
   try:
     runpy.run_path(str(REPO_ROOT / "run.py"), run_name="__main__")
   finally:
+    if args.node_summary == "model":
+      try:
+        _backfill_descriptions(graph, app_store, args.semantic_port, log)
+      except Exception as exc:  # pylint: disable=broad-exception-caught
+        print(f"description backfill skipped: {exc}", flush=True)
     (root / "progressive_belief_graph.json").write_text(
         json.dumps(graph.to_dict(), ensure_ascii=False, indent=2), encoding="utf-8")
+    if app_store is not None:
+      written = app_store.save_all()
+      (root / "app_memory_stats.json").write_text(
+          json.dumps({**app_store.stats(), "files": [str(x) for x in written]},
+                     ensure_ascii=False, indent=1), encoding="utf-8")
   return 0
 
 

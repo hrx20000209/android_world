@@ -159,3 +159,51 @@ def test_layout_signature_still_separates_different_screens():
   other_rows = layout_signature([_fab()] + [_row(i, "pkg:id/cell") for i in range(3)])
   assert list_screen != without_fab
   assert list_screen != other_rows
+
+
+def _el(cls="android.widget.Button", rid="", pkg="com.example.app",
+        bounds=(0, 0, 100, 100), clickable=True):
+  return UiElement(class_name=cls, resource_id=rid, package=pkg,
+                   bounds=bounds, clickable=clickable)
+
+
+def test_soft_keyboard_does_not_change_screen_identity():
+  """Focusing a text field must not make the form a different screen.
+
+  Gboard contributes 37 actionable nodes, and five of them carry no resource
+  id at all, so an id-prefix test could not remove them. Measured on the
+  Expense entry form (2026-09-08): the same form hashed to 3eda1f94 with the
+  keyboard down and afb43f47 with it up, and the episode's graph carried both
+  with 5 and 17 visits.
+  """
+  form = [
+      _el(rid="com.arduia.expense:id/name", pkg="com.arduia.expense"),
+      _el(rid="com.arduia.expense:id/save", pkg="com.arduia.expense",
+          bounds=(0, 200, 100, 300)),
+  ]
+  keyboard = [
+      _el(cls="android.widget.FrameLayout", rid="", pkg="com.google.android.inputmethod.latin",
+          bounds=(64, 1472, 256, 1600)),
+      _el(cls="android.widget.ImageView", rid="android:id/input_method_nav_back",
+          pkg="com.android.internal", bounds=(64, 2240, 192, 2368)),
+  ]
+  status_bar = [_el(rid="com.android.systemui:id/clock",
+                    pkg="com.android.systemui", bounds=(0, 0, 60, 40))]
+  assert layout_signature(form) == layout_signature(form + keyboard)
+  assert layout_signature(form) == layout_signature(form + status_bar)
+
+
+def test_overlays_can_be_kept_for_comparison():
+  form = [_el(rid="app:id/name")]
+  keyboard = [_el(cls="android.widget.FrameLayout",
+                  pkg="com.google.android.inputmethod.latin",
+                  bounds=(64, 1472, 256, 1600))]
+  assert (layout_signature(form, ignore_overlays=False)
+          != layout_signature(form + keyboard, ignore_overlays=False))
+
+
+def test_app_controls_still_distinguish_screens():
+  """The fix must not collapse genuinely different screens."""
+  a = [_el(rid="app:id/list")]
+  b = [_el(rid="app:id/detail")]
+  assert layout_signature(a) != layout_signature(b)

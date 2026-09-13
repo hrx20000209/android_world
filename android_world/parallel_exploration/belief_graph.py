@@ -78,6 +78,16 @@ class GraphNode:
   # above are retained as strict, point-in-time verification evidence.
   layout_signature: str = ""
   salient_ui_labels: tuple[str, ...] = ()
+  # Every named actionable control on this screen, with how often it has been
+  # pressed and probed HERE. The graph used to know only the controls it had an
+  # edge for - 0.85 per node, and 37% of visited nodes had none at all -
+  # while a screen carries 9 to 14 named controls. Everything downstream read
+  # that 0.85, which is why ranking candidates by embedding scored 40% top-1
+  # against a 38% random baseline: on one or two candidates there is nothing to
+  # rank. With the inventory the candidate set is 9 and random falls to 11%.
+  #
+  # Each entry: {"label", "control_key", "role", "clicks", "probes"}.
+  ui_elements: tuple[Mapping[str, Any], ...] = ()
   semantic_summary: str = ""
   timestamp: float = dataclasses.field(default_factory=time.time)
   status: NodeStatus = NodeStatus.SPECULATIVE
@@ -91,6 +101,12 @@ class GraphNode:
   # twice. Repetitive tasks revisit constantly (add three expenses, delete
   # several recipes), which is exactly where progressive memory should pay.
   visit_count: int = 0
+
+
+# Whether decision entropy counts only edges the model has executed. False is
+# the historical behaviour: every viable outgoing edge counts, so probe and
+# seeded edges raise H and close the skip gate. Set from the runner.
+ENTROPY_OVER_EXECUTED_ONLY = False
 
 
 @dataclasses.dataclass
@@ -542,6 +558,24 @@ class ProgressiveBeliefGraph:
       if not viable:
         node.decision_entropy = math.inf
         return math.inf
+      if ENTROPY_OVER_EXECUTED_ONLY:
+        # H is read by the skip gate, which is a claim about the MODEL's
+        # behaviour - "the answer here has always been the same" - not about
+        # what the app makes possible. Probe edges and edges seeded from
+        # cross-task memory are the latter: they say a control exists and
+        # leads somewhere, with no model having chosen it. Counting them makes
+        # every probe and every remembered screen push the gate shut.
+        #
+        # Measured 2026-09-10, mean finite H against skips fired, four arms:
+        #   semantic 0.224 -> 14   probes-off 0.246 -> 13
+        #   probes-on 0.295 ->  7   warm memory 0.324 ->  2
+        # H was the only variable that ordered every arm correctly, and both
+        # things that raise it - probing and seeding - are exactly the edges
+        # with no execution behind them.
+        executed = [e for e in viable
+                    if (e.execution_hit_count + e.execution_miss_count) > 0]
+        if executed:
+          viable = executed
       weights = [max(1e-6, edge.path_probability) for edge in viable]
       total = sum(weights)
       entropy = -sum((w / total) * math.log(w / total) for w in weights)

@@ -10,7 +10,7 @@ import dataclasses
 import threading
 import time
 from pathlib import Path
-from typing import Any, Iterable, Mapping
+from typing import Any, Iterable, Mapping, Sequence
 
 from android_world.parallel_exploration.adb import AdbClient
 from android_world.parallel_exploration.protocol import Event
@@ -18,6 +18,9 @@ from android_world.parallel_exploration.protocol import EventKind
 from android_world.parallel_exploration.protocol import ProcessRole
 from android_world.parallel_exploration.information import InformationNeed
 from android_world.parallel_exploration.information import parse_information_need
+from android_world.parallel_exploration.rankers import CoverageRanker
+from android_world.parallel_exploration.rankers import GraphKeywordRanker
+from android_world.parallel_exploration.rankers import LlmChoiceRanker
 from android_world.parallel_exploration.rankers import InformationNeedRanker
 from android_world.parallel_exploration.rankers import Ranker
 from android_world.parallel_exploration.rankers import RandomRanker
@@ -168,6 +171,116 @@ class _SnapshotView:
     )
 
 
+def _progress_line(need: Mapping[str, Any], snapshot, node_id: str) -> str:
+  """"What is already settled, and what the next unfinished step is."
+
+  Written from the model's own PREVIOUS step - the parsed need plus the
+  sentence it wrote while standing on the screen before this one. Nothing here
+  may come from this step's inference; exploration runs beside it, not after
+  it, and the generation guard enforces that on the snapshot.
+  """
+  parts: list[str] = []
+  here = ""
+  if snapshot is not None and node_id:
+    here = str((getattr(snapshot, "node_summaries", {}) or {}).get(node_id) or "")
+  if here:
+    parts.append(here.rstrip(".") + ".")
+  subgoal = str(need.get("current_subgoal") or "").strip()
+  missing = [str(m).strip() for m in (need.get("required_information_slots") or ())
+             if str(m).strip()]
+  target = str(need.get("target_entity") or "").strip()
+  tail = subgoal or (f"find {', '.join(missing[:3])}" if missing else "")
+  if not tail and target:
+    tail = f"reach {target}"
+  if tail:
+    parts.append("The next unfinished step is to " + tail.rstrip(".") + ".")
+  return " ".join(parts)
+
+
+def _discovered_labels_near(snapshot_payload, node_id: str) -> list[str]:
+  """What the graph has already found behind controls on this screen.
+
+  This is the graph's contribution to exploration targeting, and it is the one
+  question the graph can answer reliably: not "which control will the model
+  press" - four falsifications say nothing predicts that - but "what is already
+  on record here". Labels come from edges leaving this node first, then from
+  edges leaving the nodes those reach, because a probe that rediscovers the
+  screen one hop away is just as wasted.
+  """
+  if not snapshot_payload or not node_id:
+    return []
+  edges = dict(snapshot_payload.get("edges") or {})
+  outgoing = snapshot_payload.get("outgoing") or {}
+  labels: list[str] = []
+  seen: set[str] = set()
+  frontier = [node_id]
+  for _ in range(2):  # this screen, then its known neighbours
+    nxt = []
+    for node in frontier:
+      for edge_id in outgoing.get(node) or ():
+        edge = edges.get(edge_id) or {}
+        for label in edge.get("discovered_labels") or ():
+          text = str(label).strip()
+          if text and text.casefold() not in seen:
+            seen.add(text.casefold())
+            labels.append(text)
+        if edge.get("dst_node"):
+          nxt.append(edge["dst_node"])
+    frontier = nxt
+  return labels[:24]
+
+
+def _walked_path_summary(snapshot_payload, node_id: str,
+                         limit: int = 6) -> list[str]:
+  """One sentence per screen this episode has already stood on.
+
+  The graph now stores a description per node, and the obvious way to use it
+  before exploration - dump every description in the graph - does not fit: a
+  mid-episode graph carries 20-40 nodes and the encoder is dominated by how
+  many strings it sees. The walked path is the useful subset and the small
+  one: the screens the model actually reached, most recent last, current
+  screen excluded because the ranker is already looking at it.
+
+  Order comes from `node_visits`, which is built from `graph.nodes` in
+  first-upsert order, so the tail of this list is the recent past.
+  """
+  if not snapshot_payload or not node_id:
+    return []
+  visits = snapshot_payload.get("node_visits") or {}
+  summaries = snapshot_payload.get("node_summaries") or {}
+  walked: list[str] = []
+  seen: set[str] = set()
+  for other, count in visits.items():
+    if other == node_id or not count:
+      continue
+    text = str(summaries.get(other) or "").strip()
+    if text and text.casefold() not in seen:
+      seen.add(text.casefold())
+      walked.append(text)
+  return walked[-limit:]
+
+
+def _known_control_keys(snapshot_payload, node_id: str) -> set[str]:
+  """Controls on this node the graph already has an outgoing edge for.
+
+  Coverage is the ranker's objective, so what matters is which controls are
+  already answered - not who answered them. An edge the model itself walked
+  settles "where does this lead" exactly as well as a probe does, and probing
+  it again spends rollback risk to relearn it.
+  """
+  if not snapshot_payload or not node_id:
+    return set()
+  edges = dict(snapshot_payload.get("edges") or {})
+  outgoing = (snapshot_payload.get("outgoing") or {}).get(node_id) or ()
+  keys = set()
+  for edge_id in outgoing:
+    action = (edges.get(edge_id) or {}).get("action") or {}
+    key = str(action.get("control_key") or "")
+    if key:
+      keys.add(key)
+  return keys
+
+
 def _package_of(state) -> str:
   return state.activity.component.split("/", 1)[0] if state is not None else ""
 
@@ -283,6 +396,7 @@ def _safe_candidates(
   # size. Used only to recognize a near-full-screen unlabeled clickable
   # region below.
   screen_w = max((e.bounds[2] for e in elements), default=0)
+  screen_h = max((e.bounds[3] for e in elements), default=0)
   screen_h = max((e.bounds[3] for e in elements), default=0)
   for parent in elements:
     if not parent.clickable or parent.text or parent.content_desc:
@@ -893,8 +1007,17 @@ def _explore_deeper(
       or "nexuslauncher" in context["app_package"]
   ):
     return depth - 1, False
+  # layout_sig, not struct_sig: make_node_id's second parameter IS the layout
+  # signature, so passing the strict digest here hashed a different key than
+  # the runner's make_node_id(activity, layout_sig) and every lookup into the
+  # snapshot missed. Measured over 21,519 scored candidates from five full
+  # runs (2026-09-04): has_exact_history, node_visit_count, outgoing_edge_
+  # count, destination_known and a finite node entropy were non-zero on
+  # exactly ZERO of them - the graph half of the exploration ranker had never
+  # once run, and prefix alignment could never fire because promotion is
+  # keyed on the same identity.
   parent_node_id = ProgressiveBeliefGraph.make_node_id(
-      parent_state.activity.component, parent_state.struct_sig.digest, parent_state.phash,
+      parent_state.activity.component, parent_state.layout_sig,
   )
   child_context = {
       **context, "depth": depth, "parent_element_identity": parent_element_identity,
@@ -1045,6 +1168,14 @@ def explorer_window_process(
     raise RuntimeError(f"Expected INFERENCE_START, got {first.kind}")
   inference_start_ns = first.monotonic_ns
   committed_actions = list(first.payload.get("committed_actions") or [])
+  # The need the caller had when it STARTED this window is one model output
+  # behind: the explorer is spawned before inference, so config carries the
+  # reasoning from step i-1 while the probes it is about to run are trying to
+  # predict step i+1. Two steps of lag, and it showed - the model's own action
+  # landed in the probed set ~11% of the time. The caller re-parses the need
+  # from the output it now has and sends it with INFERENCE_START, which costs
+  # nothing and halves the lag.
+  fresh_need = first.payload.get("information_need") or None
   threading.Thread(target=listen_abort, daemon=True).start()
   dirty = False
   in_flight = False
@@ -1059,8 +1190,10 @@ def explorer_window_process(
   post_inference_grace_s = 0.0
   try:
     baseline = capture.capture()
+    # See the note on parent_node_id above: this must key the same way the
+    # runner does or the whole snapshot lookup silently returns nothing.
     baseline_node_id = ProgressiveBeliefGraph.make_node_id(
-        baseline.activity.component, baseline.struct_sig.digest, baseline.phash,
+        baseline.activity.component, baseline.layout_sig,
     )
     explored_element_identities = {
         node: set(identities)
@@ -1093,6 +1226,45 @@ def explorer_window_process(
       ranker: Ranker = RandomRanker(int(config.get("seed", 0)))
     elif ranker_name == "SimpleRelevanceRanker":
       ranker = SimpleRelevanceRanker()
+    elif ranker_name == "GraphKeywordRanker":
+      # Two stage: the existing need ranker narrows the ~108 candidates a
+      # screen offers down to 32, then the 22M encoder re-ranks those. 108
+      # candidates cost 52-190 ms to encode, 20 cost a steady 20 ms, and an
+      # exploration round has ~150 ms before it stops being free.
+      supplied = fresh_need or config.get("information_need") or {}
+      need_text = " ".join(str(x) for x in (
+          supplied.get("target_entity") or "",
+          " ".join(supplied.get("required_information_slots") or ()),
+          supplied.get("current_subgoal") or "") if x).strip()
+      ranker = GraphKeywordRanker(
+          base=SimpleRelevanceRanker(),
+          need_text=need_text,
+          known_labels=_discovered_labels_near(
+              config.get("graph_snapshot"), baseline_node_id),
+          visited_summaries=_walked_path_summary(
+              config.get("graph_snapshot"), baseline_node_id),
+          visited_discount=float(config.get("visited_discount", 0.0)),
+          port=int(config.get("semantic_port", 8766)))
+    elif ranker_name == "LlmChoiceRanker":
+      # One call, the whole screen: the task, what is already settled, and
+      # every named control - the small model picks which to try. Sits on the
+      # same need string the other rankers use, which comes from the model's
+      # PREVIOUS step, never this one.
+      supplied = fresh_need or config.get("information_need") or {}
+      progress = _progress_line(supplied, config.get("graph_snapshot"),
+                                baseline_node_id)
+      ranker = LlmChoiceRanker(
+          base=SimpleRelevanceRanker(),
+          need_text=progress,
+          port=int(config.get("semantic_port", 8766)))
+    elif ranker_name == "CoverageRanker":
+      # Read from the payload rather than the _SnapshotView built further
+      # down: the view is constructed after this point, and all that is
+      # needed here is which controls on this node already have an outgoing
+      # edge - whoever recorded it, probe or authoritative step.
+      ranker = CoverageRanker(
+          known_control_keys=_known_control_keys(
+              config.get("graph_snapshot"), baseline_node_id))
     else:
       node_candidate_hits = dict(config.get("node_candidate_hits") or {})
       # Computed here, not passed in from the main process: only the explorer
@@ -1107,7 +1279,7 @@ def explorer_window_process(
       # previous output (paper Eq. 4). Falling back to the task goal is what
       # the explorer did unconditionally before, and the task goal cannot
       # discriminate between steps - it is the same string all episode.
-      supplied = config.get("information_need")
+      supplied = fresh_need or config.get("information_need")
       if supplied and supplied.get("source") == "reasoning_prior":
         information_need = InformationNeed(**supplied)
       else:
@@ -1134,6 +1306,11 @@ def explorer_window_process(
     )
     max_exploration_time_s = max(0.0, float(config.get("max_exploration_time_s", 8.0)))
     max_depth = max(1, int(config.get("max_depth", 1)))
+    # A depth-2 hop is where the recovery ladder runs out - 20% of TAP_NAV
+    # probes at depth 2 could not be rolled back against 7% at depth 1 - so it
+    # is worth descending only from a root the graph has seen work here.
+    depth2_needs_known_inverse = bool(
+        config.get("depth2_needs_known_inverse", False))
     goal_relevance_threshold = float(config.get("goal_relevance_threshold", 0.0))
     max_stack_depth_increase = int(config.get("max_stack_depth_increase", 1))
 
@@ -1144,6 +1321,23 @@ def explorer_window_process(
           key.startswith(prefix)
           and level in ("NOOP", "INVERSE", "INVERSE_ANCHOR")
           for key, level in known_inverse_levels.items())
+
+    def inverse_is_known(state, probe: str) -> bool:
+      """Is THIS kind of probe known to undo cleanly on THIS screen?
+
+      The screen-level test above asks whether anything came back here; this
+      asks whether the exact combination about to run did.
+
+      Used to gate the descent to depth 2 only, never depth 1. Requiring it at
+      depth 1 is circular - a screen learns its inverse by being probed - and
+      measured so: three tasks produced 12 exploration rounds and zero probes,
+      with 104 candidates rejected for want of an inverse nobody could have
+      recorded yet (2026-09-04). At depth 2 there is no such circle, because
+      the depth-1 probe that got there has already demonstrated one.
+      """
+      return known_inverse_levels.get(
+          f"{state.activity.component}|{probe}", "") in (
+              "NOOP", "INVERSE", "INVERSE_ANCHOR")
 
     graph_view = _SnapshotView.from_payload(config.get("graph_snapshot"))
     scored_path = Path(config.get("scored_path")
@@ -1182,6 +1376,15 @@ def explorer_window_process(
         if not ranked:
           return None
         out["rank"], out["score"] = ranked[0].rank, ranked[0].score
+        # "Why was this element probed" was unanswerable for every ranker
+        # before the semantic one; for a ranker that spends a model call it
+        # has to be answerable, or a chooser that silently refuses on every
+        # round is indistinguishable from one that works.
+        choice = getattr(ranker, "last_choice", None)
+        if choice is not None:
+          out["llm_choice"] = choice
+          out["llm_candidates"] = len(getattr(ranker, "last_candidates", ()) or ())
+          out["llm_promoted_from"] = getattr(ranker, "last_promoted_from", -1)
         return ranked[0].element
       rows = matrix.build(
           current_state=state, current_node_id=node_id,
@@ -1312,6 +1515,8 @@ def explorer_window_process(
       # promote_children_of_aligned_prefix).
       nested_recovery_failed = False
       depth2_blocked = f"{baseline.activity.component}|DEPTH2" in blocked_recovery_contexts
+      if depth2_needs_known_inverse and not inverse_is_known(baseline, probe_type):
+        depth2_blocked = True
       if max_depth >= 2 and root_stack_ok and not root_unfamiliar and not depth2_blocked:
         probe_budget = [probe_idx, max_probes]
         reached_depth, nested_recovery_failed = _explore_deeper(
@@ -1410,7 +1615,15 @@ def explorer_window_process(
          "exploration_elapsed_ms": (time.monotonic() - exploration_started) * 1000,
          "preempted": inference_done_event.is_set(),
          "minimum_probes": min_probes,
-         "post_inference_grace_s": post_inference_grace_s},
+         "post_inference_grace_s": post_inference_grace_s,
+         # 80% of rounds complete zero probes, so instrumentation that only
+         # rides on a finished probe cannot tell "the chooser refused" from
+         # "the chooser was never asked".
+         "llm_choice": getattr(ranker, "last_choice", None),
+         "llm_raw": getattr(ranker, "last_raw", ""),
+         "llm_labels": list(getattr(ranker, "last_candidates", ()) or ())[:12],
+         "llm_candidates": len(getattr(ranker, "last_candidates", ()) or ()),
+         "llm_promoted_from": getattr(ranker, "last_promoted_from", -1)},
     ))
   except Exception as exc:
     # An unexpected failure anywhere in this window (e.g. one adb call
@@ -1520,7 +1733,8 @@ def prepare_explorer(config: Mapping[str, Any]) -> PreparedExplorer:
   return await_explorer_ready(spawn_explorer(config), timeout_s=15.0)
 
 
-def run_serial_exploration(prepared: PreparedExplorer, timeout_s: float = 60.0) -> dict[str, Any]:
+def run_serial_exploration(prepared: PreparedExplorer, timeout_s: float = 60.0,
+                           fresh_need: Mapping[str, Any] | None = None) -> dict[str, Any]:
   """Run a prepared explorer to the end of its own probe budget, then wait.
 
   The parallel driver below races exploration against an inference call and
@@ -1539,7 +1753,8 @@ def run_serial_exploration(prepared: PreparedExplorer, timeout_s: float = 60.0) 
   started = time.monotonic_ns()
   prepared.control_queue.put(Event.now(
       trial_id, EventKind.INFERENCE_START, ProcessRole.INFERENCE,
-      {"committed_actions": list(prepared.config.get("committed_actions") or [])},
+      {"committed_actions": list(prepared.config.get("committed_actions") or []),
+       "information_need": dict(fresh_need) if fresh_need else None},
   ))
   try:
     terminal = prepared.status_queue.get(timeout=timeout_s)

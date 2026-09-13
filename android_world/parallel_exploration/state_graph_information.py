@@ -115,6 +115,18 @@ class ScoringConfig:
   use_exact_history: bool = True
   use_contextual_history: bool = True
   use_information_need: bool = True
+  # Match each need item separately and normalise by the smaller side, instead
+  # of pooling every slot into one bag divided by its own size.
+  use_per_item_need_match: bool = True
+  # Fall back to (control, screen) when the exact (identity, probe_type, role,
+  # screen) key misses, so authoritative execution history is visible too.
+  use_loose_control_match: bool = True
+  # Score how likely the MODEL is to take a candidate, separately from how
+  # much probing it would teach the graph.
+  use_action_likelihood_prior: bool = True
+  position_prior_weight: float = 1.0
+  known_destination_likelihood: float = 1.5
+  recent_path_likelihood: float = 1.5
   use_cost: bool = True
   use_recovery_history: bool = True
 
@@ -417,6 +429,57 @@ def _overlap(a: set[str], b: set[str]) -> float:
   return len(a & b) / len(a) if a else 0.0
 
 
+# Words that carry no identifying power when they are the whole of a match.
+# "New", "the", "item" appear in half the labels on a screen, so a candidate
+# matching a need only through one of them has not been identified by it.
+_GENERIC_MATCH_WORDS = frozenset({
+    # Function words. A label sharing only these with the reasoning has not
+    # been named by it - "Sort by" matched a subgoal ending "required by the
+    # task" purely through "by".
+    "the", "this", "that", "these", "those", "and", "or", "but", "for", "with",
+    "from", "into", "onto", "to", "of", "on", "in", "at", "as", "is", "are",
+    "be", "it", "its", "an", "all", "any", "my", "your", "you", "we", "us",
+    "so", "if", "by", "not", "no", "do", "does", "done", "has", "have", "had",
+    # Reasoning filler the model emits on every step.
+    "then", "next", "now", "here", "there", "will", "can", "should", "need",
+    "needs", "want", "must", "current", "currently", "task", "required",
+    "require", "step", "first", "last", "again",
+    # UI words that appear on half the controls of any screen.
+    "new", "open", "select", "choose", "click", "tap", "press", "item",
+    "items", "list", "screen", "page", "view", "button", "option", "options",
+    "menu", "app", "back", "home", "more", "show", "go", "get", "set",
+})
+
+
+def _best_item_overlap(items: Iterable[str], label: set[str]) -> float:
+  """How well the label matches the SINGLE need item it matches best.
+
+  Pooling every slot into one bag and dividing by the bag size, as _overlap
+  does, punishes a candidate for everything the model said that it is not:
+  measured over 2712 scored candidates (2026-09-02), unresolved_information_
+  match was non-zero on 5.3% of them with mean 0.005, so the whole semantic
+  half of the ranking contributed nothing and candidates were ordered by
+  structural priors alone. Markor's "Plain Text" dropdown - named outright in
+  the model's own <THINK> - scored about 0.1 because the need also carried a
+  dozen other tokens.
+
+  Normalising by the smaller side makes containment score 1.0 in both
+  directions, which is the relation that actually matters here: the label is
+  the thing the model named ("Folder"), or the label spells out what a longer
+  sentence asked for ("change the type to folder").
+  """
+  best = 0.0
+  for item in items:
+    item_tokens = _tokens(str(item))
+    if not item_tokens:
+      continue
+    shared = item_tokens & label
+    if not shared or shared <= _GENERIC_MATCH_WORDS:
+      continue
+    best = max(best, len(shared) / min(len(item_tokens), len(label)))
+  return min(1.0, best)
+
+
 class StateGraphInformationMatrix:
   """Builds ``CandidateInformationRow``s for the candidates on one screen."""
 
@@ -474,9 +537,14 @@ class StateGraphInformationMatrix:
       )
       row.session_alignment_hits = int((known_good_identities or {}).get(
           element.identity, 0))
-      self._fill_exact_history(row, by_identity.get(
-          _match_key(element.identity, probe_type, role, current_node_id))
-          if self._config.use_exact_history else None)
+      matched_edge = None
+      if self._config.use_exact_history:
+        matched_edge = by_identity.get(
+            _match_key(element.identity, probe_type, role, current_node_id))
+        if matched_edge is None and self._config.use_loose_control_match:
+          matched_edge = by_identity.get(
+              _loose_key(element.identity, current_node_id))
+      self._fill_exact_history(row, matched_edge)
       self._fill_destination(row, graph_snapshot, recent_nodes)
       if self._config.use_contextual_history:
         for key, value in self.contextual_history.lookup(
@@ -525,7 +593,10 @@ class StateGraphInformationMatrix:
     for edge_id in snapshot.outgoing.get(node_id, ()):
       edge = snapshot.edges[edge_id]
       action = edge.get("action", {})
-      identity = str(action.get("element_identity", ""))
+      # An authoritative edge is built from the model's action and carries a
+      # control_key but no element_identity; a probe edge carries both.
+      identity = str(action.get("element_identity", "")
+                     or action.get("control_key", ""))
       if not identity:
         continue
       key = _match_key(identity, str(action.get("probe_type", "")),
@@ -535,6 +606,15 @@ class StateGraphInformationMatrix:
       # one rather than whichever hashed last.
       if previous is None or (edge.get("probe_count") or 0) > (previous.get("probe_count") or 0):
         index[key] = edge
+      loose = _loose_key(identity, node_id)
+      prior = index.get(loose)
+      # For the loose key prefer the edge with the most REAL evidence: an
+      # execution says more about what a control does than a probe does.
+      def _weight(e):
+        return ((e.get("execution_hit_count") or 0) + (e.get("execution_miss_count") or 0),
+                e.get("probe_count") or 0)
+      if prior is None or _weight(edge) > _weight(prior):
+        index[loose] = edge
     return index
 
   def _fill_exact_history(self, row, edge: Mapping[str, Any] | None) -> None:
@@ -598,6 +678,13 @@ class StateGraphInformationMatrix:
         "slots": _tokens(" ".join(need.get("required_information_slots") or ())),
         "affordance": _tokens(" ".join(need.get("expected_affordances") or ())),
         "risk": _tokens(" ".join(need.get("risk_keywords") or ())),
+        # Kept unpooled so each can be matched on its own merits.
+        "slot_items": tuple(need.get("required_information_slots") or ()),
+        # The forward-looking half of the model's own reasoning - "I will click
+        # the Plain Text dropdown". It names the very next control more often
+        # than any other text available, and until now it was parsed and then
+        # never read by the scorer.
+        "subgoal_items": (str(need.get("current_subgoal") or ""),),
     }
 
   def _fill_need(self, row, element, need_tokens, need) -> None:
@@ -607,6 +694,12 @@ class StateGraphInformationMatrix:
     row.target_match = _overlap(need_tokens["target"], label)
     row.expected_affordance_match = _overlap(need_tokens["affordance"], label)
     row.unresolved_information_match = _overlap(need_tokens["slots"], label)
+    if self._config.use_per_item_need_match:
+      row.target_match = max(row.target_match, _best_item_overlap(
+          need_tokens.get("subgoal_items") or (), label))
+      row.unresolved_information_match = max(
+          row.unresolved_information_match,
+          _best_item_overlap(need_tokens.get("slot_items") or (), label))
     row.risk_conflict = _overlap(need_tokens["risk"], label)
     expected = {str(a).lower() for a in (need.get("expected_action_types") or ())}
     row.candidate_action_type_match = float(
@@ -663,6 +756,27 @@ class StateGraphInformationMatrix:
 
 def _match_key(identity: str, probe_type: str, role: str, node_id: str) -> tuple:
   return (identity, probe_type, role, node_id)
+
+
+def _loose_key(identity: str, node_id: str) -> tuple:
+  """The control, on this screen - no coordinates, no probe type, no role.
+
+  The exact key could not find the edges that carry the most evidence. An
+  authoritative edge is written from the model's own action, which has no
+  element_identity and no probe_type at all, so it never entered the index;
+  and the exact key embeds UiElement.identity, which ends in the element's
+  bounds, so even a probe edge matched only when the control had not moved a
+  pixel. Between them, has_exact_history was False on all 21,519 scored
+  candidates of five full runs (2026-09-04) - execution counts, alignment
+  counts and skip statistics were therefore always None, and none of the
+  history the graph had accumulated ever reached the ranker.
+
+  control_key_from_identity drops the bounds, which is the same normalisation
+  the edge ids themselves use (belief_graph.canonical_action).
+  """
+  from android_world.parallel_exploration.belief_graph import control_key_from_identity
+  control = control_key_from_identity(identity) or str(identity or "")
+  return (control, node_id)
 
 
 def _subtree_size(snapshot: GraphView, node_id: str, max_nodes: int = 32) -> int:
@@ -724,6 +838,29 @@ class PredictiveElementScorer:
       # choose this control here. Nothing else in the row is evidence of the
       # same kind, so it dominates rather than being averaged in.
       prior = max(prior, min(0.95, 0.6 + 0.1 * row.session_alignment_hits))
+    if cfg.use_action_likelihood_prior:
+      # What the model is likely to DO, which is not what the graph is likely
+      # to LEARN from. Measured over 58 rounds where the model's next control
+      # was in the candidate set (2026-09-04, the first data with the graph
+      # features actually populated):
+      #
+      #   norm_y                      target 0.310  others 0.635  AUC 0.335
+      #   destination_known           target 0.138  others 0.044  AUC 0.571
+      #   destination_in_recent_path  target 0.086  others 0.016  AUC 0.579
+      #
+      # Vertical position is the strongest single discriminator of any feature
+      # in the matrix and was computed but never scored. The other two were
+      # scored with the wrong sign: expected_information_gain discounts a
+      # known destination and halves one on the recent path, which is correct
+      # for information and backwards for prediction. They belong here, where
+      # the quantity is "will the model take this", and the IG discounts stay
+      # where they are.
+      prior *= 1.0 + cfg.position_prior_weight * (0.5 - row.norm_y)
+      if row.destination_known:
+        prior *= cfg.known_destination_likelihood
+      if row.destination_in_recent_path:
+        prior *= cfg.recent_path_likelihood
+      prior = min(0.95, max(0.01, prior))
     if not row.has_exact_history:
       return prior
     seen = (row.inference_alignment_count or 0) + (row.execution_miss_count or 0)

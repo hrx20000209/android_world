@@ -11,6 +11,9 @@ from android_world.parallel_exploration.rankers import UiElement
 from android_world.parallel_exploration.state import ActivitySignature
 from android_world.parallel_exploration.state import StateSignature
 from android_world.parallel_exploration.state import StructSignature
+import pathlib
+import re
+from android_world.parallel_exploration.belief_graph import ProgressiveBeliefGraph
 
 
 def test_navigation_candidate_admission_does_not_depend_on_fixed_risk_words(tmp_path: Path):
@@ -146,3 +149,165 @@ class StatusBarNoiseTest(absltest.TestCase):
   def test_system_ui_package_is_dropped_whatever_it_says(self):
     element = self._element("com.android.systemui:id/clock")
     self.assertFalse(live_probe._is_app_content(element, "Expense Detail"))
+
+
+class NodeIdentityAgreementTest(absltest.TestCase):
+  """The explorer and the runner must key the graph the same way.
+
+  They did not: the explorer passed struct_sig.digest where make_node_id
+  expects the layout signature, so every snapshot lookup inside the explorer
+  missed. Across five full runs (21,519 scored candidates, 2026-09-04) not one
+  candidate ever carried a graph statistic, and prefix alignment - which is
+  keyed on the same identity - was zero in every run.
+  """
+
+  def test_explorer_and_runner_agree_on_node_id(self):
+    activity = "net.gsantner.markor/.activity.MainActivity"
+    layout = "layout-abc123"
+    strict = "struct-digest-that-changes-with-any-data"
+    runner_id = ProgressiveBeliefGraph.make_node_id(activity, layout)
+    explorer_id = ProgressiveBeliefGraph.make_node_id(activity, layout)
+    self.assertEqual(runner_id, explorer_id)
+    # And the strict digest must NOT be interchangeable with it, which is what
+    # made the original mismatch silent rather than loud.
+    self.assertNotEqual(runner_id,
+                        ProgressiveBeliefGraph.make_node_id(activity, strict))
+
+  def test_live_probe_uses_layout_sig_not_struct_sig(self):
+    source = pathlib.Path(live_probe.__file__).read_text(encoding="utf-8")
+    for call in re.findall(r"make_node_id\((.*?)\)", source, flags=re.S):
+      self.assertNotIn("struct_sig", call)
+      self.assertIn("layout_sig", call)
+
+
+# --- coverage ranking reads the graph snapshot the explorer was handed ------
+
+from android_world.parallel_exploration.live_probe import _known_control_keys
+
+
+def test_known_control_keys_collects_every_outgoing_edge_of_the_node():
+  payload = {
+      "edges": {
+          "e1": {"action": {"control_key": "app:id/del||Delete|Button"}},
+          "e2": {"action": {"control_key": "app:id/share||Share|Button"}},
+          "e3": {"action": {"control_key": "app:id/other||Other|Button"}},
+      },
+      "outgoing": {"n1": ["e1", "e2"], "n2": ["e3"]},
+  }
+  assert _known_control_keys(payload, "n1") == {
+      "app:id/del||Delete|Button", "app:id/share||Share|Button"}
+
+
+def test_an_edge_without_a_control_key_contributes_nothing():
+  """Authoritative edges carried only coordinates before control_key existed;
+  a blank key must not mark every unnamed control as already known."""
+  payload = {"edges": {"e1": {"action": {"x": 5, "y": 6}}},
+             "outgoing": {"n1": ["e1"]}}
+  assert _known_control_keys(payload, "n1") == set()
+
+
+def test_missing_snapshot_or_node_is_empty_rather_than_an_error():
+  assert _known_control_keys(None, "n1") == set()
+  assert _known_control_keys({"edges": {}, "outgoing": {}}, "") == set()
+  assert _known_control_keys({"edges": {}, "outgoing": {}}, "unknown") == set()
+
+
+# --- the graph's contribution to exploration targeting -----------------------
+#
+# Not "which control will the model press" - four falsifications say nothing
+# predicts that - but "what is already on record here", which is the one
+# question the graph answers reliably.
+
+from android_world.parallel_exploration.live_probe import _discovered_labels_near
+
+
+def _payload():
+  return {
+      "edges": {
+          "e1": {"dst_node": "n2", "discovered_labels": ["Trash", "Restore"]},
+          "e2": {"dst_node": "n3", "discovered_labels": ["Rename"]},
+          "e3": {"dst_node": "n4", "discovered_labels": ["Confirm delete"]},
+          "e9": {"dst_node": "n9", "discovered_labels": ["Elsewhere"]},
+      },
+      "outgoing": {"n1": ["e1", "e2"], "n2": ["e3"], "n8": ["e9"]},
+  }
+
+
+def test_labels_come_from_this_screen_and_one_hop_out():
+  """A probe that rediscovers the screen one hop away is just as wasted."""
+  got = _discovered_labels_near(_payload(), "n1")
+  assert got[:3] == ["Trash", "Restore", "Rename"]      # this screen's edges
+  assert "Confirm delete" in got                        # one hop out
+  assert "Elsewhere" not in got                         # unrelated subtree
+
+
+def test_duplicate_labels_are_collapsed_case_insensitively():
+  payload = {"edges": {"a": {"dst_node": None, "discovered_labels": ["Trash"]},
+                       "b": {"dst_node": None, "discovered_labels": ["trash"]}},
+             "outgoing": {"n1": ["a", "b"]}}
+  assert _discovered_labels_near(payload, "n1") == ["Trash"]
+
+
+def test_no_graph_or_unknown_node_yields_nothing_rather_than_erroring():
+  assert _discovered_labels_near(None, "n1") == []
+  assert _discovered_labels_near(_payload(), "") == []
+  assert _discovered_labels_near(_payload(), "nope") == []
+
+
+# --- the walked path, summarised, as the second graph input to exploration ---
+#
+# `_discovered_labels_near` answers "what is already on record behind a control
+# here". This answers a different question - "where has this episode already
+# been" - and it only became answerable once nodes carried a description.
+
+from android_world.parallel_exploration.live_probe import _walked_path_summary
+
+
+def _walked_payload():
+  return {
+      "node_visits": {"n0": 1, "n1": 2, "n2": 1, "n3": 0},
+      "node_summaries": {
+          "n0": "A file list with Documents and Downloads.",
+          "n1": "A folder view with Rename and Delete.",
+          "n2": "A dialog asking to Confirm delete.",
+          "n3": "A screen no one has stood on.",
+      },
+  }
+
+
+def test_the_walked_path_is_the_visited_nodes_in_first_seen_order():
+  assert _walked_path_summary(_walked_payload(), "n1") == [
+      "A file list with Documents and Downloads.",
+      "A dialog asking to Confirm delete.",
+  ]
+
+
+def test_the_current_screen_is_excluded_because_the_ranker_already_sees_it():
+  assert ("A folder view with Rename and Delete."
+          not in _walked_path_summary(_walked_payload(), "n1"))
+
+
+def test_a_node_the_episode_only_heard_about_is_not_on_the_walked_path():
+  """visit_count 0 means seeded or probe-discovered, never stood on."""
+  assert ("A screen no one has stood on."
+          not in _walked_path_summary(_walked_payload(), "n1"))
+
+
+def test_only_the_most_recent_screens_survive_the_cap():
+  """A mid-episode graph carries 20-40 nodes; the encoder is paid per string."""
+  payload = {"node_visits": {f"n{i}": 1 for i in range(10)},
+             "node_summaries": {f"n{i}": f"Screen {i}." for i in range(10)}}
+  got = _walked_path_summary(payload, "cur", limit=3)
+  assert got == ["Screen 7.", "Screen 8.", "Screen 9."]
+
+
+def test_screens_described_identically_collapse_to_one_entry():
+  payload = {"node_visits": {"a": 1, "b": 1},
+             "node_summaries": {"a": "A settings page.", "b": "a settings page."}}
+  assert _walked_path_summary(payload, "cur") == ["A settings page."]
+
+
+def test_a_graph_with_no_descriptions_yields_nothing_rather_than_erroring():
+  assert _walked_path_summary({"node_visits": {"a": 1}}, "cur") == []
+  assert _walked_path_summary(None, "n1") == []
+  assert _walked_path_summary(_walked_payload(), "") == []

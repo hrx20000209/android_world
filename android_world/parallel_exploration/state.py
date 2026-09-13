@@ -202,6 +202,7 @@ def parse_elements(xml: str) -> tuple[UiElement, ...]:
             scrollable=node.attrib.get("scrollable") == "true",
             checked=(checked_raw == "true") if checked_raw in ("true", "false") else None,
             selected=(selected_raw == "true") if selected_raw in ("true", "false") else None,
+            package=node.attrib.get("package", ""),
         )
     )
   return tuple(elements)
@@ -223,6 +224,7 @@ def parse_fast_elements(data: dict) -> tuple[UiElement, ...]:
             checked=bool(node.get("checked")) if node.get("checkable") else None,
             selected=bool(node.get("selected")),
             in_navigation_drawer=bool(node.get("inNavigationDrawer")),
+            package=str(node.get("package") or ""),
         )
     )
   return tuple(elements)
@@ -243,7 +245,37 @@ def structural_signature(elements: Sequence[UiElement]) -> StructSignature:
   return StructSignature(hashlib.sha256(encoded.encode("utf-8")).hexdigest(), len(records))
 
 
-def layout_signature(elements: Sequence[UiElement], grid: int = 64) -> str:
+# Windows that float over the app and are not part of what screen this is.
+# The soft keyboard is the important one: Gboard contributes 37 actionable
+# key_pos_* elements, so focusing a text field turned one screen into two.
+# Measured directly on ExpenseAddMultiple (2026-09-08): the form scored
+# layout_sig 3eda1f94 with the keyboard down and afb43f47 with it up, and the
+# episode's graph carried both as separate nodes with 5 and 17 visits - the
+# same screen, its 22 visits split so neither looked like a hub. The status
+# bar is excluded for the same reason: its contents change with the clock.
+OVERLAY_PACKAGES = (
+    "com.google.android.inputmethod",
+    "com.android.inputmethod",
+    "com.android.systemui",
+    "com.android.internal",
+)
+
+
+def _is_overlay(element: UiElement) -> bool:
+  """Drawn by the keyboard or the system bars rather than by the app.
+
+  Matched on the package the accessibility node reports, not on its
+  resource id: 5 of the keyboard's actionable nodes carry no id at all, and
+  the IME navigation bar reports "android:id/input_method_nav_back", so an
+  id-prefix test left the two states of one screen still hashing apart
+  (measured on the Expense entry form, 2026-09-08).
+  """
+  package = element.package or element.resource_id.split(":")[0]
+  return any(package.startswith(pkg) for pkg in OVERLAY_PACKAGES)
+
+
+def layout_signature(elements: Sequence[UiElement], grid: int = 64,
+                     ignore_overlays: bool = True) -> str:
   """Hash the screen's interaction skeleton; see StateSignature.layout_sig.
 
   Only actionable controls count, identified by class + resource id +
@@ -264,7 +296,8 @@ def layout_signature(elements: Sequence[UiElement], grid: int = 64) -> str:
   """
   actionable = [
       element for element in elements
-      if element.clickable or element.scrollable or element.checked is not None
+      if (element.clickable or element.scrollable or element.checked is not None)
+      and not (ignore_overlays and _is_overlay(element))
   ]
   kind_counts: dict[tuple[str, str], int] = {}
   for element in actionable:
