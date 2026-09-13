@@ -354,7 +354,8 @@ class AppMemory:
       self, layout_signature: str, goal: str,
       similarity: Callable[[str, list[str]], list[float] | None],
       *, k: int = 3, threshold: float = 0.5, margin: float = 0.6,
-      min_tasks: int = 2) -> tuple[str, dict, str, str, str] | None:
+      min_tasks: int = 2, min_pass_rate: float = 0.7,
+      goal_vote: bool = True) -> tuple[str, dict, str, str, str] | None:
     """(control, action, dst_layout_signature, dst_activity, source).
 
     Goal-conditioned. The destination activity is returned alongside the
@@ -390,14 +391,14 @@ class AppMemory:
     so the store keeps working when the encoder is down; returning None there
     simply falls back to the uniqueness answer.
     """
-    unique = self.prefill_control(layout_signature, min_tasks)
-    if unique is not None:
-      return unique[0], unique[1], unique[2], unique[3], "unique"
-    text = (goal or "").strip()
-    if not text:
-      return None
     screen = self.screens.get(layout_signature)
-    if screen is None:
+    unique = self.prefill_control(layout_signature, min_tasks)
+    if unique is not None and screen is not None:
+      known = screen.transitions.get(f"{unique[0]}\0EXECUTED")
+      if known is None or self._passes_through(screen, known, min_pass_rate):
+        return unique[0], unique[1], unique[2], unique[3], "unique"
+    text = (goal or "").strip()
+    if not goal_vote or not text or screen is None:
       return None
     # One flat list of (goal, control) pairs, the way the offline replay
     # scored it: a control executed by four tasks gets four chances to be the
@@ -430,8 +431,41 @@ class AppMemory:
       return None
     control = order[0][0]
     known = known_by_control[control]
+    if not self._passes_through(screen, known, min_pass_rate):
+      return None
     return (control, dict(known.action), known.dst_layout_signature,
             known.dst_activity, "goal")
+
+  @staticmethod
+  def _passes_through(screen: "RememberedScreen", known: RememberedTransition,
+                      min_pass_rate: float) -> bool:
+    """Did the tasks that stood on this screen mostly press this control?
+
+    The gate the retrieval was missing, and the reason a 90%-accurate landing
+    predictor was picking the right *action* only 36-43% of the time. Scored
+    over every screen visit rather than only the ones that produced a click -
+    927 visits over 112 tasks, of which just **402 (43%) involved a click
+    navigation at all**. On the other 57% the task typed, scrolled or
+    terminated, so any prefill there is wrong by construction, and an earlier
+    evaluation that scored only the click steps could not see it.
+
+    `tasks_seen` counts tasks that stood here; `tasks_executed` counts tasks
+    that pressed this control. Their ratio says whether this is a pass-through
+    screen or a fork. Same 927-visit replay:
+
+        无门控        开火 291   正确 36%   104 对 / 187 错   净 -83
+        通过率 >=30%  开火 188   正确 52%    97 对 /  91 错   净  +6
+        通过率 >=50%  开火 148   正确 59%    87 对 /  61 错   净 +26
+        通过率 >=70%  开火 127   正确 66%    84 对 /  43 错   净 +41
+        通过率 >=90%  开火 121   正确 65%    79 对 /  42 错   净 +37
+    """
+    if min_pass_rate <= 0:
+      return True
+    seen = max(screen.tasks_seen, known.tasks_executed)
+    if seen <= 1:
+      # A single prior visit says nothing about whether this is a fork.
+      return known.tasks_executed >= 1
+    return (known.tasks_executed / seen) >= min_pass_rate
 
   def known_routes(self, layout_signature: str,
                    limit: int = 4) -> list[tuple[str, str]]:

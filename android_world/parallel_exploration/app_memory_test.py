@@ -572,3 +572,38 @@ def test_retrieve_control_never_reads_its_own_goal():
   _goal_executed(memory, "S", "id|Add||B", "Create an event", "D1")
   assert memory.retrieve_control("S", "Create an event", _overlap,
                                  threshold=0.1, margin=0.05) is None
+
+
+def test_retrieve_control_refuses_a_fork_screen():
+  """A screen many tasks pass through differently is not prefillable.
+
+  Only 43% of screen visits involve a click navigation at all (927 visits over
+  112 tasks), so without this gate the retrieval fires on forks and lands the
+  right *action* 36% of the time despite a 90% landing-match rate.
+  """
+  memory = AppMemory("com.app")
+  # Six tasks stood on this screen; two of them pressed Add.
+  for _ in range(6):
+    memory.observe_screen("com.app/.A", "S")
+    memory._seen_this_task.clear()  # pylint: disable=protected-access
+  _goal_executed(memory, "S", "id|Add||B", "Create an event tomorrow", "D1")
+  _goal_executed(memory, "S", "id|Add||B", "Add an event next week", "D1")
+  assert memory.screens["S"].tasks_seen >= 6
+  assert memory.retrieve_control("S", "Add an event Friday", _overlap,
+                                 threshold=0.1, margin=0.05,
+                                 min_pass_rate=0.7) is None
+  # Same evidence, gate off: the retrieval itself would have answered.
+  got = memory.retrieve_control("S", "Add an event Friday", _overlap,
+                                threshold=0.1, margin=0.05, min_pass_rate=0.0)
+  assert got is not None and got[0] == "id|Add||B"
+
+
+def test_retrieve_control_allows_a_pass_through_screen():
+  """Every task that stood here pressed the same control."""
+  memory = AppMemory("com.app")
+  _goal_executed(memory, "S", "id|Next||B", "Create an event tomorrow", "D1")
+  _goal_executed(memory, "S", "id|Next||B", "Add an event next week", "D1")
+  _goal_executed(memory, "S", "id|Next||B", "Schedule a meeting", "D1")
+  got = memory.retrieve_control("S", "Add an event Friday", _overlap,
+                                threshold=0.1, margin=0.05, min_pass_rate=0.7)
+  assert got is not None and got[0] == "id|Next||B"

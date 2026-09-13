@@ -1491,6 +1491,16 @@ def main() -> int:
                            "accuracy only because it falls through rather than "
                            "replacing the inference, so a miss costs one extra "
                            "action and not a step of the 15-step budget.")
+  parser.add_argument("--prefill_pass_rate", type=float, default=0.7,
+                      help="fraction of the tasks that stood on this screen "
+                           "which must have pressed the retrieved control. "
+                           "Only 43%% of screen visits involve a click "
+                           "navigation at all (927 visits, 112 tasks), so "
+                           "without this the retrieval fires on forks: scored "
+                           "over every visit rather than only the clicking "
+                           "ones it lands 36%% (104 right / 187 wrong, net "
+                           "-83). At 0.5 it is 59%% (net +26), at 0.7 66%% "
+                           "(84 / 43, net +41), at 0.9 65%%. 0 disables it.")
   parser.add_argument("--prefill_by_resource_id", action="store_true",
                       help="when the full control key does not match any "
                            "element, fall back to the resource id alone, but "
@@ -2492,18 +2502,20 @@ def main() -> int:
           if "store" not in prefill_sources:
             log("prefill_refused", step=step, why="store_source_off")
             break
-          if args.prefill_retrieval in ("uniq", "both"):
-            got = memory.prefill_control(sig_now, args.prefill_min_tasks)
-            if got is not None:
-              decided, source = got, "unique"
-          if decided is None and args.prefill_retrieval in ("goal", "both"):
-            got = memory.retrieve_control(
-                sig_now, goal, _goal_similarity,
-                k=args.prefill_k, threshold=args.prefill_sim_thr,
-                margin=args.prefill_margin,
-                min_tasks=args.prefill_min_tasks)
-            if got is not None:
-              decided, source = got[:4], got[4]
+          # One call: retrieve_control runs the uniqueness gate first and the
+          # goal vote on the screens it refuses, and applies the pass-rate
+          # gate to both. Going through prefill_control directly would skip
+          # that gate, which is the whole difference between 36% and 66%
+          # action accuracy.
+          got = memory.retrieve_control(
+              sig_now, goal, _goal_similarity,
+              k=args.prefill_k, threshold=args.prefill_sim_thr,
+              margin=args.prefill_margin,
+              min_tasks=args.prefill_min_tasks,
+              min_pass_rate=args.prefill_pass_rate,
+              goal_vote=args.prefill_retrieval in ("goal", "both"))
+          if got is not None:
+            decided, source = got[:4], got[4]
           if decided is None:
             log("prefill_refused", step=step, why="no_candidate",
                 screen_known=sig_now in getattr(memory, "screens", {}))
