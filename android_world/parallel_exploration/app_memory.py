@@ -355,7 +355,8 @@ class AppMemory:
       similarity: Callable[[str, list[str]], list[float] | None],
       *, k: int = 3, threshold: float = 0.5, margin: float = 0.6,
       min_tasks: int = 2, min_pass_rate: float = 0.7,
-      goal_vote: bool = True) -> tuple[str, dict, str, str, str] | None:
+      goal_vote: bool = True,
+      trace: dict[str, Any] | None = None) -> tuple[str, dict, str, str, str] | None:
     """(control, action, dst_layout_signature, dst_activity, source).
 
     Goal-conditioned. The destination activity is returned alongside the
@@ -391,6 +392,10 @@ class AppMemory:
     so the store keeps working when the encoder is down; returning None there
     simply falls back to the uniqueness answer.
     """
+    def refuse(gate: str) -> None:
+      if trace is not None:
+        trace["gate"] = gate
+
     screen = self.screens.get(layout_signature)
     unique = self.prefill_control(layout_signature, min_tasks)
     if unique is not None and screen is not None:
@@ -399,6 +404,7 @@ class AppMemory:
         return unique[0], unique[1], unique[2], unique[3], "unique"
     text = (goal or "").strip()
     if not goal_vote or not text or screen is None:
+      refuse("无屏幕记录" if screen is None else "目标投票关闭")
       return None
     # One flat list of (goal, control) pairs, the way the offline replay
     # scored it: a control executed by four tasks gets four chances to be the
@@ -413,12 +419,17 @@ class AppMemory:
         if remembered_goal and remembered_goal != text:
           pairs.append((remembered_goal, known.control_key))
     if not pairs:
+      refuse("该屏无带目标的执行转移")
       return None
     scores = similarity(text, [g for g, _ in pairs])
     if not scores or len(scores) != len(pairs):
+      refuse("编码器无应答")
       return None
     ranked = sorted(zip(scores, (c for _, c in pairs)), key=lambda sc: -sc[0])
     if ranked[0][0] < threshold:
+      refuse("目标相似度不足")
+      if trace is not None:
+        trace["best_sim"] = round(float(ranked[0][0]), 3)
       return None
     weight: dict[str, float] = {}
     for score, control in ranked[:k]:
@@ -428,10 +439,15 @@ class AppMemory:
     # Refusing it is what buys the 84%: dropping the margin to 0.3 puts
     # precision back at 82%, to 0.0 at 76%.
     if len(order) > 1 and order[0][1] - order[1][1] < margin:
+      refuse("冠亚军边际不足")
       return None
     control = order[0][0]
     known = known_by_control[control]
     if not self._passes_through(screen, known, min_pass_rate):
+      refuse("通过率不足")
+      if trace is not None:
+        trace["pass_seen"] = screen.tasks_seen
+        trace["pass_ran"] = known.tasks_executed
       return None
     return (control, dict(known.action), known.dst_layout_signature,
             known.dst_activity, "goal")

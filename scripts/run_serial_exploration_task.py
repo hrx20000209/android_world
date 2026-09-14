@@ -2507,17 +2507,25 @@ def main() -> int:
           # gate to both. Going through prefill_control directly would skip
           # that gate, which is the whole difference between 36% and 66%
           # action accuracy.
+          # 拒绝原因必须落到具体哪道门。合成读数没有意义 —— 59% 的整体命中率
+          # 掩盖了 30% 与 88% 两个来源，同一类错误不该犯第二次。
+          trace: dict[str, Any] = {}
           got = memory.retrieve_control(
               sig_now, goal, _goal_similarity,
               k=args.prefill_k, threshold=args.prefill_sim_thr,
               margin=args.prefill_margin,
               min_tasks=args.prefill_min_tasks,
               min_pass_rate=args.prefill_pass_rate,
-              goal_vote=args.prefill_retrieval in ("goal", "both"))
+              goal_vote=args.prefill_retrieval in ("goal", "both"),
+              trace=trace)
           if got is not None:
             decided, source = got[:4], got[4]
           if decided is None:
             log("prefill_refused", step=step, why="no_candidate",
+                gate=trace.get("gate", "唯一性门未通过"),
+                best_sim=trace.get("best_sim"),
+                pass_seen=trace.get("pass_seen"),
+                pass_ran=trace.get("pass_ran"),
                 screen_known=sig_now in getattr(memory, "screens", {}))
             break
           control, _remembered, expected_dst, expected_activity = decided
