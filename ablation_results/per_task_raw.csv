@@ -1,0 +1,1007 @@
+task,success,steps,e2e_s,step_latency_s,kind,num_reasoning_calls,num_prefill_hops,num_prefill_hits,explicit_skipped_reasoning,num_rollbacks,rollback_restored,graph_nodes_after,num_unique_states,variant
+AudioRecorderRecordAudio,1,7,27.107,3.872,action,7,0,0,1,0,0,10,9,Baseline 不建图 (h1)
+AudioRecorderRecordAudioWithFileName,1,9,32.791,3.643,action,9,0,0,1,0,0,10,9,Baseline 不建图 (h1)
+BrowserDraw,0,20,50.796,2.54,action,20,0,0,1,0,0,9,9,Baseline 不建图 (h1)
+BrowserMaze,0,20,47.3,2.365,action,20,0,0,1,0,0,8,8,Baseline 不建图 (h1)
+BrowserMultiply,0,21,49.214,2.344,action,21,0,0,1,0,0,12,12,Baseline 不建图 (h1)
+CameraTakePhoto,0,4,18.9,4.725,action,4,0,0,0,0,0,4,4,Baseline 不建图 (h1)
+CameraTakeVideo,1,4,18.561,4.64,action,4,0,0,0,0,0,4,4,Baseline 不建图 (h1)
+ClockStopWatchPausedVerify,0,10,52.731,5.273,action,10,0,0,0,0,0,7,7,Baseline 不建图 (h1)
+ClockStopWatchRunning,1,4,14.606,3.651,action,4,0,0,0,0,0,7,7,Baseline 不建图 (h1)
+ClockTimerEntry,0,10,42.502,4.25,action,10,0,0,0,0,0,4,4,Baseline 不建图 (h1)
+ContactsAddContact,1,9,31.748,3.528,action,9,0,0,1,0,0,11,11,Baseline 不建图 (h1)
+ExpenseAddMultiple,0,21,61.206,2.915,action,21,0,0,1,0,0,6,6,Baseline 不建图 (h1)
+ExpenseAddMultipleFromGallery,0,21,61.865,2.946,action,21,0,0,1,0,0,10,9,Baseline 不建图 (h1)
+ExpenseAddMultipleFromMarkor,0,21,68.897,3.281,action,21,0,0,1,0,0,8,8,Baseline 不建图 (h1)
+ExpenseAddSingle,1,9,30.767,3.419,action,9,0,0,1,0,0,6,6,Baseline 不建图 (h1)
+ExpenseDeleteDuplicates,1,6,20.935,3.489,action,6,0,0,1,0,0,10,10,Baseline 不建图 (h1)
+ExpenseDeleteDuplicates2,1,10,32.897,3.29,action,10,0,0,1,0,0,11,11,Baseline 不建图 (h1)
+ExpenseDeleteMultiple,1,10,34.171,3.417,action,10,0,0,1,0,0,19,19,Baseline 不建图 (h1)
+ExpenseDeleteMultiple2,1,14,47.301,3.379,action,14,0,0,1,0,0,13,13,Baseline 不建图 (h1)
+ExpenseDeleteSingle,1,4,15.652,3.913,action,4,0,0,1,0,0,9,9,Baseline 不建图 (h1)
+FilesDeleteFile,0,4,12.859,3.215,action,4,0,0,1,0,0,6,6,Baseline 不建图 (h1)
+FilesMoveFile,1,13,49.264,3.79,action,13,0,0,1,0,0,17,16,Baseline 不建图 (h1)
+MarkorAddNoteHeader,0,12,46.086,3.84,action,12,0,0,1,0,0,11,11,Baseline 不建图 (h1)
+MarkorChangeNoteContent,0,12,43.657,3.638,action,12,0,0,1,0,0,10,10,Baseline 不建图 (h1)
+MarkorCreateFolder,0,10,32.724,3.272,action,10,0,0,1,0,0,5,5,Baseline 不建图 (h1)
+MarkorCreateNote,0,6,25.018,4.17,action,6,0,0,1,0,0,9,8,Baseline 不建图 (h1)
+MarkorCreateNoteAndSms,0,6,21.49,3.582,action,6,0,0,1,0,0,9,8,Baseline 不建图 (h1)
+MarkorCreateNoteFromClipboard,1,8,32.867,4.108,action,8,0,0,1,0,0,11,10,Baseline 不建图 (h1)
+MarkorDeleteAllNotes,1,6,21.95,3.658,action,6,0,0,1,0,0,9,8,Baseline 不建图 (h1)
+MarkorDeleteNewestNote,1,4,14.268,3.567,action,4,0,0,1,0,0,9,8,Baseline 不建图 (h1)
+MarkorDeleteNote,1,4,15.773,3.943,action,4,0,0,1,0,0,6,6,Baseline 不建图 (h1)
+MarkorEditNote,0,12,48.529,4.044,action,12,0,0,1,0,0,8,8,Baseline 不建图 (h1)
+MarkorMergeNotes,0,21,73.148,3.483,action,21,0,0,1,0,0,15,14,Baseline 不建图 (h1)
+MarkorMoveNote,0,8,28.748,3.594,action,8,0,0,1,0,0,10,10,Baseline 不建图 (h1)
+MarkorTranscribeReceipt,0,18,59.453,3.303,action,18,0,0,1,0,0,25,23,Baseline 不建图 (h1)
+MarkorTranscribeVideo,0,10,43.763,4.376,action,10,0,0,1,0,0,22,19,Baseline 不建图 (h1)
+NotesIsTodo,1,3,10.537,3.512,action,3,0,0,1,0,0,4,4,Baseline 不建图 (h1)
+NotesMeetingAttendeeCount,1,4,14.049,3.512,question,4,0,0,1,0,0,4,4,Baseline 不建图 (h1)
+NotesRecipeIngredientCount,1,4,12.818,3.204,action,4,0,0,1,0,0,4,4,Baseline 不建图 (h1)
+NotesTodoItemCount,1,3,9.572,3.191,question,3,0,0,1,0,0,5,5,Baseline 不建图 (h1)
+OpenAppTaskEval,1,2,6.993,3.496,action,2,0,0,1,0,0,4,4,Baseline 不建图 (h1)
+OsmAndFavorite,1,8,28.605,3.576,action,8,0,0,1,0,0,12,12,Baseline 不建图 (h1)
+OsmAndMarker,0,20,47.841,2.392,action,20,0,0,1,0,0,6,6,Baseline 不建图 (h1)
+OsmAndTrack,0,21,52.74,2.511,action,21,0,0,1,0,0,11,11,Baseline 不建图 (h1)
+RecipeAddMultipleRecipes,0,21,69.941,3.331,action,21,0,0,1,0,0,14,12,Baseline 不建图 (h1)
+RecipeAddMultipleRecipesFromImage,0,21,64.569,3.075,action,21,0,0,1,0,0,13,11,Baseline 不建图 (h1)
+RecipeAddMultipleRecipesFromMarkor,0,21,67.166,3.198,action,21,0,0,1,0,0,8,8,Baseline 不建图 (h1)
+RecipeAddMultipleRecipesFromMarkor2,0,21,77.486,3.69,action,21,0,0,1,0,0,26,23,Baseline 不建图 (h1)
+RecipeAddSingleRecipe,1,13,51.496,3.961,action,13,0,0,1,0,0,17,15,Baseline 不建图 (h1)
+RecipeDeleteDuplicateRecipes,1,7,26.245,3.749,action,7,0,0,1,0,0,7,6,Baseline 不建图 (h1)
+RecipeDeleteDuplicateRecipes2,0,21,68.67,3.27,action,21,0,0,1,0,0,14,11,Baseline 不建图 (h1)
+RecipeDeleteDuplicateRecipes3,0,21,67.164,3.198,action,21,0,0,1,0,0,14,11,Baseline 不建图 (h1)
+RecipeDeleteMultipleRecipes,1,14,46.902,3.35,action,14,0,0,1,0,0,13,12,Baseline 不建图 (h1)
+RecipeDeleteMultipleRecipesWithConstraint,1,3,10.933,3.644,action,3,0,0,1,0,0,8,7,Baseline 不建图 (h1)
+RecipeDeleteMultipleRecipesWithNoise,1,21,61.88,2.947,action,21,0,0,1,0,0,23,19,Baseline 不建图 (h1)
+RecipeDeleteSingleRecipe,1,5,18.401,3.68,action,5,0,0,1,0,0,9,8,Baseline 不建图 (h1)
+RecipeDeleteSingleWithRecipeWithNoise,1,6,22.139,3.69,action,6,0,0,1,0,0,11,8,Baseline 不建图 (h1)
+RetroCreatePlaylist,1,21,66.286,3.156,action,21,0,0,1,0,0,18,18,Baseline 不建图 (h1)
+RetroPlayingQueue,0,21,65.337,3.111,action,21,0,0,1,0,0,11,11,Baseline 不建图 (h1)
+RetroPlaylistDuration,0,21,69.429,3.306,action,21,0,0,1,0,0,17,17,Baseline 不建图 (h1)
+RetroSavePlaylist,0,21,66.774,3.18,action,21,0,0,1,0,0,18,18,Baseline 不建图 (h1)
+SaveCopyOfReceiptTaskEval,1,7,22.494,3.213,action,7,0,0,1,0,0,8,8,Baseline 不建图 (h1)
+SimpleCalendarAddOneEvent,0,21,60.168,2.865,action,21,0,0,1,0,0,10,10,Baseline 不建图 (h1)
+SimpleCalendarAddOneEventInTwoWeeks,0,21,60.075,2.861,action,21,0,0,1,0,0,11,11,Baseline 不建图 (h1)
+SimpleCalendarAddOneEventRelativeDay,0,21,63.07,3.003,action,21,0,0,1,0,0,11,11,Baseline 不建图 (h1)
+SimpleCalendarAddOneEventTomorrow,0,21,62.766,2.989,action,21,0,0,1,0,0,10,10,Baseline 不建图 (h1)
+SimpleCalendarAddRepeatingEvent,0,21,59.708,2.843,action,21,0,0,1,0,0,12,11,Baseline 不建图 (h1)
+SimpleCalendarAnyEventsOnDate,1,2,5.576,2.788,question,2,0,0,1,0,0,6,6,Baseline 不建图 (h1)
+SimpleCalendarDeleteEvents,1,7,25.403,3.629,action,7,0,0,1,0,0,8,8,Baseline 不建图 (h1)
+SimpleCalendarDeleteEventsOnRelativeDay,1,6,24.04,4.007,action,6,0,0,1,0,0,9,9,Baseline 不建图 (h1)
+SimpleCalendarDeleteOneEvent,1,5,16.295,3.259,action,5,0,0,1,0,0,9,8,Baseline 不建图 (h1)
+SimpleCalendarEventOnDateAtTime,1,2,6.651,3.325,question,2,0,0,1,0,0,6,6,Baseline 不建图 (h1)
+SimpleCalendarEventsInNextWeek,1,9,28.418,3.158,question,9,0,0,1,0,0,16,16,Baseline 不建图 (h1)
+SimpleCalendarEventsInTimeRange,1,2,7.519,3.76,question,2,0,0,1,0,0,7,7,Baseline 不建图 (h1)
+SimpleCalendarEventsOnDate,1,2,7.209,3.604,question,2,0,0,1,0,0,6,6,Baseline 不建图 (h1)
+SimpleCalendarFirstEventAfterStartTime,1,2,7.191,3.596,question,2,0,0,1,0,0,6,6,Baseline 不建图 (h1)
+SimpleCalendarLocationOfEvent,1,3,10.592,3.531,question,3,0,0,1,0,0,7,7,Baseline 不建图 (h1)
+SimpleCalendarNextEvent,0,2,7.289,3.644,question,2,0,0,1,0,0,6,6,Baseline 不建图 (h1)
+SimpleCalendarNextMeetingWithPerson,0,3,8.417,2.806,action,3,0,0,1,0,0,6,6,Baseline 不建图 (h1)
+SimpleDrawProCreateDrawing,1,13,48.937,3.764,action,13,0,0,1,0,0,8,7,Baseline 不建图 (h1)
+SimpleSmsReply,1,5,19.662,3.932,action,5,0,0,1,0,0,7,7,Baseline 不建图 (h1)
+SimpleSmsReplyMostRecent,1,5,17.072,3.414,action,5,0,0,1,0,0,7,7,Baseline 不建图 (h1)
+SimpleSmsResend,0,4,17.652,4.413,action,4,0,0,1,0,0,5,5,Baseline 不建图 (h1)
+SimpleSmsSend,1,6,24.043,4.007,action,6,0,0,1,0,0,9,8,Baseline 不建图 (h1)
+SimpleSmsSendClipboardContent,0,12,39.479,3.29,action,12,0,0,1,0,0,6,5,Baseline 不建图 (h1)
+SimpleSmsSendReceivedAddress,0,18,60.505,3.361,action,18,0,0,1,0,0,7,7,Baseline 不建图 (h1)
+SportsTrackerActivitiesCountForWeek,0,2,5.602,2.801,question,2,0,0,1,0,0,4,4,Baseline 不建图 (h1)
+SportsTrackerActivitiesOnDate,0,3,10.787,3.596,question,3,0,0,1,0,0,6,6,Baseline 不建图 (h1)
+SportsTrackerActivityDuration,0,5,21.287,4.257,action,5,0,0,1,0,0,8,8,Baseline 不建图 (h1)
+SportsTrackerLongestDistanceActivity,0,10,26.611,2.661,action,10,0,0,1,0,0,8,8,Baseline 不建图 (h1)
+SportsTrackerTotalDistanceForCategoryOverInterval,0,3,13.256,4.419,action,3,0,0,1,0,0,6,6,Baseline 不建图 (h1)
+SportsTrackerTotalDurationForCategoryThisWeek,0,10,27.631,2.763,action,10,0,0,1,0,0,6,6,Baseline 不建图 (h1)
+SystemBluetoothTurnOff,1,6,20.878,3.48,action,6,0,0,0,0,0,5,5,Baseline 不建图 (h1)
+SystemBluetoothTurnOffVerify,1,7,24.999,3.571,action,7,0,0,0,0,0,8,7,Baseline 不建图 (h1)
+SystemBluetoothTurnOn,1,7,35.81,5.116,action,7,0,0,0,0,0,9,7,Baseline 不建图 (h1)
+SystemBluetoothTurnOnVerify,0,10,35.195,3.519,action,10,0,0,0,0,0,7,5,Baseline 不建图 (h1)
+SystemBrightnessMax,0,10,35.615,3.562,action,10,0,0,0,0,0,8,6,Baseline 不建图 (h1)
+SystemBrightnessMaxVerify,1,4,16.014,4.004,action,4,0,0,0,0,0,8,6,Baseline 不建图 (h1)
+SystemBrightnessMin,0,6,21.301,3.55,action,6,0,0,0,0,0,7,5,Baseline 不建图 (h1)
+SystemBrightnessMinVerify,1,4,14.726,3.681,action,4,0,0,0,0,0,7,6,Baseline 不建图 (h1)
+SystemCopyToClipboard,0,10,32.758,3.276,action,10,0,0,0,0,0,8,7,Baseline 不建图 (h1)
+SystemWifiTurnOff,1,5,17.019,3.404,action,5,0,0,0,0,0,6,6,Baseline 不建图 (h1)
+SystemWifiTurnOffVerify,1,4,13.893,3.473,action,4,0,0,0,0,0,6,5,Baseline 不建图 (h1)
+SystemWifiTurnOn,1,5,16.936,3.387,action,5,0,0,0,0,0,6,5,Baseline 不建图 (h1)
+SystemWifiTurnOnVerify,1,4,14.733,3.683,action,4,0,0,0,0,0,4,4,Baseline 不建图 (h1)
+TasksCompletedTasksForDate,0,3,10.303,3.434,question,3,0,0,1,0,0,6,6,Baseline 不建图 (h1)
+TasksDueNextWeek,0,3,12.355,4.118,question,3,0,0,1,0,0,5,5,Baseline 不建图 (h1)
+TasksDueOnDate,0,1,3.299,3.299,question,1,0,0,1,0,0,4,4,Baseline 不建图 (h1)
+TasksHighPriorityTasks,1,1,3.677,3.677,question,1,0,0,1,0,0,4,4,Baseline 不建图 (h1)
+TasksHighPriorityTasksDueOnDate,0,3,11.599,3.866,question,3,0,0,1,0,0,6,6,Baseline 不建图 (h1)
+TasksIncompleteTasksOnDate,1,1,2.934,2.934,question,1,0,0,1,0,0,3,3,Baseline 不建图 (h1)
+TurnOffWifiAndTurnOnBluetooth,1,9,34.273,3.808,action,9,0,0,0,0,0,9,8,Baseline 不建图 (h1)
+TurnOnWifiAndOpenApp,1,4,12.749,3.187,action,4,0,0,1,0,0,6,6,Baseline 不建图 (h1)
+VlcCreatePlaylist,0,21,98.335,4.683,action,21,0,0,1,0,0,20,18,Baseline 不建图 (h1)
+VlcCreateTwoPlaylists,0,21,51.237,2.44,action,21,0,0,1,0,0,18,17,Baseline 不建图 (h1)
+AudioRecorderRecordAudio,0,12,48.213,4.018,action,12,0,0,1,0,0,12,11,Baseline 不建图 (h2)
+AudioRecorderRecordAudioWithFileName,1,9,34.647,3.85,action,9,0,0,1,0,0,10,9,Baseline 不建图 (h2)
+BrowserDraw,0,20,45.901,2.295,action,20,0,0,1,0,0,9,8,Baseline 不建图 (h2)
+BrowserMaze,0,20,49.548,2.477,action,20,0,0,1,0,0,9,9,Baseline 不建图 (h2)
+BrowserMultiply,0,21,49.838,2.373,action,21,0,0,1,0,0,9,9,Baseline 不建图 (h2)
+CameraTakePhoto,0,10,83.368,8.337,action,10,0,0,0,0,0,4,4,Baseline 不建图 (h2)
+CameraTakeVideo,0,6,43.571,7.262,action,6,0,0,0,0,0,4,4,Baseline 不建图 (h2)
+ClockStopWatchPausedVerify,0,10,50.222,5.022,action,10,0,0,0,0,0,8,8,Baseline 不建图 (h2)
+ClockStopWatchRunning,1,5,17.397,3.479,action,5,0,0,0,0,0,8,8,Baseline 不建图 (h2)
+ClockTimerEntry,0,10,45.704,4.57,action,10,0,0,0,0,0,4,4,Baseline 不建图 (h2)
+ContactsAddContact,1,9,33.421,3.713,action,9,0,0,1,0,0,13,13,Baseline 不建图 (h2)
+ExpenseAddMultiple,0,21,60.618,2.887,action,21,0,0,1,0,0,6,6,Baseline 不建图 (h2)
+ExpenseAddMultipleFromGallery,0,21,70.859,3.374,action,21,0,0,1,0,0,11,10,Baseline 不建图 (h2)
+ExpenseAddMultipleFromMarkor,0,21,71.701,3.414,action,21,0,0,1,0,0,7,7,Baseline 不建图 (h2)
+ExpenseAddSingle,1,9,38.456,4.273,action,9,0,0,1,0,0,7,7,Baseline 不建图 (h2)
+ExpenseDeleteDuplicates,1,7,22.731,3.247,action,7,0,0,1,0,0,9,9,Baseline 不建图 (h2)
+ExpenseDeleteDuplicates2,0,8,23.106,2.888,action,8,0,0,1,0,0,13,13,Baseline 不建图 (h2)
+ExpenseDeleteMultiple,1,10,35.297,3.53,action,10,0,0,1,0,0,19,19,Baseline 不建图 (h2)
+ExpenseDeleteMultiple2,0,21,63.032,3.002,action,21,0,0,1,0,0,10,10,Baseline 不建图 (h2)
+ExpenseDeleteSingle,1,4,16.618,4.155,action,4,0,0,1,0,0,10,10,Baseline 不建图 (h2)
+FilesDeleteFile,0,4,13.096,3.274,action,4,0,0,1,0,0,6,6,Baseline 不建图 (h2)
+FilesMoveFile,1,13,53.235,4.095,action,13,0,0,1,0,0,16,14,Baseline 不建图 (h2)
+MarkorAddNoteHeader,0,12,43.338,3.611,action,12,0,0,1,0,0,13,13,Baseline 不建图 (h2)
+MarkorChangeNoteContent,0,12,44.003,3.667,action,12,0,0,1,0,0,11,11,Baseline 不建图 (h2)
+MarkorCreateFolder,0,10,33.953,3.395,action,10,0,0,1,0,0,7,6,Baseline 不建图 (h2)
+MarkorCreateNote,0,8,31.594,3.949,action,8,0,0,1,0,0,9,8,Baseline 不建图 (h2)
+MarkorCreateNoteAndSms,0,6,22.23,3.705,action,6,0,0,1,0,0,10,9,Baseline 不建图 (h2)
+MarkorCreateNoteFromClipboard,1,8,32.319,4.04,action,8,0,0,1,0,0,11,10,Baseline 不建图 (h2)
+MarkorDeleteAllNotes,1,6,21.764,3.627,action,6,0,0,1,0,0,9,8,Baseline 不建图 (h2)
+MarkorDeleteNewestNote,1,4,14.123,3.531,action,4,0,0,1,0,0,6,6,Baseline 不建图 (h2)
+MarkorDeleteNote,1,4,15.042,3.76,action,4,0,0,1,0,0,8,8,Baseline 不建图 (h2)
+MarkorEditNote,0,12,49.494,4.124,action,12,0,0,1,0,0,12,12,Baseline 不建图 (h2)
+MarkorMergeNotes,0,21,68.582,3.266,action,21,0,0,1,0,0,14,14,Baseline 不建图 (h2)
+MarkorMoveNote,0,8,29.137,3.642,action,8,0,0,1,0,0,14,13,Baseline 不建图 (h2)
+MarkorTranscribeReceipt,0,18,64.276,3.571,action,18,0,0,1,0,0,25,22,Baseline 不建图 (h2)
+MarkorTranscribeVideo,0,20,90.023,4.501,action,20,0,0,1,0,0,20,18,Baseline 不建图 (h2)
+NotesIsTodo,0,1,2.832,2.832,action,1,0,0,1,0,0,2,2,Baseline 不建图 (h2)
+NotesMeetingAttendeeCount,1,4,14.039,3.51,question,4,0,0,1,0,0,4,4,Baseline 不建图 (h2)
+NotesRecipeIngredientCount,1,4,13.948,3.487,action,4,0,0,1,0,0,4,4,Baseline 不建图 (h2)
+NotesTodoItemCount,1,3,9.997,3.332,question,3,0,0,1,0,0,5,5,Baseline 不建图 (h2)
+OpenAppTaskEval,1,4,16.106,4.027,action,4,0,0,1,0,0,5,5,Baseline 不建图 (h2)
+OsmAndFavorite,1,8,28.664,3.583,action,8,0,0,1,0,0,10,10,Baseline 不建图 (h2)
+OsmAndMarker,0,9,33.047,3.672,action,9,0,0,1,0,0,12,12,Baseline 不建图 (h2)
+OsmAndTrack,0,21,51.752,2.464,action,21,0,0,1,0,0,10,10,Baseline 不建图 (h2)
+RecipeAddMultipleRecipes,0,21,72.172,3.437,action,21,0,0,1,0,0,14,12,Baseline 不建图 (h2)
+RecipeAddMultipleRecipesFromImage,0,21,67.862,3.232,action,21,0,0,1,0,0,26,21,Baseline 不建图 (h2)
+RecipeAddMultipleRecipesFromMarkor,0,17,65.929,3.878,action,17,0,0,1,0,0,22,21,Baseline 不建图 (h2)
+RecipeAddMultipleRecipesFromMarkor2,0,19,66.391,3.494,action,19,0,0,1,0,0,17,16,Baseline 不建图 (h2)
+RecipeAddSingleRecipe,1,14,56.117,4.008,action,14,0,0,1,0,0,15,14,Baseline 不建图 (h2)
+RecipeDeleteDuplicateRecipes,1,8,26.705,3.338,action,8,0,0,1,0,0,7,6,Baseline 不建图 (h2)
+RecipeDeleteDuplicateRecipes2,0,21,68.248,3.25,action,21,0,0,1,0,0,13,10,Baseline 不建图 (h2)
+RecipeDeleteDuplicateRecipes3,0,21,68.683,3.271,action,21,0,0,1,0,0,11,8,Baseline 不建图 (h2)
+RecipeDeleteMultipleRecipes,1,14,45.537,3.253,action,14,0,0,1,0,0,15,13,Baseline 不建图 (h2)
+RecipeDeleteMultipleRecipesWithConstraint,1,3,11.026,3.675,action,3,0,0,1,0,0,8,6,Baseline 不建图 (h2)
+RecipeDeleteMultipleRecipesWithNoise,0,21,66.757,3.179,action,21,0,0,1,0,0,21,17,Baseline 不建图 (h2)
+RecipeDeleteSingleRecipe,1,5,17.783,3.557,action,5,0,0,1,0,0,10,9,Baseline 不建图 (h2)
+RecipeDeleteSingleWithRecipeWithNoise,1,6,23.22,3.87,action,6,0,0,1,0,0,11,8,Baseline 不建图 (h2)
+RetroCreatePlaylist,1,13,44.546,3.427,action,13,0,0,1,0,0,14,14,Baseline 不建图 (h2)
+RetroPlayingQueue,0,21,61.651,2.936,action,21,0,0,1,0,0,23,23,Baseline 不建图 (h2)
+RetroPlaylistDuration,0,21,71.107,3.386,action,21,0,0,1,0,0,19,19,Baseline 不建图 (h2)
+RetroSavePlaylist,0,21,68.557,3.265,action,21,0,0,1,0,0,26,23,Baseline 不建图 (h2)
+SaveCopyOfReceiptTaskEval,1,7,27.729,3.961,action,7,0,0,1,0,0,9,8,Baseline 不建图 (h2)
+SimpleCalendarAddOneEvent,0,21,59.418,2.829,action,21,0,0,1,0,0,10,10,Baseline 不建图 (h2)
+SimpleCalendarAddOneEventInTwoWeeks,0,21,61.486,2.928,action,21,0,0,1,0,0,11,11,Baseline 不建图 (h2)
+SimpleCalendarAddOneEventRelativeDay,0,21,63.615,3.029,action,21,0,0,1,0,0,12,11,Baseline 不建图 (h2)
+SimpleCalendarAddOneEventTomorrow,0,21,61.537,2.93,action,21,0,0,1,0,0,11,10,Baseline 不建图 (h2)
+SimpleCalendarAddRepeatingEvent,0,21,59.105,2.815,action,21,0,0,1,0,0,12,11,Baseline 不建图 (h2)
+SimpleCalendarAnyEventsOnDate,1,2,5.528,2.764,question,2,0,0,1,0,0,6,6,Baseline 不建图 (h2)
+SimpleCalendarDeleteEvents,1,7,24.738,3.534,action,7,0,0,1,0,0,8,8,Baseline 不建图 (h2)
+SimpleCalendarDeleteEventsOnRelativeDay,1,6,23.153,3.859,action,6,0,0,1,0,0,9,9,Baseline 不建图 (h2)
+SimpleCalendarDeleteOneEvent,1,5,17.656,3.531,action,5,0,0,1,0,0,11,10,Baseline 不建图 (h2)
+SimpleCalendarEventOnDateAtTime,1,2,7.378,3.689,question,2,0,0,1,0,0,6,6,Baseline 不建图 (h2)
+SimpleCalendarEventsInNextWeek,1,9,29.489,3.277,question,9,0,0,1,0,0,16,16,Baseline 不建图 (h2)
+SimpleCalendarEventsInTimeRange,1,2,7.805,3.903,question,2,0,0,1,0,0,7,7,Baseline 不建图 (h2)
+SimpleCalendarEventsOnDate,0,1,2.901,2.901,question,1,0,0,1,0,0,4,4,Baseline 不建图 (h2)
+SimpleCalendarFirstEventAfterStartTime,1,2,6.958,3.479,question,2,0,0,1,0,0,6,6,Baseline 不建图 (h2)
+SimpleCalendarLocationOfEvent,1,3,10.68,3.56,question,3,0,0,1,0,0,7,7,Baseline 不建图 (h2)
+SimpleCalendarNextEvent,0,2,7.541,3.771,question,2,0,0,1,0,0,6,6,Baseline 不建图 (h2)
+SimpleCalendarNextMeetingWithPerson,0,3,11.131,3.71,action,3,0,0,1,0,0,6,6,Baseline 不建图 (h2)
+SimpleDrawProCreateDrawing,1,9,38.313,4.257,action,9,0,0,1,0,0,8,7,Baseline 不建图 (h2)
+SimpleSmsReply,1,5,18.611,3.722,action,5,0,0,1,0,0,8,8,Baseline 不建图 (h2)
+SimpleSmsReplyMostRecent,1,5,18.921,3.784,action,5,0,0,1,0,0,8,8,Baseline 不建图 (h2)
+SimpleSmsResend,1,10,39.511,3.951,action,10,0,0,1,0,0,10,9,Baseline 不建图 (h2)
+SimpleSmsSend,1,6,23.127,3.855,action,6,0,0,1,0,0,11,9,Baseline 不建图 (h2)
+SimpleSmsSendClipboardContent,0,12,34.416,2.868,action,12,0,0,1,0,0,7,6,Baseline 不建图 (h2)
+SimpleSmsSendReceivedAddress,0,18,54.069,3.004,action,18,0,0,1,0,0,10,8,Baseline 不建图 (h2)
+SportsTrackerActivitiesCountForWeek,0,2,6.088,3.044,question,2,0,0,1,0,0,4,4,Baseline 不建图 (h2)
+SportsTrackerActivitiesOnDate,0,3,10.214,3.405,question,3,0,0,1,0,0,5,5,Baseline 不建图 (h2)
+SportsTrackerActivityDuration,0,3,11.363,3.788,action,3,0,0,1,0,0,5,5,Baseline 不建图 (h2)
+SportsTrackerLongestDistanceActivity,0,1,3.725,3.725,action,1,0,0,1,0,0,4,4,Baseline 不建图 (h2)
+SportsTrackerTotalDistanceForCategoryOverInterval,0,3,12.837,4.279,action,3,0,0,1,0,0,6,6,Baseline 不建图 (h2)
+SportsTrackerTotalDurationForCategoryThisWeek,1,3,12.076,4.025,action,3,0,0,1,0,0,8,6,Baseline 不建图 (h2)
+SystemBluetoothTurnOff,1,6,22.48,3.747,action,6,0,0,0,0,0,6,5,Baseline 不建图 (h2)
+SystemBluetoothTurnOffVerify,1,7,26.822,3.832,action,7,0,0,0,0,0,10,9,Baseline 不建图 (h2)
+SystemBluetoothTurnOn,1,7,32.564,4.652,action,7,0,0,0,0,0,9,7,Baseline 不建图 (h2)
+SystemBluetoothTurnOnVerify,0,10,47.273,4.727,action,10,0,0,0,0,0,10,8,Baseline 不建图 (h2)
+SystemBrightnessMax,0,10,40.876,4.088,action,10,0,0,0,0,0,8,6,Baseline 不建图 (h2)
+SystemBrightnessMaxVerify,1,4,14.308,3.577,action,4,0,0,0,0,0,8,6,Baseline 不建图 (h2)
+SystemBrightnessMin,1,6,21.421,3.57,action,6,0,0,0,0,0,8,6,Baseline 不建图 (h2)
+SystemBrightnessMinVerify,1,4,13.918,3.48,action,4,0,0,0,0,0,7,6,Baseline 不建图 (h2)
+SystemCopyToClipboard,0,10,30.169,3.017,action,10,0,0,0,0,0,8,7,Baseline 不建图 (h2)
+SystemWifiTurnOff,1,5,17.861,3.572,action,5,0,0,0,0,0,8,7,Baseline 不建图 (h2)
+SystemWifiTurnOffVerify,1,4,12.525,3.131,action,4,0,0,0,0,0,6,6,Baseline 不建图 (h2)
+SystemWifiTurnOn,1,5,16.591,3.318,action,5,0,0,0,0,0,6,6,Baseline 不建图 (h2)
+SystemWifiTurnOnVerify,1,4,13.815,3.454,action,4,0,0,0,0,0,4,4,Baseline 不建图 (h2)
+TasksCompletedTasksForDate,0,3,10.337,3.446,question,3,0,0,1,0,0,6,6,Baseline 不建图 (h2)
+TasksDueNextWeek,0,3,11.226,3.742,question,3,0,0,1,0,0,5,5,Baseline 不建图 (h2)
+TasksDueOnDate,0,1,3.423,3.423,question,1,0,0,1,0,0,4,4,Baseline 不建图 (h2)
+TasksHighPriorityTasks,1,1,3.515,3.515,question,1,0,0,1,0,0,4,4,Baseline 不建图 (h2)
+TasksHighPriorityTasksDueOnDate,0,3,11.284,3.761,question,3,0,0,1,0,0,6,6,Baseline 不建图 (h2)
+TasksIncompleteTasksOnDate,1,1,3.296,3.296,question,1,0,0,1,0,0,3,3,Baseline 不建图 (h2)
+TurnOffWifiAndTurnOnBluetooth,1,9,39.412,4.379,action,9,0,0,0,0,0,10,10,Baseline 不建图 (h2)
+TurnOnWifiAndOpenApp,1,4,13.47,3.368,action,4,0,0,1,0,0,5,5,Baseline 不建图 (h2)
+VlcCreatePlaylist,0,21,98.545,4.693,action,21,0,0,1,0,0,17,16,Baseline 不建图 (h2)
+VlcCreateTwoPlaylists,0,21,59.632,2.84,action,21,0,0,1,0,0,17,17,Baseline 不建图 (h2)
+AudioRecorderRecordAudio,1,7,25.399,3.628,action,7,0,0,1,0,0,11,10,Baseline 不建图 (h3)
+AudioRecorderRecordAudioWithFileName,1,9,31.797,3.533,action,9,0,0,1,0,0,10,9,Baseline 不建图 (h3)
+BrowserDraw,0,20,40.835,2.042,action,20,0,0,1,0,0,9,9,Baseline 不建图 (h3)
+BrowserMaze,0,20,42.716,2.136,action,20,0,0,1,0,0,8,8,Baseline 不建图 (h3)
+BrowserMultiply,0,21,49.963,2.379,action,21,0,0,1,0,0,13,13,Baseline 不建图 (h3)
+CameraTakePhoto,0,10,58.446,5.845,action,10,0,0,0,0,0,5,5,Baseline 不建图 (h3)
+CameraTakeVideo,0,10,57.275,5.727,action,10,0,0,0,0,0,4,4,Baseline 不建图 (h3)
+ClockStopWatchPausedVerify,1,2,12.403,6.202,action,2,0,0,0,0,0,4,4,Baseline 不建图 (h3)
+ClockStopWatchRunning,1,4,15.013,3.753,action,4,0,0,0,0,0,6,6,Baseline 不建图 (h3)
+ClockTimerEntry,0,10,39.641,3.964,action,10,0,0,0,0,0,5,5,Baseline 不建图 (h3)
+ContactsAddContact,1,9,28.519,3.169,action,9,0,0,1,0,0,12,12,Baseline 不建图 (h3)
+ExpenseAddMultiple,0,21,68.16,3.246,action,21,0,0,1,0,0,8,8,Baseline 不建图 (h3)
+ExpenseAddMultipleFromGallery,0,21,60.417,2.877,action,21,0,0,1,0,0,20,18,Baseline 不建图 (h3)
+ExpenseAddMultipleFromMarkor,0,21,57.542,2.74,action,21,0,0,1,0,0,8,8,Baseline 不建图 (h3)
+ExpenseAddSingle,1,10,35.86,3.586,action,10,0,0,1,0,0,8,8,Baseline 不建图 (h3)
+ExpenseDeleteDuplicates,1,6,20.669,3.445,action,6,0,0,1,0,0,10,10,Baseline 不建图 (h3)
+ExpenseDeleteDuplicates2,0,11,32.868,2.988,action,11,0,0,1,0,0,11,11,Baseline 不建图 (h3)
+ExpenseDeleteMultiple,1,11,38.002,3.455,action,11,0,0,1,0,0,22,22,Baseline 不建图 (h3)
+ExpenseDeleteMultiple2,1,13,44.009,3.385,action,13,0,0,1,0,0,13,13,Baseline 不建图 (h3)
+ExpenseDeleteSingle,1,4,11.591,2.898,action,4,0,0,1,0,0,9,9,Baseline 不建图 (h3)
+FilesDeleteFile,0,4,12.935,3.234,action,4,0,0,1,0,0,7,7,Baseline 不建图 (h3)
+FilesMoveFile,1,15,42.884,2.859,action,15,0,0,1,0,0,22,20,Baseline 不建图 (h3)
+MarkorAddNoteHeader,0,12,44.128,3.677,action,12,0,0,1,0,0,12,12,Baseline 不建图 (h3)
+MarkorChangeNoteContent,0,12,44.689,3.724,action,12,0,0,1,0,0,10,10,Baseline 不建图 (h3)
+MarkorCreateFolder,1,4,17.396,4.349,action,4,0,0,1,0,0,8,8,Baseline 不建图 (h3)
+MarkorCreateNote,1,12,43.179,3.598,action,12,0,0,1,0,0,13,13,Baseline 不建图 (h3)
+MarkorCreateNoteAndSms,0,6,22.877,3.813,action,6,0,0,1,0,0,10,9,Baseline 不建图 (h3)
+MarkorCreateNoteFromClipboard,1,11,44.644,4.059,action,11,0,0,1,0,0,16,16,Baseline 不建图 (h3)
+MarkorDeleteAllNotes,1,6,23.024,3.837,action,6,0,0,1,0,0,11,11,Baseline 不建图 (h3)
+MarkorDeleteNewestNote,1,4,14.351,3.588,action,4,0,0,1,0,0,10,10,Baseline 不建图 (h3)
+MarkorDeleteNote,1,4,14.744,3.686,action,4,0,0,1,0,0,12,12,Baseline 不建图 (h3)
+MarkorEditNote,0,7,27.712,3.959,action,7,0,0,1,0,0,11,11,Baseline 不建图 (h3)
+MarkorMergeNotes,0,21,64.545,3.074,action,21,0,0,1,0,0,17,17,Baseline 不建图 (h3)
+MarkorMoveNote,0,9,31.028,3.448,action,9,0,0,1,0,0,15,14,Baseline 不建图 (h3)
+MarkorTranscribeReceipt,0,18,56.398,3.133,action,18,0,0,1,0,0,27,25,Baseline 不建图 (h3)
+MarkorTranscribeVideo,0,13,56.307,4.331,action,13,0,0,1,0,0,21,19,Baseline 不建图 (h3)
+NotesIsTodo,1,3,8.974,2.991,action,3,0,0,1,0,0,5,5,Baseline 不建图 (h3)
+NotesMeetingAttendeeCount,1,4,12.912,3.228,question,4,0,0,1,0,0,5,5,Baseline 不建图 (h3)
+NotesRecipeIngredientCount,0,4,12.974,3.244,action,4,0,0,1,0,0,5,5,Baseline 不建图 (h3)
+NotesTodoItemCount,1,3,9.064,3.021,question,3,0,0,1,0,0,6,6,Baseline 不建图 (h3)
+OpenAppTaskEval,1,2,9.176,4.588,action,2,0,0,1,0,0,4,4,Baseline 不建图 (h3)
+OsmAndFavorite,1,8,27.074,3.384,action,8,0,0,1,0,0,12,12,Baseline 不建图 (h3)
+OsmAndMarker,0,20,42.97,2.148,action,20,0,0,1,0,0,6,6,Baseline 不建图 (h3)
+OsmAndTrack,0,21,63.114,3.005,action,21,0,0,1,0,0,10,10,Baseline 不建图 (h3)
+RecipeAddMultipleRecipes,0,21,64.634,3.078,action,21,0,0,1,0,0,14,13,Baseline 不建图 (h3)
+RecipeAddMultipleRecipesFromImage,0,21,58.081,2.766,action,21,0,0,1,0,0,15,14,Baseline 不建图 (h3)
+RecipeAddMultipleRecipesFromMarkor,0,21,87.611,4.172,action,21,0,0,1,0,0,25,24,Baseline 不建图 (h3)
+RecipeAddMultipleRecipesFromMarkor2,0,21,70.512,3.358,action,21,0,0,1,0,0,18,17,Baseline 不建图 (h3)
+RecipeAddSingleRecipe,1,14,51.75,3.696,action,14,0,0,1,0,0,17,15,Baseline 不建图 (h3)
+RecipeDeleteDuplicateRecipes,1,6,22.703,3.784,action,6,0,0,1,0,0,8,7,Baseline 不建图 (h3)
+RecipeDeleteDuplicateRecipes2,0,21,66.991,3.19,action,21,0,0,1,0,0,14,11,Baseline 不建图 (h3)
+RecipeDeleteDuplicateRecipes3,0,21,66.184,3.152,action,21,0,0,1,0,0,14,12,Baseline 不建图 (h3)
+RecipeDeleteMultipleRecipes,1,14,43.376,3.098,action,14,0,0,1,0,0,14,13,Baseline 不建图 (h3)
+RecipeDeleteMultipleRecipesWithConstraint,1,3,10.161,3.387,action,3,0,0,1,0,0,9,7,Baseline 不建图 (h3)
+RecipeDeleteMultipleRecipesWithNoise,0,21,64.052,3.05,action,21,0,0,1,0,0,22,18,Baseline 不建图 (h3)
+RecipeDeleteSingleRecipe,1,5,16.933,3.387,action,5,0,0,1,0,0,10,9,Baseline 不建图 (h3)
+RecipeDeleteSingleWithRecipeWithNoise,1,6,22.301,3.717,action,6,0,0,1,0,0,15,12,Baseline 不建图 (h3)
+RetroCreatePlaylist,1,21,60.155,2.865,action,21,0,0,1,0,0,16,16,Baseline 不建图 (h3)
+RetroPlayingQueue,0,21,58.995,2.809,action,21,0,0,1,0,0,11,11,Baseline 不建图 (h3)
+RetroPlaylistDuration,0,21,79.127,3.768,action,21,0,0,1,0,0,21,21,Baseline 不建图 (h3)
+SimpleCalendarAddOneEventInTwoWeeks,0,21,54.463,2.593,action,21,0,0,1,0,0,11,11,Baseline 不建图 (h3)
+SimpleCalendarAddOneEventRelativeDay,0,21,59.284,2.823,action,21,0,0,1,0,0,12,12,Baseline 不建图 (h3)
+SimpleCalendarAddOneEventTomorrow,0,21,58.208,2.772,action,21,0,0,1,0,0,12,12,Baseline 不建图 (h3)
+SimpleCalendarAddRepeatingEvent,0,21,53.673,2.556,action,21,0,0,1,0,0,16,15,Baseline 不建图 (h3)
+SimpleCalendarAnyEventsOnDate,1,2,6.242,3.121,question,2,0,0,1,0,0,6,6,Baseline 不建图 (h3)
+SimpleCalendarDeleteEvents,1,7,24.22,3.46,action,7,0,0,1,0,0,8,8,Baseline 不建图 (h3)
+SimpleCalendarDeleteEventsOnRelativeDay,1,6,20.329,3.388,action,6,0,0,1,0,0,9,9,Baseline 不建图 (h3)
+SimpleCalendarDeleteOneEvent,1,5,14.86,2.972,action,5,0,0,1,0,0,10,10,Baseline 不建图 (h3)
+SimpleCalendarEventOnDateAtTime,1,2,6.371,3.186,question,2,0,0,1,0,0,6,6,Baseline 不建图 (h3)
+SimpleCalendarEventsInNextWeek,0,10,34.363,3.436,question,10,0,0,1,0,0,16,16,Baseline 不建图 (h3)
+SimpleCalendarEventsInTimeRange,1,2,7.24,3.62,question,2,0,0,1,0,0,7,7,Baseline 不建图 (h3)
+SimpleCalendarEventsOnDate,0,1,2.791,2.791,question,1,0,0,1,0,0,5,5,Baseline 不建图 (h3)
+SimpleCalendarFirstEventAfterStartTime,1,2,6.699,3.35,question,2,0,0,1,0,0,6,6,Baseline 不建图 (h3)
+SimpleCalendarLocationOfEvent,1,3,10.021,3.34,question,3,0,0,1,0,0,7,7,Baseline 不建图 (h3)
+SimpleCalendarNextEvent,0,2,7.105,3.552,question,2,0,0,1,0,0,7,7,Baseline 不建图 (h3)
+SimpleCalendarNextMeetingWithPerson,0,3,7.402,2.467,action,3,0,0,1,0,0,7,7,Baseline 不建图 (h3)
+SimpleDrawProCreateDrawing,1,9,36.604,4.067,action,9,0,0,1,0,0,9,8,Baseline 不建图 (h3)
+SimpleSmsReply,1,5,16.99,3.398,action,5,0,0,1,0,0,9,9,Baseline 不建图 (h3)
+SimpleSmsReplyMostRecent,1,5,15.29,3.058,action,5,0,0,1,0,0,7,7,Baseline 不建图 (h3)
+SimpleSmsResend,0,4,17.037,4.259,action,4,0,0,1,0,0,5,5,Baseline 不建图 (h3)
+SimpleSmsSend,1,6,21.824,3.637,action,6,0,0,1,0,0,13,11,Baseline 不建图 (h3)
+SimpleSmsSendClipboardContent,0,12,33.455,2.788,action,12,0,0,1,0,0,8,6,Baseline 不建图 (h3)
+SimpleSmsSendReceivedAddress,0,8,28.826,3.603,action,8,0,0,1,0,0,9,9,Baseline 不建图 (h3)
+SportsTrackerActivitiesCountForWeek,0,2,5.425,2.713,question,2,0,0,1,0,0,5,4,Baseline 不建图 (h3)
+SportsTrackerActivitiesOnDate,0,3,9.085,3.028,question,3,0,0,1,0,0,6,5,Baseline 不建图 (h3)
+SportsTrackerActivityDuration,0,3,11.0,3.667,action,3,0,0,1,0,0,6,5,Baseline 不建图 (h3)
+SportsTrackerLongestDistanceActivity,0,1,3.488,3.488,action,1,0,0,1,0,0,5,4,Baseline 不建图 (h3)
+SportsTrackerTotalDistanceForCategoryOverInterval,0,3,12.65,4.217,action,3,0,0,1,0,0,7,6,Baseline 不建图 (h3)
+SportsTrackerTotalDurationForCategoryThisWeek,0,10,26.452,2.645,action,10,0,0,1,0,0,8,7,Baseline 不建图 (h3)
+SystemBluetoothTurnOff,1,6,19.487,3.248,action,6,0,0,0,0,0,7,7,Baseline 不建图 (h3)
+SystemBluetoothTurnOffVerify,1,7,23.3,3.329,action,7,0,0,0,0,0,12,11,Baseline 不建图 (h3)
+SystemBluetoothTurnOn,1,7,34.477,4.925,action,7,0,0,0,0,0,10,9,Baseline 不建图 (h3)
+SystemBluetoothTurnOnVerify,0,10,41.249,4.125,action,10,0,0,0,0,0,11,9,Baseline 不建图 (h3)
+SystemBrightnessMax,0,10,35.503,3.55,action,10,0,0,0,0,0,7,5,Baseline 不建图 (h3)
+SystemBrightnessMaxVerify,1,4,14.612,3.653,action,4,0,0,0,0,0,9,8,Baseline 不建图 (h3)
+SystemBrightnessMin,1,6,20.507,3.418,action,6,0,0,0,0,0,8,7,Baseline 不建图 (h3)
+SystemBrightnessMinVerify,1,4,13.263,3.316,action,4,0,0,0,0,0,8,7,Baseline 不建图 (h3)
+SystemCopyToClipboard,0,10,33.379,3.338,action,10,0,0,0,0,0,8,7,Baseline 不建图 (h3)
+SystemWifiTurnOff,1,5,16.488,3.298,action,5,0,0,0,0,0,7,7,Baseline 不建图 (h3)
+SystemWifiTurnOffVerify,1,4,13.092,3.273,action,4,0,0,0,0,0,7,7,Baseline 不建图 (h3)
+SystemWifiTurnOn,1,5,16.515,3.303,action,5,0,0,0,0,0,7,7,Baseline 不建图 (h3)
+SystemWifiTurnOnVerify,1,4,13.877,3.469,action,4,0,0,0,0,0,6,6,Baseline 不建图 (h3)
+TasksCompletedTasksForDate,0,3,10.22,3.407,question,3,0,0,1,0,0,7,7,Baseline 不建图 (h3)
+TasksDueNextWeek,0,3,11.768,3.923,question,3,0,0,1,0,0,6,6,Baseline 不建图 (h3)
+TasksDueOnDate,0,1,3.038,3.038,question,1,0,0,1,0,0,5,5,Baseline 不建图 (h3)
+TasksHighPriorityTasks,1,1,3.353,3.353,question,1,0,0,1,0,0,5,5,Baseline 不建图 (h3)
+TasksHighPriorityTasksDueOnDate,0,3,11.263,3.754,question,3,0,0,1,0,0,7,7,Baseline 不建图 (h3)
+TasksIncompleteTasksOnDate,1,1,2.829,2.829,question,1,0,0,1,0,0,4,4,Baseline 不建图 (h3)
+TurnOffWifiAndTurnOnBluetooth,1,9,33.716,3.746,action,9,0,0,0,0,0,11,10,Baseline 不建图 (h3)
+TurnOnWifiAndOpenApp,1,4,12.146,3.036,action,4,0,0,1,0,0,7,7,Baseline 不建图 (h3)
+VlcCreatePlaylist,0,21,60.11,2.862,action,21,0,0,1,0,0,26,21,Baseline 不建图 (h3)
+VlcCreateTwoPlaylists,0,21,48.502,2.31,action,21,0,0,1,0,0,16,16,Baseline 不建图 (h3)
+AudioRecorderRecordAudio,1,7,28.905,4.129,action,7,0,0,1,0,0,10,9,MobileExplorer 完整 (h1)
+AudioRecorderRecordAudioWithFileName,1,7,26.233,3.748,action,7,2,2,1,0,0,8,8,MobileExplorer 完整 (h1)
+BrowserDraw,0,20,46.66,2.333,action,20,0,0,1,0,0,9,7,MobileExplorer 完整 (h1)
+BrowserMultiply,0,21,53.717,2.558,action,21,0,0,1,0,0,10,10,MobileExplorer 完整 (h1)
+CameraTakePhoto,0,4,27.947,6.987,action,4,0,0,0,0,0,4,4,MobileExplorer 完整 (h1)
+CameraTakeVideo,0,10,74.181,7.418,action,10,0,0,0,0,0,5,5,MobileExplorer 完整 (h1)
+ClockStopWatchPausedVerify,0,10,51.109,5.111,action,9,0,0,1,0,0,6,6,MobileExplorer 完整 (h1)
+ClockStopWatchRunning,1,4,17.917,4.479,action,4,1,1,0,0,0,6,6,MobileExplorer 完整 (h1)
+ClockTimerEntry,0,10,48.083,4.808,action,10,1,1,0,0,0,6,6,MobileExplorer 完整 (h1)
+ContactsAddContact,1,9,36.631,4.07,action,9,0,0,1,0,0,12,11,MobileExplorer 完整 (h1)
+ExpenseAddMultiple,0,21,54.262,2.584,action,21,0,0,1,0,0,5,5,MobileExplorer 完整 (h1)
+ExpenseAddMultipleFromGallery,0,16,60.745,3.797,action,16,0,0,1,0,0,9,8,MobileExplorer 完整 (h1)
+ExpenseAddMultipleFromMarkor,0,7,23.052,3.293,action,7,2,1,1,0,0,7,7,MobileExplorer 完整 (h1)
+ExpenseAddSingle,0,7,24.808,3.544,action,7,2,1,1,0,0,7,7,MobileExplorer 完整 (h1)
+ExpenseDeleteDuplicates,1,7,21.035,3.005,action,7,0,0,1,0,0,8,8,MobileExplorer 完整 (h1)
+ExpenseDeleteDuplicates2,1,9,30.315,3.368,action,9,0,0,1,0,0,9,9,MobileExplorer 完整 (h1)
+ExpenseDeleteMultiple,1,10,37.105,3.71,action,10,1,1,1,0,0,20,20,MobileExplorer 完整 (h1)
+ExpenseDeleteMultiple2,1,13,42.649,3.281,action,13,0,0,1,0,0,10,10,MobileExplorer 完整 (h1)
+ExpenseDeleteSingle,1,4,14.427,3.607,action,4,0,0,1,0,0,8,8,MobileExplorer 完整 (h1)
+FilesDeleteFile,0,4,13.108,3.277,action,4,0,0,1,0,0,6,6,MobileExplorer 完整 (h1)
+FilesMoveFile,1,14,48.884,3.492,action,14,1,1,1,0,0,17,16,MobileExplorer 完整 (h1)
+MarkorAddNoteHeader,0,12,41.95,3.496,action,12,0,0,1,0,0,14,14,MobileExplorer 完整 (h1)
+MarkorChangeNoteContent,0,12,42.832,3.569,action,12,1,1,1,0,0,11,11,MobileExplorer 完整 (h1)
+MarkorCreateFolder,0,10,33.991,3.399,action,10,0,0,1,0,0,6,6,MobileExplorer 完整 (h1)
+MarkorCreateNote,1,8,34.777,4.347,action,8,0,0,1,0,0,11,10,MobileExplorer 完整 (h1)
+MarkorCreateNoteAndSms,0,6,21.871,3.645,action,6,0,0,1,0,0,9,8,MobileExplorer 完整 (h1)
+MarkorCreateNoteFromClipboard,1,11,45.902,4.173,action,11,0,0,1,0,0,12,12,MobileExplorer 完整 (h1)
+MarkorDeleteAllNotes,1,6,22.641,3.774,action,6,0,0,1,0,0,8,7,MobileExplorer 完整 (h1)
+MarkorDeleteNewestNote,1,4,14.477,3.619,action,4,0,0,1,0,0,8,7,MobileExplorer 完整 (h1)
+MarkorDeleteNote,1,3,11.779,3.926,action,3,1,1,1,0,0,9,9,MobileExplorer 完整 (h1)
+MarkorEditNote,0,12,49.976,4.165,action,12,0,0,1,0,0,12,12,MobileExplorer 完整 (h1)
+MarkorMergeNotes,0,22,71.049,3.23,action,21,1,1,2,0,0,18,17,MobileExplorer 完整 (h1)
+MarkorMoveNote,0,8,28.934,3.617,action,8,0,0,1,0,0,14,13,MobileExplorer 完整 (h1)
+MarkorTranscribeReceipt,0,18,63.351,3.52,action,18,2,2,1,0,0,27,24,MobileExplorer 完整 (h1)
+MarkorTranscribeVideo,0,20,88.139,4.407,action,20,0,0,1,0,0,21,19,MobileExplorer 完整 (h1)
+NotesIsTodo,0,1,3.845,3.845,action,1,0,0,1,0,0,2,2,MobileExplorer 完整 (h1)
+NotesMeetingAttendeeCount,1,4,15.521,3.88,question,4,0,0,1,0,0,4,4,MobileExplorer 完整 (h1)
+NotesRecipeIngredientCount,1,4,14.985,3.746,action,4,0,0,1,0,0,4,4,MobileExplorer 完整 (h1)
+NotesTodoItemCount,1,3,10.137,3.379,question,3,0,0,1,0,0,5,5,MobileExplorer 完整 (h1)
+OpenAppTaskEval,1,4,17.023,4.256,action,4,0,0,1,0,0,5,5,MobileExplorer 完整 (h1)
+OsmAndFavorite,1,7,25.906,3.701,action,7,0,0,1,0,0,10,10,MobileExplorer 完整 (h1)
+OsmAndMarker,0,20,49.631,2.482,action,20,0,0,1,0,0,6,6,MobileExplorer 完整 (h1)
+OsmAndTrack,0,21,67.094,3.195,action,21,2,2,1,0,0,13,13,MobileExplorer 完整 (h1)
+RecipeAddMultipleRecipes,0,21,72.008,3.429,action,21,0,0,1,0,0,14,12,MobileExplorer 完整 (h1)
+RecipeAddMultipleRecipesFromImage,0,21,60.02,2.858,action,21,0,0,1,0,0,8,8,MobileExplorer 完整 (h1)
+RecipeAddMultipleRecipesFromMarkor,0,17,57.16,3.362,action,17,0,0,1,0,0,14,14,MobileExplorer 完整 (h1)
+RecipeAddMultipleRecipesFromMarkor2,0,21,57.653,2.745,action,21,0,0,1,0,0,14,14,MobileExplorer 完整 (h1)
+RecipeAddSingleRecipe,1,16,64.263,4.016,action,16,3,3,1,0,0,15,14,MobileExplorer 完整 (h1)
+RecipeDeleteDuplicateRecipes,1,6,20.552,3.425,action,6,0,0,1,0,0,7,6,MobileExplorer 完整 (h1)
+RecipeDeleteDuplicateRecipes2,0,21,68.301,3.252,action,19,1,1,3,0,0,15,12,MobileExplorer 完整 (h1)
+RecipeDeleteDuplicateRecipes3,0,21,70.508,3.358,action,21,2,2,1,0,0,13,10,MobileExplorer 完整 (h1)
+RecipeDeleteMultipleRecipes,1,13,43.029,3.31,action,13,1,1,1,0,0,16,14,MobileExplorer 完整 (h1)
+RecipeDeleteMultipleRecipesWithConstraint,1,3,9.741,3.247,action,3,0,0,1,0,0,7,5,MobileExplorer 完整 (h1)
+RecipeDeleteMultipleRecipesWithNoise,1,19,64.685,3.404,action,19,2,2,1,0,0,21,18,MobileExplorer 完整 (h1)
+RecipeDeleteSingleRecipe,1,2,8.184,4.092,action,2,3,3,1,0,0,6,6,MobileExplorer 完整 (h1)
+RecipeDeleteSingleWithRecipeWithNoise,1,5,19.938,3.988,action,5,1,1,1,0,0,9,7,MobileExplorer 完整 (h1)
+RetroCreatePlaylist,0,19,58.87,3.098,action,17,0,0,3,0,0,15,15,MobileExplorer 完整 (h1)
+RetroPlayingQueue,0,20,63.504,3.175,action,20,1,0,1,0,0,12,12,MobileExplorer 完整 (h1)
+RetroPlaylistDuration,0,21,70.254,3.345,action,21,3,3,1,0,0,17,17,MobileExplorer 完整 (h1)
+RetroSavePlaylist,1,19,72.401,3.811,action,19,0,0,1,0,0,25,23,MobileExplorer 完整 (h1)
+SaveCopyOfReceiptTaskEval,0,6,22.425,3.737,action,6,0,0,1,0,0,4,4,MobileExplorer 完整 (h1)
+SimpleCalendarAddOneEvent,0,21,66.599,3.171,action,21,0,0,1,0,0,10,10,MobileExplorer 完整 (h1)
+SimpleCalendarAddOneEventInTwoWeeks,0,14,48.098,3.436,action,14,5,4,1,0,0,13,12,MobileExplorer 完整 (h1)
+SimpleCalendarAddOneEventRelativeDay,1,11,41.159,3.742,action,11,4,3,1,0,0,13,12,MobileExplorer 完整 (h1)
+SimpleCalendarAddOneEventTomorrow,0,21,71.798,3.419,action,21,3,1,1,1,1,13,12,MobileExplorer 完整 (h1)
+SimpleCalendarAddRepeatingEvent,1,21,64.102,3.052,action,21,3,2,1,0,0,17,17,MobileExplorer 完整 (h1)
+SimpleCalendarAnyEventsOnDate,1,2,6.927,3.463,question,2,2,1,1,0,0,7,7,MobileExplorer 完整 (h1)
+SimpleCalendarDeleteEvents,1,7,27.081,3.869,action,7,0,0,1,0,0,8,8,MobileExplorer 完整 (h1)
+SimpleCalendarDeleteEventsOnRelativeDay,1,5,20.191,4.038,action,5,2,1,1,0,0,9,9,MobileExplorer 完整 (h1)
+SimpleCalendarDeleteOneEvent,1,5,17.524,3.505,action,5,1,0,1,0,0,9,8,MobileExplorer 完整 (h1)
+SimpleCalendarEventOnDateAtTime,1,2,6.86,3.43,question,2,1,0,1,0,0,6,6,MobileExplorer 完整 (h1)
+SimpleCalendarEventsInNextWeek,0,10,30.684,3.068,question,10,2,1,1,0,0,19,18,MobileExplorer 完整 (h1)
+SimpleCalendarEventsInTimeRange,0,3,10.338,3.446,question,3,2,1,1,0,0,8,8,MobileExplorer 完整 (h1)
+SimpleCalendarEventsOnDate,0,1,3.072,3.072,question,1,1,0,1,0,0,4,4,MobileExplorer 完整 (h1)
+SimpleCalendarFirstEventAfterStartTime,1,2,6.224,3.112,question,2,1,0,1,0,0,7,7,MobileExplorer 完整 (h1)
+SimpleCalendarLocationOfEvent,1,3,10.717,3.572,question,3,1,0,1,0,0,7,7,MobileExplorer 完整 (h1)
+SimpleCalendarNextEvent,0,2,7.796,3.898,question,2,1,0,1,0,0,6,6,MobileExplorer 完整 (h1)
+SimpleCalendarNextMeetingWithPerson,0,4,14.829,3.707,action,4,1,0,1,0,0,8,8,MobileExplorer 完整 (h1)
+SimpleDrawProCreateDrawing,1,8,35.678,4.46,action,8,0,0,1,0,0,9,7,MobileExplorer 完整 (h1)
+SimpleSmsReply,1,5,20.295,4.059,action,5,0,0,1,0,0,7,7,MobileExplorer 完整 (h1)
+SimpleSmsReplyMostRecent,1,5,18.787,3.757,action,5,0,0,1,0,0,8,8,MobileExplorer 完整 (h1)
+SimpleSmsResend,0,12,46.559,3.88,action,12,0,0,1,0,0,5,5,MobileExplorer 完整 (h1)
+SimpleSmsSend,1,3,13.354,4.451,action,3,3,3,1,0,0,7,7,MobileExplorer 完整 (h1)
+SimpleSmsSendClipboardContent,0,12,35.922,2.994,action,12,2,1,1,0,0,6,6,MobileExplorer 完整 (h1)
+SimpleSmsSendReceivedAddress,0,18,54.088,3.005,action,18,1,1,1,0,0,9,8,MobileExplorer 完整 (h1)
+SportsTrackerActivitiesCountForWeek,0,2,5.81,2.905,question,2,0,0,1,0,0,4,4,MobileExplorer 完整 (h1)
+SportsTrackerActivitiesOnDate,0,4,12.79,3.198,question,4,1,1,1,0,0,4,4,MobileExplorer 完整 (h1)
+SportsTrackerActivityDuration,0,10,30.921,3.092,action,10,1,1,1,0,0,4,4,MobileExplorer 完整 (h1)
+SportsTrackerLongestDistanceActivity,0,1,3.643,3.643,action,1,0,0,1,0,0,3,3,MobileExplorer 完整 (h1)
+SportsTrackerTotalDistanceForCategoryOverInterval,0,3,13.715,4.572,action,3,0,0,1,0,0,6,6,MobileExplorer 完整 (h1)
+SportsTrackerTotalDurationForCategoryThisWeek,0,10,31.823,3.182,action,10,0,0,1,0,0,6,6,MobileExplorer 完整 (h1)
+SystemBluetoothTurnOff,1,6,23.897,3.983,action,6,0,0,0,0,0,5,5,MobileExplorer 完整 (h1)
+SystemBluetoothTurnOffVerify,1,7,24.166,3.452,action,7,0,0,0,0,0,7,6,MobileExplorer 完整 (h1)
+SystemBluetoothTurnOn,1,7,31.939,4.563,action,7,0,0,0,0,0,8,8,MobileExplorer 完整 (h1)
+SystemBluetoothTurnOnVerify,0,10,40.732,4.073,action,10,0,0,0,0,0,8,7,MobileExplorer 完整 (h1)
+SystemBrightnessMax,0,10,42.496,4.25,action,10,0,0,0,0,0,8,6,MobileExplorer 完整 (h1)
+SystemBrightnessMaxVerify,1,4,15.195,3.799,action,4,0,0,0,0,0,7,5,MobileExplorer 完整 (h1)
+SystemBrightnessMin,1,5,18.788,3.758,action,5,1,1,0,0,0,8,6,MobileExplorer 完整 (h1)
+SystemBrightnessMinVerify,1,4,14.97,3.743,action,4,0,0,0,0,0,8,6,MobileExplorer 完整 (h1)
+SystemCopyToClipboard,0,10,36.97,3.697,action,8,0,0,2,0,0,7,6,MobileExplorer 完整 (h1)
+SystemWifiTurnOff,1,5,17.703,3.541,action,5,0,0,0,0,0,6,4,MobileExplorer 完整 (h1)
+SystemWifiTurnOffVerify,1,4,12.94,3.235,action,4,0,0,0,0,0,5,4,MobileExplorer 完整 (h1)
+SystemWifiTurnOn,1,5,24.373,4.875,action,5,0,0,0,0,0,6,5,MobileExplorer 完整 (h1)
+SystemWifiTurnOnVerify,1,4,15.144,3.786,action,4,0,0,0,0,0,6,5,MobileExplorer 完整 (h1)
+TasksCompletedTasksForDate,0,3,10.839,3.613,question,3,0,0,1,0,0,6,6,MobileExplorer 完整 (h1)
+TasksDueNextWeek,0,2,7.948,3.974,question,2,1,1,1,0,0,4,4,MobileExplorer 完整 (h1)
+TasksDueOnDate,0,2,7.007,3.504,question,2,1,1,1,0,0,4,4,MobileExplorer 完整 (h1)
+TasksHighPriorityTasks,0,2,8.037,4.018,question,2,1,1,1,0,0,4,4,MobileExplorer 完整 (h1)
+TasksHighPriorityTasksDueOnDate,0,2,8.61,4.305,question,2,1,1,1,0,0,4,4,MobileExplorer 完整 (h1)
+TasksIncompleteTasksOnDate,1,1,2.984,2.984,question,1,0,0,1,0,0,3,3,MobileExplorer 完整 (h1)
+TurnOffWifiAndTurnOnBluetooth,1,9,35.238,3.915,action,9,0,0,0,0,0,11,10,MobileExplorer 完整 (h1)
+TurnOnWifiAndOpenApp,1,4,13.481,3.37,action,4,0,0,1,0,0,6,6,MobileExplorer 完整 (h1)
+VlcCreatePlaylist,0,21,103.898,4.948,action,21,1,1,1,0,0,19,18,MobileExplorer 完整 (h1)
+VlcCreateTwoPlaylists,0,8,26.519,3.315,action,8,1,1,1,0,0,16,15,MobileExplorer 完整 (h1)
+AudioRecorderRecordAudio,1,7,25.639,3.663,action,7,0,0,1,0,0,9,8,MobileExplorer 完整 (h2)
+AudioRecorderRecordAudioWithFileName,1,8,25.838,3.23,action,8,1,1,1,0,0,9,8,MobileExplorer 完整 (h2)
+BrowserDraw,0,20,44.954,2.248,action,20,0,0,1,0,0,8,8,MobileExplorer 完整 (h2)
+BrowserMaze,0,5,14.767,2.953,action,5,2,2,1,0,0,6,5,MobileExplorer 完整 (h2)
+BrowserMultiply,0,21,47.113,2.243,action,21,0,0,1,0,0,11,11,MobileExplorer 完整 (h2)
+CameraTakePhoto,0,10,58.886,5.889,action,10,0,0,0,0,0,5,5,MobileExplorer 完整 (h2)
+CameraTakeVideo,0,10,58.96,5.896,action,10,0,0,0,0,0,4,4,MobileExplorer 完整 (h2)
+ClockStopWatchPausedVerify,0,10,61.393,6.139,action,10,0,0,0,0,0,6,6,MobileExplorer 完整 (h2)
+ClockStopWatchRunning,1,5,22.982,4.596,action,5,1,1,0,0,0,6,6,MobileExplorer 完整 (h2)
+ClockTimerEntry,0,10,33.789,3.379,action,10,0,0,0,0,0,4,4,MobileExplorer 完整 (h2)
+ContactsAddContact,1,9,30.454,3.384,action,9,0,0,1,0,0,13,13,MobileExplorer 完整 (h2)
+ExpenseAddMultiple,0,21,58.406,2.781,action,21,0,0,1,0,0,6,6,MobileExplorer 完整 (h2)
+ExpenseAddMultipleFromGallery,0,11,34.835,3.167,action,11,1,1,1,0,0,13,11,MobileExplorer 完整 (h2)
+ExpenseAddMultipleFromMarkor,0,10,31.008,3.101,action,10,1,0,1,0,0,8,8,MobileExplorer 完整 (h2)
+ExpenseAddSingle,0,7,22.796,3.257,action,7,1,0,1,0,0,8,8,MobileExplorer 完整 (h2)
+ExpenseDeleteDuplicates,1,6,17.114,2.852,action,6,0,0,1,0,0,9,9,MobileExplorer 完整 (h2)
+ExpenseDeleteDuplicates2,0,9,26.584,2.954,action,9,0,0,1,0,0,10,10,MobileExplorer 完整 (h2)
+ExpenseDeleteMultiple,1,10,33.395,3.34,action,10,1,1,1,0,0,17,17,MobileExplorer 完整 (h2)
+ExpenseDeleteMultiple2,0,21,57.588,2.742,action,21,0,0,1,0,0,9,9,MobileExplorer 完整 (h2)
+ExpenseDeleteSingle,1,2,6.067,3.034,action,2,2,2,1,0,0,7,7,MobileExplorer 完整 (h2)
+FilesDeleteFile,0,21,75.012,3.572,action,21,0,0,1,0,0,15,15,MobileExplorer 完整 (h2)
+FilesMoveFile,1,18,55.914,3.106,action,18,1,1,1,0,0,18,16,MobileExplorer 完整 (h2)
+MarkorAddNoteHeader,0,12,41.338,3.445,action,12,0,0,1,0,0,13,13,MobileExplorer 完整 (h2)
+MarkorChangeNoteContent,0,12,46.081,3.84,action,12,0,0,1,0,0,8,8,MobileExplorer 完整 (h2)
+MarkorCreateFolder,1,4,18.647,4.662,action,4,0,0,1,0,0,5,5,MobileExplorer 完整 (h2)
+MarkorCreateNote,0,14,51.324,3.666,action,14,2,2,1,0,0,17,16,MobileExplorer 完整 (h2)
+MarkorCreateNoteAndSms,0,6,21.762,3.627,action,6,0,0,1,0,0,9,8,MobileExplorer 完整 (h2)
+MarkorCreateNoteFromClipboard,1,11,45.048,4.095,action,11,0,0,1,0,0,16,16,MobileExplorer 完整 (h2)
+MarkorDeleteAllNotes,1,6,21.857,3.643,action,6,1,1,1,0,0,14,13,MobileExplorer 完整 (h2)
+MarkorDeleteNewestNote,1,4,14.069,3.517,action,4,0,0,1,0,0,10,9,MobileExplorer 完整 (h2)
+MarkorDeleteNote,1,3,11.617,3.872,action,3,1,1,1,0,0,11,10,MobileExplorer 完整 (h2)
+MarkorEditNote,0,12,47.869,3.989,action,12,0,0,1,0,0,10,10,MobileExplorer 完整 (h2)
+MarkorMergeNotes,0,21,69.5,3.31,action,21,1,1,1,0,0,18,17,MobileExplorer 完整 (h2)
+MarkorMoveNote,0,9,32.05,3.561,action,9,0,0,1,0,0,12,12,MobileExplorer 完整 (h2)
+MarkorTranscribeReceipt,0,18,57.669,3.204,action,18,1,1,1,0,0,21,20,MobileExplorer 完整 (h2)
+MarkorTranscribeVideo,0,20,84.137,4.207,action,20,1,1,1,0,0,23,20,MobileExplorer 完整 (h2)
+NotesIsTodo,1,1,2.838,2.838,action,1,0,0,1,0,0,2,2,MobileExplorer 完整 (h2)
+NotesMeetingAttendeeCount,1,4,12.307,3.077,question,4,0,0,1,0,0,4,4,MobileExplorer 完整 (h2)
+NotesRecipeIngredientCount,1,4,13.398,3.349,action,4,0,0,1,0,0,4,4,MobileExplorer 完整 (h2)
+NotesTodoItemCount,1,3,7.558,2.519,question,3,0,0,1,0,0,5,5,MobileExplorer 完整 (h2)
+OpenAppTaskEval,1,2,9.254,4.627,action,2,0,0,1,0,0,3,3,MobileExplorer 完整 (h2)
+OsmAndFavorite,1,7,20.236,2.891,action,7,0,0,1,0,0,9,9,MobileExplorer 完整 (h2)
+OsmAndMarker,0,20,45.181,2.259,action,20,0,0,1,0,0,6,6,MobileExplorer 完整 (h2)
+OsmAndTrack,0,21,52.052,2.479,action,21,1,1,1,0,0,13,13,MobileExplorer 完整 (h2)
+RecipeAddMultipleRecipes,0,21,63.407,3.019,action,21,0,0,1,0,0,14,12,MobileExplorer 完整 (h2)
+RecipeAddMultipleRecipesFromImage,0,12,35.649,2.971,action,12,0,0,1,0,0,11,10,MobileExplorer 完整 (h2)
+RecipeAddMultipleRecipesFromMarkor,0,19,82.165,4.324,action,19,0,0,1,0,0,23,22,MobileExplorer 完整 (h2)
+RecipeAddMultipleRecipesFromMarkor2,0,21,52.367,2.494,action,21,0,0,1,0,0,11,11,MobileExplorer 完整 (h2)
+RecipeAddSingleRecipe,1,16,57.7,3.606,action,16,2,2,1,0,0,16,14,MobileExplorer 完整 (h2)
+RecipeDeleteDuplicateRecipes,1,5,16.018,3.204,action,5,0,0,1,0,0,7,5,MobileExplorer 完整 (h2)
+RecipeDeleteDuplicateRecipes2,0,21,64.759,3.084,action,19,1,1,3,0,0,12,9,MobileExplorer 完整 (h2)
+RecipeDeleteDuplicateRecipes3,0,21,71.05,3.383,action,20,2,2,2,0,0,15,12,MobileExplorer 完整 (h2)
+RecipeDeleteMultipleRecipes,1,13,39.557,3.043,action,12,1,1,2,0,0,14,12,MobileExplorer 完整 (h2)
+RecipeDeleteMultipleRecipesWithConstraint,1,3,9.599,3.2,action,3,0,0,1,0,0,10,9,MobileExplorer 完整 (h2)
+RecipeDeleteMultipleRecipesWithNoise,1,19,54.443,2.865,action,19,3,2,1,0,0,26,24,MobileExplorer 完整 (h2)
+RecipeDeleteSingleRecipe,1,4,14.39,3.597,action,4,1,1,1,0,0,7,7,MobileExplorer 完整 (h2)
+RecipeDeleteSingleWithRecipeWithNoise,1,5,18.741,3.748,action,5,1,1,1,0,0,12,11,MobileExplorer 完整 (h2)
+RetroCreatePlaylist,0,20,58.12,2.906,action,18,0,0,3,0,0,16,16,MobileExplorer 完整 (h2)
+RetroPlayingQueue,0,21,62.646,2.983,action,21,0,0,1,0,0,11,11,MobileExplorer 完整 (h2)
+RetroPlaylistDuration,0,21,99.221,4.725,action,21,2,2,1,0,0,20,20,MobileExplorer 完整 (h2)
+SaveCopyOfReceiptTaskEval,0,8,28.86,3.608,action,8,0,0,1,0,0,4,4,MobileExplorer 完整 (h2)
+SimpleCalendarAddOneEvent,0,21,56.717,2.701,action,21,0,0,1,0,0,10,10,MobileExplorer 完整 (h2)
+SimpleCalendarAddOneEventInTwoWeeks,0,19,59.543,3.134,action,19,3,3,1,0,0,16,16,MobileExplorer 完整 (h2)
+SimpleCalendarAddOneEventRelativeDay,0,18,59.465,3.304,action,18,2,2,1,0,0,15,14,MobileExplorer 完整 (h2)
+SimpleCalendarAddOneEventTomorrow,1,16,49.395,3.087,action,16,3,2,1,1,1,16,15,MobileExplorer 完整 (h2)
+SimpleCalendarAddRepeatingEvent,0,6,22.877,3.813,action,6,5,4,1,0,0,11,11,MobileExplorer 完整 (h2)
+SimpleCalendarAnyEventsOnDate,0,3,10.138,3.379,question,3,1,1,1,0,0,11,10,MobileExplorer 完整 (h2)
+SimpleCalendarDeleteEvents,1,7,27.145,3.878,action,7,1,0,1,1,1,8,8,MobileExplorer 完整 (h2)
+SimpleCalendarDeleteEventsOnRelativeDay,1,6,20.822,3.47,action,6,3,2,1,0,0,12,12,MobileExplorer 完整 (h2)
+SimpleCalendarDeleteOneEvent,1,4,13.141,3.285,action,4,1,1,1,0,0,10,9,MobileExplorer 完整 (h2)
+SimpleCalendarEventOnDateAtTime,1,2,5.163,2.581,question,2,0,0,1,0,0,6,5,MobileExplorer 完整 (h2)
+SimpleCalendarEventsInNextWeek,0,10,28.952,2.895,question,10,1,1,1,0,0,20,20,MobileExplorer 完整 (h2)
+SimpleCalendarEventsInTimeRange,1,2,7.259,3.63,question,2,0,0,1,0,0,7,6,MobileExplorer 完整 (h2)
+SimpleCalendarEventsOnDate,0,1,2.775,2.775,question,1,0,0,1,0,0,4,4,MobileExplorer 完整 (h2)
+SimpleCalendarFirstEventAfterStartTime,1,2,6.739,3.37,question,2,0,0,1,0,0,6,5,MobileExplorer 完整 (h2)
+SimpleCalendarLocationOfEvent,1,3,10.291,3.43,question,3,1,0,1,0,0,8,7,MobileExplorer 完整 (h2)
+SimpleCalendarNextEvent,0,2,7.58,3.79,question,2,2,1,1,0,0,8,8,MobileExplorer 完整 (h2)
+SimpleCalendarNextMeetingWithPerson,1,4,11.364,2.841,action,4,1,0,1,0,0,7,7,MobileExplorer 完整 (h2)
+SimpleDrawProCreateDrawing,1,8,32.637,4.08,action,8,0,0,1,0,0,9,7,MobileExplorer 完整 (h2)
+SimpleSmsReply,1,5,18.032,3.606,action,5,0,0,1,0,0,8,8,MobileExplorer 完整 (h2)
+SimpleSmsReplyMostRecent,1,5,14.97,2.994,action,5,0,0,1,0,0,8,8,MobileExplorer 完整 (h2)
+SimpleSmsResend,1,8,30.352,3.794,action,8,0,0,1,0,0,11,9,MobileExplorer 完整 (h2)
+SimpleSmsSend,1,4,15.344,3.836,action,4,3,3,1,0,0,9,7,MobileExplorer 完整 (h2)
+SimpleSmsSendClipboardContent,0,12,34.435,2.87,action,12,0,0,1,0,0,7,6,MobileExplorer 完整 (h2)
+SimpleSmsSendReceivedAddress,0,18,50.429,2.802,action,18,1,1,1,0,0,11,9,MobileExplorer 完整 (h2)
+SportsTrackerActivitiesCountForWeek,0,10,26.16,2.616,question,10,0,0,1,0,0,6,6,MobileExplorer 完整 (h2)
+SportsTrackerActivitiesOnDate,0,3,8.714,2.905,question,3,0,0,1,0,0,6,6,MobileExplorer 完整 (h2)
+SportsTrackerActivityDuration,0,3,10.964,3.655,action,3,0,0,1,0,0,6,6,MobileExplorer 完整 (h2)
+SportsTrackerLongestDistanceActivity,0,10,28.493,2.849,action,10,0,0,1,0,0,9,9,MobileExplorer 完整 (h2)
+SportsTrackerTotalDistanceForCategoryOverInterval,0,3,13.159,4.386,action,3,0,0,1,0,0,6,6,MobileExplorer 完整 (h2)
+SportsTrackerTotalDurationForCategoryThisWeek,0,10,26.982,2.698,action,10,0,0,1,0,0,7,7,MobileExplorer 完整 (h2)
+SystemBluetoothTurnOff,1,6,27.142,4.524,action,6,0,0,0,0,0,7,7,MobileExplorer 完整 (h2)
+SystemBluetoothTurnOffVerify,1,7,26.537,3.791,action,7,0,0,0,0,0,11,10,MobileExplorer 完整 (h2)
+SystemBluetoothTurnOn,0,4,30.173,7.543,action,4,1,1,0,0,0,6,5,MobileExplorer 完整 (h2)
+SystemBluetoothTurnOnVerify,0,10,39.564,3.956,action,10,0,0,0,0,0,8,6,MobileExplorer 完整 (h2)
+SystemBrightnessMax,0,10,40.25,4.025,action,10,0,0,0,0,0,9,7,MobileExplorer 完整 (h2)
+SystemBrightnessMaxVerify,1,4,13.609,3.402,action,4,0,0,0,0,0,8,7,MobileExplorer 完整 (h2)
+SystemBrightnessMin,1,6,21.296,3.549,action,6,0,0,0,0,0,8,7,MobileExplorer 完整 (h2)
+SystemBrightnessMinVerify,1,4,13.691,3.423,action,4,0,0,0,0,0,7,6,MobileExplorer 完整 (h2)
+SystemCopyToClipboard,0,10,39.16,3.916,action,10,0,0,0,0,0,16,15,MobileExplorer 完整 (h2)
+SystemWifiTurnOff,1,5,18.436,3.687,action,5,0,0,0,0,0,7,6,MobileExplorer 完整 (h2)
+SystemWifiTurnOffVerify,1,4,18.798,4.699,action,4,0,0,0,0,0,6,6,MobileExplorer 完整 (h2)
+SystemWifiTurnOn,1,5,18.51,3.702,action,5,0,0,0,0,0,6,6,MobileExplorer 完整 (h2)
+SystemWifiTurnOnVerify,1,4,15.402,3.851,action,4,0,0,0,0,0,5,5,MobileExplorer 完整 (h2)
+TasksCompletedTasksForDate,0,3,11.126,3.709,question,3,0,0,1,0,0,6,6,MobileExplorer 完整 (h2)
+TasksDueNextWeek,0,2,6.167,3.083,question,2,1,1,1,0,0,4,4,MobileExplorer 完整 (h2)
+TasksDueOnDate,0,2,7.102,3.551,question,2,1,1,1,0,0,4,4,MobileExplorer 完整 (h2)
+TasksHighPriorityTasks,0,2,5.526,2.763,question,2,1,1,1,0,0,4,4,MobileExplorer 完整 (h2)
+TasksHighPriorityTasksDueOnDate,0,2,6.629,3.314,question,2,1,1,1,0,0,4,4,MobileExplorer 完整 (h2)
+TasksIncompleteTasksOnDate,1,1,2.944,2.944,question,1,0,0,1,0,0,3,3,MobileExplorer 完整 (h2)
+TurnOffWifiAndTurnOnBluetooth,1,9,39.974,4.442,action,9,0,0,0,0,0,9,8,MobileExplorer 完整 (h2)
+TurnOnWifiAndOpenApp,1,4,13.216,3.304,action,4,0,0,1,0,0,5,5,MobileExplorer 完整 (h2)
+VlcCreatePlaylist,0,21,100.842,4.802,action,21,1,1,1,0,0,14,13,MobileExplorer 完整 (h2)
+VlcCreateTwoPlaylists,0,21,58.319,2.777,action,21,1,1,1,0,0,22,19,MobileExplorer 完整 (h2)
+AudioRecorderRecordAudio,1,9,30.959,3.44,action,9,0,0,1,0,0,13,12,MobileExplorer+同类门 (h1)
+AudioRecorderRecordAudioWithFileName,0,20,60.384,3.019,action,20,2,2,1,0,0,12,11,MobileExplorer+同类门 (h1)
+BrowserDraw,0,20,43.533,2.177,action,20,0,0,1,0,0,9,9,MobileExplorer+同类门 (h1)
+BrowserMaze,0,6,20.076,3.346,action,6,2,2,1,0,0,6,5,MobileExplorer+同类门 (h1)
+BrowserMultiply,0,6,24.496,4.083,action,6,3,3,1,0,0,11,10,MobileExplorer+同类门 (h1)
+CameraTakePhoto,0,10,42.775,4.278,action,10,0,0,0,0,0,8,8,MobileExplorer+同类门 (h1)
+CameraTakeVideo,0,10,57.004,5.7,action,10,0,0,0,0,0,7,7,MobileExplorer+同类门 (h1)
+ClockStopWatchRunning,1,4,13.37,3.343,action,4,0,0,0,0,0,6,6,MobileExplorer+同类门 (h1)
+ClockTimerEntry,0,10,45.016,4.502,action,10,0,0,0,0,0,6,6,MobileExplorer+同类门 (h1)
+ContactsAddContact,1,9,28.696,3.188,action,9,0,0,1,0,0,11,11,MobileExplorer+同类门 (h1)
+ExpenseAddMultiple,0,21,60.917,2.901,action,21,0,0,1,0,0,5,5,MobileExplorer+同类门 (h1)
+ExpenseAddMultipleFromGallery,0,7,17.899,2.557,action,7,0,0,1,0,0,6,6,MobileExplorer+同类门 (h1)
+ExpenseAddMultipleFromMarkor,0,7,19.699,2.814,action,7,2,1,1,0,0,8,8,MobileExplorer+同类门 (h1)
+ExpenseAddSingle,0,7,25.75,3.679,action,7,1,0,1,0,0,5,5,MobileExplorer+同类门 (h1)
+ExpenseDeleteDuplicates,1,6,18.592,3.099,action,6,0,0,1,0,0,9,9,MobileExplorer+同类门 (h1)
+ExpenseDeleteDuplicates2,0,18,49.85,2.769,action,18,0,0,1,0,0,9,9,MobileExplorer+同类门 (h1)
+ExpenseDeleteMultiple,1,10,35.232,3.523,action,10,0,0,1,0,0,19,19,MobileExplorer+同类门 (h1)
+ExpenseDeleteMultiple2,1,12,41.433,3.453,action,12,3,3,1,0,0,17,17,MobileExplorer+同类门 (h1)
+ExpenseDeleteSingle,1,4,11.309,2.827,action,4,0,0,1,0,0,8,8,MobileExplorer+同类门 (h1)
+FilesDeleteFile,0,4,12.995,3.249,action,4,0,0,1,0,0,6,6,MobileExplorer+同类门 (h1)
+FilesMoveFile,0,20,58.855,2.943,action,20,1,1,1,0,0,18,16,MobileExplorer+同类门 (h1)
+MarkorAddNoteHeader,0,12,45.046,3.754,action,10,0,0,3,0,0,9,9,MobileExplorer+同类门 (h1)
+MarkorChangeNoteContent,0,12,46.221,3.852,action,12,0,0,1,0,0,8,8,MobileExplorer+同类门 (h1)
+MarkorCreateFolder,1,4,15.541,3.885,action,4,0,0,1,0,0,7,7,MobileExplorer+同类门 (h1)
+MarkorCreateNote,0,14,54.126,3.866,action,14,2,2,1,0,0,15,14,MobileExplorer+同类门 (h1)
+MarkorCreateNoteAndSms,0,6,22.162,3.694,action,6,0,0,1,0,0,9,8,MobileExplorer+同类门 (h1)
+MarkorCreateNoteFromClipboard,1,11,45.681,4.153,action,11,0,0,1,0,0,16,15,MobileExplorer+同类门 (h1)
+MarkorDeleteAllNotes,1,6,21.363,3.561,action,6,0,0,1,0,0,10,10,MobileExplorer+同类门 (h1)
+MarkorDeleteNewestNote,1,4,13.746,3.436,action,4,0,0,1,0,0,10,9,MobileExplorer+同类门 (h1)
+MarkorDeleteNote,1,3,11.249,3.75,action,3,1,1,1,0,0,7,7,MobileExplorer+同类门 (h1)
+MarkorEditNote,0,12,44.502,3.708,action,12,0,0,1,0,0,12,12,MobileExplorer+同类门 (h1)
+MarkorMergeNotes,0,21,63.402,3.019,action,21,1,1,1,0,0,17,17,MobileExplorer+同类门 (h1)
+MarkorMoveNote,0,9,31.107,3.456,action,9,0,0,1,0,0,12,11,MobileExplorer+同类门 (h1)
+MarkorTranscribeReceipt,0,18,58.037,3.224,action,18,1,1,1,0,0,23,19,MobileExplorer+同类门 (h1)
+MarkorTranscribeVideo,0,20,92.955,4.648,action,20,1,1,1,0,0,21,18,MobileExplorer+同类门 (h1)
+NotesIsTodo,1,3,8.882,2.961,action,3,0,0,1,0,0,4,4,MobileExplorer+同类门 (h1)
+NotesMeetingAttendeeCount,1,4,12.663,3.166,question,4,0,0,1,0,0,4,4,MobileExplorer+同类门 (h1)
+NotesRecipeIngredientCount,0,4,12.557,3.139,action,4,0,0,1,0,0,4,4,MobileExplorer+同类门 (h1)
+NotesTodoItemCount,0,4,13.493,3.373,question,4,1,1,1,0,0,7,7,MobileExplorer+同类门 (h1)
+OpenAppTaskEval,1,2,9.184,4.592,action,2,0,0,1,0,0,3,3,MobileExplorer+同类门 (h1)
+OsmAndFavorite,1,8,26.135,3.267,action,8,0,0,1,0,0,11,11,MobileExplorer+同类门 (h1)
+OsmAndMarker,0,20,43.285,2.164,action,20,0,0,1,0,0,5,5,MobileExplorer+同类门 (h1)
+OsmAndTrack,0,21,63.505,3.024,action,21,0,0,1,0,0,9,9,MobileExplorer+同类门 (h1)
+RecipeAddMultipleRecipes,0,21,64.389,3.066,action,21,0,0,1,0,0,12,11,MobileExplorer+同类门 (h1)
+RecipeAddMultipleRecipesFromImage,0,21,58.893,2.804,action,21,0,0,1,0,0,16,12,MobileExplorer+同类门 (h1)
+RecipeAddMultipleRecipesFromMarkor,0,21,76.168,3.627,action,21,2,2,1,0,0,21,19,MobileExplorer+同类门 (h1)
+AudioRecorderRecordAudio,0,12,45.071,3.756,action,12,0,0,1,0,0,14,13,w/o 目标条件检索
+AudioRecorderRecordAudioWithFileName,1,9,33.101,3.678,action,9,0,0,1,0,0,12,11,w/o 目标条件检索
+BrowserDraw,0,20,44.887,2.244,action,20,0,0,1,0,0,9,8,w/o 目标条件检索
+BrowserMaze,1,13,35.5,2.731,action,13,0,0,1,0,0,9,9,w/o 目标条件检索
+BrowserMultiply,0,20,42.772,2.139,action,20,0,0,1,0,0,12,12,w/o 目标条件检索
+CameraTakePhoto,0,4,18.741,4.685,action,4,0,0,0,0,0,4,4,w/o 目标条件检索
+CameraTakeVideo,0,10,59.071,5.907,action,10,0,0,0,0,0,4,4,w/o 目标条件检索
+ClockStopWatchPausedVerify,0,10,45.477,4.548,action,9,0,0,1,0,0,9,9,w/o 目标条件检索
+ClockStopWatchRunning,1,5,21.14,4.228,action,5,0,0,0,0,0,8,8,w/o 目标条件检索
+ClockTimerEntry,0,10,44.99,4.499,action,10,1,1,0,0,0,8,7,w/o 目标条件检索
+ContactsAddContact,1,10,36.291,3.629,action,10,0,0,1,0,0,12,11,w/o 目标条件检索
+ExpenseAddMultiple,0,21,57.792,2.752,action,20,0,0,2,0,0,8,8,w/o 目标条件检索
+ExpenseAddMultipleFromGallery,0,21,54.35,2.588,action,21,0,0,1,0,0,5,4,w/o 目标条件检索
+ExpenseAddMultipleFromMarkor,0,22,68.289,3.104,action,21,1,0,2,0,0,11,10,w/o 目标条件检索
+ExpenseAddSingle,1,9,28.262,3.14,action,9,1,0,1,0,0,7,7,w/o 目标条件检索
+ExpenseDeleteDuplicates,1,6,19.097,3.183,action,6,0,0,1,0,0,12,11,w/o 目标条件检索
+ExpenseDeleteDuplicates2,0,18,50.873,2.826,action,18,0,0,1,0,0,11,10,w/o 目标条件检索
+ExpenseDeleteMultiple,1,9,31.969,3.552,action,9,1,1,1,0,0,19,19,w/o 目标条件检索
+ExpenseDeleteMultiple2,0,21,55.404,2.638,action,21,0,0,1,0,0,10,9,w/o 目标条件检索
+ExpenseDeleteSingle,1,4,13.41,3.353,action,4,0,0,1,0,0,10,9,w/o 目标条件检索
+FilesDeleteFile,0,4,12.297,3.074,action,4,0,0,1,0,0,7,7,w/o 目标条件检索
+FilesMoveFile,1,14,48.638,3.474,action,14,0,0,1,0,0,22,19,w/o 目标条件检索
+MarkorAddNoteHeader,0,12,38.056,3.171,action,12,0,0,1,0,0,15,14,w/o 目标条件检索
+MarkorChangeNoteContent,0,12,46.098,3.842,action,12,0,0,1,0,0,9,8,w/o 目标条件检索
+MarkorCreateFolder,0,10,32.219,3.222,action,10,0,0,1,0,0,6,6,w/o 目标条件检索
+MarkorCreateNote,1,12,42.488,3.541,action,12,0,0,1,0,0,13,12,w/o 目标条件检索
+MarkorCreateNoteAndSms,0,6,21.219,3.536,action,6,0,0,1,0,0,10,8,w/o 目标条件检索
+MarkorCreateNoteFromClipboard,1,11,43.294,3.936,action,11,0,0,1,0,0,15,14,w/o 目标条件检索
+MarkorDeleteAllNotes,1,7,26.038,3.72,action,7,1,1,1,0,0,12,10,w/o 目标条件检索
+MarkorDeleteNewestNote,1,4,14.768,3.692,action,4,0,0,1,0,0,7,7,w/o 目标条件检索
+MarkorDeleteNote,1,4,15.419,3.855,action,4,0,0,1,0,0,10,9,w/o 目标条件检索
+MarkorEditNote,0,7,26.475,3.782,action,7,0,0,1,0,0,10,9,w/o 目标条件检索
+MarkorMergeNotes,0,21,62.303,2.967,action,21,1,1,1,0,0,14,13,w/o 目标条件检索
+MarkorMoveNote,0,9,31.228,3.47,action,9,0,0,1,0,0,16,14,w/o 目标条件检索
+MarkorTranscribeReceipt,0,18,58.895,3.272,action,17,2,2,2,0,0,32,28,w/o 目标条件检索
+MarkorTranscribeVideo,0,15,57.062,3.804,action,15,1,1,1,0,0,24,20,w/o 目标条件检索
+NotesIsTodo,1,3,8.759,2.92,action,3,0,0,1,0,0,5,5,w/o 目标条件检索
+NotesMeetingAttendeeCount,1,4,12.757,3.189,question,4,0,0,1,0,0,5,5,w/o 目标条件检索
+NotesRecipeIngredientCount,1,3,7.966,2.655,action,3,1,1,1,0,0,4,4,w/o 目标条件检索
+NotesTodoItemCount,0,4,12.694,3.173,question,4,1,1,1,0,0,8,8,w/o 目标条件检索
+OpenAppTaskEval,1,2,9.12,4.56,action,2,0,0,1,0,0,4,3,w/o 目标条件检索
+OsmAndFavorite,1,8,26.075,3.259,action,8,0,0,1,0,0,12,11,w/o 目标条件检索
+OsmAndMarker,0,20,44.445,2.222,action,20,0,0,1,0,0,6,6,w/o 目标条件检索
+OsmAndTrack,0,21,48.027,2.287,action,21,0,0,1,0,0,11,10,w/o 目标条件检索
+RecipeAddMultipleRecipes,0,21,63.778,3.037,action,21,0,0,1,0,0,13,11,w/o 目标条件检索
+RecipeAddMultipleRecipesFromImage,0,21,54.341,2.588,action,21,0,0,1,0,0,10,8,w/o 目标条件检索
+RecipeAddMultipleRecipesFromMarkor,0,21,77.498,3.69,action,21,0,0,1,0,0,22,18,w/o 目标条件检索
+RecipeAddMultipleRecipesFromMarkor2,0,21,52.825,2.515,action,21,0,0,1,0,0,11,10,w/o 目标条件检索
+RecipeAddSingleRecipe,1,16,57.883,3.618,action,16,2,2,1,0,0,17,14,w/o 目标条件检索
+RecipeDeleteDuplicateRecipes,1,5,15.718,3.144,action,5,0,0,1,0,0,9,6,w/o 目标条件检索
+RecipeDeleteDuplicateRecipes2,0,21,64.444,3.069,action,21,1,1,1,0,0,15,10,w/o 目标条件检索
+RecipeDeleteDuplicateRecipes3,0,21,65.488,3.118,action,21,2,2,1,0,0,18,13,w/o 目标条件检索
+RecipeDeleteMultipleRecipes,1,13,40.706,3.131,action,13,1,1,1,0,0,15,13,w/o 目标条件检索
+RecipeDeleteMultipleRecipesWithConstraint,1,3,9.149,3.05,action,3,0,0,1,0,0,11,8,w/o 目标条件检索
+RecipeDeleteMultipleRecipesWithNoise,1,19,56.892,2.994,action,19,1,1,1,0,0,26,21,w/o 目标条件检索
+RecipeDeleteSingleRecipe,1,4,14.379,3.595,action,4,1,1,1,0,0,9,7,w/o 目标条件检索
+RecipeDeleteSingleWithRecipeWithNoise,1,5,19.251,3.85,action,5,1,1,1,0,0,13,9,w/o 目标条件检索
+RetroCreatePlaylist,0,18,49.415,2.745,action,16,0,0,3,0,0,15,15,w/o 目标条件检索
+RetroPlayingQueue,0,10,30.133,3.013,action,10,0,0,1,0,0,12,12,w/o 目标条件检索
+RetroPlaylistDuration,0,21,70.691,3.366,action,21,0,0,1,0,0,21,20,w/o 目标条件检索
+SaveCopyOfReceiptTaskEval,0,16,38.92,2.433,action,16,0,0,1,0,0,5,4,w/o 目标条件检索
+SimpleCalendarAddOneEvent,0,21,55.405,2.638,action,21,0,0,1,0,0,11,10,w/o 目标条件检索
+SimpleCalendarAddOneEventInTwoWeeks,1,18,51.691,2.872,action,18,2,2,1,0,0,15,13,w/o 目标条件检索
+SimpleCalendarAddOneEventRelativeDay,0,21,57.768,2.751,action,21,2,1,1,0,0,15,13,w/o 目标条件检索
+SimpleCalendarAddOneEventTomorrow,0,21,59.95,2.855,action,21,4,3,1,0,0,14,12,w/o 目标条件检索
+SimpleCalendarAddRepeatingEvent,0,14,38.999,2.786,action,14,1,1,1,0,0,16,14,w/o 目标条件检索
+SimpleCalendarAnyEventsOnDate,1,2,6.097,3.048,question,2,0,0,1,0,0,7,7,w/o 目标条件检索
+SimpleCalendarDeleteEvents,1,7,23.573,3.368,action,7,0,0,1,0,0,9,9,w/o 目标条件检索
+SimpleCalendarDeleteEventsOnRelativeDay,1,6,21.39,3.565,action,6,0,0,1,0,0,10,10,w/o 目标条件检索
+SimpleCalendarDeleteOneEvent,1,5,16.022,3.204,action,5,0,0,1,0,0,11,9,w/o 目标条件检索
+SimpleCalendarEventOnDateAtTime,1,2,6.368,3.184,question,2,0,0,1,0,0,7,6,w/o 目标条件检索
+SimpleCalendarEventsInNextWeek,0,3,9.934,3.311,question,3,0,0,1,0,0,7,7,w/o 目标条件检索
+SimpleCalendarEventsInTimeRange,0,1,3.068,3.068,question,1,0,0,1,0,0,3,3,w/o 目标条件检索
+SimpleCalendarEventsOnDate,1,5,15.172,3.034,question,5,0,0,1,0,0,8,8,w/o 目标条件检索
+SimpleCalendarFirstEventAfterStartTime,1,2,8.219,4.109,question,2,0,0,1,0,0,8,7,w/o 目标条件检索
+SimpleCalendarLocationOfEvent,1,3,8.756,2.919,question,3,0,0,1,0,0,9,8,w/o 目标条件检索
+SimpleCalendarNextEvent,0,2,7.121,3.561,question,2,0,0,1,0,0,7,7,w/o 目标条件检索
+SimpleCalendarNextMeetingWithPerson,0,3,10.34,3.447,action,3,0,0,1,0,0,8,8,w/o 目标条件检索
+SimpleDrawProCreateDrawing,0,18,50.188,2.788,action,18,0,0,1,0,0,6,6,w/o 目标条件检索
+SimpleSmsReply,1,5,19.785,3.957,action,5,0,0,1,0,0,9,8,w/o 目标条件检索
+SimpleSmsReplyMostRecent,1,5,15.011,3.002,action,5,0,0,1,0,0,8,7,w/o 目标条件检索
+SimpleSmsResend,0,12,45.793,3.816,action,12,0,0,1,0,0,10,8,w/o 目标条件检索
+SimpleSmsSend,1,6,22.389,3.732,action,6,0,0,1,0,0,10,8,w/o 目标条件检索
+SimpleSmsSendClipboardContent,0,12,33.029,2.752,action,12,1,1,1,0,0,7,5,w/o 目标条件检索
+SimpleSmsSendReceivedAddress,0,8,26.346,3.293,action,8,0,0,1,0,0,8,5,w/o 目标条件检索
+SportsTrackerActivitiesCountForWeek,0,2,6.419,3.209,question,2,0,0,1,0,0,5,5,w/o 目标条件检索
+SportsTrackerActivitiesOnDate,0,3,8.603,2.868,question,3,0,0,1,0,0,7,7,w/o 目标条件检索
+SportsTrackerActivityDuration,0,3,11.026,3.675,action,3,0,0,1,0,0,7,7,w/o 目标条件检索
+SportsTrackerLongestDistanceActivity,0,1,3.428,3.428,action,1,0,0,1,0,0,5,5,w/o 目标条件检索
+SportsTrackerTotalDistanceForCategoryOverInterval,0,3,12.577,4.192,action,3,0,0,1,0,0,7,7,w/o 目标条件检索
+SportsTrackerTotalDurationForCategoryThisWeek,0,10,25.693,2.569,action,10,0,0,1,0,0,8,8,w/o 目标条件检索
+SystemBluetoothTurnOff,1,6,19.821,3.303,action,6,0,0,0,0,0,8,7,w/o 目标条件检索
+SystemBluetoothTurnOffVerify,0,10,38.113,3.811,action,10,0,0,0,0,0,6,4,w/o 目标条件检索
+SystemBluetoothTurnOn,1,4,19.682,4.921,action,4,0,0,0,0,0,7,5,w/o 目标条件检索
+SystemBluetoothTurnOnVerify,1,5,16.675,3.335,action,5,0,0,0,0,0,8,6,w/o 目标条件检索
+SystemBrightnessMax,0,10,39.848,3.985,action,10,0,0,0,0,0,12,8,w/o 目标条件检索
+SystemBrightnessMaxVerify,1,4,19.213,4.803,action,4,0,0,0,0,0,8,7,w/o 目标条件检索
+SystemBrightnessMin,1,8,33.339,4.167,action,8,1,0,0,0,0,8,6,w/o 目标条件检索
+SystemBrightnessMinVerify,1,4,19.062,4.766,action,4,1,0,0,0,0,8,6,w/o 目标条件检索
+SystemCopyToClipboard,0,10,33.228,3.323,action,8,0,0,2,0,0,9,7,w/o 目标条件检索
+SystemWifiTurnOff,1,5,21.76,4.352,action,5,0,0,0,0,0,8,6,w/o 目标条件检索
+SystemWifiTurnOffVerify,1,4,12.922,3.23,action,4,0,0,0,0,0,7,6,w/o 目标条件检索
+SystemWifiTurnOn,1,5,23.254,4.651,action,5,0,0,0,0,0,7,6,w/o 目标条件检索
+SystemWifiTurnOnVerify,1,4,20.643,5.161,action,4,0,0,0,0,0,8,7,w/o 目标条件检索
+TasksCompletedTasksForDate,0,3,9.727,3.242,question,3,0,0,1,0,0,7,7,w/o 目标条件检索
+TasksDueNextWeek,0,3,11.481,3.827,question,3,0,0,1,0,0,6,6,w/o 目标条件检索
+TasksDueOnDate,0,1,3.099,3.099,question,1,0,0,1,0,0,5,5,w/o 目标条件检索
+TasksHighPriorityTasks,1,1,3.384,3.384,question,1,0,0,1,0,0,5,5,w/o 目标条件检索
+TasksHighPriorityTasksDueOnDate,0,3,12.662,4.221,question,3,0,0,1,0,0,7,7,w/o 目标条件检索
+TasksIncompleteTasksOnDate,1,1,2.821,2.821,question,1,0,0,1,0,0,4,4,w/o 目标条件检索
+TurnOffWifiAndTurnOnBluetooth,1,9,37.503,4.167,action,9,0,0,0,0,0,10,8,w/o 目标条件检索
+TurnOnWifiAndOpenApp,1,4,13.115,3.279,action,4,0,0,1,0,0,6,5,w/o 目标条件检索
+VlcCreatePlaylist,0,21,121.603,5.791,action,21,1,1,1,0,0,15,12,w/o 目标条件检索
+VlcCreateTwoPlaylists,0,21,70.0,3.333,action,21,1,1,1,0,0,21,18,w/o 目标条件检索
+AudioRecorderRecordAudio,1,7,25.842,3.692,action,7,0,0,1,0,0,10,9,w/o 通过率门
+AudioRecorderRecordAudioWithFileName,1,8,27.767,3.471,action,8,1,1,1,0,0,8,7,w/o 通过率门
+BrowserDraw,0,20,43.153,2.158,action,20,0,0,1,0,0,9,9,w/o 通过率门
+BrowserMaze,0,20,48.944,2.447,action,20,0,0,1,0,0,10,9,w/o 通过率门
+BrowserMultiply,0,21,57.211,2.724,action,21,1,1,1,0,0,11,10,w/o 通过率门
+CameraTakePhoto,0,4,18.694,4.673,action,4,0,0,0,0,0,4,4,w/o 通过率门
+CameraTakeVideo,0,8,51.326,6.416,action,8,0,0,0,0,0,5,5,w/o 通过率门
+ClockStopWatchPausedVerify,0,10,54.813,5.481,action,10,0,0,0,0,0,9,9,w/o 通过率门
+ClockStopWatchRunning,1,4,13.89,3.473,action,4,1,1,0,0,0,6,6,w/o 通过率门
+ClockTimerEntry,0,10,44.475,4.447,action,10,1,1,0,0,0,6,6,w/o 通过率门
+ContactsAddContact,1,9,31.583,3.509,action,9,0,0,1,0,0,12,12,w/o 通过率门
+ExpenseAddMultiple,0,21,58.186,2.771,action,21,0,0,1,0,0,5,5,w/o 通过率门
+ExpenseAddMultipleFromGallery,0,21,53.143,2.531,action,21,0,0,1,0,0,9,8,w/o 通过率门
+ExpenseAddMultipleFromMarkor,0,8,23.277,2.91,action,8,2,1,1,0,0,8,8,w/o 通过率门
+ExpenseAddSingle,0,7,23.492,3.356,action,7,2,1,1,0,0,7,7,w/o 通过率门
+ExpenseDeleteDuplicates,1,6,18.912,3.152,action,6,0,0,1,0,0,8,8,w/o 通过率门
+ExpenseDeleteDuplicates2,0,18,45.487,2.527,action,17,0,0,2,0,0,11,11,w/o 通过率门
+ExpenseDeleteMultiple,1,10,35.53,3.553,action,10,1,1,1,0,0,17,17,w/o 通过率门
+ExpenseDeleteMultiple2,1,12,37.154,3.096,action,12,1,1,1,0,0,16,16,w/o 通过率门
+ExpenseDeleteSingle,1,3,9.515,3.172,action,3,1,1,1,0,0,8,8,w/o 通过率门
+FilesDeleteFile,0,4,13.429,3.357,action,4,0,0,1,0,0,6,6,w/o 通过率门
+FilesMoveFile,1,18,55.12,3.062,action,18,1,1,1,0,0,20,18,w/o 通过率门
+MarkorAddNoteHeader,0,12,43.35,3.613,action,11,0,0,2,0,0,9,9,w/o 通过率门
+MarkorChangeNoteContent,0,12,47.643,3.97,action,12,0,0,1,0,0,9,9,w/o 通过率门
+MarkorCreateFolder,1,4,16.727,4.182,action,4,0,0,1,0,0,7,7,w/o 通过率门
+MarkorCreateNote,0,14,54.93,3.924,action,14,2,2,1,0,0,14,13,w/o 通过率门
+MarkorCreateNoteAndSms,0,6,22.975,3.829,action,6,0,0,1,0,0,9,8,w/o 通过率门
+MarkorCreateNoteFromClipboard,1,11,46.934,4.267,action,11,0,0,1,0,0,16,15,w/o 通过率门
+MarkorDeleteAllNotes,1,7,28.103,4.015,action,7,1,1,1,0,0,11,11,w/o 通过率门
+MarkorDeleteNewestNote,1,5,17.627,3.525,action,5,1,1,1,0,0,12,12,w/o 通过率门
+MarkorDeleteNote,1,3,11.823,3.941,action,3,1,1,1,0,0,5,5,w/o 通过率门
+MarkorEditNote,0,5,19.924,3.985,action,5,2,2,1,0,0,13,13,w/o 通过率门
+MarkorMergeNotes,0,21,62.306,2.967,action,21,2,2,1,0,0,15,14,w/o 通过率门
+MarkorMoveNote,0,9,31.03,3.448,action,9,0,0,1,0,0,12,12,w/o 通过率门
+MarkorTranscribeReceipt,0,8,30.432,3.804,action,8,1,1,1,0,0,21,20,w/o 通过率门
+MarkorTranscribeVideo,0,16,67.726,4.233,action,16,1,1,1,0,0,21,19,w/o 通过率门
+NotesIsTodo,1,3,9.684,3.228,action,3,0,0,1,0,0,4,4,w/o 通过率门
+NotesMeetingAttendeeCount,1,4,12.123,3.031,question,4,0,0,1,0,0,5,5,w/o 通过率门
+NotesRecipeIngredientCount,1,3,8.113,2.704,action,3,1,1,1,0,0,3,3,w/o 通过率门
+NotesTodoItemCount,1,3,10.945,3.648,question,3,0,0,1,0,0,6,6,w/o 通过率门
+OpenAppTaskEval,1,2,9.803,4.902,action,2,0,0,1,0,0,3,3,w/o 通过率门
+OsmAndFavorite,1,8,27.59,3.449,action,8,0,0,1,0,0,11,11,w/o 通过率门
+OsmAndMarker,0,20,45.733,2.287,action,20,0,0,1,0,0,5,5,w/o 通过率门
+OsmAndTrack,0,21,69.232,3.297,action,21,2,2,1,0,0,12,12,w/o 通过率门
+RecipeAddMultipleRecipes,0,21,66.374,3.161,action,21,0,0,1,0,0,14,12,w/o 通过率门
+RecipeAddMultipleRecipesFromImage,0,12,36.835,3.07,action,12,0,0,1,0,0,9,8,w/o 通过率门
+RecipeAddMultipleRecipesFromMarkor,0,19,83.23,4.381,action,19,0,0,1,0,0,22,22,w/o 通过率门
+RecipeAddMultipleRecipesFromMarkor2,0,21,72.44,3.45,action,21,0,0,1,0,0,10,9,w/o 通过率门
+RecipeAddSingleRecipe,1,12,44.058,3.672,action,12,1,1,1,0,0,14,13,w/o 通过率门
+RecipeDeleteDuplicateRecipes,1,8,27.747,3.468,action,8,1,1,1,0,0,10,8,w/o 通过率门
+RecipeDeleteDuplicateRecipes2,0,21,62.933,2.997,action,21,3,2,1,1,0,12,9,w/o 通过率门
+RecipeDeleteDuplicateRecipes3,0,21,67.734,3.225,action,21,4,4,1,0,0,14,11,w/o 通过率门
+RecipeDeleteMultipleRecipes,1,16,51.609,3.226,action,16,2,2,1,0,0,17,15,w/o 通过率门
+RecipeDeleteMultipleRecipesWithConstraint,1,3,9.607,3.202,action,3,0,0,1,0,0,9,7,w/o 通过率门
+RecipeDeleteMultipleRecipesWithNoise,1,19,59.061,3.108,action,19,1,1,1,0,0,21,18,w/o 通过率门
+RecipeDeleteSingleRecipe,1,2,6.414,3.207,action,2,3,3,1,0,0,7,6,w/o 通过率门
+RecipeDeleteSingleWithRecipeWithNoise,1,5,17.101,3.42,action,5,2,2,1,0,0,9,8,w/o 通过率门
+RetroCreatePlaylist,0,18,50.246,2.791,action,16,0,0,3,0,0,15,15,w/o 通过率门
+RetroPlayingQueue,0,21,60.467,2.879,action,21,0,0,1,0,0,11,11,w/o 通过率门
+RetroPlaylistDuration,0,21,66.599,3.171,action,21,2,1,1,0,0,18,18,w/o 通过率门
+RetroSavePlaylist,0,20,67.717,3.386,action,20,2,1,1,0,0,23,21,w/o 通过率门
+SaveCopyOfReceiptTaskEval,0,16,47.845,2.99,action,16,0,0,1,0,0,14,10,w/o 通过率门
+SimpleCalendarAddOneEvent,0,21,55.438,2.64,action,21,0,0,1,0,0,10,10,w/o 通过率门
+SimpleCalendarAddOneEventInTwoWeeks,0,19,53.646,2.823,action,19,3,3,1,0,0,15,14,w/o 通过率门
+SimpleCalendarAddOneEventRelativeDay,0,18,52.054,2.892,action,18,3,3,1,0,0,14,13,w/o 通过率门
+SimpleCalendarAddOneEventTomorrow,0,9,31.621,3.513,action,9,6,6,1,0,0,13,12,w/o 通过率门
+SimpleCalendarAddRepeatingEvent,0,6,19.079,3.18,action,6,4,4,1,0,0,12,11,w/o 通过率门
+SimpleCalendarAnyEventsOnDate,1,5,15.203,3.041,question,5,2,2,1,0,0,12,12,w/o 通过率门
+SimpleCalendarDeleteEvents,0,14,42.687,3.049,action,14,2,2,1,0,0,21,19,w/o 通过率门
+SimpleCalendarDeleteEventsOnRelativeDay,1,6,19.239,3.206,action,6,0,0,1,0,0,10,10,w/o 通过率门
+SimpleCalendarDeleteOneEvent,1,4,12.371,3.093,action,4,2,1,1,0,0,9,9,w/o 通过率门
+SimpleCalendarEventOnDateAtTime,1,2,6.429,3.214,question,2,0,0,1,0,0,6,6,w/o 通过率门
+SimpleCalendarEventsInNextWeek,0,10,30.904,3.09,question,10,2,2,1,0,0,21,21,w/o 通过率门
+SimpleCalendarEventsInTimeRange,1,2,7.453,3.726,question,2,0,0,1,0,0,8,8,w/o 通过率门
+SimpleCalendarEventsOnDate,0,1,2.761,2.761,question,1,0,0,1,0,0,4,4,w/o 通过率门
+SimpleCalendarFirstEventAfterStartTime,1,2,6.81,3.405,question,2,0,0,1,0,0,7,7,w/o 通过率门
+SimpleCalendarLocationOfEvent,1,3,11.123,3.708,question,3,0,0,1,0,0,8,8,w/o 通过率门
+SimpleCalendarNextEvent,0,2,7.608,3.804,question,2,1,1,1,0,0,9,9,w/o 通过率门
+SimpleCalendarNextMeetingWithPerson,0,3,10.229,3.41,action,3,0,0,1,0,0,6,6,w/o 通过率门
+SimpleDrawProCreateDrawing,1,11,43.061,3.915,action,11,0,0,1,0,0,13,10,w/o 通过率门
+SimpleSmsReply,1,5,17.834,3.567,action,5,0,0,1,0,0,7,7,w/o 通过率门
+SimpleSmsReplyMostRecent,1,5,15.272,3.054,action,5,0,0,1,0,0,8,8,w/o 通过率门
+SimpleSmsResend,1,8,28.87,3.609,action,8,0,0,1,0,0,11,10,w/o 通过率门
+SimpleSmsSend,1,4,15.21,3.803,action,4,2,2,1,0,0,8,7,w/o 通过率门
+SimpleSmsSendClipboardContent,0,12,33.051,2.754,action,12,1,1,1,0,0,6,5,w/o 通过率门
+SimpleSmsSendReceivedAddress,0,16,48.81,3.051,action,16,2,2,1,0,0,14,12,w/o 通过率门
+SportsTrackerActivitiesCountForWeek,0,10,26.024,2.602,question,10,0,0,1,0,0,6,5,w/o 通过率门
+SportsTrackerActivitiesOnDate,0,4,10.94,2.735,question,4,1,1,1,0,0,4,4,w/o 通过率门
+SportsTrackerActivityDuration,0,10,40.077,4.008,action,10,1,1,1,0,0,12,11,w/o 通过率门
+SportsTrackerLongestDistanceActivity,0,4,14.99,3.747,action,4,1,1,1,0,0,8,7,w/o 通过率门
+SportsTrackerTotalDistanceForCategoryOverInterval,0,4,15.947,3.987,action,4,2,1,1,0,0,7,6,w/o 通过率门
+SportsTrackerTotalDurationForCategoryThisWeek,0,10,26.756,2.676,action,10,0,0,1,0,0,7,6,w/o 通过率门
+SystemBluetoothTurnOff,1,6,26.324,4.387,action,6,0,0,0,0,0,5,5,w/o 通过率门
+SystemBluetoothTurnOffVerify,1,7,24.032,3.433,action,7,0,0,0,0,0,9,8,w/o 通过率门
+SystemBluetoothTurnOn,1,4,16.792,4.198,action,4,2,2,0,0,0,6,5,w/o 通过率门
+SystemBluetoothTurnOnVerify,0,10,37.913,3.791,action,10,2,2,0,0,0,8,7,w/o 通过率门
+SystemBrightnessMax,0,10,33.633,3.363,action,10,0,0,0,0,0,8,6,w/o 通过率门
+SystemBrightnessMaxVerify,1,10,38.012,3.801,action,10,0,0,0,0,0,8,5,w/o 通过率门
+SystemBrightnessMin,1,9,36.687,4.076,action,9,3,2,0,0,0,10,6,w/o 通过率门
+SystemBrightnessMinVerify,1,4,18.453,4.613,action,4,1,0,0,0,0,9,7,w/o 通过率门
+SystemCopyToClipboard,0,10,35.33,3.533,action,10,1,1,0,0,0,15,15,w/o 通过率门
+SystemWifiTurnOff,0,2,7.816,3.908,action,2,1,1,0,0,0,5,4,w/o 通过率门
+SystemWifiTurnOffVerify,1,2,12.68,6.34,action,2,1,1,0,0,0,5,4,w/o 通过率门
+SystemWifiTurnOn,0,2,5.376,2.688,action,2,1,1,0,0,0,4,3,w/o 通过率门
+SystemWifiTurnOnVerify,1,2,12.299,6.15,action,2,1,1,0,0,0,4,3,w/o 通过率门
+TasksCompletedTasksForDate,0,3,9.693,3.231,question,3,0,0,1,0,0,5,5,w/o 通过率门
+TasksDueNextWeek,0,2,5.337,2.669,question,2,1,1,1,0,0,4,4,w/o 通过率门
+TasksDueOnDate,0,2,5.623,2.812,question,2,1,1,1,0,0,4,4,w/o 通过率门
+TasksHighPriorityTasks,0,2,5.283,2.642,question,2,1,1,1,0,0,4,4,w/o 通过率门
+TasksHighPriorityTasksDueOnDate,0,2,7.34,3.67,question,2,1,1,1,0,0,4,4,w/o 通过率门
+TasksIncompleteTasksOnDate,1,1,2.88,2.88,question,1,0,0,1,0,0,3,3,w/o 通过率门
+TurnOffWifiAndTurnOnBluetooth,1,6,26.548,4.425,action,6,0,0,0,0,0,4,3,w/o 通过率门
+TurnOnWifiAndOpenApp,1,4,13.35,3.338,action,4,0,0,1,0,0,6,6,w/o 通过率门
+VlcCreatePlaylist,0,21,56.86,2.708,action,21,0,0,1,0,0,15,15,w/o 通过率门
+VlcCreateTwoPlaylists,0,21,52.328,2.492,action,21,1,1,1,0,0,15,15,w/o 通过率门
+AudioRecorderRecordAudio,0,12,44.88,3.74,action,11,0,0,2,0,0,13,12,w/o 落点回退
+AudioRecorderRecordAudioWithFileName,1,7,23.445,3.349,action,7,2,2,1,0,0,9,8,w/o 落点回退
+BrowserDraw,0,20,43.175,2.159,action,20,0,0,1,0,0,9,9,w/o 落点回退
+BrowserMaze,0,20,43.369,2.168,action,20,0,0,1,0,0,9,9,w/o 落点回退
+BrowserMultiply,0,21,47.301,2.252,action,21,0,0,1,0,0,11,11,w/o 落点回退
+CameraTakePhoto,0,4,20.369,5.092,action,4,0,0,0,0,0,4,4,w/o 落点回退
+CameraTakeVideo,0,10,59.707,5.971,action,10,0,0,0,0,0,4,4,w/o 落点回退
+ClockStopWatchPausedVerify,0,10,44.775,4.477,action,9,0,0,1,0,0,6,6,w/o 落点回退
+ClockStopWatchRunning,1,4,14.189,3.547,action,4,2,2,0,0,0,7,7,w/o 落点回退
+ClockTimerEntry,0,10,43.19,4.319,action,10,0,0,0,0,0,5,5,w/o 落点回退
+ContactsAddContact,1,9,30.019,3.335,action,9,0,0,1,0,0,11,11,w/o 落点回退
+ExpenseAddMultiple,0,21,63.356,3.017,action,21,0,0,1,0,0,6,6,w/o 落点回退
+ExpenseAddMultipleFromGallery,0,21,60.104,2.862,action,21,0,0,1,0,0,11,9,w/o 落点回退
+ExpenseAddMultipleFromMarkor,0,7,19.006,2.715,action,7,2,1,1,0,0,7,7,w/o 落点回退
+ExpenseAddSingle,1,8,25.348,3.168,action,8,2,1,1,0,0,7,7,w/o 落点回退
+ExpenseDeleteDuplicates,1,7,18.71,2.673,action,7,1,0,1,0,0,9,9,w/o 落点回退
+ExpenseDeleteDuplicates2,0,18,48.455,2.692,action,18,0,0,1,0,0,13,13,w/o 落点回退
+ExpenseDeleteMultiple,1,11,36.843,3.349,action,11,1,1,1,0,0,20,20,w/o 落点回退
+ExpenseDeleteMultiple2,0,21,62.869,2.994,action,21,0,0,1,0,0,14,14,w/o 落点回退
+ExpenseDeleteSingle,1,4,13.733,3.433,action,4,0,0,1,0,0,10,10,w/o 落点回退
+FilesDeleteFile,0,4,12.263,3.066,action,4,0,0,1,0,0,6,6,w/o 落点回退
+FilesMoveFile,1,18,54.579,3.032,action,18,1,1,1,0,0,18,16,w/o 落点回退
+MarkorAddNoteHeader,0,12,40.693,3.391,action,12,0,0,1,0,0,13,13,w/o 落点回退
+MarkorChangeNoteContent,0,12,45.536,3.795,action,12,0,0,1,0,0,9,9,w/o 落点回退
+MarkorCreateFolder,0,10,34.789,3.479,action,10,0,0,1,0,0,6,6,w/o 落点回退
+MarkorCreateNote,1,10,38.927,3.893,action,10,1,1,1,0,0,13,12,w/o 落点回退
+MarkorCreateNoteAndSms,0,6,21.207,3.535,action,6,0,0,1,0,0,9,8,w/o 落点回退
+MarkorCreateNoteFromClipboard,1,11,43.197,3.927,action,11,0,0,1,0,0,15,14,w/o 落点回退
+MarkorDeleteAllNotes,1,6,21.368,3.561,action,6,0,0,1,0,0,6,6,w/o 落点回退
+MarkorDeleteNewestNote,1,4,13.846,3.461,action,4,0,0,1,0,0,6,6,w/o 落点回退
+MarkorDeleteNote,1,3,11.367,3.789,action,3,1,1,1,0,0,10,10,w/o 落点回退
+MarkorEditNote,0,12,44.512,3.709,action,12,0,0,1,0,0,10,10,w/o 落点回退
+MarkorMergeNotes,0,21,63.448,3.021,action,21,1,1,1,0,0,15,15,w/o 落点回退
+MarkorMoveNote,0,11,36.793,3.345,action,11,1,1,1,0,0,14,13,w/o 落点回退
+MarkorTranscribeReceipt,0,18,65.608,3.645,action,18,2,2,1,0,0,19,19,w/o 落点回退
+MarkorTranscribeVideo,0,18,81.718,4.54,action,18,0,0,1,0,0,20,17,w/o 落点回退
+NotesIsTodo,1,3,10.253,3.418,action,3,0,0,1,0,0,4,4,w/o 落点回退
+NotesMeetingAttendeeCount,1,4,13.946,3.486,question,4,0,0,1,0,0,4,4,w/o 落点回退
+NotesRecipeIngredientCount,0,4,12.883,3.221,action,4,0,0,1,0,0,4,4,w/o 落点回退
+NotesTodoItemCount,0,4,13.119,3.28,question,4,1,1,1,0,0,7,7,w/o 落点回退
+OpenAppTaskEval,1,2,9.205,4.602,action,2,0,0,1,0,0,3,3,w/o 落点回退
+OsmAndFavorite,1,7,23.303,3.329,action,7,0,0,1,0,0,10,10,w/o 落点回退
+OsmAndMarker,0,20,44.505,2.225,action,20,0,0,1,0,0,5,5,w/o 落点回退
+OsmAndTrack,0,21,62.431,2.973,action,21,0,0,1,0,0,10,10,w/o 落点回退
+RecipeAddMultipleRecipes,0,21,66.351,3.16,action,21,0,0,1,0,0,12,11,w/o 落点回退
+RecipeAddMultipleRecipesFromImage,0,21,57.879,2.756,action,21,0,0,1,0,0,13,11,w/o 落点回退
+AudioRecorderRecordAudio,1,10,38.271,3.827,action,10,1,0,1,0,0,12,11,上一代 full_lean (h1)
+AudioRecorderRecordAudioWithFileName,0,20,69.848,3.492,action,20,1,0,1,0,0,12,11,上一代 full_lean (h1)
+BrowserDraw,0,20,47.68,2.384,action,20,0,0,1,0,0,10,10,上一代 full_lean (h1)
+BrowserMaze,0,11,32.49,2.954,action,11,0,0,1,0,0,17,16,上一代 full_lean (h1)
+BrowserMultiply,0,21,47.577,2.266,action,21,0,0,1,0,0,14,13,上一代 full_lean (h1)
+CameraTakePhoto,0,3,17.405,5.802,action,3,0,0,0,0,0,4,4,上一代 full_lean (h1)
+CameraTakeVideo,0,6,39.49,6.582,action,6,0,0,0,0,0,6,6,上一代 full_lean (h1)
+ClockStopWatchPausedVerify,0,10,52.057,5.206,action,8,0,0,2,0,0,7,6,上一代 full_lean (h1)
+ClockStopWatchRunning,1,5,25.095,5.019,action,5,0,0,0,0,0,11,10,上一代 full_lean (h1)
+ClockTimerEntry,0,10,45.282,4.528,action,10,0,0,0,0,0,8,7,上一代 full_lean (h1)
+ContactsAddContact,1,10,36.277,3.628,action,10,0,0,1,0,0,13,12,上一代 full_lean (h1)
+ExpenseAddMultiple,0,21,61.61,2.934,action,21,1,0,1,0,0,10,10,上一代 full_lean (h1)
+ExpenseAddMultipleFromGallery,0,21,61.97,2.951,action,21,2,1,1,0,0,15,12,上一代 full_lean (h1)
+ExpenseAddMultipleFromMarkor,0,21,60.722,2.892,action,20,1,0,2,0,0,12,11,上一代 full_lean (h1)
+ExpenseAddSingle,1,10,38.366,3.837,action,10,1,0,1,0,0,10,9,上一代 full_lean (h1)
+ExpenseDeleteDuplicates,1,7,22.356,3.194,action,7,0,0,1,0,0,13,12,上一代 full_lean (h1)
+ExpenseDeleteDuplicates2,1,12,38.46,3.205,action,12,0,0,1,0,0,15,14,上一代 full_lean (h1)
+ExpenseDeleteMultiple,1,10,36.375,3.637,action,10,0,0,1,0,0,25,24,上一代 full_lean (h1)
+ExpenseDeleteMultiple2,1,13,45.392,3.492,action,13,1,0,1,0,0,19,18,上一代 full_lean (h1)
+ExpenseDeleteSingle,1,4,14.062,3.515,action,4,0,0,1,0,0,10,9,上一代 full_lean (h1)
+FilesDeleteFile,0,21,57.342,2.731,action,21,1,0,1,0,0,22,19,上一代 full_lean (h1)
+FilesMoveFile,1,13,51.588,3.968,action,13,0,0,1,0,0,25,21,上一代 full_lean (h1)
+MarkorAddNoteHeader,0,12,42.794,3.566,action,12,1,1,1,0,0,18,16,上一代 full_lean (h1)
+MarkorChangeNoteContent,0,12,42.302,3.525,action,12,1,1,1,0,0,18,16,上一代 full_lean (h1)
+MarkorCreateFolder,1,4,17.365,4.341,action,4,0,0,1,0,0,11,9,上一代 full_lean (h1)
+MarkorCreateNote,1,8,34.094,4.262,action,8,0,0,1,0,0,20,17,上一代 full_lean (h1)
+MarkorCreateNoteAndSms,0,6,22.064,3.677,action,6,0,0,1,0,0,12,9,上一代 full_lean (h1)
+MarkorCreateNoteFromClipboard,1,11,46.59,4.235,action,11,0,0,1,0,0,21,18,上一代 full_lean (h1)
+MarkorDeleteAllNotes,1,6,22.799,3.8,action,6,0,0,1,0,0,13,11,上一代 full_lean (h1)
+MarkorDeleteNewestNote,1,4,15.419,3.855,action,4,1,0,1,0,0,11,10,上一代 full_lean (h1)
+MarkorDeleteNote,1,4,16.898,4.224,action,4,0,0,1,0,0,15,13,上一代 full_lean (h1)
+MarkorEditNote,0,12,48.727,4.061,action,12,0,0,1,0,0,15,13,上一代 full_lean (h1)
+MarkorMergeNotes,0,21,71.731,3.416,action,21,1,0,1,0,0,17,15,上一代 full_lean (h1)
+MarkorMoveNote,0,8,27.706,3.463,action,8,1,0,1,0,0,18,16,上一代 full_lean (h1)
+MarkorTranscribeReceipt,0,18,65.311,3.628,action,18,0,0,1,0,0,26,23,上一代 full_lean (h1)
+MarkorTranscribeVideo,0,9,35.618,3.958,action,9,0,0,1,0,0,22,19,上一代 full_lean (h1)
+NotesIsTodo,1,3,11.149,3.716,action,3,0,0,1,0,0,7,6,上一代 full_lean (h1)
+NotesMeetingAttendeeCount,1,4,13.263,3.316,question,4,0,0,1,0,0,6,5,上一代 full_lean (h1)
+NotesRecipeIngredientCount,1,4,13.981,3.495,action,4,0,0,1,0,0,6,5,上一代 full_lean (h1)
+NotesTodoItemCount,1,3,10.745,3.582,question,3,0,0,1,0,0,8,7,上一代 full_lean (h1)
+OpenAppTaskEval,1,6,25.072,4.179,action,6,1,0,1,0,0,10,8,上一代 full_lean (h1)
+OsmAndFavorite,1,8,31.468,3.933,action,8,0,0,1,0,0,15,14,上一代 full_lean (h1)
+OsmAndMarker,0,20,64.236,3.212,action,20,4,2,1,0,0,20,19,上一代 full_lean (h1)
+OsmAndTrack,0,21,54.663,2.603,action,21,0,0,1,0,0,16,15,上一代 full_lean (h1)
+RecipeAddMultipleRecipes,0,21,75.727,3.606,action,21,0,0,1,0,0,20,17,上一代 full_lean (h1)
+RecipeAddMultipleRecipesFromImage,0,21,307.019,14.62,action,21,0,0,1,0,0,28,23,上一代 full_lean (h1)
+RecipeAddMultipleRecipesFromMarkor,0,21,80.33,3.825,action,21,0,0,1,0,0,30,25,上一代 full_lean (h1)
+RecipeAddMultipleRecipesFromMarkor2,0,17,59.874,3.522,action,17,1,0,1,0,0,12,11,上一代 full_lean (h1)
+RecipeAddSingleRecipe,1,13,57.951,4.458,action,13,0,0,1,0,0,22,19,上一代 full_lean (h1)
+RecipeDeleteDuplicateRecipes,0,10,35.406,3.541,action,10,1,0,1,0,0,15,12,上一代 full_lean (h1)
+RecipeDeleteDuplicateRecipes2,0,21,69.143,3.293,action,20,2,0,2,0,0,16,13,上一代 full_lean (h1)
+RecipeDeleteDuplicateRecipes3,0,21,71.506,3.405,action,21,1,0,1,0,0,16,12,上一代 full_lean (h1)
+RecipeDeleteMultipleRecipes,1,14,44.98,3.213,action,13,0,0,2,0,0,16,13,上一代 full_lean (h1)
+RecipeDeleteMultipleRecipesWithConstraint,1,3,10.708,3.569,action,3,0,0,1,0,0,11,9,上一代 full_lean (h1)
+RecipeDeleteMultipleRecipesWithNoise,1,22,68.752,3.125,action,21,1,1,2,0,0,23,20,上一代 full_lean (h1)
+RecipeDeleteSingleRecipe,1,5,18.72,3.744,action,5,0,0,1,0,0,12,10,上一代 full_lean (h1)
+RecipeDeleteSingleWithRecipeWithNoise,1,6,23.438,3.906,action,6,0,0,1,0,0,15,12,上一代 full_lean (h1)
+RetroCreatePlaylist,1,15,51.925,3.462,action,15,1,1,1,0,0,20,19,上一代 full_lean (h1)
+RetroPlayingQueue,0,21,60.538,2.883,action,21,0,0,1,0,0,27,26,上一代 full_lean (h1)
+RetroPlaylistDuration,0,21,72.826,3.468,action,21,1,1,1,0,0,20,19,上一代 full_lean (h1)
+RetroSavePlaylist,0,18,64.296,3.572,action,18,1,1,1,0,0,26,23,上一代 full_lean (h1)
+SaveCopyOfReceiptTaskEval,1,7,23.416,3.345,action,7,0,0,1,0,0,10,9,上一代 full_lean (h1)
+SimpleCalendarAddOneEvent,0,21,61.449,2.926,action,21,2,2,1,0,0,20,19,上一代 full_lean (h1)
+SimpleCalendarAddOneEventInTwoWeeks,1,18,58.097,3.228,action,18,2,1,1,0,0,23,21,上一代 full_lean (h1)
+SimpleCalendarAddOneEventRelativeDay,1,19,60.21,3.169,action,19,3,3,1,0,0,21,19,上一代 full_lean (h1)
+SimpleCalendarAddOneEventTomorrow,0,21,62.999,3.0,action,21,2,2,1,0,0,19,17,上一代 full_lean (h1)
+SimpleCalendarAddRepeatingEvent,1,17,53.753,3.162,action,17,2,2,1,0,0,22,20,上一代 full_lean (h1)
+SimpleCalendarAnyEventsOnDate,1,2,5.365,2.682,question,2,0,0,1,0,0,11,10,上一代 full_lean (h1)
+SimpleCalendarDeleteEvents,1,7,24.935,3.562,action,7,0,0,1,0,0,13,12,上一代 full_lean (h1)
+SimpleCalendarDeleteEventsOnRelativeDay,1,6,23.773,3.962,action,6,0,0,1,0,0,13,12,上一代 full_lean (h1)
+SimpleCalendarDeleteOneEvent,1,5,16.355,3.271,action,5,0,0,1,0,0,15,13,上一代 full_lean (h1)
+SimpleCalendarEventOnDateAtTime,1,2,7.757,3.878,question,2,0,0,1,0,0,10,9,上一代 full_lean (h1)
+SimpleCalendarEventsInNextWeek,0,10,33.427,3.343,question,10,0,0,1,0,0,20,19,上一代 full_lean (h1)
+SimpleCalendarEventsInTimeRange,1,2,7.332,3.666,question,2,0,0,1,0,0,10,9,上一代 full_lean (h1)
+SimpleCalendarEventsOnDate,1,2,7.01,3.505,question,2,0,0,1,0,0,10,9,上一代 full_lean (h1)
+SimpleCalendarFirstEventAfterStartTime,1,2,7.522,3.761,question,2,0,0,1,0,0,10,9,上一代 full_lean (h1)
+SimpleCalendarLocationOfEvent,1,3,10.927,3.642,question,3,0,0,1,0,0,11,10,上一代 full_lean (h1)
+SimpleCalendarNextEvent,0,2,7.476,3.738,question,2,0,0,1,0,0,8,7,上一代 full_lean (h1)
+SimpleCalendarNextMeetingWithPerson,0,4,14.464,3.616,action,4,0,0,1,0,0,10,9,上一代 full_lean (h1)
+SimpleDrawProCreateDrawing,1,9,40.405,4.489,action,9,0,0,1,0,0,12,9,上一代 full_lean (h1)
+SimpleSmsReply,1,5,19.187,3.837,action,5,0,0,1,0,0,12,11,上一代 full_lean (h1)
+SimpleSmsReplyMostRecent,1,5,18.24,3.648,action,5,0,0,1,0,0,9,8,上一代 full_lean (h1)
+SimpleSmsResend,0,4,17.166,4.292,action,4,0,0,1,0,0,5,4,上一代 full_lean (h1)
+SimpleSmsSend,1,6,23.589,3.931,action,6,0,0,1,0,0,12,10,上一代 full_lean (h1)
+SimpleSmsSendClipboardContent,0,12,37.047,3.087,action,12,0,0,1,0,0,9,7,上一代 full_lean (h1)
+SimpleSmsSendReceivedAddress,0,18,51.198,2.844,action,18,1,0,1,0,0,15,11,上一代 full_lean (h1)
+SportsTrackerActivitiesCountForWeek,0,2,8.337,4.168,question,2,0,0,1,0,0,8,6,上一代 full_lean (h1)
+SportsTrackerActivitiesOnDate,0,3,9.699,3.233,question,3,0,0,1,0,0,9,7,上一代 full_lean (h1)
+SportsTrackerActivityDuration,0,3,9.155,3.052,action,3,0,0,1,0,0,9,7,上一代 full_lean (h1)
+SportsTrackerLongestDistanceActivity,0,10,28.369,2.837,action,10,1,0,1,0,0,12,11,上一代 full_lean (h1)
+SportsTrackerTotalDistanceForCategoryOverInterval,0,3,12.969,4.323,action,3,0,0,1,0,0,7,6,上一代 full_lean (h1)
+SportsTrackerTotalDurationForCategoryThisWeek,1,3,12.024,4.008,action,3,0,0,1,0,0,9,7,上一代 full_lean (h1)
+SystemBluetoothTurnOff,1,6,21.07,3.512,action,6,0,0,0,0,0,6,5,上一代 full_lean (h1)
+SystemBluetoothTurnOffVerify,1,7,28.585,4.084,action,7,0,0,0,0,0,13,9,上一代 full_lean (h1)
+SystemBluetoothTurnOn,1,7,32.545,4.649,action,7,0,0,0,0,0,10,6,上一代 full_lean (h1)
+SystemBluetoothTurnOnVerify,0,10,42.865,4.287,action,10,1,1,0,0,0,11,7,上一代 full_lean (h1)
+SystemBrightnessMax,0,10,34.686,3.469,action,10,1,0,0,0,0,10,6,上一代 full_lean (h1)
+SystemBrightnessMaxVerify,1,4,14.468,3.617,action,4,0,0,0,0,0,8,5,上一代 full_lean (h1)
+SystemBrightnessMin,1,6,21.756,3.626,action,6,0,0,0,0,0,8,4,上一代 full_lean (h1)
+SystemBrightnessMinVerify,1,4,14.394,3.598,action,4,0,0,0,0,0,8,6,上一代 full_lean (h1)
+SystemCopyToClipboard,0,10,33.89,3.389,action,9,0,0,1,0,0,9,7,上一代 full_lean (h1)
+SystemWifiTurnOff,1,5,23.669,4.734,action,5,0,0,0,0,0,7,6,上一代 full_lean (h1)
+SystemWifiTurnOffVerify,1,4,12.809,3.202,action,4,0,0,0,0,0,6,5,上一代 full_lean (h1)
+SystemWifiTurnOn,1,5,18.729,3.746,action,5,0,0,0,0,0,7,6,上一代 full_lean (h1)
+SystemWifiTurnOnVerify,1,4,20.904,5.226,action,4,0,0,0,0,0,7,6,上一代 full_lean (h1)
+TasksCompletedTasksForDate,0,3,11.578,3.859,question,3,0,0,1,0,0,7,6,上一代 full_lean (h1)
+TasksDueNextWeek,0,3,11.501,3.834,question,3,0,0,1,0,0,6,5,上一代 full_lean (h1)
+TasksDueOnDate,0,1,3.139,3.139,question,1,0,0,1,0,0,5,4,上一代 full_lean (h1)
+TasksHighPriorityTasks,1,1,3.663,3.663,question,1,0,0,1,0,0,5,4,上一代 full_lean (h1)
+TasksHighPriorityTasksDueOnDate,0,3,11.695,3.898,question,3,0,0,1,0,0,7,6,上一代 full_lean (h1)
+TasksIncompleteTasksOnDate,1,1,3.01,3.01,question,1,0,0,1,0,0,4,3,上一代 full_lean (h1)
+TurnOffWifiAndTurnOnBluetooth,1,9,39.729,4.414,action,9,0,0,0,0,0,12,10,上一代 full_lean (h1)
+TurnOnWifiAndOpenApp,1,4,13.654,3.414,action,4,0,0,1,0,0,7,6,上一代 full_lean (h1)
+VlcCreatePlaylist,0,21,83.258,3.965,action,21,1,1,1,0,0,25,22,上一代 full_lean (h1)
+VlcCreateTwoPlaylists,0,21,60.708,2.891,action,21,3,1,1,0,0,20,19,上一代 full_lean (h1)

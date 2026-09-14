@@ -1,0 +1,5 @@
+variant,ref,n,success,ref_success,d_success,success_rate,ref_success_rate,avg_steps,ref_avg_steps,d_steps,avg_success_steps,ref_avg_success_steps,avg_reasoning_calls,ref_avg_reasoning_calls,prefill_hops,prefill_hit_rate,explicit_skip_bootstrap,explicit_skip_gate,rollbacks,avg_e2e_s,ref_avg_e2e_s
+MobileExplorer 完整,Baseline 不建图,114,54,58,-4,47.37,50.88,9.32,9.77,-0.45,6.76,6.41,9.25,9.77,79,74.7,95,8,1,33.2,32.8
+w/o 目标条件检索,MobileExplorer 完整,113,51,53,-2,45.13,46.9,9.72,9.24,0.48,6.25,6.53,9.65,9.17,34,82.4,94,8,0,31.7,32.8
+w/o 通过率门,MobileExplorer 完整,114,50,54,-4,43.86,47.37,9.42,9.32,0.1,6.14,6.76,9.39,9.25,100,91.0,95,4,1,31.1,33.2
+w/o 落点回退,MobileExplorer 完整,45,17,20,-3,37.78,44.44,11.29,10.49,0.8,6.94,6.9,11.24,10.44,18,83.3,40,2,0,37.0,37.5
