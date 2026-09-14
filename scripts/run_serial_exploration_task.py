@@ -1491,6 +1491,18 @@ def main() -> int:
                            "accuracy only because it falls through rather than "
                            "replacing the inference, so a miss costs one extra "
                            "action and not a step of the 15-step budget.")
+  parser.add_argument("--prefill_any_kind", action="store_true",
+                      help="let a goal that asks a question reuse a control "
+                           "recorded by a goal that performs an action. Off by "
+                           "default: the store is built only from tasks that "
+                           "did something, and sentence embeddings put \"Do I "
+                           "have any events October 28\" right beside \"Create "
+                           "an event on October 28\", so the retrieval hands "
+                           "back the new-event FAB. Split by this predicate "
+                           "over two full runs (2026-09-14): on the 94-96 "
+                           "action tasks the design is level with no-graph "
+                           "(47 v 47, 45 v 46); on the 18 question tasks it "
+                           "loses 4 and 2 - the whole deficit.")
   parser.add_argument("--prefill_pass_rate", type=float, default=0.7,
                       help="fraction of the tasks that stood on this screen "
                            "which must have pressed the retrieved control. "
@@ -2517,6 +2529,7 @@ def main() -> int:
               min_tasks=args.prefill_min_tasks,
               min_pass_rate=args.prefill_pass_rate,
               goal_vote=args.prefill_retrieval in ("goal", "both"),
+              same_kind_only=not args.prefill_any_kind,
               trace=trace)
           if got is not None:
             decided, source = got[:4], got[4]

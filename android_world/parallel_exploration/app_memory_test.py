@@ -629,3 +629,36 @@ def test_pass_rate_excludes_the_asking_task():
   got = memory.retrieve_control("S", "Add an event Friday", _overlap,
                                 threshold=0.1, margin=0.05, min_pass_rate=0.7)
   assert got is not None and got[0] == "id|Next||B"
+
+
+def test_a_question_goal_gets_no_prefill():
+  """store 里只有"做事"的先例，问答类任务没有可回放的动作。
+
+  两轮全量 116 的拆分：执行类任务上本设计与不建图打平（47 对 47、45 对 46），
+  问答类 18 个任务上输 4 和 2 —— 全部亏损都在这里。句向量把
+  "Do I have any events October 28" 判得紧挨着 "Create an event on October 28"，
+  于是检索把新建事件的 FAB 交了回去。
+  """
+  memory = AppMemory("com.app")
+  _goal_executed(memory, "S", "id|New||B", "Create an event on October 28", "D1")
+  _goal_executed(memory, "S", "id|New||B", "Add an event next week", "D1")
+  asked = "Do I have any events October 28? Answer with the titles only."
+  assert memory.retrieve_control("S", asked, _overlap, threshold=0.1,
+                                 margin=0.05) is None
+  # 同类的执行目标仍然拿得到
+  got = memory.retrieve_control("S", "Create an event on Friday", _overlap,
+                                threshold=0.1, margin=0.05)
+  assert got is not None and got[0] == "id|New||B"
+
+
+def test_a_question_goal_may_reuse_another_question():
+  """门挡的是跨类，不是问答类本身。"""
+  memory = AppMemory("com.app")
+  _goal_executed(memory, "S", "id|List||B",
+                 "What events do I have next week? Answer with the titles.", "D1")
+  _goal_executed(memory, "S", "id|List||B",
+                 "How many events are there today? Answer with a number.", "D1")
+  got = memory.retrieve_control(
+      "S", "Do I have any events October 28? Answer with the titles only.",
+      _overlap, threshold=0.05, margin=0.02)
+  assert got is not None and got[0] == "id|List||B"

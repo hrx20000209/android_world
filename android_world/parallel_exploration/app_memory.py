@@ -30,6 +30,7 @@ from __future__ import annotations
 import dataclasses
 import json
 import pathlib
+import re
 import threading
 import time
 from typing import Any, Callable, Iterable, Mapping
@@ -350,12 +351,36 @@ class AppMemory:
     return (control, dict(known.action), known.dst_layout_signature,
             known.dst_activity)
 
+  _ASKS = re.compile(
+      r"(answer with|answer the following|what (is|are|do|does)|how many"
+      r"|do i have|which |tell me)", re.I)
+
+  @classmethod
+  def _is_question(cls, goal: str) -> bool:
+    """Does this goal ask for an answer rather than an action?
+
+    The store is built exclusively from tasks that *did* something -
+    observe_execution only ever records a control someone pressed. A goal that
+    asks a question has no prior action to replay, and sentence embeddings put
+    it right next to the action goals that share its vocabulary: "Do I have any
+    events October 28" sits at high similarity to "Create an event on
+    October 28", so the retrieval hands back the new-event FAB.
+
+    Measured over two full 116-task runs (2026-09-14), splitting on this
+    predicate: on the 94-96 action tasks the design is level with no-graph
+    (47 v 47, 45 v 46); on the 18 question tasks it loses 4 and 2. **The whole
+    deficit is here**, and prefill fired on 13 and 8 of those 18.
+
+    This is a property of the goal string, not of any app.
+    """
+    return bool(cls._ASKS.search(goal or ""))
+
   def retrieve_control(
       self, layout_signature: str, goal: str,
       similarity: Callable[[str, list[str]], list[float] | None],
       *, k: int = 3, threshold: float = 0.5, margin: float = 0.6,
       min_tasks: int = 2, min_pass_rate: float = 0.7,
-      goal_vote: bool = True,
+      goal_vote: bool = True, same_kind_only: bool = True,
       trace: dict[str, Any] | None = None) -> tuple[str, dict, str, str, str] | None:
     """(control, action, dst_layout_signature, dst_activity, source).
 
@@ -397,9 +422,19 @@ class AppMemory:
         trace["gate"] = gate
 
     screen = self.screens.get(layout_signature)
+    asking = self._is_question(goal or "")
     unique = self.prefill_control(layout_signature, min_tasks)
     if unique is not None and screen is not None:
       known = screen.transitions.get(f"{unique[0]}\0EXECUTED")
+      # 唯一性门本身不看目标，所以同类要求得在这里加：问答类任务只能复用
+      # 同样是问答类的先例。store 绝大部分是执行类记忆，不加这一条，
+      # 「有没有 X」会拿到「新建 X」按过的控件。
+      kind_ok = (not same_kind_only or not known
+                 or any(self._is_question(g) == asking for g in known.goals)
+                 or not known.goals)
+      if not kind_ok:
+        refuse("唯一性门：先例与本任务不同类")
+        return None
       if known is None or self._passes_through(screen, known, min_pass_rate):
         return unique[0], unique[1], unique[2], unique[3], "unique"
     text = (goal or "").strip()
@@ -416,8 +451,13 @@ class AppMemory:
         continue
       known_by_control.setdefault(known.control_key, known)
       for remembered_goal in known.goals:
-        if remembered_goal and remembered_goal != text:
-          pairs.append((remembered_goal, known.control_key))
+        if not remembered_goal or remembered_goal == text:
+          continue
+        # Same kind only. A question goal must not inherit an action goal's
+        # control just because they share nouns.
+        if same_kind_only and self._is_question(remembered_goal) != asking:
+          continue
+        pairs.append((remembered_goal, known.control_key))
     if not pairs:
       refuse("该屏无带目标的执行转移")
       return None
