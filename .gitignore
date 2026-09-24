@@ -29,6 +29,15 @@ results/**
 !results/git_upload/**
 !results/git_upload/.gitkeep
 
+# Local evaluation artifacts and temporary server-sync data.
+evaluation_results/
+tmp/
+
+# Generated/compiled helper artifacts.
+gui_exploration_selector/__pycache__/
+gui_exploration_selector/explorer_selector
+docs/*.png
+
 # Tests
 .pytest_cache/
 

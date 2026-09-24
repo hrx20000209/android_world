@@ -363,7 +363,10 @@ class AdbScreenshotProvider(ScreenshotProvider):
     self._adb = adb
 
   def capture(self) -> tuple[np.ndarray, float]:
-    result = self._adb.run(["exec-out", "screencap", "-p"], timeout_s=5.0)
+    # ADB screencap can briefly exceed five seconds while AndroidWorld is
+    # serving a gRPC accessibility request on the same emulator. Give the
+    # read-only capture enough room to recover without failing the task.
+    result = self._adb.run(["exec-out", "screencap", "-p"], timeout_s=12.0)
     image = cv2.imdecode(
         np.frombuffer(result.stdout, dtype=np.uint8), cv2.IMREAD_GRAYSCALE
     )
@@ -452,13 +455,22 @@ def create_optimized_state_capture(
     console_port: int = 5554,
     adb_path: str = "/Users/huangrunxi/Library/Android/sdk/platform-tools/adb",
     a11y_local_port: int = 8765,
+    use_fast_a11y_socket: bool = True,
 ) -> StateCapture:
-  """Build the low-latency emulator capture path used by the harness."""
+  """Build the emulator capture path used by the harness.
+
+  The FastA11y socket is fastest but requires its own AccessibilityService to
+  be enabled. AndroidWorld's gRPC evaluator enables a different accessibility
+  service, so callers using that evaluator should select the adb UiAutomator
+  provider instead of attempting to share/replace the active service.
+  """
   adb = AdbClient(serial)
+  tree_provider = (
+      FastSocketUiTreeProvider(adb, local_port=a11y_local_port)
+      if use_fast_a11y_socket else UiAutomatorDumpProvider(adb)
+  )
   return StateCapture(
       adb=adb,
-      tree_provider=FastSocketUiTreeProvider(adb, local_port=a11y_local_port),
-      screenshot_provider=AndroidWorldGrpcScreenshotProvider(
-          console_port=console_port, adb_path=adb_path
-      ),
+      tree_provider=tree_provider,
+      screenshot_provider=AdbScreenshotProvider(adb),
   )

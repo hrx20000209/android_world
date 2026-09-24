@@ -1,0 +1,26 @@
+[
+  {
+    "index": 0,
+    "text": "Search",
+    "content_desc": "",
+    "resource_id": "com.example:id/search_button"
+  },
+  {
+    "index": 1,
+    "text": "Settings",
+    "content_desc": "",
+    "resource_id": "com.example:id/settings"
+  },
+  {
+    "index": 2,
+    "text": "",
+    "content_desc": "More",
+    "resource_id": "com.example:id/more"
+  },
+  {
+    "index": 3,
+    "text": "Decorative title",
+    "content_desc": "",
+    "resource_id": "com.example:id/title"
+  }
+]

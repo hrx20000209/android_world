@@ -11,6 +11,47 @@ NC='\033[0m' # No Color
 
 emulator_name=${EMULATOR_NAME}
 
+# Docker image layers are shared by all containers.  The emulator refuses to
+# open the same AVD from multiple containers unless each worker has its own
+# writable AVD directory.  Copy the initialized AVD once per container so app
+# databases and userdata stay isolated across workers.
+function isolate_avd() {
+  if [[ "${ANDROID_WORLD_AVD_ISOLATE:-1}" != "1" ]]; then
+    return
+  fi
+
+  local source_home="${ANDROID_AVD_HOME:-${HOME}/.android/avd}"
+  local source_dir="${source_home}/${emulator_name}.avd"
+  local isolated_home="/tmp/androidworld-avd-${HOSTNAME:-$$}"
+  local isolated_name="${emulator_name}_${HOSTNAME:-$$}"
+  local isolated_dir="${isolated_home}/${isolated_name}.avd"
+  if [[ ! -d "$source_dir" ]]; then
+    echo "Warning: AVD directory not found at ${source_dir}; using shared AVD." >&2
+    return
+  fi
+  if [[ ! -d "$isolated_dir" ]]; then
+    mkdir -p "$isolated_home"
+    cp -a "$source_dir" "$isolated_dir"
+    if [[ -f "${source_home}/${emulator_name}.ini" ]]; then
+      cp "${source_home}/${emulator_name}.ini" "${isolated_home}/${isolated_name}.ini"
+    fi
+  fi
+  if [[ -f "${isolated_home}/${isolated_name}.ini" ]]; then
+    sed -i "s#^path=.*#path=${isolated_dir}#; s#^avd\.ini\.displayname=.*#avd.ini.displayname=${isolated_name}#" "${isolated_home}/${isolated_name}.ini"
+  fi
+  if [[ -f "${isolated_dir}/config.ini" ]]; then
+    sed -i "s#^avd\.name *=.*#avd.name = ${isolated_name}#; s#^avd\.id *=.*#avd.id = ${isolated_name}#" "${isolated_dir}/config.ini"
+  fi
+  # A prepared image can contain this stale marker from the setup emulator.
+  # Remove it before booting; otherwise the emulator reports a duplicate AVD.
+  find "$isolated_dir" -maxdepth 1 -type f \( -name '*.lock' -o -name 'multiinstance.lock' \) -delete
+  export ANDROID_AVD_HOME="$isolated_home"
+  emulator_name="$isolated_name"
+  export EMULATOR_NAME="$emulator_name"
+  echo "Using isolated AVD home: ${ANDROID_AVD_HOME}"
+  echo "Using isolated AVD name: ${EMULATOR_NAME}"
+}
+
 function check_hardware_acceleration() {
     if [[ "$HW_ACCEL_OVERRIDE" != "" ]]; then
         hw_accel_flag="$HW_ACCEL_OVERRIDE"
@@ -38,9 +79,13 @@ function check_hardware_acceleration() {
 hw_accel_flag=$(check_hardware_acceleration)
 
 function launch_emulator () {
+  isolate_avd
+  if [[ "${ANDROID_WORLD_AVD_ISOLATE:-1}" != "1" ]]; then
+    find "${ANDROID_AVD_HOME:-${HOME}/.android/avd}/${emulator_name}.avd" -maxdepth 1 -type f \( -name '*.lock' -o -name 'multiinstance.lock' \) -delete 2>/dev/null || true
+  fi
   adb devices | grep emulator | cut -f1 | xargs -I {} adb -s "{}" emu kill
   # options="@${emulator_name} -no-window -no-snapshot -noaudio -no-boot-anim -memory 2048 ${hw_accel_flag} -camera-back none  -grpc 8554"
-  options="@${emulator_name} -no-window -no-snapshot -no-boot-anim -memory 2048 ${hw_accel_flag} -grpc 8554"
+  options="@${emulator_name} -no-window -no-snapshot -no-boot-anim -noaudio -memory 2048 ${hw_accel_flag} -grpc 8554"
   if [[ "$OSTYPE" == *linux* ]]; then
     echo "${OSTYPE}: emulator ${options} -gpu off"
     nohup emulator $options -gpu off &

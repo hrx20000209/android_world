@@ -17,6 +17,7 @@ from unittest import mock
 import numpy as np
 
 from android_world.agents import explorer_agent
+from android_world.agents import explore_agent_text
 from android_world.agents.explorer_agent import ExplorerElementAgent
 from android_world.utils import test_utils
 
@@ -50,6 +51,7 @@ class ExplorerHistoryFormattingTest(absltest.TestCase):
     self.assertIn("2. swipe up", text)
     self.assertIn("3. system_button back", text)
 
+
   def test_simplify_history_item_supports_swipe_coordinate_form(self):
     item = "[llm] action=swipe, start_coordinate=[10, 20], end_coordinate=[30, 40]"
     self.assertEqual(
@@ -69,6 +71,43 @@ class ExplorerHistoryFormattingTest(absltest.TestCase):
             ["Record audio and save it"],
             ["open_app"],
         )
+    )
+
+
+class GoalTargetAppInferenceTest(absltest.TestCase):
+
+  def test_explicit_app_beats_app_like_task_data(self):
+    self.assertEqual(
+        explore_agent_text._infer_goal_target_app(
+            "Is the note titled 'Meeting Agenda' in the Joplin app marked as a todo item?"),
+        "Joplin",
+    )
+
+  def test_explicit_multiword_app_name_is_canonicalized(self):
+    self.assertEqual(
+        explore_agent_text._infer_goal_target_app(
+            "What events do I have in the Simple Calendar Pro app?"),
+        "Simple Calendar Pro",
+    )
+
+  def test_tasks_app_has_a_verified_package_for_deterministic_bootstrap(self):
+    self.assertEqual(
+        explore_agent_text._infer_goal_target_app(
+            "How many tasks do I have due next week in Tasks app?"),
+        "Tasks",
+    )
+    self.assertEqual(explore_agent_text._APP_PACKAGE_HINTS["Tasks"], ("org.tasks",))
+
+  def test_android_filesystem_goal_resolves_files_but_browser_goal_stays_chrome(self):
+    self.assertEqual(
+        explore_agent_text._infer_goal_target_app(
+            "Move setup_exe.exe to Download in the Android filesystem."),
+        "Files",
+    )
+    self.assertEqual(
+        explore_agent_text._infer_goal_target_app(
+            "Open task.html in Downloads in the file manager; when prompted open it with Chrome."),
+        "Chrome",
     )
 
 

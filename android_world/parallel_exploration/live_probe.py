@@ -4,9 +4,11 @@ from __future__ import annotations
 
 import json
 import multiprocessing
+import os
 import queue
 import statistics
 import dataclasses
+from collections import Counter
 import threading
 import time
 from pathlib import Path
@@ -22,12 +24,15 @@ from android_world.parallel_exploration.rankers import CoverageRanker
 from android_world.parallel_exploration.rankers import GraphKeywordRanker
 from android_world.parallel_exploration.rankers import LlmChoiceRanker
 from android_world.parallel_exploration.rankers import InformationNeedRanker
+from android_world.parallel_exploration.rankers import LightweightLinearRanker
 from android_world.parallel_exploration.rankers import Ranker
 from android_world.parallel_exploration.rankers import RandomRanker
 from android_world.parallel_exploration.rankers import SimpleRelevanceRanker
 from android_world.parallel_exploration import state_graph_information as sgi
+from android_world.parallel_exploration.executable_memory import ElementSelector
 from android_world.parallel_exploration.rankers import UiElement
 from android_world.parallel_exploration.belief_graph import ProgressiveBeliefGraph
+from android_world.parallel_exploration.belief_graph import stable_control_key_from_identity
 from android_world.parallel_exploration.state import StateSignature
 from android_world.parallel_exploration.state import create_optimized_state_capture
 from android_world.parallel_exploration.safety import RiskLevel
@@ -36,6 +41,18 @@ from android_world.parallel_exploration.recovery import execute_inverse
 from android_world.parallel_exploration.recovery import replay_navigation_trajectory
 
 import re
+
+_EAM_SIDE_EFFECT_LABEL = re.compile(
+    r"\b(?:set\s*up|enable|activate|pair|connect|configure|subscribe|upgrade|"
+    r"purchase|pay|send|publish|post|delete|remove|share|export|login|"
+    r"sign\s*in|allow|permission|camera|microphone|record|call|text|dial|"
+    r"phone|sms|email|voicemail)\b",
+    re.IGNORECASE,
+)
+_SAFE_NAVIGATION_BUTTON_LABELS = frozenset({
+    "search", "menu", "more", "more options", "settings", "filter",
+    "sort", "category", "categories",
+})
 
 
 def _tokens(value: str) -> set[str]:
@@ -111,9 +128,83 @@ _MATERIAL_NAV_MENU_ITEM_IDS = {
 }
 
 
+
 def _write_jsonl(path: Path, row: Mapping[str, Any]) -> None:
   with path.open("a", encoding="utf-8") as stream:
     stream.write(json.dumps(dict(row), ensure_ascii=False, default=str) + "\n")
+
+
+def _graph_element_rows(elements: Sequence[UiElement]) -> list[dict[str, Any]]:
+  """Compact control snapshot for cross-process graph state matching."""
+  rows = []
+  for element in elements:
+    if not (element.resource_id or element.clickable or element.scrollable):
+      continue
+    editable = element.class_name.rsplit(".", 1)[-1].casefold() == "edittext"
+    rows.append({
+        "text": "" if editable else element.text,
+        "content_desc": "" if editable else element.content_desc,
+        "resource_id": element.resource_id,
+        "class_name": element.class_name,
+        "bounds": list(element.bounds),
+        "is_clickable": element.clickable,
+        "is_scrollable": element.scrollable,
+        "is_editable": editable,
+        "is_enabled": True,
+        "is_visible": True,
+    })
+    if len(rows) >= 256:
+      break
+  return rows
+
+
+def _save_probe_diagnostic(
+    adb: AdbClient,
+    root: Path,
+    stem: str,
+    state: StateSignature,
+) -> dict[str, str]:
+  """Persist the exact probe screen plus its parsed UI state for audits."""
+  root.mkdir(parents=True, exist_ok=True)
+  screenshot_path = root / f"{stem}.png"
+  state_path = root / f"{stem}.json"
+  try:
+    screenshot = adb.run(["exec-out", "screencap", "-p"], timeout_s=5.0)
+    screenshot_path.write_bytes(screenshot.stdout)
+  except Exception:  # pylint: disable=broad-exception-caught
+    screenshot_path = Path("")
+  payload = {
+      "activity": dataclasses.asdict(state.activity),
+      "structural_signature": state.struct_sig.digest,
+      "visual_signature": state.phash,
+      "layout_signature": state.layout_sig,
+      "timings_ms": dict(state.timings_ms),
+      "elements": [
+          {
+              "text": element.text,
+              "content_desc": element.content_desc,
+              "resource_id": element.resource_id,
+              "class": element.class_name,
+              "bounds": list(element.bounds),
+              "clickable": element.clickable,
+              "scrollable": element.scrollable,
+              "checked": element.checked,
+              "selected": element.selected,
+              "package": element.package,
+              "in_navigation_drawer": element.in_navigation_drawer,
+              "identity": element.identity,
+          }
+          for element in state.elements
+      ],
+  }
+  state_path.write_text(
+      json.dumps(payload, ensure_ascii=False, indent=2, default=str),
+      encoding="utf-8",
+  )
+  return {
+      "screenshot": str(screenshot_path) if screenshot_path else "",
+      "state": str(state_path),
+  }
 
 
 def _element_dict(element: UiElement, rank: int, score: float) -> dict[str, Any]:
@@ -162,13 +253,59 @@ class _SnapshotView:
   def from_payload(cls, payload) -> "_SnapshotView | None":
     if not payload:
       return None
+    raw_edges = payload.get("edges") or {}
+    edges = (
+        {str(row.get("edge_id")): row for row in raw_edges if isinstance(row, Mapping)}
+        if isinstance(raw_edges, list) else dict(raw_edges)
+    )
+    raw_nodes = payload.get("nodes") or []
+    node_visits = dict(payload.get("node_visits") or {})
+    node_entropy = dict(payload.get("node_entropy") or {})
+    if isinstance(raw_nodes, list):
+      for row in raw_nodes:
+        if not isinstance(row, Mapping) or not row.get("node_id"):
+          continue
+        node_id = str(row["node_id"])
+        node_visits.setdefault(node_id, int(row.get("visit_count") or 0))
+        node_entropy.setdefault(node_id, float(row.get("decision_entropy") or 0.0))
+    outgoing = {k: list(v) for k, v in (payload.get("outgoing") or {}).items()}
+    if not outgoing:
+      for edge_id, row in edges.items():
+        source = str(row.get("src_node") or "")
+        if source:
+          outgoing.setdefault(source, []).append(edge_id)
     return cls(
         generation=int(payload.get("generation", 0)),
-        node_visits=dict(payload.get("node_visits") or {}),
-        node_entropy={k: float(v) for k, v in (payload.get("node_entropy") or {}).items()},
-        edges=dict(payload.get("edges") or {}),
-        outgoing={k: list(v) for k, v in (payload.get("outgoing") or {}).items()},
+        node_visits=node_visits,
+        node_entropy={k: float(v) for k, v in node_entropy.items()},
+        edges=edges,
+        outgoing=outgoing,
     )
+
+
+def _snapshot_edges(payload) -> dict[str, Mapping[str, Any]]:
+  if not payload:
+    return {}
+  raw = payload.get("edges") or {}
+  if isinstance(raw, list):
+    return {
+        str(row.get("edge_id")): row for row in raw
+        if isinstance(row, Mapping) and row.get("edge_id")
+    }
+  return dict(raw)
+
+
+def _snapshot_outgoing(payload, edges=None) -> dict[str, list[str]]:
+  if not payload:
+    return {}
+  outgoing = {k: list(v) for k, v in (payload.get("outgoing") or {}).items()}
+  if outgoing:
+    return outgoing
+  for edge_id, row in (edges or _snapshot_edges(payload)).items():
+    source = str(row.get("src_node") or "")
+    if source:
+      outgoing.setdefault(source, []).append(edge_id)
+  return outgoing
 
 
 def _progress_line(need: Mapping[str, Any], snapshot, node_id: str) -> str:
@@ -209,8 +346,8 @@ def _discovered_labels_near(snapshot_payload, node_id: str) -> list[str]:
   """
   if not snapshot_payload or not node_id:
     return []
-  edges = dict(snapshot_payload.get("edges") or {})
-  outgoing = snapshot_payload.get("outgoing") or {}
+  edges = _snapshot_edges(snapshot_payload)
+  outgoing = _snapshot_outgoing(snapshot_payload, edges)
   labels: list[str] = []
   seen: set[str] = set()
   frontier = [node_id]
@@ -270,8 +407,8 @@ def _known_control_keys(snapshot_payload, node_id: str) -> set[str]:
   """
   if not snapshot_payload or not node_id:
     return set()
-  edges = dict(snapshot_payload.get("edges") or {})
-  outgoing = (snapshot_payload.get("outgoing") or {}).get(node_id) or ()
+  edges = _snapshot_edges(snapshot_payload)
+  outgoing = _snapshot_outgoing(snapshot_payload, edges).get(node_id) or ()
   keys = set()
   for edge_id in outgoing:
     action = (edges.get(edge_id) or {}).get("action") or {}
@@ -333,9 +470,170 @@ def _record_scored(path: Path, scored, rank: int, context: Mapping[str, Any],
       "rank": rank,
       "selected_for_probe": selected,
       "final_exploration_score": scored.utility,
+      "graph_familiarity": "known_transition" if row.has_exact_history else "unexplored_control",
+      "task_relevance_score": max(
+          float(row.target_match or 0.0),
+          float(row.unresolved_information_match or 0.0),
+          float(row.expected_affordance_match or 0.0),
+      ),
       **scored.components,
   })
   _write_jsonl(path, record)
+
+
+def _apply_executable_memory_tiebreak(ranked, guidance):
+  """Use EAM to select a relevant graph frontier after Ex5 safety/scoring.
+
+  Ex5 still owns candidate admission and safety. Within that safe pool, mature
+  transitions are not probed again while another safe control remains; weak or
+  ambiguous edges remain eligible for validation, and task-relevant unseen
+  controls receive a bounded ranking bonus. Thus coverage is not the objective
+  and memory never makes an unsafe control executable.
+  """
+  guidance = guidance if isinstance(guidance, Mapping) else {}
+  matched = bool(guidance.get("enabled") and guidance.get("state_matched"))
+  controls = guidance.get("controls") if isinstance(guidance.get("controls"), Mapping) else {}
+  adjusted = []
+  stats = {"state_matched": matched, "candidate_count": 0,
+           "seen_count": 0, "unseen_count": 0, "mature_count": 0,
+           "relevant_count": 0, "revalidation_count": 0,
+           "repeat_suppressed_count": 0, "trap_suppressed_count": 0,
+           "known_noop_suppressed_count": 0,
+           "side_effect_veto_count": 0,
+           "stop_reason": "", "suppressed_candidates": []}
+  for scored in ranked:
+    row = scored.row
+    action_label = " ".join((row.text, row.content_desc,
+                              row.element.resource_id or ""))
+    # Resource IDs commonly use underscores (for example ``verb_call``);
+    # normalize separators before applying word boundaries so unlabeled
+    # affordances receive the same veto as visible labels.
+    normalized_action_label = re.sub(r"[_:/.-]+", " ", action_label)
+    if (guidance.get("enabled")
+        and _EAM_SIDE_EFFECT_LABEL.search(normalized_action_label)):
+      row.eam_side_effect_veto = True
+      stats["side_effect_veto_count"] += 1
+      stats["suppressed_candidates"].append({
+          "element_identity": row.element_identity,
+          "reason": "eam_side_effect_label_veto",
+      })
+      continue
+    evidence = controls.get(ElementSelector.from_element(row.element).key()) if matched else None
+    evidence = evidence if isinstance(evidence, Mapping) else None
+    relevance = (
+        float(evidence.get("task_relevance", 0.0)) if evidence else
+        max(float(row.target_match or 0.0),
+            float(row.unresolved_information_match or 0.0),
+            float(row.expected_affordance_match or 0.0))
+    ) if matched else 0.0
+    row.eam_state_matched = matched
+    row.eam_control_seen = evidence is not None
+    row.eam_control_support = int((evidence or {}).get("support_count", 0) or 0)
+    row.eam_task_relevance = max(0.0, min(1.0, relevance))
+    row.eam_control_mature = bool((evidence or {}).get("mature", False))
+    row.eam_control_trap = bool((evidence or {}).get("trap", False))
+    row.eam_control_dynamic = bool((evidence or {}).get("dynamic", False))
+    row.eam_control_noop = bool((evidence or {}).get("known_noop", False))
+    base = max(abs(float(scored.utility)), 0.005)
+    adjustment = 0.0
+    if matched:
+      if evidence:
+        if row.eam_control_trap or row.eam_control_dynamic:
+          adjustment -= base * 0.50
+        elif row.eam_control_mature:
+          # Mature paths are handled by frontier suppression below. Retain a
+          # small penalty as a tie-break if every safe alternative is known.
+          adjustment -= base * 0.20
+        else:
+          # Repeated validation is useful only while evidence is uncertain;
+          # its bonus is proportional to task relevance and bounded.
+          adjustment += base * (
+              0.12 * row.eam_task_relevance
+              + (0.08 if row.eam_control_support < 2 else 0.03)
+          )
+          stats["revalidation_count"] += 1
+      else:
+        # No edge from this source/selector means the safe control is a true
+        # graph frontier. Relevance, not visit count/coverage, is the bonus.
+        adjustment += base * (0.24 * row.eam_task_relevance - 0.03)
+    row.eam_graph_tiebreak = adjustment
+    row.eam_repeat_suppressed = False
+    components = dict(scored.components)
+    components.update({
+        "eam_graph_tiebreak": adjustment,
+        "eam_state_matched": float(matched),
+        "eam_control_seen": float(row.eam_control_seen),
+        "eam_task_relevance": row.eam_task_relevance,
+        "eam_support_count": float(row.eam_control_support),
+        "eam_mature": float(row.eam_control_mature),
+        "eam_trap_or_dynamic": float(row.eam_control_trap or row.eam_control_dynamic),
+        "eam_known_noop": float(row.eam_control_noop),
+    })
+    adjusted.append(dataclasses.replace(
+        scored, utility=float(scored.utility) + adjustment, components=components))
+    stats["candidate_count"] += int(matched)
+    stats["seen_count"] += int(row.eam_control_seen)
+    stats["unseen_count"] += int(matched and not row.eam_control_seen)
+    stats["mature_count"] += int(row.eam_control_mature)
+    stats["relevant_count"] += int(row.eam_task_relevance > 0)
+
+  if matched and adjusted:
+    for item in adjusted:
+      if item.row.eam_control_trap or item.row.eam_control_dynamic:
+        item.row.eam_repeat_suppressed = True
+        stats["trap_suppressed_count"] += 1
+        stats["suppressed_candidates"].append({
+            "element_identity": item.row.element_identity,
+            "reason": "graph_trap_or_dynamic_edge",
+        })
+      elif item.row.eam_control_noop:
+        item.row.eam_repeat_suppressed = True
+        stats["known_noop_suppressed_count"] += 1
+        stats["suppressed_candidates"].append({
+            "element_identity": item.row.element_identity,
+            "reason": "repeated_click_noop",
+        })
+    eligible = [item for item in adjusted
+                if not item.row.eam_control_trap and not item.row.eam_control_dynamic
+                and not item.row.eam_control_noop]
+    frontier = [item for item in eligible if not item.row.eam_control_mature]
+    suppressed_mature = [item for item in eligible if item.row.eam_control_mature]
+    if frontier:
+      for item in suppressed_mature:
+        item.row.eam_repeat_suppressed = True
+        stats["suppressed_candidates"].append({
+            "element_identity": item.row.element_identity,
+            "reason": "mature_transition_has_unexplored_frontier",
+        })
+      stats["repeat_suppressed_count"] = len(suppressed_mature)
+      adjusted = frontier
+    elif suppressed_mature:
+      # Every remaining Ex5-safe control on this matched page already has a
+      # verified transition. Stop instead of paying rollback risk to repeat it.
+      for item in suppressed_mature:
+        item.row.eam_repeat_suppressed = True
+        stats["suppressed_candidates"].append({
+            "element_identity": item.row.element_identity,
+            "reason": "graph_frontier_exhausted_mature_controls",
+        })
+      stats["repeat_suppressed_count"] = len(suppressed_mature)
+      adjusted = []
+      stats["stop_reason"] = "graph_frontier_exhausted_mature_controls"
+    else:
+      adjusted = []
+      stats["stop_reason"] = (
+          "graph_frontier_exhausted_known_noop"
+          if stats["known_noop_suppressed_count"]
+          else "graph_all_candidates_trap_or_dynamic")
+  if guidance.get("enabled") and not adjusted and not stats["stop_reason"]:
+    # A memory veto may stop exploration, but must never leave an empty list
+    # for the caller to index. It records the reason and safely yields control.
+    stats["stop_reason"] = (
+        "eam_side_effect_veto_all" if stats["side_effect_veto_count"]
+        else "eam_graph_filtered_all"
+    )
+  adjusted.sort(key=lambda item: (-item.utility, item.row.element_identity))
+  return adjusted, stats
 
 
 def _is_app_content(element: UiElement, label: str) -> bool:
@@ -384,7 +682,41 @@ def _safe_candidates(
     elements: tuple[UiElement, ...], filtered_path: Path, context: Mapping[str, Any]
 ) -> list[UiElement]:
   blocked = set(context.get("blocked_element_identities") or ())
-  already_explored = set(context.get("already_explored_element_identities") or ())
+  explored_control_evidence = context.get("explored_control_evidence") or {}
+  blocked_control_keys = {
+      stable_control_key_from_identity(identity) for identity in blocked
+  }
+  blocked_control_keys.discard("")
+  # Permit another measurement for a low-support or multi-destination edge.
+  # Suppress it only after two consistent landings with no recovery failure;
+  # a recorded trap is permanent for this source/control within the task.
+  mature_control_keys: set[str] = set()
+  trap_control_keys: set[str] = set()
+  for control_key, evidence in explored_control_evidence.items():
+    if not control_key or not isinstance(evidence, Mapping):
+      continue
+    probe_support = int(evidence.get("probe_count", evidence.get("support_count", 0)) or 0)
+    execution_support = int(evidence.get("execution_count", 0) or 0)
+    destinations = set(evidence.get("destinations") or ())
+    failures = int(evidence.get("recovery_failures", 0) or 0)
+    if failures:
+      trap_control_keys.add(str(control_key))
+    elif (probe_support >= 2 or execution_support >= 1) and len(destinations) == 1:
+      mature_control_keys.add(str(control_key))
+  editing_active = any(
+      element.class_name.rsplit(".", 1)[-1].casefold() == "edittext"
+      or any((element.package or "").startswith(pkg) for pkg in _SYSTEM_UI_PACKAGES[1:])
+      for element in elements
+  )
+  if editing_active:
+    # UI structure does not encode cursor, selection, composing spans, or IME
+    # state. A scroll/no-op can therefore pass structural recovery while
+    # silently moving the insertion point (observed filename corruption:
+    # 2023_... -> 023_...2). No probe on an active editing page is safe.
+    _write_jsonl(filtered_path, {
+        **context, "reason": "editing_state_not_structurally_recoverable",
+    })
+    return []
   # Accessibility often places the label/icon on a non-clickable child and
   # the click handler on an unlabeled parent.  Transfer the child's semantics
   # to the smallest containing clickable parent, but keep the parent's actual
@@ -453,8 +785,31 @@ def _safe_candidates(
       ))
   safe = []
   scroll_regions: list[tuple[int, int, int, int]] = []
+  # Repeated clickable templates usually denote rows/cards in a dynamic
+  # collection, not stable navigation controls. Probing one can change the
+  # list's scroll/selection state; Back may restore the Activity while leaving
+  # the reasoning action's original coordinates aimed at a different row.
+  # Such pages are not structurally restorable from the accessibility tree.
+  clickable_templates = Counter(
+      (element.resource_id, element.class_name)
+      for element in augmented
+      if element.clickable and not element.scrollable and element.resource_id
+  )
   for element in augmented:
-    if element.resource_id.startswith(("com.android.systemui:", "com.example.androidworld:")):
+    if (element.resource_id.startswith(("com.android.systemui:", "com.example.androidworld:"))
+        or any((element.package or "").startswith(pkg) for pkg in _SYSTEM_UI_PACKAGES)
+        or any((element.resource_id or "").startswith(pkg) for pkg in _SYSTEM_UI_PACKAGES)):
+      continue
+    if ("nexuslauncher" in str(context.get("app_package") or "")
+        and not element.scrollable):
+      # Opening arbitrary apps is an external transition, not a safe probe.
+      # The old fixed-five loop clicked Clock/Gmail/Photos/YouTube merely to
+      # fill budget after opening the app drawer. Candidate exhaustion is the
+      # correct, explicitly logged stop condition on Launcher.
+      _write_jsonl(filtered_path, {
+          **context, "element": _element_dict(element, 0, 0.0),
+          "reason": "launcher_external_app_target",
+      })
       continue
     if element.in_navigation_drawer:
       # Structural: this element sits under a standard AndroidX/Material
@@ -469,7 +824,9 @@ def _safe_candidates(
           "reason": "navigation_drawer_item",
       })
       continue
-    if element.identity in blocked:
+    stable_control_key = stable_control_key_from_identity(element.identity)
+    if (element.identity in blocked or stable_control_key in blocked_control_keys
+        or stable_control_key in trap_control_keys):
       # This exact element already produced an unrecoverable state transition
       # earlier in this task (see dirty_events / RESTORE_FAILED). Learned from
       # observed rollback outcome, not a keyword/label rule: never probe it
@@ -479,23 +836,45 @@ def _safe_candidates(
           "reason": "previously_caused_unrecoverable_state",
       })
       continue
-    if element.identity in already_explored and not element.scrollable:
+    if stable_control_key in mature_control_keys:
       # Already on record in the graph from a prior round that revisited
       # this same node (progressive per-task memory - see
       # ProgressiveBeliefGraph), whatever the outcome was. Re-probing it
       # would spend fresh budget and fresh rollback risk to relearn
       # something already known; let the ranker move on to a genuinely
-      # unexplored candidate instead. Scrollable containers are exempt:
-      # re-scrolling the same container can still reveal new list content,
-      # unlike re-tapping a static control.
+      # unexplored candidate instead. A changed list layout receives a new
+      # graph node and can be scrolled there; exempting scroll containers at
+      # the same node caused the same proven no-op to consume every round.
       _write_jsonl(filtered_path, {
           **context, "element": _element_dict(element, 0, 0.0),
-          "reason": "already_explored_this_node",
+          "reason": "already_explored_this_node_stable_transition",
+          "stable_control_key": stable_control_key,
       })
       continue
     role = element.class_name.rsplit(".", 1)[-1].casefold()
     left, top, right, bottom = element.bounds
+    # Accessibility providers occasionally expose stale/off-screen nodes with
+    # inverted or empty bounds (observed as [0, 296, -147, 438] in Calendar).
+    # Computing a centre for such a node produces an off-screen tap which is
+    # guaranteed to be a no-op and can still consume a probe budget slot.
+    # Bounds are an execution-safety invariant, not a ranking feature.
+    missing_bounds_sentinel = (left, top, right, bottom) == (0, 0, 0, 0)
+    if (right < left or bottom < top or
+        (not missing_bounds_sentinel and (right == left or bottom == top))):
+      _write_jsonl(filtered_path, {
+          **context, "element": _element_dict(element, 0, 0.0),
+          "reason": "invalid_or_empty_bounds",
+      })
+      continue
     if not (element.clickable or element.scrollable):
+      continue
+    if (element.clickable and not element.scrollable and element.resource_id
+        and clickable_templates[(element.resource_id, element.class_name)] > 1):
+      _write_jsonl(filtered_path, {
+          **context, "element": _element_dict(element, 0, 0.0),
+          "reason": "repeated_dynamic_collection_item",
+          "risk_level": RiskLevel.UNKNOWN.value,
+      })
       continue
     if element.scrollable:
       # Accessibility trees commonly expose both a coordinator/ScrollView and
@@ -545,7 +924,23 @@ def _safe_candidates(
           "risk_level": RiskLevel.UNKNOWN.value,
       })
       continue
-    if role == "button" and not reversible_toggle:
+    button_labels = {
+        re.sub(r"\s+", " ", re.sub(r"[_:/.-]+", " ", str(value or "")).casefold()).strip()
+        for value in (element.text, element.content_desc)
+        if value
+    }
+    resource_tail = (element.resource_id or "").rsplit("/", 1)[-1]
+    resource_label = re.sub(
+        r"\s+", " ", re.sub(r"[_:/.-]+", " ", resource_tail.casefold())
+    ).strip()
+    safe_navigation_button = bool(
+        button_labels & _SAFE_NAVIGATION_BUTTON_LABELS
+        or resource_label in {
+            "menu search", "action search", "btn search", "search button",
+            "menu more", "more options",
+        }
+    )
+    if role == "button" and not reversible_toggle and not safe_navigation_button:
       _write_jsonl(filtered_path, {
           **context, "element": _element_dict(element, 0, 0.0),
           "reason": "action_button_requires_semantic_inverse",
@@ -1113,6 +1508,7 @@ def _explore_deeper(
               "structural_signature": parent_state.struct_sig.digest,
               "visual_signature": parent_state.phash,
               "layout_signature": parent_state.layout_sig,
+              "elements": _graph_element_rows(parent_state.elements),
           },
           "action": {
               "action_type": "CLICK", "x": _center(child)[0], "y": _center(child)[1],
@@ -1123,6 +1519,7 @@ def _explore_deeper(
               "structural_signature": child_post.struct_sig.digest,
               "visual_signature": child_post.phash,
               "layout_signature": child_post.layout_sig,
+              "elements": _graph_element_rows(child_post.elements),
           },
       },
       "aborted_midway": inference_done_event.is_set(),
@@ -1139,9 +1536,18 @@ def explorer_window_process(
   trace_path = Path(config["trace_path"])
   filtered_path = Path(config["filtered_path"])
   trace_path.parent.mkdir(parents=True, exist_ok=True)
+  diagnostics_enabled = bool(config.get("save_probe_diagnostics", False))
+  diagnostics_root = Path(
+      config.get("probe_diagnostics_root")
+      or trace_path.parent / "probe_diagnostics"
+  )
   inference_done_event = threading.Event()
   inference_done_at: list[float] = []
   inference_start_ns = 0
+  # The initial capture happens before the per-window request payload is
+  # decoded. If adb times out there, the exception handler must still be able
+  # to publish a terminal event instead of dying with UnboundLocalError.
+  context: dict[str, Any] = {}
 
   def listen_abort() -> None:
     while True:
@@ -1155,7 +1561,11 @@ def explorer_window_process(
   capture = create_optimized_state_capture(
       serial=str(config.get("serial", "emulator-5554")),
       console_port=int(config.get("console_port", 5554)),
-      adb_path=str(config.get("adb_path", "/Users/huangrunxi/Library/Android/sdk/platform-tools/adb")),
+      adb_path=str(config.get(
+          "adb_path", os.environ.get(
+              "ANDROID_WORLD_ADB_PATH", "/opt/android/platform-tools/adb"
+          )
+      )),
       a11y_local_port=int(config.get("a11y_local_port", 8765)),
   )
   status_queue.put(Event.now(trial_id, EventKind.EXPLORER_READY, ProcessRole.EXPLORER))
@@ -1176,6 +1586,8 @@ def explorer_window_process(
   # from the output it now has and sends it with INFERENCE_START, which costs
   # nothing and halves the lag.
   fresh_need = first.payload.get("information_need") or None
+  fresh_eam_guidance = (first.payload.get("executable_memory_guidance")
+                        or config.get("executable_memory_guidance") or {})
   threading.Thread(target=listen_abort, daemon=True).start()
   dirty = False
   in_flight = False
@@ -1186,10 +1598,19 @@ def explorer_window_process(
   probe_idx = 0
   max_depth_reached = 0
   exploration_started = time.monotonic()
+  max_probes = min(5, max(0, int(config.get("max_probes", 5))))
+  stop_reason = "unknown"
   min_probes = 0
   post_inference_grace_s = 0.0
   try:
     baseline = capture.capture()
+    baseline_artifacts = (
+        _save_probe_diagnostic(
+            adb, diagnostics_root,
+            f"step_{int(config.get('step_idx', 0)):02d}_anchor", baseline,
+        )
+        if diagnostics_enabled else {}
+    )
     # See the note on parent_node_id above: this must key the same way the
     # runner does or the whole snapshot lookup silently returns nothing.
     baseline_node_id = ProgressiveBeliefGraph.make_node_id(
@@ -1202,7 +1623,7 @@ def explorer_window_process(
     context = {
         "trial_id": trial_id, "step_idx": int(config.get("step_idx", 0)),
         "app_package": baseline.activity.component.split("/", 1)[0],
-        "task": str(config.get("task", "")),
+      "task": str(config.get("task", "")),
         "allow_navigation_click": bool(config.get("allow_navigation_click", True)),
         "blocked_element_identities": list(config.get("blocked_element_identities") or ()),
         "blocked_recovery_contexts": list(config.get("blocked_recovery_contexts") or ()),
@@ -1214,7 +1635,19 @@ def explorer_window_process(
         # (outcome known either way): re-probing it spends budget and fresh
         # rollback risk to relearn something already known, so the ranker
         # should move on to a still-unexplored candidate instead.
-        "already_explored_element_identities": sorted(explored_element_identities.get(baseline_node_id, ())),
+      "already_explored_element_identities": sorted(explored_element_identities.get(baseline_node_id, ())),
+      "executable_memory_guidance": fresh_eam_guidance,
+      "executable_memory_guidance_stats": {
+          "state_matched": bool(fresh_eam_guidance.get("enabled")
+                                and fresh_eam_guidance.get("state_matched")),
+          "candidate_count": 0, "seen_count": 0,
+          "unseen_count": 0, "mature_count": 0, "relevant_count": 0,
+          "revalidation_count": 0, "repeat_suppressed_count": 0,
+          "known_noop_suppressed_count": 0,
+          "side_effect_veto_count": 0,
+          "trap_suppressed_count": 0,
+      },
+      "graph_stop_reason": "",
     }
     candidates = _safe_candidates(baseline.elements, filtered_path, context)
     ranker_name = str(config.get("ranker", "InformationNeedRanker"))
@@ -1265,6 +1698,20 @@ def explorer_window_process(
       ranker = CoverageRanker(
           known_control_keys=_known_control_keys(
               config.get("graph_snapshot"), baseline_node_id))
+    elif ranker_name in {"LightweightLinearRanker", "TinyLinearRanker"}:
+      weights_path = str(config.get("lightweight_selector_weights") or "")
+      if not weights_path:
+        raise ValueError(
+            "LightweightLinearRanker requires lightweight_selector_weights")
+      ranker = LightweightLinearRanker(weights_path)
+      # Keep the graph scorer fallback well-defined if a caller explicitly
+      # combines this ranker with predictive_scorer. The V0 experiment leaves
+      # that scorer off so the linear model remains exactly w^T x + b.
+      ui_labels = [
+          label for element in baseline.elements
+          for label in (element.text, element.content_desc) if label
+      ]
+      information_need = parse_information_need(None, context["task"], ui_labels)
     else:
       node_candidate_hits = dict(config.get("node_candidate_hits") or {})
       # Computed here, not passed in from the main process: only the explorer
@@ -1290,17 +1737,28 @@ def explorer_window_process(
       )
       goal_tokens = _goal_tokens_from_information_need(information_need.to_dict())
     probed: set[str] = set()
+    # A new page must first demonstrate an exact inverse before TAP_NAV is
+    # attempted.  Such taps are deferred, not consumed: once a scroll/no-op
+    # proves exact restoration in this same round they become eligible for
+    # the remaining Ex5 slots.  Previously they were inserted into `probed`
+    # before this gate, so the evidence arrived too late and every page was
+    # effectively capped at one scroll probe.
+    deferred_until_inverse: set[str] = set()
     probe_idx = 0
     max_depth_reached = 0
     scroll_probed = False
     deep_yield = False
+    selection_stopped = False
     blocked_recovery_contexts = set(context.get("blocked_recovery_contexts") or ())
     allowed_probe_types = set(context.get("allowed_probe_types")
                               or ("TAP_NAV", "SCROLL"))
     known_inverse_levels = dict(context.get("known_inverse_levels") or {})
     exploration_started = time.monotonic()
-    max_probes = max(0, int(config.get("max_probes", 12)))
-    min_probes = min(max_probes, max(0, int(config.get("min_probes", 4))))
+    max_probes = min(5, max(0, int(config.get("max_probes", 5))))
+    # The five probes are a target, not a promise: the loop may terminate for
+    # an empty safe pool, time/resource pressure, or failed recovery. In all
+    # other cases inference completion alone must not truncate the budget.
+    min_probes = min(max_probes, max(0, int(config.get("min_probes", 5))))
     post_inference_grace_s = max(
         0.0, float(config.get("post_inference_grace_s", 4.0))
     )
@@ -1371,6 +1829,20 @@ def explorer_window_process(
       remaining = [e for e in pool if e.identity not in already_probed]
       if not remaining:
         return None
+      if config.get("posterior_frontier"):
+        from android_world.parallel_exploration.online_evidence_index import posterior_frontier_scores
+        scores = posterior_frontier_scores(
+            remaining, context["task"], config.get("graph_snapshot") or {}, node_id)
+        chosen = max(remaining, key=lambda element: scores[element.identity])
+        out["rank"], out["score"] = 1, scores[chosen.identity]
+        for element in remaining:
+          _write_jsonl(scored_path, {
+              "trial_id": context["trial_id"], "node_id": node_id,
+              "element_identity": element.identity, "score": scores[element.identity],
+              "selected": element.identity == chosen.identity,
+              "policy": "dirichlet_frontier_per_second",
+          })
+        return chosen
       if not use_scorer:
         ranked = ranker.rank(remaining, context["task"], already_probed)
         if not ranked:
@@ -1408,6 +1880,22 @@ def explorer_window_process(
       if not safe:
         return None
       ranked = scorer.rank(safe)
+      ranked, guidance_stats = _apply_executable_memory_tiebreak(
+          ranked, context.get("executable_memory_guidance"))
+      for key in ("candidate_count", "seen_count", "unseen_count", "mature_count",
+          "relevant_count", "revalidation_count", "repeat_suppressed_count",
+          "known_noop_suppressed_count",
+          "side_effect_veto_count",
+                  "trap_suppressed_count"):
+        context["executable_memory_guidance_stats"][key] += guidance_stats[key]
+      if guidance_stats.get("stop_reason"):
+        context["graph_stop_reason"] = guidance_stats["stop_reason"]
+      for suppressed in guidance_stats.get("suppressed_candidates", ()):
+        _write_jsonl(scored_path, {
+            "trial_id": context["trial_id"], "node_id": node_id,
+            "selected_for_probe": False,
+            "graph_suppressed_candidate": dict(suppressed),
+        })
       # Every candidate, ranked, not only the winner. PART F's central metric
       # is where the model's real action later turns up in this ranking, and
       # that cannot be recovered from a log of the choice alone - a selector
@@ -1416,12 +1904,19 @@ def explorer_window_process(
       for position, scored in enumerate(ranked, start=1):
         _record_scored(scored_path, scored, position, context, node_id,
                        selected=position == 1)
+      if not ranked:
+        return None
       best = ranked[0]
       out["rank"], out["score"] = 1, best.utility
       return best.row.element
 
     def should_stop_for_inference() -> bool:
       if not inference_done_event.is_set():
+        return False
+      # Prefix arms explicitly request a fixed five-probe page budget.  The
+      # old Ex5-compatible path may still use the grace window, but a Prefix
+      # experiment must not turn a fast model response into a one-probe page.
+      if bool(config.get("force_min_probes", False)) and probe_idx < min_probes:
         return False
       if probe_idx >= min_probes:
         return True
@@ -1432,16 +1927,21 @@ def explorer_window_process(
         not should_stop_for_inference()
         and candidates
         and probe_idx < max_probes
-        and time.monotonic() - exploration_started < max_exploration_time_s
+        and (
+            (bool(config.get("force_min_probes", False)) and probe_idx < min_probes)
+            or time.monotonic() - exploration_started < max_exploration_time_s
+        )
     ):
-      element = select_candidate(candidates, probed, baseline, baseline_node_id,
+      element = select_candidate(candidates, probed | deferred_until_inverse,
+                                 baseline, baseline_node_id,
                                  selection)
       if element is None:
+        selection_stopped = True
         break
       root_probe_idx = probe_idx
-      probed.add(element.identity)
       probe_type = _probe_type(element)
       if probe_type not in allowed_probe_types:
+        probed.add(element.identity)
         # Recovery reliability differs sharply by probe type, and it is
         # measured, not assumed: over 452 probes on 2026-08-31, TAP_NAV at
         # depth 1 failed to roll back 7% of the time and SCROLL 10%, while
@@ -1466,14 +1966,18 @@ def explorer_window_process(
         # is what usually earns it, and scrolling stays available everywhere,
         # so exploration still runs on every eligible step - it just does the
         # cheap, exactly-reversible thing first on a screen it has not tested.
+        deferred_until_inverse.add(element.identity)
         continue
       if f"{baseline.activity.component}|{probe_type}" in blocked_recovery_contexts:
         # This screen has already swallowed a probe of this kind this episode
         # (see blocked_recovery_contexts in the runner). Trying again spends a
         # fresh unrecoverable-state risk to relearn the same thing.
+        probed.add(element.identity)
         continue
       if probe_type == "SCROLL" and scroll_probed:
+        probed.add(element.identity)
         continue
+      probed.add(element.identity)
       if probe_type == "SCROLL":
         scroll_probed = True
       row_started = time.monotonic_ns()
@@ -1485,6 +1989,14 @@ def explorer_window_process(
       time.sleep(0.10)
       post_started = time.monotonic_ns()
       post = capture.capture()
+      post_artifacts = (
+          _save_probe_diagnostic(
+              adb, diagnostics_root,
+              f"step_{int(config.get('step_idx', 0)):02d}_probe_{root_probe_idx:02d}_post",
+              post,
+          )
+          if diagnostics_enabled else {}
+      )
       post_capture_ms = (time.monotonic_ns() - post_started) / 1e6
       discovered_ids = {e.identity for e in post.elements} - {e.identity for e in baseline.elements}
       new_texts = sorted({
@@ -1539,7 +2051,26 @@ def explorer_window_process(
           known_inverse=str(known_inverse_levels.get(
               f"{baseline.activity.component}|{probe_type}", "")),
       )
+      recovered_artifacts: dict[str, str] = {}
+      if diagnostics_enabled:
+        try:
+          recovered = capture.capture()
+          recovered_artifacts = _save_probe_diagnostic(
+              adb, diagnostics_root,
+              f"step_{int(config.get('step_idx', 0)):02d}_probe_{root_probe_idx:02d}_recovered",
+              recovered,
+          )
+        except Exception:  # pylint: disable=broad-exception-caught
+          recovered_artifacts = {}
       last_recovery = level
+      if ok and level in ("NOOP", "INVERSE", "INVERSE_ANCHOR"):
+        known_inverse_levels[
+            f"{baseline.activity.component}|{probe_type}"
+        ] = level
+        # Exact restoration is the page-level evidence required by
+        # depth1_tap_needs_evidence(). Re-rank the taps that were deferred
+        # earlier in this round instead of waiting for another reasoning step.
+        deferred_until_inverse.clear()
       total_ms = (time.monotonic_ns() - row_started) / 1e6
       row = {
           **context, "probe_idx": root_probe_idx, "depth": 1,
@@ -1568,6 +2099,7 @@ def explorer_window_process(
                   "structural_signature": baseline.struct_sig.digest,
                   "visual_signature": baseline.phash,
                   "layout_signature": baseline.layout_sig,
+                  "elements": _graph_element_rows(baseline.elements),
               },
               "action": {
                   "action_type": "SWIPE" if probe_type == "SCROLL" else "CLICK",
@@ -1579,10 +2111,16 @@ def explorer_window_process(
                   "structural_signature": post.struct_sig.digest,
                   "visual_signature": post.phash,
                   "layout_signature": post.layout_sig,
+                  "elements": _graph_element_rows(post.elements),
               },
           },
           "aborted_midway": inference_done_event.is_set(),
           "notes": "" if ok else "RESTORE_FAILED",
+          "diagnostic_artifacts": {
+              "anchor": baseline_artifacts,
+              "post_probe": post_artifacts,
+              "recovered": recovered_artifacts,
+          } if diagnostics_enabled else {},
       }
       _write_jsonl(trace_path, row)
       in_flight = False
@@ -1606,12 +2144,31 @@ def explorer_window_process(
         # without contributing to its benefit.
         break
 
+    if dirty:
+      stop_reason = "recovery_failed"
+    elif probe_idx >= max_probes:
+      stop_reason = "budget_exhausted"
+    elif selection_stopped:
+      stop_reason = context.get("graph_stop_reason") or "candidate_rejected_or_no_progress"
+    elif not candidates:
+      stop_reason = "no_safe_candidate"
+    elif inference_done_event.is_set():
+      stop_reason = "reasoning_finished"
+    elif not candidates:
+      stop_reason = "no_safe_candidate"
+    elif time.monotonic() - exploration_started >= max_exploration_time_s:
+      stop_reason = "time_budget"
+    else:
+      stop_reason = "candidate_rejected_or_no_progress"
     terminal = EventKind.RESTORE_FAILED if dirty else EventKind.RESTORED
     status_queue.put(Event.now(
         trial_id, terminal, ProcessRole.EXPLORER,
         {"restore_elapsed_ms": 0.0, "abort_during_work": in_flight,
          "abort_recovery_level": last_recovery, "dirty": dirty,
          "probes_completed": probe_idx, "max_depth_reached": max_depth_reached,
+         "probe_budget_target": max_probes,
+         "five_probe_complete": bool(probe_idx >= max_probes and not dirty),
+         "stop_reason": stop_reason,
          "exploration_elapsed_ms": (time.monotonic() - exploration_started) * 1000,
          "preempted": inference_done_event.is_set(),
          "minimum_probes": min_probes,
@@ -1623,7 +2180,9 @@ def explorer_window_process(
          "llm_raw": getattr(ranker, "last_raw", ""),
          "llm_labels": list(getattr(ranker, "last_candidates", ()) or ())[:12],
          "llm_candidates": len(getattr(ranker, "last_candidates", ()) or ()),
-         "llm_promoted_from": getattr(ranker, "last_promoted_from", -1)},
+         "llm_promoted_from": getattr(ranker, "last_promoted_from", -1),
+         "executable_memory_guidance": dict(
+             context.get("executable_memory_guidance_stats") or {})},
     ))
   except Exception as exc:
     # An unexpected failure anywhere in this window (e.g. one adb call
@@ -1635,15 +2194,21 @@ def explorer_window_process(
     # inference-only for this round" (see device_dirty handling in
     # run_one_parallel_exploration_task.py), the same as any other
     # unrecoverable probe.
+    stop_reason = f"unexpected_error:{type(exc).__name__}"
     status_queue.put(Event.now(
         trial_id, EventKind.RESTORE_FAILED, ProcessRole.EXPLORER,
         {"restore_elapsed_ms": 0.0, "abort_during_work": in_flight,
          "abort_recovery_level": last_recovery, "dirty": True,
          "probes_completed": probe_idx, "max_depth_reached": max_depth_reached,
+         "probe_budget_target": max_probes,
+         "five_probe_complete": False,
+         "stop_reason": stop_reason,
          "exploration_elapsed_ms": (time.monotonic() - exploration_started) * 1000,
          "preempted": inference_done_event.is_set(),
          "minimum_probes": min_probes,
          "post_inference_grace_s": post_inference_grace_s,
+         "executable_memory_guidance": dict(
+             context.get("executable_memory_guidance_stats") or {}),
          "unexpected_error": f"{type(exc).__name__}: {exc}"},
     ))
   finally:
@@ -1785,7 +2350,9 @@ def run_prepared_explorer(prepared: PreparedExplorer, inference_call) -> tuple[A
   trial_id = str(prepared.config["trial_id"])
   start = Event.now(
       trial_id, EventKind.INFERENCE_START, ProcessRole.INFERENCE,
-      {"committed_actions": list(prepared.config.get("committed_actions") or [])},
+      {"committed_actions": list(prepared.config.get("committed_actions") or []),
+       "executable_memory_guidance": dict(
+           prepared.config.get("executable_memory_guidance") or {})},
   )
   prepared.control_queue.put(start)
   inference_started = time.monotonic_ns()
@@ -1793,9 +2360,33 @@ def run_prepared_explorer(prepared: PreparedExplorer, inference_call) -> tuple[A
   inference_ms = (time.monotonic_ns() - inference_started) / 1e6
   prepared.control_queue.put(Event.now(trial_id, EventKind.ABORT, ProcessRole.INFERENCE))
   extension_started = time.monotonic_ns()
-  terminal = prepared.status_queue.get(
-      timeout=float(prepared.config.get("restore_timeout_s", 10.0))
-  )
+  try:
+    terminal = prepared.status_queue.get(
+        timeout=float(prepared.config.get("restore_timeout_s", 10.0))
+    )
+  except queue.Empty:
+    # The reasoning action is already available, but exploration may have
+    # been interrupted while touching the shared emulator. Treat its state as
+    # unverified and let the caller re-observe/reason; never let a missing
+    # child status message turn an evaluator task into a task failure.
+    process_was_alive = prepared.process.is_alive()
+    if process_was_alive:
+      prepared.process.terminate()
+    prepared.process.join(timeout=2)
+    terminal = Event.now(
+        trial_id, EventKind.RESTORE_FAILED, ProcessRole.EXPLORER,
+        {"restore_elapsed_ms": 0.0, "abort_during_work": True,
+         "abort_recovery_level": "UNKNOWN", "dirty": True,
+         "probes_completed": 0, "max_depth_reached": 0,
+         "probe_budget_target": int(prepared.config.get("max_probes", 5)),
+         "five_probe_complete": False, "stop_reason": "terminal_status_timeout",
+         "exploration_elapsed_ms": 0.0, "preempted": True,
+         "minimum_probes": int(prepared.config.get("min_probes", 0)),
+         "post_inference_grace_s": float(
+             prepared.config.get("post_inference_grace_s", 0.0)),
+         "status_message_missing": True,
+         "explorer_was_alive_at_timeout": process_was_alive},
+    )
   extension_ms = (time.monotonic_ns() - extension_started) / 1e6
   prepared.process.join(timeout=2)
   if prepared.process.is_alive():

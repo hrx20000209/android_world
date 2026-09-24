@@ -1,0 +1,16 @@
+{
+  "measurement": "single_adb_run",
+  "date": "2026-09-21",
+  "device_model": "SM-S9210",
+  "abi": "arm64-v8a",
+  "weights_mode": "manual_ground_truth_like_v0",
+  "candidates": 4,
+  "runs": 1000,
+  "avg_us": 4.823,
+  "p50_us": 4.583,
+  "p95_us": 4.688,
+  "model_bytes": 1013,
+  "executable_bytes": 514960,
+  "peak_memory_kb_approx": 6832,
+  "source": "adb shell explorer_selector example_screen.json weights.txt --benchmark 1000"
+}

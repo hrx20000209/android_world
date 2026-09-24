@@ -100,10 +100,12 @@ class ResourceAdaptiveBudgetController:
     utility_factor = min(1.0, max(0.15, predicted_utility))
     reliability_factor = 0.5 + 0.5 * self.explorer_reliability
     scale = min(1.0, headroom * 1.5) * cpu_factor * interference_factor * utility_factor * reliability_factor
-    probes = max(1, round(c.max_probes * scale))
+    # The online memory contract is a five-probe target. Older experiment
+    # configs may still contain 12/20; keep them readable but never let those
+    # values silently expand a reasoning round beyond the safety budget.
+    probes = min(5, max(1, round(c.max_probes * scale)))
     depth = max(1, min(c.max_depth, 1 + int(scale * c.max_depth)))
     return ExplorationBudget(
         probes, depth, c.max_extra_memory_mb * max(0.1, scale),
         c.max_exploration_time_s * max(0.1, scale), True, "adaptive",
     )
-

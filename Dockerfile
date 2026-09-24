@@ -1,6 +1,6 @@
 # Credits to https://github.com/amrsa1/Android-Emulator-image
 
-FROM openjdk:18-jdk-slim
+FROM eclipse-temurin:17-jdk-jammy
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -91,7 +91,8 @@ ENV PATH="$PATH:/root/.local/bin"
 #=========================
 # Copying Scripts to root
 #=========================
-COPY . /
+WORKDIR /androidworld
+COPY . /androidworld/
 
 RUN chmod a+x docker_setup/start_emu.sh && \
     chmod a+x docker_setup/start_emu_headless.sh && \

@@ -217,6 +217,20 @@ class CandidateInformationRow:
   # into one number whose provenance is then unrecoverable.
   session_alignment_hits: int = 0
 
+  # Executable-memory guidance is kept separate from Ex5's measured graph
+  # features: it can add a bounded tie-break, but never alters the safety
+  # verdict or the fixed per-page probe budget.
+  eam_state_matched: bool = False
+  eam_control_seen: bool = False
+  eam_control_support: int = 0
+  eam_task_relevance: float = 0.0
+  eam_control_mature: bool = False
+  eam_control_trap: bool = False
+  eam_control_dynamic: bool = False
+  eam_control_noop: bool = False
+  eam_side_effect_veto: bool = False
+  eam_graph_tiebreak: float = 0.0
+
   # --- A1.5 contextual history --------------------------------------------
   contextual_probe_count: int = 0
   contextual_alignment_rate: float | None = None

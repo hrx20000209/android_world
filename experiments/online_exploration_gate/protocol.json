@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "claim_scope": "AndroidWorld dual-emulator prototype",
+  "arms": [
+    "no_memory",
+    "offline_topology",
+    "deployment_history",
+    "online_oracle",
+    "online_oracle_without_freshness"
+  ],
+  "fixed_controls": [
+    "backbone",
+    "prompt_except_arm_evidence_block",
+    "quantization",
+    "decoding",
+    "step_budget",
+    "task_instance",
+    "episode_seed"
+  ],
+  "seed_policy": {
+    "paired_by": ["task_id", "episode_seed", "decision_id"],
+    "current_episode_seed_must_not_appear_in_memory_seeds": true,
+    "offline_topology_may_contain": ["screen skeletons", "navigation transitions", "action semantics"],
+    "offline_topology_must_not_contain": ["current field values", "current evaluator state", "current answer"]
+  },
+  "initial_task_families": {
+    "calendar": [
+      "SimpleCalendarNextEvent",
+      "SimpleCalendarLocationOfEvent",
+      "SimpleCalendarFirstEventAfterStartTime"
+    ],
+    "tasks": [
+      "TasksDueOnDate",
+      "TasksDueNextWeek",
+      "TasksHighPriorityTasks"
+    ],
+    "opentracks": [
+      "SportsTrackerActivitiesOnDate",
+      "SportsTrackerActivityDuration",
+      "SportsTrackerTotalDistanceForCategoryOverInterval"
+    ],
+    "notes": [
+      "NotesRecipeIngredientCount",
+      "NotesMeetingAttendeeCount",
+      "NotesTodoItemCount"
+    ]
+  },
+  "negative_controls": {
+    "include_same_runs": true,
+    "definition": "decision points with no hidden or stale current-information slot"
+  },
+  "primary_metrics": [
+    "slot_accuracy",
+    "next_inference_avoid_rate",
+    "remaining_reasoning_calls",
+    "remaining_actions",
+    "stale_error_rate",
+    "evidence_coverage"
+  ],
+  "secondary_metrics": ["task_success_rate", "mean_e2e_s"],
+  "go_no_go": {
+    "minimum_passing_app_families": 2,
+    "minimum_saved_call_or_action_per_family": 1,
+    "fresh_must_beat_stale": true
+  }
+}

@@ -68,8 +68,12 @@ _OPEN_APP_ALIASES = {
     "notes": "Joplin",
     "markor": "Markor",
     "tasks": "Tasks",
+    "task": "Tasks",
     "todo": "Tasks",
     "to-do": "Tasks",
+    "files": "Files",
+    "file manager": "Files",
+    "文件管理": "Files",
     "simple draw": "Simple Draw Pro",
     "draw": "Simple Draw Pro",
     "gallery": "Simple Gallery Pro",
@@ -120,6 +124,11 @@ _GOAL_APP_PATTERNS: tuple[tuple[str, str], ...] = (
     ("settings", "Settings"),
     ("chrome", "Chrome"),
     ("browser", "Chrome"),
+    ("android filesystem", "Files"),
+    ("android file system", "Files"),
+    ("file manager", "Files"),
+    ("tasks app", "Tasks"),
+    ("task app", "Tasks"),
     ("osmand", "OSMand"),
     ("map", "OSMand"),
     ("favorite", "OSMand"),
@@ -135,6 +144,8 @@ _APP_PACKAGE_HINTS = {
     "Clock": ("com.google.android.deskclock", "com.android.deskclock"),
     "Simple Calendar Pro": ("com.simplemobiletools.calendar",),
     "Contacts": ("com.google.android.contacts", "com.android.contacts"),
+    "Tasks": ("org.tasks",),
+    "Files": ("com.google.android.documentsui",),
     "Markor": ("net.gsantner.markor",),
     "Joplin": ("net.cozic.joplin",),
     "Broccoli APP": ("com.flauschcode.broccoli",),
@@ -541,6 +552,20 @@ def _normalize_open_app_name(app_name: str | None) -> str | None:
 
 def _infer_goal_target_app(goal: str) -> str | None:
     goal_low = _clean_text(goal).lower()
+    # Prefer an explicit app mention over generic nouns in task data.  For
+    # example, "Is the note titled Meeting Agenda in the Joplin app ..." must
+    # open Joplin; matching "meeting" first incorrectly launched Calendar.
+    explicit_app = re.search(
+        r"\b(?:in|inside|using|with|on)\s+(?:the\s+)?"
+        r"([a-z0-9][a-z0-9 .&_-]*?)\s+app\b",
+        goal_low,
+    )
+    if explicit_app:
+        candidate = _normalize_open_app_name(explicit_app.group(1).strip(" ._-"))
+        if candidate:
+            for known_app in _APP_PACKAGE_HINTS:
+                if known_app.casefold() == candidate.casefold():
+                    return known_app
     for pattern, app_name in _GOAL_APP_PATTERNS:
         if pattern in goal_low:
             return app_name

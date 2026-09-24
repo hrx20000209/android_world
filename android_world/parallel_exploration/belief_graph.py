@@ -48,6 +48,14 @@ def canonical_action(action: Mapping[str, Any]) -> str:
   type is lower-cased so a probe's CLICK and the agent's click are one thing.
   """
   a = dict(action)
+  stable_control = a.get("stable_control_key")
+  if stable_control:
+    return json.dumps({
+        "action_type": str(a.get("action_type", "")).lower(),
+        "stable_control_key": stable_control,
+        "direction": a.get("direction"),
+        "app_name": a.get("app_name"),
+    }, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
   control = a.get("control_key")
   if control:
     return json.dumps({
@@ -65,6 +73,27 @@ def control_key_from_identity(identity: str) -> str:
   parts = str(identity or "").split("|")
   key = "|".join(parts[:4]).strip("|")
   return key if key.strip("|") else ""
+
+
+def stable_control_key_from_identity(identity: str) -> str:
+  """Return a bounds- and dynamic-label-tolerant control key.
+
+  Resource id + class is the preferred identity. For controls without ids,
+  stable content-description/text plus class is used. This key is for
+  suppressing duplicate exploration and merging repeated observations; the
+  richer ``control_key_from_identity`` remains available for relocation and
+  diagnostics.
+  """
+  parts = [part.strip().casefold() for part in str(identity or "").split("|")]
+  parts += [""] * max(0, 4 - len(parts))
+  resource_id, text, content_desc, class_name = parts[:4]
+  if resource_id:
+    return f"resource:{resource_id}|class:{class_name}"
+  if content_desc:
+    return f"desc:{content_desc}|class:{class_name}"
+  if text:
+    return f"text:{text}|class:{class_name}"
+  return ""
 
 
 @dataclasses.dataclass
@@ -134,6 +163,10 @@ class GraphEdge:
   # safe to explore a second time.
   inverse_level: str = ""
   risk_level: str = "UNKNOWN"
+  # A probe selected a control whose visible label is runtime/user data.
+  # Keep the observation for diagnostics, but never use it as reusable route
+  # guidance. Older serialized graphs default this field to False.
+  dynamic_content: bool = False
   exploration_cost: float = 0.0
   # Cumulative history. The single-value fields above record the latest
   # observation; these keep the record, which is what a ranking or a
@@ -237,6 +270,7 @@ class ProgressiveBeliefGraph:
       expected_information_gain: float, risk_level: str,
       exploration_cost: float, rollback_success: bool | None = None,
       discovered_labels: tuple[str, ...] = (), inverse_level: str = "",
+      dynamic_content: bool = False,
   ) -> GraphEdge:
     with self._lock:
       # Identity is (source screen, action) - the destination is something
@@ -272,6 +306,7 @@ class ProgressiveBeliefGraph:
       edge.confidence = max(edge.confidence, max(0.0, min(1.0, confidence)))
       edge.expected_information_gain = expected_information_gain
       edge.risk_level = risk_level
+      edge.dynamic_content = bool(edge.dynamic_content or dynamic_content)
       edge.exploration_cost = exploration_cost
       edge.rollback_success = rollback_success
       if inverse_level:

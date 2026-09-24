@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "task_set": ["ClockStopWatchRunning", "ContactsAddContact", "SimpleCalendarEventsOnDate", "SystemWifiOn"],
+  "seed": 30,
+  "model": "fixed_by_ANDROID_WORLD_LLM_API_URL",
+  "max_n_steps": 15,
+  "arms": [
+    {"name": "baseline", "agent_name": "gelab_agent", "flags": {"executable_memory_enabled": false}},
+    {"name": "five_probe_no_graph", "agent_name": "mobileexplorer_executable", "flags": {"executable_memory_enabled": true, "executable_memory_graph_enabled": false, "executable_memory_graph_prompt_enabled": false, "executable_memory_post_fusion_enabled": false, "executable_memory_high_confidence_skip_enabled": false}},
+    {"name": "graph_prompt_only", "agent_name": "mobileexplorer_executable", "flags": {"executable_memory_enabled": true, "executable_memory_exploration_enabled": false, "executable_memory_graph_enabled": true, "executable_memory_graph_prompt_enabled": true, "executable_memory_post_fusion_enabled": false, "executable_memory_high_confidence_skip_enabled": false}},
+    {"name": "post_fusion", "agent_name": "mobileexplorer_executable", "flags": {"executable_memory_enabled": true, "executable_memory_graph_enabled": true, "executable_memory_graph_prompt_enabled": true, "executable_memory_post_fusion_enabled": true, "executable_memory_high_confidence_skip_enabled": false}},
+    {"name": "high_confidence_skip", "agent_name": "mobileexplorer_executable", "flags": {"executable_memory_enabled": true, "executable_memory_graph_enabled": true, "executable_memory_graph_prompt_enabled": true, "executable_memory_post_fusion_enabled": true, "executable_memory_high_confidence_skip_enabled": true}},
+    {"name": "ablate_k_step", "agent_name": "mobileexplorer_executable", "flags": {"executable_memory_enabled": true, "executable_memory_k_step_enabled": false}},
+    {"name": "ablate_hard_negatives", "agent_name": "mobileexplorer_executable", "flags": {"executable_memory_enabled": true, "executable_memory_hard_negatives_enabled": false}},
+    {"name": "ablate_action_groups", "agent_name": "mobileexplorer_executable", "flags": {"executable_memory_enabled": true, "executable_memory_action_groups_enabled": false}},
+    {"name": "ablate_repeated_validation", "agent_name": "mobileexplorer_executable", "flags": {"executable_memory_enabled": true, "executable_memory_repeated_validation_enabled": false}}
+  ],
+  "randomization": "Use paired task seeds and randomize arm order externally; this file does not fabricate randomization.",
+  "success_source": "AndroidWorld evaluator checkpoint metadata"
+}

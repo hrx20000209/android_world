@@ -162,7 +162,10 @@ def _safe_json_loads(payload: str) -> dict[str, Any]:
         if coord is not None:
             args["coordinate"] = coord
     elif act_low in {"type", "input_text"}:
-        args["text"] = text or ""
+        # GELAB sometimes emits TYPE payloads under `value`. Preserve that
+        # field in the tolerant recovery path rather than issuing an empty
+        # input after malformed/truncated tool-call JSON.
+        args["text"] = text or value_field or ""
         coord = _extract_any_coord()
         if coord is not None:
             args["coordinate"] = coord
@@ -482,7 +485,6 @@ def _resolve_coordinate_by_mode(
     mode: str,
     ui_elements: list[Any],
 ) -> tuple[int, int]:
-    _ = ui_elements
     m = (mode or "auto").strip().lower()
     if m != "auto":
         return _scale_coordinate_by_mode(coordinate, screen_size, m)
@@ -512,13 +514,26 @@ def _resolve_coordinate_by_mode(
     if not in_absolute and not in_1000:
         return _scale_coordinate_by_mode(coordinate, screen_size, "auto")
 
-    # Ambiguous case: point is valid in both spaces.
-    # Prefer 1000-space for typical tall Android screens.
+    # Ambiguous case: point is valid in both spaces. Prefer the interpretation
+    # that lands closest to a live interactive control; this matches the
+    # GELAB-Light coordinate post-processing and avoids turning a plausible
+    # normalized target into a tap elsewhere on tall screens.
+    absolute = (int(round(x)), int(round(y)))
+    normalized = _scale_coordinate_by_mode(coordinate, screen_size, "1000")
+    absolute_distance = _nearest_interactive_distance(absolute, ui_elements)
+    normalized_distance = _nearest_interactive_distance(normalized, ui_elements)
+    if absolute_distance is not None and normalized_distance is not None:
+      if normalized_distance + 1.0 < absolute_distance:
+        return normalized
+      if absolute_distance + 1.0 < normalized_distance:
+        return _clamp_coordinate_to_screen(absolute, screen_size)
+
+    # With no useful live target (or a tie), prefer 1000-space on tall screens.
     if height > 1200.0 or width > 1200.0:
-        return _scale_coordinate_by_mode(coordinate, screen_size, "1000")
+        return normalized
     if width <= 1000.0 and height <= 1000.0:
-        return _clamp_coordinate_to_screen((int(round(x)), int(round(y))), screen_size)
-    return _clamp_coordinate_to_screen((int(round(x)), int(round(y))), screen_size)
+        return _clamp_coordinate_to_screen(absolute, screen_size)
+    return _clamp_coordinate_to_screen(absolute, screen_size)
 
 
 def _infer_swipe_direction_from_coordinates(

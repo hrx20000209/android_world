@@ -20,7 +20,10 @@ class TwoSystemConfig:
   # the element the authoritative model actually picks (see
   # docs/mobileexplorer_implementation_audit_zh.md and the 2026-08-28
   # single-task probe-coverage experiment).
-  max_probes: int = 20
+  # Five is the per-reasoning-step target. Resource pressure, an unsafe
+  # candidate pool, or failed recovery may stop earlier, but the terminal
+  # trace must explain why.
+  max_probes: int = 5
   max_depth: int = 3
   # Goal-directed depth continuation: keep expanding a speculative branch past
   # depth 1 only while what it reveals still overlaps the task's
@@ -47,4 +50,3 @@ class TwoSystemConfig:
   state_verify_threshold: float = 0.72
   recovery_timeout_s: float = 12.0
   abort_poll_interval_s: float = 0.05
-

@@ -1,0 +1,50 @@
+[
+  {
+    "text": "Search",
+    "content_desc": "",
+    "resource_id": "com.example:id/search_button",
+    "label": 1
+  },
+  {
+    "text": "More",
+    "content_desc": "",
+    "resource_id": "com.example:id/more",
+    "label": 1
+  },
+  {
+    "text": "Settings",
+    "content_desc": "",
+    "resource_id": "com.example:id/settings",
+    "label": 1
+  },
+  {
+    "text": "Delete account",
+    "content_desc": "",
+    "resource_id": "com.example:id/delete",
+    "label": 0
+  },
+  {
+    "text": "Decorative title",
+    "content_desc": "",
+    "resource_id": "com.example:id/title",
+    "label": 0
+  },
+  {
+    "text": "Open gallery",
+    "content_desc": "",
+    "resource_id": "com.example:id/gallery",
+    "label": 1
+  },
+  {
+    "text": "Close",
+    "content_desc": "",
+    "resource_id": "com.example:id/close",
+    "label": 0
+  },
+  {
+    "text": "Account history",
+    "content_desc": "",
+    "resource_id": "com.example:id/account_history",
+    "label": 0
+  }
+]

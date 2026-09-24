@@ -208,10 +208,19 @@ class ContactsNewContactDraft(task_eval.TaskEval):
       env: interface.AsyncEnv,
   ) -> float:
     super().is_successful(env)
-    ui_elements = representation_utils.forest_to_ui_elements(
-        env.get_state().forest,
-        exclude_invisible_elements=False,
-    )
+    state = env.get_state()
+    try:
+      ui_elements = representation_utils.forest_to_ui_elements(
+          state.forest,
+          exclude_invisible_elements=False,
+      )
+    except ValueError:
+      # Under the fast a11y provider there is no gRPC forest, and this raised
+      # "Must use a11y_grpc_wrapper", which suite_utils logged as a skipped
+      # task with 0 steps - a failure in every arm regardless of what the agent
+      # did (2026-09-24). The provider's elements carry the same text and
+      # hint_text (Android's getHintText) this check reads, from the same screen.
+      ui_elements = state.ui_elements
     return (
         1.0
         if _contact_info_is_entered(

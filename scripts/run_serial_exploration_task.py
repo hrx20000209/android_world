@@ -1482,6 +1482,45 @@ def main() -> int:
   parser.add_argument("--loop_repeats", type=int, default=3,
                       help="how many uses of one control on one screen, with no "
                            "change, count as a loop")
+  # Executable GUI memory sidecar (docs/CLAUDE_MOBILEEXPLORER_IMPLEMENTATION_PROMPT_ZH.md).
+  # One canonical graph (android_world/parallel_exploration/executable_memory.py)
+  # receives every exploration, reasoning and shortcut event. Every switch is
+  # off by default, so omitting them reproduces the baseline runner exactly;
+  # each switch adds one mechanism so the arms isolate one change at a time.
+  parser.add_argument("--em_path", default="",
+                      help="enable the executable-memory sidecar and persist "
+                           "its single graph at this JSON path (shared across "
+                           "the tasks of one arm). Alone it only observes and "
+                           "records - it changes no decision.")
+  parser.add_argument("--em_prompt", action="store_true",
+                      help="append the memory's top-K task-relevant routes to "
+                           "the reasoning prompt as evidence, not instructions")
+  parser.add_argument("--em_fusion", action="store_true",
+                      help="after the model's click is parsed, fuse it with "
+                           "the graph: snap to the live selector of a matching "
+                           "graph edge, or override only past the strict gate")
+  parser.add_argument("--em_shortcut", action="store_true",
+                      help="before reasoning, execute a verified 1-3 hop route "
+                           "from the graph, verifying every landing live and "
+                           "rolling back on a miss; the step then falls "
+                           "through to normal reasoning on the landed screen")
+  parser.add_argument("--em_explore_guidance", action="store_true",
+                      help="hand the memory's seen/unseen/support/trap evidence "
+                           "for this page to the probe chooser as a tie-break")
+  parser.add_argument("--em_route_landing", default="node",
+                      choices=("node", "activity"),
+                      help="level at which a shortcut hop's landing is judged "
+                           "and route confidence is computed. 'node' is the "
+                           "specification's exact-state rule; 'activity' "
+                           "requires the target activity and a real page "
+                           "change (landing activity re-lands 96%% of the "
+                           "time, the layout signature 66%%). Both verdicts "
+                           "are logged for every hop either way.")
+  parser.add_argument("--em_route_unknown_reversibility", action="store_true",
+                      help="treat an edge with no recovery attempts as "
+                           "reversibility-unknown rather than irreversible in "
+                           "the shortcut gate (a recovery failure still "
+                           "disqualifies it)")
   parser.add_argument("--store_prefill", action="store_true",
                       help="before each inference, if the persistent store has "
                            "seen exactly one control executed on this screen by "
@@ -1743,7 +1782,8 @@ def main() -> int:
     return sgi._need_type(parse_reasoning_prior(model_text, task_goal).to_dict())  # pylint: disable=protected-access
 
   def log(kind: str, **fields: Any) -> None:
-    row = {"kind": kind, "step": fields.pop("step", None), **fields}
+    row = {"kind": kind, "step": fields.pop("step", None), **fields,
+           "t": round(time.time(), 3)}
     events.append(row)
     with (root / "serial_events.jsonl").open("a", encoding="utf-8") as stream:
       stream.write(json.dumps(row, ensure_ascii=False, default=str) + "\n")
@@ -1957,6 +1997,15 @@ def main() -> int:
     for row in fresh:
       if row.get("trial_id") != trial_id or "graph" not in row:
         continue
+      if em_memory is not None:
+        try:
+          em_edge = em_memory.ingest_probe_row(row)
+          log("em_probe_edge", step=step_counter["i"],
+              edge=em_edge.edge_id if em_edge is not None else None,
+              recovered=bool(row.get("recovery_ok")),
+              recovery_level=row.get("recovery_level"))
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+          log("em_probe_edge_failed", step=step_counter["i"], error=str(exc)[:200])
       # Near-miss: the probe did come back, but only by walking the deep end
       # of the recovery ladder. NOOP and INVERSE mean the action was
       # structurally reversible; BACK_N, BACK_OVERLAY, DEEPLINK and
@@ -2309,6 +2358,158 @@ def main() -> int:
     original_step = _resize.GELABResizeAgent.step
   else:
     original_step = gelab_agent.GELABAgent.step
+  # ---- Executable GUI memory sidecar -----------------------------------
+  em_memory = None
+  em_state: dict[str, Any] = {"page": None, "page_before": None, "context": "",
+                              "sig": None, "raw_before": None,
+                              "last_auth": None, "screen_size": None,
+                              "pending": None}
+  if args.em_path:
+    from android_world.parallel_exploration import executable_memory as _em
+    em_memory = _em.ExecutableExplorationMemory(
+        _em.ExecutableMemoryConfig.from_mapping({
+            "enabled": True,
+            "graph_prompt_enabled": bool(args.em_prompt),
+            "post_fusion_enabled": bool(args.em_fusion),
+            "high_confidence_skip_enabled": bool(args.em_shortcut),
+            "exploration_guidance_enabled": bool(args.em_explore_guidance),
+            "route_allow_unknown_reversibility": bool(
+                args.em_route_unknown_reversibility),
+            "route_landing_level": args.em_route_landing,
+        }),
+        path=args.em_path,
+        logger=_em.JsonlMemoryLogger(str(root / "executable_memory_events.jsonl")))
+    em_memory.begin_task()
+    log("em_load", step=None, nodes=len(em_memory.states),
+        edges=len(em_memory.edges), path=args.em_path)
+
+  def em_page(sig):
+    """The runner's capture, as the memory's value-free page observation."""
+    rows = []
+    activity = getattr(getattr(sig, "activity", None), "component", "") or ""
+    app_package = activity.split("/", 1)[0]
+    for element in getattr(sig, "elements", ()) or ():
+      # Only the foreground app's own nodes identify its page. The status bar,
+      # notification icons and the soft keyboard are drawn by other packages,
+      # and they are exactly the dynamic chrome that split one Markor dialog
+      # into two graph nodes with identical app landmarks (a calendar
+      # notification icon appeared between two runs, 2026-09-24).
+      element_package = getattr(element, "package", "") or ""
+      if app_package and element_package and element_package != app_package:
+        continue
+      cls = getattr(element, "class_name", "") or ""
+      rows.append({
+          "text": getattr(element, "text", "") or "",
+          "content_desc": getattr(element, "content_desc", "") or "",
+          "resource_id": getattr(element, "resource_id", "") or "",
+          "class_name": cls,
+          "bbox": tuple(getattr(element, "bounds", (0, 0, 0, 0))),
+          "clickable": bool(getattr(element, "clickable", False)),
+          "scrollable": bool(getattr(element, "scrollable", False)),
+          # UiElement carries no editable flag. Deriving it from the class
+          # keeps typed task values (names, phone numbers) out of the graph's
+          # landmarks, which is what the memory's editable path is for.
+          "editable": "EditText" in cls,
+      })
+    return _em.PageObservation.from_ui(
+        rows, package=activity.split("/", 1)[0], activity=activity,
+        screen_size=em_state["screen_size"])
+
+  def em_try_shortcut(agent, goal: str, step: int, sig):
+    """Execute a verified route from the graph; return the landed capture.
+
+    Returns None when nothing was executed. Every hop re-reads the live UI,
+    relocates its selector and checks the landing against the graph; a miss
+    rolls back every executed hop with Back and is recorded as a route miss.
+    """
+    page = em_page(sig)
+    report = em_memory.route_gate_report(page, goal)
+    route = em_memory.high_confidence_path(page, goal)
+    log("em_route_gate", step=step, candidates=report["candidates"],
+        blocks=report["blocks"], chosen=bool(route))
+    if not route:
+      return None
+    source_node = em_memory.observe_page(page, visited=False)
+    current_sig, current = sig, page
+    executed, failed, reason, hops = [], None, "", []
+    previous_node_id = source_node.node_id
+    started = time.perf_counter()
+    for edge in route:
+      relocation = edge.selector.relocate(current.elements)
+      if relocation.ambiguous or relocation.center is None:
+        failed, reason = edge, ("live_selector_ambiguous" if relocation.ambiguous
+                                else "live_selector_not_found")
+        break
+      if edge.action_type == "navigate_back":
+        act = json_action.JSONAction(action_type=json_action.NAVIGATE_BACK)
+      else:
+        act = json_action.JSONAction(action_type=json_action.CLICK,
+                                     x=int(relocation.center[0]),
+                                     y=int(relocation.center[1]))
+      agent._execute_action(act, {})
+      current_sig = _settled_capture(capture, 1.5)
+      current = em_page(current_sig)
+      executed.append(edge)
+      landed = em_memory.observe_page(current, visited=False)
+      verdict = em_memory.route_landed(edge, previous_node_id, landed)
+      hops.append({"edge": edge.edge_id, "landed": landed.node_id,
+                   "activity": landed.activity, **verdict})
+      if not verdict["ok"]:
+        failed, reason = edge, "wrong_landing"
+        break
+      previous_node_id = landed.node_id
+    if failed is None:
+      em_memory.record_route_result(route, hit=True, reason="verified_landing")
+      for edge in executed:
+        # The model must be told what was done on its behalf, exactly as the
+        # step-0 app launch is: otherwise it reads a screen it never
+        # navigated to and its own history says it is still on the last one.
+        agent._summaries.append(str({"action": edge.action_type,
+                                     "text": edge.selector.describe()[:80]}))
+      log("em_route", step=step, hit=True, hops=len(executed),
+          hop_verdicts=hops, landing_level=args.em_route_landing,
+          edge_ids=[e.edge_id for e in route],
+          confidence=[round(e.confidence, 3) for e in route],
+          latency_s=time.perf_counter() - started)
+      return current_sig
+    em_memory.record_route_result(route, hit=False, failed_edge=failed, reason=reason)
+    restored = not executed
+    backs = 0
+    # One Back per executed hop is not enough: a hop that lands on a text
+    # field raises the soft keyboard, and the first Back only dismisses it
+    # (fault-injected miss on Markor's new-file dialog, 2026-09-24: one Back,
+    # dialog still open, restored=False). Press until the source screen is
+    # back, at most two extra, and never past the app's own screens.
+    source_package = (source_node.activity or "").split("/", 1)[0]
+    while executed and not restored and backs < len(executed) + 2:
+      try:
+        agent._execute_action(json_action.JSONAction(
+            action_type=json_action.NAVIGATE_BACK), {})
+      except Exception:  # pylint: disable=broad-exception-caught
+        break
+      backs += 1
+      current_sig = _settled_capture(capture, 1.5)
+      now = em_memory.observe_page(em_page(current_sig), visited=False)
+      restored = now.node_id == source_node.node_id
+      if (now.activity or "").split("/", 1)[0] != source_package:
+        break
+    if executed:
+      if not restored:
+        # Stale-state reasoning is forbidden: the model is told everything
+        # that happened, then reasons on the screen actually in front of it.
+        for edge in executed:
+          agent._summaries.append(str({"action": edge.action_type,
+                                       "text": edge.selector.describe()[:80]}))
+        for _ in range(backs):
+          agent._summaries.append(str({"action": "navigate_back"}))
+    log("em_route", step=step, hit=False, reason=reason, hops=len(executed),
+        backs=backs,
+        hop_verdicts=hops, landing_level=args.em_route_landing,
+        restored=restored, edge_ids=[e.edge_id for e in route],
+        failed_edge=failed.edge_id if failed else None,
+        latency_s=time.perf_counter() - started)
+    return current_sig if executed else None
+
   original_build = gelab_agent.build_gelab_messages
   step_counter = {"i": 0}
   dirty_from_last_step = {"value": False}
@@ -2328,7 +2529,7 @@ def main() -> int:
     convention.
     """
     messages = original_build(goal_text, history, screenshot)
-    extra = "\n\n".join(x for x in (briefing_now["text"],
+    extra = "\n\n".join(x for x in (briefing_now["text"], em_state["context"],
                                      _decision_constraints(
                                          goal_text, args.constraints_variant)
                                      if args.decision_constraints else "") if x)
@@ -2349,13 +2550,68 @@ def main() -> int:
           return messages
     return messages
 
+  def em_flush_record(page_after):
+    """Record last step's action against the screen it settled on."""
+    pending, em_state["pending"] = em_state["pending"], None
+    if pending is None:
+      return
+    action_dict = pending["action"]
+    em_edge = em_memory.record_authoritative(
+        pending["page"], action_dict, page_after, latency_s=pending["latency_s"])
+    src_node = em_memory.observe_page(pending["page"], visited=False).node_id
+    dst_node = em_memory.observe_page(page_after, visited=False).node_id
+    atype = str(action_dict.get("action_type") or "")
+    last = em_state["last_auth"]
+    reversed_edge = None
+    if (atype == json_action.NAVIGATE_BACK and last
+        and last["dst"] == src_node and last["src"] == dst_node):
+      if em_memory.record_observed_reversal(last["edge"]):
+        reversed_edge = last["edge"]
+    em_state["last_auth"] = (
+        {"edge": em_edge.edge_id, "src": src_node, "dst": dst_node}
+        if atype == json_action.CLICK and em_edge is not None
+        and src_node != dst_node else None)
+    log("em_record", step=pending["step"], action_type=atype,
+        edge=em_edge.edge_id if em_edge is not None else None,
+        src=src_node, dst=dst_node, prompt_adopted=pending["adopted"],
+        observed_reversal=reversed_edge,
+        nodes=len(em_memory.states), edges=len(em_memory.edges))
+
   def serial_step(self, goal: str):
     episode_goal["text"] = goal
     step = step_counter["i"]
+    log("step_begin", step=step)
     before = capture.capture()
     src_id = node_id_of(before)
     upsert(before, src_id, visited=True)
     dump_node_screenshot(self, src_id)
+    if em_memory is not None:
+      if em_state["screen_size"] is None:
+        try:
+          em_state["screen_size"] = tuple(
+              float(v) for v in self.env.logical_screen_size)
+        except Exception:  # pylint: disable=broad-exception-caught
+          em_state["screen_size"] = None
+      # suite_utils records the task outcome on agent.executable_memory and
+      # saves it; binding here is what makes the graph persist across tasks.
+      self.executable_memory = em_memory
+      try:
+        # `before` is taken right after the last action returned; the model's
+        # own screenshot waits a further second. The graph needs the screen
+        # the action settled on, so it waits for the layout to stop changing.
+        em_state["raw_before"] = before
+        em_state["sig"] = _settled_capture(capture, 1.5)
+        em_state["page_before"] = em_page(em_state["sig"])
+        try:
+          em_flush_record(em_state["page_before"])
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+          log("em_record_failed", step=step, error=str(exc)[:200])
+        node = em_memory.observe_page(em_state["page_before"], visited=True)
+        log("em_observe", step=step, node=node.node_id,
+            nodes=len(em_memory.states), edges=len(em_memory.edges))
+      except Exception as exc:  # pylint: disable=broad-exception-caught
+        em_state["page_before"] = None
+        log("em_observe_failed", step=step, error=str(exc)[:200])
 
     # Prefix alignment: did last step's probe guess land where the model's
     # real action then landed? If so the explorer read the intent correctly
@@ -2718,6 +2974,27 @@ def main() -> int:
         src_id = node_id_of(before)
         upsert(before, src_id, visited=True)
 
+    # Executable-memory shortcut. After the app launch so the app's own
+    # screens are in front of it; before the gate, exploration and reasoning
+    # so all three then start from the landed screen - the explorer and the
+    # model still read the same page, and neither sees the other.
+    if em_memory is not None and args.em_shortcut:
+      try:
+        landed_sig = em_try_shortcut(
+            self, goal, step,
+            em_state["sig"] if before is em_state.get("raw_before") else before)
+      except Exception as exc:  # pylint: disable=broad-exception-caught
+        landed_sig = None
+        log("em_route_failed", step=step, error=str(exc)[:200])
+      if landed_sig is not None:
+        before = landed_sig
+        src_id = node_id_of(before)
+        upsert(before, src_id, visited=True)
+        try:
+          em_state["page_before"] = em_page(before)
+        except Exception:  # pylint: disable=broad-exception-caught
+          em_state["page_before"] = None
+
     # P_{i-1}: what the model said it was looking for in its LAST output.
     # Computed once per step and shared by exploration ranking and the
     # distiller, so both are conditioned on the same statement of need.
@@ -2986,8 +3263,21 @@ def main() -> int:
         return 3.0  # before the first observation, near the measured median
       return statistics.median(inference_latencies)
 
+    em_guidance: dict[str, Any] = {}
+    if (em_memory is not None and args.em_explore_guidance
+        and em_state.get("page_before") is not None):
+      try:
+        em_guidance = em_memory.exploration_guidance(em_state["page_before"], goal)
+        log("em_explore_guidance", step=step,
+            enabled=bool(em_guidance.get("enabled")),
+            state_matched=bool(em_guidance.get("state_matched")),
+            controls=len(em_guidance.get("controls") or {}))
+      except Exception as exc:  # pylint: disable=broad-exception-caught
+        em_guidance = {}
+        log("em_explore_guidance_failed", step=step, error=str(exc)[:200])
     explorer_config = {
         "trial_id": f"{args.task}-step{step}", "task": goal, "step_idx": step,
+        "executable_memory_guidance": em_guidance,
         "trace_path": str(root / "probe_trace.jsonl"),
         "filtered_path": str(root / "filtered_elements.jsonl"),
         "ranker": {"random": "RandomRanker",
@@ -3162,6 +3452,22 @@ def main() -> int:
 
     # (4) Inference. The explorer has finished and the app has been put
     # back, so the model reads the screen this window opened on.
+    em_state["page"], em_state["context"] = None, ""
+    if em_memory is not None:
+      try:
+        # Re-read after exploration's restore: this is the screen the model is
+        # about to see, and the one fusion must relocate selectors against.
+        em_state["page"] = em_page(capture.capture())
+        if args.em_prompt:
+          em_state["context"] = em_memory.prompt_context(em_state["page"], goal)
+          log("em_prompt", step=step, injected=bool(em_state["context"]),
+              chars=len(em_state["context"]),
+              edge_ids=list(getattr(em_memory, "_last_prompt_edge_ids", ())),
+              text=em_state["context"])
+      except Exception as exc:  # pylint: disable=broad-exception-caught
+        em_state["page"], em_state["context"] = None, ""
+        log("em_prompt_failed", step=step, error=str(exc)[:200])
+    log("inference_begin", step=step)
     inference_started = time.perf_counter()
     result = original_step(self, goal)
     inference_s = time.perf_counter() - inference_started
@@ -3299,6 +3605,24 @@ def main() -> int:
     real_control = _control_key_at(before, action_dict)
     if real_control:
       last_real_action["control_key"] = real_control
+    if em_memory is not None and em_state["page"] is not None:
+      try:
+        adopted = (em_memory.record_prompt_action(action_dict, em_state["page"])
+                   if em_state["context"] else False)
+        # The landing is recorded against the next step's screen, not the
+        # capture taken right after the action: that one is mid-transition.
+        # Measured 2026-09-24 on Markor's new-file FAB: the immediate capture
+        # held either a 2-element half-drawn dialog or the file list with the
+        # dialog not yet attached, so one click became two landing nodes and
+        # neither was the dialog the model then read and acted on.
+        em_state["pending"] = {"page": em_state["page"], "action": action_dict,
+                               "latency_s": inference_s, "adopted": adopted,
+                               "step": step}
+        if result.done or step + 1 >= args.max_steps:
+          time.sleep(0.5)
+          em_flush_record(em_page(capture.capture()))
+      except Exception as exc:  # pylint: disable=broad-exception-caught
+        log("em_record_failed", step=step, error=str(exc)[:200])
     if inference_s > 0:
       inference_latencies.append(inference_s)
     log("inference", step=step, inference_s=inference_s,
@@ -3306,6 +3630,7 @@ def main() -> int:
     step_counter["i"] += 1
     guarded.commit_step()
     dump_graph_snapshot(step)
+    log("step_end", step=step)
     return result
 
   # Which class carries step() depends on whether the screenshot is
@@ -3323,8 +3648,46 @@ def main() -> int:
   # computed its context on every step and the result was thrown away - module
   # three never ran end to end in any full run, and the "injection is neutral"
   # measurement was measuring nothing (2026-09-02).
-  if args.inject_briefing or args.graph_context != "off" or args.decision_constraints:
+  if (args.inject_briefing or args.graph_context != "off" or args.decision_constraints
+      or args.em_prompt):
     gelab_agent.build_gelab_messages = build_with_briefing
+  if em_memory is not None and args.em_fusion:
+    _original_convert = gelab_agent.gelab_action_to_json_action
+
+    def _fused_convert(parsed_action, screen_size):
+      # The model's response is parsed and scaled by the unchanged GELAB
+      # converter; fusion only sees the finished pixel action, and only a
+      # click. TYPE, COMPLETE, OPEN_APP and swipes are never touched.
+      action, tool_call, extras = _original_convert(parsed_action, screen_size)
+      page = em_state["page"]
+      if (page is None or getattr(action, "action_type", "") != json_action.CLICK
+          or getattr(action, "x", None) is None or getattr(action, "y", None) is None):
+        return action, tool_call, extras
+      try:
+        decision = em_memory.fuse_action(dict(action.__dict__), page, episode_goal["text"])
+      except Exception as exc:  # pylint: disable=broad-exception-caught
+        log("em_fusion_failed", step=step_counter["i"], error=str(exc)[:200])
+        return action, tool_call, extras
+      fused = dict(decision.action)
+      new_xy = (fused.get("x"), fused.get("y"))
+      changed = (new_xy[0] is not None and new_xy[1] is not None
+                 and (int(new_xy[0]), int(new_xy[1])) != (int(action.x), int(action.y))
+                 and fused.get("action_type", json_action.CLICK) == json_action.CLICK)
+      log("em_fusion", step=step_counter["i"], source=decision.source,
+          reason=decision.reason, confidence=round(float(decision.confidence), 3),
+          coordinate_corrected=decision.coordinate_corrected,
+          graph_overrode=decision.graph_overrode,
+          graph_rejected=decision.graph_rejected,
+          disagreement=decision.disagreement, changed=changed,
+          before=[int(action.x), int(action.y)],
+          after=[int(new_xy[0]), int(new_xy[1])] if changed else None)
+      if not changed:
+        return action, tool_call, extras
+      moved = json_action.JSONAction(**{**action.__dict__,
+                                        "x": int(new_xy[0]), "y": int(new_xy[1])})
+      return moved, tool_call, extras
+
+    gelab_agent.gelab_action_to_json_action = _fused_convert
   sys.argv = [
       "run.py", "--suite_family=android_world",
       f"--agent_name={'gelab_agent_resize' if args.downsample > 1.0 else 'gelab_agent'}",

@@ -30,7 +30,7 @@ from absl import logging
 from android_world import checkpointer as checkpointer_lib
 from android_world import registry
 from android_world import suite_utils
-from android_world.agents import base_agent, human_agent, infer, m3a, random_agent, seeact, t3a, t3a_mobicom, t3a_fast, mm_agent, t3a_profiling, explorer_agent, gelab_agent, gelab_agent_resize, gelab_offline_exploration, explorer_agent_gelab, explorer_agent_gelab_light, explore_agent_text, explorer_agent_gelab_bandit, explorer_agent_gelab_effectiveness, explorer_agent_ablation_random, explorer_agent_ablation_back2, explorer_agent_ablation_no_knowledge
+from android_world.agents import base_agent, human_agent, infer, m3a, random_agent, seeact, t3a, t3a_mobicom, t3a_fast, mm_agent, t3a_profiling, explorer_agent, gelab_agent, gelab_agent_resize, gelab_offline_exploration, mobileexplorer, explorer_agent_gelab, explorer_agent_gelab_light, explore_agent_text, explorer_agent_gelab_bandit, explorer_agent_gelab_effectiveness, explorer_agent_ablation_random, explorer_agent_ablation_back2, explorer_agent_ablation_no_knowledge
 from android_world.env import env_launcher
 from android_world.env import interface
 
@@ -52,6 +52,9 @@ os.environ['GRPC_TRACE'] = 'none'  # Disable tracing
 
 def _find_adb_directory() -> str:
     """Returns the directory where adb is located."""
+    configured_path = os.environ.get('ANDROID_WORLD_ADB_PATH')
+    if configured_path and os.path.isfile(configured_path):
+        return configured_path
     potential_paths = [
         os.path.expanduser('~/Library/Android/sdk/platform-tools/adb'),  # macOS
         os.path.expanduser('~/Android/Sdk/platform-tools/adb'),  # Linux
@@ -157,6 +160,54 @@ _IMAGE_DOWNSAMPLE_SCALE = flags.DEFINE_float(
     '1.0 means no downsampling.',
 )
 
+# Executable Exploration Memory is opt-in.  Keeping these switches at the
+# AndroidWorld entry point makes every arm use the same evaluator, reset,
+# checkpointing and trace path; an arm only changes memory policy.
+_EXECUTABLE_MEMORY_ENABLED = flags.DEFINE_bool(
+    'executable_memory_enabled', False,
+    'Enable the versioned executable exploration memory layer.',
+)
+_EXECUTABLE_MEMORY_EXPLORATION = flags.DEFINE_bool(
+    'executable_memory_exploration_enabled', True,
+    'Allow the shadow explorer to populate executable memory.',
+)
+_EXECUTABLE_MEMORY_GRAPH = flags.DEFINE_bool(
+    'executable_memory_graph_enabled', True,
+    'Enable executable state/action graph retrieval.',
+)
+_EXECUTABLE_MEMORY_PROMPT = flags.DEFINE_bool(
+    'executable_memory_graph_prompt_enabled', True,
+    'Inject bounded low/medium-confidence graph evidence into prompts.',
+)
+_EXECUTABLE_MEMORY_FUSION = flags.DEFINE_bool(
+    'executable_memory_post_fusion_enabled', True,
+    'Apply selector relocation and conservative post-inference fusion.',
+)
+_EXECUTABLE_MEMORY_SKIP = flags.DEFINE_bool(
+    'executable_memory_high_confidence_skip_enabled', False,
+    'Permit only repeatedly validated executable edges to skip the model.',
+)
+_EXECUTABLE_MEMORY_MAX_PROBES = flags.DEFINE_integer(
+    'executable_memory_max_probes', 5,
+    'Per-reasoning-step safe-probe target (capped at five).',
+)
+_EXECUTABLE_MEMORY_K_STEP = flags.DEFINE_bool(
+    'executable_memory_k_step_enabled', True,
+    'Retain k-step GUI transition samples.',
+)
+_EXECUTABLE_MEMORY_HARD_NEGATIVES = flags.DEFINE_bool(
+    'executable_memory_hard_negatives_enabled', True,
+    'Retain unstable/no-op/trap transitions as hard negatives.',
+)
+_EXECUTABLE_MEMORY_ACTION_GROUPS = flags.DEFINE_bool(
+    'executable_memory_action_groups_enabled', True,
+    'Mine repeatedly validated adjacent action groups.',
+)
+_EXECUTABLE_MEMORY_REPEATED_VALIDATION = flags.DEFINE_bool(
+    'executable_memory_repeated_validation_enabled', True,
+    'Require repeated validation before a skill/edge is directly executable.',
+)
+
 # m3a_llamacpp, t3a_llamacpp, mai-ui, mm_agent, t3a_profiling, explore_agent, explore_agent_gelab, gelab_agent, gelab_agent_resize, gelab_offline_exploration, explore_agent_ablation_random, explore_agent_ablation_back2, explore_agent_ablation_no_knowledge
 
 _FIXED_TASK_SEED = flags.DEFINE_boolean(
@@ -260,6 +311,63 @@ def _get_agent(
             "qwen-vl",
             output_path="./output",
             image_downsample_scale=_IMAGE_DOWNSAMPLE_SCALE.value,
+        )
+    elif _AGENT_NAME.value in {
+            'mobileexplorer_no_memory',
+            'mobileexplorer_offline',
+            'mobileexplorer_offline_safe',
+            'mobileexplorer_replay',
+            'mobileexplorer',
+            'mobileexplorer_with_replay',
+            'mobileexplorer_executable',
+    }:
+        modes = {
+            'mobileexplorer_no_memory': 'no_memory',
+            'mobileexplorer_offline': 'offline_trajectory',
+            'mobileexplorer_offline_safe': 'offline_navigation',
+            'mobileexplorer_replay': 'offline_replay',
+            'mobileexplorer': 'mobileexplorer',
+            'mobileexplorer_with_replay': 'mobileexplorer_replay',
+            'mobileexplorer_executable': 'mobileexplorer',
+        }
+        agent = mobileexplorer.MobileExplorer(
+            env,
+            infer.LlamaCppWrapper(
+                api_url=_LLM_API_URL,
+                temperature=0.0,
+            ),
+            name=_AGENT_NAME.value,
+            output_path=os.environ.get('MOBILEEXPLORER_OUTPUT_PATH', './output'),
+            image_downsample_scale=_IMAGE_DOWNSAMPLE_SCALE.value,
+            mode=modes[_AGENT_NAME.value],
+            trajectory_memory_path=os.environ.get(
+                'MOBILEEXPLORER_TRAJECTORY_MEMORY'
+            ),
+            evidence_inbox_path=os.environ.get(
+                'MOBILEEXPLORER_EVIDENCE_INBOX'
+            ),
+            opportunity_path=os.environ.get(
+                'MOBILEEXPLORER_OPPORTUNITY_PATH'
+            ),
+            current_seed=_TASK_RANDOM_SEED.value,
+            executable_memory_config=(None if os.environ.get(
+                'MOBILEEXPLORER_EXECUTABLE_MEMORY_CONFIG') else {
+                'enabled': (_EXECUTABLE_MEMORY_ENABLED.value or
+                            _AGENT_NAME.value == 'mobileexplorer_executable'),
+                'exploration_enabled': _EXECUTABLE_MEMORY_EXPLORATION.value,
+                'graph_enabled': _EXECUTABLE_MEMORY_GRAPH.value,
+                'graph_prompt_enabled': _EXECUTABLE_MEMORY_PROMPT.value,
+                'post_fusion_enabled': _EXECUTABLE_MEMORY_FUSION.value,
+                'high_confidence_skip_enabled': _EXECUTABLE_MEMORY_SKIP.value,
+                'max_probes': min(5, max(0, _EXECUTABLE_MEMORY_MAX_PROBES.value)),
+                'k_step_memory_enabled': _EXECUTABLE_MEMORY_K_STEP.value,
+                'hard_negatives_enabled': _EXECUTABLE_MEMORY_HARD_NEGATIVES.value,
+                'action_groups_enabled': _EXECUTABLE_MEMORY_ACTION_GROUPS.value,
+                'repeated_validation_enabled': _EXECUTABLE_MEMORY_REPEATED_VALIDATION.value,
+            }),
+            executable_memory_path=os.environ.get(
+                'MOBILEEXPLORER_EXECUTABLE_MEMORY_PATH'
+            ),
         )
     elif _AGENT_NAME.value == 'mm_agent':
         agent = mm_agent.ElementTextAgent(

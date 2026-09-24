@@ -228,6 +228,7 @@ def _run_task(
         run_episode: Callable[[TaskEvalType], episode_runner.EpisodeResult],
         env: interface.AsyncEnv,
         demo_mode: bool,
+        agent: base_agent.EnvironmentInteractingAgent | None = None,
 ) -> dict[str, Any]:
     """Runs a task.
 
@@ -249,7 +250,20 @@ def _run_task(
         _log_and_print('Running task %s with goal "%s"', task.name, task.goal)
         interaction_results = run_episode(task)
         task_successful = task.is_successful(env)
+        executable_memory = getattr(agent, 'executable_memory', None)
+        if executable_memory is not None:
+            step_data = interaction_results.step_data
+            steps = len(step_data.get(constants.STEP_NUMBER, ())) if isinstance(step_data, dict) else 0
+            executable_memory.record_task_outcome(
+                success=bool(task_successful and interaction_results.done),
+                steps=steps,
+            )
+            executable_memory.save()
     except Exception as e:  # pylint: disable=broad-exception-caught
+        executable_memory = getattr(agent, 'executable_memory', None)
+        if executable_memory is not None:
+            executable_memory.record_task_outcome(success=False, steps=0)
+            executable_memory.save()
         _log_and_print('%s\nSKIPPING %s.', '~' * 80, task.name)
         logging.exception(
             'Logging exception and skipping task. Will keep running. Task: %s: %s',
@@ -341,6 +355,7 @@ def _run_task_suite(
         return_full_episode_data: bool = False,
         process_episodes_fn=None,
         check_episode_fn: Callable[[dict[str, Any]], bool] | None = None,
+        agent: base_agent.EnvironmentInteractingAgent | None = None,
 ) -> list[dict[str, Any]]:
     """Runs e2e system on suite.
 
@@ -406,7 +421,7 @@ def _run_task_suite(
                 _log_and_print('Skipping already processed task %s', instance_name)
                 continue
 
-            episode = _run_task(instance, run_episode, env, demo_mode=demo_mode)
+            episode = _run_task(instance, run_episode, env, demo_mode=demo_mode, agent=agent)
             if (
                     episode.get(constants.EpisodeConstants.EXCEPTION_INFO) is None
                     and check_episode_fn is not None
@@ -471,6 +486,8 @@ def run(
     def run_episode(task: task_eval.TaskEval) -> episode_runner.EpisodeResult:
         if demo_mode:
             _display_goal(agent.env, task)
+        if hasattr(agent, 'set_task_context'):
+            agent.set_task_context(task_template=task.name)
         step_budget = (
             int(max_n_steps)
             if max_n_steps is not None and int(max_n_steps) > 0
@@ -506,6 +523,7 @@ def run(
         return_full_episode_data=return_full_episode_data,
         process_episodes_fn=process_episodes_fn,
         check_episode_fn=check_episode_fn,
+        agent=agent,
     )
 
     return results

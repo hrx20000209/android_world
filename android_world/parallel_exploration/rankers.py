@@ -132,6 +132,38 @@ class SimpleRelevanceRanker(Ranker):
     ]
 
 
+class LightweightLinearRanker(Ranker):
+  """Fixed multi-hot linear selector used by the V0 feasibility experiment.
+
+  Safety filtering happens before this ranker in ``live_probe``. This class
+  only applies ``w^T x + b`` to text, content description, and resource id;
+  it deliberately does not add task semantics, embeddings, or graph features.
+  The weights file can therefore be the manually initialized ground-truth-like
+  prototype shipped under ``gui_exploration_selector/``.
+  """
+
+  def __init__(self, weights_path: str):
+    from android_world.parallel_exploration.lightweight_selector import LinearModel
+    self.model = LinearModel.from_text(weights_path)
+
+  def rank(
+      self,
+      elements: Sequence[UiElement],
+      task: str,
+      probed_ids: Iterable[str] = (),
+  ) -> list[RankedElement]:
+    del task, probed_ids
+    scored = [
+        (self.model.score(element), position, element)
+        for position, element in enumerate(elements)
+    ]
+    scored.sort(key=lambda item: (-item[0], item[1]))
+    return [
+        RankedElement(element=element, rank=rank, score=score)
+        for rank, (score, _, element) in enumerate(scored, start=1)
+    ]
+
+
 class InformationNeedRanker(Ranker):
   """Ranks by structured InformationNeed fields plus verified session memory.
 

@@ -39,6 +39,26 @@ class _Element:
 
 class CoordinateModeTest(absltest.TestCase):
 
+  def test_truncated_type_tool_call_preserves_value_payload(self):
+    response = (
+        '<tool_call>\n{"name":"mobile_use","arguments":'
+        '{"action":"TYPE","value":"Employee Performance Evaluation",'
+        '"point":105,135}\tsummary: typing the search query'
+    )
+    tool_call = explorer_agent_utils.parse_tool_call(response)
+
+    self.assertEqual(
+        tool_call["arguments"]["text"], "Employee Performance Evaluation")
+    action = explorer_agent_utils._to_json_action(
+        tool_call=tool_call,
+        ui_elements=[],
+        logical_screen_size=(1080, 2400),
+        coordinate_mode="1000",
+    )
+    self.assertEqual(action.action_type, json_action.INPUT_TEXT)
+    self.assertEqual(action.text, "Employee Performance Evaluation")
+    self.assertEqual((action.x, action.y), (113, 324))
+
   def test_parse_tool_call_accepts_open_app_shorthand(self):
     tool_call = explorer_agent_utils.parse_tool_call(
         '<tool_call>\n{"action":"open_app","text":"Audio Recorder"}\n</tool_call>'
