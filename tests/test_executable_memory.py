@@ -1063,7 +1063,10 @@ def test_beta_value_and_fusion_override_gate():
   assert decision.action["action_type"] == "click"
 
 
-def test_post_fusion_snaps_reasoning_coordinate_to_live_bbox():
+def test_post_fusion_keeps_a_point_already_inside_the_graph_target():
+  """The tap at (205, 305) is inside the live Menu button, so it already
+  reaches the control the graph knows. Snapping it to the center moved taps
+  on position-sensitive views (a calendar month grid) onto other days."""
   old = ElementSelector(resource_id="app:id/menu", class_name="Button", bbox=(10, 20, 110, 80))
   edge = EdgeEvidence(
       edge_id="e", source_node="s", selector=old, action_type="click",
@@ -1077,8 +1080,9 @@ def test_post_fusion_snaps_reasoning_coordinate_to_live_bbox():
   }], package="app", activity="app/.Main")
   decision = ActionFusion(ExecutableMemoryConfig(enabled=True)).fuse(
       {"action_type": "click", "x": 205, "y": 305}, page, [edge])
-  assert decision.coordinate_corrected
-  assert decision.action["x"] == 260 and decision.action["y"] == 340
+  assert not decision.coordinate_corrected
+  assert decision.action == {"action_type": "click", "x": 205, "y": 305}
+  assert decision.source == "graph_consistent"
 
 
 def test_post_fusion_does_not_snap_to_full_page_container():
@@ -1273,3 +1277,67 @@ def test_a_page_with_no_stable_anchor_is_a_dynamic_target():
   assert not target.landmarks
   assert target.dynamic_content and "no_stable_landmark" in target.dynamic_reasons
   assert memory.route_block_reason([edge]) == "dynamic_target_state"
+
+
+def _markor_like_memory():
+  memory = ExecutableExplorationMemory(ExecutableMemoryConfig(
+      enabled=True, graph_prompt_enabled=True, high_confidence_skip_enabled=True,
+      override_confidence=0.82, route_allow_unknown_reversibility=True))
+  home = PageObservation.from_ui([
+      {"text": "", "content_desc": "Create a new file or folder",
+       "resource_id": "net.gsantner.markor:id/fab_add_new_item",
+       "class_name": "android.widget.ImageButton", "bbox": (900, 2000, 1040, 2140),
+       "is_clickable": True},
+      {"text": "Files", "resource_id": "net.gsantner.markor:id/nav_files",
+       "class_name": "android.widget.TextView", "bbox": (0, 2200, 270, 2300)},
+  ], package="net.gsantner.markor", activity="net.gsantner.markor/.activity.MainActivity")
+  dialog = PageObservation.from_ui([
+      {"text": "Name", "resource_id": "net.gsantner.markor:id/label",
+       "class_name": "android.widget.TextView", "bbox": (100, 800, 400, 860)},
+      {"text": "OK", "resource_id": "android:id/button1",
+       "class_name": "android.widget.Button", "bbox": (700, 1300, 900, 1400),
+       "is_clickable": True},
+  ], package="net.gsantner.markor", activity="net.gsantner.markor/.activity.MainActivity")
+  edge = None
+  for _ in range(6):
+    edge = memory.record_transition(TransitionRecord(
+        source=home, action={"action_type": "click"}, destination=dialog,
+        selector=ElementSelector(resource_id="net.gsantner.markor:id/fab_add_new_item",
+                                 content_desc="Create a new file or folder",
+                                 class_name="android.widget.ImageButton"),
+        function="click Create a new file or folder reveals android.widget.Button|android:id/button1",
+        meaningful=True, recovered=False, recovery_attempted=False, no_op=False,
+        provenance="inference"))
+  return memory, home, edge
+
+
+def test_delete_task_is_not_related_to_a_create_control():
+  memory, home, edge = _markor_like_memory()
+  query = _route_relevance_tokens("Delete all my notes in Markor.")
+  assert memory._edge_task_relevance(edge, query) == 0.0
+  assert memory.prompt_context(home, "Delete all my notes in Markor.") == ""
+
+
+def test_app_name_alone_does_not_make_a_route_relevant():
+  memory, _, edge = _markor_like_memory()
+  query = _route_relevance_tokens("Open Markor.")
+  query.discard("navigate")
+  assert memory._edge_task_relevance(edge, query) == 0.0
+
+
+def test_shortcut_needs_an_object_the_task_names():
+  """Intent-only overlap ("add" -> create) may advise the model but must not
+  act for it: the recipe task needs recipes.txt opened, not a new file."""
+  memory, home, edge = _markor_like_memory()
+  goal = "Add the recipes from recipes.txt in Markor to the Broccoli recipe app."
+  assert memory.route_block_reason([edge]) == ""
+  assert memory.route_task_block([edge], goal) == "task_object_mismatch"
+  assert memory.high_confidence_path(home, goal) is None
+  report = memory.route_gate_report(home, goal)
+  assert report["blocks"].get("task_object_mismatch", 0) >= 1
+
+
+def test_shortcut_still_passes_when_the_task_names_the_object():
+  memory, home, _ = _markor_like_memory()
+  path = memory.high_confidence_path(home, "Create a new file in Markor named a.md.")
+  assert path is not None

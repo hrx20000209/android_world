@@ -90,6 +90,7 @@ _GOAL_STOPWORDS = {
     "last", "middle", "phone", "email", "label", "work", "enter", "field",
     "fields", "hit", "not", "do", "save",
 }
+_OPPOSITE_INTENTS = (("create", "delete"), ("delete", "create"))
 _ROUTE_INTENT_TOKENS = frozenset({
     "create", "navigate", "enter", "select", "save", "delete", "search", "mark",
 })
@@ -1123,13 +1124,15 @@ class ActionFusion:
     if selector is not None:
       candidates = [edge for edge in edges if edge.selector.key() == selector.key()]
     if candidates and selector is not None:
-      relocation = selector.relocate(current_elements)
-      if relocation.center and not relocation.ambiguous:
-        corrected = dict(original)
-        corrected["x"], corrected["y"] = relocation.center
-        return FusionDecision(corrected, "selector", max(edge.confidence for edge in candidates),
-                              coordinate_corrected=tuple(relocation.center) != (original.get("x"), original.get("y")),
-                              reason="reasoning_target_snapped_to_live_selector")
+      # The model's point already lies inside this element - that is how
+      # `selector` was found - so the tap already reaches it. Moving it to the
+      # element's center cannot fix a miss and changes what position-sensitive
+      # views (month grids, lists, maps) receive: on SimpleCalendarDeleteEvents
+      # a tap on one day was moved 127 px to the center of
+      # month_view_background nine times running (em_full, 2026-09-24).
+      return FusionDecision(original, "graph_consistent",
+                            max(edge.confidence for edge in candidates),
+                            reason="reasoning_inside_graph_target")
     # With no matching graph edge, snapping is ordinary coordinate rewriting
     # rather than memory fusion. Preserve the baseline action in that case.
     if not edges:
@@ -1517,7 +1520,19 @@ class ExecutableExplorationMemory:
     source_id = source_node.node_id if isinstance(source_node, StateNode) else source_node
     return _hash((source_id, selector.key(), _ACTION_TYPE_ALIASES.get(action_type.lower(), action_type.lower())), 24)
 
-  def _edge_task_relevance(self, edge: EdgeEvidence, query: set[str]) -> float:
+  def _edge_task_relevance(self, edge: EdgeEvidence, query: set[str], *,
+                           require_object: bool = False) -> float:
+    if not query:
+      return 0.0
+    # The app's own name is on every one of its screens ("markor" in the
+    # package, the landmarks and the goal), so it made every Markor route look
+    # related to every Markor task: "Delete all my notes" scored 0.39 against
+    # "Create a new file or folder" almost entirely from that word (em_full,
+    # 2026-09-24). Only the package's words are dropped - they carry no
+    # information about which screen inside the app is meant.
+    source = self.states.get(edge.source_node)
+    app_tokens = _route_relevance_tokens(source.package) if source is not None else set()
+    query = set(query) - app_tokens
     if not query:
       return 0.0
     # Keep action semantics separate from destination deltas. Otherwise a
@@ -1535,8 +1550,18 @@ class ExecutableExplorationMemory:
       target = self.states.get(target_id)
       if target is not None:
         destination_tokens.update(_route_relevance_tokens(" ".join(target.landmarks)))
+    destination_tokens -= app_tokens
     query_intents = query & _ROUTE_INTENT_TOKENS
     query_objects = query - _ROUTE_INTENT_TOKENS
+    edge_intents = action_tokens & _ROUTE_INTENT_TOKENS
+    if any(a in query_intents and b in edge_intents and a not in edge_intents
+           and b not in query_intents for a, b in _OPPOSITE_INTENTS):
+      # A delete task and a create control are opposite operations, not a
+      # weak match: the lexical score gave them 0.39 and the route was
+      # injected into all 8 prompts of a "delete all notes" episode. Only
+      # true opposites count - "open Contacts" through a Search button is a
+      # different verb, not a contradiction.
+      return 0.0
     action_intent_score = (
         len(query_intents & action_tokens) / len(query_intents)
         if query_intents else 0.0
@@ -1548,10 +1573,17 @@ class ExecutableExplorationMemory:
     # Intent match is normalized within the small intent vocabulary rather
     # than all task words; otherwise one useful "Search" edge is diluted by
     # every noun and formatting phrase in a long question.
-    action_score = max(0.65 * action_intent_score, action_object_score)
     destination_score = (
         0.65 * len(query_objects & destination_tokens) / len(query)
     )
+    if require_object and not (query_objects & action_tokens) and not destination_score:
+      # Intent alone says what kind of operation, not on what. "Add the
+      # recipes from recipes.txt in Markor to Broccoli" shares only "add" ->
+      # create with Markor's new-file button, and a shortcut took that button
+      # for it twice. An action taken without the model must name something
+      # the task names.
+      return 0.0
+    action_score = max(0.65 * action_intent_score, action_object_score)
     return max(action_score, destination_score)
 
   def record_transition(self, record: TransitionRecord) -> EdgeEvidence:
@@ -2015,9 +2047,11 @@ class ExecutableExplorationMemory:
     edges = [edge for path in self.retrieve_paths(page, goal, top_k=5) for edge in path]
     decision = ActionFusion(self.config).fuse(
         action, page, list({edge.edge_id: edge for edge in edges}.values()),
-        task_relevance=lambda edge: len(
-            _route_relevance_tokens(goal) & _route_relevance_tokens(edge.function)
-        ) / max(1, len(_route_relevance_tokens(goal))))
+        # An override replaces the model's action, so it is held to the same
+        # relevance as a shortcut: app name excluded, opposite intents
+        # rejected, and an object the task names required.
+        task_relevance=lambda edge: self._edge_task_relevance(
+            edge, _route_relevance_tokens(goal), require_object=True))
     self.metrics.coordinate_corrections += int(decision.coordinate_corrected)
     self.metrics.graph_overrides += int(decision.graph_overrode)
     self.metrics.graph_rejections += int(decision.graph_rejected)
@@ -2129,10 +2163,26 @@ class ExecutableExplorationMemory:
         return "side_effect_risk"
     return ""
 
+  def route_task_block(self, path: Sequence[EdgeEvidence], goal: str) -> str:
+    """"task_object_mismatch" unless some hop names an object the task names.
+
+    route_block_reason answers whether a route can be executed safely; this
+    answers whether it is this task's route. Retrieval ranks on intent as well
+    as objects, which is right for advice the model may ignore and wrong for
+    an action taken on its behalf.
+    """
+    query = _route_relevance_tokens(goal)
+    grounded = max((self._edge_task_relevance(edge, query, require_object=True)
+                    for edge in path), default=0.0)
+    return "" if grounded >= self.config.min_task_relevance else "task_object_mismatch"
+
+  def _route_block(self, path: Sequence[EdgeEvidence], goal: str) -> str:
+    return self.route_block_reason(path) or self.route_task_block(path, goal)
+
   def route_gate_report(self, page: PageObservation, goal: str) -> dict[str, Any]:
     """Blocking distribution over this page's retrieved candidate routes."""
     paths = self.retrieve_paths(page, goal, top_k=max(5, self.config.top_k_paths))
-    blocks = Counter(self.route_block_reason(path) or "passed" for path in paths)
+    blocks = Counter(self._route_block(path, goal) or "passed" for path in paths)
     return {"candidates": len(paths), "blocks": dict(blocks)}
 
   def high_confidence_path(
@@ -2142,7 +2192,7 @@ class ExecutableExplorationMemory:
     if not (self.config.enabled and self.config.high_confidence_skip_enabled):
       return None
     for path in self.retrieve_paths(page, goal, top_k=max(5, self.config.top_k_paths)):
-      if not self.route_block_reason(path):
+      if not self._route_block(path, goal):
         return path
     return None
 
