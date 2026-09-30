@@ -8,8 +8,10 @@
 
 ## 1. 工作目录与安全边界
 
-- 工作目录：`/data/rxhuang/android_world_server`
-- 如果目录不存在，从 `git@github.com:hrx20000209/android_world.git` clone；否则先检查 git status，再按需 pull。
+- Git checkout：`/data/rxhuang/android_world_repo`
+- 结果与运行数据：`/data/rxhuang/android_world_server/runs/`
+- `/data/rxhuang/android_world_server` 是既有部署/运行数据目录，不要把它当作 Git checkout，也不要对它执行 `git init`、`reset` 或清理。
+- 如果 checkout 不存在，从 `git@github.com:hrx20000209/android_world.git` clone 到上述 checkout 路径；如果存在，先检查 git status，再按需 fetch/pull。
 - 不要上传或提交模型权重、APK、模拟器镜像、截图、日志、checkpoint、JSONL 结果、`evaluation_results/`、`tmp/` 或任何大于 50 MB 的文件。
 - 结果写入 `/data/rxhuang/android_world_server/runs/`，源码修改留在 git 分支或清晰的 commit 中。
 - 不要使用 `git reset --hard`、删除用户数据或覆盖已有实验结果。新实验必须使用新的输出前缀和独立 worker。
