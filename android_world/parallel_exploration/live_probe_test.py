@@ -243,6 +243,34 @@ def test_executable_memory_guidance_only_nudges_scored_safe_candidates():
   assert stats["state_matched"] and stats["seen_count"] == 1
 
 
+def test_task_relevant_graph_frontier_is_explicit_bounded_tiebreak():
+  element = UiElement(
+      text="Notes", resource_id="app:id/notes",
+      class_name="android.widget.Button", bounds=(10, 20, 180, 90),
+      clickable=True)
+  row = sgi.CandidateInformationRow(
+      element=element, element_identity=element.identity, text=element.text,
+      content_desc="", role="button", probe_type="TAP_NAV", norm_x=.1,
+      norm_y=.1, clickable=True, scrollable=False)
+  scored = sgi.ScoredCandidate(row=row, utility=.1, components={})
+  guidance = {"enabled": True, "state_matched": True, "controls": {
+      ElementSelector.from_element(element).key(): {
+          "support_count": 0, "task_relevance": .8,
+          "observed_transition": False, "frontier": True,
+          "node_discovery_opportunity": True,
+      },
+  }}
+
+  adjusted, stats = _apply_executable_memory_tiebreak([scored], guidance)
+
+  assert len(adjusted) == 1
+  assert not adjusted[0].row.eam_control_seen
+  assert adjusted[0].components["eam_frontier"] == 1.0
+  assert adjusted[0].components["eam_node_discovery_opportunity"] == 1.0
+  assert 0 < adjusted[0].components["eam_graph_tiebreak"] < .1
+  assert stats["unseen_count"] == 1
+
+
 def test_executable_memory_mature_edge_gets_bounded_repeat_penalty():
   element = UiElement(
       text="Settings", resource_id="app:id/settings",

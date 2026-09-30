@@ -41,7 +41,7 @@ from pathlib import Path
 from typing import Any
 
 
-MEMORY_SCHEMA_VERSION = 3
+MEMORY_SCHEMA_VERSION = 4
 DEFAULT_PROBE_BUDGET = 5
 
 _DYNAMIC_TEXT = re.compile(
@@ -104,6 +104,11 @@ _TASK_VALUE_PATTERNS = (
                r"([^,.!?;]+)"),
     re.compile(r"\+?\d[\d ()-]{5,}\d"),
     re.compile(r"['\"]([^'\"]{2,80})['\"]"),
+)
+_COMPLEX_ACTION_WORDS = re.compile(
+    r"\b(?:save|submit|confirm|finish|complete|delete|remove|erase|send|publish|post|"
+    r"pay|purchase|buy|call|dial|share|export|install|uninstall|reset|clear\s+data)\b",
+    re.IGNORECASE,
 )
 _ACTION_TYPE_ALIASES = {
     "tap": "click", "longpress": "long_press", "slide": "swipe",
@@ -199,6 +204,23 @@ def _route_relevance_tokens(value: Any) -> set[str]:
   tokens.update(token for token, pattern in intent_patterns.items()
                 if re.search(pattern, text))
   return tokens
+
+
+def _task_context_signature(value: Any) -> str:
+  """A value-filtered task/action fingerprint for graph attribution.
+
+  Store only the bounded UI-concept and intent vocabulary. Unknown object
+  tokens, names, dates, addresses, and other instance-specific values are
+  excluded before hashing; a digest is not treated as encryption.
+  """
+  tokens = _task_signature_tokens(_route_relevance_tokens(value))
+  return _hash(tokens, 20) if tokens else ""
+
+
+def _task_signature_tokens(tokens: Iterable[str]) -> tuple[str, ...]:
+  """Return only known UI concepts/intents, excluding task instance values."""
+  normalized = set(tokens)
+  return tuple(sorted(normalized & (_STABLE_UI_CONCEPTS | _ROUTE_INTENT_TOKENS)))
 
 
 def _task_sensitive_literals(task: Any) -> set[str]:
@@ -780,6 +802,9 @@ class EdgeEvidence:
   normalized_action_token: str = ""
   route_hit_count: int = 0
   route_miss_count: int = 0
+  # Hashed, value-free task intent/object fingerprints.  This is attribution,
+  # not an execution recipe: route matching still has to pass live task gates.
+  task_signatures: Counter[str] = dataclasses.field(default_factory=Counter)
 
   @property
   def posterior_mean(self) -> float:
@@ -951,6 +976,7 @@ class TransitionRecord:
   task_failed: bool = False
   return_action: Mapping[str, Any] | None = None
   latency_s: float = 0.0
+  task_signature: str = ""
 
 
 @dataclasses.dataclass
@@ -1186,6 +1212,7 @@ class MemoryMetrics:
   exploration_guidance_controls_seen: int = 0
   exploration_guidance_controls_mature: int = 0
   exploration_guidance_controls_relevant: int = 0
+  exploration_frontier_controls: int = 0
   coordinate_corrections: int = 0
   graph_overrides: int = 0
   graph_rejections: int = 0
@@ -1257,6 +1284,8 @@ class ExecutableExplorationMemory:
     self.states: dict[str, StateNode] = {}
     self.edges: dict[str, EdgeEvidence] = {}
     self._coarse: dict[tuple[str, str, str], list[str]] = defaultdict(list)
+    self._by_activity: dict[tuple[str, str], list[str]] = defaultdict(list)
+    self._outgoing: dict[str, list[str]] = defaultdict(list)
     self.samples: list[KStepSample] = []
     self.skills: dict[str, SkillGroup] = {}
     self.metrics = MemoryMetrics()
@@ -1340,6 +1369,7 @@ class ExecutableExplorationMemory:
                            landmarks=page.landmarks, elements=page.elements)
       self.states[node_id] = selected
       self._coarse[page.coarse_key].append(node_id)
+      self._by_activity[(page.package, page.activity)].append(node_id)
     else:
       self.metrics.state_merges += 1
       selected.landmarks = tuple(sorted(set(selected.landmarks) | set(page.landmarks)))[:256]
@@ -1358,10 +1388,11 @@ class ExecutableExplorationMemory:
     # a new node; this is the deterministic embedding approximation used by
     # the dependency-free runtime.
     if not candidates:
+      same_activity = [self.states[node_id] for node_id in
+                       self._by_activity.get((page.package, page.activity), ())
+                       if node_id in self.states]
       candidates = []
-      for node in self.states.values():
-        if node.package != page.package or node.activity != page.activity:
-          continue
+      for node in same_activity:
         node_page = PageObservation(
             page.package, page.activity, node.landmarks, node.elements,
             node.structural_signature, node.semantic_signature)
@@ -1426,9 +1457,9 @@ class ExecutableExplorationMemory:
     page = self._sanitize_page(page)
     node = self._match_existing_state(page)
     if node is None:
-      same_activity = [candidate for candidate in self.states.values()
-                       if candidate.package == page.package
-                       and candidate.activity == page.activity]
+      same_activity = [self.states[node_id] for node_id in
+                       self._by_activity.get((page.package, page.activity), ())
+                       if node_id in self.states]
       page_action_landmarks = _matching_landmarks(page)
       diagnostics = []
       for candidate in same_activity:
@@ -1458,8 +1489,9 @@ class ExecutableExplorationMemory:
     self.metrics.exploration_guidance_state_matches += 1
     query = _route_relevance_tokens(goal)
     controls: dict[str, dict[str, Any]] = {}
-    for edge in self.edges.values():
-      if edge.source_node != node.node_id:
+    for edge_id in self._outgoing.get(node.node_id, ()):
+      edge = self.edges.get(edge_id)
+      if edge is None:
         continue
       relevance = self._edge_task_relevance(edge, query)
       stable = edge.stability >= 0.8 and len(edge.target_states) <= 1
@@ -1475,7 +1507,7 @@ class ExecutableExplorationMemory:
           "confidence": 0.0, "task_relevance": 0.0,
           "mature": False, "trap": False, "dynamic": False,
           "no_op_count": 0, "meaningful_count": 0,
-          "edge_ids": [],
+          "edge_ids": [], "observed_transition": True, "frontier": False,
       })
       row["support_count"] += edge.support_count
       row["destination_count"] += len(edge.target_states)
@@ -1492,27 +1524,72 @@ class ExecutableExplorationMemory:
       if edge.action_type == "click":
         row["no_op_click_support_count"] += edge.support_count
         row["no_op_click_count"] += edge.no_op_count
+    for row in self._unseen_frontier_controls(node, page, query, controls):
+      controls[row["selector_key"]] = row
     for row in controls.values():
       click_support = int(row["no_op_click_support_count"])
       no_op_clicks = int(row["no_op_click_count"])
       # Two stable click no-ops are useful hard-negative evidence. Scrolls are
       # excluded because their direction is not part of this edge identity.
       row["known_noop"] = click_support >= 2 and no_op_clicks >= click_support
-    mature_count = sum(bool(row["mature"]) for row in controls.values())
+    observed = [row for row in controls.values() if row.get("observed_transition")]
+    frontier_count = sum(bool(row.get("frontier")) for row in controls.values())
+    mature_count = sum(bool(row["mature"]) for row in observed)
     relevant_count = sum(float(row["task_relevance"]) > 0 for row in controls.values())
-    self.metrics.exploration_guidance_controls_seen += len(controls)
+    self.metrics.exploration_guidance_controls_seen += len(observed)
     self.metrics.exploration_guidance_controls_mature += mature_count
     self.metrics.exploration_guidance_controls_relevant += relevant_count
+    self.metrics.exploration_frontier_controls += frontier_count
     result = {
         "enabled": True, "state_matched": True, "state_id": node.node_id,
         "state_visits": node.visit_count, "controls": controls,
+        "frontier_count": frontier_count,
     }
     self.logger.emit(
         "exploration_guidance", state_matched=True, state_id=node.node_id,
         state_visits=node.visit_count, control_count=len(controls),
         mature_control_count=mature_count, relevant_control_count=relevant_count,
-        goal_tokens=sorted(query),
+        frontier_count=frontier_count,
+        task_intent_count=len(query & _ROUTE_INTENT_TOKENS),
+        task_concept_count=len(query & _STABLE_UI_CONCEPTS),
     )
+    return result
+
+  def _unseen_frontier_controls(
+      self, node: StateNode, page: PageObservation, query: set[str],
+      observed_controls: Mapping[str, Mapping[str, Any]],
+  ) -> list[dict[str, Any]]:
+    """Task-relevant, currently visible controls with no edge from this node."""
+    result = []
+    for element in page.elements:
+      if (not element.get("clickable") or not element.get("enabled", True)
+          or not element.get("visible", True)):
+        continue
+      selector = ElementSelector.from_element(element)
+      if not _selector_is_actionable(selector) or selector.key() in observed_controls:
+        continue
+      label = selector.describe()
+      resource_label = selector.resource_id.replace("_", " ")
+      if (_UNSAFE_WORDS.search(label) or _COMPLEX_ACTION_WORDS.search(label)
+          or _COMPLEX_ACTION_WORDS.search(resource_label)):
+        continue
+      probe_edge = EdgeEvidence(
+          edge_id="", source_node=node.node_id, selector=selector,
+          action_type="click", function=f"click {label}")
+      relevance = self._edge_task_relevance(probe_edge, query)
+      if relevance <= 0.0:
+        continue
+      result.append({
+          "selector_key": selector.key(), "selector": dataclasses.asdict(selector),
+          "support_count": 0, "destination_count": 0,
+          "no_op_click_support_count": 0, "no_op_click_count": 0,
+          "reversible": False, "reversibility": 0.0,
+          "confidence": 0.0, "task_relevance": relevance,
+          "mature": False, "trap": False, "dynamic": False,
+          "no_op_count": 0, "meaningful_count": 0,
+          "edge_ids": [], "observed_transition": False, "frontier": True,
+          "node_discovery_opportunity": True,
+      })
     return result
 
   def _edge_key(self, source_node: StateNode | str, selector: ElementSelector,
@@ -1524,6 +1601,9 @@ class ExecutableExplorationMemory:
                            require_object: bool = False) -> float:
     if not query:
       return 0.0
+    signature_tokens = _task_signature_tokens(query)
+    task_signature = _hash(signature_tokens, 20) if signature_tokens else ""
+    task_support = edge.task_signatures.get(task_signature, 0)
     # The app's own name is on every one of its screens ("markor" in the
     # package, the landmarks and the goal), so it made every Markor route look
     # related to every Markor task: "Delete all my notes" scored 0.39 against
@@ -1584,7 +1664,12 @@ class ExecutableExplorationMemory:
       # the task names.
       return 0.0
     action_score = max(0.65 * action_intent_score, action_object_score)
-    return max(action_score, destination_score)
+    lexical_score = max(action_score, destination_score)
+    if lexical_score <= 0.0 or not task_support:
+      return lexical_score
+    # Reuse task-family evidence only as a small tie-break after current-task
+    # grounding; it cannot make an unrelated edge relevant or bypass vetoes.
+    return min(1.0, lexical_score + min(0.12, 0.03 * math.log1p(task_support)))
 
   def record_transition(self, record: TransitionRecord) -> EdgeEvidence:
     source = self.observe_page(record.source, visited=True)
@@ -1605,8 +1690,11 @@ class ExecutableExplorationMemory:
                           dynamic=record.selector.dynamic_text,
                           normalized_action_token=action_token)
       self.edges[edge_id] = edge
+      self._outgoing[source.node_id].append(edge_id)
     edge.support_count += 1
     edge.provenance[record.provenance] += 1
+    if record.task_signature:
+      edge.task_signatures[record.task_signature] += 1
     edge.meaningful_count += int(record.meaningful)
     edge.no_op_count += int(record.no_op)
     edge.external_count += int(record.external)
@@ -1769,6 +1857,7 @@ class ExecutableExplorationMemory:
         external=external, trap=trap,
         cost_s=float((row.get("timings_ms") or {}).get("total", 0.0)) / 1000.0,
         provenance="exploration", latency_s=float((row.get("timings_ms") or {}).get("total", 0.0)) / 1000.0,
+        task_signature=_task_context_signature(row.get("task", "")),
     )
     edge = self.record_transition(record)
     if self.config.k_step_memory_enabled:
@@ -1786,7 +1875,9 @@ class ExecutableExplorationMemory:
   def record_authoritative(
       self, source: PageObservation, action: Mapping[str, Any], destination: PageObservation | None,
       *, task_success: bool = False, latency_s: float = 0.0,
+      task_context: str = "",
   ) -> EdgeEvidence:
+    task_signature = _task_context_signature(task_context)
     action_type = _ACTION_TYPE_ALIASES.get(
         _norm(action.get("action_type") or "click").lower(),
         _norm(action.get("action_type") or "click").lower())
@@ -1804,7 +1895,7 @@ class ExecutableExplorationMemory:
           function="input_text into a task-specific field (payload redacted)",
           meaningful=destination is not None, recovered=False, recovery_attempted=False,
           cost_s=latency_s, latency_s=latency_s, provenance="inference",
-          task_success=task_success,
+          task_success=task_success, task_signature=task_signature,
       ))
     selector = selector_for_action(action, source)
     edge = self.record_transition(TransitionRecord(
@@ -1813,7 +1904,8 @@ class ExecutableExplorationMemory:
         meaningful=destination is not None,
         recovered=False, recovery_attempted=False,
         cost_s=latency_s, latency_s=latency_s,
-        provenance="inference", task_success=task_success))
+        provenance="inference", task_success=task_success,
+        task_signature=task_signature))
     if (action_type in {"click", "navigate_back"} and destination is not None
         and _selector_is_actionable(selector) and not selector.dynamic_text):
       self._episode_authoritative_edges.add(edge.edge_id)
@@ -1917,12 +2009,15 @@ class ExecutableExplorationMemory:
     for _ in range(max(1, self.config.max_depth)):
       next_frontier = []
       for score, path, source_id, visited in frontier:
-        outgoing = [edge for edge in self.edges.values()
-                    if edge.source_node == source_id and edge.trap_count == 0
-                    and not edge.dynamic and _selector_is_actionable(edge.selector)
-                    and _click_is_navigation_selector(edge)
+        outgoing = [self.edges[edge_id] for edge_id in self._outgoing.get(source_id, ())
+                    if edge_id in self.edges
+                    and self.edges[edge_id].trap_count == 0
+                    and not self.edges[edge_id].dynamic
+                    and _selector_is_actionable(self.edges[edge_id].selector)
+                    and _click_is_navigation_selector(self.edges[edge_id])
                     and not _UNSAFE_WORDS.search(
-                        edge.action_type + " " + edge.selector.describe())]
+                        self.edges[edge_id].action_type + " "
+                        + self.edges[edge_id].selector.describe())]
         for edge in outgoing:
           targets = [target for target in edge.target_states if target not in visited]
           if not targets:
@@ -1968,6 +2063,15 @@ class ExecutableExplorationMemory:
     if not (self.config.enabled and self.config.graph_enabled and self.config.graph_prompt_enabled):
       return ""
     self.metrics.prompt_context_queries += 1
+    safe_page = self._sanitize_page(page)
+    node = self.observe_page(safe_page, visited=False)
+    boundary = self.action_boundary_reason(safe_page)
+    guidance = self.exploration_guidance(safe_page, goal)
+    frontiers = sorted(
+        (row for row in guidance.get("controls", {}).values()
+         if row.get("frontier")),
+        key=lambda row: (-float(row.get("task_relevance", 0.0)),
+                         str(row.get("selector_key", ""))))
     paths = [path for path in self.retrieve_paths(
         page, goal,
         min_task_relevance=self.config.prompt_min_task_relevance)
@@ -1975,6 +2079,9 @@ class ExecutableExplorationMemory:
     query = _route_relevance_tokens(goal)
     ranked_paths = []
     for path in paths:
+      path = self._navigation_prefix(path)
+      if not path:
+        continue
       if any(edge.trap_count or edge.dynamic for edge in path):
         continue
       if any(not _selector_is_actionable(edge.selector) for edge in path):
@@ -1989,10 +2096,29 @@ class ExecutableExplorationMemory:
               for edge in path) / len(path)
       ranked_paths.append((q + relevance, path, relevance))
     ranked_paths.sort(key=lambda item: (-item[0], tuple(e.edge_id for e in item[1])))
-    if not ranked_paths:
+    traps = []
+    for edge_id in self._outgoing.get(node.node_id, ()):
+      edge = self.edges.get(edge_id)
+      if edge is None or not (edge.trap_count or (
+          edge.support_count >= 2 and edge.no_op_count >= edge.support_count)):
+        continue
+      if self._edge_task_relevance(edge, query) > 0.0:
+        traps.append(edge.selector.describe())
+    if not ranked_paths and not frontiers and not traps and not boundary:
       return ""
-    lines = ["[EXECUTABLE GUI MEMORY — task-relevant observations]"]
+    lines = ["[TASK-CONDITIONED GUI GRAPH]"]
+    if node is not None:
+      stable_landmarks = sorted({item.partition("|")[2] or item for item in node.landmarks
+                                 if not item.startswith("state_text|")})
+      lines.append(
+          f"Current UI: {node.activity}; stable landmarks: "
+          + (", ".join(stable_landmarks[:6]) if stable_landmarks else "none"))
+    if boundary:
+      lines.append(
+          f"Action boundary: {boundary}; do not execute a graph shortcut here. "
+          "Inspect the live screen and let the agent reason about the task action.")
     emitted_edges = 0
+    emitted_edge_ids = []
     for rank, (_, path, relevance) in enumerate(ranked_paths[:self.config.top_k_paths], 1):
       steps = []
       for edge in path:
@@ -2000,23 +2126,74 @@ class ExecutableExplorationMemory:
           break
         steps.append(
             f"{edge.selector.describe()} [{edge.action_type}] -> {edge.function} "
-        f"(n={edge.support_count}, q={edge.q_value(task_relevance=relevance):.2f}, "
+            f"(n={edge.support_count}, q={edge.q_value(task_relevance=relevance):.2f}, "
             f"confidence={edge.confidence:.2f}, reversible={edge.reversible_rate:.2f})")
         emitted_edges += 1
+        emitted_edge_ids.append(edge.edge_id)
       if steps:
         lines.append(f"- Route {rank} (task relevance={relevance:.2f}): " + " ; then ".join(steps))
       if emitted_edges >= self.config.max_prompt_edges:
         break
+    if frontiers:
+      labels = [ElementSelector.from_element({"selector": row["selector"]}).describe()
+                for row in frontiers[:3]]
+      lines.append(
+          "Unmeasured task-relevant frontier (candidate only; not a verified route): "
+          + ", ".join(labels))
+    if traps:
+      lines.append("Task-relevant observed trap/no-op controls: "
+                   + ", ".join(sorted(set(traps))[:3]))
     if len(lines) == 1:
       return ""
-    lines.append("Observed paths are evidence, not instructions; inspect live controls and verify each transition.")
+    lines.append(
+        "Observed navigation is prior evidence, not a command: relocate each control on the "
+        "live UI and verify every landing. Stop graph reuse at editable forms or commit actions.")
     self.metrics.prompt_context_count += 1
     self.metrics.prompt_context_edges += emitted_edges
-    self._last_prompt_edge_ids = tuple(
-        edge.edge_id for _, path, _ in ranked_paths[:self.config.top_k_paths]
-        for edge in path
-    )
+    self._last_prompt_edge_ids = tuple(emitted_edge_ids)
     return "\n".join(lines)[:self.config.max_prompt_chars]
+
+  def action_boundary_reason(self, page: PageObservation) -> str:
+    """Whether the current UI is at a task action rather than navigation."""
+    for row in page.elements:
+      if not row.get("visible", True) or not row.get("enabled", True):
+        continue
+      if row.get("role") == "input":
+        return "editable_form"
+      if not row.get("clickable"):
+        continue
+      selector = ElementSelector.from_element(row)
+      label = selector.describe() + " " + selector.resource_id.replace("_", " ")
+      if _COMPLEX_ACTION_WORDS.search(label):
+        return "commit_or_side_effect_control"
+    return ""
+
+  def _node_action_boundary_reason(self, node: StateNode | None) -> str:
+    if node is None:
+      return ""
+    page = PageObservation(
+        package=node.package, activity=node.activity, landmarks=node.landmarks,
+        elements=node.elements, structural_signature=node.structural_signature,
+        semantic_signature=node.semantic_signature)
+    return self.action_boundary_reason(page)
+
+  def _navigation_prefix(self, path: Sequence[EdgeEvidence]) -> list[EdgeEvidence]:
+    """Keep navigation hops only; stop before commits and after landing on a form."""
+    prefix = []
+    for edge in path:
+      action_phrase = re.split(
+          r"\b(?:reveals|opens|changes|has no stable page delta)\b",
+          edge.function, maxsplit=1, flags=re.IGNORECASE)[0]
+      label = (edge.action_type + " " + edge.selector.describe() + " "
+               + edge.selector.resource_id.replace("_", " ") + " " + action_phrase)
+      if _COMPLEX_ACTION_WORDS.search(label):
+        break
+      prefix.append(edge)
+      target_reasons = [self._node_action_boundary_reason(self.states.get(target_id))
+                        for target_id in edge.target_states]
+      if any(target_reasons):
+        break
+    return prefix
 
   def record_prompt_action(self, action: Mapping[str, Any], page: PageObservation) -> bool:
     """Count a model action that actually targets a selector we injected."""
@@ -2136,6 +2313,14 @@ class ExecutableExplorationMemory:
     if len(path) > 3:
       return "route_too_long"
     for edge in path:
+      action_phrase = re.split(
+          r"\b(?:reveals|opens|changes|has no stable page delta)\b",
+          edge.function, maxsplit=1, flags=re.IGNORECASE)[0]
+      boundary_label = (edge.action_type + " " + edge.selector.describe() + " "
+                        + edge.selector.resource_id.replace("_", " ") + " "
+                        + action_phrase)
+      if _COMPLEX_ACTION_WORDS.search(boundary_label):
+        return "complex_action_boundary"
       if self.route_edge_confidence(edge) < max(0.82, self.config.override_confidence):
         return "low_confidence"
       if not (self.route_consistent_validations(edge) >= 3
@@ -2159,7 +2344,7 @@ class ExecutableExplorationMemory:
         return "unsafe_action_type"
       if not _selector_is_actionable(edge.selector):
         return "selector_not_actionable"
-      if _UNSAFE_WORDS.search(edge.action_type + " " + edge.selector.describe()):
+      if _UNSAFE_WORDS.search(boundary_label):
         return "side_effect_risk"
     return ""
 
@@ -2191,9 +2376,12 @@ class ExecutableExplorationMemory:
     """Return a short, repeatedly verified navigation path, if one is safe."""
     if not (self.config.enabled and self.config.high_confidence_skip_enabled):
       return None
+    if self.action_boundary_reason(self._sanitize_page(page)):
+      return None
     for path in self.retrieve_paths(page, goal, top_k=max(5, self.config.top_k_paths)):
-      if not self._route_block(path, goal):
-        return path
+      prefix = self._navigation_prefix(path)
+      if prefix and not self._route_block(prefix, goal):
+        return prefix
     return None
 
   def record_observed_reversal(self, edge_id: str) -> bool:
@@ -2236,6 +2424,7 @@ class ExecutableExplorationMemory:
     if self.path and self.path.is_file():
       fresh = ExecutableExplorationMemory(self.config, path=self.path, logger=self.logger)
       self.states, self.edges, self._coarse = fresh.states, fresh.edges, fresh._coarse
+      self._by_activity, self._outgoing = fresh._by_activity, fresh._outgoing
       self.samples, self.skills = fresh.samples, fresh.skills
       # The authoritative agent and shadow ingester share this file but keep
       # separate in-process metric objects. Merge monotonic counters instead
@@ -2264,7 +2453,8 @@ class ExecutableExplorationMemory:
         "states": [dict(dataclasses.asdict(node)) for node in self.states.values()],
         "edges": [
             {**dataclasses.asdict(edge), "selector": dataclasses.asdict(edge.selector),
-             "target_states": dict(edge.target_states), "provenance": dict(edge.provenance)}
+             "target_states": dict(edge.target_states), "provenance": dict(edge.provenance),
+             "task_signatures": dict(edge.task_signatures)}
             for edge in self.edges.values()
         ],
         "samples": [sample.to_dict() for sample in self.samples],
@@ -2324,6 +2514,7 @@ class ExecutableExplorationMemory:
       node.activity = _canonical_activity(node.activity)
       self.states[node.node_id] = node
       self._coarse[(node.package, node.activity, node.structural_signature)].append(node.node_id)
+      self._by_activity[(node.package, node.activity)].append(node.node_id)
     for raw in payload.get("edges", ()):
       if not isinstance(raw, Mapping):
         continue
@@ -2350,10 +2541,13 @@ class ExecutableExplorationMemory:
             observed_at_s=float(raw.get("observed_at_s", time.time())), dynamic=bool(raw.get("dynamic", False)),
             normalized_action_token=str(raw.get("normalized_action_token", "")),
             route_hit_count=int(raw.get("route_hit_count", 0)),
-            route_miss_count=int(raw.get("route_miss_count", 0)))
+            route_miss_count=int(raw.get("route_miss_count", 0)),
+            task_signatures=Counter({str(k): int(v) for k, v in
+                                     dict(raw.get("task_signatures") or {}).items()}))
       except (KeyError, TypeError, ValueError):
         continue
       self.edges[edge.edge_id] = edge
+      self._outgoing[edge.source_node].append(edge.edge_id)
     for raw in payload.get("samples", ()):
       if not isinstance(raw, Mapping):
         continue

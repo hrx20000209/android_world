@@ -753,7 +753,9 @@ class MobileExplorer(gelab_agent.GELABAgent):
             logger=JsonlMemoryLogger(memory_log_path),
         ) if self.executable_memory_config.enabled else None
     )
-    self._pending_executable_transition: tuple[PageObservation, dict[str, Any], float] | None = None
+    self._pending_executable_transition: (
+        tuple[PageObservation, dict[str, Any], float, str] | None
+    ) = None
 
   def set_task_context(self, *, task_template: str) -> None:
     """Binds direct replay to the evaluator task template for this episode."""
@@ -818,6 +820,11 @@ class MobileExplorer(gelab_agent.GELABAgent):
       if destination.node_id not in edge.target_states:
         failed_edge, failure_reason = edge, "wrong_landing"
         break
+      if memory.action_boundary_reason(current_page):
+        # Defensive stop even if a stale or externally produced graph route
+        # contains steps beyond the form/commit boundary.
+        route = route[:len(executed)]
+        break
 
     if failed_edge is not None:
       memory.record_route_result(route, hit=False, failed_edge=failed_edge,
@@ -874,6 +881,8 @@ class MobileExplorer(gelab_agent.GELABAgent):
         "reasoning_mode": "high_confidence_skip", "memory_edge_id": last_edge.edge_id,
         "memory_route_edge_ids": [edge.edge_id for edge in route],
         "memory_route_length": len(route),
+        "memory_navigation_only": True,
+        "memory_action_boundary": memory.action_boundary_reason(current_page),
         "memory_confidence": min(edge.confidence for edge in route),
         "memory_fusion": "verified_skip",
     }
@@ -1050,10 +1059,12 @@ class MobileExplorer(gelab_agent.GELABAgent):
       self.executable_memory.refresh()
       executable_page = self._executable_page(state)
       if self._pending_executable_transition is not None:
-        pending_page, pending_action, pending_started = self._pending_executable_transition
+        pending_page, pending_action, pending_started, pending_goal = (
+            self._pending_executable_transition)
         self.executable_memory.record_authoritative(
             pending_page, pending_action, executable_page,
             latency_s=max(0.0, time.time() - pending_started),
+            task_context=pending_goal,
         )
         self._pending_executable_transition = None
       # Record pending input before observing the landing page so task values
@@ -1211,7 +1222,7 @@ class MobileExplorer(gelab_agent.GELABAgent):
     self._execute_action(action, extras)
     if self.executable_memory is not None and executable_page is not None:
       self._pending_executable_transition = (
-          executable_page, dict(action.__dict__), time.time())
+          executable_page, dict(action.__dict__), time.time(), goal)
     summary = gelab_agent._normalize_space(parsed_action.get("summary"))  # pylint: disable=protected-access
     if not summary:
       summary = str(tool_call.get("arguments") or tool_call)

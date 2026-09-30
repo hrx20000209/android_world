@@ -1,101 +1,83 @@
-# 给 LabServer Codex 的 AndroidWorld 实验与优化 Prompt
+# 给 LabServer Codex 的 AndroidWorld 运行与优化 Prompt
 
-复制下面代码块，交给能访问 LabServer 的 Codex。它以仓库里的 posterior-coverage 实验为主线，要求先检查环境、跑小规模 smoke，再在安全条件允许时扩展配对评测并做单因素优化。
+将下方 prompt 交给能访问 LabServer 的 Codex。它要求先核实服务器现状，再沿用当前确定性配置验证“任务条件化探索图”，并以强历史复用基线为参照做小步、可归因的优化。
 
 ```text
-你要在 LabServer 上独立运行 AndroidWorld，评测并逐步改进本仓库的 posterior-coverage 在线探索方法。所有代码、进程、模拟器和结果都必须留在服务器；不要依赖开发者 Mac 的文件、ADB、模拟器或 vLLM。
+你要在 LabServer 上运行 AndroidWorld，验证并改进仓库中的 MobileExplorer / Executable Exploration Memory。源码、Android worker、vLLM 请求和结果都在服务器端；不要依赖开发者 Mac 的文件、进程、ADB、模拟器或 vLLM。
 
-## 目标与实验对象
+## 目标：必须分别回答三个研究问题
 
-核心实现：
-- android_world/parallel_exploration/posterior_coverage.py
-- scripts/run_posterior_coverage_task.py
+1. 建图：建立与 Android GUI 交互结构有关、又由当前任务条件化的图，而不是只做截图去重或积累通用页面访问次数。状态是稳定 UI schema（activity、可访问性控件/结构），边是 selector/action/落点及支持数、成功率、成本、可逆性、失败/无效/副作用证据和 provenance。当前任务只以归一化、不可读回的语义签名参与边排序；不要把原始任务、用户输入、答案、联系人/日期/电话等值写入跨任务图。
+2. 探索：先由既有 Ex5 安全层决定可执行候选，再让图做有界 tie-break。区分已知成熟边、需要复核的弱边和当前 UI 上任务相关的未探索 frontier；在有安全 frontier 时少重复成熟边，目标是取得有用的新状态/证据，而非单纯增加覆盖率。记录每次选择为何与任务有关、是否到达新节点、probe/recovery 成本及副作用。图绝不提升不安全控件的权限。
+3. 推理：只把有限的任务相关信息注入 prompt：当前 UI、相关且已观察的导航路线、未验证 frontier（明确标注不是事实/指令）、以及相关 trap/no-op。不要倾倒整图。历史图只能指导导航；只有短、稳定、任务对象匹配且多次验证的导航前缀可跳过 VLM。每跳都要对当前 UI 重新定位 selector 并验证落点；抵达可编辑表单或遇到 Save/Submit/Confirm/Delete 等复杂/提交动作前必须停止，让 VLM 基于当前页面重新推理。不能靠图直接代填当前任务值或自动提交。
 
-这个 runner 在原始 GELAB agent 的完整推理请求进行时，为安全可点击控件计算候选动作 posterior，并尝试 live probe。比较以下五臂：
-- none：不做 probe；端到端无探索基线。
-- current：现有 GraphKeywordRanker 的排序。
-- random：固定种子的均匀随机选择。
-- probability：按 posterior 概率从高到低选择，不根据预算优化。
-- posterior_coverage：以候选概率质量为收益、在线测得的 probe 耗时为成本，在当前推理剩余时间内解 0/1 knapsack，并在每次 probe 后重新规划。
+研究边界：AutoDroid 的 UTG 与 task/function memory 已经证明 GUI 图、自动探索和任务记忆注入不是新颖点（原文：[AutoDroid](https://arxiv.org/abs/2308.15272)）。OmniFlow 已做成功历史轨迹的可参数化 function/transition reuse 与 live re-grounding；SwiftAgent 已做有序 reuse points、gap action 与局部恢复。不要声称“我们用了图”“图是 GUI-specific”或“能重放历史路径”本身是贡献。要检验的差异只能是：图是否在当前任务中识别了有价值的未探索控件/证据缺口、提前获取新状态信息、并且相对 validated replay/UTG 基线带来更好的端到端结果。若没有增益，诚实报告并收窄结论。
 
-注意：此 posterior runner 是受控实验 harness，不代表方法已经自动接入默认 AndroidWorld/MobileExplorer 路径。它的 probe 会在同一任务设备上直接点击，然后根据主模型最终动作决定提交该点击或恢复；这不是独立 shadow emulator。只允许使用专用、可丢弃、已快照的 AndroidWorld 模拟器，绝不能对个人手机或有用户数据的设备运行。探测/覆盖指标不是任务成功率，必须单独报告。
+## 1. 服务器安全与工作区
 
-## 1. 服务器、Git 和数据安全
+- GitHub：`git@github.com:hrx20000209/android_world.git`
+- 现有主 checkout：`/data/rxhuang/android_world_repo`
+- 运行数据：`/data/rxhuang/android_world_server/runs/`
+- 先记录 hostname、UTC 时间、`git status`/commit、磁盘、GPU/显存、ADB 设备、容器、监听端口、AndroidWorld/vLLM 进程和 `/v1/models`。只用服务器已有 SSH 凭据；绝不索要、显示或写入密码/token/私钥。
+- 现有 checkout 可能正被 AndroidWorld `run.py` 使用。若检测到活动进程，不在该目录 pull、切分支、覆盖代码或安装依赖；从远端最新 commit 创建一个新、独立 worktree（先确认目标不存在），在新 worktree 改代码。保留活动进程及其代码版本。
+- 结果必须写入唯一目录 `/data/rxhuang/android_world_server/runs/<worker>/<日期>_<commit>_<arm>/`。不要覆盖、清理、reset、挪动任何旧结果、checkpoint、AVD 文件或运行目录。不要杀不属于本轮且归属不清楚的进程，不要重启已有服务。
+- 不要向 GitHub 上传模型权重、APK、模拟器镜像、截图、checkpoint、日志、JSONL 结果、`evaluation_results/`、`tmp/` 或大文件。提交只包含必要源码、测试、脚本和本文档。
+- 若目录冲突、工作树 dirty、设备/服务归属不明，先保留现场并报告；禁止 `git reset --hard`、强推、删除式清理或直接改活动 checkout。
 
-- 仓库预期路径：`/data/rxhuang/android_world_repo`
-- 结果预期路径：`/data/rxhuang/android_world_server/runs/`
-- 后者是运行数据目录，不是 Git 仓库；不要对它 `git init`、清理或 reset。
-- 先检查 hostname、当前路径、Git 分支/commit/status、磁盘、GPU、ADB 设备、现存 AndroidWorld/vLLM 进程和监听端口。仓库缺失时再 clone `git@github.com:hrx20000209/android_world.git`；仓库干净时可 fetch 并 fast-forward 到远端。若有未提交修改，不覆盖、不 stash、不 reset；记录现状并在独立工作区继续或先报告阻塞。
-- 已有运行和输出一律保留。每个新实验使用带日期/commit/实验名的唯一目录；不续写已有实验目录，不重复已完成的 task×method 组合。
-- 不上传模型、APK、模拟器镜像、截图、checkpoint、日志、JSONL 结果或其他大文件到 GitHub。不要在命令、日志或报告里打印口令、token、私钥；使用服务器现有 SSH agent/凭据，勿把秘密写进脚本或仓库。
-- 禁止 `git reset --hard`、删除用户数据、杀掉不属于本实验的进程或重启已有服务。任何资源归属不清楚时先保持原状。
+## 2. 延续已有 AndroidWorld 实验，不重复已完成任务
 
-## 2. 固定采样设置
+先检查以下既有运行及其真实 checkpoint/evaluator 状态（路径仅作定位，不代表应重跑）：
 
-所有对比臂和优化臂固定，不可为了提升分数而改变：
-- 完整回答：`temperature=0.0`、`top_p=1.0`（runner 的 reasoning 请求使用 agent wrapper temperature，并明确发送 top_p=1）。
-- 候选 posterior scoring：代码固定 `temperature=0.0`、`max_tokens=1`，使用 vLLM `prompt_logprobs`。
-- vLLM server seed：`0`；只有确需启动新服务时才启动，并在启动参数和日志中确认 seed=0。
-- AndroidWorld task seed：`34`，并启用 `--fixed_task_seed`（runner 已设置）。
-- 所有 arm 使用完全相同的模型、task manifest、初始 app/device 状态、step budget、`max_probes=10`、`score_workers=8` 和评测版本。
+- worker-a：`/data/rxhuang/android_world_server/runs/worker-a/baseline_20260924.log`，原始 GELAB baseline，原记录使用 vLLM 8083。
+- worker-b：`/data/rxhuang/android_world_server/runs/worker-b/design_current_20260924_orchestrator.log`，MobileExplorer + two_system + executable memory + semantic prefix，原记录使用 vLLM 8084。
+- worker-c：`/data/rxhuang/android_world_server/runs/worker-c/baseline2_20260924.log`，独立 baseline 复现，原记录使用 vLLM 8085。
+- worker-d：`/data/rxhuang/android_world_server/runs/worker-d/design_v2c_20260924_orchestrator.log`，V2 `max_probes=2, min_probes=1`，原记录使用 vLLM 8085；只统计 `design_v2c_20260924`，忽略 `invalid_v2*` 诊断目录。
 
-不要改温度、seed、任务顺序、模型、预算或多个算法因素来制造收益。若要研究其中一个变量，另建明确标记的诊断实验，不混入主对比。
+旧记录曾报告上述四路各完成 30 个任务；不要仅凭这段文字认定完成或失败。逐一读 orchestrator、task manifest、run_args、checkpoint、evaluator 输出及进程。已完成的 task×arm 不得重复计数或无故重跑。若进程停止，先确认是否正常完成及最后一个可靠 checkpoint；只有 runner 明确支持 resume 且输出/设备状态可验证时才续跑。不能安全恢复就保留现场并报告，不要盲目从头启动。
 
-## 3. 运行前检查（不满足就先修环境，不要启动大批次）
+新实验先做 1 个隔离 smoke，再做配对 pilot，确认 AVD 状态、恢复和 evaluator 正常后才扩到预先冻结的 task 子集。baseline 和优化臂必须使用相同 task、初始状态、step budget 和 evaluator。若进行多个并发臂，每臂必须独占 AVD/userdata snapshot、ADB namespace/serial/console port、a11y 端口、输出目录和必要的 vLLM/GPU 配额；共用设备则串行。单纯开多个 AndroidWorld 进程不叫隔离。
 
-1. 盘点 `nvidia-smi`、`ps`、`ss -ltnp`、`adb devices -l`、可用内存/磁盘、容器和 AVD。不能只凭端口号猜服务用途；确认每个 endpoint 的 `/v1/models`、served model、GPU 映射、日志和负载。优先复用确认空闲且兼容的 GELAB-ZERO-4B OpenAI-compatible vLLM；绝不停止或覆盖现有服务。若确实需要启动新服务，先确认有空闲 GPU/显存，复用仓库 `scripts/start_labserver_vllm.sh` 的 seed=0 设置，并将端口、GPU、模型路径、启动日志写入实验 manifest。
-2. posterior 方法要求 endpoint 支持本代码用到的 `prompt_logprobs`、`continue_final_message`、`add_generation_prompt`，且与 chat/completions 接口兼容。用一个无副作用的小请求验证返回包含可读的 `prompt_logprobs`；随后再用单个候选验证分数解析和归一化。若不支持、报错或有效候选比例为 0，停止 posterior 矩阵，记录请求/服务端错误；不要把它记为 agent 失败。
-3. 确认 ADB 中有专用 `emulator-5554`，因为当前 runner 固定使用该 serial 和 console port 5554。通过 `command -v adb` 找到服务器 adb，并设置 `ANDROID_WORLD_ADB_PATH`，避免代码默认的 Mac adb 路径。检查 AndroidWorld 依赖、a11y/fast provider 端口及应用初始化是否可用。`current` arm 的 `GraphKeywordRanker` 可能还依赖 semantic service（默认 port 8766）；依赖不可用时先诊断并单独记录，不要静默改变 arm。
-4. runner 会真实操作同一 emulator，且当前 CLI 不提供可配置 ADB serial/console port 的选项。因此默认串行运行 task×method。只有每个并发 runner 拥有完全独立的容器/ADB namespace、AVD userdata snapshot、emulator serial/console port、a11y 端口、vLLM 配额、stats 和输出目录，且确认不会共用状态时才允许并行；否则绝不并发。
-5. 每个 task×method 开始前，用 AndroidWorld 自身 reset 加独立快照恢复到同一干净初态；确认恢复成功并记录快照 ID/hash。不可只假设固定 seed 会清理先前运行留下的 app/device 状态。发生 recovery failure、`dirty=true`、runner 仍在运行但 AVD 状态不明时，暂停该设备上的后续运行，先恢复/核验快照。
+## 3. 确定性：保持既有设置，不得为结果改采样
 
-## 4. 实验流程
+- 首先从有效 `run_args.json`、启动脚本、vLLM 命令行和服务日志读取每个已有实验实际使用的 temperature、top_p、vLLM seed、AndroidWorld task seed、模型和 task 顺序；结果报告引用这些已验证值，而不是猜测或套用另一条 runner 的默认值。
+- 当前项目既有对照规范是完整回答 `temperature=0.0, top_p=1.0`、vLLM `seed=0`、AndroidWorld seed `34` 并启用 `--fixed_task_seed`；posterior scoring 请求也固定 temperature 0。只有经文件/日志确认这正是该实验臂的生效设置时才按此值运行。
+- 对延续中的实验，精确保留其生效设置；任何 baseline/优化臂不得更改 temperature、top_p、seed、模型、task manifest/order 来制造差异。若两个旧臂设置不同，先标记不可直接配对，不能偷偷改成一致后把旧结果混比。新实验若缺少明确设置，先暂停并报告，不擅自选择温度。
 
-### A. Smoke
+## 4. vLLM、ADB 与任务状态核验
 
-- 从仓库已有固定 manifest 或服务器上可复现的既有 AndroidWorld baseline 选择 1 个有效、包含可点击 UI 的任务；固定写入 manifest，不临时换任务。
-- 先对五个 arm 各跑一次，确认 AndroidWorld evaluator 能结束、日志/checkpoint 可读、完整回答请求成功、posterior 解析正常、探测恢复安全。每次用全新的输出目录及同 seed 初态。
-- `none` 不做 posterior scoring；其他四个探索 arm 都计算候选分数。因此，`posterior_coverage` 与 `current/random/probability` 的对比用于判断选择策略；与 `none` 的对比还要计入 posterior scoring 和探索开销。明确报告这一点。
-- posterior 数据至少核查：`posterior_errors`、有效候选数、`posterior_sum`（有候选且无错误时应接近 1）、posterior latency、probe cost、reasoning slack、`rollback_ok`、`dirty`、`speculative_commit` 及 AndroidWorld 最终任务结果。
-- 若 smoke 中出现可疑状态污染、未恢复、posterior 接口不兼容、连续请求失败或应用/基础设施错误，先停，不要扩成多任务矩阵。
+- 不要按端口猜服务用途。检查每个端点 `/v1/models`、served model、GPU 映射、日志和负载。只有确认空闲且兼容时才复用服务；posterior runner 还须核实 `prompt_logprobs`、chat template 参数与 scoring parser。
+- 先 `command -v adb`，并为服务器进程指定服务器上的 adb；确认 `adb devices -l`、a11y/fast dumper、forwarding、AndroidWorld app 初始化正常。绝不使用 Mac adb。
+- 使用专用、可恢复快照的 AndroidWorld emulator/AVD；绝不在个人手机、有用户数据设备或共享 AVD 上试验。固定 seed 不等于重置设备。每个 task/arm 开始前记录 AVD/snapshot 标识并核验恢复；发生 `dirty=true`、restore failure、状态不明或 app 数据污染时暂停该 worker。
+- evaluator 的任务判定是唯一成功依据。进程退出、动作数、checkpoint 行数、探测覆盖和“生成了 memory”都不能代替任务成功。
 
-### B. 配对 pilot 与完整评测
+## 5. 评测臂与单因素优化
 
-- Smoke 通过后，从同一固定 manifest 中选 5 个具有代表性的任务做 pilot；同一 task 的五个 arm 逐一恢复到同一初始快照。保留 task 顺序和 seed 34。
-- Pilot 没有系统性基础设施错误且设备恢复可靠时，继续该 manifest 的固定 30-task 子集；若仓库/服务器已有相同口径的 30-task manifest，优先复用并记录来源。若没有，先从 AndroidWorld 可用任务中固定并保存一个分层 task list，再开始任何完整臂。不要在看过中途分数后换题。
-- 每个 arm 使用独立 `stats.json`：给所有 arm 相同代码默认 latency prior（reasoning 4.0s、probe 1.5s），之后只允许各自用本 arm 历史在线更新，避免不同 arm 互相泄漏成本统计。每个 task 使用独立 output 目录。任务状态必须按 AndroidWorld evaluator 判定；进程退出/产生 JSONL 不能替代成功判定。
-- 推荐单任务命令模板（在服务器 shell 中先设定实际检查过的 `API_URL`、`MODEL_ID`、`RUN_ROOT`、`TASK` 和 method；不要原样猜端口/模型）：
+按现有实现和资源能力选择，但至少保留：
 
-  `ANDROID_WORLD_ADB_PATH="$(command -v adb)" python scripts/run_posterior_coverage_task.py --task "$TASK" --method posterior_coverage --output "$RUN_ROOT/posterior_coverage/$TASK" --stats "$RUN_ROOT/posterior_coverage/stats.json" --seed 34 --api_url "$API_URL" --model "$MODEL_ID" --max_probes 10 --score_workers 8`
+1. `gelab_agent` 原始 baseline（无本设计）。
+2. 完整当前设计（当前实验臂实际启用的 two-system、memory、prefix 等模块需逐项核实）。
+3. 单因素图消融：图仅记录；图引导 exploration；任务相关 prompt summary；保守 navigation-prefix skip。分别开关，不叠加多个变化。
+4. 强历史复用对照：live selector re-grounding 的 validated trajectory/action replay（OmniFlow/SwiftAgent 风格）；并尽量做 AutoDroid-style UTG/task memory 对照。比较图与 replay 的互补收益，而非只对比弱的纯文本轨迹 prompt。
 
-  其他 arm 只把 `--method` 和隔离的 output/stats 子目录改为 `none`、`current`、`random` 或 `probability`。runner 额外输出 `steps.jsonl`、`filtered_elements.jsonl`、`run_args.json`；AndroidWorld 自己的 evaluator/checkpoint 也要一并归档在该任务目录。
+一次优化只写一个可证伪假设，例如“task-relevant unseen frontier 能减少成熟边的重复 probe，且不降低 evaluator 成功率”。先补针对性单测，再运行隔离 smoke 和同一冻结 task 集配对 pilot。改变温度或 seed 不属于可接受的算法优化。
 
-## 5. 结果读取与判断
+针对当前代码，重点验证：
 
-每一轮都保存运行 manifest（commit、hostname、UTC 时间、task 列表、每臂命令、seed/temperature/top_p、API/model、GPU/端口、AVD snapshot ID、依赖版本、输出目录）。报告至少包括：
+- 图建构/检索是否随当前 activity 的节点数和 outgoing degree 增长，而不是每步扫描整张图；state 合并是否不会把动态值/表单数据写入长期 memory。
+- Ex5 safe candidate admission 不变；graph frontier 的 tiebreak 有界、成熟 transition 在存在安全 frontier 时避免重复探索、hard-negative/no-op 能抑制重试。
+- prompt 只包含少量当前任务相关的路线/frontier/trap，并将 frontier 明确标成“未验证”；提示不会泄露其他 task 的值或把图的动作误当成已执行。
+- navigation-prefix skip 在起点和每跳重新 grounding；每个 landing 都验证，分歧后安全回滚；到可编辑字段或提交/副作用控件之前收口。route failure、rollback failure 和错误 skip 必须单独计数。
+- graph/history/replay 相比 baseline 是否真的节省 VLM calls、端到端时间或提升任务成功率。selector 命中、route candidate、coverage 或 probe count 都只是机制指标。
 
-- 任务数、成功/失败/基础设施错误和 evaluator success rate；按 task 配对列出分歧，不把 infrastructure error 算成 agent failure。
-- 每任务端到端时间、step latency、full reasoning 时间/TTFT/output tokens、posterior latency、probe 数与实际 forward/settle/recovery 耗时、总 probe overhead、final action 是否在推理结束前已 probe、commit/rollback/recovery 成功率。
-- posterior 错误率、候选数、候选概率分布/覆盖率；CPU、内存、GPU/显存和 vLLM 请求/队列负载（若指标可用）。
-- 平均数之外同时报告中位数、分位数和逐任务明细；只在共同完成的 task 上做配对 latency 比较。请求数少、探测覆盖高、或单一任务成功都不是设计有效的充分证据。
-- 从 `steps.jsonl` 读取机制数据，从 AndroidWorld 官方 evaluator 输出读取任务成败；如果 evaluator 结果缺失，就标为未确定，不补猜。
+## 6. 日志分析与决策
 
-## 6. 单因素优化循环
+每个 worker 定期检查：PID/进程状态、当前任务与 checkpoint、最后日志时间、任务成功/失败/infrastructure error、每任务耗时/step、primary 与 exploration VLM 请求/token、probe 数及耗时、rollback/restore、route hit/miss/block reason、memory 节点/边/frontier、vLLM 错误/队列、GPU 利用率/显存、AVD 状态和异常堆栈。异常要归类为 agent、任务/evaluator、模型服务、设备/依赖基础设施，不得混算。
 
-1. 先完成并分析 pilot/当前完整臂，找出具体瓶颈（例如 posterior 请求延迟、候选错误、成本预测偏差、回滚时间或有 probe 无收益的任务）。
-2. 提出一个可证伪假设，一轮只改一个因素；温度、top_p、seed、模型、任务 manifest 和初态保持不变。
-3. 修改前检查现有工作树，使用独立分支/工作区，不动正在运行的代码和结果；增加或更新小范围单测，并运行相关单测及一个隔离 smoke。不要通过测试后再覆盖旧实验。
-4. 新方案用新 commit 标识和新结果目录，与同一固定 task manifest 做 paired comparison。没有完整或足够配对证据时，将其标为探索性结果；有退化、恢复失败或异常时停止推广并保留证据，不删除旧结果。
-5. 仅在完整 evaluator 结果与配对开销均支持时建议保留优化。无法证明有益时，明确报告无结论/负结果，不把覆盖率当成功率。
+报告需给出：task×arm 配对表、成功/失败/infra 数及 success rate、共同完成任务上的端到端/step latency（中位数及分位数）、primary VLM calls、probe/recovery overhead、错误 skip 与路线 block 原因、GPU/服务状态。列出代表性失败和对应日志/checkpoint 路径；结果不足时标“探索性/无结论”。
 
-## 7. 交付
+若一臂停止，先保存当前证据并核对可恢复点，不能重复任务；若出现恢复失败、误跳过、成功率回归、共享设备冲突或采样设置漂移，暂停该臂并报告。所有旧数据只追加解释，不覆盖。
 
-最后用简洁中文给出：
-- 服务器 hostname、仓库 commit/status、服务/GPU/AVD 映射和确定性参数；
-- task manifest、所有实验臂完整命令、每臂完成情况及结果表；
-- 成功率、配对变化、端到端/推理/posterior/probe/recovery 开销、posterior 错误和基础设施失败；
-- 有代表性的失败及服务器日志/JSONL/checkpoint 路径；
-- 本轮改动的假设、代码 diff/commit、测试与评测证据、限制和下一步。
+## 7. 最终交付
 
-只在服务器保留运行产物；不要把大文件或结果树 push 到 GitHub。状态有疑问或恢复不安全时，暂停对应实验并先说明问题，不要盲目重启。
+最后用中文交付：服务器 hostname、代码 commit/status、新 worktree 路径、GPU/vLLM/AVD 映射、核实过的确定性设置、task manifest、每臂命令和已完成任务；配对结果和失败分类；机制开销与错误；代码修改假设、测试/评测证据、适用限制及下一步。只保留运行产物在服务器，不向 GitHub 推送运行数据或大文件。
 ```

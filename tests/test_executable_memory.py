@@ -6,6 +6,7 @@ from android_world.parallel_exploration.executable_memory import EdgeEvidence
 from android_world.parallel_exploration.executable_memory import ElementSelector
 from android_world.parallel_exploration.executable_memory import ExecutableExplorationMemory
 from android_world.parallel_exploration.executable_memory import ExecutableMemoryConfig
+from android_world.parallel_exploration.executable_memory import JsonlMemoryLogger
 from android_world.parallel_exploration.executable_memory import PageObservation
 from android_world.parallel_exploration.executable_memory import ProbeCandidate
 from android_world.parallel_exploration.executable_memory import SafeProbePlanner
@@ -82,7 +83,9 @@ def test_stable_heading_separates_same_control_skeleton_without_dynamic_text():
       recovered=True, latency_s=0.2,
   ))
   assert memory.retrieve_paths(search_results, "what tasks are due") == []
-  assert memory.prompt_context(search_results, "what tasks are due") == ""
+  context = memory.prompt_context(search_results, "what tasks are due")
+  assert "Route 1" not in context
+  assert "Unmeasured task-relevant frontier" in context
 
 
 def test_exploration_guidance_matches_page_and_scores_seen_task_relevant_control():
@@ -131,6 +134,30 @@ def test_exploration_guidance_matches_page_and_scores_seen_task_relevant_control
   assert guidance["controls"][selector.key()]["task_relevance"] > 0
   assert before_visits == {node_id: node.visit_count for node_id, node in memory.states.items()}
   assert memory.metrics.exploration_guidance_state_matches == 1
+
+
+def test_exploration_guidance_surfaces_only_task_relevant_unseen_frontier():
+  memory = ExecutableExplorationMemory(ExecutableMemoryConfig(enabled=True))
+  page = PageObservation.from_ui([
+      {"text": "Notes", "resource_id": "app:id/notes",
+       "class_name": "Button", "bbox": (10, 20, 180, 90),
+       "is_clickable": True},
+      {"text": "Settings", "resource_id": "app:id/settings",
+       "class_name": "Button", "bbox": (200, 20, 370, 90),
+       "is_clickable": True},
+  ], package="app", activity="app/.Main", screen_size=(1000, 2000))
+  notes = ElementSelector(resource_id="app:id/notes", text="Notes", class_name="Button")
+  memory.observe_page(page)
+
+  guidance = memory.exploration_guidance(page, "Open Notes")
+
+  frontier = guidance["controls"][notes.key()]
+  assert frontier["frontier"] and not frontier["observed_transition"]
+  assert frontier["node_discovery_opportunity"]
+  assert frontier["support_count"] == 0 and frontier["task_relevance"] > 0
+  assert not any(row.get("selector", {}).get("text") == "Settings"
+                 for row in guidance["controls"].values())
+  assert guidance["frontier_count"] == 1
 
 
 def test_exploration_guidance_matches_same_structure_after_labels_drift():
@@ -642,7 +669,7 @@ def test_advisory_prompt_threshold_is_separate_from_execution_threshold():
   assert memory.high_confidence_edge(source, "open security dashboard") is None
 
 
-def test_authoritative_text_input_is_redacted_and_never_a_route():
+def test_authoritative_text_input_is_redacted_and_never_a_route(tmp_path):
   field_before = [{
       "text": "", "resource_id": "app:id/first_name",
       "class_name": "android.widget.EditText", "bbox": (10, 20, 300, 80),
@@ -655,14 +682,19 @@ def test_authoritative_text_input_is_redacted_and_never_a_route():
       field_before, package="app", activity="app/.Contact")
   destination = PageObservation.from_ui(
       field_after, package="app", activity="app/.Contact")
-  memory = ExecutableExplorationMemory(ExecutableMemoryConfig(enabled=True))
+  events_path = tmp_path / "memory_events.jsonl"
+  memory = ExecutableExplorationMemory(
+      ExecutableMemoryConfig(enabled=True), logger=JsonlMemoryLogger(events_path))
   edge = memory.record_authoritative(
       source, {"action_type": "input_text", "text": "Hugo"}, destination)
   serialized = json.dumps(memory.to_dict(), ensure_ascii=False)
   assert "Hugo" not in serialized
   assert edge.dynamic
   assert edge.selector.dynamic_text
-  assert memory.prompt_context(source, "enter Hugo") == ""
+  context = memory.prompt_context(source, "enter Hugo")
+  assert "Hugo" not in context
+  assert "Action boundary: editable_form" in context
+  assert "Hugo" not in events_path.read_text(encoding="utf-8")
   assert source.landmarks == destination.landmarks
 
 
@@ -708,6 +740,7 @@ def test_probe_ingestion_redacts_task_literals_from_deltas():
   assert "Pereira" not in serialized
   assert "13920741751" not in serialized
   assert "contacts" in edge.function.casefold()
+  assert edge.task_signatures
 
 
 def test_probe_ingestion_redacts_unclassified_dynamic_control_from_all_memory():
@@ -957,10 +990,11 @@ def test_persistence_is_versioned_and_restores_edges(tmp_path):
   memory.save()
   restored = ExecutableExplorationMemory(ExecutableMemoryConfig(enabled=True), path=path)
   json_version = restored.to_dict()["schema_version"]
-  assert json_version == 3
+  assert json_version == 4
   assert len(restored.edges) == 1
   loaded_edge = next(iter(restored.edges.values()))
   assert loaded_edge.normalized_action_token
+  assert loaded_edge.edge_id in restored._outgoing[loaded_edge.source_node]
   loaded_node = restored.states[loaded_edge.target_states.most_common(1)[0][0]]
   assert loaded_node.parent_state_ids == (loaded_edge.source_node,)
   assert loaded_node.incoming_action_tokens
@@ -1039,6 +1073,89 @@ def test_unified_graph_route_requires_repeated_reversible_unambiguous_evidence()
   assert edge.route_miss_count == 1
   assert memory.metrics.route_miss_count == 1
   assert memory.high_confidence_path(source, "Open Notes") is None
+
+
+def test_graph_route_skips_navigation_but_stops_at_form_and_commit_boundary():
+  memory = ExecutableExplorationMemory(ExecutableMemoryConfig(
+      enabled=True, high_confidence_skip_enabled=True,
+      route_allow_unknown_reversibility=True, override_confidence=0.82,
+      min_task_relevance=0.50))
+  home = PageObservation.from_ui([{
+      "text": "Menu", "resource_id": "app:id/menu", "class_name": "Button",
+      "bbox": (10, 10, 100, 100), "is_clickable": True,
+  }], package="app", activity="app/.Home")
+  menu = PageObservation.from_ui([{
+      "text": "Create contact", "resource_id": "app:id/create_contact",
+      "class_name": "Button", "bbox": (10, 10, 100, 100), "is_clickable": True,
+  }], package="app", activity="app/.Menu")
+  form = PageObservation.from_ui([{
+      "text": "Name", "resource_id": "app:id/name", "class_name": "EditText",
+      "bbox": (10, 10, 300, 80), "is_editable": True,
+  }, {
+      "text": "Save", "resource_id": "app:id/save", "class_name": "Button",
+      "bbox": (300, 10, 400, 80), "is_clickable": True,
+  }], package="app", activity="app/.ContactForm")
+  saved = PageObservation.from_ui([{
+      "text": "Contact", "resource_id": "app:id/contact", "class_name": "TextView",
+      "bbox": (10, 10, 300, 80),
+  }], package="app", activity="app/.Contact")
+  menu_edge = create_edge = save_edge = None
+  for _ in range(4):
+    menu_edge = memory.record_transition(TransitionRecord(
+        home, {"action_type": "click"}, menu,
+        ElementSelector(resource_id="app:id/menu", text="Menu", class_name="Button"),
+        function="click Menu opens actions", meaningful=True,
+        recovered=False, recovery_attempted=False, no_op=False))
+    create_edge = memory.record_transition(TransitionRecord(
+        menu, {"action_type": "click"}, form,
+        ElementSelector(resource_id="app:id/create_contact", text="Create contact",
+                        class_name="Button"),
+        function="click Create contact opens contact form", meaningful=True,
+        recovered=False, recovery_attempted=False, no_op=False))
+    save_edge = memory.record_transition(TransitionRecord(
+        form, {"action_type": "click"}, saved,
+        ElementSelector(resource_id="app:id/save", text="Save", class_name="Button"),
+        function="click Save commits contact", meaningful=True,
+        recovered=False, recovery_attempted=False, no_op=False))
+
+  route = memory.high_confidence_path(home, "Create a contact named Alex")
+
+  assert route == [menu_edge, create_edge]
+  assert save_edge not in route
+  assert memory.route_block_reason([save_edge]) == "complex_action_boundary"
+  assert memory.high_confidence_path(form, "Create a contact named Alex") is None
+  home_context = memory.prompt_context(home, "Create a contact named Alex")
+  form_context = memory.prompt_context(form, "Create a contact named Alex")
+  assert "Create contact" in home_context
+  assert "Save" not in home_context
+  assert "Action boundary: editable_form" in form_context
+  assert "Route 1" not in form_context
+
+
+def test_authoritative_task_signature_is_persisted_without_raw_task_text(tmp_path):
+  path = tmp_path / "task_memory.json"
+  memory = ExecutableExplorationMemory(ExecutableMemoryConfig(enabled=True), path=path)
+  source = PageObservation.from_ui([{
+      "text": "Notes", "resource_id": "app:id/notes", "class_name": "Button",
+      "bbox": (10, 10, 100, 100), "is_clickable": True,
+  }], package="app", activity="app/.Main")
+  destination = PageObservation.from_ui(_elements("Note list"),
+                                         package="app", activity="app/.Notes")
+  edge = memory.record_authoritative(
+      source, {"action_type": "click", "x": 50, "y": 50}, destination,
+      task_context="Open Notes for Alex")
+  memory.save()
+  serialized = path.read_text(encoding="utf-8")
+
+  restored = ExecutableExplorationMemory(ExecutableMemoryConfig(enabled=True), path=path)
+  loaded = restored.edges[edge.edge_id]
+  assert loaded.task_signatures
+  assert "Alex" not in serialized and "Open Notes for Alex" not in serialized
+  assert loaded.edge_id in restored._outgoing[loaded.source_node]
+  query = _route_relevance_tokens("Open Notes for Alex")
+  without_attribution = dataclasses.replace(loaded, task_signatures={})
+  assert restored._edge_task_relevance(loaded, query) > (
+      restored._edge_task_relevance(without_attribution, query))
 
 
 def test_beta_value_and_fusion_override_gate():

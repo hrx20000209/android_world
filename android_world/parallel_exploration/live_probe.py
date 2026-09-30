@@ -527,7 +527,8 @@ def _apply_executable_memory_tiebreak(ranked, guidance):
             float(row.expected_affordance_match or 0.0))
     ) if matched else 0.0
     row.eam_state_matched = matched
-    row.eam_control_seen = evidence is not None
+    row.eam_control_seen = bool(
+        evidence and evidence.get("observed_transition", True))
     row.eam_control_support = int((evidence or {}).get("support_count", 0) or 0)
     row.eam_task_relevance = max(0.0, min(1.0, relevance))
     row.eam_control_mature = bool((evidence or {}).get("mature", False))
@@ -537,7 +538,14 @@ def _apply_executable_memory_tiebreak(ranked, guidance):
     base = max(abs(float(scored.utility)), 0.005)
     adjustment = 0.0
     if matched:
-      if evidence:
+      if evidence and evidence.get("frontier"):
+        # EAM has matched this live control to the task-relevant unexplored
+        # graph frontier. This remains a bounded tie-break after Ex5 admission.
+        adjustment += base * (0.24 * row.eam_task_relevance - 0.03)
+        row.eam_node_discovery_opportunity = bool(
+            evidence.get("node_discovery_opportunity", False))
+      elif evidence:
+        row.eam_node_discovery_opportunity = False
         if row.eam_control_trap or row.eam_control_dynamic:
           adjustment -= base * 0.50
         elif row.eam_control_mature:
@@ -556,6 +564,7 @@ def _apply_executable_memory_tiebreak(ranked, guidance):
         # No edge from this source/selector means the safe control is a true
         # graph frontier. Relevance, not visit count/coverage, is the bonus.
         adjustment += base * (0.24 * row.eam_task_relevance - 0.03)
+        row.eam_node_discovery_opportunity = True
     row.eam_graph_tiebreak = adjustment
     row.eam_repeat_suppressed = False
     components = dict(scored.components)
@@ -563,6 +572,9 @@ def _apply_executable_memory_tiebreak(ranked, guidance):
         "eam_graph_tiebreak": adjustment,
         "eam_state_matched": float(matched),
         "eam_control_seen": float(row.eam_control_seen),
+        "eam_frontier": float(bool(evidence and evidence.get("frontier"))),
+        "eam_node_discovery_opportunity": float(
+            bool(getattr(row, "eam_node_discovery_opportunity", False))),
         "eam_task_relevance": row.eam_task_relevance,
         "eam_support_count": float(row.eam_control_support),
         "eam_mature": float(row.eam_control_mature),
