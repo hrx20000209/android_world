@@ -9,6 +9,11 @@ if [[ ! "$run_id" =~ ^[A-Za-z0-9][A-Za-z0-9._-]{2,63}$ ]]; then
 fi
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+max_workers="${ANDROIDWORLD_STUDY_MAX_WORKERS:-3}"
+if [[ ! "$max_workers" =~ ^[1-3]$ ]]; then
+  echo "ANDROIDWORLD_STUDY_MAX_WORKERS must be 1, 2, or 3" >&2
+  exit 2
+fi
 studies_root="/data/rxhuang/android_world_server/androidworld_graph_studies"
 run_root="${studies_root}/${run_id}"
 mkdir -p "$run_root"
@@ -27,7 +32,7 @@ nohup setsid python3 "${repo_root}/scripts/labserver_androidworld_graph_study.py
   --repo "$repo_root" \
   --protocol "${repo_root}/experiments/labserver_androidworld_graph_study/protocol.json" \
   --reuse-vllm-port 8085 \
-  --max-workers 3 \
+  --max-workers "$max_workers" \
   --failure-backoff-s 15 \
   --publish \
   >>"${run_root}/supervisor.log" 2>&1 </dev/null &

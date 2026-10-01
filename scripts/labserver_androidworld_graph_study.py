@@ -345,11 +345,20 @@ def _wait_for_emulator(container: str, timeout_s: int = 300) -> None:
 
 
 def _preflight_worker(container: str) -> None:
-  """Fail before task allocation if the container lacks runner dependencies."""
+  """Verify runner imports and a real AndroidWorld gRPC tree before allocation."""
   code = (
       "import openai, scipy, matplotlib; "
       "from android_world.agents import mobileexplorer, gelab_agent; "
-      "from android_world import checkpointer; print('androidworld-worker-preflight-ok')"
+      "from android_world import checkpointer; "
+      "from android_world.env.android_world_controller import A11yMethod, get_controller; "
+      "controller=get_controller(console_port=5554, "
+      "adb_path='/opt/android/platform-tools/adb', grpc_port=8554, "
+      "a11y_method=A11yMethod.A11Y_FORWARDER_APP); "
+      "timestep=controller.reset(); "
+      "elements=timestep.observation.get('ui_elements') or []; "
+      "controller.close(); "
+      "assert elements, 'AndroidWorld gRPC preflight returned no UI elements'; "
+      "print('androidworld-worker-preflight-ok', len(elements))"
   )
   result = subprocess.run([
       "docker", "exec", "-e", f"PYTHONPATH={CONTAINER_SITE_OVERLAY}",
