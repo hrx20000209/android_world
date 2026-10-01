@@ -29,6 +29,7 @@ from absl import logging
 from android_env import env_interface
 from android_env import loader
 from android_env.components import config_classes
+from android_env.proto import adb_pb2
 from android_env.proto.a11y import android_accessibility_forest_pb2
 from android_env.wrappers import a11y_grpc_wrapper
 from android_env.wrappers import base_wrapper
@@ -199,6 +200,29 @@ def apply_a11y_forwarder_app_wrapper(
     # first reset tree reliably.
     try:
         wrapped_env._configure_grpc()  # pylint: disable=protected-access
+        # android_env's current ADB parser treats SendBroadcast.action as one
+        # literal argument; its _configure_grpc implementation embeds
+        # ``--ei port N`` in that action, so the forwarder never receives the
+        # integer extra and keeps grpcPort=0. Send the command as a generic ADB
+        # argv vector, where Android's ``am broadcast`` parses the extra.
+        grpc_port = wrapped_env.get_port()
+        response = adb_utils.issue_generic_request(
+            [
+                'shell', 'am', 'broadcast', '-a',
+                'accessibility_forwarder.intent.action.SET_GRPC',
+                '--ei', 'port', str(grpc_port),
+                '-n',
+                'com.google.androidenv.accessibilityforwarder/'
+                'com.google.androidenv.accessibilityforwarder.FlagsBroadcastReceiver',
+            ],
+            wrapped_env,
+            timeout_sec=10,
+        )
+        if response.status != adb_pb2.AdbResponse.Status.OK:
+            raise RuntimeError(
+                'Could not configure accessibility-forwarder gRPC port: '
+                f'{response}'
+            )
         wrapped_env._enable_a11y_tree_logs()  # pylint: disable=protected-access
     except Exception as exc:  # pylint: disable=broad-exception-caught
         logging.warning('Initial a11y gRPC configuration failed: %s', exc)

@@ -18,6 +18,7 @@ from unittest import mock
 
 from absl.testing import absltest
 from android_env import env_interface
+from android_env.proto import adb_pb2
 from android_env.wrappers import a11y_grpc_wrapper
 from android_world.env import adb_utils
 from android_world.env import android_world_controller
@@ -79,6 +80,37 @@ class AndroidWorldControllerTest(absltest.TestCase):
             'clear_directory',
             side_effect=file_test_utils.mock_remove_files,
         )
+    )
+
+  def test_forwarder_grpc_port_uses_adb_broadcast_extras(self):
+    wrapped_env = mock.Mock()
+    wrapped_env.get_port.return_value = 45678
+    response = mock.Mock(status=adb_pb2.AdbResponse.Status.OK)
+    with mock.patch.object(
+        android_world_controller.a11y_grpc_wrapper,
+        'A11yGrpcWrapper',
+        return_value=wrapped_env,
+    ):
+      with mock.patch.object(
+          adb_utils, 'issue_generic_request', return_value=response
+      ) as issue_generic:
+        result = android_world_controller.apply_a11y_forwarder_app_wrapper(
+            mock.Mock(), install_a11y_forwarding_app=False
+        )
+
+    self.assertIs(result, wrapped_env)
+    wrapped_env._configure_grpc.assert_called_once()
+    wrapped_env._enable_a11y_tree_logs.assert_called_once()
+    issue_generic.assert_called_once_with(
+        [
+            'shell', 'am', 'broadcast', '-a',
+            'accessibility_forwarder.intent.action.SET_GRPC',
+            '--ei', 'port', '45678', '-n',
+            'com.google.androidenv.accessibilityforwarder/'
+            'com.google.androidenv.accessibilityforwarder.FlagsBroadcastReceiver',
+        ],
+        wrapped_env,
+        timeout_sec=10,
     )
 
   def test_initialization(self):
