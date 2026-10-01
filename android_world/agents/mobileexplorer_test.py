@@ -227,6 +227,52 @@ class TrajectoryMemoryTest(absltest.TestCase):
     self.assertIsNone(mobileexplorer._target_descriptor(action, state))
 
 
+class OpenAppRecoveryTest(absltest.TestCase):
+
+  def test_filesystem_task_infers_the_files_app(self):
+    response = (
+        '{"name":"mobile_use","arguments":'
+        '{"action":"open_app","text":""}}'
+    )
+    state = type("State", (), {"ui_elements": []})()
+    _, action, _, _, _ = mobileexplorer._parse_mobileexplorer_response(
+        response, state, (1080, 2400)
+    )
+
+    self.assertEqual(action.action_type, json_action.OPEN_APP)
+    self.assertEmpty(action.app_name)
+    self.assertEqual(
+        mobileexplorer._infer_open_app_name_from_goal(
+            "Delete a file from the Android filesystem in the Alarms folder."
+        ),
+        "Files",
+    )
+
+  def test_inference_requires_an_app_phrase_not_an_incidental_substring(self):
+    self.assertEmpty(
+        mobileexplorer._infer_open_app_name_from_goal(
+            "Delete a file from the user's profile."
+        )
+    )
+    self.assertEqual(
+        mobileexplorer._infer_open_app_name_from_goal(
+            "Add an expense in Pro Expense."
+        ),
+        "Pro Expense",
+    )
+
+  def test_recovery_instruction_preserves_the_current_screenshot(self):
+    image = {"type": "image_url", "image_url": {"url": "data:unchanged"}}
+    messages = [{"role": "user", "content": [
+        {"type": "text", "text": "task and history"}, image,
+    ]}]
+
+    mobileexplorer._add_open_app_recovery_instruction(messages)
+
+    self.assertIn("Do not repeat it", messages[0]["content"][0]["text"])
+    self.assertIs(messages[0]["content"][1], image)
+
+
 class LiveEvidenceTest(absltest.TestCase):
 
   def test_evidence_requires_next_generation_and_exact_binding(self):

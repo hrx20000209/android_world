@@ -572,6 +572,91 @@ def _navigation_block(retrieved: RetrievedTrajectory | None) -> str:
   )
 
 
+def _normalized_goal_phrase(text: str) -> str:
+  return re.sub(r"[^a-z0-9]+", " ", str(text).casefold()).strip()
+
+
+def _infer_open_app_name_from_goal(goal: str) -> str:
+  """Infers an app only when its name or a narrow alias is in the goal."""
+  normalized_goal = f" {_normalized_goal_phrase(goal)} "
+  for app_name in sorted(
+      gelab_agent.AVAILABLE_APPS, key=lambda value: len(str(value)), reverse=True
+  ):
+    phrase = _normalized_goal_phrase(str(app_name))
+    if phrase and f" {phrase} " in normalized_goal:
+      return str(app_name)
+
+  # AndroidWorld's file tasks often say "filesystem" without naming the
+  # Files app. Keep this alias deliberately narrow to avoid inferring Files
+  # from unrelated words such as "profile".
+  files_aliases = (
+      "filesystem", "file system", "file manager", "file browser", "file explorer"
+  )
+  if any(f" {_normalized_goal_phrase(alias)} " in normalized_goal for alias in files_aliases):
+    return "Files"
+  return ""
+
+
+def _parse_mobileexplorer_response(
+    response: str,
+    state: interface.State,
+    logical_screen_size: tuple[int, int],
+) -> tuple[
+    OrderedDict[str, Any], json_action.JSONAction,
+    dict[str, Any], dict[str, Any], str | None,
+]:
+  """Parses GELAB output, retaining the existing tolerant tool-call fallback."""
+  parse_error = None
+  try:
+    parsed_action = gelab_agent.parse_gelab_response(response)
+    action, tool_call, extras = gelab_agent.gelab_action_to_json_action(
+        parsed_action, logical_screen_size
+    )
+  except seeact_utils.ParseActionError as error:
+    parse_error = str(error)
+    try:
+      tool_call = parse_tool_call(str(response))
+      action = _to_json_action(
+          tool_call,
+          list(getattr(state, "ui_elements", None) or []),
+          fallback_index=None,
+          logical_screen_size=logical_screen_size,
+          coordinate_mode="1000",
+      )
+      if action.action_type == json_action.UNKNOWN:
+        raise seeact_utils.ParseActionError("tool_call_recovery_unknown_action")
+      parsed_action = OrderedDict(
+          cot="", action="RECOVERED_TOOL_CALL",
+          summary="Recovered action from tool_call parser.",
+          parse_error=parse_error, fallback="tool_call_recovery",
+      )
+      extras = {"recovered_from_tool_call": True, "parse_error": parse_error}
+    except Exception as recovery_error:  # pylint: disable=broad-exception-caught
+      parsed_action = OrderedDict(
+          cot="", action="WAIT", value="1", summary="Parser fallback wait",
+          parse_error=parse_error, recovery_error=str(recovery_error),
+      )
+      action = json_action.JSONAction(action_type=json_action.WAIT)
+      tool_call = {"name": "mobile_use", "arguments": {"action": "wait", "value": 1}}
+      extras = {"wait_seconds": 1, "parse_error": parse_error,
+                "fallback": "parse_error_wait"}
+  return parsed_action, action, tool_call, extras, parse_error
+
+
+def _add_open_app_recovery_instruction(messages: list[dict[str, Any]]) -> None:
+  """Adds one bounded correction request without altering the screenshot."""
+  if not messages or not isinstance(messages[-1].get("content"), list):
+    return
+  for part in messages[-1]["content"]:
+    if isinstance(part, dict) and part.get("type") == "text":
+      part["text"] += (
+          "\nThe previous open_app action had an empty app name and could not "
+          "run. Do not repeat it. Choose a valid action on a visible UI element, "
+          "or provide a non-empty exact installed app name."
+      )
+      return
+
+
 def _live_evidence_block(evidence: Iterable[LiveEvidence]) -> str:
   records = list(evidence)[:4]
   if not records:
@@ -1155,44 +1240,67 @@ class MobileExplorer(gelab_agent.GELABAgent):
       # The parallel shadow explorer has finished before predict_mm returns;
       # only now may its graph influence this reasoning action.
       self.executable_memory.refresh()
-    parse_error = None
-    try:
-      parsed_action = gelab_agent.parse_gelab_response(response)
-      action, tool_call, extras = gelab_agent.gelab_action_to_json_action(
-          parsed_action, self.env.logical_screen_size
-      )
-    except seeact_utils.ParseActionError as error:
-      parse_error = str(error)
-      try:
-        # Match explorer_agent_gelab_light's tolerant post-processing: if the
-        # canonical GELAB parser rejects formatting but a tool call is present,
-        # recover it and interpret coordinates in the documented 0..1000
-        # logical-screen space before falling back to a safe wait.
-        tool_call = parse_tool_call(str(response))
-        action = _to_json_action(
-            tool_call,
-            list(getattr(state, "ui_elements", None) or []),
-            fallback_index=None,
-            logical_screen_size=self.env.logical_screen_size,
-            coordinate_mode="1000",
+    parsed_action, action, tool_call, extras, parse_error = (
+        _parse_mobileexplorer_response(
+            response, state, self.env.logical_screen_size
         )
-        if action.action_type == json_action.UNKNOWN:
-          raise seeact_utils.ParseActionError("tool_call_recovery_unknown_action")
-        parsed_action = OrderedDict(
-            cot="", action="RECOVERED_TOOL_CALL",
-            summary="Recovered action from tool_call parser.",
-            parse_error=parse_error, fallback="tool_call_recovery",
+    )
+    open_app_recovery = None
+    open_app_safe_wait = False
+    if (
+        action.action_type == json_action.OPEN_APP
+        and not str(action.app_name or "").strip()
+    ):
+      inferred_app = _infer_open_app_name_from_goal(goal)
+      if inferred_app:
+        action = json_action.JSONAction(
+            action_type=json_action.OPEN_APP, app_name=inferred_app
         )
-        extras = {"recovered_from_tool_call": True, "parse_error": parse_error}
-      except Exception as recovery_error:  # pylint: disable=broad-exception-caught
-        parsed_action = OrderedDict(
-            cot="", action="WAIT", value="1", summary="Parser fallback wait",
-            parse_error=parse_error, recovery_error=str(recovery_error),
+        tool_call = {
+            "name": "mobile_use",
+            "arguments": {"action": "open_app", "text": inferred_app},
+        }
+        extras = dict(extras)
+        extras["open_app_name_inferred_from_goal"] = inferred_app
+        parsed_action = OrderedDict(parsed_action)
+        parsed_action["open_app_name_inferred_from_goal"] = inferred_app
+        open_app_recovery = {
+            "outcome": "inferred_from_goal", "app_name": inferred_app,
+        }
+      else:
+        _add_open_app_recovery_instruction(messages)
+        response, _, _ = self.vllm.predict_mm("", [], messages=messages)
+        parsed_action, action, tool_call, extras, retry_parse_error = (
+            _parse_mobileexplorer_response(
+                response, state, self.env.logical_screen_size
+            )
         )
-        action = json_action.JSONAction(action_type=json_action.WAIT)
-        tool_call = {"name": "mobile_use", "arguments": {"action": "wait", "value": 1}}
-        extras = {"wait_seconds": 1, "parse_error": parse_error,
-                  "fallback": "parse_error_wait"}
+        if (
+            action.action_type == json_action.OPEN_APP
+            and not str(action.app_name or "").strip()
+        ):
+          action = json_action.JSONAction(action_type=json_action.WAIT)
+          tool_call = {
+              "name": "mobile_use",
+              "arguments": {"action": "wait", "value": 1},
+          }
+          parsed_action = OrderedDict(
+              action="WAIT", summary="Safe wait after an invalid empty open_app action",
+          )
+          extras = {
+              "wait_seconds": 1,
+              "fallback": "open_app_recovery_safe_wait",
+              "initial_parse_error": parse_error,
+              "retry_parse_error": retry_parse_error,
+          }
+          open_app_safe_wait = True
+          open_app_recovery = {"outcome": "safe_wait_after_retry"}
+        else:
+          open_app_recovery = {
+              "outcome": "reasked_after_missing_name",
+              "action_type": action.action_type,
+          }
+        parse_error = retry_parse_error or parse_error
     action, tool_call, parsed_action, extras = _normalize_terminal_answer(
         goal, action, parsed_action, tool_call, extras
     )
@@ -1201,7 +1309,8 @@ class MobileExplorer(gelab_agent.GELABAgent):
       prompt_adopted = self.executable_memory.record_prompt_action(
           action.__dict__, executable_page)
     fusion = None
-    if self.executable_memory is not None and executable_page is not None:
+    if (self.executable_memory is not None and executable_page is not None
+        and not open_app_safe_wait):
       fusion = self.executable_memory.fuse_action(action.__dict__, executable_page, goal)
       if fusion.action != action.__dict__:
         try:
@@ -1214,6 +1323,23 @@ class MobileExplorer(gelab_agent.GELABAgent):
           # A graph proposal must never make an otherwise parseable reasoning
           # action invalid; the disagreement remains logged in the step row.
           pass
+    if (
+        action.action_type == json_action.OPEN_APP
+        and not str(action.app_name or "").strip()
+    ):
+      # A graph proposal is advisory; it may never turn an otherwise safe
+      # decision into an unexecutable OPEN_APP action.
+      action = json_action.JSONAction(action_type=json_action.WAIT)
+      tool_call = {
+          "name": "mobile_use",
+          "arguments": {"action": "wait", "value": 1},
+      }
+      parsed_action = OrderedDict(
+          action="WAIT", summary="Safe wait after an empty open_app proposal",
+      )
+      extras = {"wait_seconds": 1, "fallback": "empty_open_app_safe_wait"}
+      open_app_safe_wait = True
+      open_app_recovery = {"outcome": "safe_wait_after_graph_override"}
     if extras.get("return_text"):
       self.env.interaction_cache = str(extras["return_text"])
     source_activity = self.env.foreground_activity_name
@@ -1249,6 +1375,7 @@ class MobileExplorer(gelab_agent.GELABAgent):
         "source_landmarks": list(source_landmarks),
         "target_descriptor": target_descriptor,
         "parse_error": parse_error,
+        "open_app_recovery": open_app_recovery,
         "executable_memory_enabled": self.executable_memory is not None,
         "executable_memory_prompt_context": executable_memory_context,
         "executable_memory_prompt_context_injected": bool(executable_memory_context),
