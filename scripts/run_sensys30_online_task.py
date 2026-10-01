@@ -12,6 +12,8 @@ import os
 from pathlib import Path
 import re
 import runpy
+import socket
+import struct
 import subprocess
 import sys
 import threading
@@ -874,6 +876,29 @@ def main() -> int:
     )
     if '"ok":true' not in smoke:
       raise RuntimeError(f"FastA11y sidecar did not become ready: {smoke[:500]}")
+    adb(
+        "forward", f"tcp:{a11y_local_port}",
+        "localabstract:androidworld_fast_a11y",
+    )
+    with socket.create_connection(("127.0.0.1", a11y_local_port), timeout=5.0) as connection:
+      connection.settimeout(5.0)
+      connection.sendall(b"flat 0 10000\n")
+
+      def read_exact(size: int) -> bytes:
+        chunks = bytearray()
+        while len(chunks) < size:
+          chunk = connection.recv(size - len(chunks))
+          if not chunk:
+            raise ConnectionError("FastA11y socket closed during startup probe")
+          chunks.extend(chunk)
+        return bytes(chunks)
+
+      payload_size = struct.unpack(">I", read_exact(4))[0]
+      if payload_size <= 0 or payload_size > 32 * 1024 * 1024:
+        raise RuntimeError(f"FastA11y socket returned invalid payload size: {payload_size}")
+      socket_smoke = json.loads(read_exact(payload_size).decode("utf-8"))
+    if not socket_smoke.get("ok") or socket_smoke.get("nodeCount", 0) <= 0:
+      raise RuntimeError(f"FastA11y socket returned an empty/unready tree: {socket_smoke}")
     fast_a11y_ready = True
 
   def ensure_skip_capture():
