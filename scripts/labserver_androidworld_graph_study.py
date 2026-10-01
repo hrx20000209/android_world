@@ -39,6 +39,7 @@ DEFAULT_IMAGE = "android-world:labserver-ready-isolated6-20260924"
 DEFAULT_MODEL_DIR = "/home/rxhuang/Projects/models/gelab_zero_4B"
 DEFAULT_VLLM_PYTHON = "/home/rxhuang/anaconda3/envs/agent/bin/python"
 CONTAINER_PYTHON = "/usr/local/bin/python3"
+CONTAINER_SITE_OVERLAY = "/study/python-site-packages"
 MODEL_NAME = "GELAB-ZERO-4B"
 PUBLISH_PREFIX = Path("reports/labserver_androidworld_graph_study")
 
@@ -343,9 +344,28 @@ def _wait_for_emulator(container: str, timeout_s: int = 300) -> None:
   raise RuntimeError(f"emulator did not boot in {timeout_s}s ({last[-500:]})")
 
 
+def _preflight_worker(container: str) -> None:
+  """Fail before task allocation if the container lacks runner dependencies."""
+  code = (
+      "import openai, scipy, matplotlib; "
+      "from android_world.agents import mobileexplorer, gelab_agent; "
+      "from android_world import checkpointer; print('androidworld-worker-preflight-ok')"
+  )
+  result = subprocess.run([
+      "docker", "exec", "-e", f"PYTHONPATH={CONTAINER_SITE_OVERLAY}",
+      "-w", "/androidworld", container, CONTAINER_PYTHON, "-c", code,
+  ], capture_output=True, text=True, timeout=180)
+  if result.returncode != 0 or "androidworld-worker-preflight-ok" not in result.stdout:
+    raise RuntimeError(
+        f"worker dependency preflight failed for {container}: "
+        f"{(result.stdout + result.stderr)[-2500:]}"
+    )
+
+
 def _extract_episode(container: str, checkpoint_dir: str) -> dict[str, Any] | None:
   result = subprocess.run([
-      "docker", "exec", "-w", "/androidworld", container,
+      "docker", "exec", "-e", f"PYTHONPATH={CONTAINER_SITE_OVERLAY}",
+      "-w", "/androidworld", container,
       CONTAINER_PYTHON, "scripts/labserver_androidworld_graph_study_extract.py",
       "--checkpoint-dir", checkpoint_dir,
   ], capture_output=True, text=True, timeout=90)
@@ -504,6 +524,7 @@ def _run_one(args: argparse.Namespace, root: Path, protocol: dict[str, Any],
   common_env = [
       "-e", f"ANDROID_WORLD_LLM_API_URL={api_base}/v1/chat/completions",
       "-e", f"ANDROID_WORLD_LLAMACPP_MODEL={MODEL_NAME}",
+      "-e", f"PYTHONPATH={CONTAINER_SITE_OVERLAY}",
       "-e", "ANDROID_WORLD_ADB_PATH=/opt/android/platform-tools/adb",
       "-e", "ANDROID_WORLD_SERIAL=emulator-5554",
       "-e", f"MOBILEEXPLORER_OUTPUT_PATH=/study/episodes/{task}/{arm_name}/{attempt.name}",
@@ -706,6 +727,7 @@ def run_study(args: argparse.Namespace) -> int:
       containers = [_ensure_container(args, root, i) for i in range(len(services))]
       for container in containers:
         _wait_for_emulator(container)
+        _preflight_worker(container)
       _write_status(root, "running", "AndroidWorld matrix is running.",
                     workers=containers, ports=[s["port"] for s in services], updated_at=_now())
       rows = _read_jsonl(root / "records.jsonl")
