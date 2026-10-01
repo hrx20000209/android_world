@@ -347,6 +347,7 @@ def _wait_for_emulator(container: str, timeout_s: int = 300) -> None:
 def _preflight_worker(container: str) -> None:
   """Verify runner imports and a real AndroidWorld gRPC tree before allocation."""
   code = (
+      "import urllib.request; "
       "import openai, scipy, matplotlib; "
       "from android_world.agents import mobileexplorer, gelab_agent; "
       "from android_world import checkpointer; "

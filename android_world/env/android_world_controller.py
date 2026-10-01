@@ -180,6 +180,28 @@ class A11yMethod(enum.Enum):
     NONE = 'none'
 
 
+def _set_accessibility_forwarder_grpc_port(wrapped_env) -> None:
+    """Send the SET_GRPC broadcast with real integer-extra argv tokens."""
+    grpc_port = wrapped_env.get_port()
+    response = adb_utils.issue_generic_request(
+        [
+            'shell', 'am', 'broadcast', '-a',
+            'accessibility_forwarder.intent.action.SET_GRPC',
+            '--ei', 'port', str(grpc_port),
+            '-n',
+            'com.google.androidenv.accessibilityforwarder/'
+            'com.google.androidenv.accessibilityforwarder.FlagsBroadcastReceiver',
+        ],
+        wrapped_env,
+        timeout_sec=10,
+    )
+    if response.status != adb_pb2.AdbResponse.Status.OK:
+        raise RuntimeError(
+            'Could not configure accessibility-forwarder gRPC port: '
+            f'{response}'
+        )
+
+
 def apply_a11y_forwarder_app_wrapper(
         env: env_interface.AndroidEnvInterface, install_a11y_forwarding_app: bool
 ) -> env_interface.AndroidEnvInterface:
@@ -205,24 +227,7 @@ def apply_a11y_forwarder_app_wrapper(
         # ``--ei port N`` in that action, so the forwarder never receives the
         # integer extra and keeps grpcPort=0. Send the command as a generic ADB
         # argv vector, where Android's ``am broadcast`` parses the extra.
-        grpc_port = wrapped_env.get_port()
-        response = adb_utils.issue_generic_request(
-            [
-                'shell', 'am', 'broadcast', '-a',
-                'accessibility_forwarder.intent.action.SET_GRPC',
-                '--ei', 'port', str(grpc_port),
-                '-n',
-                'com.google.androidenv.accessibilityforwarder/'
-                'com.google.androidenv.accessibilityforwarder.FlagsBroadcastReceiver',
-            ],
-            wrapped_env,
-            timeout_sec=10,
-        )
-        if response.status != adb_pb2.AdbResponse.Status.OK:
-            raise RuntimeError(
-                'Could not configure accessibility-forwarder gRPC port: '
-                f'{response}'
-            )
+        _set_accessibility_forwarder_grpc_port(wrapped_env)
         wrapped_env._enable_a11y_tree_logs()  # pylint: disable=protected-access
     except Exception as exc:  # pylint: disable=broad-exception-caught
         logging.warning('Initial a11y gRPC configuration failed: %s', exc)

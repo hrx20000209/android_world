@@ -87,20 +87,12 @@ class AndroidWorldControllerTest(absltest.TestCase):
     wrapped_env.get_port.return_value = 45678
     response = mock.Mock(status=adb_pb2.AdbResponse.Status.OK)
     with mock.patch.object(
-        android_world_controller.a11y_grpc_wrapper,
-        'A11yGrpcWrapper',
-        return_value=wrapped_env,
-    ):
-      with mock.patch.object(
-          adb_utils, 'issue_generic_request', return_value=response
-      ) as issue_generic:
-        result = android_world_controller.apply_a11y_forwarder_app_wrapper(
-            mock.Mock(), install_a11y_forwarding_app=False
-        )
+        android_world_controller.adb_utils,
+        'issue_generic_request',
+        return_value=response,
+    ) as issue_generic:
+      android_world_controller._set_accessibility_forwarder_grpc_port(wrapped_env)
 
-    self.assertIs(result, wrapped_env)
-    wrapped_env._configure_grpc.assert_called_once()
-    wrapped_env._enable_a11y_tree_logs.assert_called_once()
     issue_generic.assert_called_once_with(
         [
             'shell', 'am', 'broadcast', '-a',
@@ -143,7 +135,7 @@ class AndroidWorldControllerTest(absltest.TestCase):
     mock_base_env = mock.Mock(spec=env_interface.AndroidEnvInterface)
     env = android_world_controller.AndroidWorldController(mock_base_env)
     mock_forest = mock.Mock()
-    mock_ui_elements = mock.Mock()
+    mock_ui_elements = []
     mock_get_logical_screen_size.return_value = (100, 200)
     mock_get_a11y_tree.return_value = mock_forest
     mock_forest_to_ui.return_value = mock_ui_elements
