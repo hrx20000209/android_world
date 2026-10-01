@@ -86,6 +86,16 @@ class StudyTests(unittest.TestCase):
     self.assertEqual(summary["paired_vs_baseline"]["graph"]["paired_n"], 2)
     self.assertEqual(summary["paired_vs_baseline"]["graph"]["paired_step_n"], 1)
 
+  def test_pre_action_exception_without_model_request_is_retryable_infrastructure(self) -> None:
+    infra = {"episode_exception": True, "episode_steps": 0}
+    self.assertTrue(study._is_pre_action_infra_failure(infra, 0, True))
+    self.assertFalse(study._is_pre_action_infra_failure(infra, 1, True))
+    self.assertFalse(study._is_pre_action_infra_failure(infra, 0, False))
+    self.assertFalse(study._is_pre_action_infra_failure(
+        {"episode_exception": False, "episode_steps": 0}, 0, True))
+    self.assertFalse(study._is_pre_action_infra_failure(
+        {"episode_exception": True, "episode_steps": 1}, 0, True))
+
   def test_trace_counter_separates_mutation_and_overlapping_ingest_wall_time(self) -> None:
     with tempfile.TemporaryDirectory() as tmp:
       root = Path(tmp)

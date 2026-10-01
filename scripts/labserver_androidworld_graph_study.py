@@ -386,6 +386,17 @@ def _checkpoint_container_path(task: str, arm: str, attempt: str,
   return root + "/checkpoints"
 
 
+def _is_pre_action_infra_failure(episode: dict[str, Any], request_delta: float,
+                                request_counter_observed: bool) -> bool:
+  """Identify a checkpointed reset failure that never reached the method."""
+  steps = episode.get("episode_steps")
+  no_steps = steps is None or steps == 0
+  return bool(
+      episode.get("episode_exception") and no_steps
+      and request_counter_observed and request_delta == 0
+  )
+
+
 def _container_attempt_active(container: str, task: str, arm: str,
                               attempt_name: str) -> bool:
   marker = f"/study/episodes/{task}/{arm}/{attempt_name}"
@@ -619,6 +630,24 @@ def _run_one(args: argparse.Namespace, root: Path, protocol: dict[str, Any],
              "recorded_at": _now()}
     _append_jsonl(root / "events.jsonl", event)
     raise RuntimeError(f"{task}/{arm_name} ended rc={rc} without an evaluator checkpoint")
+  request_counter_observed = (
+      "vllm:request_success_total" in server_before
+      and "vllm:request_success_total" in server_after
+  )
+  if _is_pre_action_infra_failure(extracted, server_request_delta,
+                                  request_counter_observed):
+    reason = "evaluator exception before the first action with zero observed VLM requests"
+    meta.update({"state": "infra_failed", "finished_at": _now(),
+                 "return_code": rc, "elapsed_s": round(elapsed, 3),
+                 "reason": reason})
+    _atomic_json(attempt / "attempt.json", meta)
+    _append_jsonl(root / "events.jsonl", {
+        "status": "infra_failed", "task": task, "arm": arm_name,
+        "attempt": attempt_n, "return_code": rc,
+        "elapsed_s": round(elapsed, 3), "reason": "pre_action_exception_no_vlm_request",
+        "recorded_at": _now(),
+    })
+    raise RuntimeError(f"{task}/{arm_name} had a pre-action infrastructure exception; retrying in a fresh attempt")
   after = _graph_counts(graph_path)
   record = _make_record(task, arm_name, extracted, attempt, protocol,
                         _trace_counts(attempt), after)
@@ -785,7 +814,7 @@ def run_study(args: argparse.Namespace) -> int:
                         last_task=task, last_error=str(failure)[:500] if failure else None,
                         updated_at=_now())
           if failure:
-            _write_status(root, "recovering", "A task failed before a valid evaluator checkpoint; preserving artifacts and retrying safely.",
+            _write_status(root, "recovering", "A task attempt failed or was classified as a pre-action infrastructure error; preserving artifacts and retrying safely.",
                           error=str(failure)[:1000], completed_episodes=len(completed),
                           total_episodes=complete_target, updated_at=_now())
             time.sleep(args.failure_backoff_s)

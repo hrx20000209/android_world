@@ -195,7 +195,7 @@
     "arm_order": "seeded random permutation within task",
     "worker_assignment": "round-robin after arm-order randomization",
     "shared_memory": "one independent graph per graph-enabled arm, shared only across tasks of that arm; no graph is shared across arms",
-    "retry": "never overwrite; failed attempts are retained and retried in a new attempt directory only if no evaluator checkpoint exists"
+    "retry": "never overwrite; retain every failed attempt; retry in a fresh attempt when no evaluator checkpoint exists or when a checkpointed exception occurred before the first action with zero observed VLM requests; count post-action/model-request evaluator exceptions as failures"
   },
   "primary_outcomes": [
     "success_rate",

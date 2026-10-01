@@ -28,6 +28,7 @@ nohup setsid python3 "${repo_root}/scripts/labserver_androidworld_graph_study.py
   --protocol "${repo_root}/experiments/labserver_androidworld_graph_study/protocol.json" \
   --reuse-vllm-port 8085 \
   --max-workers 3 \
+  --failure-backoff-s 15 \
   --publish \
   >>"${run_root}/supervisor.log" 2>&1 </dev/null &
 supervisor_pid=$!
