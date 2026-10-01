@@ -378,6 +378,14 @@ def _extract_episode(container: str, checkpoint_dir: str) -> dict[str, Any] | No
   return value if isinstance(value, dict) and value.get("task") else None
 
 
+def _checkpoint_container_path(task: str, arm: str, attempt: str,
+                               runner: str) -> str:
+  root = f"/study/episodes/{task}/{arm}/{attempt}"
+  if runner != "run.py":
+    root += "/runner_output"
+  return root + "/checkpoints"
+
+
 def _container_attempt_active(container: str, task: str, arm: str,
                               attempt_name: str) -> bool:
   marker = f"/study/episodes/{task}/{arm}/{attempt_name}"
@@ -402,9 +410,11 @@ def _graph_counts(path: Path) -> dict[str, int]:
 
 
 def _trace_counts(attempt: Path) -> dict[str, Any]:
-  probes = _read_jsonl(attempt / "probe_trace.jsonl")
-  requests = _read_jsonl(attempt / "request_latency.jsonl")
-  steps = _read_jsonl(attempt / "step_latency.jsonl")
+  runner_output = attempt / "runner_output"
+  metrics_root = runner_output if runner_output.is_dir() else attempt
+  probes = _read_jsonl(metrics_root / "probe_trace.jsonl")
+  requests = _read_jsonl(metrics_root / "request_latency.jsonl")
+  steps = _read_jsonl(metrics_root / "step_latency.jsonl")
   rollbacks = 0
   observations = 0
   for row in probes:
@@ -417,7 +427,7 @@ def _trace_counts(attempt: Path) -> dict[str, Any]:
     primary_requests = len(re.findall(r"^Step\s+\d+: Model input$", text, re.MULTILINE))
   else:
     primary_requests = len(requests)
-  graph_events = _read_jsonl(attempt / "graph_construction_perf.jsonl")
+  graph_events = _read_jsonl(metrics_root / "graph_construction_perf.jsonl")
   graph_mutations = [row for row in graph_events
                      if row.get("operation") != "probe_trace_ingest_wall"]
   graph_construction_time_s = sum(
@@ -438,7 +448,9 @@ def _trace_counts(attempt: Path) -> dict[str, Any]:
 
 
 def _memory_metrics(attempt: Path) -> dict[str, Any]:
-  path = attempt / "executable_memory_summary.json"
+  runner_output = attempt / "runner_output"
+  metrics_root = runner_output if runner_output.is_dir() else attempt
+  path = metrics_root / "executable_memory_summary.json"
   if not path.is_file():
     return {}
   try:
@@ -476,7 +488,8 @@ def _run_one(args: argparse.Namespace, root: Path, protocol: dict[str, Any],
       if time.monotonic() >= deadline:
         raise RuntimeError(f"previous attempt still active for {task}/{arm_name}; refusing duplicate execution")
       time.sleep(5)
-    extracted = _extract_episode(container, f"/study/episodes/{task}/{arm_name}/{candidate.name}/checkpoints")
+    extracted = _extract_episode(
+        container, _checkpoint_container_path(task, arm_name, candidate.name, arm["runner"]))
     if extracted and extracted["task"] == task:
       record = _make_record(task, arm_name, extracted, candidate,
                             protocol, _trace_counts(candidate), _graph_counts(root / "memory" / arm_name / "executable_memory.json"))
@@ -527,7 +540,6 @@ def _run_one(args: argparse.Namespace, root: Path, protocol: dict[str, Any],
       "-e", f"PYTHONPATH={CONTAINER_SITE_OVERLAY}",
       "-e", "ANDROID_WORLD_ADB_PATH=/opt/android/platform-tools/adb",
       "-e", "ANDROID_WORLD_SERIAL=emulator-5554",
-      "-e", f"MOBILEEXPLORER_OUTPUT_PATH=/study/episodes/{task}/{arm_name}/{attempt.name}",
   ]
   if arm["runner"] == "run.py":
     command = [
@@ -542,10 +554,12 @@ def _run_one(args: argparse.Namespace, root: Path, protocol: dict[str, Any],
         f"--checkpoint_dir=/study/episodes/{task}/{arm_name}/{attempt.name}/checkpoints",
     ]
   else:
+    online_output = f"/study/episodes/{task}/{arm_name}/{attempt.name}/runner_output"
+    common_env += ["-e", f"MOBILEEXPLORER_OUTPUT_PATH={online_output}"]
     command = [
         "docker", "exec", *common_env, "-w", "/androidworld", container,
         CONTAINER_PYTHON, "scripts/run_sensys30_online_task.py",
-        f"--output=/study/episodes/{task}/{arm_name}/{attempt.name}",
+        f"--output={online_output}",
         f"--task={task}", f"--seed={protocol['controls']['task_seed']}",
         f"--max_steps={protocol['controls']['max_n_steps']}",
         f"--ranker={protocol['controls']['ranker']}",
@@ -592,7 +606,8 @@ def _run_one(args: argparse.Namespace, root: Path, protocol: dict[str, Any],
   server_request_delta = max(
       0.0, server_after.get("vllm:request_success_total", 0.0)
       - server_before.get("vllm:request_success_total", 0.0))
-  extracted = _extract_episode(container, f"/study/episodes/{task}/{arm_name}/{attempt.name}/checkpoints")
+  extracted = _extract_episode(
+      container, _checkpoint_container_path(task, arm_name, attempt.name, arm["runner"]))
   if not extracted or extracted.get("task") != task:
     meta.update({"state": "infra_failed", "finished_at": _now(), "return_code": rc,
                  "elapsed_s": round(elapsed, 3),

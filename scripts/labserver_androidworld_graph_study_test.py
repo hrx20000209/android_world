@@ -102,6 +102,17 @@ class StudyTests(unittest.TestCase):
       self.assertAlmostEqual(counts["graph_construction_time_s"], 0.005)
       self.assertAlmostEqual(counts["probe_trace_ingest_wall_s"], 0.010)
 
+  def test_online_runner_uses_private_child_output_and_checkpoint_path(self) -> None:
+    self.assertEqual(
+        study._checkpoint_container_path("TaskA", "probe_only", "attempt-02", "run.py"),
+        "/study/episodes/TaskA/probe_only/attempt-02/checkpoints",
+    )
+    self.assertEqual(
+        study._checkpoint_container_path(
+            "TaskA", "probe_only", "attempt-02", "run_sensys30_online_task.py"),
+        "/study/episodes/TaskA/probe_only/attempt-02/runner_output/checkpoints",
+    )
+
   def test_analyzer_writes_aggregate_only_visual_artifacts(self) -> None:
     protocol = {
         "study": "unit test", "tasks": ["A"], "primary_outcomes": [],
