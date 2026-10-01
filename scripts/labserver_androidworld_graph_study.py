@@ -298,6 +298,9 @@ def _ensure_container(args: argparse.Namespace, root: Path, worker_index: int) -
     labels = payload.get("Config", {}).get("Labels") or {}
     if labels.get("org.androidworld.study") != args.run_id:
       raise RuntimeError(f"container name collision; refusing to touch unowned container {name}")
+    command = " ".join(payload.get("Config", {}).get("Cmd") or [])
+    if "start_emu_headless.sh" not in command:
+      raise RuntimeError(f"study container {name} has no Android emulator startup command; refusing reuse")
     expected_mounts = {str(args.repo.resolve()), str(root.resolve())}
     actual_mounts = {str(Path(mount.get("Source", "")).resolve())
                      for mount in payload.get("Mounts", [])}
@@ -318,6 +321,7 @@ def _ensure_container(args: argparse.Namespace, root: Path, worker_index: int) -
       "--device", "/dev/kvm", "--shm-size=2g",
       "--add-host=host.docker.internal:host-gateway",
       "--network", "bridge", args.image,
+      "-lc", "cd /androidworld && ./docker_setup/start_emu_headless.sh && adb root && tail -f /dev/null",
   ]
   _run(command, timeout=120)
   return name
