@@ -188,6 +188,8 @@ def main() -> int:
   parser.add_argument("--skip_confidence", type=float, default=0.90)
   parser.add_argument("--max_probes", type=int, default=5)
   parser.add_argument("--min_probes", type=int, default=5)
+  parser.add_argument("--force_min_probes", action=argparse.BooleanOptionalAction,
+                      default=False)
   parser.add_argument("--post_inference_grace_s", type=float, default=4.0)
   parser.add_argument("--max_depth", type=int, default=3)
   parser.add_argument("--max_exploration_time_s", type=float, default=8.0)
@@ -588,6 +590,15 @@ def main() -> int:
 
   def explorer_config(number: int, step: int, task_text: str) -> dict[str, Any]:
     information_need = parse_information_need(None, last_intent or task_text)
+    budget = last_budget
+    allow_exploration = bool(args.two_system and budget.allow_exploration)
+    effective_max_probes = (
+        min(args.max_probes, budget.max_probes) if allow_exploration else 0)
+    effective_max_depth = (
+        min(args.max_depth, max(1, budget.max_depth)) if allow_exploration else 1)
+    effective_exploration_time_s = (
+        min(args.max_exploration_time_s, budget.max_exploration_time_s)
+        if allow_exploration else 0.0)
     config = {
         "trial_id": f"{args.task}-step{step}-request{number}",
         "trace_path": str(trace), "filtered_path": str(filtered),
@@ -612,20 +623,18 @@ def main() -> int:
         "serial": serial,
         "console_port": args.console_port, "a11y_local_port": a11y_local_port,
         "restore_timeout_s": 30.0,
-        "max_probes": 0 if args.variant == "offline" else args.max_probes,
-        "min_probes": args.min_probes,
-        # The Ex5 contract is a five-probe page target for every arm,
-        # including the no-Prefix baseline.  Early exit remains possible only
-        # through the existing no-safe-candidate/recovery/time conditions.
-        "force_min_probes": True,
+        "max_probes": 0 if args.variant == "offline" else effective_max_probes,
+        "min_probes": min(args.min_probes, effective_max_probes),
+        "force_min_probes": bool(args.force_min_probes and effective_max_probes),
         "post_inference_grace_s": args.post_inference_grace_s,
-        "max_depth": args.max_depth,
+        "max_depth": effective_max_depth,
         # Depth-2 caused the majority of real restore failures in the first
         # smoke (keyboard keys, dialogs, and edit modes). Descend only after
         # this exact root probe type has already demonstrated an exact inverse
         # on this screen in an earlier round.
         "depth2_needs_known_inverse": True,
-        "max_exploration_time_s": args.max_exploration_time_s,
+        "max_exploration_time_s": effective_exploration_time_s,
+        "resource_budget_reason": budget.reason,
         "information_need": information_need.to_dict(),
         "lightweight_selector_weights": str(args.selector_weights),
         "blocked_element_identities": sorted(blocked_element_identities),
@@ -644,6 +653,12 @@ def main() -> int:
         "enabled": False, "state_matched": False, "controls": {},
     }
     return config
+
+  def prepare_explorer_for_step(number: int, step: int, task_text: str):
+    config = explorer_config(number, step, task_text)
+    if config["max_probes"] <= 0:
+      return None
+    return prepare_explorer(config)
 
   def executable_page_from_capture(current_state):
     """Mirror live_probe's compact graph-element view for cross-store matching."""
@@ -1381,7 +1396,7 @@ def main() -> int:
       # The process prepared for inference round zero captured the Launcher
       # state. Replace it so the next actual inference explores the opened app.
       stop_prepared_explorer(prepared)
-      prepared = prepare_explorer(explorer_config(request_no + 1, 1, goal))
+      prepared = prepare_explorer_for_step(request_no + 1, 1, goal)
       return base_agent.AgentInteractionResult(False, step_record)
     # Coordinate comparison is brittle across normalized VLM coordinates,
     # nested clickable containers, and icon hit boxes.  At the next step the
@@ -1552,8 +1567,8 @@ def main() -> int:
     # states. A fresh worker here preserves the required parallel semantics.
     if args.two_system and args.variant != "offline":
       stop_prepared_explorer(prepared)
-      prepared = prepare_explorer(explorer_config(
-          request_no + 1, profile["step"], goal))
+      prepared = prepare_explorer_for_step(
+          request_no + 1, profile["step"], goal)
     started = step_started
     try:
       result = original_step(self, goal)
@@ -1817,9 +1832,14 @@ def main() -> int:
           "config": str(args.executable_memory_config) if args.executable_memory_config else None,
       },
       "skip_inference_enabled": args.enable_skip_inference,
+      "two_system_skip_inference_enabled": args.enable_skip_inference,
+      "executable_memory_high_confidence_skip_enabled": bool(
+          executable_memory is not None
+          and executable_memory.config.high_confidence_skip_enabled),
       "two_system_config": dataclasses.asdict(two_system_config),
       "exploration_execution": {
           "min_probes": args.min_probes,
+          "force_min_probes": args.force_min_probes,
           "post_inference_grace_s": args.post_inference_grace_s,
       },
   }, ensure_ascii=False, indent=2), encoding="utf-8")

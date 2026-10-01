@@ -1251,13 +1251,15 @@ def _walk_notes(memory, source, destination, times):
   return edge
 
 
-def test_execution_edge_is_blocked_by_reversibility_under_the_strict_gate():
+def test_execution_edge_is_blocked_by_reversibility_under_the_strict_gate(tmp_path):
   """Why the full run logged 2893 route candidates and 0 shortcut attempts:
   an edge the agent walked has no recovery record, so the strict gate reads
   it as irreversible no matter how many times it landed consistently."""
+  events_path = tmp_path / "memory_events.jsonl"
+  logger = JsonlMemoryLogger(events_path)
   memory = ExecutableExplorationMemory(ExecutableMemoryConfig(
       enabled=True, high_confidence_skip_enabled=True,
-      override_confidence=0.82))
+      override_confidence=0.82), logger=logger)
   source, destination = _notes_route_pages()
   edge = _walk_notes(memory, source, destination, 4)
   assert memory.route_block_reason([edge]) == "reversibility_unproven"
@@ -1265,6 +1267,11 @@ def test_execution_edge_is_blocked_by_reversibility_under_the_strict_gate():
   report = memory.route_gate_report(source, "Open Notes")
   assert report["candidates"] >= 1
   assert report["blocks"].get("reversibility_unproven", 0) >= 1
+  gate_events = [json.loads(line) for line in events_path.read_text().splitlines()
+                 if json.loads(line).get("event") == "high_confidence_route_gate"]
+  assert gate_events
+  assert gate_events[-1]["blocks"].get("reversibility_unproven", 0) >= 1
+  assert "goal" not in gate_events[-1] and "action" not in gate_events[-1]
 
 
 def test_observed_back_press_is_reversibility_evidence():

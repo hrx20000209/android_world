@@ -14,6 +14,7 @@ from __future__ import annotations
 import argparse
 import concurrent.futures
 import csv
+from collections import Counter
 import datetime as dt
 import fcntl
 import hashlib
@@ -436,6 +437,11 @@ def _trace_counts(attempt: Path) -> dict[str, Any]:
   probes = _read_jsonl(metrics_root / "probe_trace.jsonl")
   requests = _read_jsonl(metrics_root / "request_latency.jsonl")
   steps = _read_jsonl(metrics_root / "step_latency.jsonl")
+  skip_events = _read_jsonl(metrics_root / "skip_events.jsonl")
+  memory_events = _read_jsonl(metrics_root / "executable_memory_events.jsonl")
+  action_rows: list[dict[str, Any]] = []
+  for action_path in metrics_root.rglob("action.jsonl"):
+    action_rows.extend(_read_jsonl(action_path))
   rollbacks = 0
   observations = 0
   for row in probes:
@@ -456,12 +462,45 @@ def _trace_counts(attempt: Path) -> dict[str, Any]:
   probe_trace_ingest_wall_s = sum(
       max(0.0, float(row.get("elapsed_s") or 0.0)) for row in graph_events
       if row.get("operation") == "probe_trace_ingest_wall")
+  route_gate_events = [row for row in memory_events
+                       if row.get("event") == "high_confidence_route_gate"]
+  route_gate_blocks: Counter[str] = Counter()
+  route_gate_candidates = 0
+  route_gate_eligible = 0
+  for row in route_gate_events:
+    route_gate_candidates += int(row.get("candidates", 0) or 0)
+    route_gate_eligible += int(row.get("eligible_routes", 0) or 0)
+    route_gate_blocks.update(row.get("blocks") or {})
+  executable_memory_skip_steps = sum(
+      1 for row in action_rows
+      if row.get("reasoning_mode") == "high_confidence_skip")
+  executable_memory_route_rollback_failures = sum(
+      1 for row in action_rows
+      if row.get("reasoning_mode") == "route_rollback_failed")
+  two_system_route_attempts = sum(
+      1 for row in skip_events if row.get("skip_kind") != "deterministic_bootstrap")
+  two_system_route_hits = sum(
+      1 for row in skip_events
+      if row.get("skip_kind") != "deterministic_bootstrap"
+      and row.get("successor_matched") is True)
+  two_system_bootstrap_skips = sum(
+      1 for row in skip_events if row.get("skip_kind") == "deterministic_bootstrap")
+  two_system_skip_steps = sum(1 for row in steps if row.get("inference_skipped"))
   return {
       "probe_events": len(probes), "probe_observations": observations,
       "rollbacks": rollbacks, "primary_vlm_requests": primary_requests,
       "primary_prompt_tokens": sum(int(row.get("prompt_tokens") or 0) for row in requests),
       "primary_generation_tokens": sum(int(row.get("generation_tokens") or 0) for row in requests),
-      "inference_skipped_steps": sum(1 for row in steps if row.get("inference_skipped")),
+      "inference_skipped_steps": two_system_skip_steps + executable_memory_skip_steps,
+      "two_system_skip_route_attempts": two_system_route_attempts,
+      "two_system_skip_route_hits": two_system_route_hits,
+      "two_system_bootstrap_skips": two_system_bootstrap_skips,
+      "executable_memory_skip_action_records": executable_memory_skip_steps,
+      "executable_memory_route_rollback_failures": executable_memory_route_rollback_failures,
+      "high_confidence_route_gate_queries": len(route_gate_events),
+      "high_confidence_route_gate_candidates": route_gate_candidates,
+      "high_confidence_route_gate_eligible": route_gate_eligible,
+      "high_confidence_route_gate_blocks": dict(sorted(route_gate_blocks.items())),
       "graph_update_calls": len(graph_mutations),
       "graph_construction_time_s": graph_construction_time_s,
       "probe_trace_ingest_wall_s": probe_trace_ingest_wall_s,
@@ -597,9 +636,29 @@ def _run_one(args: argparse.Namespace, root: Path, protocol: dict[str, Any],
     if arm.get("config") is not None:
       command += ["--executable_memory", f"--executable_memory_config=/study/episodes/{task}/{arm_name}/{attempt.name}/memory_config.json",
                   f"--executable_memory_path=/study/memory/{arm_name}/executable_memory.json"]
+    controls = protocol["controls"]
+    command.append("--force_min_probes" if controls.get("force_min_probes", False)
+                   else "--no-force_min_probes")
+    command.append(
+        f"--post_inference_grace_s={controls.get('post_inference_grace_s', 4.0)}")
   _atomic_json(attempt / "command_metadata.json", {
       "command_program": command[0:8], "runner": arm["runner"],
       "task": task, "arm": arm_name,
+      "effective_features": {
+          "two_system_enabled": bool(arm.get("two_system")),
+          "executable_memory_enabled": arm.get("config") is not None,
+          "executable_memory_high_confidence_skip_enabled": bool(
+              (arm.get("config") or {}).get("high_confidence_skip_enabled", False)),
+          "two_system_skip_inference_enabled": bool(
+              controls.get("two_system_skip_inference_enabled", False)),
+      },
+      "exploration_controls": {
+          "max_probes": controls["max_probes"],
+          "min_probes": controls["min_probes"],
+          "force_min_probes": bool(controls.get("force_min_probes", False)),
+          "post_inference_grace_s": float(
+              controls.get("post_inference_grace_s", 4.0)),
+      },
       "fixed_settings": {"temperature": 0.0, "top_p": 1.0,
                          "task_seed": protocol["controls"]["task_seed"],
                          "vllm_seed": endpoint.get("sampling", {}).get("vllm_seed", "unknown")},
@@ -683,6 +742,24 @@ def _run_one(args: argparse.Namespace, root: Path, protocol: dict[str, Any],
   return record
 
 
+def _resume_argv(args: argparse.Namespace) -> list[str]:
+  """Rebuild the supervisor command without losing explicit publish policy."""
+  return [
+      sys.executable, str(Path(__file__).resolve()), "run",
+      "--run-root", str(args.run_root), "--run-id", args.run_id,
+      "--repo", str(args.repo), "--protocol", str(args.protocol),
+      "--image", args.image, "--model-dir", args.model_dir,
+      "--vllm-python", args.vllm_python, "--vllm-cwd", args.vllm_cwd,
+      "--max-workers", str(args.max_workers), "--port-start", str(args.port_start),
+      "--reuse-vllm-port", str(args.reuse_vllm_port) if args.reuse_vllm_port is not None else "-1",
+      "--idle-window-s", str(args.idle_window_s), "--resource-poll-s", str(args.resource_poll_s),
+      "--vllm-start-timeout-s", str(args.vllm_start_timeout_s),
+      "--episode-timeout-s", str(args.episode_timeout_s),
+      "--failure-backoff-s", str(args.failure_backoff_s),
+      "--publish" if args.publish else "--no-publish",
+  ]
+
+
 def _make_record(task: str, arm: str, episode: dict[str, Any], attempt: Path,
                  protocol: dict[str, Any], trace: dict[str, Any],
                  graph: dict[str, int]) -> dict[str, Any]:
@@ -715,6 +792,12 @@ def _validate_protocol(protocol: dict[str, Any]) -> None:
     raise ValueError("matched study arms must use the frozen AndroidWorld gRPC accessibility path")
   if not controls.get("fixed_task_seed") or not isinstance(controls.get("task_seed"), int):
     raise ValueError("fixed integer task seed is required")
+  if "force_min_probes" in controls and not isinstance(controls["force_min_probes"], bool):
+    raise ValueError("force_min_probes must be a boolean")
+  grace_s = controls.get("post_inference_grace_s", 4.0)
+  if (not isinstance(grace_s, (int, float)) or isinstance(grace_s, bool)
+      or not math.isfinite(grace_s) or grace_s < 0 or grace_s > 60):
+    raise ValueError("post_inference_grace_s must be finite and between 0 and 60 seconds")
   if not protocol.get("tasks") or not protocol.get("arms"):
     raise ValueError("protocol tasks/arms must not be empty")
   names = [row.get("name") for row in protocol["arms"]]
@@ -845,17 +928,7 @@ def run_study(args: argparse.Namespace) -> int:
     # Re-exec the same script to keep the lock/pid lifecycle simple. A stale
     # process cannot overwrite attempts; task-level checkpoints are adopted.
     lock_stream.close()
-    os.execv(sys.executable, [sys.executable, str(Path(__file__).resolve()),
-        "run", "--run-root", str(root), "--run-id", args.run_id,
-        "--repo", str(args.repo), "--protocol", str(args.protocol),
-        "--image", args.image, "--model-dir", args.model_dir,
-        "--vllm-python", args.vllm_python, "--vllm-cwd", args.vllm_cwd,
-        "--max-workers", str(args.max_workers), "--port-start", str(args.port_start),
-        "--reuse-vllm-port", str(args.reuse_vllm_port) if args.reuse_vllm_port is not None else "-1",
-        "--idle-window-s", str(args.idle_window_s), "--resource-poll-s", str(args.resource_poll_s),
-        "--vllm-start-timeout-s", str(args.vllm_start_timeout_s),
-        "--episode-timeout-s", str(args.episode_timeout_s),
-        "--failure-backoff-s", str(args.failure_backoff_s)])
+    os.execv(sys.executable, _resume_argv(args))
   _write_status(root, "analyzing", "All planned task/arm episodes have checkpoints; building aggregate report.", updated_at=_now())
   analyze(root, protocol)
   if args.publish:
@@ -953,6 +1026,9 @@ def _summarize(records: list[dict[str, Any]], protocol: dict[str, Any]) -> dict[
   for arm, rows in by_arm.items():
     valid = [r for r in rows if r.get("evaluator_complete") and isinstance(r.get("episode_steps"), (int, float))]
     success = [r for r in rows if r.get("success")]
+    route_gate_blocks: Counter[str] = Counter()
+    for row in rows:
+      route_gate_blocks.update(row.get("high_confidence_route_gate_blocks") or {})
     n_success = len(success)
     ci = _wilson(n_success, len(rows))
     all_steps = [float(r["episode_steps"]) for r in valid]
@@ -975,6 +1051,15 @@ def _summarize(records: list[dict[str, Any]], protocol: dict[str, Any]) -> dict[
         "prompt_context_edges": sum(int(r.get("prompt_context_edges", 0) or 0) for r in rows),
         "prompt_context_queries": sum(int(r.get("prompt_context_queries", 0) or 0) for r in rows),
         "inference_skipped_steps": sum(int(r.get("inference_skipped_steps", 0)) for r in rows),
+        "two_system_skip_route_attempts": sum(int(r.get("two_system_skip_route_attempts", 0)) for r in rows),
+        "two_system_skip_route_hits": sum(int(r.get("two_system_skip_route_hits", 0)) for r in rows),
+        "two_system_bootstrap_skips": sum(int(r.get("two_system_bootstrap_skips", 0)) for r in rows),
+        "executable_memory_skip_action_records": sum(int(r.get("executable_memory_skip_action_records", 0)) for r in rows),
+        "executable_memory_route_rollback_failures": sum(int(r.get("executable_memory_route_rollback_failures", 0)) for r in rows),
+        "high_confidence_route_gate_queries": sum(int(r.get("high_confidence_route_gate_queries", 0)) for r in rows),
+        "high_confidence_route_gate_candidates": sum(int(r.get("high_confidence_route_gate_candidates", 0)) for r in rows),
+        "high_confidence_route_gate_eligible": sum(int(r.get("high_confidence_route_gate_eligible", 0)) for r in rows),
+        "high_confidence_route_gate_blocks": dict(sorted(route_gate_blocks.items())),
         "graph_update_calls": sum(int(r.get("graph_update_calls", 0) or 0) for r in rows),
         "graph_construction_time_s": sum(float(r.get("graph_construction_time_s", 0.0) or 0.0) for r in rows),
         "probe_trace_ingest_wall_s": sum(float(r.get("probe_trace_ingest_wall_s", 0.0) or 0.0) for r in rows),
@@ -1041,6 +1126,11 @@ def analyze(root: Path, protocol: dict[str, Any]) -> dict[str, Any]:
               "episode_exception", "probe_events", "probe_observations", "rollbacks",
       "primary_vlm_requests", "primary_prompt_tokens", "primary_generation_tokens",
       "inference_skipped_steps", "graph_nodes", "graph_edges", "graph_delta_nodes",
+              "two_system_skip_route_attempts", "two_system_skip_route_hits",
+              "two_system_bootstrap_skips", "executable_memory_skip_action_records",
+              "executable_memory_route_rollback_failures",
+              "high_confidence_route_gate_queries", "high_confidence_route_gate_candidates",
+              "high_confidence_route_gate_eligible", "high_confidence_route_gate_blocks",
               "graph_delta_edges", "extra_time_s", "exploration_guidance_queries",
               "graph_update_calls", "graph_construction_time_s", "probe_trace_ingest_wall_s",
               "probe_critical_path_extension_s",
@@ -1048,7 +1138,11 @@ def analyze(root: Path, protocol: dict[str, Any]) -> dict[str, Any]:
               "route_miss_count", "vllm_requests_endpoint_delta"]
     writer = csv.DictWriter(stream, fieldnames=fields, extrasaction="ignore")
     writer.writeheader()
-    writer.writerows(records)
+    writer.writerows({
+        **row,
+        "high_confidence_route_gate_blocks": json.dumps(
+            row.get("high_confidence_route_gate_blocks") or {}, sort_keys=True),
+    } for row in records)
 
   arm_names = [arm["name"] for arm in protocol["arms"]]
   summaries = summary["arms"]
@@ -1091,6 +1185,21 @@ def analyze(root: Path, protocol: dict[str, Any]) -> dict[str, Any]:
   for name in arm_names:
     row = summaries[name]
     lines.append(f"| {name} | {row['graph_update_calls']} | {row['graph_construction_time_s']:.4f} | {row['probe_trace_ingest_wall_s']:.4f} |")
+  lines += ["", "## Verified inference-skip diagnostics", "",
+            "Executable-memory route gates and the independent two-system SkipInferenceGate are reported separately. A gate candidate is not a skip hit; only a live-validated route/action is counted as a hit. Bootstrap app-open skips are separated because the evaluator action still continues.",
+            "", "| Arm | Route-gate queries | Retrieved candidates | Eligible routes | Gate blocks | Executable-memory skip hits / attempts | Two-system route hits / attempts | Bootstrap skips | Route rollback failures |",
+            "|---|---:|---:|---:|---|---:|---:|---:|---:|"]
+  for name in arm_names:
+    row = summaries[name]
+    blocks = ", ".join(f"{key}:{value}" for key, value in row["high_confidence_route_gate_blocks"].items()) or "none"
+    lines.append(
+        f"| {name} | {row['high_confidence_route_gate_queries']} | "
+        f"{row['high_confidence_route_gate_candidates']} | "
+        f"{row['high_confidence_route_gate_eligible']} | {blocks} | "
+        f"{row['skip_hits']} / {row['skip_attempts']} | "
+        f"{row['two_system_skip_route_hits']} / {row['two_system_skip_route_attempts']} | "
+        f"{row['two_system_bootstrap_skips']} | "
+        f"{row['executable_memory_route_rollback_failures']} |")
   lines += ["", "## Paired contrasts against raw baseline", "",
             "Negative step deltas favor the graph arm. Success-rate pairs include every task with a checkpoint; episode-step pairs exclude evaluator exceptions/missing steps. Shared-success steps compare only tasks where both methods passed.",
             "", "| Arm | Paired trials | Step pairs | Success-rate delta (95% bootstrap CI) | All-step delta (95% bootstrap CI) | Shared-success step delta (n; 95% CI) |",
@@ -1115,7 +1224,7 @@ def analyze(root: Path, protocol: dict[str, Any]) -> dict[str, Any]:
       "- Exploration: the primary contrast is `graph_guided_exploration` versus `probe_only` (matched probe budget); `graph_build_only` versus `baseline` measures graph recording without graph steering.",
       "- Inference: `graph_prompt_inference` versus `graph_guided_exploration` isolates prompt retrieval; `graph_post_fusion` tests structured evidence fusion; `graph_verified_skip` tests skipping repeated VLM reasoning only through the configured confidence/verification gate.",
       "- Task specificity: each graph arm uses a separate persistent graph and the method's goal-semantic retrieval; no graph is shared across study arms.",
-      "- Inference efficiency: primary VLM calls, skipped reasoning steps, prompt tokens, and verified-route hit/miss counts are recorded separately from environment action steps.",
+      "- Inference efficiency: primary VLM calls, prompt tokens, executable-memory skip actions, two-system skip hits, route-gate rejection reasons, and verified-route hit/miss counts are recorded separately from environment action steps.",
       "",
       "## Decision rule and limitations",
       "",
@@ -1166,11 +1275,31 @@ def publish_report(repo: Path, root: Path, protocol: dict[str, Any], run_id: str
   unexpected = [line for line in status if not line[3:].startswith(allowed_rel)]
   if unexpected:
     raise RuntimeError("refusing report commit while unrelated changes exist: " + "; ".join(unexpected[:10]))
-  _run(["git", "-C", str(repo), "add", "--", allowed_rel], timeout=30)
+  allowed_names = [*allow, "protocol_public.json"]
+  allowed_paths = [f"{allowed_rel}{name}" for name in allowed_names
+                   if (destination / name).is_file()]
+  if not allowed_paths:
+    raise RuntimeError("no allowlisted aggregate outputs exist to publish")
+  _run(["git", "-C", str(repo), "add", "--", *allowed_paths], timeout=30)
   staged = _run(["git", "-C", str(repo), "diff", "--cached", "--name-only"], timeout=30).stdout.splitlines()
-  if not staged or any(not path.startswith(allowed_rel) for path in staged):
+  if any(path not in allowed_paths for path in staged):
     raise RuntimeError("staged publication paths are outside the report allowlist")
   if _run(["git", "-C", str(repo), "diff", "--cached", "--quiet"], check=False).returncode == 0:
+    missing = []
+    for path in allowed_paths:
+      result = _run(["git", "-C", str(repo), "ls-files", "--error-unmatch", "--", path],
+                    check=False, timeout=30)
+      if result.returncode != 0:
+        missing.append(path)
+    if missing:
+      raise RuntimeError("allowlisted report files were not staged or tracked: "
+                         + "; ".join(missing))
+    latest_subject = _run([
+        "git", "-C", str(repo), "log", "-1", "--format=%s"], timeout=30).stdout.strip()
+    if latest_subject == f"Publish AndroidWorld graph study {run_id}":
+      # A previous iteration may have committed locally but lost its SSH
+      # connection during push. Retry that exact publication, not a new commit.
+      _run(["git", "-C", str(repo), "push", "origin", "HEAD"], timeout=180)
     return
   _run(["git", "-C", str(repo), "commit", "-m", f"Publish AndroidWorld graph study {run_id}"], timeout=120)
   _run(["git", "-C", str(repo), "push", "origin", "HEAD"], timeout=180)

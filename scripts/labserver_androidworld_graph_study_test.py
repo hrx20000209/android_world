@@ -113,6 +113,88 @@ class StudyTests(unittest.TestCase):
       self.assertAlmostEqual(counts["graph_construction_time_s"], 0.005)
       self.assertAlmostEqual(counts["probe_trace_ingest_wall_s"], 0.010)
 
+  def test_trace_counter_separates_route_gate_reasons_and_skip_mechanisms(self) -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+      attempt = Path(tmp) / "attempt-01"
+      output = attempt / "runner_output"
+      output.mkdir(parents=True)
+      study._append_jsonl(output / "step_latency.jsonl", {"inference_skipped": True})
+      study._append_jsonl(output / "skip_events.jsonl", {
+          "skip_kind": "graph_route", "successor_matched": True,
+      })
+      study._append_jsonl(output / "executable_memory_events.jsonl", {
+          "event": "high_confidence_route_gate", "candidates": 2,
+          "eligible_routes": 1,
+          "blocks": {"passed": 1, "task_object_mismatch": 1},
+      })
+      action_dir = output / "private-task-label"
+      action_dir.mkdir()
+      study._append_jsonl(action_dir / "action.jsonl", {
+          "reasoning_mode": "high_confidence_skip", "inference_skipped": True,
+          "memory_route_length": 2,
+      })
+      counts = study._trace_counts(attempt)
+      self.assertEqual(counts["inference_skipped_steps"], 2)
+      self.assertEqual(counts["two_system_skip_route_attempts"], 1)
+      self.assertEqual(counts["two_system_skip_route_hits"], 1)
+      self.assertEqual(counts["executable_memory_skip_action_records"], 1)
+      self.assertEqual(counts["high_confidence_route_gate_queries"], 1)
+      self.assertEqual(counts["high_confidence_route_gate_candidates"], 2)
+      self.assertEqual(counts["high_confidence_route_gate_eligible"], 1)
+      self.assertEqual(counts["high_confidence_route_gate_blocks"], {
+          "passed": 1, "task_object_mismatch": 1,
+      })
+
+  def test_supervisor_reexec_preserves_publish_policy(self) -> None:
+    for flag, expected in (("--publish", True), ("--no-publish", False)):
+      args = study.build_parser().parse_args([
+          "run", "--run-root", "/tmp/study", "--run-id", "test", flag,
+      ])
+      resumed = study.build_parser().parse_args(study._resume_argv(args)[2:])
+      self.assertEqual(resumed.publish, expected)
+
+  def test_publication_is_allowlisted_and_idempotent(self) -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+      root = Path(tmp)
+      repo = root / "repo"
+      remote = root / "origin.git"
+      repo.mkdir()
+      study._run(["git", "init", "--quiet", "--bare", str(remote)])
+      study._run(["git", "init", "--quiet", "-b", "main", str(repo)])
+      study._run(["git", "-C", str(repo), "config", "user.name", "AndroidWorld Test"])
+      study._run(["git", "-C", str(repo), "config", "user.email", "test@example.invalid"])
+      (repo / "README.md").write_text("test\n", encoding="utf-8")
+      study._run(["git", "-C", str(repo), "add", "README.md"])
+      study._run(["git", "-C", str(repo), "commit", "--quiet", "-m", "Initialize"])
+      study._run(["git", "-C", str(repo), "remote", "add", "origin", str(remote)])
+      study._run(["git", "-C", str(repo), "push", "--quiet", "-u", "origin", "main"])
+
+      run_root = root / "study"
+      run_root.mkdir()
+      (run_root / "report.md").write_text("aggregate report\n", encoding="utf-8")
+      (run_root / "aggregate_summary.json").write_text("{}\n", encoding="utf-8")
+      (run_root / "private_trace.json").write_text("secret task data\n", encoding="utf-8")
+      protocol = {
+          "study": "test", "suite": "android_world", "tasks": ["TaskA"],
+          "controls": {"task_seed": 34}, "arms": [{"name": "baseline"}],
+          "primary_outcomes": ["success_rate"],
+      }
+      study.publish_report(repo, run_root, protocol, "test-run")
+      published_commit = study._run([
+          "git", "-C", str(repo), "rev-parse", "HEAD"], timeout=30).stdout.strip()
+      study.publish_report(repo, run_root, protocol, "test-run")
+      self.assertEqual(
+          study._run(["git", "-C", str(repo), "rev-parse", "HEAD"], timeout=30).stdout.strip(),
+          published_commit,
+      )
+      published = study._run([
+          "git", "--git-dir", str(remote), "ls-tree", "-r", "--name-only", "main"],
+          timeout=30).stdout.splitlines()
+      prefix = "reports/labserver_androidworld_graph_study/test-run/"
+      self.assertTrue(published)
+      self.assertTrue(all(path.startswith(prefix) or path == "README.md" for path in published))
+      self.assertFalse(any("private_trace" in path for path in published))
+
   def test_online_runner_uses_private_child_output_and_checkpoint_path(self) -> None:
     self.assertEqual(
         study._checkpoint_container_path("TaskA", "probe_only", "attempt-02", "run.py"),

@@ -2366,23 +2366,53 @@ class ExecutableExplorationMemory:
 
   def route_gate_report(self, page: PageObservation, goal: str) -> dict[str, Any]:
     """Blocking distribution over this page's retrieved candidate routes."""
+    _, report = self._route_gate_evaluation(page, goal)
+    return report
+
+  def _route_gate_evaluation(
+      self, page: PageObservation, goal: str,
+  ) -> tuple[list[EdgeEvidence] | None, dict[str, Any]]:
+    """Evaluate each retrieved path once and retain the best executable prefix."""
     paths = self.retrieve_paths(page, goal, top_k=max(5, self.config.top_k_paths))
-    blocks = Counter(self._route_block(path, goal) or "passed" for path in paths)
-    return {"candidates": len(paths), "blocks": dict(blocks)}
+    blocks: Counter[str] = Counter()
+    selected: list[EdgeEvidence] | None = None
+    for path in paths:
+      prefix = self._navigation_prefix(path)
+      reason = "" if prefix else "no_navigation_prefix"
+      if prefix:
+        reason = self._route_block(prefix, goal)
+      if reason:
+        blocks[reason] += 1
+        continue
+      blocks["passed"] += 1
+      if selected is None:
+        selected = prefix
+    return selected, {
+        "candidates": len(paths),
+        "blocks": dict(sorted(blocks.items())),
+        "eligible_routes": blocks.get("passed", 0),
+        "selected_route_length": len(selected) if selected else 0,
+    }
 
   def high_confidence_path(
       self, page: PageObservation, goal: str,
   ) -> list[EdgeEvidence] | None:
     """Return a short, repeatedly verified navigation path, if one is safe."""
     if not (self.config.enabled and self.config.high_confidence_skip_enabled):
+      self.logger.emit(
+          "high_confidence_route_gate", enabled=False, candidates=0,
+          blocks={"skip_disabled": 1}, eligible_routes=0,
+          selected_route_length=0)
       return None
     if self.action_boundary_reason(self._sanitize_page(page)):
+      self.logger.emit(
+          "high_confidence_route_gate", enabled=True, candidates=0,
+          blocks={"current_action_boundary": 1}, eligible_routes=0,
+          selected_route_length=0)
       return None
-    for path in self.retrieve_paths(page, goal, top_k=max(5, self.config.top_k_paths)):
-      prefix = self._navigation_prefix(path)
-      if prefix and not self._route_block(prefix, goal):
-        return prefix
-    return None
+    selected, report = self._route_gate_evaluation(page, goal)
+    self.logger.emit("high_confidence_route_gate", enabled=True, **report)
+    return selected
 
   def record_observed_reversal(self, edge_id: str) -> bool:
     """The agent itself undid this edge: it pressed Back from the edge's

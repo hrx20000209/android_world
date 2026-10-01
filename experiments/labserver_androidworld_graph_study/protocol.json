@@ -46,6 +46,7 @@
     "ranker": "InformationNeedRanker",
     "max_probes": 2,
     "min_probes": 1,
+    "force_min_probes": false,
     "max_depth": 3,
     "max_exploration_time_s": 8.0,
     "randomization_seed": 34030,
