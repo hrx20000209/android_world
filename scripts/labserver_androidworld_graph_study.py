@@ -569,6 +569,7 @@ def _run_one(args: argparse.Namespace, root: Path, protocol: dict[str, Any],
         f"--max_depth={protocol['controls']['max_depth']}",
         f"--max_exploration_time_s={protocol['controls']['max_exploration_time_s']}",
         f"--agent_name={arm['agent']}",
+        f"--a11y_method={protocol['controls']['a11y_method']}",
     ]
     if arm.get("two_system"):
       command.append("--two_system")
@@ -671,6 +672,8 @@ def _validate_protocol(protocol: dict[str, Any]) -> None:
   controls = protocol.get("controls") or {}
   if controls.get("client_temperature") != 0.0 or controls.get("client_top_p") != 1.0:
     raise ValueError("protocol must preserve temperature=0 and top_p=1")
+  if controls.get("a11y_method") != "grpc":
+    raise ValueError("matched study arms must use the frozen AndroidWorld gRPC accessibility path")
   if not controls.get("fixed_task_seed") or not isinstance(controls.get("task_seed"), int):
     raise ValueError("fixed integer task seed is required")
   if not protocol.get("tasks") or not protocol.get("arms"):

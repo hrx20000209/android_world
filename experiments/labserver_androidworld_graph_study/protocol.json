@@ -38,6 +38,7 @@
   "controls": {
     "client_temperature": 0.0,
     "client_top_p": 1.0,
+    "a11y_method": "grpc",
     "vllm_seed": 0,
     "task_seed": 34,
     "fixed_task_seed": true,

@@ -26,6 +26,7 @@ class StudyTests(unittest.TestCase):
     study._validate_protocol(self.protocol)
     self.assertEqual(self.protocol["controls"]["client_temperature"], 0.0)
     self.assertEqual(self.protocol["controls"]["client_top_p"], 1.0)
+    self.assertEqual(self.protocol["controls"]["a11y_method"], "grpc")
     self.assertEqual(len(self.protocol["tasks"]), 30)
     self.assertEqual(
         [row["name"] for row in self.protocol["arms"]],

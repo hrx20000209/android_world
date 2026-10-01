@@ -678,7 +678,7 @@ def main() -> int:
           "reason": "device_dirty_fallback_skip_exploration",
       })
       return original_predict(self, text_prompt, images, messages)
-    if args.variant == "offline":
+    if args.variant == "offline" or prepared is None:
       return original_predict(self, text_prompt, images, messages)
     if isinstance(prepared.config, dict):
       prepared.config["committed_actions"] = list(profile.get("committed_actions") or [])

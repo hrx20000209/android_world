@@ -10,7 +10,7 @@
 
 ## 冻结控制与分析
 
-详见同目录 [`protocol.json`](protocol.json)：30 个固定 AndroidWorld 任务、固定 task seed 34、`fixed_task_seed`、客户端 `temperature=0` / `top_p=1`、自启动 vLLM `seed=0`、相同模型与任务步数上限。每个 task 在所有 arms 下成对运行；arm 顺序用预先固定的随机种子打乱；图只在所属 arm 内跨任务累积。
+详见同目录 [`protocol.json`](protocol.json)：30 个固定 AndroidWorld 任务、固定 task seed 34、`fixed_task_seed`、客户端 `temperature=0` / `top_p=1`、自启动 vLLM `seed=0`、相同模型与任务步数上限。在线图 arm 使用 AndroidWorld gRPC 主 accessibility 路径，FastA11y 仅作为并行探索 sidecar；raw baseline 也使用 AndroidWorld 默认 gRPC 主路径。每个 task 在所有 arms 下成对运行；arm 顺序用预先固定的随机种子打乱；图只在所属 arm 内跨任务累积。
 
 主要输出包括 evaluator 成功率（含 Wilson 95% 区间；已写入 evaluator checkpoint 的异常按失败计）、成功率配对差 bootstrap 区间、全部 evaluator-complete episode 的总/平均动作数、成功任务步数、共同成功任务的配对步数差，以及 VLM 调用、probe、观察、rollback、skip、route 命中、图增长、可执行图状态/边更新耗时和 probe trace 摄取耗时。状态/边更新计时使用嵌套安全的计时器，避免一次转移中的多次 `observe_page` 重复计数；probe trace 摄取耗时是包含解析/包装工作的更宽时间，不与图更新时间相加。二者都不覆盖磁盘序列化成本。**只有成功率不低于 baseline 且全部任务与成功任务动作数均有下降，才算达到目标；成功率点估计相同不等于统计上已经证明非劣。**
 
