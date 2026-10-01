@@ -321,7 +321,7 @@ def _ensure_container(args: argparse.Namespace, root: Path, worker_index: int) -
       "--device", "/dev/kvm", "--shm-size=2g",
       "--add-host=host.docker.internal:host-gateway",
       "--network", "bridge", args.image,
-      "-lc", "cd /androidworld && ./docker_setup/start_emu_headless.sh && adb root && tail -f /dev/null",
+      "-lc", "/bin/bash /androidworld/docker_setup/start_emu_headless.sh && adb root && tail -f /dev/null",
   ]
   _run(command, timeout=120)
   return name
