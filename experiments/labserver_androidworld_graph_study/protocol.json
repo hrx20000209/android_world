@@ -1,0 +1,211 @@
+{
+  "schema_version": 1,
+  "study": "task-conditioned GUI graph construction, exploration, and inference",
+  "suite": "android_world",
+  "task_source": "30-task set from the 2026-09-24 LabServer baseline; rerun as a paired cohort",
+  "tasks": [
+    "NotesRecipeIngredientCount",
+    "NotesIsTodo",
+    "FilesDeleteFile",
+    "FilesMoveFile",
+    "SportsTrackerActivityDuration",
+    "SportsTrackerTotalDistanceForCategoryOverInterval",
+    "SimpleCalendarNextMeetingWithPerson",
+    "SimpleCalendarEventsInTimeRange",
+    "ClockStopWatchRunning",
+    "ClockTimerEntry",
+    "MarkorCreateNote",
+    "MarkorEditNote",
+    "MarkorCreateFolder",
+    "ExpenseDeleteSingle",
+    "ExpenseDeleteMultiple2",
+    "ExpenseAddSingle",
+    "BrowserMaze",
+    "BrowserMultiply",
+    "BrowserDraw",
+    "ContactsNewContactDraft",
+    "ContactsAddContact",
+    "AudioRecorderRecordAudio",
+    "AudioRecorderRecordAudioWithFileName",
+    "SystemWifiTurnOnVerify",
+    "SystemWifiTurnOffVerify",
+    "SystemBrightnessMinVerify",
+    "SimpleDrawProCreateDrawing",
+    "CameraTakePhoto",
+    "OsmAndFavorite",
+    "OsmAndMarker"
+  ],
+  "controls": {
+    "client_temperature": 0.0,
+    "client_top_p": 1.0,
+    "vllm_seed": 0,
+    "task_seed": 34,
+    "fixed_task_seed": true,
+    "max_n_steps": 0,
+    "ranker": "InformationNeedRanker",
+    "max_probes": 2,
+    "min_probes": 1,
+    "max_depth": 3,
+    "max_exploration_time_s": 8.0,
+    "randomization_seed": 34030,
+    "model": "GELAB-ZERO-4B"
+  },
+  "arms": [
+    {
+      "name": "baseline",
+      "agent": "gelab_agent",
+      "runner": "run.py",
+      "hypothesis": "No graph, no shadow exploration; reference success and action steps."
+    },
+    {
+      "name": "probe_only",
+      "agent": "mobileexplorer_no_memory",
+      "runner": "run_sensys30_online_task.py",
+      "two_system": true,
+      "config": null,
+      "hypothesis": "Measures live probing without persistent task-conditioned graph effects."
+    },
+    {
+      "name": "graph_build_only",
+      "agent": "mobileexplorer_executable",
+      "runner": "run_sensys30_online_task.py",
+      "two_system": false,
+      "config": {
+        "enabled": true,
+        "graph_enabled": true,
+        "exploration_enabled": false,
+        "exploration_guidance_enabled": false,
+        "graph_prompt_enabled": false,
+        "post_fusion_enabled": false,
+        "high_confidence_skip_enabled": false,
+        "max_probes": 2
+      },
+      "hypothesis": "Builds the task-relevant graph from executed observations without using it to steer exploration or inference."
+    },
+    {
+      "name": "graph_guided_exploration",
+      "agent": "mobileexplorer_executable",
+      "runner": "run_sensys30_online_task.py",
+      "two_system": true,
+      "config": {
+        "enabled": true,
+        "graph_enabled": true,
+        "exploration_enabled": true,
+        "exploration_guidance_enabled": true,
+        "graph_prompt_enabled": false,
+        "post_fusion_enabled": false,
+        "high_confidence_skip_enabled": false,
+        "max_probes": 2
+      },
+      "hypothesis": "Tests whether graph-guided probe/action selection improves useful node discovery and reduces later navigation actions."
+    },
+    {
+      "name": "graph_prompt_inference",
+      "agent": "mobileexplorer_executable",
+      "runner": "run_sensys30_online_task.py",
+      "two_system": true,
+      "config": {
+        "enabled": true,
+        "graph_enabled": true,
+        "exploration_enabled": true,
+        "exploration_guidance_enabled": true,
+        "graph_prompt_enabled": true,
+        "post_fusion_enabled": false,
+        "high_confidence_skip_enabled": false,
+        "max_probes": 2
+      },
+      "hypothesis": "Isolates concise task-relevant graph evidence injected into VLM prompts."
+    },
+    {
+      "name": "graph_post_fusion",
+      "agent": "mobileexplorer_executable",
+      "runner": "run_sensys30_online_task.py",
+      "two_system": true,
+      "config": {
+        "enabled": true,
+        "graph_enabled": true,
+        "exploration_enabled": true,
+        "exploration_guidance_enabled": true,
+        "graph_prompt_enabled": true,
+        "post_fusion_enabled": true,
+        "high_confidence_skip_enabled": false,
+        "max_probes": 2
+      },
+      "hypothesis": "Tests structured fusion of graph facts with the current observation beyond prompt retrieval alone."
+    },
+    {
+      "name": "graph_verified_skip",
+      "agent": "mobileexplorer_executable",
+      "runner": "run_sensys30_online_task.py",
+      "two_system": true,
+      "config": {
+        "enabled": true,
+        "graph_enabled": true,
+        "exploration_enabled": true,
+        "exploration_guidance_enabled": true,
+        "graph_prompt_enabled": true,
+        "post_fusion_enabled": true,
+        "high_confidence_skip_enabled": true,
+        "max_probes": 2
+      },
+      "hypothesis": "Tests conservative, live-verified graph route execution as a way to skip repeated VLM reasoning."
+    },
+    {
+      "name": "graph_skip_allow_unknown_reversibility",
+      "agent": "mobileexplorer_executable",
+      "runner": "run_sensys30_online_task.py",
+      "two_system": true,
+      "config": {
+        "enabled": true,
+        "graph_enabled": true,
+        "exploration_enabled": true,
+        "exploration_guidance_enabled": true,
+        "graph_prompt_enabled": true,
+        "post_fusion_enabled": true,
+        "high_confidence_skip_enabled": true,
+        "route_allow_unknown_reversibility": true,
+        "route_landing_level": "node",
+        "max_probes": 2
+      },
+      "hypothesis": "Tests whether a route with no failed recovery evidence can be tried under the existing live landing verifier; any observed recovery failure still disqualifies it."
+    },
+    {
+      "name": "graph_skip_activity_landing",
+      "agent": "mobileexplorer_executable",
+      "runner": "run_sensys30_online_task.py",
+      "two_system": true,
+      "config": {
+        "enabled": true,
+        "graph_enabled": true,
+        "exploration_enabled": true,
+        "exploration_guidance_enabled": true,
+        "graph_prompt_enabled": true,
+        "post_fusion_enabled": true,
+        "high_confidence_skip_enabled": true,
+        "route_allow_unknown_reversibility": true,
+        "route_landing_level": "activity",
+        "max_probes": 2
+      },
+      "hypothesis": "Isolates activity-level landing identity after enabling conservative unknown-reversibility candidates; every hop remains live-verified and misses are recovered."
+    }
+  ],
+  "schedule": {
+    "unit": "paired task across every arm",
+    "arm_order": "seeded random permutation within task",
+    "worker_assignment": "round-robin after arm-order randomization",
+    "shared_memory": "one independent graph per graph-enabled arm, shared only across tasks of that arm; no graph is shared across arms",
+    "retry": "never overwrite; failed attempts are retained and retried in a new attempt directory only if no evaluator checkpoint exists"
+  },
+  "primary_outcomes": [
+    "success_rate",
+    "mean_episode_steps_all_completed",
+    "mean_episode_steps_on_successes",
+    "paired_episode_steps_on_tasks_successful_in_both_arms"
+  ],
+  "safety": {
+    "never_stop_or_reconfigure_foreign_processes": true,
+    "start_vllm_only_on_verified_free_gpu": true,
+    "publish_only_aggregates_and_public_task_ids": true,
+    "exclude_logs_checkpoints_screenshots_prompts_and_goal_values_from_git": true
+  }
+}

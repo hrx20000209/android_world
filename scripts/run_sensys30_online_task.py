@@ -77,6 +77,33 @@ def _append(path: Path, row: dict[str, Any]) -> None:
     stream.write(json.dumps(row, ensure_ascii=False, default=str) + "\n")
 
 
+def _instrument_graph_updates(path: Path) -> None:
+  """Write per-task wall timings for graph mutations without nested double counts."""
+  depth_var = contextvars.ContextVar("androidworld_graph_update_depth", default=0)
+  for method_name in ("observe_page", "record_transition", "ingest_probe_row"):
+    original = getattr(ExecutableExplorationMemory, method_name)
+    if getattr(original, "_androidworld_graph_timed", False):
+      continue
+
+    def timed(self, *args, _original=original, _method_name=method_name, **kwargs):
+      config = getattr(self, "config", None)
+      enabled = bool(getattr(config, "enabled", False) and
+                     getattr(config, "graph_enabled", False))
+      depth = depth_var.get()
+      token = depth_var.set(depth + 1)
+      started = time.perf_counter()
+      try:
+        return _original(self, *args, **kwargs)
+      finally:
+        elapsed = max(0.0, time.perf_counter() - started)
+        depth_var.reset(token)
+        if enabled and depth == 0:
+          _append(path, {"operation": _method_name, "elapsed_s": elapsed})
+
+    timed._androidworld_graph_timed = True
+    setattr(ExecutableExplorationMemory, method_name, timed)
+
+
 def _action_signature(action_dict: dict[str, Any]) -> tuple[Any, ...]:
   action_type = str(action_dict.get("action_type", "")).lower()
   if action_type in {"click", "tap"}:
@@ -223,6 +250,8 @@ def main() -> int:
   requests_path = root / "request_latency.jsonl"
   steps_path = root / "step_latency.jsonl"
   executable_memory_path = args.executable_memory_path or (root / "executable_memory.json")
+  graph_perf_path = root / "graph_construction_perf.jsonl"
+  _instrument_graph_updates(graph_perf_path)
   executable_memory_summary_path = root / "executable_memory_summary.json"
   semantic_prefix_path = args.semantic_prefix_path or (root / "semantic_prefix_memory.json")
   semantic_prefix_events_path = root / "semantic_prefix_events.jsonl"
@@ -245,7 +274,7 @@ def main() -> int:
     if not memory_config.exploration_enabled:
       args.two_system = False
     executable_memory = ExecutableExplorationMemory(
-        dataclasses.replace(memory_config, enabled=True, max_probes=5),
+        dataclasses.replace(memory_config, enabled=True, max_probes=args.max_probes),
         path=executable_memory_path,
         logger=JsonlMemoryLogger(root / "executable_memory_events.jsonl"),
     )
@@ -344,6 +373,7 @@ def main() -> int:
 
   def ingest_probe_trace(trial_id: str) -> list[dict[str, Any]]:
     nonlocal trace_cursor, semantic_prefix_event_cursor
+    graph_ingest_started = time.perf_counter()
     if not trace.exists():
       return []
     rows = trace.read_text(encoding="utf-8").splitlines()
@@ -521,6 +551,10 @@ def main() -> int:
       semantic_prefix_summary_path.write_text(
           json.dumps(semantic_prefix.summary(), ensure_ascii=False, indent=2),
           encoding="utf-8")
+    _append(graph_perf_path, {
+        "operation": "probe_trace_ingest_wall",
+        "elapsed_s": max(0.0, time.perf_counter() - graph_ingest_started),
+    })
     return ingested
 
   def snapshot() -> dict[str, float]:
@@ -1800,7 +1834,7 @@ def main() -> int:
       # Read the final shared graph because the agent and shadow ingester both
       # contribute. Evaluator output remains the only source of task success.
       final_memory = ExecutableExplorationMemory(
-          dataclasses.replace(memory_config, enabled=True, max_probes=5),
+          dataclasses.replace(memory_config, enabled=True, max_probes=args.max_probes),
           path=executable_memory_path,
       )
       executable_memory_summary_path.write_text(json.dumps({
