@@ -56,6 +56,20 @@ class StudyTests(unittest.TestCase):
     with self.assertRaisesRegex(ValueError, "unsupported a11y method"):
       study._validate_protocol(protocol)
 
+  def test_wifi_uia_protocol_is_a_matched_infrastructure_pilot(self) -> None:
+    path = study.DEFAULT_PROTOCOL.with_name("protocol_wifi_uia_infra_pilot.json")
+    protocol = json.loads(path.read_text(encoding="utf-8"))
+    study._validate_protocol(protocol)
+    self.assertEqual(protocol["tasks"], ["SystemWifiTurnOffVerify"])
+    self.assertEqual(
+        [arm["name"] for arm in protocol["arms"]],
+        ["baseline", "graph_guided_exploration"],
+    )
+    self.assertEqual(
+        protocol["controls"]["a11y_method_overrides"],
+        {"SystemWifiTurnOffVerify": "uiautomator"},
+    )
+
   def test_worker_preflight_uses_network_independent_uiautomator(self) -> None:
     result = mock.Mock(
         returncode=0, stdout="androidworld-worker-preflight-ok 33"

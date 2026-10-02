@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "study": "Wi-Fi-off accessibility transport validation (infrastructure pilot only)",
+  "suite": "android_world",
+  "task_source": "Single-task matched diagnostic; not evidence for overall graph-design effectiveness",
+  "tasks": [
+    "SystemWifiTurnOffVerify"
+  ],
+  "controls": {
+    "client_temperature": 0.0,
+    "client_top_p": 1.0,
+    "a11y_method": "grpc",
+    "a11y_method_overrides": {
+      "SystemWifiTurnOffVerify": "uiautomator"
+    },
+    "vllm_seed": 0,
+    "task_seed": 34,
+    "fixed_task_seed": true,
+    "max_n_steps": 0,
+    "ranker": "InformationNeedRanker",
+    "max_probes": 2,
+    "min_probes": 1,
+    "force_min_probes": false,
+    "max_depth": 3,
+    "max_exploration_time_s": 8.0,
+    "randomization_seed": 34030,
+    "model": "GELAB-ZERO-4B"
+  },
+  "arms": [
+    {
+      "name": "baseline",
+      "agent": "gelab_agent",
+      "runner": "run.py",
+      "hypothesis": "Infrastructure reference only; do not use this single task to infer design effects."
+    },
+    {
+      "name": "graph_guided_exploration",
+      "agent": "mobileexplorer_executable",
+      "runner": "run_sensys30_online_task.py",
+      "two_system": true,
+      "config": {
+        "enabled": true,
+        "graph_enabled": true,
+        "exploration_enabled": true,
+        "exploration_guidance_enabled": true,
+        "graph_prompt_enabled": false,
+        "post_fusion_enabled": false,
+        "high_confidence_skip_enabled": false,
+        "max_probes": 2
+      },
+      "hypothesis": "Infrastructure validation only; not evidence for overall graph-design effectiveness."
+    }
+  ],
+  "primary_outcomes": [
+    "evaluator_success",
+    "evaluator_steps",
+    "accessibility_method"
+  ]
+}
