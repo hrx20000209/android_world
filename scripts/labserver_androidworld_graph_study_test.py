@@ -386,6 +386,10 @@ class StudyTests(unittest.TestCase):
       study._append_jsonl(output / "skip_events.jsonl", {
           "skip_kind": "graph_route", "successor_matched": True,
       })
+      study._append_jsonl(output / "probe_trace.jsonl", {
+          "graph": {"src": {}, "dst": {}},
+          "discovered": {"new_element_count": 2},
+      })
       study._append_jsonl(output / "executable_memory_events.jsonl", {
           "event": "high_confidence_route_gate", "candidates": 2,
           "eligible_routes": 1,
@@ -398,6 +402,8 @@ class StudyTests(unittest.TestCase):
           "memory_route_length": 2,
       })
       counts = study._trace_counts(attempt)
+      self.assertEqual(counts["probe_events"], 1)
+      self.assertEqual(counts["probe_observations"], 1)
       self.assertEqual(counts["inference_skipped_steps"], 2)
       self.assertEqual(counts["two_system_skip_route_attempts"], 1)
       self.assertEqual(counts["two_system_skip_route_hits"], 1)
@@ -457,6 +463,7 @@ class StudyTests(unittest.TestCase):
       record = {
           "task": "TaskA", "arm": "graph", "attempt_id": "attempt-01",
           "retrieval_path_candidates": 0, "probes_completed": 0,
+          "probe_events": 2, "probe_observations": 0,
       }
 
       enriched = study._attach_memory_summary_snapshots(root, [record], protocol)
@@ -465,6 +472,7 @@ class StudyTests(unittest.TestCase):
       self.assertEqual(enriched[0]["probes_completed"], 2)
       self.assertEqual(enriched[0]["node_count"], 4)
       self.assertEqual(enriched[0]["edge_count"], 3)
+      self.assertEqual(enriched[0]["probe_observations"], 2)
       self.assertNotIn("goal", enriched[0])
 
   def test_supervisor_reexec_preserves_publish_policy(self) -> None:

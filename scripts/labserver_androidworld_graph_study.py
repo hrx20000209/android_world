@@ -465,7 +465,13 @@ def _trace_counts(attempt: Path) -> dict[str, Any]:
   observations = 0
   for row in probes:
     rollbacks += len(row.get("rollbacks") or [])
-    observations += len(row.get("observations") or [])
+    nested_observations = row.get("observations")
+    if isinstance(nested_observations, list) and nested_observations:
+      observations += len(nested_observations)
+    elif isinstance(row.get("graph"), dict) and isinstance(row.get("discovered"), dict):
+      # Current probe_trace.jsonl schema writes one row per probe outcome;
+      # that row itself contains the resulting screen/graph observation.
+      observations += 1
   if not requests and (attempt / "runner.log").is_file():
     # Raw gelab_agent uses the standard run.py logger rather than the online
     # wrapper's per-request JSONL.
@@ -568,6 +574,11 @@ def _attach_memory_summary_snapshots(
       snapshot = root / "episodes" / str(task) / str(arm) / attempt_id
       metrics = _memory_metrics(snapshot)
       row.update(metrics)
+    # Older analyzer versions counted only a nested `observations` array, while
+    # this trace schema records one observed result per probe row. Preserve
+    # the original trace-row count as the canonical fallback for old records.
+    if not row.get("probe_observations") and row.get("probe_events"):
+      row["probe_observations"] = int(row["probe_events"])
     enriched.append(row)
   return enriched
 
@@ -1372,7 +1383,7 @@ def analyze(root: Path, protocol: dict[str, Any]) -> dict[str, Any]:
     row = summaries[name]
     lines.append(f"| {name} | {row['graph_update_calls']} | {row['graph_construction_time_s']:.4f} | {row['probe_trace_ingest_wall_s']:.4f} |")
   lines += ["", "## Exploration budget and route retrieval", "",
-            "Probe target is the per-round maximum, not a mandatory minimum. `Complete rounds` means the full configured target was finished; utilization is diagnostic rather than a success objective. `retrieval_path_candidates` counts graph paths before task-relevance filtering, while executable route candidates count paths surviving the task-relevance filter. The two counts separate missing graph coverage from overly strict matching.",
+            "Probe target is the per-round maximum, not a mandatory minimum. `Complete rounds` means the full configured target was finished; utilization is diagnostic rather than a success objective. `retrieval_path_candidates` counts graph paths before task-relevance filtering, while executable route candidates count paths surviving the task-relevance filter. The two counts separate missing graph coverage from overly strict matching. Probe observations count one resulting UI observation per probe-trace row (or explicit nested observations in legacy rows); legacy records fall back to the probe-event count.",
             "", "| Arm | Probe rounds | Full-budget rounds | Probes completed / max target | Full-budget rate | Budget utilization | Paths before relevance filter | Prompt route edges | Executable route candidates | Probe stop reasons |", "|---|---:|---:|---:|---:|---:|---:|---:|---:|---|"]
   for name in arm_names:
     row = summaries[name]
