@@ -1103,6 +1103,8 @@ def _summarize(records: list[dict[str, Any]], protocol: dict[str, Any]) -> dict[
         "probe_observations": sum(int(r.get("probe_observations", 0)) for r in rows),
         "rollbacks": sum(int(r.get("rollbacks", 0)) for r in rows),
         "primary_vlm_requests": sum(int(r.get("primary_vlm_requests", 0)) for r in rows),
+        "vllm_requests_endpoint_delta": sum(
+            int(r.get("vllm_requests_endpoint_delta", 0)) for r in rows),
         "prompt_context_edges": sum(int(r.get("prompt_context_edges", 0) or 0) for r in rows),
         "prompt_context_queries": sum(int(r.get("prompt_context_queries", 0) or 0) for r in rows),
         "inference_skipped_steps": sum(int(r.get("inference_skipped_steps", 0)) for r in rows),
@@ -1221,10 +1223,11 @@ def analyze(root: Path, protocol: dict[str, Any]) -> dict[str, Any]:
       "Accessibility capture is frozen per task across all arms. The Wi-Fi-off verification task uses UIAutomator because its precondition disables guest networking; all other tasks use the protocol's default gRPC capture.",
       "",
       "This report uses AndroidWorld evaluator checkpoint metadata for success and episode steps. It does not infer success from agent text. Only aggregate metrics, public task IDs, protocol details, and SVG charts are intended for publication; raw prompts, goals, screenshots, logs, and checkpoints remain server-side.",
+      "VLM request totals use the per-episode vLLM successful-request counter delta. Local primary request traces remain in the per-task CSV for diagnostics; they can be absent for some runner modes. When reusing a shared endpoint, concurrent external clients could affect endpoint deltas, so interpret them with service ownership and the idle-check record.",
       "",
       "## Main outcomes",
       "",
-      "| Arm | Trials | Evaluated steps | Exceptions | Success | Success rate (Wilson 95% CI) | Total observed actions | Mean actions | Mean actions, success only | Primary VLM calls | Probe observations | Rollbacks | Prompt graph edges | Skip hits / attempts | New graph nodes / edges |",
+      "| Arm | Trials | Evaluated steps | Exceptions | Success | Success rate (Wilson 95% CI) | Total observed actions | Mean actions | Mean actions, success only | VLLM requests (endpoint delta) | Probe observations | Rollbacks | Prompt graph edges | Skip hits / attempts | New graph nodes / edges |",
       "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
   ]
   for name in arm_names:
@@ -1234,7 +1237,7 @@ def analyze(root: Path, protocol: dict[str, Any]) -> dict[str, Any]:
     ci = "n/a" if lo is None else f"[{lo:.1%}, {hi:.1%}]"
     def fmt(value: Any) -> str:
       return "n/a" if value is None else f"{float(value):.2f}"
-    lines.append(f"| {name} | {row['n_trials']} | {row['n_evaluator_complete']} | {row['n_episode_exceptions']} | {row['n_success']} | {pct} ({ci}) | {row['total_steps_all_completed']} | {fmt(row['mean_steps_all_completed'])} | {fmt(row['mean_steps_successes'])} | {row['primary_vlm_requests']} | {row['probe_observations']} | {row['rollbacks']} | {row['prompt_context_edges']} | {row['skip_hits']} / {row['skip_attempts']} | {row['graph_new_nodes']} / {row['graph_new_edges']} |")
+    lines.append(f"| {name} | {row['n_trials']} | {row['n_evaluator_complete']} | {row['n_episode_exceptions']} | {row['n_success']} | {pct} ({ci}) | {row['total_steps_all_completed']} | {fmt(row['mean_steps_all_completed'])} | {fmt(row['mean_steps_successes'])} | {row['vllm_requests_endpoint_delta']} | {row['probe_observations']} | {row['rollbacks']} | {row['prompt_context_edges']} | {row['skip_hits']} / {row['skip_attempts']} | {row['graph_new_nodes']} / {row['graph_new_edges']} |")
   lines += ["", "## Graph construction overhead", "",
             "Graph update time is the sum of top-level executable-memory state/edge mutation calls; nested mutations are not counted twice. Probe-trace ingestion wall time includes parsing and surrounding ingestion work and overlaps graph update time, so the two columns must not be added. Neither measure includes graph JSON serialization or all agent-side CPU work.",
             "", "| Arm | Graph update calls | Graph mutation wall time (s) | Probe-trace ingestion wall time (s) |", "|---|---:|---:|---:|"]
