@@ -161,6 +161,11 @@ def _deterministic_bootstrap_target(goal: str, activity: str, enabled: bool) -> 
   return target
 
 
+def _use_fast_a11y_socket(a11y_method: str) -> bool:
+  """Use adb UiAutomator capture when the task explicitly overrides A11y."""
+  return a11y_method != "uiautomator"
+
+
 def main() -> int:
   parser = argparse.ArgumentParser()
   parser.add_argument("--output", type=Path, required=True)
@@ -922,12 +927,15 @@ def main() -> int:
       # AndroidWorld's gRPC wrapper owns the primary accessibility service.
       # Install/enable FastA11y alongside it only after env setup; enabling it
       # earlier lets the wrapper replace the service list and leaves the
-      # skip-app observer with a dead socket.
-      ensure_fast_a11y_companion()
+      # skip-app observer with a dead socket. A task-specific UiAutomator
+      # override must also govern this secondary graph/skip capture path.
+      use_fast_socket = _use_fast_a11y_socket(args.a11y_method)
+      if use_fast_socket:
+        ensure_fast_a11y_companion()
       skip_capture = create_optimized_state_capture(
           serial=serial, console_port=args.console_port,
           adb_path=adb_path, a11y_local_port=a11y_local_port,
-          use_fast_a11y_socket=True,
+          use_fast_a11y_socket=use_fast_socket,
       )
     return skip_capture
 
