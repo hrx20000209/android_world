@@ -543,7 +543,9 @@ def _memory_metrics(attempt: Path) -> dict[str, Any]:
   except (OSError, json.JSONDecodeError):
     return {}
   metrics = data.get("metrics") or {}
-  keys = ("exploration_guidance_queries", "prompt_context_queries",
+  keys = ("exploration_guidance_queries", "exploration_guidance_state_matches",
+          "exploration_guidance_controls_seen", "exploration_guidance_controls_relevant",
+          "exploration_guidance_controls_mature", "prompt_context_queries",
           "prompt_context_count", "prompt_context_edges", "skip_attempts",
           "skip_hits", "route_hit_count", "route_miss_count", "recovery_failures",
           "state_merges", "graph_overrides", "graph_rejections", "probe_rounds",
@@ -1054,7 +1056,9 @@ def _wilson(successes: int, n: int, z: float = 1.96) -> tuple[float | None, floa
 
 
 _CUMULATIVE_MEMORY_COUNTERS = (
-    "exploration_guidance_queries", "prompt_context_queries",
+    "exploration_guidance_queries", "exploration_guidance_state_matches",
+    "exploration_guidance_controls_seen", "exploration_guidance_controls_relevant",
+    "exploration_guidance_controls_mature", "prompt_context_queries",
     "prompt_context_count", "prompt_context_edges", "skip_attempts",
     "skip_hits", "route_hit_count", "route_miss_count", "recovery_failures",
     "state_merges", "graph_overrides", "graph_rejections", "probe_rounds",
@@ -1232,6 +1236,16 @@ def _summarize(records: list[dict[str, Any]], protocol: dict[str, Any]) -> dict[
             / sum(int(r.get("probes_target", 0) or 0) for r in rows)
             if sum(int(r.get("probes_target", 0) or 0) for r in rows) else None),
         "probe_stop_reasons": dict(sorted(probe_stop_reasons.items())),
+        "exploration_guidance_queries": sum(
+            int(r.get("exploration_guidance_queries", 0) or 0) for r in rows),
+        "exploration_guidance_state_matches": sum(
+            int(r.get("exploration_guidance_state_matches", 0) or 0) for r in rows),
+        "exploration_guidance_controls_seen": sum(
+            int(r.get("exploration_guidance_controls_seen", 0) or 0) for r in rows),
+        "exploration_guidance_controls_relevant": sum(
+            int(r.get("exploration_guidance_controls_relevant", 0) or 0) for r in rows),
+        "exploration_guidance_controls_mature": sum(
+            int(r.get("exploration_guidance_controls_mature", 0) or 0) for r in rows),
         "rollbacks": sum(int(r.get("rollbacks", 0)) for r in rows),
         "primary_vlm_requests": sum(int(r.get("primary_vlm_requests", 0)) for r in rows),
         "vllm_requests_endpoint_delta": sum(
@@ -1337,6 +1351,8 @@ def analyze(root: Path, protocol: dict[str, Any]) -> dict[str, Any]:
               "probe_rounds", "probe_rounds_complete", "probes_target", "probes_completed",
               "retrieval_path_candidates", "probe_stop_reasons",
               "graph_delta_edges", "extra_time_s", "exploration_guidance_queries",
+              "exploration_guidance_state_matches", "exploration_guidance_controls_seen",
+              "exploration_guidance_controls_relevant", "exploration_guidance_controls_mature",
               "graph_update_calls", "graph_construction_time_s", "probe_trace_ingest_wall_s",
               "probe_critical_path_extension_s",
       "prompt_context_queries", "prompt_context_edges", "skip_attempts", "skip_hits", "route_hit_count",
@@ -1409,6 +1425,17 @@ def analyze(root: Path, protocol: dict[str, Any]) -> dict[str, Any]:
         f"{row['probes_completed']} / {row['probes_target']} | {round_rate} | "
         f"{budget_rate} | {row['retrieval_path_candidates']} | "
         f"{row['prompt_context_edges']} | {row['high_confidence_route_gate_candidates']} | {stop_reasons} |")
+  lines += ["", "## Graph-guidance candidate funnel", "",
+            "These counters are differenced from cumulative per-arm memory snapshots. `State matches` counts queries mapped to a stored graph state; `observed controls` counts outgoing controls backed by observed transitions; `task-relevant controls` also includes frontier controls and is not a strict subset of observed controls; `mature controls` are observed transitions passing the repeated-support, confidence, stability, reversibility, recovery, and dynamic-content checks.",
+            "", "| Arm | Guidance queries | State matches | Observed controls | Task-relevant controls | Mature controls |", "|---|---:|---:|---:|---:|---:|"]
+  for name in arm_names:
+    row = summaries[name]
+    lines.append(
+        f"| {name} | {row['exploration_guidance_queries']} | "
+        f"{row['exploration_guidance_state_matches']} | "
+        f"{row['exploration_guidance_controls_seen']} | "
+        f"{row['exploration_guidance_controls_relevant']} | "
+        f"{row['exploration_guidance_controls_mature']} |")
   lines += ["", "## Verified inference-skip diagnostics", "",
             "Executable-memory route gates and the independent two-system SkipInferenceGate are reported separately. A gate candidate is not a skip hit; only a live-validated route/action is counted as a hit. Bootstrap app-open skips are separated because the evaluator action still continues.",
             "", "| Arm | Route-gate queries | Retrieved candidates | Eligible routes | Gate blocks | Executable-memory skip hits / attempts | Two-system route hits / attempts | Bootstrap skips | Route rollback failures |",

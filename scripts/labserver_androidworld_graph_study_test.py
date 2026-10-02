@@ -284,6 +284,11 @@ class StudyTests(unittest.TestCase):
          "probe_rounds": 6, "probe_rounds_complete": 2,
          "probes_target": 12, "probes_completed": 9,
          "retrieval_path_candidates": 11, "prompt_context_queries": 10,
+         "exploration_guidance_queries": 7,
+         "exploration_guidance_state_matches": 5,
+         "exploration_guidance_controls_seen": 10,
+         "exploration_guidance_controls_relevant": 6,
+         "exploration_guidance_controls_mature": 3,
          "probe_critical_path_extension_s": 6.0,
          "probe_stop_reasons": {"inference_preempted": 4, "budget_exhausted": 1}},
         {"status": "complete", "task": "A", "arm": "graph_build_only",
@@ -294,6 +299,11 @@ class StudyTests(unittest.TestCase):
          "probe_rounds": 4, "probe_rounds_complete": 1,
          "probes_target": 8, "probes_completed": 5,
          "retrieval_path_candidates": 7, "prompt_context_queries": 3,
+         "exploration_guidance_queries": 3,
+         "exploration_guidance_state_matches": 2,
+         "exploration_guidance_controls_seen": 4,
+         "exploration_guidance_controls_relevant": 2,
+         "exploration_guidance_controls_mature": 1,
          "probe_critical_path_extension_s": 4.5,
          "probe_stop_reasons": {"inference_preempted": 3}},
     ]
@@ -311,6 +321,11 @@ class StudyTests(unittest.TestCase):
     self.assertEqual(by_task["B"]["probes_completed"], 4)
     self.assertEqual(by_task["B"]["retrieval_path_candidates"], 4)
     self.assertEqual(by_task["B"]["prompt_context_queries"], 7)
+    self.assertEqual(by_task["B"]["exploration_guidance_queries"], 4)
+    self.assertEqual(by_task["B"]["exploration_guidance_state_matches"], 3)
+    self.assertEqual(by_task["B"]["exploration_guidance_controls_seen"], 6)
+    self.assertEqual(by_task["B"]["exploration_guidance_controls_relevant"], 4)
+    self.assertEqual(by_task["B"]["exploration_guidance_controls_mature"], 2)
     self.assertAlmostEqual(by_task["B"]["probe_critical_path_extension_s"], 1.5)
     self.assertEqual(by_task["B"]["probe_stop_reasons"], {
         "inference_preempted": 1, "budget_exhausted": 1,
@@ -322,6 +337,11 @@ class StudyTests(unittest.TestCase):
     self.assertEqual(graph["probes_completed"], 9)
     self.assertEqual(graph["retrieval_path_candidates"], 11)
     self.assertEqual(graph["prompt_context_queries"], 10)
+    self.assertEqual(graph["exploration_guidance_queries"], 7)
+    self.assertEqual(graph["exploration_guidance_state_matches"], 5)
+    self.assertEqual(graph["exploration_guidance_controls_seen"], 10)
+    self.assertEqual(graph["exploration_guidance_controls_relevant"], 6)
+    self.assertEqual(graph["exploration_guidance_controls_mature"], 3)
     self.assertAlmostEqual(graph["probe_budget_utilization"], 9 / 12)
     self.assertEqual(graph["probe_stop_reasons"], {
         "budget_exhausted": 1, "inference_preempted": 4,
@@ -439,6 +459,11 @@ class StudyTests(unittest.TestCase):
               "probes_target": 8,
               "probes_completed": 5,
               "retrieval_path_candidates": 7,
+              "exploration_guidance_queries": 6,
+              "exploration_guidance_state_matches": 4,
+              "exploration_guidance_controls_seen": 8,
+              "exploration_guidance_controls_relevant": 5,
+              "exploration_guidance_controls_mature": 2,
               "five_probe_completion_rate": 0.25,
               "stop_reasons": {"inference_preempted": 3},
           },
@@ -456,6 +481,11 @@ class StudyTests(unittest.TestCase):
       self.assertEqual(result["probes_target"], 8)
       self.assertEqual(result["probes_completed"], 5)
       self.assertEqual(result["retrieval_path_candidates"], 7)
+      self.assertEqual(result["exploration_guidance_queries"], 6)
+      self.assertEqual(result["exploration_guidance_state_matches"], 4)
+      self.assertEqual(result["exploration_guidance_controls_seen"], 8)
+      self.assertEqual(result["exploration_guidance_controls_relevant"], 5)
+      self.assertEqual(result["exploration_guidance_controls_mature"], 2)
       self.assertEqual(result["probe_stop_reasons"], {"inference_preempted": 3})
 
   def test_analysis_reloads_sanitized_attempt_memory_snapshot(self) -> None:
@@ -568,6 +598,11 @@ class StudyTests(unittest.TestCase):
           "primary_vlm_requests": 0, "vllm_requests_endpoint_delta": 5,
           "graph_nodes": 0, "graph_edges": 0, "graph_delta_nodes": 0,
           "graph_delta_edges": 0, "node_count": 4, "edge_count": 3,
+          "exploration_guidance_queries": 1,
+          "exploration_guidance_state_matches": 1,
+          "exploration_guidance_controls_seen": 2,
+          "exploration_guidance_controls_relevant": 1,
+          "exploration_guidance_controls_mature": 1,
       })
       study.analyze(root, protocol)
       for name in ("report.md", "aggregate_summary.json", "per_task_metrics.csv",
@@ -576,14 +611,19 @@ class StudyTests(unittest.TestCase):
       report = (root / "report.md").read_text(encoding="utf-8")
       self.assertIn("jointly successful", report)
       self.assertIn("VLLM requests (endpoint delta)", report)
+      self.assertIn("## Graph-guidance candidate funnel", report)
+      self.assertIn("| graph_build_only | 1 | 1 | 2 | 1 | 1 |", report)
       self.assertIn("| graph_build_only | 1 | 1 | 0 | 1 | 100.0%", report)
       summary = json.loads((root / "aggregate_summary.json").read_text(encoding="utf-8"))
       self.assertEqual(summary["arms"]["graph_build_only"]["vllm_requests_endpoint_delta"], 5)
       self.assertEqual(summary["arms"]["graph_build_only"]["graph_new_nodes"], 4)
       self.assertEqual(summary["arms"]["graph_build_only"]["graph_new_edges"], 3)
+      self.assertEqual(summary["arms"]["graph_build_only"]["exploration_guidance_state_matches"], 1)
+      self.assertEqual(summary["arms"]["graph_build_only"]["exploration_guidance_controls_mature"], 1)
       with (root / "per_task_metrics.csv").open(encoding="utf-8") as stream:
         csv_rows = {row["arm"]: row for row in csv.DictReader(stream)}
       self.assertEqual(csv_rows["graph_build_only"]["graph_nodes"], "4")
+      self.assertEqual(csv_rows["graph_build_only"]["exploration_guidance_controls_relevant"], "1.0")
       self.assertEqual(csv_rows["graph_build_only"]["graph_delta_source"], "successive_arm_snapshots")
       self.assertNotIn("buckwheat groats", report)
 
