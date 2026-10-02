@@ -111,7 +111,8 @@ def _metrics(url: str) -> tuple[dict[str, float], str]:
       continue
     match = re.match(r"([^\s{]+)(?:\{[^}]*\})?\s+([0-9.eE+-]+)$", line)
     if match and any(token in match.group(1) for token in (
-        "request_success_total", "prompt_tokens_total", "generation_tokens_total")):
+        "request_success_total", "prompt_tokens_total", "generation_tokens_total",
+        "num_requests_running", "num_requests_waiting")):
       counters[match.group(1)] = counters.get(match.group(1), 0.0) + float(match.group(2))
   return counters, body
 
@@ -128,6 +129,11 @@ def _endpoint_idle(port: int, seconds: int, status: Path | None = None) -> bool:
   url = f"http://127.0.0.1:{port}/metrics"
   try:
     before, _ = _metrics(url)
+    active_metrics = ("vllm:num_requests_running", "vllm:num_requests_waiting")
+    # Fail closed when the server does not expose live queue gauges. Cumulative
+    # token/request counters alone cannot prove a long-running request is idle.
+    if any(name not in before or before[name] > 0 for name in active_metrics):
+      return False
     if not _endpoint_ok(port):
       return False
     if status:
@@ -135,7 +141,10 @@ def _endpoint_idle(port: int, seconds: int, status: Path | None = None) -> bool:
                             "checked_at": _now(), "idle_window_s": seconds})
     time.sleep(seconds)
     after, _ = _metrics(url)
-    return before == after
+    return (
+        all(name in after and after[name] == 0 for name in active_metrics)
+        and before == after
+    )
   except Exception:
     return False
 

@@ -81,6 +81,51 @@ class StudyTests(unittest.TestCase):
     self.assertIn("A11yMethod.UIAUTOMATOR", code)
     self.assertNotIn("A11yMethod.A11Y_FORWARDER_APP", code)
 
+  def test_shared_vllm_idle_requires_zero_running_and_waiting_requests(self) -> None:
+    idle_metrics = {
+        "vllm:request_success_total": 4.0,
+        "vllm:prompt_tokens_total": 120.0,
+        "vllm:generation_tokens_total": 64.0,
+        "vllm:num_requests_running": 0.0,
+        "vllm:num_requests_waiting": 0.0,
+    }
+    with mock.patch.object(
+        study, "_metrics", side_effect=[(idle_metrics, ""), (idle_metrics, "")]
+    ), mock.patch.object(study, "_endpoint_ok", return_value=True), mock.patch.object(
+        study.time, "sleep"
+    ):
+      self.assertTrue(study._endpoint_idle(8095, 20))
+
+    running_metrics = {**idle_metrics, "vllm:num_requests_running": 1.0}
+    with mock.patch.object(
+        study, "_metrics", return_value=(running_metrics, "")
+    ), mock.patch.object(study, "_endpoint_ok", return_value=True), mock.patch.object(
+        study.time, "sleep"
+    ) as sleep:
+      self.assertFalse(study._endpoint_idle(8095, 20))
+      sleep.assert_not_called()
+
+    with mock.patch.object(
+        study, "_metrics", return_value=({"vllm:request_success_total": 0.0}, "")
+    ), mock.patch.object(study, "_endpoint_ok", return_value=True):
+      self.assertFalse(study._endpoint_idle(8095, 20))
+
+  def test_shared_vllm_idle_rejects_requests_that_arrive_during_window(self) -> None:
+    before = {
+        "vllm:request_success_total": 4.0,
+        "vllm:prompt_tokens_total": 120.0,
+        "vllm:generation_tokens_total": 64.0,
+        "vllm:num_requests_running": 0.0,
+        "vllm:num_requests_waiting": 0.0,
+    }
+    after = {**before, "vllm:num_requests_waiting": 1.0}
+    with mock.patch.object(
+        study, "_metrics", side_effect=[(before, ""), (after, "")]
+    ), mock.patch.object(study, "_endpoint_ok", return_value=True), mock.patch.object(
+        study.time, "sleep"
+    ):
+      self.assertFalse(study._endpoint_idle(8095, 20))
+
   def test_paired_metrics_use_common_successes_for_success_steps(self) -> None:
     protocol = {
         "tasks": ["A", "B", "C"],
