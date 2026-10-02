@@ -168,6 +168,37 @@ class StudyTests(unittest.TestCase):
     )
     self.assertIn("--reuse-vllm-only", study._resume_argv(args))
 
+  def test_baseline_command_metadata_is_written_before_episode_launch(self) -> None:
+    protocol = {
+        "controls": {
+            "task_seed": 34, "a11y_method": "grpc", "max_n_steps": 0,
+            "client_temperature": 0.0, "client_top_p": 1.0,
+            "max_probes": 2, "min_probes": 1, "force_min_probes": False,
+        },
+    }
+    arm = {"name": "baseline", "runner": "run.py", "agent": "gelab_agent"}
+    endpoint = {"port": 8096, "sampling": {"vllm_seed": 0}}
+    args = study.argparse.Namespace(
+        episode_timeout_s=30, run_id="baseline-metadata-test", repo=Path("/repo")
+    )
+    with tempfile.TemporaryDirectory() as tmp:
+      root = Path(tmp)
+      process = mock.Mock()
+      process.wait.return_value = 0
+      with mock.patch.object(study, "_read_jsonl", return_value=[]), mock.patch.object(
+          study, "_graph_counts", return_value={}
+      ), mock.patch.object(study, "_metrics", return_value=({}, "")), mock.patch.object(
+          study.subprocess, "Popen", return_value=process
+      ) as popen, mock.patch.object(study, "_extract_episode", return_value=None):
+        with self.assertRaisesRegex(RuntimeError, "without an evaluator checkpoint"):
+          study._run_one(args, root, protocol, "worker-test", endpoint, "TaskA", arm)
+      metadata_path = next(root.glob("episodes/TaskA/baseline/attempt-*/command_metadata.json"))
+      metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+      self.assertEqual(metadata["a11y_method"], "grpc")
+      self.assertEqual(metadata["fixed_settings"]["task_seed"], 34)
+      self.assertEqual(metadata["fixed_settings"]["vllm_seed"], 0)
+      popen.assert_called_once()
+
   def test_paired_metrics_use_common_successes_for_success_steps(self) -> None:
     protocol = {
         "tasks": ["A", "B", "C"],

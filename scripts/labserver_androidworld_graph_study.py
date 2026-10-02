@@ -549,6 +549,7 @@ def _run_one(args: argparse.Namespace, root: Path, protocol: dict[str, Any],
              container: str, endpoint: dict[str, Any], task: str,
              arm: dict[str, Any]) -> dict[str, Any]:
   arm_name = str(arm["name"])
+  controls = protocol["controls"]
   a11y_method = _a11y_method_for_task(protocol, task)
   task_root = root / "episodes" / task / arm_name
   task_root.mkdir(parents=True, exist_ok=True)
@@ -652,7 +653,6 @@ def _run_one(args: argparse.Namespace, root: Path, protocol: dict[str, Any],
     if arm.get("config") is not None:
       command += ["--executable_memory", f"--executable_memory_config=/study/episodes/{task}/{arm_name}/{attempt.name}/memory_config.json",
                   f"--executable_memory_path=/study/memory/{arm_name}/executable_memory.json"]
-    controls = protocol["controls"]
     command.append("--force_min_probes" if controls.get("force_min_probes", False)
                    else "--no-force_min_probes")
     command.append(
