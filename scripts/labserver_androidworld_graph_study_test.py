@@ -347,7 +347,7 @@ class StudyTests(unittest.TestCase):
         "budget_exhausted": 1, "inference_preempted": 4,
     })
 
-  def test_checkpointed_evaluator_exceptions_count_as_failures(self) -> None:
+  def test_incomplete_evaluator_exceptions_are_unscored_not_method_failures(self) -> None:
     protocol = {
         "tasks": ["A", "B"],
         "arms": [{"name": "baseline"}, {"name": "graph"}],
@@ -356,18 +356,30 @@ class StudyTests(unittest.TestCase):
         {"status": "complete", "task": "A", "arm": "baseline", "success": True,
          "evaluator_complete": True, "episode_steps": 8, "episode_exception": False},
         {"status": "complete", "task": "B", "arm": "baseline", "success": False,
-         "evaluator_complete": False, "episode_steps": None, "episode_exception": True},
+         "evaluator_complete": False, "episode_steps": 0, "episode_exception": True,
+         "primary_vlm_requests": 99, "probe_events": 7},
         {"status": "complete", "task": "A", "arm": "graph", "success": True,
          "evaluator_complete": True, "episode_steps": 6, "episode_exception": False},
         {"status": "complete", "task": "B", "arm": "graph", "success": False,
-         "evaluator_complete": False, "episode_steps": None, "episode_exception": True},
+         "evaluator_complete": True, "episode_steps": 10, "episode_exception": False,
+         "primary_vlm_requests": 4, "probe_events": 2},
     ]
     summary = study._summarize(rows, protocol)
-    self.assertEqual(summary["arms"]["baseline"]["success_rate"], 0.5)
+    self.assertEqual(summary["arms"]["baseline"]["success_rate"], 1.0)
+    self.assertEqual(summary["arms"]["baseline"]["n_recorded"], 2)
+    self.assertEqual(summary["arms"]["baseline"]["n_trials"], 1)
     self.assertEqual(summary["arms"]["baseline"]["n_evaluator_complete"], 1)
+    self.assertEqual(summary["arms"]["baseline"]["n_incomplete"], 1)
     self.assertEqual(summary["arms"]["baseline"]["n_episode_exceptions"], 1)
+    self.assertEqual(summary["arms"]["baseline"]["primary_vlm_requests"], 0)
+    self.assertEqual(summary["arms"]["baseline"]["probe_events"], 0)
+    self.assertEqual(summary["arms"]["graph"]["success_rate"], 0.5)
     self.assertEqual(summary["paired_vs_baseline"]["graph"]["paired_n"], 2)
+    self.assertEqual(summary["paired_vs_baseline"]["graph"]["paired_evaluator_n"], 1)
     self.assertEqual(summary["paired_vs_baseline"]["graph"]["paired_step_n"], 1)
+    self.assertEqual(summary["paired_vs_baseline"]["graph"]["paired_success_rate_delta"], 0.0)
+    self.assertEqual(summary["n_complete_task_arm_pairs"], 3)
+    self.assertEqual(summary["n_recorded_task_arm_pairs"], 4)
 
   def test_pre_action_exception_without_model_request_is_retryable_infrastructure(self) -> None:
     infra = {"episode_exception": True, "episode_steps": 0}
@@ -613,7 +625,7 @@ class StudyTests(unittest.TestCase):
       self.assertIn("VLLM requests (endpoint delta)", report)
       self.assertIn("## Graph-guidance candidate funnel", report)
       self.assertIn("| graph_build_only | 1 | 1 | 2 | 1 | 1 |", report)
-      self.assertIn("| graph_build_only | 1 | 1 | 0 | 1 | 100.0%", report)
+      self.assertIn("| graph_build_only | 1 | 1 | 0 | 0 | 1 | 100.0%", report)
       summary = json.loads((root / "aggregate_summary.json").read_text(encoding="utf-8"))
       self.assertEqual(summary["arms"]["graph_build_only"]["vllm_requests_endpoint_delta"], 5)
       self.assertEqual(summary["arms"]["graph_build_only"]["graph_new_nodes"], 4)

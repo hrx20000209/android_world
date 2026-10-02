@@ -1199,82 +1199,83 @@ def _summarize(records: list[dict[str, Any]], protocol: dict[str, Any]) -> dict[
   arms_summary: dict[str, Any] = {}
   for arm, rows in by_arm.items():
     valid = [r for r in rows if r.get("evaluator_complete") and isinstance(r.get("episode_steps"), (int, float))]
-    success = [r for r in rows if r.get("success")]
+    success = [r for r in valid if r.get("success")]
     route_gate_blocks: Counter[str] = Counter()
     probe_stop_reasons: Counter[str] = Counter()
-    for row in rows:
+    for row in valid:
       route_gate_blocks.update(row.get("high_confidence_route_gate_blocks") or {})
       probe_stop_reasons.update(row.get("probe_stop_reasons") or {})
     n_success = len(success)
-    ci = _wilson(n_success, len(rows))
+    ci = _wilson(n_success, len(valid))
     all_steps = [float(r["episode_steps"]) for r in valid]
     success_steps = [float(r["episode_steps"]) for r in success]
     arms_summary[arm] = {
-        "n_recorded": len(rows), "n_trials": len(rows),
+        "n_recorded": len(rows), "n_trials": len(valid),
         "n_evaluator_complete": len(valid),
+        "n_incomplete": len(rows) - len(valid),
         "n_episode_exceptions": sum(1 for r in rows if r.get("episode_exception")),
         "n_success": n_success,
-        "success_rate": n_success / len(rows) if rows else None,
+        "success_rate": n_success / len(valid) if valid else None,
         "success_rate_wilson_95": list(ci),
         "mean_steps_all_completed": _mean(all_steps),
         "mean_steps_successes": _mean(success_steps),
         "total_steps_all_completed": sum(all_steps),
         "total_steps_successes": sum(success_steps),
-        "probe_events": sum(int(r.get("probe_events", 0)) for r in rows),
-        "probe_observations": sum(int(r.get("probe_observations", 0)) for r in rows),
-        "probe_rounds": sum(int(r.get("probe_rounds", 0) or 0) for r in rows),
-        "probe_rounds_complete": sum(int(r.get("probe_rounds_complete", 0) or 0) for r in rows),
-        "probes_target": sum(int(r.get("probes_target", 0) or 0) for r in rows),
-        "probes_completed": sum(int(r.get("probes_completed", 0) or 0) for r in rows),
-        "retrieval_path_candidates": sum(int(r.get("retrieval_path_candidates", 0) or 0) for r in rows),
+        "probe_events": sum(int(r.get("probe_events", 0)) for r in valid),
+        "probe_observations": sum(int(r.get("probe_observations", 0)) for r in valid),
+        "probe_rounds": sum(int(r.get("probe_rounds", 0) or 0) for r in valid),
+        "probe_rounds_complete": sum(int(r.get("probe_rounds_complete", 0) or 0) for r in valid),
+        "probes_target": sum(int(r.get("probes_target", 0) or 0) for r in valid),
+        "probes_completed": sum(int(r.get("probes_completed", 0) or 0) for r in valid),
+        "retrieval_path_candidates": sum(int(r.get("retrieval_path_candidates", 0) or 0) for r in valid),
         "probe_round_completion_rate": (
-            sum(int(r.get("probe_rounds_complete", 0) or 0) for r in rows)
-            / sum(int(r.get("probe_rounds", 0) or 0) for r in rows)
-            if sum(int(r.get("probe_rounds", 0) or 0) for r in rows) else None),
+            sum(int(r.get("probe_rounds_complete", 0) or 0) for r in valid)
+            / sum(int(r.get("probe_rounds", 0) or 0) for r in valid)
+            if sum(int(r.get("probe_rounds", 0) or 0) for r in valid) else None),
         "probe_budget_utilization": (
-            sum(int(r.get("probes_completed", 0) or 0) for r in rows)
-            / sum(int(r.get("probes_target", 0) or 0) for r in rows)
-            if sum(int(r.get("probes_target", 0) or 0) for r in rows) else None),
+            sum(int(r.get("probes_completed", 0) or 0) for r in valid)
+            / sum(int(r.get("probes_target", 0) or 0) for r in valid)
+            if sum(int(r.get("probes_target", 0) or 0) for r in valid) else None),
         "probe_stop_reasons": dict(sorted(probe_stop_reasons.items())),
         "exploration_guidance_queries": sum(
-            int(r.get("exploration_guidance_queries", 0) or 0) for r in rows),
+            int(r.get("exploration_guidance_queries", 0) or 0) for r in valid),
         "exploration_guidance_state_matches": sum(
-            int(r.get("exploration_guidance_state_matches", 0) or 0) for r in rows),
+            int(r.get("exploration_guidance_state_matches", 0) or 0) for r in valid),
         "exploration_guidance_controls_seen": sum(
-            int(r.get("exploration_guidance_controls_seen", 0) or 0) for r in rows),
+            int(r.get("exploration_guidance_controls_seen", 0) or 0) for r in valid),
         "exploration_guidance_controls_relevant": sum(
-            int(r.get("exploration_guidance_controls_relevant", 0) or 0) for r in rows),
+            int(r.get("exploration_guidance_controls_relevant", 0) or 0) for r in valid),
         "exploration_guidance_controls_mature": sum(
-            int(r.get("exploration_guidance_controls_mature", 0) or 0) for r in rows),
-        "rollbacks": sum(int(r.get("rollbacks", 0)) for r in rows),
-        "primary_vlm_requests": sum(int(r.get("primary_vlm_requests", 0)) for r in rows),
+            int(r.get("exploration_guidance_controls_mature", 0) or 0) for r in valid),
+        "rollbacks": sum(int(r.get("rollbacks", 0)) for r in valid),
+        "primary_vlm_requests": sum(int(r.get("primary_vlm_requests", 0)) for r in valid),
         "vllm_requests_endpoint_delta": sum(
-            int(r.get("vllm_requests_endpoint_delta", 0)) for r in rows),
-        "prompt_context_edges": sum(int(r.get("prompt_context_edges", 0) or 0) for r in rows),
-        "prompt_context_queries": sum(int(r.get("prompt_context_queries", 0) or 0) for r in rows),
-        "inference_skipped_steps": sum(int(r.get("inference_skipped_steps", 0)) for r in rows),
-        "two_system_skip_route_attempts": sum(int(r.get("two_system_skip_route_attempts", 0)) for r in rows),
-        "two_system_skip_route_hits": sum(int(r.get("two_system_skip_route_hits", 0)) for r in rows),
-        "two_system_bootstrap_skips": sum(int(r.get("two_system_bootstrap_skips", 0)) for r in rows),
-        "executable_memory_skip_action_records": sum(int(r.get("executable_memory_skip_action_records", 0)) for r in rows),
-        "executable_memory_route_rollback_failures": sum(int(r.get("executable_memory_route_rollback_failures", 0)) for r in rows),
-        "high_confidence_route_gate_queries": sum(int(r.get("high_confidence_route_gate_queries", 0)) for r in rows),
-        "high_confidence_route_gate_candidates": sum(int(r.get("high_confidence_route_gate_candidates", 0)) for r in rows),
-        "high_confidence_route_gate_eligible": sum(int(r.get("high_confidence_route_gate_eligible", 0)) for r in rows),
+            int(r.get("vllm_requests_endpoint_delta", 0)) for r in valid),
+        "prompt_context_edges": sum(int(r.get("prompt_context_edges", 0) or 0) for r in valid),
+        "prompt_context_queries": sum(int(r.get("prompt_context_queries", 0) or 0) for r in valid),
+        "inference_skipped_steps": sum(int(r.get("inference_skipped_steps", 0)) for r in valid),
+        "two_system_skip_route_attempts": sum(int(r.get("two_system_skip_route_attempts", 0)) for r in valid),
+        "two_system_skip_route_hits": sum(int(r.get("two_system_skip_route_hits", 0)) for r in valid),
+        "two_system_bootstrap_skips": sum(int(r.get("two_system_bootstrap_skips", 0)) for r in valid),
+        "executable_memory_skip_action_records": sum(int(r.get("executable_memory_skip_action_records", 0)) for r in valid),
+        "executable_memory_route_rollback_failures": sum(int(r.get("executable_memory_route_rollback_failures", 0)) for r in valid),
+        "high_confidence_route_gate_queries": sum(int(r.get("high_confidence_route_gate_queries", 0)) for r in valid),
+        "high_confidence_route_gate_candidates": sum(int(r.get("high_confidence_route_gate_candidates", 0)) for r in valid),
+        "high_confidence_route_gate_eligible": sum(int(r.get("high_confidence_route_gate_eligible", 0)) for r in valid),
         "high_confidence_route_gate_blocks": dict(sorted(route_gate_blocks.items())),
-        "graph_update_calls": sum(int(r.get("graph_update_calls", 0) or 0) for r in rows),
-        "graph_construction_time_s": sum(float(r.get("graph_construction_time_s", 0.0) or 0.0) for r in rows),
-        "probe_trace_ingest_wall_s": sum(float(r.get("probe_trace_ingest_wall_s", 0.0) or 0.0) for r in rows),
-        "probe_critical_path_extension_s": sum(float(r.get("probe_critical_path_extension_s", 0.0) or 0.0) for r in rows),
-        "verified_route_hits": sum(int(r.get("route_hit_count", 0) or 0) for r in rows),
-        "verified_route_misses": sum(int(r.get("route_miss_count", 0) or 0) for r in rows),
-        "skip_attempts": sum(int(r.get("skip_attempts", 0) or 0) for r in rows),
-        "skip_hits": sum(int(r.get("skip_hits", 0) or 0) for r in rows),
-        "graph_nodes_final_max": max((int(r.get("graph_nodes", 0)) for r in rows), default=0),
-        "graph_edges_final_max": max((int(r.get("graph_edges", 0)) for r in rows), default=0),
-        "graph_new_nodes": sum(int(r.get("graph_delta_nodes", 0)) for r in rows),
-        "graph_new_edges": sum(int(r.get("graph_delta_edges", 0)) for r in rows),
-        "episode_ids": sorted(r["task"] for r in rows),
+        "graph_update_calls": sum(int(r.get("graph_update_calls", 0) or 0) for r in valid),
+        "graph_construction_time_s": sum(float(r.get("graph_construction_time_s", 0.0) or 0.0) for r in valid),
+        "probe_trace_ingest_wall_s": sum(float(r.get("probe_trace_ingest_wall_s", 0.0) or 0.0) for r in valid),
+        "probe_critical_path_extension_s": sum(float(r.get("probe_critical_path_extension_s", 0.0) or 0.0) for r in valid),
+        "verified_route_hits": sum(int(r.get("route_hit_count", 0) or 0) for r in valid),
+        "verified_route_misses": sum(int(r.get("route_miss_count", 0) or 0) for r in valid),
+        "skip_attempts": sum(int(r.get("skip_attempts", 0) or 0) for r in valid),
+        "skip_hits": sum(int(r.get("skip_hits", 0) or 0) for r in valid),
+        "graph_nodes_final_max": max((int(r.get("graph_nodes", 0)) for r in valid), default=0),
+        "graph_edges_final_max": max((int(r.get("graph_edges", 0)) for r in valid), default=0),
+        "graph_new_nodes": sum(int(r.get("graph_delta_nodes", 0)) for r in valid),
+        "graph_new_edges": sum(int(r.get("graph_delta_edges", 0)) for r in valid),
+        "episode_ids": sorted(r["task"] for r in valid),
     }
   base = {r["task"]: r for r in by_arm.get("baseline", [])}
   comparisons: dict[str, Any] = {}
@@ -1282,17 +1283,18 @@ def _summarize(records: list[dict[str, Any]], protocol: dict[str, Any]) -> dict[
     if arm == "baseline":
       continue
     paired = [(base[r["task"]], r) for r in rows if r["task"] in base]
-    success_diffs = [float(b["success"]) - float(a["success"]) for a, b in paired]
     valid_step_pairs = [(a, b) for a, b in paired
                         if a.get("evaluator_complete") and b.get("evaluator_complete")
                         and isinstance(a.get("episode_steps"), (int, float))
                         and isinstance(b.get("episode_steps"), (int, float))]
+    success_diffs = [float(b["success"]) - float(a["success"]) for a, b in valid_step_pairs]
     all_step_diffs = [float(b["episode_steps"]) - float(a["episode_steps"])
                       for a, b in valid_step_pairs]
-    common_success = [(a, b) for a, b in paired if a.get("success") and b.get("success")]
+    common_success = [(a, b) for a, b in valid_step_pairs if a.get("success") and b.get("success")]
     success_step_diffs = [float(b["episode_steps"]) - float(a["episode_steps"]) for a, b in common_success]
     comparisons[arm] = {
         "paired_n": len(paired),
+        "paired_evaluator_n": len(valid_step_pairs),
         "paired_step_n": len(valid_step_pairs),
         "paired_success_rate_delta": _mean(success_diffs),
         "paired_success_rate_delta_bootstrap_95": _bootstrap_mean_ci(success_diffs, 34030 + len(arm)),
@@ -1302,9 +1304,9 @@ def _summarize(records: list[dict[str, Any]], protocol: dict[str, Any]) -> dict[
         "paired_common_success_steps_delta_variant_minus_baseline": _mean(success_step_diffs),
         "paired_common_success_steps_delta_bootstrap_95": _bootstrap_mean_ci(success_step_diffs, 34032 + len(arm)),
         "point_estimate_meets_success_noninferiority": bool(
-            paired and _mean(success_diffs) is not None and _mean(success_diffs) >= 0.0),
+            valid_step_pairs and _mean(success_diffs) is not None and _mean(success_diffs) >= 0.0),
         "paired_success_ci_lower_ge_zero": bool(
-            paired and _bootstrap_mean_ci(success_diffs, 34030 + len(arm))[0] is not None
+            valid_step_pairs and _bootstrap_mean_ci(success_diffs, 34030 + len(arm))[0] is not None
             and _bootstrap_mean_ci(success_diffs, 34030 + len(arm))[0] >= 0.0),
         "point_estimate_reduces_all_steps": bool(
             all_step_diffs and _mean(all_step_diffs) is not None and _mean(all_step_diffs) < 0.0),
@@ -1314,7 +1316,11 @@ def _summarize(records: list[dict[str, Any]], protocol: dict[str, Any]) -> dict[
   return {"arms": arms_summary, "paired_vs_baseline": comparisons,
           "n_planned_tasks": len(protocol["tasks"]),
           "n_planned_arms": len(protocol["arms"]),
-          "n_complete_task_arm_pairs": sum(len(rows) for rows in by_arm.values()),
+          "n_complete_task_arm_pairs": sum(len(
+              [r for r in rows if r.get("evaluator_complete")
+               and isinstance(r.get("episode_steps"), (int, float))])
+              for rows in by_arm.values()),
+          "n_recorded_task_arm_pairs": sum(len(rows) for rows in by_arm.values()),
           "interpretation": "Success-rate non-inferiority is not established by point estimates alone; inspect paired confidence intervals and sample size.",
           "records": records}
 
@@ -1394,8 +1400,9 @@ def analyze(root: Path, protocol: dict[str, Any]) -> dict[str, Any]:
       "",
       "## Main outcomes",
       "",
-      "| Arm | Trials | Evaluated steps | Exceptions | Success | Success rate (Wilson 95% CI) | Total observed actions | Mean actions | Mean actions, success only | VLLM requests (endpoint delta) | Probe observations | Rollbacks | Prompt graph edges | Skip hits / attempts | New graph nodes / edges |",
-      "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
+      "Success rate and method metrics use evaluator-complete episodes only. Incomplete or infrastructure-exception rows are reported as unscored, not treated as method failures.",
+      "| Arm | Records | Evaluated | Unscored | Exceptions | Successes | Success rate (Wilson 95% CI) | Total observed actions | Mean actions | Mean actions, success only | VLLM requests (endpoint delta) | Probe observations | Rollbacks | Prompt graph edges | Skip hits / attempts | New graph nodes / edges |",
+      "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
   ]
   for name in arm_names:
     row = summaries[name]
@@ -1404,7 +1411,7 @@ def analyze(root: Path, protocol: dict[str, Any]) -> dict[str, Any]:
     ci = "n/a" if lo is None else f"[{lo:.1%}, {hi:.1%}]"
     def fmt(value: Any) -> str:
       return "n/a" if value is None else f"{float(value):.2f}"
-    lines.append(f"| {name} | {row['n_trials']} | {row['n_evaluator_complete']} | {row['n_episode_exceptions']} | {row['n_success']} | {pct} ({ci}) | {row['total_steps_all_completed']} | {fmt(row['mean_steps_all_completed'])} | {fmt(row['mean_steps_successes'])} | {row['vllm_requests_endpoint_delta']} | {row['probe_observations']} | {row['rollbacks']} | {row['prompt_context_edges']} | {row['skip_hits']} / {row['skip_attempts']} | {row['graph_new_nodes']} / {row['graph_new_edges']} |")
+    lines.append(f"| {name} | {row['n_recorded']} | {row['n_trials']} | {row['n_incomplete']} | {row['n_episode_exceptions']} | {row['n_success']} | {pct} ({ci}) | {row['total_steps_all_completed']} | {fmt(row['mean_steps_all_completed'])} | {fmt(row['mean_steps_successes'])} | {row['vllm_requests_endpoint_delta']} | {row['probe_observations']} | {row['rollbacks']} | {row['prompt_context_edges']} | {row['skip_hits']} / {row['skip_attempts']} | {row['graph_new_nodes']} / {row['graph_new_edges']} |")
   lines += ["", "## Graph construction overhead", "",
             "Graph update time is the sum of top-level executable-memory state/edge mutation calls; nested mutations are not counted twice. Probe-trace ingestion wall time includes parsing and surrounding ingestion work and overlaps graph update time, so the two columns must not be added. Neither measure includes graph JSON serialization or all agent-side CPU work.",
             "", "| Arm | Graph update calls | Graph mutation wall time (s) | Probe-trace ingestion wall time (s) |", "|---|---:|---:|---:|"]
@@ -1452,9 +1459,9 @@ def analyze(root: Path, protocol: dict[str, Any]) -> dict[str, Any]:
         f"{row['two_system_bootstrap_skips']} | "
         f"{row['executable_memory_route_rollback_failures']} |")
   lines += ["", "## Paired contrasts against raw baseline", "",
-            "Negative step deltas favor the graph arm. Success-rate pairs include every task with a checkpoint; episode-step pairs exclude evaluator exceptions/missing steps. Shared-success steps compare only tasks where both methods passed.",
-            "", "| Arm | Paired trials | Step pairs | Success-rate delta (95% bootstrap CI) | All-step delta (95% bootstrap CI) | Shared-success step delta (n; 95% CI) |",
-            "|---|---:|---:|---:|---:|---:|"]
+            "Negative step deltas favor the graph arm. Success-rate and step contrasts include only matched tasks where both arms have evaluator-complete results; incomplete rows remain unscored. Shared-success steps compare only tasks where both methods passed.",
+            "", "| Arm | Recorded pairs | Evaluator-complete pairs | Step pairs | Success-rate delta (95% bootstrap CI) | All-step delta (95% bootstrap CI) | Shared-success step delta (n; 95% CI) |",
+            "|---|---:|---:|---:|---:|---:|---:|"]
   for name, row in summary["paired_vs_baseline"].items():
     def ci_text(value: Any) -> str:
       if value[0] is None:
@@ -1466,7 +1473,7 @@ def analyze(root: Path, protocol: dict[str, Any]) -> dict[str, Any]:
     all_step_delta = "n/a" if all_step_delta is None else f"{all_step_delta:+.2f}"
     shared_delta = row["paired_common_success_steps_delta_variant_minus_baseline"]
     shared_delta = "n/a" if shared_delta is None else f"{shared_delta:+.2f}"
-    lines.append(f"| {name} | {row['paired_n']} | {row['paired_step_n']} | {success_delta} {ci_text(row['paired_success_rate_delta_bootstrap_95'])} | {all_step_delta} {ci_text(row['paired_all_steps_delta_bootstrap_95'])} | {row['common_success_n']}; {shared_delta} {ci_text(row['paired_common_success_steps_delta_bootstrap_95'])} |")
+    lines.append(f"| {name} | {row['paired_n']} | {row['paired_evaluator_n']} | {row['paired_step_n']} | {success_delta} {ci_text(row['paired_success_rate_delta_bootstrap_95'])} | {all_step_delta} {ci_text(row['paired_all_steps_delta_bootstrap_95'])} | {row['common_success_n']}; {shared_delta} {ci_text(row['paired_common_success_steps_delta_bootstrap_95'])} |")
   lines += [
       "",
       "## What this matrix identifies",
