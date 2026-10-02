@@ -345,7 +345,12 @@ def _wait_for_emulator(container: str, timeout_s: int = 300) -> None:
 
 
 def _preflight_worker(container: str) -> None:
-  """Verify runner imports and a real AndroidWorld gRPC tree before allocation."""
+  """Verify runner imports and a local Android UI tree before allocation.
+
+  On the idle launcher, the accessibility-forwarder path may fail to provide
+  a tree even though the local UI provider is healthy. The actual task runner
+  continues to use the frozen protocol's gRPC mode.
+  """
   code = (
       "import urllib.request; "
       "import openai, scipy, matplotlib; "
@@ -354,7 +359,7 @@ def _preflight_worker(container: str) -> None:
       "from android_world.env.android_world_controller import A11yMethod, get_controller; "
       "controller=get_controller(console_port=5554, "
       "adb_path='/opt/android/platform-tools/adb', grpc_port=8554, "
-      "a11y_method=A11yMethod.A11Y_FORWARDER_APP); "
+      "a11y_method=A11yMethod.UIAUTOMATOR); "
       "timestep=controller.reset(); "
       "elements=timestep.observation.get('ui_elements') or []; "
       "controller.close(); "

@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest import mock
 
 
 SCRIPT = Path(__file__).with_name("labserver_androidworld_graph_study.py")
@@ -95,6 +96,14 @@ class StudyTests(unittest.TestCase):
         {"episode_exception": False, "episode_steps": 0}, 0, True))
     self.assertFalse(study._is_pre_action_infra_failure(
         {"episode_exception": True, "episode_steps": 1}, 0, True))
+
+  def test_startup_preflight_uses_local_ui_provider_not_task_grpc_path(self) -> None:
+    completed = mock.Mock(returncode=0, stdout="androidworld-worker-preflight-ok 33", stderr="")
+    with mock.patch.object(study.subprocess, "run", return_value=completed) as run:
+      study._preflight_worker("study-worker")
+    command = run.call_args.args[0]
+    self.assertIn("A11yMethod.UIAUTOMATOR", command[-1])
+    self.assertNotIn("A11yMethod.A11Y_FORWARDER_APP", command[-1])
 
   def test_trace_counter_separates_mutation_and_overlapping_ingest_wall_time(self) -> None:
     with tempfile.TemporaryDirectory() as tmp:
