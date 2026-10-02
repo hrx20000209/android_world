@@ -39,6 +39,9 @@
     "client_temperature": 0.0,
     "client_top_p": 1.0,
     "a11y_method": "grpc",
+    "a11y_method_overrides": {
+      "SystemWifiTurnOffVerify": "uiautomator"
+    },
     "vllm_seed": 0,
     "task_seed": 34,
     "fixed_task_seed": true,

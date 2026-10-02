@@ -346,7 +346,12 @@ def _wait_for_emulator(container: str, timeout_s: int = 300) -> None:
 
 
 def _preflight_worker(container: str) -> None:
-  """Verify runner imports and a real AndroidWorld gRPC tree before allocation."""
+  """Verify runner imports and a local Android UI tree before allocation.
+
+  The preflight must not depend on guest networking: a previous benchmark task
+  may intentionally have disabled Wi-Fi, while the next task can still be
+  evaluated through UIAutomator.
+  """
   code = (
       "import urllib.request; "
       "import openai, scipy, matplotlib; "
@@ -355,7 +360,7 @@ def _preflight_worker(container: str) -> None:
       "from android_world.env.android_world_controller import A11yMethod, get_controller; "
       "controller=get_controller(console_port=5554, "
       "adb_path='/opt/android/platform-tools/adb', grpc_port=8554, "
-      "a11y_method=A11yMethod.A11Y_FORWARDER_APP); "
+      "a11y_method=A11yMethod.UIAUTOMATOR); "
       "timestep=controller.reset(); "
       "elements=timestep.observation.get('ui_elements') or []; "
       "controller.close(); "
@@ -535,6 +540,7 @@ def _run_one(args: argparse.Namespace, root: Path, protocol: dict[str, Any],
              container: str, endpoint: dict[str, Any], task: str,
              arm: dict[str, Any]) -> dict[str, Any]:
   arm_name = str(arm["name"])
+  a11y_method = _a11y_method_for_task(protocol, task)
   task_root = root / "episodes" / task / arm_name
   task_root.mkdir(parents=True, exist_ok=True)
   existing_rows = _read_jsonl(root / "records.jsonl")
@@ -600,6 +606,7 @@ def _run_one(args: argparse.Namespace, root: Path, protocol: dict[str, Any],
       "-e", f"PYTHONPATH={CONTAINER_SITE_OVERLAY}",
       "-e", "ANDROID_WORLD_ADB_PATH=/opt/android/platform-tools/adb",
       "-e", "ANDROID_WORLD_SERIAL=emulator-5554",
+      "-e", f"ANDROID_WORLD_A11Y_METHOD={a11y_method}",
   ]
   if arm["runner"] == "run.py":
     command = [
@@ -629,7 +636,7 @@ def _run_one(args: argparse.Namespace, root: Path, protocol: dict[str, Any],
         f"--max_depth={protocol['controls']['max_depth']}",
         f"--max_exploration_time_s={protocol['controls']['max_exploration_time_s']}",
         f"--agent_name={arm['agent']}",
-        f"--a11y_method={protocol['controls']['a11y_method']}",
+        f"--a11y_method={a11y_method}",
     ]
     if arm.get("two_system"):
       command.append("--two_system")
@@ -644,6 +651,7 @@ def _run_one(args: argparse.Namespace, root: Path, protocol: dict[str, Any],
   _atomic_json(attempt / "command_metadata.json", {
       "command_program": command[0:8], "runner": arm["runner"],
       "task": task, "arm": arm_name,
+      "a11y_method": a11y_method,
       "effective_features": {
           "two_system_enabled": bool(arm.get("two_system")),
           "executable_memory_enabled": arm.get("config") is not None,
@@ -800,6 +808,25 @@ def _validate_protocol(protocol: dict[str, Any]) -> None:
     raise ValueError("post_inference_grace_s must be finite and between 0 and 60 seconds")
   if not protocol.get("tasks") or not protocol.get("arms"):
     raise ValueError("protocol tasks/arms must not be empty")
+  a11y_overrides = controls.get("a11y_method_overrides", {})
+  if not isinstance(a11y_overrides, dict):
+    raise ValueError("a11y_method_overrides must be a task-to-method mapping")
+  unknown_override_tasks = set(a11y_overrides) - set(protocol["tasks"])
+  if unknown_override_tasks:
+    raise ValueError(
+        "a11y method overrides reference tasks outside this cohort: "
+        + ", ".join(sorted(unknown_override_tasks))
+    )
+  allowed_a11y_methods = {"grpc", "uiautomator", "fast_provider"}
+  invalid_override_methods = [
+      method for method in a11y_overrides.values()
+      if not isinstance(method, str) or method not in allowed_a11y_methods
+  ]
+  if invalid_override_methods:
+    raise ValueError(
+        "unsupported a11y method override(s): "
+        + ", ".join(sorted(map(str, invalid_override_methods)))
+    )
   names = [row.get("name") for row in protocol["arms"]]
   if len(names) != len(set(names)):
     raise ValueError("arm names must be unique")
@@ -810,6 +837,13 @@ def _validate_protocol(protocol: dict[str, Any]) -> None:
     raise ValueError("task IDs must be registry identifiers, not paths")
   if any(not re.fullmatch(r"[A-Za-z][A-Za-z0-9_]*", name) for name in names):
     raise ValueError("arm names must be safe identifiers")
+
+
+def _a11y_method_for_task(protocol: dict[str, Any], task: str) -> str:
+  controls = protocol["controls"]
+  return controls.get("a11y_method_overrides", {}).get(
+      task, controls["a11y_method"]
+  )
 
 
 def run_study(args: argparse.Namespace) -> int:
@@ -1163,6 +1197,7 @@ def analyze(root: Path, protocol: dict[str, Any]) -> dict[str, Any]:
       f"Study ID: `{root.name}`  ",
       f"Tasks planned: {len(protocol['tasks'])}; arms: {len(protocol['arms'])}  ",
       f"Controls: task seed {protocol['controls']['task_seed']} (fixed), client temperature 0, top_p 1, vLLM seed 0 for services started by this runner.",
+      "Accessibility capture is frozen per task across all arms. The Wi-Fi-off verification task uses UIAutomator because its precondition disables guest networking; all other tasks use the protocol's default gRPC capture.",
       "",
       "This report uses AndroidWorld evaluator checkpoint metadata for success and episode steps. It does not infer success from agent text. Only aggregate metrics, public task IDs, protocol details, and SVG charts are intended for publication; raw prompts, goals, screenshots, logs, and checkpoints remain server-side.",
       "",

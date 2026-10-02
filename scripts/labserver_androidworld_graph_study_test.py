@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest import mock
 
 
 SCRIPT = Path(__file__).with_name("labserver_androidworld_graph_study.py")
@@ -27,6 +28,13 @@ class StudyTests(unittest.TestCase):
     self.assertEqual(self.protocol["controls"]["client_temperature"], 0.0)
     self.assertEqual(self.protocol["controls"]["client_top_p"], 1.0)
     self.assertEqual(self.protocol["controls"]["a11y_method"], "grpc")
+    self.assertEqual(
+        study._a11y_method_for_task(self.protocol, "SystemWifiTurnOffVerify"),
+        "uiautomator",
+    )
+    self.assertEqual(
+        study._a11y_method_for_task(self.protocol, "FilesDeleteFile"), "grpc"
+    )
     self.assertEqual(len(self.protocol["tasks"]), 30)
     self.assertEqual(
         [row["name"] for row in self.protocol["arms"]],
@@ -35,6 +43,29 @@ class StudyTests(unittest.TestCase):
          "graph_post_fusion", "graph_verified_skip",
          "graph_skip_allow_unknown_reversibility", "graph_skip_activity_landing"],
     )
+
+  def test_a11y_overrides_must_be_in_cohort_and_supported(self) -> None:
+    protocol = json.loads(json.dumps(self.protocol))
+    protocol["controls"]["a11y_method_overrides"] = {"NotInCohort": "uiautomator"}
+    with self.assertRaisesRegex(ValueError, "outside this cohort"):
+      study._validate_protocol(protocol)
+
+    protocol["controls"]["a11y_method_overrides"] = {
+        "SystemWifiTurnOffVerify": "unknown"
+    }
+    with self.assertRaisesRegex(ValueError, "unsupported a11y method"):
+      study._validate_protocol(protocol)
+
+  def test_worker_preflight_uses_network_independent_uiautomator(self) -> None:
+    result = mock.Mock(
+        returncode=0, stdout="androidworld-worker-preflight-ok 33"
+    )
+    with mock.patch.object(study.subprocess, "run", return_value=result) as run:
+      study._preflight_worker("worker-test")
+
+    code = run.call_args.args[0][-1]
+    self.assertIn("A11yMethod.UIAUTOMATOR", code)
+    self.assertNotIn("A11yMethod.A11Y_FORWARDER_APP", code)
 
   def test_paired_metrics_use_common_successes_for_success_steps(self) -> None:
     protocol = {
