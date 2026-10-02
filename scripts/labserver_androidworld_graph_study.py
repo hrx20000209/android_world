@@ -414,12 +414,17 @@ def _checkpoint_container_path(task: str, arm: str, attempt: str,
 def _is_pre_action_infra_failure(episode: dict[str, Any], request_delta: float,
                                 request_counter_observed: bool) -> bool:
   """Identify a checkpointed reset failure that never reached the method."""
-  steps = episode.get("episode_steps")
-  no_steps = steps is None or steps == 0
   return bool(
-      episode.get("episode_exception") and no_steps
+      _is_pre_action_infra_checkpoint(episode)
       and request_counter_observed and request_delta == 0
   )
+
+
+def _is_pre_action_infra_checkpoint(episode: dict[str, Any]) -> bool:
+  """Such a checkpoint is diagnostic evidence, never a completed trial."""
+  steps = episode.get("episode_steps")
+  no_steps = steps is None or steps == 0
+  return bool(episode.get("episode_exception") and no_steps)
 
 
 def _container_attempt_active(container: str, task: str, arm: str,
@@ -567,6 +572,10 @@ def _run_one(args: argparse.Namespace, root: Path, protocol: dict[str, Any],
     extracted = _extract_episode(
         container, _checkpoint_container_path(task, arm_name, candidate.name, arm["runner"]))
     if extracted and extracted["task"] == task:
+      if _is_pre_action_infra_checkpoint(extracted):
+        # Preserve this attempt and its checkpoint as failure evidence, but
+        # never let a zero-action exception satisfy the task/arm completion set.
+        continue
       record = _make_record(task, arm_name, extracted, candidate,
                             protocol, _trace_counts(candidate), _graph_counts(root / "memory" / arm_name / "executable_memory.json"))
       record.update(_memory_metrics(candidate))

@@ -259,6 +259,20 @@ class StudyTests(unittest.TestCase):
     self.assertFalse(study._is_pre_action_infra_failure(
         {"episode_exception": True, "episode_steps": 1}, 0, True))
 
+  def test_pre_action_exception_checkpoint_is_not_adopted_as_a_completed_trial(self) -> None:
+    self.assertTrue(study._is_pre_action_infra_checkpoint({
+        "episode_exception": True, "episode_steps": 0,
+    }))
+    self.assertTrue(study._is_pre_action_infra_checkpoint({
+        "episode_exception": True, "episode_steps": None,
+    }))
+    self.assertFalse(study._is_pre_action_infra_checkpoint({
+        "episode_exception": True, "episode_steps": 1,
+    }))
+    self.assertFalse(study._is_pre_action_infra_checkpoint({
+        "episode_exception": False, "episode_steps": 0,
+    }))
+
   def test_trace_counter_separates_mutation_and_overlapping_ingest_wall_time(self) -> None:
     with tempfile.TemporaryDirectory() as tmp:
       root = Path(tmp)
