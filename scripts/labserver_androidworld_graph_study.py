@@ -249,7 +249,7 @@ def _server_options(args: argparse.Namespace, root: Path) -> list[dict[str, Any]
     # start another service while it holds its dedicated GPU.
     return []
 
-  free = _free_gpus(args.max_workers)
+  free = [] if getattr(args, "reuse_vllm_only", False) else _free_gpus(args.max_workers)
   if free:
     port = args.port_start
     for gpu in free:
@@ -761,7 +761,7 @@ def _run_one(args: argparse.Namespace, root: Path, protocol: dict[str, Any],
 
 def _resume_argv(args: argparse.Namespace) -> list[str]:
   """Rebuild the supervisor command without losing explicit publish policy."""
-  return [
+  argv = [
       sys.executable, str(Path(__file__).resolve()), "run",
       "--run-root", str(args.run_root), "--run-id", args.run_id,
       "--repo", str(args.repo), "--protocol", str(args.protocol),
@@ -775,6 +775,9 @@ def _resume_argv(args: argparse.Namespace) -> list[str]:
       "--failure-backoff-s", str(args.failure_backoff_s),
       "--publish" if args.publish else "--no-publish",
   ]
+  if getattr(args, "reuse_vllm_only", False):
+    argv.append("--reuse-vllm-only")
+  return argv
 
 
 def _make_record(task: str, arm: str, episode: dict[str, Any], attempt: Path,
@@ -1364,6 +1367,10 @@ def build_parser() -> argparse.ArgumentParser:
   run_parser.add_argument("--max-workers", type=int, default=3)
   run_parser.add_argument("--port-start", type=int, default=8093)
   run_parser.add_argument("--reuse-vllm-port", type=int)
+  run_parser.add_argument(
+      "--reuse-vllm-only", action="store_true",
+      help="never start a vLLM process; wait until the selected existing endpoint is idle",
+  )
   run_parser.add_argument("--idle-window-s", type=int, default=20)
   run_parser.add_argument("--resource-poll-s", type=int, default=300)
   run_parser.add_argument("--vllm-start-timeout-s", type=int, default=900)
@@ -1390,6 +1397,8 @@ def main() -> int:
       raise SystemExit("--max-workers must be between 1 and 3")
     if args.reuse_vllm_port == -1:
       args.reuse_vllm_port = None
+    if args.reuse_vllm_only and args.reuse_vllm_port is None:
+      raise SystemExit("--reuse-vllm-only requires --reuse-vllm-port")
     return run_study(args)
   if args.command == "status":
     root = args.run_root.resolve()

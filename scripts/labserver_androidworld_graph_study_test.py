@@ -126,6 +126,48 @@ class StudyTests(unittest.TestCase):
     ):
       self.assertFalse(study._endpoint_idle(8095, 20))
 
+  def test_reuse_only_skips_gpu_discovery_and_never_starts_a_server(self) -> None:
+    args = study.argparse.Namespace(
+        max_workers=1, port_start=8093, reuse_vllm_port=8096,
+        idle_window_s=20, reuse_vllm_only=True,
+    )
+    with tempfile.TemporaryDirectory() as tmp, mock.patch.object(
+        study, "_load_services", return_value=[]
+    ), mock.patch.object(study, "_free_gpus") as free_gpus, mock.patch.object(
+        study, "_endpoint_idle", return_value=True
+    ) as endpoint_idle:
+      services = study._server_options(args, Path(tmp))
+    free_gpus.assert_not_called()
+    endpoint_idle.assert_called_once_with(8096, 20, Path(tmp) / "status.json")
+    self.assertEqual(len(services), 1)
+    self.assertFalse(services[0]["owned"])
+
+  def test_reuse_only_waits_instead_of_starting_when_endpoint_is_busy(self) -> None:
+    args = study.argparse.Namespace(
+        max_workers=1, port_start=8093, reuse_vllm_port=8096,
+        idle_window_s=20, reuse_vllm_only=True,
+    )
+    with tempfile.TemporaryDirectory() as tmp, mock.patch.object(
+        study, "_load_services", return_value=[]
+    ), mock.patch.object(study, "_free_gpus") as free_gpus, mock.patch.object(
+        study, "_endpoint_idle", return_value=False
+    ):
+      services = study._server_options(args, Path(tmp))
+    free_gpus.assert_not_called()
+    self.assertEqual(services, [])
+
+  def test_resume_command_preserves_reuse_only_policy(self) -> None:
+    args = study.argparse.Namespace(
+        run_root=Path("/runs/test"), run_id="test", repo=Path("/repo"),
+        protocol=Path("/protocol.json"), image="image", model_dir="model",
+        vllm_python="python", vllm_cwd="/tmp", max_workers=1,
+        port_start=8093, reuse_vllm_port=8096, idle_window_s=20,
+        resource_poll_s=300, vllm_start_timeout_s=900,
+        episode_timeout_s=5400, failure_backoff_s=300, publish=False,
+        reuse_vllm_only=True,
+    )
+    self.assertIn("--reuse-vllm-only", study._resume_argv(args))
+
   def test_paired_metrics_use_common_successes_for_success_steps(self) -> None:
     protocol = {
         "tasks": ["A", "B", "C"],
