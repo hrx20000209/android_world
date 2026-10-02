@@ -1305,6 +1305,19 @@ def _summarize(records: list[dict[str, Any]], protocol: dict[str, Any]) -> dict[
           "records": records}
 
 
+def _accessibility_report_text(protocol: dict[str, Any]) -> str:
+  controls = protocol.get("controls") or {}
+  default_method = str(controls.get("a11y_method") or "unspecified")
+  overrides = controls.get("a11y_method_overrides") or {}
+  if not overrides:
+    return ("Accessibility capture is frozen per task across all arms and uses the "
+            f"configured default `{default_method}`; no task-specific overrides are set.")
+  details = ", ".join(
+      f"`{task}`=`{method}`" for task, method in sorted(overrides.items()))
+  return ("Accessibility capture is frozen per task across all arms. "
+          f"Default `{default_method}`; task-specific overrides: {details}.")
+
+
 def analyze(root: Path, protocol: dict[str, Any]) -> dict[str, Any]:
   records = _read_jsonl(root / "records.jsonl")
   records = _attach_memory_summary_snapshots(root, records, protocol)
@@ -1357,7 +1370,7 @@ def analyze(root: Path, protocol: dict[str, Any]) -> dict[str, Any]:
       f"Study ID: `{root.name}`  ",
       f"Tasks planned: {len(protocol['tasks'])}; arms: {len(protocol['arms'])}  ",
       f"Controls: task seed {protocol['controls']['task_seed']} (fixed), client temperature 0, top_p 1, vLLM seed 0 for services started by this runner.",
-      "Accessibility capture is frozen per task across all arms. The Wi-Fi-off verification task uses UIAutomator because its precondition disables guest networking; all other tasks use the protocol's default gRPC capture.",
+      _accessibility_report_text(protocol),
       "",
       "This report uses AndroidWorld evaluator checkpoint metadata for success and episode steps. It does not infer success from agent text. Only aggregate metrics, public task IDs, protocol details, and SVG charts are intended for publication; raw prompts, goals, screenshots, logs, and checkpoints remain server-side.",
       "VLM request totals use the per-episode vLLM successful-request counter delta. Local primary request traces remain in the per-task CSV for diagnostics; they can be absent for some runner modes. When reusing a shared endpoint, concurrent external clients could affect endpoint deltas, so interpret them with service ownership and the idle-check record.",

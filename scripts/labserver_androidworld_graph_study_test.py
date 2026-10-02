@@ -57,6 +57,19 @@ class StudyTests(unittest.TestCase):
     with self.assertRaisesRegex(ValueError, "unsupported a11y method"):
       study._validate_protocol(protocol)
 
+  def test_report_describes_protocol_accessibility_method_without_assumptions(self) -> None:
+    self.assertIn(
+        "default `grpc`; no task-specific overrides",
+        study._accessibility_report_text({"controls": {"a11y_method": "grpc"}}),
+    )
+    self.assertIn(
+        "`SystemWifiTurnOffVerify`=`uiautomator`",
+        study._accessibility_report_text({"controls": {
+            "a11y_method": "grpc",
+            "a11y_method_overrides": {"SystemWifiTurnOffVerify": "uiautomator"},
+        }}),
+    )
+
   def test_wifi_uia_protocol_is_a_matched_infrastructure_pilot(self) -> None:
     path = study.DEFAULT_PROTOCOL.with_name("protocol_wifi_uia_infra_pilot.json")
     protocol = json.loads(path.read_text(encoding="utf-8"))
