@@ -541,13 +541,35 @@ def _memory_metrics(attempt: Path) -> dict[str, Any]:
           "prompt_context_count", "prompt_context_edges", "skip_attempts",
           "skip_hits", "route_hit_count", "route_miss_count", "recovery_failures",
           "state_merges", "graph_overrides", "graph_rejections", "probe_rounds",
-          "probes_completed")
+          "probe_rounds_complete", "probes_target", "probes_completed",
+          "retrieval_path_candidates")
   result = {key: metrics.get(key) for key in keys if key in metrics}
+  if isinstance(metrics.get("stop_reasons"), dict):
+    result["probe_stop_reasons"] = metrics["stop_reasons"]
   if "extra_time_s" in metrics:
     result["probe_critical_path_extension_s"] = metrics["extra_time_s"]
   result.update({key: data[key] for key in
                  ("node_count", "edge_count", "sample_count", "skill_count") if key in data})
   return result
+
+
+def _attach_memory_summary_snapshots(
+    root: Path, records: list[dict[str, Any]], protocol: dict[str, Any],
+) -> list[dict[str, Any]]:
+  """Reload safe per-attempt metric snapshots omitted by older supervisors."""
+  tasks = set(protocol.get("tasks") or [])
+  arms = {str(row.get("name")) for row in protocol.get("arms") or []}
+  enriched = []
+  for source in records:
+    row = dict(source)
+    task, arm, attempt_id = row.get("task"), row.get("arm"), row.get("attempt_id")
+    if (task in tasks and arm in arms and isinstance(attempt_id, str)
+        and re.fullmatch(r"attempt-\d{2,}", attempt_id)):
+      snapshot = root / "episodes" / str(task) / str(arm) / attempt_id
+      metrics = _memory_metrics(snapshot)
+      row.update(metrics)
+    enriched.append(row)
+  return enriched
 
 
 def _run_one(args: argparse.Namespace, root: Path, protocol: dict[str, Any],
@@ -1020,12 +1042,24 @@ def _wilson(successes: int, n: int, z: float = 1.96) -> tuple[float | None, floa
   return max(0.0, center - radius), min(1.0, center + radius)
 
 
-def _reconstruct_graph_deltas(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
-  """Recover per-task graph growth from cumulative, attempt-level snapshots.
+_CUMULATIVE_MEMORY_COUNTERS = (
+    "exploration_guidance_queries", "prompt_context_queries",
+    "prompt_context_count", "prompt_context_edges", "skip_attempts",
+    "skip_hits", "route_hit_count", "route_miss_count", "recovery_failures",
+    "state_merges", "graph_overrides", "graph_rejections", "probe_rounds",
+    "probe_rounds_complete", "probes_target", "probes_completed",
+    "retrieval_path_candidates",
+)
+
+
+def _reconstruct_snapshot_deltas(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+  """Recover per-trial graph growth and cumulative memory-counter deltas.
 
   The shared graph JSON is container-owned and may be unreadable to the host
-  supervisor. Per-attempt executable-memory summaries are readable and store
-  cumulative graph counts, so difference those snapshots in completion order.
+  supervisor. Per-attempt executable-memory summaries are readable but store
+  cumulative graph counts and counters. Difference those snapshots in task
+  completion order before computing arm aggregates; otherwise every trial
+  repeats all previous graph, prompt, probe, and route metrics.
   """
   normalized = [dict(row) for row in records]
   by_arm: dict[str, list[tuple[int, dict[str, Any]]]] = {}
@@ -1035,6 +1069,8 @@ def _reconstruct_graph_deltas(records: list[dict[str, Any]]) -> list[dict[str, A
     rows.sort(key=lambda pair: (str(pair[1].get("finished_at") or ""), pair[0]))
     previous_nodes = 0
     previous_edges = 0
+    previous_metrics: dict[str, float] = {}
+    previous_stop_reasons: dict[str, int] = {}
     for _, row in rows:
       node_count = row.get("node_count")
       edge_count = row.get("edge_count")
@@ -1051,6 +1087,33 @@ def _reconstruct_graph_deltas(records: list[dict[str, Any]]) -> list[dict[str, A
         row["graph_delta_edges"] = max(0, current_edges - previous_edges)
         row["graph_delta_source"] = "successive_arm_snapshots"
         previous_nodes, previous_edges = current_nodes, current_edges
+        metric_fields = [key for key in _CUMULATIVE_MEMORY_COUNTERS
+                         if isinstance(row.get(key), (int, float))
+                         and not isinstance(row.get(key), bool)]
+        for key in metric_fields:
+          cumulative = float(row[key])
+          row[key] = max(0, cumulative - previous_metrics.get(key, 0.0))
+          previous_metrics[key] = cumulative
+        cumulative_extra_time = row.get("probe_critical_path_extension_s")
+        if (isinstance(cumulative_extra_time, (int, float))
+            and not isinstance(cumulative_extra_time, bool)):
+          row["probe_critical_path_extension_s"] = max(
+              0.0, float(cumulative_extra_time)
+              - previous_metrics.get("probe_critical_path_extension_s", 0.0))
+          previous_metrics["probe_critical_path_extension_s"] = float(cumulative_extra_time)
+        stop_reasons = row.get("probe_stop_reasons")
+        if isinstance(stop_reasons, dict):
+          current_stop_reasons = {
+              str(key): max(0, int(value)) for key, value in stop_reasons.items()
+              if isinstance(value, (int, float)) and not isinstance(value, bool)
+          }
+          row["probe_stop_reasons"] = {
+              key: max(0, value - previous_stop_reasons.get(key, 0))
+              for key, value in current_stop_reasons.items()
+              if value - previous_stop_reasons.get(key, 0) > 0
+          }
+          previous_stop_reasons = current_stop_reasons
+        row["memory_metric_delta_source"] = "successive_arm_snapshots"
       else:
         row.setdefault("graph_nodes", 0)
         row.setdefault("graph_edges", 0)
@@ -1113,7 +1176,7 @@ def _svg_bars(title: str, labels: list[str], values: list[float], ylabel: str,
 
 
 def _summarize(records: list[dict[str, Any]], protocol: dict[str, Any]) -> dict[str, Any]:
-  records = _reconstruct_graph_deltas(records)
+  records = _reconstruct_snapshot_deltas(records)
   by_arm: dict[str, list[dict[str, Any]]] = {arm["name"]: [] for arm in protocol["arms"]}
   for row in records:
     if row.get("status") == "complete" and row.get("arm") in by_arm:
@@ -1123,8 +1186,10 @@ def _summarize(records: list[dict[str, Any]], protocol: dict[str, Any]) -> dict[
     valid = [r for r in rows if r.get("evaluator_complete") and isinstance(r.get("episode_steps"), (int, float))]
     success = [r for r in rows if r.get("success")]
     route_gate_blocks: Counter[str] = Counter()
+    probe_stop_reasons: Counter[str] = Counter()
     for row in rows:
       route_gate_blocks.update(row.get("high_confidence_route_gate_blocks") or {})
+      probe_stop_reasons.update(row.get("probe_stop_reasons") or {})
     n_success = len(success)
     ci = _wilson(n_success, len(rows))
     all_steps = [float(r["episode_steps"]) for r in valid]
@@ -1142,6 +1207,20 @@ def _summarize(records: list[dict[str, Any]], protocol: dict[str, Any]) -> dict[
         "total_steps_successes": sum(success_steps),
         "probe_events": sum(int(r.get("probe_events", 0)) for r in rows),
         "probe_observations": sum(int(r.get("probe_observations", 0)) for r in rows),
+        "probe_rounds": sum(int(r.get("probe_rounds", 0) or 0) for r in rows),
+        "probe_rounds_complete": sum(int(r.get("probe_rounds_complete", 0) or 0) for r in rows),
+        "probes_target": sum(int(r.get("probes_target", 0) or 0) for r in rows),
+        "probes_completed": sum(int(r.get("probes_completed", 0) or 0) for r in rows),
+        "retrieval_path_candidates": sum(int(r.get("retrieval_path_candidates", 0) or 0) for r in rows),
+        "probe_round_completion_rate": (
+            sum(int(r.get("probe_rounds_complete", 0) or 0) for r in rows)
+            / sum(int(r.get("probe_rounds", 0) or 0) for r in rows)
+            if sum(int(r.get("probe_rounds", 0) or 0) for r in rows) else None),
+        "probe_budget_utilization": (
+            sum(int(r.get("probes_completed", 0) or 0) for r in rows)
+            / sum(int(r.get("probes_target", 0) or 0) for r in rows)
+            if sum(int(r.get("probes_target", 0) or 0) for r in rows) else None),
+        "probe_stop_reasons": dict(sorted(probe_stop_reasons.items())),
         "rollbacks": sum(int(r.get("rollbacks", 0)) for r in rows),
         "primary_vlm_requests": sum(int(r.get("primary_vlm_requests", 0)) for r in rows),
         "vllm_requests_endpoint_delta": sum(
@@ -1217,6 +1296,7 @@ def _summarize(records: list[dict[str, Any]], protocol: dict[str, Any]) -> dict[
 
 def analyze(root: Path, protocol: dict[str, Any]) -> dict[str, Any]:
   records = _read_jsonl(root / "records.jsonl")
+  records = _attach_memory_summary_snapshots(root, records, protocol)
   summary = _summarize(records, protocol)
   analysis_records = summary["records"]
   _atomic_json(root / "aggregate_summary.json", {key: value for key, value in summary.items() if key != "records"})
@@ -1230,6 +1310,8 @@ def analyze(root: Path, protocol: dict[str, Any]) -> dict[str, Any]:
               "executable_memory_route_rollback_failures",
               "high_confidence_route_gate_queries", "high_confidence_route_gate_candidates",
               "high_confidence_route_gate_eligible", "high_confidence_route_gate_blocks",
+              "probe_rounds", "probe_rounds_complete", "probes_target", "probes_completed",
+              "retrieval_path_candidates", "probe_stop_reasons",
               "graph_delta_edges", "extra_time_s", "exploration_guidance_queries",
               "graph_update_calls", "graph_construction_time_s", "probe_trace_ingest_wall_s",
               "probe_critical_path_extension_s",
@@ -1241,6 +1323,8 @@ def analyze(root: Path, protocol: dict[str, Any]) -> dict[str, Any]:
         **row,
         "high_confidence_route_gate_blocks": json.dumps(
             row.get("high_confidence_route_gate_blocks") or {}, sort_keys=True),
+        "probe_stop_reasons": json.dumps(
+            row.get("probe_stop_reasons") or {}, sort_keys=True),
     } for row in analysis_records)
 
   arm_names = [arm["name"] for arm in protocol["arms"]]
@@ -1287,6 +1371,20 @@ def analyze(root: Path, protocol: dict[str, Any]) -> dict[str, Any]:
   for name in arm_names:
     row = summaries[name]
     lines.append(f"| {name} | {row['graph_update_calls']} | {row['graph_construction_time_s']:.4f} | {row['probe_trace_ingest_wall_s']:.4f} |")
+  lines += ["", "## Exploration budget and route retrieval", "",
+            "Probe target is the per-round maximum, not a mandatory minimum. `Complete rounds` means the full configured target was finished; utilization is diagnostic rather than a success objective. `retrieval_path_candidates` counts graph paths before task-relevance filtering, while executable route candidates count paths surviving the task-relevance filter. The two counts separate missing graph coverage from overly strict matching.",
+            "", "| Arm | Probe rounds | Full-budget rounds | Probes completed / max target | Full-budget rate | Budget utilization | Paths before relevance filter | Prompt route edges | Executable route candidates | Probe stop reasons |", "|---|---:|---:|---:|---:|---:|---:|---:|---:|---|"]
+  for name in arm_names:
+    row = summaries[name]
+    round_rate = "n/a" if row["probe_round_completion_rate"] is None else f"{row['probe_round_completion_rate']:.1%}"
+    budget_rate = "n/a" if row["probe_budget_utilization"] is None else f"{row['probe_budget_utilization']:.1%}"
+    stop_reasons = ", ".join(
+        f"{key}:{value}" for key, value in row["probe_stop_reasons"].items()) or "none"
+    lines.append(
+        f"| {name} | {row['probe_rounds']} | {row['probe_rounds_complete']} | "
+        f"{row['probes_completed']} / {row['probes_target']} | {round_rate} | "
+        f"{budget_rate} | {row['retrieval_path_candidates']} | "
+        f"{row['prompt_context_edges']} | {row['high_confidence_route_gate_candidates']} | {stop_reasons} |")
   lines += ["", "## Verified inference-skip diagnostics", "",
             "Executable-memory route gates and the independent two-system SkipInferenceGate are reported separately. A gate candidate is not a skip hit; only a live-validated route/action is counted as a hit. Bootstrap app-open skips are separated because the evaluator action still continues.",
             "", "| Arm | Route-gate queries | Retrieved candidates | Eligible routes | Gate blocks | Executable-memory skip hits / attempts | Two-system route hits / attempts | Bootstrap skips | Route rollback failures |",

@@ -239,29 +239,50 @@ class StudyTests(unittest.TestCase):
          "primary_vlm_requests": 5, "vllm_requests_endpoint_delta": 5},
         {"status": "complete", "task": "A", "arm": "graph_build_only", "success": True,
          "evaluator_complete": True, "episode_steps": 5,
-         "primary_vlm_requests": 0, "vllm_requests_endpoint_delta": 5},
+         "primary_vlm_requests": 0, "vllm_requests_endpoint_delta": 5,
+         "probe_rounds": 4, "probe_rounds_complete": 1,
+         "probes_target": 8, "probes_completed": 5,
+         "retrieval_path_candidates": 7,
+         "probe_stop_reasons": {"inference_preempted": 3}},
     ]
     summary = study._summarize(rows, protocol)
     build = summary["arms"]["graph_build_only"]
     self.assertEqual(build["primary_vlm_requests"], 0)
     self.assertEqual(build["vllm_requests_endpoint_delta"], 5)
+    self.assertEqual(build["probe_rounds"], 4)
+    self.assertEqual(build["probe_rounds_complete"], 1)
+    self.assertEqual(build["probes_target"], 8)
+    self.assertEqual(build["probes_completed"], 5)
+    self.assertEqual(build["probe_budget_utilization"], 5 / 8)
+    self.assertEqual(build["retrieval_path_candidates"], 7)
+    self.assertEqual(build["probe_stop_reasons"], {"inference_preempted": 3})
 
-  def test_graph_deltas_reconstruct_from_cumulative_arm_snapshots(self) -> None:
+  def test_cumulative_snapshots_reconstruct_graph_and_memory_metric_deltas(self) -> None:
     protocol = {
         "tasks": ["A", "B"],
         "arms": [{"name": "baseline"}, {"name": "graph_build_only"}],
     }
     rows = [
         {"status": "complete", "task": "B", "arm": "graph_build_only",
-         "finished_at": "2026-10-02T02:00:00+00:00", "success": True,
-         "evaluator_complete": True, "episode_steps": 7,
+        "finished_at": "2026-10-02T02:00:00+00:00", "success": True,
+        "evaluator_complete": True, "episode_steps": 7,
          "graph_nodes": 0, "graph_edges": 0, "graph_delta_nodes": 0,
-         "graph_delta_edges": 0, "node_count": 4, "edge_count": 3},
+         "graph_delta_edges": 0, "node_count": 4, "edge_count": 3,
+         "probe_rounds": 6, "probe_rounds_complete": 2,
+         "probes_target": 12, "probes_completed": 9,
+         "retrieval_path_candidates": 11, "prompt_context_queries": 10,
+         "probe_critical_path_extension_s": 6.0,
+         "probe_stop_reasons": {"inference_preempted": 4, "budget_exhausted": 1}},
         {"status": "complete", "task": "A", "arm": "graph_build_only",
          "finished_at": "2026-10-02T01:00:00+00:00", "success": True,
          "evaluator_complete": True, "episode_steps": 5,
          "graph_nodes": 0, "graph_edges": 0, "graph_delta_nodes": 0,
-         "graph_delta_edges": 0, "node_count": 2, "edge_count": 1},
+         "graph_delta_edges": 0, "node_count": 2, "edge_count": 1,
+         "probe_rounds": 4, "probe_rounds_complete": 1,
+         "probes_target": 8, "probes_completed": 5,
+         "retrieval_path_candidates": 7, "prompt_context_queries": 3,
+         "probe_critical_path_extension_s": 4.5,
+         "probe_stop_reasons": {"inference_preempted": 3}},
     ]
     summary = study._summarize(rows, protocol)
     graph = summary["arms"]["graph_build_only"]
@@ -272,6 +293,26 @@ class StudyTests(unittest.TestCase):
     self.assertEqual(by_task["A"]["graph_delta_edges"], 1)
     self.assertEqual(by_task["B"]["graph_delta_nodes"], 2)
     self.assertEqual(by_task["B"]["graph_delta_edges"], 2)
+    self.assertEqual(by_task["B"]["probe_rounds"], 2)
+    self.assertEqual(by_task["B"]["probes_target"], 4)
+    self.assertEqual(by_task["B"]["probes_completed"], 4)
+    self.assertEqual(by_task["B"]["retrieval_path_candidates"], 4)
+    self.assertEqual(by_task["B"]["prompt_context_queries"], 7)
+    self.assertAlmostEqual(by_task["B"]["probe_critical_path_extension_s"], 1.5)
+    self.assertEqual(by_task["B"]["probe_stop_reasons"], {
+        "inference_preempted": 1, "budget_exhausted": 1,
+    })
+    graph = summary["arms"]["graph_build_only"]
+    self.assertEqual(graph["probe_rounds"], 6)
+    self.assertEqual(graph["probe_rounds_complete"], 2)
+    self.assertEqual(graph["probes_target"], 12)
+    self.assertEqual(graph["probes_completed"], 9)
+    self.assertEqual(graph["retrieval_path_candidates"], 11)
+    self.assertEqual(graph["prompt_context_queries"], 10)
+    self.assertAlmostEqual(graph["probe_budget_utilization"], 9 / 12)
+    self.assertEqual(graph["probe_stop_reasons"], {
+        "budget_exhausted": 1, "inference_preempted": 4,
+    })
 
   def test_checkpointed_evaluator_exceptions_count_as_failures(self) -> None:
     protocol = {
@@ -367,6 +408,64 @@ class StudyTests(unittest.TestCase):
       self.assertEqual(counts["high_confidence_route_gate_blocks"], {
           "passed": 1, "task_object_mismatch": 1,
       })
+
+  def test_memory_summary_keeps_probe_completion_and_prefiltered_routes(self) -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+      runner_output = Path(tmp) / "runner_output"
+      runner_output.mkdir()
+      summary = {
+          "metrics": {
+              "probe_rounds": 4,
+              "probe_rounds_complete": 1,
+              "probes_target": 8,
+              "probes_completed": 5,
+              "retrieval_path_candidates": 7,
+              "five_probe_completion_rate": 0.25,
+              "stop_reasons": {"inference_preempted": 3},
+          },
+          "node_count": 9,
+          "edge_count": 11,
+          "sample_count": 5,
+          "skill_count": 0,
+      }
+      (runner_output / "executable_memory_summary.json").write_text(
+          json.dumps(summary), encoding="utf-8")
+
+      result = study._memory_metrics(Path(tmp))
+
+      self.assertEqual(result["probe_rounds_complete"], 1)
+      self.assertEqual(result["probes_target"], 8)
+      self.assertEqual(result["probes_completed"], 5)
+      self.assertEqual(result["retrieval_path_candidates"], 7)
+      self.assertEqual(result["probe_stop_reasons"], {"inference_preempted": 3})
+
+  def test_analysis_reloads_sanitized_attempt_memory_snapshot(self) -> None:
+    protocol = {
+        "tasks": ["TaskA"],
+        "arms": [{"name": "graph"}],
+    }
+    with tempfile.TemporaryDirectory() as tmp:
+      root = Path(tmp)
+      output = root / "episodes" / "TaskA" / "graph" / "attempt-01" / "runner_output"
+      output.mkdir(parents=True)
+      summary = {
+          "metrics": {"retrieval_path_candidates": 3, "probes_completed": 2},
+          "node_count": 4, "edge_count": 3, "sample_count": 2, "skill_count": 0,
+      }
+      (output / "executable_memory_summary.json").write_text(
+          json.dumps(summary), encoding="utf-8")
+      record = {
+          "task": "TaskA", "arm": "graph", "attempt_id": "attempt-01",
+          "retrieval_path_candidates": 0, "probes_completed": 0,
+      }
+
+      enriched = study._attach_memory_summary_snapshots(root, [record], protocol)
+
+      self.assertEqual(enriched[0]["retrieval_path_candidates"], 3)
+      self.assertEqual(enriched[0]["probes_completed"], 2)
+      self.assertEqual(enriched[0]["node_count"], 4)
+      self.assertEqual(enriched[0]["edge_count"], 3)
+      self.assertNotIn("goal", enriched[0])
 
   def test_supervisor_reexec_preserves_publish_policy(self) -> None:
     for flag, expected in (("--publish", True), ("--no-publish", False)):
