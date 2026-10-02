@@ -1020,6 +1020,46 @@ def _wilson(successes: int, n: int, z: float = 1.96) -> tuple[float | None, floa
   return max(0.0, center - radius), min(1.0, center + radius)
 
 
+def _reconstruct_graph_deltas(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+  """Recover per-task graph growth from cumulative, attempt-level snapshots.
+
+  The shared graph JSON is container-owned and may be unreadable to the host
+  supervisor. Per-attempt executable-memory summaries are readable and store
+  cumulative graph counts, so difference those snapshots in completion order.
+  """
+  normalized = [dict(row) for row in records]
+  by_arm: dict[str, list[tuple[int, dict[str, Any]]]] = {}
+  for index, row in enumerate(normalized):
+    by_arm.setdefault(str(row.get("arm", "")), []).append((index, row))
+  for rows in by_arm.values():
+    rows.sort(key=lambda pair: (str(pair[1].get("finished_at") or ""), pair[0]))
+    previous_nodes = 0
+    previous_edges = 0
+    for _, row in rows:
+      node_count = row.get("node_count")
+      edge_count = row.get("edge_count")
+      has_snapshot = (
+          isinstance(node_count, (int, float)) and not isinstance(node_count, bool)
+          and isinstance(edge_count, (int, float)) and not isinstance(edge_count, bool)
+      )
+      if has_snapshot:
+        current_nodes = max(0, int(node_count))
+        current_edges = max(0, int(edge_count))
+        row["graph_nodes"] = current_nodes
+        row["graph_edges"] = current_edges
+        row["graph_delta_nodes"] = max(0, current_nodes - previous_nodes)
+        row["graph_delta_edges"] = max(0, current_edges - previous_edges)
+        row["graph_delta_source"] = "successive_arm_snapshots"
+        previous_nodes, previous_edges = current_nodes, current_edges
+      else:
+        row.setdefault("graph_nodes", 0)
+        row.setdefault("graph_edges", 0)
+        row.setdefault("graph_delta_nodes", 0)
+        row.setdefault("graph_delta_edges", 0)
+        row["graph_delta_source"] = "no_executable_memory_snapshot"
+  return normalized
+
+
 def _bootstrap_mean_ci(values: list[float], seed: int, samples: int = 4000) -> list[float | None]:
   if not values:
     return [None, None]
@@ -1073,6 +1113,7 @@ def _svg_bars(title: str, labels: list[str], values: list[float], ylabel: str,
 
 
 def _summarize(records: list[dict[str, Any]], protocol: dict[str, Any]) -> dict[str, Any]:
+  records = _reconstruct_graph_deltas(records)
   by_arm: dict[str, list[dict[str, Any]]] = {arm["name"]: [] for arm in protocol["arms"]}
   for row in records:
     if row.get("status") == "complete" and row.get("arm") in by_arm:
@@ -1177,6 +1218,7 @@ def _summarize(records: list[dict[str, Any]], protocol: dict[str, Any]) -> dict[
 def analyze(root: Path, protocol: dict[str, Any]) -> dict[str, Any]:
   records = _read_jsonl(root / "records.jsonl")
   summary = _summarize(records, protocol)
+  analysis_records = summary["records"]
   _atomic_json(root / "aggregate_summary.json", {key: value for key, value in summary.items() if key != "records"})
   with (root / "per_task_metrics.csv").open("w", encoding="utf-8", newline="") as stream:
     fields = ["task", "arm", "seed", "success", "evaluator_score", "episode_steps", "evaluator_complete",
@@ -1192,14 +1234,14 @@ def analyze(root: Path, protocol: dict[str, Any]) -> dict[str, Any]:
               "graph_update_calls", "graph_construction_time_s", "probe_trace_ingest_wall_s",
               "probe_critical_path_extension_s",
       "prompt_context_queries", "prompt_context_edges", "skip_attempts", "skip_hits", "route_hit_count",
-              "route_miss_count", "vllm_requests_endpoint_delta"]
+              "route_miss_count", "vllm_requests_endpoint_delta", "graph_delta_source"]
     writer = csv.DictWriter(stream, fieldnames=fields, extrasaction="ignore")
     writer.writeheader()
     writer.writerows({
         **row,
         "high_confidence_route_gate_blocks": json.dumps(
             row.get("high_confidence_route_gate_blocks") or {}, sort_keys=True),
-    } for row in records)
+    } for row in analysis_records)
 
   arm_names = [arm["name"] for arm in protocol["arms"]]
   summaries = summary["arms"]
@@ -1224,6 +1266,7 @@ def analyze(root: Path, protocol: dict[str, Any]) -> dict[str, Any]:
       "",
       "This report uses AndroidWorld evaluator checkpoint metadata for success and episode steps. It does not infer success from agent text. Only aggregate metrics, public task IDs, protocol details, and SVG charts are intended for publication; raw prompts, goals, screenshots, logs, and checkpoints remain server-side.",
       "VLM request totals use the per-episode vLLM successful-request counter delta. Local primary request traces remain in the per-task CSV for diagnostics; they can be absent for some runner modes. When reusing a shared endpoint, concurrent external clients could affect endpoint deltas, so interpret them with service ownership and the idle-check record.",
+      "Per-task graph deltas are reconstructed in completion order from cumulative attempt-level executable-memory summaries. The shared graph JSON may be container-owned and unreadable to the host; raw records remain preserved, while CSV and aggregates mark the derived delta source.",
       "",
       "## Main outcomes",
       "",

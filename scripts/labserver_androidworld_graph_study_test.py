@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import importlib.util
+import csv
 import json
 from pathlib import Path
 import tempfile
@@ -245,6 +246,33 @@ class StudyTests(unittest.TestCase):
     self.assertEqual(build["primary_vlm_requests"], 0)
     self.assertEqual(build["vllm_requests_endpoint_delta"], 5)
 
+  def test_graph_deltas_reconstruct_from_cumulative_arm_snapshots(self) -> None:
+    protocol = {
+        "tasks": ["A", "B"],
+        "arms": [{"name": "baseline"}, {"name": "graph_build_only"}],
+    }
+    rows = [
+        {"status": "complete", "task": "B", "arm": "graph_build_only",
+         "finished_at": "2026-10-02T02:00:00+00:00", "success": True,
+         "evaluator_complete": True, "episode_steps": 7,
+         "graph_nodes": 0, "graph_edges": 0, "graph_delta_nodes": 0,
+         "graph_delta_edges": 0, "node_count": 4, "edge_count": 3},
+        {"status": "complete", "task": "A", "arm": "graph_build_only",
+         "finished_at": "2026-10-02T01:00:00+00:00", "success": True,
+         "evaluator_complete": True, "episode_steps": 5,
+         "graph_nodes": 0, "graph_edges": 0, "graph_delta_nodes": 0,
+         "graph_delta_edges": 0, "node_count": 2, "edge_count": 1},
+    ]
+    summary = study._summarize(rows, protocol)
+    graph = summary["arms"]["graph_build_only"]
+    self.assertEqual(graph["graph_new_nodes"], 4)
+    self.assertEqual(graph["graph_new_edges"], 3)
+    by_task = {row["task"]: row for row in summary["records"]}
+    self.assertEqual(by_task["A"]["graph_delta_nodes"], 2)
+    self.assertEqual(by_task["A"]["graph_delta_edges"], 1)
+    self.assertEqual(by_task["B"]["graph_delta_nodes"], 2)
+    self.assertEqual(by_task["B"]["graph_delta_edges"], 2)
+
   def test_checkpointed_evaluator_exceptions_count_as_failures(self) -> None:
     protocol = {
         "tasks": ["A", "B"],
@@ -418,6 +446,8 @@ class StudyTests(unittest.TestCase):
           "status": "complete", "task": "A", "arm": "graph_build_only", "seed": 34,
           "success": True, "evaluator_complete": True, "episode_steps": 7,
           "primary_vlm_requests": 0, "vllm_requests_endpoint_delta": 5,
+          "graph_nodes": 0, "graph_edges": 0, "graph_delta_nodes": 0,
+          "graph_delta_edges": 0, "node_count": 4, "edge_count": 3,
       })
       study.analyze(root, protocol)
       for name in ("report.md", "aggregate_summary.json", "per_task_metrics.csv",
@@ -429,6 +459,12 @@ class StudyTests(unittest.TestCase):
       self.assertIn("| graph_build_only | 1 | 1 | 0 | 1 | 100.0%", report)
       summary = json.loads((root / "aggregate_summary.json").read_text(encoding="utf-8"))
       self.assertEqual(summary["arms"]["graph_build_only"]["vllm_requests_endpoint_delta"], 5)
+      self.assertEqual(summary["arms"]["graph_build_only"]["graph_new_nodes"], 4)
+      self.assertEqual(summary["arms"]["graph_build_only"]["graph_new_edges"], 3)
+      with (root / "per_task_metrics.csv").open(encoding="utf-8") as stream:
+        csv_rows = {row["arm"]: row for row in csv.DictReader(stream)}
+      self.assertEqual(csv_rows["graph_build_only"]["graph_nodes"], "4")
+      self.assertEqual(csv_rows["graph_build_only"]["graph_delta_source"], "successive_arm_snapshots")
       self.assertNotIn("buckwheat groats", report)
 
 
