@@ -1,0 +1,50 @@
+{
+  "source": "/Users/huangrunxi/Projects/android_world/results/sensys27_task_navigation/20261006_naive_full",
+  "arms": {
+    "base": {
+      "tasks": 116,
+      "score_sum": 63.5,
+      "success_rate_percent": 54.741379310344826,
+      "success_steps": 7.140625,
+      "mean_steps": 9.431034482758621,
+      "successful_tasks_score_positive": 64
+    },
+    "full_rec": {
+      "tasks": 116,
+      "score_sum": 63.5,
+      "success_rate_percent": 54.741379310344826,
+      "success_steps": 7.109375,
+      "mean_steps": 8.96551724137931,
+      "successful_tasks_score_positive": 64
+    },
+    "naive_graph": {
+      "tasks": 116,
+      "score_sum": 60.5,
+      "success_rate_percent": 52.1551724137931,
+      "success_steps": 6.967213114754099,
+      "mean_steps": 9.344827586206897,
+      "successful_tasks_score_positive": 61
+    },
+    "naive_explore": {
+      "tasks": 116,
+      "score_sum": 64.5,
+      "success_rate_percent": 55.60344827586207,
+      "success_steps": 7.076923076923077,
+      "mean_steps": 9.39655172413793,
+      "successful_tasks_score_positive": 65
+    },
+    "naive_use": {
+      "tasks": 116,
+      "score_sum": 63.5,
+      "success_rate_percent": 54.741379310344826,
+      "success_steps": 7.046875,
+      "mean_steps": 9.327586206896552,
+      "successful_tasks_score_positive": 64
+    }
+  },
+  "definitions": {
+    "success_rate": "Mean evaluator score, partial credit included.",
+    "success_steps": "Each arm's tasks with score > 0.",
+    "mean_steps": "All tasks, including failures."
+  }
+}

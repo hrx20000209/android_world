@@ -1,0 +1,8 @@
+arm,delete_four_steps,score_29
+base,55.0,13.0
+full_rec,33.0,15.0
+no_replay,55.0,12.0
+no_skip,33.0,15.0
+no_context,33.0,14.0
+no_explore,35.0,16.0
+explore_untargeted,33.0,13.0

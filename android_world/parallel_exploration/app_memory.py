@@ -88,6 +88,11 @@ class RememberedTransition:
   rollback_failure_count: int = 0
   inverse_level: str = ""
   last_seen: float = dataclasses.field(default_factory=time.time)
+  # Independent app-state checker verdicts for executions of this transition
+  # (app_state_checker.py): business state identical before the action and
+  # after it settled. A UI landing says nothing about persistent effects.
+  state_verified_count: int = 0
+  state_changed_count: int = 0
 
   @property
   def rollback_success_rate(self) -> float | None:
@@ -210,8 +215,12 @@ class AppMemory:
   def observe_execution(self, *, activity: str, layout_signature: str,
                         control_key: str, action: Mapping[str, Any],
                         dst_activity: str, dst_layout_signature: str,
-                        labels: Iterable[str] = (), goal: str = "") -> None:
+                        labels: Iterable[str] = (), goal: str = "",
+                        state_effect: bool | None = None) -> None:
     """The agent really took this transition; remember where it goes.
+
+    ``state_effect`` is the checker verdict: True = persistent state
+    unchanged, False = changed, None = not checked / not covered.
 
     Separate from observe_probe because the rollback statistics must not be
     touched: a real execution is never undone, so it says nothing about
@@ -239,6 +248,10 @@ class AppMemory:
       known.dst_layout_signature = dst_layout_signature
       known.dst_activity = dst_activity
       known.executed_count += 1
+      if state_effect is True:
+        known.state_verified_count += 1
+      elif state_effect is False:
+        known.state_changed_count += 1
       # One process is one task, so the first execution of this transition in
       # this process is one more task having taken it. Counting tasks rather
       # than executions is what the prefill gate needs: a task that presses
@@ -254,6 +267,30 @@ class AppMemory:
       if goal_text:
         known.goals = tuple(dict.fromkeys(known.goals + (goal_text,)))[:8]
       known.last_seen = time.time()
+
+  def record_state_effect(self, layout_signature: str, control_key: str,
+                          unchanged: bool) -> bool:
+    """Attach a checker verdict to an execution recorded earlier this step.
+
+    The verdict is only known once the landing settled, after
+    observe_execution ran. Returns False when no such execution exists.
+    """
+    with self._lock:
+      screen = self.screens.get(layout_signature)
+      known = screen.transitions.get(f"{control_key}\0EXECUTED") if screen else None
+      if known is None:
+        return False
+      if unchanged:
+        known.state_verified_count += 1
+      else:
+        known.state_changed_count += 1
+      return True
+
+  def state_certificate(self, layout_signature: str, control_key: str) -> tuple[int, int]:
+    """(times verified unchanged, times seen changing persistent state)."""
+    screen = self.screens.get(layout_signature)
+    known = screen.transitions.get(f"{control_key}\0EXECUTED") if screen else None
+    return (known.state_verified_count, known.state_changed_count) if known else (0, 0)
 
   def observe_rollback(self, activity: str, probe_type: str, *, ok: bool,
                        level: str = "") -> None:
@@ -724,6 +761,8 @@ class AppMemory:
             rollback_failure_count=int(t.get("rollback_failure_count", 0)),
             inverse_level=str(t.get("inverse_level", "")),
             last_seen=float(t.get("last_seen", 0.0)),
+            state_verified_count=int(t.get("state_verified_count", 0)),
+            state_changed_count=int(t.get("state_changed_count", 0)),
         )
         screen.transitions[f"{transition.control_key}\0{transition.probe_type}"] = transition
       memory.screens[screen.layout_signature] = screen

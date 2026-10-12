@@ -19,6 +19,7 @@ import base64
 import io
 import os
 import time
+import uuid
 from typing import Any, Optional, Tuple
 import google.generativeai as genai
 from google.generativeai import types
@@ -423,6 +424,11 @@ class LlamaCppWrapper(LlmWrapper, MultimodalLlmWrapper):
 
     def call_llama(self, messages):
         headers = {"Content-Type": "application/json"}
+        # Optional bearer token for a vLLM started with --api-key. Read from
+        # the environment only; never logged. Unset = unchanged behaviour.
+        api_key = os.environ.get("ANDROID_WORLD_LLM_API_KEY") or os.environ.get("VLLM_API_KEY")
+        if api_key:
+            headers["Authorization"] = f"Bearer {api_key}"
         payload = {
             "messages": messages,
             "temperature": self.temperature,
@@ -432,6 +438,12 @@ class LlamaCppWrapper(LlmWrapper, MultimodalLlmWrapper):
         }
         if self.model_name:
             payload["model"] = self.model_name
+        if os.environ.get("ANDROID_WORLD_LLM_NO_PREFIX_CACHE") == "1":
+            # vLLM prefix caching makes temperature-0 decoding depend on what
+            # other requests ran before (cold vs cached KV differ numerically;
+            # measured 4/12 divergent repeats). A unique salt forces the
+            # always-cold path, which reproduced 12/12.
+            payload["cache_salt"] = uuid.uuid4().hex
 
         counter = self.max_retry
         wait = self.RETRY_WAITING_SECONDS

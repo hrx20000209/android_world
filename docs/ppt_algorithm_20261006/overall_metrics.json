@@ -1,0 +1,36 @@
+{
+  "run": "/Users/huangrunxi/Projects/android_world/results/sensys27_task_navigation/20261005_full_r7",
+  "reference": "/Users/huangrunxi/Projects/android_world/results/4B_2.txt",
+  "definitions": {
+    "success_rate": "Mean evaluator score; partial credit included.",
+    "success_steps": "Unweighted mean steps over each arm's tasks with score > 0.",
+    "mean_steps": "Mean steps over all 116 tasks, including failed tasks.",
+    "comparison": "4B_2 is a historical baseline; Base and Full are from r7."
+  },
+  "arms": {
+    "4B_2": {
+      "tasks": 116,
+      "score_sum": 54.0,
+      "success_rate_percent": 46.55172413793103,
+      "successful_tasks_score_positive": 54,
+      "success_steps": 7.851851851851852,
+      "mean_steps": 10.827586206896552
+    },
+    "Base": {
+      "tasks": 116,
+      "score_sum": 63.5,
+      "success_rate_percent": 54.741379310344826,
+      "successful_tasks_score_positive": 64,
+      "success_steps": 7.140625,
+      "mean_steps": 9.431034482758621
+    },
+    "Full": {
+      "tasks": 116,
+      "score_sum": 63.5,
+      "success_rate_percent": 54.741379310344826,
+      "successful_tasks_score_positive": 64,
+      "success_steps": 7.109375,
+      "mean_steps": 8.96551724137931
+    }
+  }
+}

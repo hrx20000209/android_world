@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import abc
 import dataclasses
+import os
 import hashlib
 import json
 import re
@@ -65,6 +66,9 @@ class StateSignature:
     quantizing position coarsely, so the same screen showing different data
     resolves to the same node.
     """
+    if os.environ.get("ANDROID_WORLD_NAIVE_GRAPH") == "1":
+      # Ablation: a naive UTG keys nodes by the exact screen instance.
+      return self.struct_sig.digest
     return layout_signature(self.elements)
 
   def phash_distance(self, other: "StateSignature") -> int:
@@ -225,6 +229,8 @@ def parse_fast_elements(data: dict) -> tuple[UiElement, ...]:
             selected=bool(node.get("selected")),
             in_navigation_drawer=bool(node.get("inNavigationDrawer")),
             package=str(node.get("package") or ""),
+            focused=bool(node.get("focused")),
+            editable=bool(node.get("editable")),
         )
     )
   return tuple(elements)

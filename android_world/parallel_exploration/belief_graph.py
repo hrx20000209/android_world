@@ -6,6 +6,7 @@ import dataclasses
 import enum
 import hashlib
 import json
+import os
 import math
 import threading
 import time
@@ -48,6 +49,11 @@ def canonical_action(action: Mapping[str, Any]) -> str:
   type is lower-cased so a probe's CLICK and the agent's click are one thing.
   """
   a = dict(action)
+  if os.environ.get("ANDROID_WORLD_NAIVE_GRAPH") == "1":
+    # Ablation: a naive UTG keys edges by the raw action, coordinates included.
+    a.pop("stable_control_key", None)
+    a.pop("control_key", None)
+    return json.dumps(a, sort_keys=True, ensure_ascii=False, separators=(",", ":"), default=str)
   stable_control = a.get("stable_control_key")
   if stable_control:
     return json.dumps({
@@ -188,6 +194,9 @@ class GraphEdge:
   # merely by the action recurring, and the two look identical from the edge
   # alone - see nodes_known in the runner's reusable_edge.
   nodes_at_last_execution: int = 0
+  # Bounded, exact pre/post witnesses for task-directed navigation. Coarse
+  # node identity must not overwrite the data instance an action was seen on.
+  navigation_observations: tuple[Mapping[str, Any], ...] = ()
 
   @property
   def alignment_rate(self) -> float | None:
@@ -366,6 +375,14 @@ class ProgressiveBeliefGraph:
       edge.last_updated_generation = generation
       edge.last_updated = time.time()
       return edge
+
+  def record_navigation_observation(self, edge_id: str, observation: Mapping[str, Any]) -> None:
+    """Retain at most four independent screen contracts per transition."""
+    with self._lock:
+      # Copy nested data; a process payload or caller may later mutate it.
+      witness = json.loads(json.dumps(dict(observation), ensure_ascii=False))
+      edge = self.edges[edge_id]
+      edge.navigation_observations = (edge.navigation_observations + (witness,))[-4:]
 
   def record_rollback_result(self, edge_id: str, ok: bool, level: str = "") -> GraphEdge:
     with self._lock:

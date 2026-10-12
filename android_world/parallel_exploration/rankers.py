@@ -30,6 +30,11 @@ class UiElement:
   # without it the soft keyboard could only be recognised by resource-id
   # prefix, and its unnamed keys have no id to match (2026-09-08).
   package: str = ""
+  # Input focus and editability as the accessibility tree reports them.
+  # Excluded from equality/hash: they describe transient focus, not identity,
+  # so element comparisons and every signature behave exactly as before.
+  focused: bool = dataclasses.field(default=False, compare=False)
+  editable: bool = dataclasses.field(default=False, compare=False)
 
   @property
   def identity(self) -> str:

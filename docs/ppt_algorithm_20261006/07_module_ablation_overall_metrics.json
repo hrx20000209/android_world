@@ -1,0 +1,66 @@
+{
+  "source": "/Users/huangrunxi/Projects/android_world/results/sensys27_task_navigation/20261005_ablation_r1",
+  "arms": {
+    "base": {
+      "tasks": 29,
+      "score_sum": 13.0,
+      "success_rate_percent": 44.827586206896555,
+      "success_steps": 10.307692307692308,
+      "mean_steps": 13.068965517241379,
+      "successful_tasks_score_positive": 13
+    },
+    "full_rec": {
+      "tasks": 29,
+      "score_sum": 15.0,
+      "success_rate_percent": 51.724137931034484,
+      "success_steps": 9.8,
+      "mean_steps": 12.689655172413794,
+      "successful_tasks_score_positive": 15
+    },
+    "no_replay": {
+      "tasks": 29,
+      "score_sum": 12.0,
+      "success_rate_percent": 41.37931034482759,
+      "success_steps": 10.25,
+      "mean_steps": 12.551724137931034,
+      "successful_tasks_score_positive": 12
+    },
+    "no_skip": {
+      "tasks": 29,
+      "score_sum": 15.0,
+      "success_rate_percent": 51.724137931034484,
+      "success_steps": 9.733333333333333,
+      "mean_steps": 12.241379310344827,
+      "successful_tasks_score_positive": 15
+    },
+    "no_context": {
+      "tasks": 29,
+      "score_sum": 14.0,
+      "success_rate_percent": 48.275862068965516,
+      "success_steps": 9.428571428571429,
+      "mean_steps": 12.344827586206897,
+      "successful_tasks_score_positive": 14
+    },
+    "no_explore": {
+      "tasks": 29,
+      "score_sum": 16.0,
+      "success_rate_percent": 55.172413793103445,
+      "success_steps": 9.875,
+      "mean_steps": 12.310344827586206,
+      "successful_tasks_score_positive": 16
+    },
+    "explore_untargeted": {
+      "tasks": 29,
+      "score_sum": 13.0,
+      "success_rate_percent": 44.827586206896555,
+      "success_steps": 9.384615384615385,
+      "mean_steps": 12.655172413793103,
+      "successful_tasks_score_positive": 13
+    }
+  },
+  "definitions": {
+    "success_rate": "Mean evaluator score, partial credit included.",
+    "success_steps": "Each arm's tasks with score > 0.",
+    "mean_steps": "All tasks, including failures."
+  }
+}

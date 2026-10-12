@@ -662,3 +662,16 @@ def test_a_question_goal_may_reuse_another_question():
       "S", "Do I have any events October 28? Answer with the titles only.",
       _overlap, threshold=0.05, margin=0.02)
   assert got is not None and got[0] == "id|List||B"
+
+
+def test_state_certificate_round_trips_and_needs_an_execution():
+  memory = AppMemory("app.x")
+  assert not memory.record_state_effect("sig", "ctl", True)
+  memory.observe_execution(activity="app.x/.A", layout_signature="sig", control_key="ctl",
+                           action={"action_type": "click"}, dst_activity="app.x/.B",
+                           dst_layout_signature="sig2")
+  assert memory.record_state_effect("sig", "ctl", True)
+  assert memory.record_state_effect("sig", "ctl", False)
+  restored = AppMemory.from_dict(memory.to_dict())
+  assert restored.state_certificate("sig", "ctl") == (1, 1)
+  assert restored.state_certificate("sig", "other") == (0, 0)

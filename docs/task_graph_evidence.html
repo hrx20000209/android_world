@@ -1,0 +1,360 @@
+<title>MobileExplorer 任务图证据</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column (~760px) of numbered figures, each a caption + chart + one-line reading. */
+:root{
+  --bg:#f6f7f5; --panel:#ffffff; --fg:#1d2427; --muted:#5d686d; --rule:#d9dedc;
+  --full:#0f7a6c; --base:#8a959a; --ref:#c08a2e; --replay:#0f7a6c; --replay-soft:#cfe8e3;
+  --commit:#b5473a; --env:#aab4b8; --mech:#0f7a6c; --bad:#b5473a; --grid:#e7ebe9;
+  --serif:"Noto Serif SC","Songti SC",serif; --sans:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141a1c; --panel:#1b2326; --fg:#e4e9e7; --muted:#9aa6aa; --rule:#2e393c;
+  --full:#3fbfa9; --base:#7f8b90; --ref:#d9a548; --replay:#3fbfa9; --replay-soft:#1f4741;
+  --commit:#e07a6c; --env:#5c686c; --mech:#3fbfa9; --bad:#e07a6c; --grid:#263033; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141a1c; --panel:#1b2326; --fg:#e4e9e7; --muted:#9aa6aa; --rule:#2e393c;
+  --full:#3fbfa9; --base:#7f8b90; --ref:#d9a548; --replay:#3fbfa9; --replay-soft:#1f4741;
+  --commit:#e07a6c; --env:#5c686c; --mech:#3fbfa9; --bad:#e07a6c; --grid:#263033; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.65;margin:0}
+.wrap{max-width:780px;margin:0 auto;padding-inline:20px;padding-block:40px 72px}
+h1{font-family:var(--serif);font-size:30px;line-height:1.3;margin:0 0 10px;text-wrap:balance}
+h2{font-family:var(--serif);font-size:21px;margin:56px 0 6px;text-wrap:balance}
+.lede{color:var(--muted);max-width:62ch;margin:0}
+.meta{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:14px;letter-spacing:.02em}
+figure{margin:22px 0 0;background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:18px 18px 14px}
+figcaption{font-size:14px;font-weight:700;margin-bottom:2px;overflow-wrap:anywhere}
+.sub{font-size:13px;color:var(--muted);margin:0 0 12px}
+.read{font-size:14px;margin:12px 0 0;padding-top:10px;border-top:1px solid var(--rule)}
+.chart{overflow-x:auto}
+svg{display:block;max-width:100%;height:auto}
+svg text{fill:var(--fg);font-family:var(--sans);font-size:14px}
+svg .m{font-family:var(--mono);font-size:12.5px}
+svg .mu{fill:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--muted);margin:2px 0 8px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:11px;height:11px;border-radius:2px;display:inline-block}
+.tag{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--rule)}
+th{font-weight:500;color:var(--muted)}
+td.n{font-family:var(--mono);text-align:right}
+.note{font-size:13px;color:var(--muted);margin-top:40px}
+code{font-family:var(--mono);font-size:12.5px}
+</style>
+
+<div class="wrap">
+  <div class="tag">SenSys'27 #228 · rebuttal 实验 · AndroidWorld 116 tasks</div>
+  <h1>在线任务图让 4B agent 少走弯路</h1>
+  <p class="lede">四次完整运行（r4–r7），每次 116 个任务，同一 session 内 base 与 full_rec 逐任务交错配对，temperature 0，模型输入相同时输出逐字节一致。下面每张图回答一个具体问题，数字都来自运行目录里的日志。</p>
+  <div class="meta">GELab-Zero-4B · seed 30 · 步数上限 20 · results/sensys27_task_navigation/2026100{4,5}_full_r{4..7}</div>
+
+  <h2>1 · 结果：四次运行都优于 4B_2</h2>
+  <figure>
+    <figcaption>图 1　成功数与步数（116 个任务）</figcaption>
+    <p class="sub">成功为评估器分数之和（部分得分计 0.5）。4B_2 是历史基线，三次运行共用。</p>
+    <div class="legend"><span><i class="sw" style="background:var(--ref)"></i>4B_2</span><span><i class="sw" style="background:var(--base)"></i>base（同 session）</span><span><i class="sw" style="background:var(--full)"></i>full_rec（完整设计）</span></div>
+    <div class="chart" id="fig1"></div>
+    <p class="read">full_rec 四次都比 4B_2 成功更多（60 / 60.5 / 64.5 / 63.5 对 54）、平均步数更少（9.33 / 8.91 / 8.95 / 8.97 对 10.83）、成功任务步数更少。两边都成功的任务上，步数从约 8.0 降到 6.1–6.3。r6 修好两个回滚问题后，full_rec 追平或超过同 session 的 base（r6 64.5 对 61.5，r7 63.5 对 63.5），同时步数和推理调用更少。</p>
+  </figure>
+
+  <h2>2 · 图在一个 episode 里做了什么</h2>
+  <figure>
+    <figcaption>图 2　RecipeDeleteMultipleRecipesWithNoise：删除 3 个菜谱</figcaption>
+    <p class="sub">每格是一步。base 每个菜谱都让模型从头决策；full_rec 记下第一个菜谱的操作，后两个菜谱按同一流程自动回放，停在“DELETE”确认之前，由模型自己按下。</p>
+    <div class="legend"><span><i class="sw" style="background:var(--base)"></i>模型决策</span><span><i class="sw" style="background:var(--replay-soft);outline:1px solid var(--replay)"></i>回放（不调用模型）</span><span><i class="sw" style="background:var(--commit)"></i>提交（检查器证实改了数据，必须由模型按）</span></div>
+    <div class="chart" id="fig2"></div>
+    <p class="read">base 19 步，full_rec 9 步，r4、r5、r6 三次结果完全相同。回放的 4 跳在第一次执行时都被状态检查器证实“不改数据库”，所以可以安全重放；“DELETE” 那一跳被证实改了数据，所以回放永远停在它前面。</p>
+  </figure>
+
+  <h2>3 · 节省来自流程回放，而且可复现</h2>
+  <figure>
+    <figcaption>图 3　有回放的任务：base 步数 → full_rec 步数</figcaption>
+    <p class="sub">每行一个任务，四次运行各一条。圆点空心表示该次失败。</p>
+    <div class="chart" id="fig3"></div>
+    <p class="read">4 个多实体删除任务四次结果逐步相同，合计从 55 步降到 33 步（−40%）。RecipeAddMultipleRecipes 每个菜谱要填 11 个字段，回放替模型填完后两个，r4、r6、r7 因此在 20 步内做完。ExpenseAddMultiple 的类别选项在横向列表的屏幕外，r4–r6 回放都在同一跳停下；r7 让回放在选项那一行内拖动查找后，两个条目各回放 6 跳，任务 10 步完成（base 21 步失败）。</p>
+  </figure>
+
+  <h2>4 · 输给 base 的任务，都不是图造成的</h2>
+  <figure>
+    <figcaption>图 4　full_rec 与 base 结果不同的任务；输的任务按“谁先动”归因</figcaption>
+    <p class="sub">对 full_rec 输掉的每个任务，比较两组模型输入（截图）第一次不同的步，和 full_rec 里图机制第一次动作（探测、图跳过、回放、注入事实）的步。分叉在先，说明差异来自环境时序（动画帧、滑动惯性、初始屏幕），与图无关。</p>
+    <div class="legend"><span><i class="sw" style="background:var(--env)"></i>输：图在分叉前没有任何动作（环境）</span><span><i class="sw" style="background:var(--bad)"></i>输：图先动作</span><span><i class="sw" style="background:var(--mech)"></i>full_rec 赢</span></div>
+    <div class="chart" id="fig4"></div>
+    <p class="read">四次运行里 full_rec 输了 14 次，其中 13 次分叉发生在图有任何动作之前。唯一一次由图造成的失败（r5，SimpleCalendarAddOneEventRelativeDay）来自在日期选择器里探测，r6 已修复；同一任务在 r6、r7 两组都成功。r7 中 full_rec 赢的 3 个任务里，ExpenseAddMultiple 和 RecipeAddMultipleRecipes 的分叉恰好发生在回放那一步。</p>
+  </figure>
+
+  <h2>5 · 问题一：图是怎么建出来的</h2>
+  <figure>
+    <figcaption>图 5a　节点能不能被认出来：重访占比</figcaption>
+    <p class="sub">决策时，当前屏幕所在的节点在本 episode 里已经出现过的步数占比。节点键只看可交互控件的类别、id、64px 网格位置，不看文字，列表行只计类别不计个数。</p>
+    <div class="chart" id="fig5a"></div>
+    <p class="read">宽松的节点键让六成以上的步能复用本 episode 已有的证据；如果用包含文字和 16px 位置的严格签名做键，同一统计只有约 5%（r3 实测），图几乎无法复用。</p>
+  </figure>
+  <figure>
+    <figcaption>图 5b　每一跳都带着证据：执行跳的状态证书（r6）</figcaption>
+    <p class="sub">模型真实执行的每一跳，前后各拍一次 app 数据快照（SQLite 逐表哈希、文件树、shared_prefs）。</p>
+    <div class="chart" id="fig5b"></div>
+    <p class="read">411 跳被证实不改数据，可以回放；78 跳被证实改了数据，是提交，只能由模型来按。没有证书的跳来自检查器不覆盖的 app，图在那里只记录、不代替模型行动。</p>
+  </figure>
+
+  <h2>6 · 问题二：图怎样约束和引导探索</h2>
+  <figure>
+    <figcaption>图 6　探索只在“可以证明没有副作用”的地方发生</figcaption>
+    <p class="sub">左：按 app 是否被状态检查器覆盖，统计 r6 的探索。右：每次运行中，由探索回滚造成的 full_rec 失败数。</p>
+    <div class="chart" id="fig6"></div>
+    <p class="read">52 个任务所在的 app 无法验证副作用，那里一次探测也没有发生。r5 暴露了两个回滚问题：在日期选择器里探测（回滚校验看不到文字变化），以及跨过提交的轨迹重放（把已保存的菜谱又录了一遍）。r6 把选择器当作输入控件不再探测、发生提交后不再重放轨迹，回滚造成的失败降为 0。探索对成功率和步数的直接贡献很小（r6 只完成 34 个 probe），这一点如实报告。</p>
+  </figure>
+
+  <h2>7 · 问题三：图怎样参与每一步推理</h2>
+  <figure>
+    <figcaption>图 7　每一步走哪条路径（r6，full_rec，1038 个决策步）</figcaption>
+    <p class="sub">执行顺序：流程回放 → 图跳过 → 注入蒸馏后的图事实 → 正常推理。提交、确认、编辑文本、作答只出现在正常推理里。</p>
+    <div class="chart" id="fig7"></div>
+    <table id="tab7" aria-label="推理路径读数"></table>
+    <p class="read">回放只发生在 11 步，却替模型执行了 50 跳，这是 GUI 推理调用减少的主要来源（1072 → 1061，另有纯文本的任务契约调用计在其中）。图跳过的候选里，9 成以上在不可验证的 app 被交还模型，另有 8 次因为下一跳是提交而被截断：图只在能证明安全时才替模型行动。</p>
+  </figure>
+
+  <figure>
+    <figcaption>图 7b　四次完整运行的机制读数（full_rec，每次 116 个任务）</figcaption>
+    <p class="sub">命中率：图跳过以落点是否为预期页面计；回放以计划跳数中实际执行完成的比例计，以及回放是否一直走到提交前。</p>
+    <div class="chart"><table id="tab7b"></table></div>
+    <p class="read">四次合计：图跳过 32 次、落点正确 27 次（84%），另有 26 次因下一跳是提交被截断；回放 45 次，计划 225 跳完成 205 跳（91%），38 次一直走到提交前（84%）；每次运行有 56–62 步不调用模型执行。探索每次完成 34–41 个 probe，但探索得到的边没有一条后来被直接复用，探索的作用停留在发现与验证上。</p>
+  </figure>
+
+  <h2>8 · 消融：去掉哪个模块，节省就消失</h2>
+  <figure>
+    <figcaption>图 8　逐个关掉 full_rec 的模块（29 个任务，r6 代码，单次运行）</figcaption>
+    <p class="sub">左：4 个多实体删除任务的步数合计（越低越好）。右：29 个任务的分数和。去掉回放、去掉图跳过、去掉图上下文、去掉探索、探索不按任务实体定目标，各为一组，其余设置与 full_rec 相同。</p>
+    <div class="chart" id="fig8"></div>
+    <p class="read">只有去掉回放会让 4 个删除任务的步数逐任务退回 base（10 / 13 / 13 / 19，合计 55），RecipeAddMultipleRecipes 也随之失败；其他模块去掉后步数仍是 33–35。分数和的差异（12–16）在单次运行的噪声范围内，只有“去掉回放”在分数和步数上同时变差。结论：多实体任务上的节省，因果上来自流程回放。</p>
+  </figure>
+
+  <h2>9 · 朴素对照：每次只换掉一项设计</h2>
+  <figure>
+    <figcaption>图 9　full_rec 与三种朴素替代（29 个任务，r7 代码）</figcaption>
+    <p class="sub">每组只把 full_rec 的一项设计换成朴素做法，其余完全相同。朴素建图：节点用精确屏幕签名（含文字与 16px 位置），边与回放用点击坐标。随机探索：同样的安全过滤、预算与回滚，候选均匀随机抽取，不瞄准任务实体。朴素用图：AutoDroid 式提示，每一步把“控件 → 已知目的地”逐行写进提示词，不回放、不跳过。base 与 full_rec 复用 r7 的同代码 episode。</p>
+    <div class="chart"><table id="tab9"></table></div>
+    <p class="read">朴素建图：节点数几乎翻倍（每个 episode 17.9 对 10.1），重访占比从 71% 降到 40%，图跳过 2 次全部落点错误；坐标回放执行了同样多的跳，却点到了错误的条目或类别，6 个多实体任务只做成 3 个，成功从 16 降到 11。朴素用图：6 个多实体任务的结果与步数和 base 逐任务相同，总步数还多于 base（13.14 对 12.86）——把图写进提示词不会让 4B 模型少走一步。随机探索：成功、步数、覆盖率（新页面 25 对 24、预览到模型后来走到的页面 21 对 25 次）都与目标导向探索接近，目标导向探索目前没有可测量的优势。</p>
+  </figure>
+
+  <p class="note">数据来源：<code>pairs.jsonl</code>（图 8 来自 <code>20261005_ablation_r1</code>）、<code>final_compare_full_rec.json</code>、<code>full_rec_explain.json</code>、<code>full_rec_traces/</code>、<code>api_calls.jsonl</code>（image_md5 / output_md5 用于图 4）。设计与问题清单见 <code>docs/sensys27_task_graph_design_v3_zh.md</code> 与 <code>full_r3/ISSUES.md</code>。</p>
+</div>
+
+<script>
+const D = {
+  runs: ["r4","r5","r6","r7"],
+  score: {"4B_2":[54,54,54,54], base:[63,63.5,61.5,63.5], full:[60,60.5,64.5,63.5]},
+  steps: {"4B_2":[10.83,10.83,10.83,10.83], base:[9.45,9.28,9.38,9.43], full:[9.33,8.91,8.95,8.97]},
+  sstep: {"4B_2":[7.85,7.85,7.85,7.85], base:[7.22,6.84,6.77,7.14], full:[6.93,6.77,7.06,7.11]},
+  replay: [
+    {t:"ExpenseDeleteMultiple", r:[[1,10,1,6],[1,10,1,6],[1,10,1,6],[1,10,1,6]], h:"2 次 / 4 跳"},
+    {t:"ExpenseDeleteMultiple2", r:[[1,13,1,11],[1,13,1,11],[1,13,1,11],[1,13,1,11]], h:"1 次 / 2 跳"},
+    {t:"RecipeDeleteMultipleRecipes", r:[[1,13,1,7],[1,13,1,7],[1,13,1,7],[1,13,1,7]], h:"2 次 / 6 跳"},
+    {t:"RecipeDeleteMultipleRecipesWithNoise", r:[[1,19,1,9],[1,19,1,9],[1,19,1,9],[1,19,1,9]], h:"2 次 / 8 跳"},
+    {t:"RecipeAddMultipleRecipes", r:[[0,21,1,21],[0,21,0,21],[0,21,1,21],[0,21,1,21]], h:"2 次 / 22 跳"},
+    {t:"ExpenseAddMultiple", r:[[0,21,0,18],[0,21,0,18],[0,21,0,18],[0,21,1,10]], h:"r4–r6 停在类别；r7 行内拖动后 12 跳"}
+  ],
+  attrib: {r4:{env_loss:5,mech_loss:0,win:2}, r5:{env_loss:4,mech_loss:1,win:2}, r6:{env_loss:1,mech_loss:0,win:4}, r7:{env_loss:3,mech_loss:0,win:3}},
+  revisit: [["r4",688,1082],["r5",643,1033],["r6",646,1038],["r7",662,1040]],
+  hops: {cert:411, commit:78, other:874-411-78},
+  explore: {covered:{tasks:64,steps:581,rounds:70,probes:34}, uncovered:{tasks:52,steps:457,rounds:0,probes:0}},
+  rollbackFail: [["r4",0],["r5",2],["r6",0],["r7",0]],
+  paths: [["正常推理",1011,"var(--base)"],["流程回放",11,"var(--replay)"],["图上下文",9,"var(--ref)"],["图跳过",7,"var(--fg)"]]
+};
+const NS="http://www.w3.org/2000/svg";
+function svg(w,h){const s=document.createElementNS(NS,"svg");s.setAttribute("viewBox",`0 0 ${w} ${h}`);s.setAttribute("width",w);s.setAttribute("role","img");return s}
+function el(tag,attrs,parent,text){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(text!==undefined)e.textContent=text;parent.appendChild(e);return e}
+const C={"4B_2":"var(--ref)",base:"var(--base)",full:"var(--full)"};
+
+// Fig 1: three small panels, grouped bars per run.
+(function(){
+  const W=740,H=250,s=svg(W,H);
+  const panels=[["成功（分数和）",D.score,[0,70],10,false],["平均步数",D.steps,[0,12],2,true],["成功任务平均步数",D.sstep,[0,9],1,true]];
+  const pw=230,gap=25,top=34,ph=170;
+  panels.forEach(([title,data,[lo,hi],tick,lowerBetter],pi)=>{
+    const x0=pi*(pw+gap)+30; const y=v=>top+ph-(v-lo)/(hi-lo)*ph;
+    el("text",{x:x0,y:16,"font-weight":"700"},s,title);
+    el("text",{x:x0+pw-4,y:16,"text-anchor":"end",class:"m mu"},s,lowerBetter?"越低越好":"越高越好");
+    for(let v=lo;v<=hi;v+=tick){el("line",{x1:x0,x2:x0+pw-10,y1:y(v),y2:y(v),stroke:"var(--grid)"},s);el("text",{x:x0-6,y:y(v)+4,"text-anchor":"end",class:"m mu"},s,v)}
+    const gw=(pw-20)/D.runs.length;
+    D.runs.forEach((r,ri)=>{
+      const gx=x0+6+ri*gw; const bw=(gw-14)/3;
+      ["4B_2","base","full"].forEach((a,ai)=>{
+        const v=data[a][ri]; const bx=gx+ai*bw;
+        el("rect",{x:bx,y:y(v),width:bw-3,height:y(lo)-y(v),fill:C[a],rx:1.5},s);
+        if(a==="full") el("text",{x:bx+(bw-3)/2,y:y(v)-4,"text-anchor":"middle",class:"m"},s,v);
+      });
+      el("text",{x:gx+(gw-14)/2,y:top+ph+16,"text-anchor":"middle",class:"m mu"},s,r);
+    });
+  });
+  document.getElementById("fig1").appendChild(s);
+})();
+
+// Fig 2: step timelines.
+(function(){
+  const base=[];const ents=["Chicken Alfredo Pasta","Tomato Basil Bruschetta","Grilled Cheese…"];
+  for(let e=0;e<3;e++){const n=e===0?6:6; for(let i=0;i<n;i++) base.push({k:i===n-1?"commit":"model",e});}
+  base.push({k:"model",e:3,label:"完成"});
+  const full=[];
+  for(let i=0;i<6;i++) full.push({k:i===5?"commit":"model",e:0});
+  [1,2].forEach(e=>{full.push({k:"replay",e,hops:4});full.push({k:"commit",e,inline:true});});
+  full.push({k:"model",e:3,label:"完成"});
+  const W=740,H=170,s=svg(W,H),cw=30,x0=86;
+  function row(items,y,label,count){
+    el("text",{x:0,y:y+17,"font-weight":"700"},s,label);
+    el("text",{x:0,y:y+33,class:"m mu"},s,count);
+    let x=x0;
+    items.forEach((it,i)=>{
+      if(it.k==="replay"){
+        const w=cw*1.6; el("rect",{x,y,width:w-3,height:26,rx:3,fill:"var(--replay-soft)",stroke:"var(--replay)"},s);
+        el("text",{x:x+(w-3)/2,y:y+17,"text-anchor":"middle",class:"m"},s,"回放 4 跳");
+        x+=w; return;
+      }
+      el("rect",{x,y,width:cw-3,height:26,rx:3,fill:it.k==="commit"?"var(--commit)":"var(--base)"},s);
+      if(it.label) el("text",{x:x+(cw-3)/2,y:y+42,"text-anchor":"middle",class:"m mu"},s,"✓");
+      x+=cw;
+    });
+    return x;
+  }
+  row(base,10,"base","19 步");
+  const xe=row(full,92,"full_rec","9 步");
+  // entity brackets under full_rec
+  const spans=[[x0,x0+6*cw,"菜谱 1：模型演示"],[x0+6*cw,x0+6*cw+cw*2.6,"菜谱 2"],[x0+6*cw+cw*2.6,x0+6*cw+cw*5.2,"菜谱 3"]];
+  spans.forEach(([a,b,t])=>{el("line",{x1:a,x2:b-4,y1:126,y2:126,stroke:"var(--muted)"},s);el("text",{x:(a+b)/2,y:142,"text-anchor":"middle",class:"mu"},s,t)});
+  el("text",{x:x0,y:162,class:"m mu"},s,"每格 = 一次模型调用；回放块内的 4 跳（输入名称、打开、更多、删除）不调用模型");
+  document.getElementById("fig2").appendChild(s);
+})();
+
+// Fig 3: dumbbells.
+(function(){
+  const rowH=20,top=26,W=740,H=top+D.replay.length*(rowH*4+14)+30,s=svg(W,H);
+  const x0=300,x1=W-40,xs=v=>x0+(v-0)/(22-0)*(x1-x0);
+  for(let v=0;v<=21;v+=3){el("line",{x1:xs(v),x2:xs(v),y1:top-8,y2:H-26,stroke:"var(--grid)"},s);el("text",{x:xs(v),y:H-10,"text-anchor":"middle",class:"m mu"},s,v)}
+  el("text",{x:x1,y:12,"text-anchor":"end",class:"m mu"},s,"步数");
+  let y=top;
+  D.replay.forEach(d=>{
+    el("text",{x:0,y:y+rowH+4,"font-size":"12"},s,d.t.replace("Recipes","…").length>34?d.t.slice(0,34)+"…":d.t);
+    el("text",{x:0,y:y+rowH+20,class:"m mu"},s,"回放 "+d.h);
+    d.r.forEach((r,i)=>{
+      const yy=y+i*rowH+10;
+      el("text",{x:x0-10,y:yy+4,"text-anchor":"end",class:"m mu"},s,D.runs[i]);
+      el("line",{x1:xs(r[1]),x2:xs(r[3]),y1:yy,y2:yy,stroke:"var(--muted)","stroke-width":1.5},s);
+      el("circle",{cx:xs(r[1]),cy:yy,r:5.5,fill:r[0]?"var(--base)":"var(--panel)",stroke:"var(--base)","stroke-width":2},s);
+      el("circle",{cx:xs(r[3]),cy:yy,r:5.5,fill:r[2]?"var(--full)":"var(--panel)",stroke:"var(--full)","stroke-width":2},s);
+    });
+    y+=rowH*4+14;
+  });
+  const lg=document.createElement("div");lg.className="legend";
+  lg.innerHTML='<span><i class="sw" style="background:var(--base)"></i>base</span><span><i class="sw" style="background:var(--full)"></i>full_rec</span><span><i class="sw" style="background:var(--panel);outline:2px solid var(--muted)"></i>空心 = 失败</span>';
+  const host=document.getElementById("fig3");host.appendChild(lg);host.appendChild(s);
+})();
+
+// Fig 4: diverging bars per run (losses left, wins right).
+(function(){
+  const W=740,H=182,s=svg(W,H),mid=370,u=42,top=20,rh=32;
+  el("text",{x:mid-10,y:12,"text-anchor":"end",class:"mu"},s,"← full_rec 输");
+  el("text",{x:mid+10,y:12,class:"mu"},s,"full_rec 赢 →");
+  D.runs.forEach((r,i)=>{
+    const a=D.attrib[r],y=top+i*rh+4;
+    el("text",{x:mid-6*u-20,y:y+15,"text-anchor":"end",class:"m mu"},s,r);
+    let x=mid; // losses leftwards: env then mech
+    [[a.env_loss,"var(--env)"],[a.mech_loss,"var(--bad)"]].forEach(([n,c])=>{ if(!n)return; x-=n*u; el("rect",{x,y,width:n*u-2,height:22,fill:c,rx:2},s); el("text",{x:x+(n*u-2)/2,y:y+15,"text-anchor":"middle",class:"m",fill:"#fff",style:"fill:#fff"},s,n);});
+    x=mid+2;
+    [[a.win,"var(--mech)"]].forEach(([n,c])=>{ if(!n)return; el("rect",{x,y,width:n*u-2,height:22,fill:c,rx:2},s); el("text",{x:x+(n*u-2)/2,y:y+15,"text-anchor":"middle",class:"m",style:"fill:#fff"},s,n); x+=n*u;});
+  });
+  el("line",{x1:mid,x2:mid,y1:top-2,y2:top+4*rh+2,stroke:"var(--fg)"},s);
+  document.getElementById("fig4").appendChild(s);
+})();
+
+// Fig 5a: revisit share.
+(function(){
+  const W=740,H=178,s=svg(W,H),x0=170,x1=W-60,xs=v=>x0+v/100*(x1-x0);
+  for(let v=0;v<=100;v+=20){el("line",{x1:xs(v),x2:xs(v),y1:6,y2:H-22,stroke:"var(--grid)"},s);el("text",{x:xs(v),y:H-6,"text-anchor":"middle",class:"m mu"},s,v+"%")}
+  const rows=D.revisit.map(([r,a,b])=>[`layout_sig · ${r}`,a/b*100,`${a}/${b}`,"var(--full)"]).concat([["严格签名 · r3",5,"≈5%","var(--base)"]]);
+  rows.forEach(([l,v,t,c],i)=>{const y=10+i*28;el("text",{x:x0-10,y:y+14,"text-anchor":"end"},s,l);el("rect",{x:x0,y,width:xs(v)-x0,height:18,fill:c,rx:2},s);el("text",{x:xs(v)+6,y:y+14,class:"m"},s,(v).toFixed(0)+"%  "+t)});
+  document.getElementById("fig5a").appendChild(s);
+})();
+
+// Fig 5b: hop certificates stacked bar.
+(function(){
+  const W=740,H=86,s=svg(W,H),x0=0,x1=W,tot=D.hops.cert+D.hops.commit+D.hops.other,xs=v=>v/tot*(x1-x0);
+  const parts=[[D.hops.cert,"证实不改数据 · 可回放","var(--full)"],[D.hops.commit,"证实改了数据 · 提交","var(--commit)"],[D.hops.other,"无证书 · 只记录","var(--env)"]];
+  let x=x0;
+  parts.forEach(([n,l,c])=>{const w=xs(n);el("rect",{x,y:8,width:w-2,height:30,fill:c,rx:2},s);el("text",{x:x+4,y:58,class:"m"},s,n);el("text",{x:x+4,y:76,class:"mu"},s,w>150?l:l.split(" · ")[0]);x+=w});
+  document.getElementById("fig5b").appendChild(s);
+})();
+
+// Fig 6: exploration scope + rollback failures.
+(function(){
+  const W=740,H=170,s=svg(W,H);
+  const e=D.explore; const xs=v=>30+v/100*300;
+  el("text",{x:0,y:14,"font-weight":"700"},s,"r6 探索轮数（app 是否可验证）");
+  [["可验证 app（"+e.covered.tasks+" 个任务）",e.covered.rounds,e.covered.probes,"var(--full)"],["不可验证 app（"+e.uncovered.tasks+" 个任务）",e.uncovered.rounds,e.uncovered.probes,"var(--env)"]].forEach(([l,r,p,c],i)=>{
+    const y=34+i*56; el("text",{x:0,y:y+4,class:"mu"},s,l);
+    el("rect",{x:0,y:y+12,width:Math.max(2,r*3.6),height:20,fill:c,rx:2},s);
+    el("text",{x:Math.max(2,r*3.6)+8,y:y+27,class:"m"},s,`${r} 轮 · ${p} 个 probe`);
+  });
+  const bx=430;
+  el("text",{x:bx,y:14,"font-weight":"700"},s,"探索回滚造成的 full_rec 失败");
+  const ys=v=>140-v*40;
+  for(let v=0;v<=2;v++){el("line",{x1:bx,x2:W-10,y1:ys(v),y2:ys(v),stroke:"var(--grid)"},s);el("text",{x:bx-6,y:ys(v)+4,"text-anchor":"end",class:"m mu"},s,v)}
+  D.rollbackFail.forEach(([r,n],i)=>{const x=bx+20+i*70;if(n)el("rect",{x,y:ys(n),width:44,height:140-ys(n),fill:"var(--bad)",rx:2},s);else el("rect",{x,y:138,width:44,height:2,fill:"var(--full)"},s);el("text",{x:x+22,y:160,"text-anchor":"middle",class:"m mu"},s,r);el("text",{x:x+22,y:ys(n)-6,"text-anchor":"middle",class:"m"},s,n)});
+  el("text",{x:bx+20+70+22,y:ys(2)-20,"text-anchor":"middle",class:"mu","font-size":"11"},s,"选择器 · 跨提交重放");
+  document.getElementById("fig6").appendChild(s);
+})();
+
+// Fig 7: path proportions on log-ish display + table.
+(function(){
+  const W=740,H=120,s=svg(W,H),x0=110,x1=W-120,max=1011,xs=v=>x0+Math.sqrt(v/max)*(x1-x0);
+  D.paths.forEach(([l,n,c],i)=>{const y=6+i*28;el("text",{x:x0-10,y:y+14,"text-anchor":"end"},s,l);el("rect",{x:x0,y,width:Math.max(2,xs(n)-x0),height:18,fill:c,rx:2},s);el("text",{x:xs(n)+6,y:y+14,class:"m"},s,n+" 步")});
+  el("text",{x:W,y:H-4,"text-anchor":"end",class:"m mu"},s,"条长按平方根缩放");
+  document.getElementById("fig7").appendChild(s);
+  const rows=[["回放：次数 / 执行跳数","11 / 50"],["回放停止原因：停在提交前 / 定位不到交还模型","9 / 2"],["图跳过：执行 / 落点正确","7 / 5"],["图跳过被截断：下一跳是提交","8"],["图跳过被交还：app 不可验证","473"],["启动折叠（第一步打开 app 不调用模型）","97 个 episode"],["GUI 推理调用：base → full_rec","1072 → 1061"]];
+  document.getElementById("tab7").innerHTML="<tr><th>读数（r6）</th><th style='text-align:right'>值</th></tr>"+rows.map(r=>`<tr><td>${r[0]}</td><td class="n">${r[1]}</td></tr>`).join("");
+})();
+// Fig 8: ablation.
+(function(){
+  const arms=[["base",55,13,"var(--base)"],["full_rec",33,15,"var(--full)"],["去掉回放",55,12,"var(--bad)"],["去掉图跳过",33,15,"var(--full)"],["去掉图上下文",33,14,"var(--full)"],["去掉探索",35,16,"var(--full)"],["探索不定目标",33,13,"var(--full)"]];
+  const W=740,rh=26,top=24,H=top+arms.length*rh+28,s=svg(W,H),lx=120,aw=230,bx=lx+aw+150,bw=170;
+  el("text",{x:lx,y:14,"font-weight":"700"},s,"删除任务步数合计");
+  el("text",{x:bx,y:14,"font-weight":"700"},s,"分数和 / 29");
+  const xa=v=>lx+v/60*aw, xb=v=>bx+v/20*bw;
+  [0,20,40,60].forEach(v=>{el("line",{x1:xa(v),x2:xa(v),y1:top-4,y2:H-22,stroke:"var(--grid)"},s);el("text",{x:xa(v),y:H-6,"text-anchor":"middle",class:"m mu"},s,v)});
+  [0,10,20].forEach(v=>{el("line",{x1:xb(v),x2:xb(v),y1:top-4,y2:H-22,stroke:"var(--grid)"},s);el("text",{x:xb(v),y:H-6,"text-anchor":"middle",class:"m mu"},s,v)});
+  arms.forEach(([l,st,sc,c],i)=>{const y=top+i*rh;
+    el("text",{x:lx-10,y:y+14,"text-anchor":"end"},s,l);
+    el("rect",{x:lx,y,width:xa(st)-lx,height:17,fill:c,rx:2},s);el("text",{x:xa(st)+6,y:y+13,class:"m"},s,st);
+    el("rect",{x:bx,y,width:xb(sc)-bx,height:17,fill:c==="var(--bad)"?c:(l==="base"?c:"var(--full)"),opacity:l==="base"||l==="full_rec"||l==="去掉回放"?1:.55,rx:2},s);el("text",{x:xb(sc)+6,y:y+13,class:"m"},s,sc);
+  });
+  document.getElementById("fig8").appendChild(s);
+})();
+// Table 9.
+(function(){
+  const arms=["full_rec","朴素建图","随机探索","朴素用图","base"];
+  const rows=[
+    ["成功（29 个任务）",[16,11,15,13,15]],
+    ["平均步数",[12.17,12.41,12.38,13.14,12.86]],
+    ["6 个多实体任务：成功 / 步数合计",["6 / 64","3 / 72","6 / 64","4 / 97","4 / 97"]],
+    ["每个 episode 的节点数",[10.10,17.93,9.93,11.21,"—"]],
+    ["重访占比",["71%","40%","71%","—","—"]],
+    ["完成的 probe",[42,5,37,40,"—"]],
+    ["探索发现的新页面 / 新控件",["24 / 2402","5 / 208","25 / 2208","22 / 2678","—"]],
+    ["probe 落点出现任务实体",[8,0,9,0,"—"]],
+    ["probe 预览到模型后来走到的页面",[25,3,21,17,"—"]],
+    ["图跳过：落点正确 / 次数",["6 / 8","0 / 2","6 / 7","—","—"]],
+    ["回放：完成跳数 / 计划跳数",["54 / 54","55 / 60","54 / 54","—","—"]],
+    ["不调用模型执行的步数",[62,57,61,0,"—"]],
+    ["推理调用",[361,374,366,373,366]]
+  ];
+  document.getElementById("tab9").innerHTML="<tr><th></th>"+arms.map(a=>`<th style='text-align:right'>${a}</th>`).join("")+"</tr>"+rows.map(([l,v])=>`<tr><td>${l}</td>${v.map((x,i)=>`<td class="n"${i===0?" style='font-weight:600'":""}>${x}</td>`).join("")}</tr>`).join("");
+})();
+// Table 7b.
+(function(){
+  const runs=["r4","r5","r6","r7"];
+  const rows=[["图跳过：落点正确 / 次数",["10 / 11","6 / 6","5 / 7","6 / 8"]],["图跳过被提交守卫截断",[9,7,8,2]],["回放：次数",[12,11,11,11]],["回放：完成跳数 / 计划跳数",["51 / 63","50 / 54","50 / 54","54 / 54"]],["回放走到提交前",[9,9,9,11]],["不调用模型执行的步数",[62,56,57,62]],["图上下文注入步数 / token",["11 / 195","8 / 157","9 / 149","8 / 157"]],["重访占比",["64%","62%","62%","64%"]],["探索轮数 / probe",["96 / 40","91 / 36","70 / 34","73 / 41"]],["回滚失败的轮数",[4,3,2,1]],["probe 落点出现任务实体",[6,5,8,8]],["探索得到的边后来被复用",[0,0,0,0]]];
+  document.getElementById("tab7b").innerHTML="<tr><th></th>"+runs.map(a=>`<th style='text-align:right'>${a}</th>`).join("")+"</tr>"+rows.map(([l,v])=>`<tr><td>${l}</td>${v.map(x=>`<td class="n">${x}</td>`).join("")}</tr>`).join("");
+})();
+</script>

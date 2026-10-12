@@ -38,14 +38,17 @@ success rate; measure latency benefit with the parallel runner.
 from __future__ import annotations
 
 import argparse
+import copy
 import dataclasses
 import datetime
+import hashlib
 import json
 import pathlib
 import os
 from pathlib import Path
 import re
 import statistics
+import subprocess
 import sys
 import time
 from typing import Any
@@ -344,6 +347,8 @@ class GenerationGuardedGraph:
             "cumulative_realized_ig": edge.cumulative_realized_ig,
             "cumulative_exploration_cost": edge.cumulative_exploration_cost,
             "last_updated_generation": edge.last_updated_generation,
+            "dynamic_content": edge.dynamic_content,
+            "navigation_observations": copy.deepcopy(edge.navigation_observations),
         }
         for edge_id, edge in self._graph.edges.items()
     }
@@ -787,6 +792,27 @@ def _canonical_control(action: Mapping[str, Any]) -> str:
   return ""
 
 
+def _element_at(state, action: dict[str, Any]):
+  """Smallest CLICKABLE element containing the tap point.
+
+  The executor relocates by clickable selector, so a witness keyed on a
+  non-clickable label inside a row could never be replayed.
+  """
+  x, y = action.get("x"), action.get("y")
+  if x is None or y is None:
+    return None
+  best, best_area = None, None
+  for element in getattr(state, "elements", ()) or ():
+    if not element.clickable:
+      continue
+    left, top, right, bottom = element.bounds
+    area = max(0, right - left) * max(0, bottom - top)
+    if area > 0 and left <= x <= right and top <= y <= bottom and (
+        best_area is None or area < best_area):
+      best, best_area = element, area
+  return best
+
+
 def _control_key_at(state, action: dict[str, Any]) -> str:
   """Which control the agent's tap landed on, as a stable key.
 
@@ -848,6 +874,25 @@ def _has_unsaved_input(state) -> bool:
     if "edittext" in cls or "autocomplete" in cls:
       if (element.text or "").strip():
         return True
+  return False
+
+
+def _has_value_picker(state) -> bool:
+  """Is a date/time/number picker on screen?
+
+  A picker is a text field by another name: every tap on it writes a value,
+  and the rollback check compares class, id, geometry and selection - not
+  text - so a probe that changed the selected day restores "exactly" with the
+  wrong date still in the dialog. Measured 2026-10-04 (r5,
+  SimpleCalendarAddOneEventRelativeDay): base and full_rec identical through
+  step 8, a depth-2 probe tapped day 10 (header Thu, Oct 19 -> Tue, Oct 10),
+  INVERSE reported success, the model pressed OK on the wrong date.
+  """
+  for element in getattr(state, "elements", ()):
+    rid = (element.resource_id or "").casefold()
+    cls = (element.class_name or "").rsplit(".", 1)[-1].casefold()
+    if "picker" in rid or "picker" in cls:
+      return True
   return False
 
 
@@ -1335,6 +1380,12 @@ def main() -> int:
                            "critical path so this is a real cost, not a free one.")
   parser.add_argument("--max_depth", type=int, default=2)
   parser.add_argument("--enable_skip", action="store_true")
+  parser.add_argument("--task_navigation", choices=("off", "shadow", "execute"), default="off",
+                      help="Task-directed navigation: shadow logs routes; execute checks each hop.")
+  parser.add_argument("--task_navigation_frontier", action="store_true",
+                      help="Rank safe probes by task target coverage and downstream reachability.")
+  parser.add_argument("--task_navigation_ui_only", action="store_true",
+                      help="Experimental ablation: accept UI restoration without an app-state effect check.")
   parser.add_argument("--probe_budget", type=int, default=12,
                       help="Probes allowed across the whole episode.")
   parser.add_argument("--max_path", type=int, default=3,
@@ -1677,6 +1728,49 @@ def main() -> int:
                           "ANDROID_WORLD_LLM_API_URL",
                           "http://localhost:8084/v1/chat/completions"))
   parser.add_argument("--a11y_socket_port", type=int, default=8765)
+  parser.add_argument("--deterministic_swipe", action="store_true",
+                      help="Execute swipes as drags that pause before release (no fling).")
+  parser.add_argument("--stable_screenshot", action="store_true",
+                      help="Give the model a screenshot only after two identical frames.")
+  parser.add_argument("--serial", default="emulator-5554")
+  parser.add_argument("--console_port", type=int, default=5554)
+  parser.add_argument("--adb_path", default="/Users/huangrunxi/Library/Android/sdk/platform-tools/adb")
+  parser.add_argument("--state_checker", choices=("off", "on"), default="off",
+                      help="Bracket each exploration window with a read-only app-state "
+                           "snapshot; only invariant windows yield state_effect_verified.")
+  parser.add_argument("--procedure_replay", choices=("off", "shadow", "execute"), default="off",
+                      help="Entity-parameterised replay of the model's own certified "
+                           "navigation prefix for the task's next obligation entity.")
+  parser.add_argument("--probe_entity_rows", action="store_true",
+                      help="Let exploration probe list rows that name an undone task entity "
+                           "(normally filtered as dynamic collection items).")
+  parser.add_argument("--explore_handoff", action="store_true",
+                      help="When procedure replay is refused because the next task entity is "
+                           "not on screen, take the probe-verified action that exploration "
+                           "found brings that entity into view, then plan again.")
+  parser.add_argument("--probe_only_certifiable", action="store_true",
+                      help="Act without the model (probe, graph skip) only in apps the state "
+                           "checker covers: side effects there cannot be verified (Files probes "
+                           "and Retro skips each cost a task where base passed).")
+  parser.add_argument("--procedure_records", action="store_true",
+                      help="Contract lists each entity's attribute values (amount, category...); "
+                           "typed or selected values become record slots in the template.")
+  parser.add_argument("--procedure_allow_unverified", action="store_true",
+                      help="Ablation: replay hops without an app-state certificate.")
+  parser.add_argument("--app_memory_readonly", action="store_true",
+                      help="Frozen store: read --app_memory but never write it back, "
+                           "so evaluation episodes cannot feed each other.")
+  parser.add_argument("--prefill_strict_selector", action="store_true",
+                      help="Prefill only controls that name themselves: a resource id plus "
+                           "their OWN text or content description, not editable, not "
+                           "checkable. A bare container (e.g. a month grid) identifies a "
+                           "region, not the entity the recorded task pressed.")
+  parser.add_argument("--prefill_require_state_cert", action="store_true",
+                      help="Store prefill only for transitions the independent checker "
+                           "verified >=1 time as leaving persistent state unchanged and "
+                           "never saw changing it.")
+  parser.add_argument("--task_navigation_history", action="store_true",
+                      help="Also record witnesses from the agent's own executed clicks.")
   args = parser.parse_args()
 
   os.environ["ANDROID_WORLD_A11Y_METHOD"] = "fast_provider"
@@ -1691,11 +1785,14 @@ def main() -> int:
     }[args.graph_reasoning]
     args.enable_skip = args.graph_reasoning in ("skip_only", "distill_and_skip")
   args.predictive_scorer = args.exploration_policy == "graph_matrix"
+  if args.task_navigation == "execute" and (
+      args.enable_skip or args.store_prefill or args.em_shortcut):
+    parser.error("task_navigation execute requires legacy skip, store_prefill and em_shortcut off")
   os.environ["ANDROID_WORLD_LLM_API_URL"] = args.api_url
   import runpy
   import subprocess
   subprocess.run(
-      ["adb", "-s", "emulator-5554", "forward", f"tcp:{args.a11y_socket_port}",
+      ["adb", "-s", args.serial, "forward", f"tcp:{args.a11y_socket_port}",
        "localabstract:androidworld_fast_a11y"], check=True, timeout=10)
 
   from android_world.agents import base_agent
@@ -1713,6 +1810,21 @@ def main() -> int:
   from android_world.parallel_exploration.live_probe import _is_app_content
   from android_world.parallel_exploration.belief_graph import control_key_from_identity
   from android_world.parallel_exploration import state_graph_information as sgi
+  from android_world.parallel_exploration import task_navigation as tn
+  from android_world.parallel_exploration import app_state_checker as asc
+  from android_world.parallel_exploration import procedure_replay as pr
+  if args.procedure_replay != "off" and args.state_checker != "on" and not args.procedure_allow_unverified:
+    print("procedure_replay without --state_checker on can never certify a hop", flush=True)
+  proc = {"graph": None, "pending": None, "commit_controls": set()}
+  agent_summaries: dict[str, Any] = {"ref": []}
+  call_purpose = {"v": "step"}
+  state_checker = None
+  if args.state_checker == "on":
+    subprocess.run([args.adb_path, "-s", args.serial, "root"], capture_output=True, timeout=20)
+    subprocess.run([args.adb_path, "-s", args.serial, "wait-for-device"], timeout=30)
+    state_checker = asc.AppStateChecker(serial=args.serial, adb_path=args.adb_path)
+  # Verdict for the exploration window being ingested; None = not checked.
+  window_state = {"verdict": None}
   from android_world.parallel_exploration.live_probe import element_identity_from_dict
   from android_world.parallel_exploration.live_probe import await_explorer_ready
   from android_world.parallel_exploration.live_probe import spawn_explorer
@@ -1748,8 +1860,8 @@ def main() -> int:
     return app_store.get(package) if package else None
   guarded = GenerationGuardedGraph(graph)
   capture = create_optimized_state_capture(
-      serial="emulator-5554", console_port=5554,
-      adb_path="/Users/huangrunxi/Library/Android/sdk/platform-tools/adb",
+      serial=args.serial, console_port=args.console_port,
+      adb_path=args.adb_path,
       a11y_local_port=args.a11y_socket_port,
   )
   events: list[dict[str, Any]] = []
@@ -1861,6 +1973,9 @@ def main() -> int:
     return scores
 
   trace_cursor = {"n": 0}
+  # Exploration findings indexed for reuse: (activity, layout) of the screen a
+  # depth-1 probe started from -> what it pressed and the labels it revealed.
+  entity_locator: list[dict[str, Any]] = []
   episode_goal = {"text": ""}
   depth1_edge_ids: list[str] = []
   # (activity, probe_type) combinations that have already swallowed a probe on
@@ -1952,6 +2067,7 @@ def main() -> int:
   consecutive_skips = {"n": 0}
   skip_record = {"n": 0, "ok": 0}
   probe_total = {"n": 0}
+  state_check_total = {"s": 0.0}
 
   def known_inverse_levels() -> dict[str, str]:
     """This episode's evidence first, then what earlier tasks learned."""
@@ -1997,6 +2113,15 @@ def main() -> int:
     for row in fresh:
       if row.get("trial_id") != trial_id or "graph" not in row:
         continue
+      if row.get("recovery_ok") and int(row.get("depth", 1) or 1) == 1:
+        g_src = (row.get("graph") or {}).get("src") or {}
+        g_dst = (row.get("graph") or {}).get("dst") or {}
+        entity_locator.append({
+            "src": (str(g_src.get("activity") or ""), str(g_src.get("layout_signature") or "")),
+            "probe_type": str(row.get("probe_type") or ""),
+            "bounds": list((row.get("element") or {}).get("bounds") or []),
+            "labels": [" ".join(str(x).casefold().split()) for x in (g_dst.get("labels") or [])],
+            "step": step_counter["i"]})
       if em_memory is not None:
         try:
           em_edge = em_memory.ingest_probe_row(row)
@@ -2149,6 +2274,18 @@ def main() -> int:
       graph.record_probe(edge.edge_id, rollback_ok=bool(row.get("recovery_ok")),
                          cost_s=cost_s, realized_ig=realized_ig,
                          generation=guarded.generation)
+      if args.task_navigation != "off" or args.task_navigation_frontier:
+        verdict = window_state["verdict"]
+        if verdict is not None:
+          # The policy reads only this verdict; digests stay in the log.
+          row = {**row, "state_effect_verified": bool(verdict.verified)}
+        witness = tn.observation_from_probe(row, guarded.generation)
+        if witness is not None and verdict is not None:
+          witness["state_check"] = {k: v for k, v in verdict.to_dict().items()
+                                    if k in ("verified", "covered", "reason", "changed",
+                                             "checker_cost_s")}
+        if witness is not None:
+          graph.record_navigation_observation(edge.edge_id, witness)
       contextual_history.record_probe(
           sgi.ContextualHistoryTable.key(
               str(row.get("probe_type") or ""),
@@ -2358,6 +2495,76 @@ def main() -> int:
     original_step = _resize.GELABResizeAgent.step
   else:
     original_step = gelab_agent.GELABAgent.step
+  if args.deterministic_swipe:
+    _original_execute = gelab_agent.GELABAgent._execute_action
+
+    def _drag(self_agent, x1, y1, x2, y2, steps=8):
+      """Drag with a pause before release: zero release velocity, no fling.
+
+      `input swipe` is a fling whose inertia depends on event-injection
+      timing; replicates of one episode stopped the list at different
+      offsets (2026-10-03, ExpenseDeleteDuplicates2 step 3). Same endpoints
+      as the original action, so the gesture means the same thing.
+      """
+      parts = [f"input motionevent DOWN {x1} {y1}"]
+      for i in range(1, steps + 1):
+        parts.append(f"input motionevent MOVE {round(x1 + (x2 - x1) * i / steps)} "
+                     f"{round(y1 + (y2 - y1) * i / steps)}")
+      parts += ["sleep 0.3", f"input motionevent UP {x2} {y2}"]
+      subprocess.run([args.adb_path, "-s", args.serial, "shell", "; ".join(parts)],
+                     capture_output=True, timeout=30)
+      time.sleep(0.5)
+
+    def _deterministic_execute(self_agent, action, extras):
+      if action.action_type == json_action.SWIPE:
+        if extras.get("start_coordinate") and extras.get("end_coordinate"):
+          (x1, y1), (x2, y2) = extras["start_coordinate"], extras["end_coordinate"]
+          return _drag(self_agent, int(x1), int(y1), int(x2), int(y2))
+        width, height = self_agent.env.logical_screen_size
+        mid_x, mid_y = width // 2, height // 2
+        ends = {"down": ((mid_x, 0), (mid_x, height // 2)),
+                "up": ((mid_x, height // 2), (mid_x, 0)),
+                "left": ((0, mid_y), (width // 2, mid_y)),
+                "right": ((width // 2, mid_y), (0, mid_y))}.get(action.direction)
+        if ends:  # android_world actuation's own 'swipe' endpoints
+          return _drag(self_agent, *ends[0], *ends[1])
+      return _original_execute(self_agent, action, extras)
+    gelab_agent.GELABAgent._execute_action = _deterministic_execute
+  if args.stable_screenshot:
+    import numpy as _np
+    from android_world.agents import base_agent as _base_agent
+
+    def _stable_state(self_agent):
+      """The model's screenshot only once the screen has stopped changing.
+
+      Measured 2026-10-03: with identical text inputs, temperature-0 outputs
+      were identical whenever the screenshot bytes were, and replicate
+      divergences began where screenshots differed (a list still settling,
+      or a text cursor caught in a different blink phase). Keeps the
+      baseline's 1 s pause, then waits at most 3 s more. A difference
+      confined to a tiny region that keeps toggling is a blink: three
+      frames 0.35 s apart span both phases of a 1 s blink cycle, and their
+      per-pixel max is the same image whichever phase came first.
+      """
+      time.sleep(1.0)
+      frames = [self_agent.env.get_state(wait_to_stabilize=False)]
+      deadline = time.perf_counter() + 3.0
+      while True:
+        while len(frames) < 3:
+          time.sleep(0.35)
+          frames.append(self_agent.env.get_state(wait_to_stabilize=False))
+        changed = (_np.any(frames[1].pixels != frames[0].pixels, axis=-1)
+                   | _np.any(frames[2].pixels != frames[0].pixels, axis=-1))
+        if not changed.any():
+          return frames[-1]  # three identical frames spanning 0.7 s
+        if changed.mean() < 0.002:  # only a cursor-sized region toggles
+          composite = _np.maximum(_np.maximum(frames[0].pixels, frames[1].pixels),
+                                  frames[2].pixels)
+          return dataclasses.replace(frames[-1], pixels=composite)
+        if time.perf_counter() > deadline:
+          return frames[-1]
+        frames = frames[1:]
+    _base_agent.EnvironmentInteractingAgent.get_post_transition_state = _stable_state
   # ---- Executable GUI memory sidecar -----------------------------------
   em_memory = None
   em_state: dict[str, Any] = {"page": None, "page_before": None, "context": "",
@@ -2519,6 +2726,16 @@ def main() -> int:
   last_context_node = {"id": None}
   briefing_now = {"text": ""}
   gate_mode = {"value": gd.NORMAL_INFERENCE, "context": ""}
+  nav_intent = {"value": None}
+  nav_consumed: set[str] = set()
+  nav_actions: list[dict[str, Any]] = []
+  nav_planner = tn.TaskNavigationPlanner(allow_ui_only=args.task_navigation_ui_only)
+  shadow_ui_planner = tn.TaskNavigationPlanner(allow_ui_only=True)
+  pending_history: dict[str, Any] = {"value": None}
+  # Executed clicks get a checker verdict when they feed either the episode
+  # navigation graph or the persistent store.
+  record_effects = args.task_navigation_history or (
+      state_checker is not None and app_store is not None)
 
   def build_with_briefing(goal_text, history, screenshot):
     """Append the graph's briefing for the current screen to the prompt.
@@ -2530,6 +2747,7 @@ def main() -> int:
     """
     messages = original_build(goal_text, history, screenshot)
     extra = "\n\n".join(x for x in (briefing_now["text"], em_state["context"],
+                                     tn.INTENT_PROMPT if args.task_navigation != "off" else "",
                                      _decision_constraints(
                                          goal_text, args.constraints_variant)
                                      if args.decision_constraints else "") if x)
@@ -2577,10 +2795,161 @@ def main() -> int:
         observed_reversal=reversed_edge,
         nodes=len(em_memory.states), edges=len(em_memory.edges))
 
+  def finalize_history_witness(step: int) -> None:
+    """The landing of the previous executed click, read once it settled.
+
+    The witness has the probe schema with origin=execution. It is never
+    undone, so state_effect_verified compares the app state right before the
+    model's action with the state after it settled; no checker, no
+    certificate (the ui_only ablation may still accept it).
+    """
+    pending = pending_history["value"]
+    pending_history["value"] = None
+    if pending is None:
+      return
+    try:
+      landed = _settled_capture(capture, 1.5)
+      verdict = None
+      if state_checker is not None and pending["state_before"] is not None:
+        verdict = asc.compare(pending["state_before"],
+                              state_checker.snapshot(pending["state_before"].package))
+        state_check_total["s"] += verdict.checker_cost_s
+      witness = {
+          "generation": guarded.generation, "origin": "execution",
+          "source": pending["source"], "target": tn.state_from_signature(landed),
+          "selector": pending["selector"], "action_type": "click",
+          "probe_type": "EXEC_NAV", "ui_restored": False, "inverse_level": "",
+          "state_effect_verified": bool(verdict and verdict.verified),
+          "checked": pending["checked"], "dynamic_content": False,
+          "cost_s": 0.0, "trial_id": f"exec-{pending['step']}",
+      }
+      if verdict is not None:
+        witness["state_check"] = {k: v for k, v in verdict.to_dict().items()
+                                  if k in ("verified", "covered", "reason", "changed",
+                                           "checker_cost_s")}
+      if verdict is not None and verdict.covered and pending.get("control"):
+        memory = memory_for(pending["activity"])
+        if memory is not None:
+          memory.record_state_effect(pending["layout_signature"], pending["control"],
+                                     bool(verdict.verified))
+      if not args.task_navigation_history:
+        return
+      graph.record_navigation_observation(pending["edge_id"], witness)
+      log("history_witness", step=step, edge_id=pending["edge_id"],
+          state_effect_verified=witness["state_effect_verified"],
+          state_reason=verdict.reason if verdict else "no_checker",
+          selector=pending["selector"])
+    except Exception as exc:  # pylint: disable=broad-exception-caught
+      log("history_witness_failed", step=step, stage="finalize", error=str(exc)[:200])
+
+  def procedure_targets() -> list[str]:
+    graph_ = proc["graph"]
+    if args.procedure_replay == "off" or graph_ is None:
+      return []
+    return [e for e in graph_.entities
+            if e.casefold() not in graph_.done and e.casefold() not in graph_.failed]
+
+  def obligation_entities(goal_text: str) -> tuple[str, ...]:
+    """One text-only model call per episode; counted in api_calls.jsonl."""
+    call_purpose["v"] = "obligation"
+    try:
+      prompt = pr.OBLIGATION_RECORDS_PROMPT if args.procedure_records else pr.OBLIGATION_PROMPT
+      wrapper = _infer.LlamaCppWrapper(api_url=args.api_url, temperature=0.0,
+                                      max_tokens=600 if args.procedure_records else 160)
+      text, _, _ = wrapper.call_llama(
+          [{"role": "user", "content": [{"type": "text", "text": prompt + goal_text}]}])
+    except Exception as exc:  # pylint: disable=broad-exception-caught
+      text = ""
+      log("obligation_failed", step=0, error=str(exc)[:200])
+    finally:
+      call_purpose["v"] = "step"
+    if args.procedure_records:
+      entities, proc["records"] = pr.parse_obligation_records(str(text or ""), goal_text)
+    else:
+      entities = pr.parse_obligations(str(text or ""), goal_text)
+    log("obligations", step=0, entities=list(entities), records=proc.get("records") or {},
+        raw=str(text or "")[:600])
+    return entities
+
+  def finalize_procedure_hop(step: int) -> None:
+    """Record the model's previous click as a hop, with its checker verdict."""
+    pending = proc["pending"]
+    proc["pending"] = None
+    if pending is None:
+      return
+    try:
+      landed = _settled_capture(capture, 1.5)
+      state_ok = None
+      verdict = None
+      if state_checker is not None and pending["state_before"] is not None:
+        verdict = asc.compare(pending["state_before"],
+                              state_checker.snapshot(pending["state_before"].package))
+        state_check_total["s"] += verdict.checker_cost_s
+        if verdict.covered:
+          state_ok = bool(verdict.verified)
+      if pending["action_type"] == "swipe":
+        hop = pr.make_swipe_hop(pending["step"], pending["sig"], pending["direction"], landed, state_ok)
+      elif pending["action_type"] == "input_text":
+        # A slot only if the typed text IS an obligation entity; any other
+        # text ends the procedure (it is content, not navigation).
+        hop = pr.make_typed_hop(pending["step"], pending["sig"], pending["element"],
+                                pending["text"], landed, proc["graph"].entities, state_ok)
+      else:
+        hop = pr.make_hop(pending["step"], pending["sig"], pending["element"], landed,
+                          proc["graph"].entities, state_ok, action_type=pending["action_type"])
+      proc["graph"].record(hop)
+      if hop.state_ok is False:
+        proc["committed"] = True
+      if hop.state_ok is False and pending.get("control"):
+        proc["commit_controls"].add(pending["control"])
+      if hop.state_ok is False and proc.get("awaiting_commit"):
+        # Progress ledger from the contract and an observed persistent change:
+        # replay reorders entities, and the model otherwise loses count (seen:
+        # it confirmed 'Pet Supplies' believing it was the last item).
+        entity = proc.pop("awaiting_commit")
+        remaining = [e for e in proc["graph"].entities
+                     if e.casefold() not in proc["graph"].done]
+        handled = [e for e in proc["graph"].entities if e.casefold() in proc["graph"].done]
+        note = (f"Confirmed for '{entity}'. Items from the task handled so far: "
+                + ", ".join(f"'{e}'" for e in handled) + ". "
+                + ("Still NOT handled: " + ", ".join(f"'{e}'" for e in remaining) + "."
+                   if remaining else "No other item named in the task remains."))
+        agent_summaries["ref"].append(note)
+        log("procedure_ledger", step=step, note=note)
+      elif hop.state_ok is not False and proc.get("awaiting_commit"):
+        proc.pop("awaiting_commit")  # the model did something else first
+      if (not proc.get("contract_requested")
+          and proc["graph"].has_completed_demonstration_candidate()):
+        proc["contract_requested"] = True
+        proc["graph"].set_entities(obligation_entities(episode_goal["text"]))
+        if proc.get("records"):
+          proc["graph"].set_records(proc["records"])
+        hop = next((h for h in reversed(proc["graph"].hops) if h.step == hop.step), hop)
+      log("procedure_hop", step=step, hop_step=hop.step, entity=hop.entity,
+          action_type=hop.action_type,
+          resource_id=hop.resource_id, class_name=hop.class_name,
+          label=hop.key_label, inner=list(hop.inner[:6]),
+          source_activity=hop.source_activity, target_activity=hop.target_activity,
+          state_ok=state_ok, state_reason=verdict.reason if verdict else "no_checker")
+    except Exception as exc:  # pylint: disable=broad-exception-caught
+      log("procedure_hop_failed", step=step, error=str(exc)[:200])
+
   def serial_step(self, goal: str):
     episode_goal["text"] = goal
     step = step_counter["i"]
     log("step_begin", step=step)
+    if record_effects:
+      finalize_history_witness(step)
+    if args.procedure_replay != "off":
+      agent_summaries["ref"] = self._summaries
+      if proc["graph"] is None:
+        # The contract is requested lazily, once the graph holds a completed
+        # demonstration candidate; read-only tasks never pay for it.
+        proc["graph"] = pr.ProcedureGraph((), allow_unverified=args.procedure_allow_unverified,
+                                          # A form procedure (title, description, servings,
+                                          # ...) is longer than a list one.
+                                          max_hops=16 if args.procedure_records else 6)
+      finalize_procedure_hop(step)
     before = capture.capture()
     src_id = node_id_of(before)
     upsert(before, src_id, visited=True)
@@ -2810,6 +3179,21 @@ def main() -> int:
                   (getattr(el, "resource_id", "") or "") == control.split("|")[0]
                   for el in (getattr(state_now, "elements", ()) or ())))
           break
+        if args.prefill_strict_selector and not (
+            getattr(element, "resource_id", "") and (
+                getattr(element, "text", "") or getattr(element, "content_desc", ""))
+            and getattr(element, "checked", None) is None
+            and not str(getattr(element, "class_name", "")).endswith("EditText")):
+          log("prefill_refused", step=step, why="weak_selector", source=source,
+              control=control[:80])
+          break
+        if args.prefill_require_state_cert and source != "episode" and memory is not None:
+          verified_n, changed_n = memory.state_certificate(sig_now, control)
+          if verified_n < 1 or changed_n > 0:
+            log("prefill_refused", step=step, why="no_state_certificate",
+                source=source, control=control[:80],
+                state_verified=verified_n, state_changed=changed_n)
+            break
         if _prefill_risk_of(element, args.prefill_risk) not in ("SAFE", "LOW"):
           log("prefill_refused", step=step, why="risky", source=source,
               control=control[:80],
@@ -2932,7 +3316,7 @@ def main() -> int:
         opened = False
         try:
           out = subprocess.run(
-              ["adb", "-s", "emulator-5554", "shell", "dumpsys", "activity", "activities"],
+              ["adb", "-s", args.serial, "shell", "dumpsys", "activity", "activities"],
               capture_output=True, text=True, timeout=6).stdout
           top = re.search(r"topResumedActivity=.*?\{[^}]*?\s(\S+)/", out)
           opened = bool(top) and "nexuslauncher" not in top.group(1)
@@ -3009,6 +3393,192 @@ def main() -> int:
     if args.align_promotes_current_step:
       guarded.refresh_before_exploration()
 
+    if args.procedure_replay != "off" and proc["graph"] is not None:
+      planned = proc["graph"].plan(before)
+      log("procedure_plan", step=step, mode=args.procedure_replay,
+          entities=list(proc["graph"].entities), done=sorted(proc["graph"].done),
+          plan=planned[0].to_dict() if planned else None,
+          rejection=proc["graph"].last_rejection)
+      if (planned is None and args.explore_handoff and args.procedure_replay == "execute"
+          and proc["graph"].last_rejection == "entity_not_visible"):
+        # Exploration -> replay hand-off: a probe from THIS screen already showed
+        # where the next entity is (and was rolled back, in an app the checker
+        # covers). Take that one action, then plan again from where it lands.
+        wanted = next(iter(proc["graph"]._next_entities()), "")
+        key = (before.activity.component, before.layout_sig)
+        hits = [r for r in entity_locator if r["src"] == key and len(r["bounds"]) == 4
+                and " ".join(wanted.casefold().split()) in r["labels"]]
+        if wanted and hits:
+          hit = hits[-1]
+          left, top, right, bottom = hit["bounds"]
+          if hit["probe_type"] == "SCROLL":
+            xm = (left + right) // 2
+            subprocess.run([args.adb_path, "-s", args.serial, "shell", "input", "swipe",
+                            str(xm), str(top + int((bottom - top) * 0.75)),
+                            str(xm), str(top + int((bottom - top) * 0.25)), "800"],
+                           capture_output=True, timeout=10)
+            # A slow drag, not a fling: the plan below locates the entity row on
+            # the next capture, and a list still coasting moves it away (first
+            # try tapped the row that had slid under the planned coordinate).
+            time.sleep(0.8)
+            what = f"scrolled the list to bring '{wanted}' into view"
+            act = {"action_type": "scroll", "direction": "down"}
+          else:
+            xm, ym = (left + right) // 2, (top + bottom) // 2
+            self._execute_action(json_action.JSONAction(action_type="click", x=xm, y=ym), {})
+            what = f"opened the control that exploration found leads to '{wanted}'"
+            act = {"action_type": "click", "x": xm, "y": ym}
+          nav_actions.append({"before_action_index": len(getattr(self, "_actions", [])),
+                              "action_dict": act})
+          self._summaries.append(f"Exploration had located '{wanted}'; {what}.")
+          before = _settled_capture(capture, 2.5)
+          src_id = node_id_of(before)
+          upsert(before, src_id, visited=True)
+          planned = proc["graph"].plan(before)
+          log("explore_handoff", step=step, entity=wanted, probe_type=hit["probe_type"],
+              probe_step=hit["step"], replanned=planned is not None,
+              rejection=proc["graph"].last_rejection)
+      if planned is not None and args.procedure_replay == "execute":
+        plan_obj, first_element = planned
+        started_replay = time.perf_counter()
+
+        def replay_hop(hop, action_dict_r):
+          nav_actions.append({"before_action_index": len(getattr(self, "_actions", [])),
+                              "action_dict": dict(action_dict_r)})
+          if hop.action_type == "swipe":
+            what = f"scrolled {hop.direction}"
+          elif hop.action_type == "input_text":
+            what = f"typed '{action_dict_r.get('text', '')}' into the field"
+          elif hop.entity:
+            what = f"opened '{plan_obj.entity}'"
+          else:
+            what = f"clicked '{hop.key_label or hop.resource_id.rsplit('/', 1)[-1]}'"
+          # The model must know what was pressed on its behalf, and that the
+          # pending decision for this entity is still its own.
+          self._summaries.append(
+              f"Now handling '{plan_obj.entity}' the same way as '{plan_obj.template_entity}': "
+              f"{what}. The final confirmation for '{plan_obj.entity}' is still pending.")
+
+        def replay_action(a_):
+          if a_.get("action_type") == "swipe_xy":
+            # A drag inside one row (an option list), not a screen swipe.
+            (x1, y1), (x2, y2) = a_["start"], a_["end"]
+            subprocess.run([args.adb_path, "-s", args.serial, "shell", "input", "swipe",
+                            str(x1), str(y1), str(x2), str(y2), "400"],
+                           capture_output=True, timeout=10)
+            time.sleep(0.8)
+            return
+          self._execute_action(json_action.JSONAction(**a_), {})
+
+        outcome_replay = pr.execute(
+            plan_obj, first_element,
+            capture=lambda: _settled_capture(capture, 1.5),
+            click=replay_action,
+            on_hop=replay_hop,
+            screen_size=tuple(int(x) for x in self.env.logical_screen_size))
+        if outcome_replay.attempted:
+          proc["graph"].opened(plan_obj.entity)
+        if outcome_replay.reason == "stopped_before_commit":
+          proc["graph"].mark_done(plan_obj.entity)
+          proc["awaiting_commit"] = plan_obj.entity
+        else:
+          # Not done: the model must still handle it, and must be told so.
+          proc["graph"].mark_failed(plan_obj.entity)
+          if outcome_replay.attempted:
+            self._summaries.append(
+                f"Automatic handling of '{plan_obj.entity}' stopped after "
+                f"{outcome_replay.attempted} action(s) ({outcome_replay.reason}); "
+                f"'{plan_obj.entity}' is NOT done yet.")
+        log("procedure_execute", step=step, entity=outcome_replay.entity,
+            attempted=outcome_replay.attempted, completed=outcome_replay.completed,
+            reason=outcome_replay.reason, actions=list(outcome_replay.actions),
+            planned_hops=len(plan_obj.hops),
+            latency_s=time.perf_counter() - started_replay)
+        before = _settled_capture(capture)
+        src_id = node_id_of(before)
+        recent_nodes.append(src_id)
+        upsert(before, src_id, visited=True)
+
+    # A model contract licenses a destination; an observed transition alone
+    # never licenses the task choice. Read before this window's exploration.
+    if args.task_navigation != "off":
+      nav_snapshot = guarded.snapshot(for_step=step)
+      intent = nav_intent["value"]
+      route = nav_planner.compile(
+          nav_snapshot, tn.state_from_signature(before), intent,
+          task=goal, inference_cost_s=(statistics.median(inference_latencies)
+                                       if inference_latencies else 0.0),
+      ) if intent is not None and intent.intent_id not in nav_consumed else None
+      strict_rejections = dict(nav_planner.last_rejections)
+      # Shadow only: the same plan without the state certificate, to split
+      # "no connected route" from "route lacks an independent effect check".
+      shadow_ui = None
+      shadow_ui_rejections: dict[str, int] = {}
+      if (args.task_navigation == "shadow" and not args.task_navigation_ui_only
+          and intent is not None and intent.intent_id not in nav_consumed):
+        shadow_ui = shadow_ui_planner.compile(
+            nav_snapshot, tn.state_from_signature(before), intent, task=goal,
+            inference_cost_s=(statistics.median(inference_latencies)
+                              if inference_latencies else 0.0))
+        shadow_ui_rejections = dict(shadow_ui_planner.last_rejections)
+      nav_edges = tn.snapshot_edges(nav_snapshot)
+      n_witnesses = sum(len(e.get("navigation_observations") or ()) for e in nav_edges.values())
+      # The exact graph this step's planner read, for offline hindsight
+      # analysis (evaluation only; the policy never reads these files).
+      witness_dir = root / "nav_snapshots"
+      witness_dir.mkdir(exist_ok=True)
+      (witness_dir / f"step{step:02d}.json").write_text(json.dumps({
+          "step": step, "generation": int(getattr(nav_snapshot, "generation", step)),
+          "current": tn.state_from_signature(before),
+          "edges": {eid: {k: e.get(k) for k in (
+              "status", "dynamic_content", "risk_level", "rollback_failure_count",
+              "execution_miss_count", "navigation_observations")}
+                    for eid, e in nav_edges.items() if e.get("navigation_observations")},
+      }, default=str), encoding="utf-8")
+      log("task_navigation_plan", step=step, mode=args.task_navigation,
+          intent=dataclasses.asdict(intent) if intent else None,
+          intent_consumed=bool(intent and intent.intent_id in nav_consumed),
+          intent_valid=bool(intent and intent.valid(goal, int(getattr(nav_snapshot, "generation", step)))),
+          already_at_target=bool(intent and intent.matches(tn.state_from_signature(before))),
+          current=tn.state_from_signature(before),
+          witnesses=n_witnesses,
+          route=route.to_dict() if route else None,
+          rejections=strict_rejections,
+          route_ui_only=shadow_ui.to_dict() if shadow_ui else None,
+          rejections_ui_only=shadow_ui_rejections,
+          ui_only=args.task_navigation_ui_only)
+      if (route is not None and args.task_navigation == "execute"
+          and route.expected_net_saving_s > 0):
+        nav_consumed.add(route.intent_id)
+        started_nav = time.perf_counter()
+        def nav_action(action_dict, hop):
+          # History records every actual action, including a wrong landing.
+          nav_actions.append({"before_action_index": len(getattr(self, "_actions", [])),
+                              "action_dict": dict(action_dict)})
+          self._summaries.append(
+              f"Navigation selected {hop.selector.get('text') or hop.selector.get('content_desc')}; "
+              "task decision remains pending.")
+        outcome_nav = tn.execute_route(
+            route, intent, task=goal,
+            capture=lambda: _settled_capture(capture),
+            execute=lambda action: self._execute_action(json_action.JSONAction(**action), {}),
+            on_action=nav_action)
+        for eid in outcome_nav.verified_edge_ids:
+          graph.record_skip_result(eid, True, generation=guarded.generation)
+        if outcome_nav.failed_edge_id:
+          graph.record_skip_result(outcome_nav.failed_edge_id, False, generation=guarded.generation)
+          # Quarantine only this conflicting edge; its descendants may have
+          # valid evidence on a different incoming route.
+          graph.record_execution_verification(outcome_nav.failed_edge_id, False)
+        log("task_navigation_execute", step=step,
+            **dataclasses.asdict(outcome_nav), latency_s=time.perf_counter() - started_nav)
+        before = _settled_capture(capture)
+        src_id = node_id_of(before)
+        recent_nodes.append(src_id)
+        upsert(before, src_id, visited=True)
+        # Terminal reasoning is always performed in this same agent step.
+        # Counts of physical actions are emitted separately from model calls.
+
     # (2) Skip decision, against last step's snapshot only.
     if args.enable_skip:
       # A run of skips means several moves in a row that no model looked at.
@@ -3042,6 +3612,14 @@ def main() -> int:
       accurate = correct == attempted
       allowed = (consecutive_skips["n"] < 3 and accurate
                  and skip_record["n"] < 2)
+      if (allowed and args.probe_only_certifiable
+          and not (state_checker is not None
+                   and state_checker.covers(before.activity.component.split("/", 1)[0]))):
+        # Acting for the model is allowed only where its side effects can be
+        # checked: in an uncovered app the commit guard is blind (Retro: two
+        # skips replayed one control and the task failed where base passed).
+        allowed = False
+        log("skip_refused_uncertifiable", step=step)
       # Earn the right to chain. A multi-hop replay commits several moves on
       # one prediction, so it is only worth the exposure once this episode's
       # skips have actually been landing; before that, take one hop at a time
@@ -3052,6 +3630,17 @@ def main() -> int:
       candidate_path = (gate_snapshot.reusable_path(
                             src_id, tuple(recent_nodes[-4:]), max_len=hops)
                         if allowed else [])
+      # A graph skip replays an edge without the model; a control the state
+      # checker saw change persistent state (DELETE, SAVE, CONFIRM) is a
+      # decision, not navigation, so the replay path stops before it. Seen
+      # live: right after a procedure replay stopped before DELETE, the skip
+      # gate pressed DELETE itself because the model had pressed it twice.
+      for index, edge_ in enumerate(candidate_path):
+        if str((edge_.get("action") or {}).get("control_key") or "") in proc["commit_controls"]:
+          log("skip_refused_commit", step=step, edge_id=edge_.get("edge_id"),
+              control=str((edge_.get("action") or {}).get("control_key"))[:80])
+          candidate_path = candidate_path[:index]
+          break
       # B9: one gate decides all three consumption modes from the same belief
       # state, so a step that is not certain enough to skip still gets the
       # benefit of what exploration found instead of falling back to a plain
@@ -3217,6 +3806,9 @@ def main() -> int:
     # spent 30 probes where every other lost task spent 1-7, and lost.
     may_probe = (args.probes_per_step > 0
                  and not _unprobeable(before.activity.component.split("/", 1)[0])
+                 and not (args.probe_only_certifiable and not (
+                     state_checker is not None
+                     and state_checker.covers(before.activity.component.split("/", 1)[0])))
                  and not dirty_from_last_step["value"]
                  and step >= 2
                  and probe_total["n"] < args.probe_budget
@@ -3242,7 +3834,8 @@ def main() -> int:
                  # episode chooses rather than the app's shape.
                  and (args.explore_interval <= 1
                       or step - last_explored_step["n"] >= args.explore_interval)
-                 and not _has_unsaved_input(before))
+                 and not _has_unsaved_input(before)
+                 and not _has_value_picker(before))
     pending_explorer = None
     if may_probe:
       last_explored_step["n"] = step
@@ -3289,7 +3882,16 @@ def main() -> int:
         "visited_discount": args.visited_discount,
         "seed": args.seed + step,
         "information_need": current_need.to_dict(),
-        "serial": "emulator-5554", "console_port": 5554,
+        # Q2: once the procedure graph holds a contract, exploration is aimed
+        # at its gap - the task's entities not yet handled - so probes locate
+        # and pre-certify the next entity instead of chasing novelty.
+        "task_navigation_frontier": args.task_navigation_frontier or bool(procedure_targets()),
+        "entity_row_targets": procedure_targets() if args.probe_entity_rows else [],
+        "task_navigation_targets": procedure_targets() or (
+            list(nav_intent["value"].target_labels)
+            if nav_intent["value"] is not None and nav_intent["value"].valid(goal, step)
+            else list(current_need.required_information_slots)),
+        "serial": args.serial, "console_port": args.console_port,
         "a11y_local_port": args.a11y_socket_port, "restore_timeout_s": 30.0,
         "max_probes": args.probes_per_step, "min_probes": 0,
         "post_inference_grace_s": 0.0, "max_depth": args.max_depth,
@@ -3300,7 +3902,13 @@ def main() -> int:
         # ladder simply ends. Omitting this list made every one of 107
         # rollback failures bottom out at FAILED, a 49% failure rate against
         # the parallel runner's 13% (2026-08-30).
-        "committed_actions": _committed_actions(getattr(self, "_actions", [])),
+        # ...but not across a commit. Replaying from HOME re-enters data the
+        # checker has already seen persisted: in r5 RecipeAddMultipleRecipes
+        # the replay re-typed the first, already saved recipe into a new form,
+        # the model saved it, and the duplicate failed the task. After a
+        # commit the ladder stops at DEEPLINK and reports failure instead.
+        "committed_actions": [] if proc.get("committed") else tn.merge_action_prefix(
+            _committed_actions(getattr(self, "_actions", [])), nav_actions),
         "blocked_recovery_contexts": sorted(blocked_recovery_contexts),
         # The step i-1 graph, serialised. The explorer runs in a separate
         # process and gets a copy of the previous generation only, so
@@ -3433,9 +4041,25 @@ def main() -> int:
     if pending_explorer is not None:
       started = time.perf_counter()
       try:
+        window_state["verdict"] = None
+        state_before = None
+        if state_checker is not None:
+          state_before = state_checker.snapshot(before.activity.component.split("/", 1)[0])
         outcome = run_serial_exploration(
             await_explorer_ready(pending_explorer),
             fresh_need=current_need.to_dict())
+        if state_checker is not None:
+          # Same package and a settled UI: the probes' restore has finished.
+          state_after = state_checker.snapshot(state_before.package)
+          verdict = asc.compare(state_before, state_after)
+          if outcome.get("restore_status") != "RESTORED":
+            verdict = dataclasses.replace(verdict, verified=False, reason="ui_not_restored")
+          if int(outcome.get("probes_completed", 0) or 0) == 0:
+            verdict = dataclasses.replace(verdict, verified=False, reason="no_probes")
+          window_state["verdict"] = verdict
+          state_check_total["s"] += verdict.checker_cost_s
+          log("state_check", step=step, probes=int(outcome.get("probes_completed", 0) or 0),
+              restore_status=outcome.get("restore_status"), **verdict.to_dict())
         dirty_from_last_step["value"] = outcome.get("restore_status") != "RESTORED"
         probe_total["n"] += int(outcome.get("probes_completed", 0) or 0)
         ingest_probe_trace(explorer_config["trial_id"])
@@ -3467,6 +4091,16 @@ def main() -> int:
       except Exception as exc:  # pylint: disable=broad-exception-caught
         em_state["page"], em_state["context"] = None, ""
         log("em_prompt_failed", step=step, error=str(exc)[:200])
+    pre_action = {"sig": None, "state": None}
+    if record_effects or args.procedure_replay != "off":
+      # The screen the model is about to read, after exploration's restore.
+      try:
+        pre_action["sig"] = capture.capture()
+        if state_checker is not None:
+          pre_action["state"] = state_checker.snapshot(
+              pre_action["sig"].activity.component.split("/", 1)[0])
+      except Exception as exc:  # pylint: disable=broad-exception-caught
+        log("history_witness_failed", step=step, stage="pre", error=str(exc)[:200])
     log("inference_begin", step=step)
     inference_started = time.perf_counter()
     result = original_step(self, goal)
@@ -3475,6 +4109,53 @@ def main() -> int:
     # (5) Record the authoritative transition, then make this step visible.
     raw = result.data.get("action_dict") or {}
     action_dict = dict(getattr(raw, "__dict__", raw) or {})
+    if args.procedure_replay != "off" and proc["graph"] is not None:
+      kind = str(action_dict.get("action_type"))
+      element = (_element_at(pre_action["sig"], action_dict)
+                 if pre_action["sig"] is not None
+                 and kind in ("click", "long_press", "input_text") else None)
+      if (element is None and kind == "input_text" and pre_action["sig"] is not None
+          and action_dict.get("x") is None):
+        # Typed into the focused field without a point: only an unambiguous
+        # single text field on screen can be named; otherwise a barrier.
+        fields = [e for e in pre_action["sig"].elements
+                  if str(e.class_name).endswith(("EditText", "AutoCompleteTextView"))
+                  and e.resource_id and e.package == pre_action["sig"].activity.component.split("/")[0]]
+        element = fields[0] if len(fields) == 1 else None
+        if element is None and args.procedure_records:
+          # The accessibility tree says which field holds input focus.
+          focused = [e for e in pre_action["sig"].elements
+                     if getattr(e, "focused", False) and getattr(e, "editable", False)
+                     and e.resource_id]
+          element = focused[0] if len(focused) == 1 else None
+        last = proc.get("last_clicked_field")
+        if element is None and last is not None and args.procedure_records:
+          # Several fields: the one the model clicked on the previous step
+          # holds the focus, provided it is still on this screen.
+          same = [e for e in fields if e.resource_id == last.resource_id
+                  and e.class_name == last.class_name and e.bounds == last.bounds]
+          element = same[0] if len(same) == 1 else None
+      proc["last_clicked_field"] = (
+          element if kind == "click" and element is not None
+          and str(element.class_name).endswith(("EditText", "AutoCompleteTextView")) else None)
+      if (element is None and args.procedure_records and kind in ("swipe", "scroll")
+          and action_dict.get("direction") and pre_action["sig"] is not None):
+        # A scroll inside the procedure (down a form to its category list)
+        # is navigation, replayed as the same-direction swipe.
+        proc["pending"] = {"step": step, "sig": pre_action["sig"], "element": None,
+                           "state_before": pre_action["state"], "action_type": "swipe",
+                           "direction": str(action_dict.get("direction")), "text": "",
+                           "control": ""}
+      elif element is not None:
+        proc["pending"] = {"step": step, "sig": pre_action["sig"], "element": element,
+                           "state_before": pre_action["state"], "action_type": kind,
+                           "text": str(action_dict.get("text") or ""),
+                           "control": _control_key_at(pre_action["sig"], action_dict)}
+      else:
+        # Typing, swiping, answering or an unresolvable tap ends a procedure.
+        proc["graph"].record(pr.barrier(step))
+        log("procedure_hop", step=step, barrier=True,
+            action_type=str(action_dict.get("action_type")))
     try:
       after = capture.capture()
       dst_id = node_id_of(after)
@@ -3526,6 +4207,21 @@ def main() -> int:
             exploration_cost=0.0, rollback_success=True, discovered_labels=labels)
         graph.record_execution_verification(observed.edge_id, True)
         observed.nodes_at_last_execution = len(graph.nodes)
+        if (record_effects and pre_action["sig"] is not None
+            and str(action_dict.get("action_type")) == "click"):
+          element = _element_at(pre_action["sig"], action_dict)
+          if element is not None:
+            pending_history["value"] = {
+                "edge_id": observed.edge_id, "step": step,
+                "source": tn.state_from_signature(pre_action["sig"]),
+                "selector": {"resource_id": element.resource_id or "",
+                             "text": element.text or "",
+                             "content_desc": element.content_desc or "",
+                             "class_name": element.class_name or ""},
+                "checked": element.checked, "state_before": pre_action["state"],
+                "layout_signature": before.layout_sig, "control": control,
+                "activity": before.activity.component,
+            }
         # The dynamics of what the agent just did belong to the app and outlive
         # the task; the fact that the model chose it does not. Only probes fed
         # app memory at first, and probes are rare - 19 tasks produced 7
@@ -3571,6 +4267,8 @@ def main() -> int:
     responses = getattr(self, "_responses", None) or []
     if responses:
       last_model_output["text"] = str(responses[-1])
+      if args.task_navigation != "off":
+        nav_intent["value"] = tn.parse_navigation_intent(last_model_output["text"], goal, step)
       if args.node_summary != "off":
         node = graph.nodes.get(src_id)
         if node is not None and not (node.semantic_summary or "").strip():
@@ -3649,8 +4347,48 @@ def main() -> int:
   # three never ran end to end in any full run, and the "injection is neutral"
   # measurement was measuring nothing (2026-09-02).
   if (args.inject_briefing or args.graph_context != "off" or args.decision_constraints
-      or args.em_prompt):
+      or args.em_prompt or args.task_navigation != "off"):
     gelab_agent.build_gelab_messages = build_with_briefing
+  # Every HTTP request to the model, retries and summary calls included, with
+  # the server's own token usage: the agent's step counter is not a cost.
+  from android_world.agents import infer as _infer
+  _original_call_llama = _infer.LlamaCppWrapper.call_llama
+  api_calls_path = root / "api_calls.jsonl"
+
+  def counted_call_llama(self_wrapper, messages):
+    started_call = time.perf_counter()
+    text, ok, raw = _original_call_llama(self_wrapper, messages)
+    usage = (raw or {}).get("usage") or {}
+    if os.environ.get("ANDROID_WORLD_SAVE_MODEL_INPUTS") == "1":
+      import base64 as _b64
+      folder = root / "model_inputs"
+      folder.mkdir(exist_ok=True)
+      for m in messages:
+        for item in (m.get("content") or []):
+          url = item.get("image_url", {}).get("url", "") if isinstance(item, dict) else ""
+          if url.startswith("data:image"):
+            (folder / f"step{step_counter['i']:02d}_{hashlib.md5(url.encode()).hexdigest()[:10]}.png"
+             ).write_bytes(_b64.b64decode(url.split(",", 1)[1]))
+    with api_calls_path.open("a", encoding="utf-8") as stream:
+      stream.write(json.dumps({
+          "step": step_counter["i"], "ok": bool(ok),
+          "latency_s": time.perf_counter() - started_call,
+          "prompt_tokens": usage.get("prompt_tokens"),
+          "completion_tokens": usage.get("completion_tokens"),
+          "model": (raw or {}).get("model"),
+          "has_nav_intent": "<NAV_INTENT>" in str(text or ""),
+          "purpose": call_purpose["v"],
+          # Fingerprints for reproducibility audits: identical inputs must
+          # give identical outputs under temperature 0.
+          "image_md5": [hashlib.md5(str(item.get("image_url", {}).get("url", "")).encode()).hexdigest()[:10]
+                        for m in messages for item in (m.get("content") or [])
+                        if isinstance(item, dict) and item.get("type") == "image_url"],
+          "text_md5": hashlib.md5(json.dumps([[i.get("text") for i in (m.get("content") or [])
+                                               if isinstance(i, dict)] for m in messages]).encode()).hexdigest()[:10],
+          "output_md5": hashlib.md5(str(text or "").encode()).hexdigest()[:10],
+      }) + "\n")
+    return text, ok, raw
+  _infer.LlamaCppWrapper.call_llama = counted_call_llama
   if em_memory is not None and args.em_fusion:
     _original_convert = gelab_agent.gelab_action_to_json_action
 
@@ -3694,7 +4432,8 @@ def main() -> int:
       f"--image_downsample_scale={args.downsample}",
       f"--tasks={args.task}", "--n_task_combinations=1", "--fixed_task_seed",
       f"--task_random_seed={args.seed}", f"--max_n_steps={args.max_steps}",
-      "--console_port=5554", f"--output_path={root}",
+      f"--console_port={args.console_port}", f"--adb_path={args.adb_path}",
+      f"--output_path={root}",
   ]
   try:
     runpy.run_path(str(REPO_ROOT / "run.py"), run_name="__main__")
@@ -3706,7 +4445,7 @@ def main() -> int:
         print(f"description backfill skipped: {exc}", flush=True)
     (root / "progressive_belief_graph.json").write_text(
         json.dumps(graph.to_dict(), ensure_ascii=False, indent=2), encoding="utf-8")
-    if app_store is not None:
+    if app_store is not None and not args.app_memory_readonly:
       written = app_store.save_all()
       (root / "app_memory_stats.json").write_text(
           json.dumps({**app_store.stats(), "files": [str(x) for x in written]},

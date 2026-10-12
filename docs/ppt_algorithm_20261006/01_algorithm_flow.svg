@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="884.88pt" height="587.4225pt" viewBox="0 0 884.88 587.4225" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-10-06T21:29:57.133006</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.6.1, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 587.4225 
+L 884.88 587.4225 
+L 884.88 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 35.1 122.8425 
+L 408.96 122.8425 
+L 408.96 67.4025 
+L 35.1 67.4025 
+z
+" clip-path="url(#p04e2b29d7d)" style="fill: #235da3; fill-opacity: 0.070588; stroke: #235da3; stroke-width: 1.4; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 35.1 200.4585 
+L 408.96 200.4585 
+L 408.96 145.0185 
+L 35.1 145.0185 
+z
+" clip-path="url(#p04e2b29d7d)" style="fill: #235da3; fill-opacity: 0.070588; stroke: #235da3; stroke-width: 1.4; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 35.1 278.0745 
+L 408.96 278.0745 
+L 408.96 222.6345 
+L 35.1 222.6345 
+z
+" clip-path="url(#p04e2b29d7d)" style="fill: #20815f; fill-opacity: 0.070588; stroke: #20815f; stroke-width: 1.4; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 35.1 355.6905 
+L 408.96 355.6905 
+L 408.96 300.2505 
+L 35.1 300.2505 
+z
+" clip-path="url(#p04e2b29d7d)" style="fill: #235da3; fill-opacity: 0.070588; stroke: #235da3; stroke-width: 1.4; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 35.1 433.3065 
+L 408.96 433.3065 
+L 408.96 377.8665 
+L 35.1 377.8665 
+z
+" clip-path="url(#p04e2b29d7d)" style="fill: #235da3; fill-opacity: 0.070588; stroke: #235da3; stroke-width: 1.4; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 35.1 510.9225 
+L 408.96 510.9225 
+L 408.96 455.4825 
+L 35.1 455.4825 
+z
+" clip-path="url(#p04e2b29d7d)" style="fill: #235da3; fill-opacity: 0.070588; stroke: #235da3; stroke-width: 1.4; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 35.1 575.7873 
+L 408.96 575.7873 
+L 408.96 534.2073 
+L 35.1 534.2073 
+z
+" clip-path="url(#p04e2b29d7d)" style="fill: #235da3; fill-opacity: 0.070588; stroke: #235da3; stroke-width: 1.4; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 222.03 124.842996 
+Q 222.03 133.928376 222.03 141.336705 
+" clip-path="url(#p04e2b29d7d)" style="fill: none; stroke: #6d7884; stroke-width: 1.5; stroke-linecap: round"/>
+    <path d="M 224.83 135.736705 
+L 222.03 141.336705 
+L 219.23 135.736705 
+L 224.83 135.736705 
+z
+" clip-path="url(#p04e2b29d7d)" style="fill: #6d7884; stroke: #6d7884; stroke-width: 1.5; stroke-linecap: round"/>
+   </g>
+   <g id="patch_10">
+    <path d="M 222.03 202.458996 
+Q 222.03 211.544376 222.03 218.952705 
+" clip-path="url(#p04e2b29d7d)" style="fill: none; stroke: #6d7884; stroke-width: 1.5; stroke-linecap: round"/>
+    <path d="M 224.83 213.352705 
+L 222.03 218.952705 
+L 219.23 213.352705 
+L 224.83 213.352705 
+z
+" clip-path="url(#p04e2b29d7d)" style="fill: #6d7884; stroke: #6d7884; stroke-width: 1.5; stroke-linecap: round"/>
+   </g>
+   <g id="patch_11">
+    <path d="M 222.03 280.074996 
+Q 222.03 289.160376 222.03 296.568705 
+" clip-path="url(#p04e2b29d7d)" style="fill: none; stroke: #6d7884; stroke-width: 1.5; stroke-linecap: round"/>
+    <path d="M 224.83 290.968705 
+L 222.03 296.568705 
+L 219.23 290.968705 
+L 224.83 290.968705 
+z
+" clip-path="url(#p04e2b29d7d)" style="fill: #6d7884; stroke: #6d7884; stroke-width: 1.5; stroke-linecap: round"/>
+   </g>
+   <g id="patch_12">
+    <path d="M 222.03 357.690996 
+Q 222.03 366.776376 222.03 374.184705 
+" clip-path="url(#p04e2b29d7d)" style="fill: none; stroke: #6d7884; stroke-width: 1.5; stroke-linecap: round"/>
+    <path d="M 224.83 368.584705 
+L 222.03 374.184705 
+L 219.23 368.584705 
+L 224.83 368.584705 
+z
+" clip-path="url(#p04e2b29d7d)" style="fill: #6d7884; stroke: #6d7884; stroke-width: 1.5; stroke-linecap: round"/>
+   </g>
+   <g id="patch_13">
+    <path d="M 222.03 435.306996 
+Q 222.03 444.392376 222.03 451.800705 
+" clip-path="url(#p04e2b29d7d)" style="fill: none; stroke: #6d7884; stroke-width: 1.5; stroke-linecap: round"/>
+    <path d="M 224.83 446.200705 
+L 222.03 451.800705 
+L 219.23 446.200705 
+L 224.83 446.200705 
+z
+" clip-path="url(#p04e2b29d7d)" style="fill: #6d7884; stroke: #6d7884; stroke-width: 1.5; stroke-linecap: round"/>
+   </g>
+   <g id="patch_14">
+    <path d="M 222.03 512.920695 
+Q 222.03 522.564889 222.03 530.532031 
+" clip-path="url(#p04e2b29d7d)" style="fill: none; stroke: #6d7884; stroke-width: 1.5; stroke-linecap: round"/>
+    <path d="M 224.83 524.932031 
+L 222.03 530.532031 
+L 219.23 524.932031 
+L 224.83 524.932031 
+z
+" clip-path="url(#p04e2b29d7d)" style="fill: #6d7884; stroke: #6d7884; stroke-width: 1.5; stroke-linecap: round"/>
+   </g>
+   <g id="patch_15">
+    <path d="M 467.55 161.6505 
+L 841.41 161.6505 
+L 841.41 67.4025 
+L 467.55 67.4025 
+z
+" clip-path="url(#p04e2b29d7d)" style="fill: #235da3; fill-opacity: 0.070588; stroke: #235da3; stroke-width: 1.4; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_16">
+    <path d="M 467.55 294.7065 
+L 841.41 294.7065 
+L 841.41 194.9145 
+L 467.55 194.9145 
+z
+" clip-path="url(#p04e2b29d7d)" style="fill: #20815f; fill-opacity: 0.070588; stroke: #20815f; stroke-width: 1.4; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_17">
+    <path d="M 465.550988 250.3545 
+Q 438.255439 250.3545 412.63694 250.3545 
+" clip-path="url(#p04e2b29d7d)" style="fill: none; stroke: #6d7884; stroke-width: 1.5; stroke-linecap: round"/>
+    <path d="M 418.23694 253.1545 
+L 412.63694 250.3545 
+L 418.23694 247.5545 
+L 418.23694 253.1545 
+z
+" clip-path="url(#p04e2b29d7d)" style="fill: #6d7884; stroke: #6d7884; stroke-width: 1.5; stroke-linecap: round"/>
+   </g>
+   <g id="patch_18">
+    <path d="M 467.55 380.6385 
+L 841.41 380.6385 
+L 841.41 327.9705 
+L 467.55 327.9705 
+z
+" clip-path="url(#p04e2b29d7d)" style="fill: #d38a24; fill-opacity: 0.070588; stroke: #d38a24; stroke-width: 1.4; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_19">
+    <path d="M 410.765905 328.824907 
+Q 438.255105 341.83055 464.228358 354.118971 
+" clip-path="url(#p04e2b29d7d)" style="fill: none; stroke: #6d7884; stroke-width: 1.5; stroke-linecap: round"/>
+    <path d="M 460.363791 349.193007 
+L 464.228358 354.118971 
+L 457.968847 354.255047 
+L 460.363791 349.193007 
+z
+" clip-path="url(#p04e2b29d7d)" style="fill: #6d7884; stroke: #6d7884; stroke-width: 1.5; stroke-linecap: round"/>
+   </g>
+   <g id="patch_20">
+    <path d="M 467.55 510.9225 
+L 841.41 510.9225 
+L 841.41 422.2185 
+L 467.55 422.2185 
+z
+" clip-path="url(#p04e2b29d7d)" style="fill: #6d7884; fill-opacity: 0.070588; stroke: #6d7884; stroke-width: 1.4; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_1">
+    <text style="fill: #235da3; font: 700 24px 'Arial Unicode MS'; text-anchor: start" x="29.52" y="25.8225" transform="rotate(-0 29.52 25.8225)">full_rec 当前执行流程</text>
+   </g>
+   <g id="text_2">
+    <text style="fill: #6d7884; font: 13px 'Arial Unicode MS'; text-anchor: start" x="29.52" y="45.2265" transform="rotate(-0 29.52 45.2265)">116 任务实验使用串行 runner；探索结束并恢复后才推理</text>
+   </g>
+   <g id="text_3">
+    <text style="fill: #203046; font: 13px 'Arial Unicode MS'" transform="translate(161.724219 88.88702)">① 结算上一模型动作</text>
+    <text style="fill: #203046; font: 13px 'Arial Unicode MS'" transform="translate(103.574609 108.607512)">前后状态检查，记录流程 hop 与提交边界</text>
+   </g>
+   <g id="text_4">
+    <text style="fill: #203046; font: 13px 'Arial Unicode MS'" transform="translate(133.918438 167.317145)">② 读取当前 UI，登记屏幕节点</text>
+    <text style="fill: #203046; font: 13px 'Arial Unicode MS'" transform="translate(85.53 185.866418)">读取探索开始前的图快照，解析上一步推理需求</text>
+   </g>
+   <g id="text_5">
+    <text style="fill: #203046; font: 13px 'Arial Unicode MS'" transform="translate(130.306875 244.670098)">③ 流程图规划与实体 / 字段回放</text>
+    <text style="fill: #203046; font: 13px 'Arial Unicode MS'" transform="translate(85.53 263.219371)">有已完成演示且下一实体可定位，执行到提交前</text>
+   </g>
+   <g id="text_6">
+    <text style="fill: #203046; font: 13px 'Arial Unicode MS'" transform="translate(174.724219 322.82702)">④ 屏幕图跳步门</text>
+    <text style="fill: #203046; font: 13px 'Arial Unicode MS'" transform="translate(94.195313 340.205074)">重访、可复用边、风险 / 提交守卫 / 次数限制</text>
+   </g>
+   <g id="text_7">
+    <text style="fill: #203046; font: 13px 'Arial Unicode MS'" transform="translate(142.224219 400.681031)">⑤ 蒸馏图上下文并完成探索</text>
+    <text style="fill: #203046; font: 13px 'Arial Unicode MS'" transform="translate(105.03 417.753687)">过滤、排序、探测、恢复、窗口状态检查</text>
+   </g>
+   <g id="text_8">
+    <text style="fill: #203046; font: 13px 'Arial Unicode MS'" transform="translate(114.418438 477.851375)">⑥ 模型读取恢复后的 UI，推理并执行</text>
+    <text style="fill: #203046; font: 13px 'Arial Unicode MS'" transform="translate(118.03 496.233781)">模型决定最终提交，或处理回放中断</text>
+   </g>
+   <g id="text_9">
+    <text style="fill: #203046; font: 13px 'Arial Unicode MS'; text-anchor: middle" x="222.03" y="559.085191" transform="rotate(-0 222.03 559.085191)">⑦ 写入真实屏幕转移，准备 pending hop，提交下一代</text>
+   </g>
+   <g id="text_10">
+    <text style="fill: #203046; font: 13px 'Arial Unicode MS'" transform="translate(564.534219 99.530645)">屏幕图 ProgressiveBeliefGraph</text>
+    <text style="fill: #203046; font: 13px 'Arial Unicode MS'" transform="translate(581.707422 119.145715)">activity + 交互骨架的节点</text>
+    <text style="fill: #203046; font: 13px 'Arial Unicode MS'" transform="translate(530.98 137.775324)">控件动作边，落点、恢复、代价与历史统计</text>
+   </g>
+   <g id="text_11">
+    <text style="fill: #203046; font: 13px 'Arial Unicode MS'" transform="translate(585.122969 230.39223)">流程图 ProcedureGraph</text>
+    <text style="fill: #203046; font: 13px 'Arial Unicode MS'" transform="translate(545.062656 248.881684)">模型演示的动作序列，实体 / 字段槽位</text>
+    <text style="fill: #203046; font: 13px 'Arial Unicode MS'" transform="translate(532.774609 267.430957)">state_ok，已处理实体，当前进行中的实体</text>
+   </g>
+   <g id="text_12">
+    <text style="fill: #6d7884; font: 11px 'Arial Unicode MS'; text-anchor: middle" x="438.255" y="240.955894" transform="rotate(-0 438.255 240.955894)">规划</text>
+   </g>
+   <g id="text_13">
+    <text style="fill: #203046; font: 13px 'Arial Unicode MS'; text-anchor: middle" x="654.48" y="358.503094" transform="rotate(-0 654.48 358.503094)">跳步允许：执行一跳，记录结果，结束本 step</text>
+   </g>
+   <g id="text_14">
+    <text style="fill: #6d7884; font: 11px 'Arial Unicode MS'; text-anchor: middle" x="438.255" y="332.431894" transform="rotate(-0 438.255 332.431894)">允许</text>
+   </g>
+   <g id="text_15">
+    <text style="fill: #203046; font: 13px 'Arial Unicode MS'" transform="translate(615.48 452.258312)">契约调用时机</text>
+    <text style="fill: #203046; font: 13px 'Arial Unicode MS'" transform="translate(538.743438 469.359305)">首次发现“演示片段 + 持久状态变化”之后</text>
+    <text style="fill: #203046; font: 13px 'Arial Unicode MS'" transform="translate(530.98 487.663)">额外一次纯文本调用，抽取任务实体与字段</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p04e2b29d7d">
+   <rect x="7.2" y="9.1905" width="870.48" height="571.032"/>
+  </clipPath>
+ </defs>
+</svg>

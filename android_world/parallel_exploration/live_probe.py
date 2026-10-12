@@ -158,6 +158,21 @@ def _graph_element_rows(elements: Sequence[UiElement]) -> list[dict[str, Any]]:
   return rows
 
 
+def _graph_state_labels(state: StateSignature) -> list[str]:
+  """Bounded episode-local landing cues, including non-actionable text.
+
+  An action inventory omits many task facts (detail labels and entity names).
+  Keep these separately, excluding other apps' system/keyboard chrome.
+  """
+  package = state.activity.component.split("/", 1)[0]
+  return list(dict.fromkeys(
+      str(label).strip() for element in state.elements
+      if element.package in ("", package)
+      for label in (element.text, element.content_desc)
+      if label and len(str(label).strip()) <= 160
+  ))[:64]
+
+
 def _save_probe_diagnostic(
     adb: AdbClient,
     root: Path,
@@ -215,6 +230,7 @@ def _element_dict(element: UiElement, rank: int, score: float) -> dict[str, Any]
       "class": element.class_name,
       "bounds": list(element.bounds),
       "selected": element.selected,
+      "checked": element.checked,
       "rank": rank,
       "score": score,
   }
@@ -690,9 +706,24 @@ def _is_app_content(element: UiElement, label: str) -> bool:
   return True
 
 
+def _names_entity_target(element: UiElement, elements: Sequence[UiElement],
+                         targets: set[str]) -> bool:
+  """A list row whose label is exactly a task entity.
+
+  Own text only: candidate augmentation already lifts a row's child label
+  onto the clickable row, so checking children too would admit the same row
+  twice (the bare row and its labelled copy).
+  """
+  del elements
+  return bool(targets) and any(" ".join(str(x).casefold().split()) in targets
+                               for x in (element.text, element.content_desc) if x)
+
+
 def _safe_candidates(
     elements: tuple[UiElement, ...], filtered_path: Path, context: Mapping[str, Any]
 ) -> list[UiElement]:
+  entity_targets = {" ".join(str(x).casefold().split())
+                    for x in (context.get("entity_row_targets") or ()) if x}
   blocked = set(context.get("blocked_element_identities") or ())
   explored_control_evidence = context.get("explored_control_evidence") or {}
   blocked_control_keys = {
@@ -881,7 +912,8 @@ def _safe_candidates(
     if not (element.clickable or element.scrollable):
       continue
     if (element.clickable and not element.scrollable and element.resource_id
-        and clickable_templates[(element.resource_id, element.class_name)] > 1):
+        and clickable_templates[(element.resource_id, element.class_name)] > 1
+        and not _names_entity_target(element, elements, entity_targets)):
       _write_jsonl(filtered_path, {
           **context, "element": _element_dict(element, 0, 0.0),
           "reason": "repeated_dynamic_collection_item",
@@ -1037,6 +1069,26 @@ def _probe_type(element: UiElement) -> str:
 def _center(element: UiElement) -> tuple[int, int]:
   left, top, right, bottom = element.bounds
   return (left + right) // 2, (top + bottom) // 2
+
+
+def _replay_record(probe_type: str, element: UiElement) -> dict[str, Any]:
+  """The probe as a trajectory-replay record, matching what _adb_action sent.
+
+  A SCROLL parent recorded as a tap replays as a tap on the middle of the
+  scrolled container - inside a date picker that selects a different day, so
+  a nested rollback "reconstructed" a changed form (2026-10-04,
+  SimpleCalendarAddOneEventRelativeDay).
+  """
+  if probe_type == "SCROLL":
+    left, top, right, bottom = element.bounds
+    x = (left + right) // 2
+    return {"action_dict": {
+        "action_type": "swipe",
+        "start_coordinate": [x, top + int((bottom - top) * 0.75)],
+        "end_coordinate": [x, top + int((bottom - top) * 0.25)],
+    }}
+  x, y = _center(element)
+  return {"action_dict": {"action_type": "click", "x": x, "y": y}}
 
 
 def _adb_action(adb: AdbClient, probe_type: str, element: UiElement, inverse: bool = False) -> float:
@@ -1475,6 +1527,7 @@ def _explore_deeper(
   relevant = (not goal_tokens) or relevance > goal_relevance_threshold
 
   nested_failed = False
+  recover_from = child_post
   if depth < max_depth and stack_ok and relevant:
     deepest, nested_failed = _explore_deeper(
         adb, capture, ranker, ranker_name, context, filtered_path, trace_path,
@@ -1482,10 +1535,15 @@ def _explore_deeper(
         goal_relevance_threshold, root_baseline, max_stack_depth_increase,
         inference_done_event, exploration_started, max_exploration_time_s,
         probe_budget, inference_start_ns, explored_element_identities,
-        list(replay_prefix) + [{"action_dict": {
-            "action_type": "click", "x": _center(child)[0], "y": _center(child)[1],
-        }}],
+        list(replay_prefix) + [_replay_record(_probe_type(child), child)],
     )
+    if nested_failed:
+      # child_post was captured before the nested hops; after a failed nested
+      # rollback it no longer describes the screen, and comparing against it
+      # lets _recover declare NOOP on a changed screen.
+      recover_from = capture.capture()
+    else:
+      recover_from = child_post
 
   # parent_state is reconstructible as "committed prefix + every ancestor
   # probe action", so nested probes get the same full recovery ladder as
@@ -1493,7 +1551,7 @@ def _explore_deeper(
   # None here meant 12 of 23 observed rollback failures (2026-08-29) were
   # nested probes that never had access to the deepest recovery level.
   level, ok, matches, details, recovery_ms, verify_ms = _recover(
-      adb, capture, parent_state, child_post, _probe_type(child), child,
+      adb, capture, parent_state, recover_from, _probe_type(child), child,
       inference_done_event, replay_prefix or None,
   )
   total_ms = (time.monotonic_ns() - child_started) / 1e6
@@ -1520,6 +1578,7 @@ def _explore_deeper(
               "structural_signature": parent_state.struct_sig.digest,
               "visual_signature": parent_state.phash,
               "layout_signature": parent_state.layout_sig,
+              "labels": _graph_state_labels(parent_state),
               "elements": _graph_element_rows(parent_state.elements),
           },
           "action": {
@@ -1531,6 +1590,7 @@ def _explore_deeper(
               "structural_signature": child_post.struct_sig.digest,
               "visual_signature": child_post.phash,
               "layout_signature": child_post.layout_sig,
+              "labels": _graph_state_labels(child_post),
               "elements": _graph_element_rows(child_post.elements),
           },
       },
@@ -1588,6 +1648,12 @@ def explorer_window_process(
   first = control_queue.get()
   if first.kind != EventKind.INFERENCE_START:
     raise RuntimeError(f"Expected INFERENCE_START, got {first.kind}")
+  # Workers may be prepared during the previous reasoning call. Refresh only
+  # with the snapshot committed before THIS call, never with in-flight probes.
+  config = dict(config)
+  for key in ("graph_snapshot", "task_navigation_targets", "task_navigation_frontier"):
+    if key in first.payload:
+      config[key] = first.payload[key]
   inference_start_ns = first.monotonic_ns
   committed_actions = list(first.payload.get("committed_actions") or [])
   # The need the caller had when it STARTED this window is one model output
@@ -1643,6 +1709,9 @@ def explorer_window_process(
         "known_inverse_levels": dict(config.get("known_inverse_levels") or {}),
         "recent_nodes": list(config.get("recent_nodes") or ()),
         "allow_icon_only_probes": bool(config.get("allow_icon_only_probes")),
+        # Q2: rows naming an entity the task still has to handle are exempt
+        # from the generic list-row filter (empty unless the runner opts in).
+        "entity_row_targets": list(config.get("entity_row_targets") or ()),
         # Already on record from a prior round revisiting this same node
         # (outcome known either way): re-probing it spends budget and fresh
         # rollback risk to relearn something already known, so the ranker
@@ -1892,6 +1961,25 @@ def explorer_window_process(
       if not safe:
         return None
       ranked = scorer.rank(safe)
+      if config.get("task_navigation_frontier"):
+        from android_world.parallel_exploration.task_navigation import frontier_scores
+        target_labels = config.get("task_navigation_targets") or ()
+        frontier = frontier_scores(
+            config.get("graph_snapshot") or {}, node_id,
+            [item.row.element for item in ranked], target_labels,
+            screen_elements=state.elements)
+        if target_labels:
+          ranked = [dataclasses.replace(
+              item, utility=item.utility + frontier[item.row.element_identity]["score"]
+              / max(.5, item.row.expected_total_exploration_cost))
+                    for item in ranked if not frontier[item.row.element_identity]["known_noop"]]
+          ranked.sort(key=lambda item: (-item.utility, item.row.element_identity))
+        for identity, fields in frontier.items():
+          _write_jsonl(scored_path, {
+              "trial_id": context["trial_id"], "node_id": node_id,
+              "element_identity": identity, "policy": "task_navigation_frontier",
+              **fields,
+          })
       ranked, guidance_stats = _apply_executable_memory_tiebreak(
           ranked, context.get("executable_memory_guidance"))
       for key in ("candidate_count", "seen_count", "unseen_count", "mature_count",
@@ -2038,6 +2126,7 @@ def explorer_window_process(
       # earned real trust (INFERENCE_ALIGNED / VERIFIED via
       # promote_children_of_aligned_prefix).
       nested_recovery_failed = False
+      recover_from = post
       depth2_blocked = f"{baseline.activity.component}|DEPTH2" in blocked_recovery_contexts
       if depth2_needs_known_inverse and not inverse_is_known(baseline, probe_type):
         depth2_blocked = True
@@ -2049,16 +2138,16 @@ def explorer_window_process(
             goal_relevance_threshold, baseline, max_stack_depth_increase,
             inference_done_event, exploration_started, max_exploration_time_s,
             probe_budget, inference_start_ns, explored_element_identities,
-            list(committed_actions) + [{"action_dict": {
-                "action_type": "click", "x": _center(element)[0], "y": _center(element)[1],
-            }}],
+            list(committed_actions) + [_replay_record(probe_type, element)],
         )
+        if nested_recovery_failed:
+          recover_from = capture.capture()  # see _explore_deeper: stale post masks the failure
         probe_idx = probe_budget[0]
         max_depth_reached = max(max_depth_reached, reached_depth)
         deep_yield = deep_yield or reached_depth >= 2
 
       level, ok, matches, signature_details, recovery_ms, verify_ms = _recover(
-          adb, capture, baseline, post, probe_type, element, inference_done_event,
+          adb, capture, baseline, recover_from, probe_type, element, inference_done_event,
           committed_actions,
           known_inverse=str(known_inverse_levels.get(
               f"{baseline.activity.component}|{probe_type}", "")),
@@ -2111,6 +2200,7 @@ def explorer_window_process(
                   "structural_signature": baseline.struct_sig.digest,
                   "visual_signature": baseline.phash,
                   "layout_signature": baseline.layout_sig,
+                  "labels": _graph_state_labels(baseline),
                   "elements": _graph_element_rows(baseline.elements),
               },
               "action": {
@@ -2123,6 +2213,7 @@ def explorer_window_process(
                   "structural_signature": post.struct_sig.digest,
                   "visual_signature": post.phash,
                   "layout_signature": post.layout_sig,
+                  "labels": _graph_state_labels(post),
                   "elements": _graph_element_rows(post.elements),
               },
           },
@@ -2331,7 +2422,10 @@ def run_serial_exploration(prepared: PreparedExplorer, timeout_s: float = 60.0,
   prepared.control_queue.put(Event.now(
       trial_id, EventKind.INFERENCE_START, ProcessRole.INFERENCE,
       {"committed_actions": list(prepared.config.get("committed_actions") or []),
-       "information_need": dict(fresh_need) if fresh_need else None},
+       "information_need": dict(fresh_need) if fresh_need else None,
+       **{key: prepared.config[key] for key in (
+           "graph_snapshot", "task_navigation_targets", "task_navigation_frontier")
+          if key in prepared.config}},
   ))
   try:
     terminal = prepared.status_queue.get(timeout=timeout_s)
@@ -2364,7 +2458,10 @@ def run_prepared_explorer(prepared: PreparedExplorer, inference_call) -> tuple[A
       trial_id, EventKind.INFERENCE_START, ProcessRole.INFERENCE,
       {"committed_actions": list(prepared.config.get("committed_actions") or []),
        "executable_memory_guidance": dict(
-           prepared.config.get("executable_memory_guidance") or {})},
+           prepared.config.get("executable_memory_guidance") or {}),
+       **{key: prepared.config[key] for key in (
+           "graph_snapshot", "task_navigation_targets", "task_navigation_frontier")
+          if key in prepared.config}},
   )
   prepared.control_queue.put(start)
   inference_started = time.monotonic_ns()

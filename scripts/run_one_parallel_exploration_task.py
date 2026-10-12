@@ -39,6 +39,7 @@ from android_world.parallel_exploration.config import TwoSystemConfig
 from android_world.parallel_exploration.logging import InferenceRoundRecord
 from android_world.parallel_exploration.logging import RoundLogger
 from android_world.parallel_exploration.information import parse_information_need
+from android_world.parallel_exploration import task_navigation as tn
 from android_world.parallel_exploration.resources import ResourceAdaptiveBudgetController
 from android_world.parallel_exploration.resources import ResourceMonitor
 from android_world.parallel_exploration.runtime import SkipInferenceGate
@@ -56,6 +57,10 @@ METRICS = {
     "prompt_tokens": "vllm:prompt_tokens_total",
     "generation_tokens": "vllm:generation_tokens_total",
 }
+
+
+class ReperceptionRequired(RuntimeError):
+  """The concurrent model result refers to a UI state not restored by probes."""
 
 
 def _append(path: Path, row: dict[str, Any]) -> None:
@@ -118,6 +123,9 @@ def main() -> int:
   parser.add_argument("--metrics_url", default="http://127.0.0.1:8081/metrics")
   parser.add_argument("--two_system", action="store_true")
   parser.add_argument("--enable_skip_inference", action="store_true")
+  parser.add_argument("--task_navigation", choices=("off", "shadow", "execute"), default="off")
+  parser.add_argument("--task_navigation_frontier", action="store_true")
+  parser.add_argument("--task_navigation_ui_only", action="store_true")
   parser.add_argument("--skip_confidence", type=float, default=0.90)
   parser.add_argument("--max_probes", type=int, default=12)
   parser.add_argument("--min_probes", type=int, default=4)
@@ -129,6 +137,11 @@ def main() -> int:
   parser.add_argument("--m3a_summary", action="store_true", help="Enable M3A's second model call for summaries")
   parser.add_argument("--inject_evidence", action="store_true", help="Summarize exploration findings into the next prompt")
   args = parser.parse_args()
+  if args.task_navigation != "off":
+    if args.agent_name != "gelab_agent" or not args.two_system:
+      parser.error("task_navigation requires --agent_name gelab_agent --two_system")
+    if args.task_navigation == "execute" and args.enable_skip_inference:
+      parser.error("disable legacy enable_skip_inference for task_navigation execute")
   if args.a11y_method == "grpc":
     os.environ.pop("ANDROID_WORLD_A11Y_METHOD", None)
   else:
@@ -160,6 +173,12 @@ def main() -> int:
       max_exploration_time_s=args.max_exploration_time_s,
   )
   graph = ProgressiveBeliefGraph(args.task)
+  nav_planner = tn.TaskNavigationPlanner(allow_ui_only=args.task_navigation_ui_only)
+  nav_intent = None
+  nav_consumed: set[str] = set()
+  nav_actions: list[dict[str, Any]] = []
+  nav_inference_costs: list[float] = []
+  nav_events_path = root / "task_navigation_events.jsonl"
   skip_gate = SkipInferenceGate(graph, two_system_config)
   resource_monitor = ResourceMonitor()
   budget_controller = ResourceAdaptiveBudgetController(two_system_config)
@@ -277,6 +296,13 @@ def main() -> int:
               str(label) for label in (row.get("discovered") or {}).get("new_texts", [])[:8]
           ),
       )
+      if args.task_navigation != "off" or args.task_navigation_frontier:
+        witness = tn.observation_from_probe(row, int(row.get("step_idx", 0)))
+        if witness is not None:
+          graph.record_navigation_observation(edge.edge_id, witness)
+        graph.record_probe(edge.edge_id, rollback_ok=bool(row.get("recovery_ok")),
+                           cost_s=float(row.get("timings_ms", {}).get("total", 0)) / 1000,
+                           generation=int(row.get("step_idx", 0)))
       edge_ids.append(edge.edge_id)
       ingested.append({
           "edge_id": edge.edge_id, "depth": depth,
@@ -330,6 +356,11 @@ def main() -> int:
         "max_depth": last_budget.max_depth if args.two_system else 1,
         "max_exploration_time_s": last_budget.max_exploration_time_s if args.two_system else args.max_exploration_time_s,
         "information_need": information_need.to_dict(),
+        "task_navigation_frontier": args.task_navigation_frontier,
+        "task_navigation_targets": list(nav_intent.target_labels)
+            if nav_intent is not None and nav_intent.valid(task_text, step) else [],
+        "graph_snapshot": {**graph.to_dict(), "generation": step}
+            if args.task_navigation_frontier else {},
         "blocked_element_identities": sorted(blocked_element_identities),
         "blocked_recovery_contexts": sorted(blocked_recovery_contexts),
         "node_candidate_hits": {node: dict(hits) for node, hits in node_candidate_hits.items()},
@@ -356,6 +387,13 @@ def main() -> int:
       return original_predict(self, text_prompt, images, messages)
     if isinstance(prepared.config, dict):
       prepared.config["committed_actions"] = list(profile.get("committed_actions") or [])
+      if args.task_navigation_frontier:
+        prepared.config.update({
+            "graph_snapshot": {**graph.to_dict(), "generation": int(profile["step"])},
+            "task_navigation_frontier": True,
+            "task_navigation_targets": list(nav_intent.target_labels)
+                if nav_intent is not None and nav_intent.valid(str(profile["goal"]), int(profile["step"])) else [],
+        })
     trial_id = str(prepared.config["trial_id"])
     next_holder: dict[str, Any] = {}
     def prepare_next() -> None:
@@ -376,6 +414,8 @@ def main() -> int:
     result, window = run_prepared_explorer(
         prepared, lambda: original_predict(self, text_prompt, images, messages)
     )
+    if args.task_navigation != "off":
+      nav_inference_costs.append(float(window["inference_ms"]) / 1000)
     client_total_s = time.perf_counter() - client_started
     next_thread.join(timeout=15)
     if "error" in next_holder:
@@ -454,6 +494,9 @@ def main() -> int:
         memory_confidence=graph.get_local_confidence(graph.edges[trial_edges[trial_id][0]].src_node) if trial_edges.get(trial_id) else 0.0,
         explorer_reliability=budget_controller.explorer_reliability,
     )
+    if not rollback_ok and args.task_navigation != "off":
+      round_logger.append(pending_rounds.pop(request_no))
+      raise ReperceptionRequired("discard stale action after failed exploration recovery")
     return result
 
   from android_world.parallel_exploration.protocol import EventKind
@@ -484,7 +527,8 @@ def main() -> int:
 
   def build_messages_with_evidence(goal, history, screenshot):
     messages = original_build_messages(goal, history, screenshot)
-    evidence = evidence_var.get()
+    evidence = "\n\n".join(x for x in (
+        evidence_var.get(), tn.INTENT_PROMPT if args.task_navigation != "off" else "") if x)
     if evidence:
       for item in messages[-1]["content"]:
         if item.get("type") == "text":
@@ -772,13 +816,64 @@ def main() -> int:
     return base_agent.AgentInteractionResult(False, step_record)
 
   def timed_step(self, goal: str):
-    nonlocal pending_prefix_edge_ids, device_dirty, prepared, last_intent
+    nonlocal pending_prefix_edge_ids, device_dirty, prepared, last_intent, nav_intent
+    step_total_started = time.perf_counter()
+    if args.task_navigation != "off":
+      nav_step = len(getattr(self, "_actions", []))
+      nav_before = ensure_skip_capture().capture()
+      nav_snapshot = {**graph.to_dict(), "generation": nav_step}
+      nav_route = nav_planner.compile(
+          nav_snapshot, tn.state_from_signature(nav_before), nav_intent, task=goal,
+          inference_cost_s=(sum(nav_inference_costs) / len(nav_inference_costs)
+                            if nav_inference_costs else 0.0),
+      ) if nav_intent and nav_intent.intent_id not in nav_consumed else None
+      _append(nav_events_path, {
+          "kind": "plan", "step": nav_step, "mode": args.task_navigation,
+          "intent": dataclasses.asdict(nav_intent) if nav_intent else None,
+          "route": nav_route.to_dict() if nav_route else None,
+          "rejections": nav_planner.last_rejections,
+          "ui_only": args.task_navigation_ui_only,
+      })
+      if (nav_route is not None and args.task_navigation == "execute"
+          and nav_route.expected_net_saving_s > 0 and not device_dirty):
+        nav_consumed.add(nav_route.intent_id)
+        started_nav = time.perf_counter()
+        # Prepared explorer has the previous start screen; never probe it
+        # after moving the live UI through a macro.
+        if prepared is not None:
+          stop_prepared_explorer(prepared)
+          prepared = None
+        def capture_navigation_state():
+          time.sleep(.2)
+          return ensure_skip_capture().capture()
+        def record_navigation_action(action, hop):
+          nav_actions.append({"before_action_index": nav_step, "action_dict": dict(action)})
+          self._summaries.append(
+              f"Navigation selected {hop.selector.get('text') or hop.selector.get('content_desc')}; "
+              "task decision remains pending.")
+        nav_outcome = tn.execute_route(
+            nav_route, nav_intent, task=goal, capture=capture_navigation_state,
+            execute=lambda action: self._execute_action(json_action.JSONAction(**action), {}),
+            on_action=record_navigation_action)
+        for eid in nav_outcome.verified_edge_ids:
+          graph.record_skip_result(eid, True, generation=nav_step)
+        if nav_outcome.failed_edge_id:
+          graph.record_skip_result(nav_outcome.failed_edge_id, False, generation=nav_step)
+          graph.record_execution_verification(nav_outcome.failed_edge_id, False)
+        pending_prefix_edge_ids = []
+        prepared = prepare_explorer(explorer_config(request_no + 1, nav_step, goal))
+        _append(nav_events_path, {
+            "kind": "execute", "step": nav_step, **dataclasses.asdict(nav_outcome),
+            "latency_s": time.perf_counter() - started_nav,
+        })
+        # Fall through to inference on the actual landing screen, including
+        # on a mismatch. Terminal decisions always stay with the model.
     skipped_result = try_skip_step(self, goal)
     if skipped_result is not None:
       _append(steps_path, {
           "task": args.task, "goal": goal,
           "step": len(getattr(self, "_actions", [])) - 1,
-          "step_total_s": skipped_result.data.get("latency_sec", 0.0),
+          "step_total_s": time.perf_counter() - step_total_started,
           "done": False, "action": skipped_result.data.get("action_dict", {}),
           "inference_skipped": True,
           "successor_matched": skipped_result.data.get("successor_matched"),
@@ -797,7 +892,7 @@ def main() -> int:
       })
     profile = {
         "task": args.task, "goal": goal, "step": len(history),
-        "committed_actions": committed_actions,
+        "committed_actions": tn.merge_action_prefix(committed_actions, nav_actions),
     }
     token = profile_var.set(profile)
     # One capture serves two purposes: the evidence summary for this prompt,
@@ -810,10 +905,24 @@ def main() -> int:
     )
     started = time.perf_counter()
     try:
-      result = original_step(self, goal)
+      try:
+        result = original_step(self, goal)
+      except ReperceptionRequired:
+        # The discarded call has not reached action conversion/execution.
+        # Capture a fresh screenshot in the ordinary agent step; dirty=True
+        # prevents further probing during this recovery-only inference.
+        evidence_var.set("")
+        _append(nav_events_path, {"kind": "reperception", "step": profile["step"],
+                                 "reason": "rollback_failure_discarded_stale_action"})
+        result = original_step(self, goal)
     finally:
       profile_var.reset(token)
       evidence_var.reset(evidence_token)
+    if args.task_navigation != "off":
+      responses = getattr(self, "_responses", [])
+      nav_intent = tn.parse_navigation_intent(
+          str(responses[-1]) if responses else str(result.data.get("response", "")),
+          goal, int(profile["step"]))
     if device_dirty:
       # A prior round's rollback failure only tells us that PAST screen was
       # left unverified, not that the device is dirty forever. The real step
@@ -1004,13 +1113,13 @@ def main() -> int:
             "error": f"{type(exc).__name__}: {exc}",
         })
     _append(steps_path, {
-        **profile, "step_total_s": time.perf_counter() - started,
+        **profile, "step_total_s": time.perf_counter() - step_total_started,
         "done": bool(result.done), "action": action_dict,
     })
     return result
 
   agent_class.step = timed_step
-  if args.inject_evidence:
+  if args.inject_evidence or args.task_navigation != "off":
     gelab_agent.build_gelab_messages = build_messages_with_evidence
   (root / "meta.json").write_text(json.dumps({
       "started_at": dt.datetime.now().isoformat(), "task": args.task,
@@ -1019,6 +1128,9 @@ def main() -> int:
       "exploration": "parallel_live_probe",
       "two_system": args.two_system,
       "skip_inference_enabled": args.enable_skip_inference,
+      "task_navigation": args.task_navigation,
+      "task_navigation_frontier": args.task_navigation_frontier,
+      "task_navigation_ui_only": args.task_navigation_ui_only,
       "two_system_config": dataclasses.asdict(two_system_config),
       "exploration_execution": {
           "min_probes": args.min_probes,
@@ -1042,6 +1154,14 @@ def main() -> int:
     stop_prepared_explorer(prepared)
     if skip_capture is not None:
       skip_capture.close()
+    if args.task_navigation != "off":
+      (root / "task_navigation_runtime.json").write_text(json.dumps({
+          "actual_model_calls": request_no,
+          "navigation_action_attempts": len(nav_actions),
+          "consumed_intents": sorted(nav_consumed),
+          "mode": args.task_navigation, "ui_only": args.task_navigation_ui_only,
+          "navigation_actions": nav_actions,
+      }, ensure_ascii=False, indent=2), encoding="utf-8")
   return 0
 
 
