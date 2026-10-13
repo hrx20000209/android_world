@@ -356,7 +356,9 @@ class DeepseekWrapper(LlmWrapper, MultimodalLlmWrapper):
         # api_key = os.getenv("DEEPSEEK_API_KEY")
         # if not api_key:
         #   raise RuntimeError("DeepSeek API key not set.")
-        api_key = 'sk-d645153259c2492c91893c07f6e72b7a'
+        api_key = os.environ.get("DEEPSEEK_API_KEY")
+        if not api_key:
+            raise RuntimeError("DEEPSEEK_API_KEY not set.")
         self.client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
         self.model = model_name
         self.temperature = temperature

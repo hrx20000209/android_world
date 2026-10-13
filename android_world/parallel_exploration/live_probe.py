@@ -1639,6 +1639,7 @@ def explorer_window_process(
           )
       )),
       a11y_local_port=int(config.get("a11y_local_port", 8765)),
+      use_fast_a11y_socket=bool(config.get("use_fast_a11y_socket", True)),
   )
   status_queue.put(Event.now(trial_id, EventKind.EXPLORER_READY, ProcessRole.EXPLORER))
   # A prepared explorer may intentionally sit idle while AndroidWorld resets the
@@ -2205,6 +2206,10 @@ def explorer_window_process(
               },
               "action": {
                   "action_type": "SWIPE" if probe_type == "SCROLL" else "CLICK",
+                  # SCROLL probes use a fixed upward finger gesture. Persist
+                  # the operation so an authoritative SWIPE on this same
+                  # scroll container can be compared as the same action slot.
+                  "direction": "up" if probe_type == "SCROLL" else None,
                   "x": _center(element)[0], "y": _center(element)[1],
                   "element_identity": element.identity,
               },

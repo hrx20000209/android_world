@@ -32,6 +32,29 @@ class Observation:
   recovered: bool
   cost_s: float
   origin: str = "probe"
+  destination_family: str | None = None
+
+
+def _action_key(action: dict[str, Any]) -> str:
+  """Identify an action slot without confusing moved controls or gestures."""
+  action_type = str(action.get("action_type", "")).casefold()
+  selector = (
+      action.get("stable_control_key")
+      or action.get("control_key")
+      or action.get("element_identity")
+  )
+  if selector:
+    payload = {
+        "action_type": action_type,
+        "selector": str(selector),
+        "direction": action.get("direction"),
+        "text": action.get("text") if action_type in {"input_text", "type"} else None,
+        "app_name": action.get("app_name"),
+    }
+  else:
+    payload = dict(action)
+    payload["action_type"] = action_type
+  return json.dumps(payload, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
 
 
 class OnlineEvidenceIndex:
@@ -40,33 +63,116 @@ class OnlineEvidenceIndex:
     self.records: dict[str, Observation] = {}
     self.by_source: dict[str, set[str]] = defaultdict(set)
     self.postings: dict[str, set[str]] = defaultdict(set)
-    self.outcomes: dict[tuple[str, str], Counter] = defaultdict(Counter)
+    self.outcomes: dict[tuple[str, str, str], Counter] = defaultdict(Counter)
+    self.destination_families: dict[tuple[str, str, str], Counter] = defaultdict(Counter)
     self.events: list[dict[str, Any]] = []
 
   def add(self, *, source: str, source_version: str, destination: str,
           action: dict, labels, recovered: bool, cost_s: float,
-          origin: str = "probe") -> str:
-    selector = action.get("control_key") or action.get("element_identity")
-    action_key = str(selector or json.dumps(action, sort_keys=True))
-    key = hashlib.sha256(f"{source}|{source_version}|{action_key}".encode()).hexdigest()[:24]
+          origin: str = "probe", destination_family: str | None = None) -> str:
+    action_key = _action_key(action)
+    # Destination is part of the observation identity. A control can have
+    # several valid successors as app data, permissions, or system state vary.
+    # Keeping each branch is necessary for later verification.
+    key = hashlib.sha256(
+        f"{source}|{source_version}|{action_key}|{destination}".encode()
+    ).hexdigest()[:24]
     old = self.records.get(key)
+    if old and old.recovered and not recovered and origin != "authoritative":
+      # A later failed attempt must not revoke an earlier verified observation
+      # of the same branch. Keep the failure in the event log, not in retrieval.
+      self.events.append({
+          "event": "rejected_duplicate",
+          "generation": self.generation,
+          "key": key,
+          "source": source,
+          "destination": destination,
+          "destination_family": destination_family,
+          "origin": origin,
+          "recovered": False,
+          "nodes": len(self.by_source),
+          "records": len(self.records),
+      })
+      return key
     if old:
       for token in terms(" ".join(old.labels) + " " + str(old.action)):
         self.postings[token].discard(key)
     obs = Observation(key, source, source_version, destination, dict(action),
                       tuple(str(x) for x in labels), self.generation,
-                      recovered, cost_s, origin)
+                      recovered, cost_s, origin, destination_family)
     self.records[key] = obs
     self.by_source[source].add(key)
     for token in terms(" ".join(obs.labels) + " " + str(action)):
       self.postings[token].add(key)
-    self.outcomes[(source, action_key)][destination] += 1
+    # A failed speculative recovery is retained in the audit log but cannot
+    # become a trusted transition. Authoritative executions are already on
+    # the primary instance and therefore do not need speculative recovery.
+    if recovered or origin == "authoritative":
+      self.outcomes[(source, source_version, action_key)][destination] += 1
+      if destination_family:
+        self.destination_families[(source, source_version, action_key)][
+            destination_family
+        ] += 1
     self.events.append({"event": "insert" if old is None else "replace",
                         "generation": self.generation, "key": key,
                         "source": source, "destination": destination,
+                        "destination_family": destination_family,
                         "origin": origin, "recovered": recovered,
                         "nodes": len(self.by_source), "records": len(self.records)})
     return key
+
+  def classify_transition(self, *, source: str, source_version: str,
+                          action: dict[str, Any], destination: str | None,
+                          destination_family: str | None = None,
+                          source_match: bool = True,
+                          action_match: bool = True) -> dict[str, Any]:
+    """Classify an authoritative successor against verified edge outcomes.
+
+    ``source_match`` and ``action_match`` are supplied by the caller because
+    state-family and selector matching are environment-specific. This method
+    only compares exact destination fingerprints after those gates pass.
+    """
+    action_key = _action_key(action)
+    known = self.outcomes.get((source, source_version, action_key), Counter()).copy()
+    known_families = self.destination_families.get(
+        (source, source_version, action_key), Counter()).copy()
+    same_family_prior_destinations = []
+    if destination_family:
+      for prior_destination in known:
+        prior_key = hashlib.sha256(
+            f"{source}|{source_version}|{action_key}|{prior_destination}".encode()
+        ).hexdigest()[:24]
+        prior_observation = self.records.get(prior_key)
+        if prior_observation and prior_observation.destination_family == destination_family:
+          same_family_prior_destinations.append(prior_destination)
+    if not source_match or not action_match or not destination or not known:
+      verdict = "UNMATCHABLE"
+    elif destination not in known:
+      verdict = "NEW_BRANCH"
+    else:
+      max_support = max(known.values(), default=0)
+      verdict = (
+          "KNOWN_OUTCOME" if known[destination] == max_support
+          else "KNOWN_ALTERNATIVE"
+      )
+    return {
+        "verdict": verdict,
+        "source": source,
+        "source_version": source_version,
+        "action_key": action_key,
+        "destination": destination,
+        "destination_family": destination_family,
+        "known_destinations": dict(known),
+        "same_family_prior_destinations": sorted(same_family_prior_destinations),
+        "known_destination_families": dict(known_families),
+        "reason": (
+            (
+                "source_or_action_not_matched" if not source_match or not action_match
+                else ("missing_destination" if not destination else "no_verified_prior_edge")
+            ) if verdict == "UNMATCHABLE"
+            else ("no_prior_destination_match" if verdict == "NEW_BRANCH" else "")
+        ),
+    }
 
   def commit(self):
     self.generation += 1

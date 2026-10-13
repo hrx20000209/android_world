@@ -1,0 +1,65 @@
+[
+  {
+    "scenario": {
+      "name": "markor_todo_tab"
+    },
+    "probe": {
+      "rollback": {
+        "verified": true
+      }
+    },
+    "graph": {
+      "positive_retrieval": true,
+      "negative_wrong_source_count": 0,
+      "negative_wrong_source_version_count": 0,
+      "negative_wrong_action_rejected": true
+    },
+    "authoritative_replay": {
+      "action_slot_match": true,
+      "successor_exact_runtime_match": true,
+      "successor_family_match": true
+    }
+  },
+  {
+    "scenario": {
+      "name": "simple_calendar_settings"
+    },
+    "probe": {
+      "rollback": {
+        "verified": true
+      }
+    },
+    "graph": {
+      "positive_retrieval": true,
+      "negative_wrong_source_count": 0,
+      "negative_wrong_source_version_count": 0,
+      "negative_wrong_action_rejected": true
+    },
+    "authoritative_replay": {
+      "action_slot_match": true,
+      "successor_exact_runtime_match": true,
+      "successor_family_match": true
+    }
+  },
+  {
+    "scenario": {
+      "name": "simple_gallery_overflow"
+    },
+    "probe": {
+      "rollback": {
+        "verified": true
+      }
+    },
+    "graph": {
+      "positive_retrieval": true,
+      "negative_wrong_source_count": 0,
+      "negative_wrong_source_version_count": 0,
+      "negative_wrong_action_rejected": true
+    },
+    "authoritative_replay": {
+      "action_slot_match": true,
+      "successor_exact_runtime_match": true,
+      "successor_family_match": true
+    }
+  }
+]

@@ -1,0 +1,88 @@
+{
+  "label": "24-state descriptive offline evidence-utility pilot; no device execution; not a causal task-success estimate",
+  "n_decision_states": 24,
+  "n_cells": 96,
+  "by_condition": {
+    "E0_no_evidence": {
+      "n": 24,
+      "parse_valid": 22,
+      "target_grounded": 22,
+      "reference_path_consistent": 19,
+      "mean_latency_s": 1.8315,
+      "mean_input_tokens": 3153.4,
+      "mean_output_tokens": 125.6
+    },
+    "E1_fresh_outcome": {
+      "n": 24,
+      "parse_valid": 24,
+      "target_grounded": 24,
+      "reference_path_consistent": 20,
+      "mean_latency_s": 1.9117,
+      "mean_input_tokens": 3313.8,
+      "mean_output_tokens": 136.2
+    },
+    "E2_fresh_child_affordances": {
+      "n": 24,
+      "parse_valid": 24,
+      "target_grounded": 24,
+      "reference_path_consistent": 20,
+      "mean_latency_s": 1.477,
+      "mean_input_tokens": 3355.7,
+      "mean_output_tokens": 97.3
+    },
+    "D_wrong_source_control": {
+      "n": 24,
+      "parse_valid": 24,
+      "target_grounded": 24,
+      "reference_path_consistent": 20,
+      "mean_latency_s": 1.8919,
+      "mean_input_tokens": 3313.8,
+      "mean_output_tokens": 134.7
+    }
+  },
+  "paired_change_categories": {
+    "E1_fresh_outcome": {
+      "same_reference_path_relation": 20,
+      "baseline_invalid_output": 2,
+      "grounded_but_unresolved_change": 2
+    },
+    "E2_fresh_child_affordances": {
+      "same_reference_path_relation": 21,
+      "grounded_but_unresolved_change": 1,
+      "baseline_invalid_output": 2
+    },
+    "D_wrong_source_control": {
+      "same_reference_path_relation": 20,
+      "baseline_invalid_output": 2,
+      "grounded_but_unresolved_change": 2
+    }
+  },
+  "paired_reference_path_direction_vs_E0": {
+    "E1_fresh_outcome": {
+      "same": 20,
+      "baseline_invalid_excluded": 2,
+      "toward_reference": 1,
+      "away_from_reference": 1
+    },
+    "E2_fresh_child_affordances": {
+      "same": 21,
+      "toward_reference": 0,
+      "away_from_reference": 1,
+      "baseline_invalid_excluded": 2
+    },
+    "D_wrong_source_control": {
+      "same": 20,
+      "baseline_invalid_excluded": 2,
+      "toward_reference": 1,
+      "away_from_reference": 1
+    }
+  },
+  "task_success_effect_measured": false,
+  "action_correctness_claim": "none; path agreement and UI grounding are proxies, not ground truth",
+  "limitations": [
+    "K=1 only; no balanced exact-source K=2/3 candidate set in archived traces.",
+    "Depth-2 verified traces were only available for 3 exact same-task joins and were not powered as an arm.",
+    "Current 116-task pilot's original selector was random; evidence utility here does not validate a Top-K selection policy.",
+    "No action was executed after offline inference; evaluator completion, recovery after the chosen action, and true improvement are unknown."
+  ]
+}

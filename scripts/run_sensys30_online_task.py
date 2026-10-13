@@ -26,6 +26,7 @@ if str(REPO_ROOT) not in sys.path:
 
 from android_world.agents import mobileexplorer
 from android_world.parallel_exploration.online_evidence_index import OnlineEvidenceIndex
+from android_world.parallel_exploration.action_binding import resolve_action_target
 from android_world.agents import gelab_agent
 from android_world.agents import explore_agent_text
 from android_world.agents import infer
@@ -485,15 +486,17 @@ def main() -> int:
       if not row.get("recovery_ok"):
         edge.status = EdgeStatus.INVALID
         edge.confidence = 0.0
-      evidence_index.add(
-          source=src_id, source_version=str(src.get("structural_signature", "")),
-          destination=dst_id, action=item["action"],
-          labels=[label for label in (row.get("discovered") or {}).get("new_texts", [])[:12]
-                  if not is_task_specific_value(task_text, label)
-                  and not is_dynamic_ui_text(label)],
-          recovered=bool(row.get("recovery_ok")),
-          cost_s=float(row.get("timings_ms", {}).get("total", 0)) / 1000,
-      )
+      if probe_action.get("stable_control_key"):
+        evidence_index.add(
+            source=src_id, source_version=str(src.get("structural_signature", "")),
+            destination=f'{dst.get("activity", "")}|{dst.get("structural_signature", "")}',
+            destination_family=dst_id, action=probe_action,
+            labels=[label for label in (row.get("discovered") or {}).get("new_texts", [])[:12]
+                    if not is_task_specific_value(task_text, label)
+                    and not is_dynamic_ui_text(label)],
+            recovered=bool(row.get("recovery_ok")),
+            cost_s=float(row.get("timings_ms", {}).get("total", 0)) / 1000,
+        )
       edge_ids.append(edge.edge_id)
       ingested.append({
           "edge_id": edge.edge_id, "depth": depth,
@@ -575,6 +578,7 @@ def main() -> int:
         "graph_snapshot": graph.to_dict() if args.variant != "flat" else {},
         "serial": serial,
         "console_port": args.console_port, "a11y_local_port": a11y_local_port,
+        "use_fast_a11y_socket": _use_fast_a11y_socket(args.a11y_method),
         "restore_timeout_s": 30.0,
         "max_probes": 0 if args.variant == "offline" else args.max_probes,
         "min_probes": args.min_probes,
@@ -1649,7 +1653,88 @@ def main() -> int:
               semantic_prefix.save()
         src_id = graph.make_node_id(before_state.activity.component, before_state.layout_sig)
         dst_id = graph.make_node_id(after_state.activity.component, after_state.layout_sig)
-        if src_id != dst_id:
+        source_runtime_id = (
+            f"{before_state.activity.component}|{before_state.struct_sig.digest}"
+        )
+        destination_runtime_id = (
+            f"{after_state.activity.component}|{after_state.struct_sig.digest}"
+        )
+        destination_labels = tuple(dict.fromkeys(
+            label for element in after_state.elements
+            for label in (element.text, element.content_desc)
+            if label and len(label) < 40
+        ))[:8]
+        anchored_action = dict(action_dict)
+        target_resolution = resolve_action_target(action_dict, before_state.elements)
+        if target_resolution.element is not None:
+          live_element = target_resolution.element
+          kinds: dict[tuple[str, str], int] = {}
+          for element in before_state.elements:
+            key = (element.class_name or "", element.resource_id or "")
+            kinds[key] = kinds.get(key, 0) + 1
+          key = (live_element.class_name or "", live_element.resource_id or "")
+          anchored_action["element_anchor"] = "|".join(key)
+          anchored_action["element_role"] = (
+              "content" if kinds[key] > 1 else "chrome")
+          identity = live_element.identity
+          identity_parts = identity.split("|")
+          dynamic_identity = any(
+              is_task_specific_value(args.task, part) or is_dynamic_ui_text(part)
+              for part in identity_parts[1:3]
+          )
+          if dynamic_identity:
+            identity = "|".join([identity_parts[0], "", "", *identity_parts[3:]])
+          anchored_action["element_identity"] = identity
+          anchored_action["control_key"] = control_key_from_identity(identity)
+          anchored_action["stable_control_key"] = stable_control_key_from_identity(identity)
+          anchored_action["action_binding_scope"] = target_resolution.scope
+        elif str(action_dict.get("action_type") or "").casefold() == "open_app" and action_dict.get("app_name"):
+          # The app/package name is itself the stable target for launcher
+          # transitions; there is no in-app accessibility node to hit-test.
+          anchored_action["action_binding_scope"] = "semantic_app_target"
+        action_matchable = bool(
+            target_resolution.matchable
+            or anchored_action.get("action_binding_scope") == "semantic_app_target"
+        )
+        transition_verification = evidence_index.classify_transition(
+            source=src_id,
+            source_version=before_state.struct_sig.digest,
+            action=anchored_action,
+            destination=destination_runtime_id,
+            destination_family=dst_id,
+            source_match=True,
+            action_match=action_matchable,
+        )
+        _append(root / "transition_verification.jsonl", {
+            "task": args.task,
+            "step": profile["step"],
+            "model_action": action_dict,
+            "source_layout_signature": before_state.layout_sig,
+            "source_structure_signature": before_state.struct_sig.digest,
+            "destination_layout_signature": after_state.layout_sig,
+            "action_matchable": action_matchable,
+            "action_binding_scope": anchored_action.get("action_binding_scope", "unmatched"),
+            "action_binding_reason": target_resolution.reason,
+            "action_binding_candidates": target_resolution.candidate_count,
+            **transition_verification,
+        })
+        if anchored_action.get("stable_control_key"):
+          evidence_index.add(
+              source=src_id,
+              source_version=before_state.struct_sig.digest,
+              destination=destination_runtime_id,
+              destination_family=dst_id,
+              action=anchored_action,
+              labels=[
+                  label for label in destination_labels
+                  if not is_task_specific_value(args.task, label)
+                  and not is_dynamic_ui_text(label)
+              ],
+              recovered=True,
+              cost_s=0.0,
+              origin="authoritative",
+          )
+        if src_id != dst_id or source_runtime_id != destination_runtime_id:
           for node_id, sig in ((src_id, before_state), (dst_id, after_state)):
             graph.upsert_node(GraphNode(
                 node_id=node_id, activity=sig.activity.component,
@@ -1663,52 +1748,6 @@ def main() -> int:
             # counting it again would make every node look revisited after one
             # pass and hand out reuse rights that were never earned.
             ), visited=node_id == dst_id)
-          # Same predictive payload a speculative probe would have produced
-          # ("this action leads to a screen showing X"), obtained here at
-          # zero risk because the action was going to be taken anyway. This
-          # is what lets evidence injection work even with probing fully
-          # disabled, where discovered_labels would otherwise never be
-          # populated.
-          destination_labels = tuple(dict.fromkeys(
-              label for element in after_state.elements
-              for label in (element.text, element.content_desc)
-              if label and len(label) < 40
-          ))[:8]
-          # Remember WHICH control the model tapped, not just where. On a
-          # repetitive task the same screen recurs with different content, so
-          # raw coordinates alone can land on a different row next time round
-          # (2026-08-30: authoritative reuse landed as predicted only 2 of 9
-          # times). Recorded from the pre-action state by hit-testing the
-          # action's own coordinates, so it costs nothing extra.
-          # Record whether the model tapped the screen's fixed chrome or one
-          # of its content rows. A control kind that occurs once on the
-          # screen (a FAB, a toolbar button, Save) is part of what the screen
-          # IS, and replaying a tap on it later means the same thing. A
-          # control kind that repeats is a list row, and "the first row" is
-          # a different thing on every visit - replaying it after the item
-          # was deleted or a new one was added taps whatever moved into that
-          # slot. This is the same singleton-vs-repeated distinction that
-          # layout_signature uses for screen identity (see state.py), applied
-          # to the question of which actions may be replayed at all.
-          anchored_action = dict(action_dict)
-          ax, ay = anchored_action.get("x"), anchored_action.get("y")
-          if ax is not None and ay is not None:
-            kinds: dict[tuple[str, str], int] = {}
-            for element in before_state.elements:
-              key = (element.class_name or "", element.resource_id or "")
-              kinds[key] = kinds.get(key, 0) + 1
-            for element in before_state.elements:
-              left, top, right, bottom = element.bounds
-              if left <= float(ax) <= right and top <= float(ay) <= bottom:
-                key = (element.class_name or "", element.resource_id or "")
-                anchored_action["element_anchor"] = "|".join(key)
-                anchored_action["element_role"] = (
-                    "content" if kinds[key] > 1 else "chrome")
-                if element.identity:
-                  anchored_action["control_key"] = control_key_from_identity(element.identity)
-                  anchored_action["stable_control_key"] = stable_control_key_from_identity(
-                      element.identity)
-                break
           observed = graph.add_speculative_transition(
               src_id, anchored_action, dst_id,
               path_probability=1.0, confidence=0.0,

@@ -1,0 +1,341 @@
+{
+  "generated_at_utc": "2026-10-13T05:41:18+00:00",
+  "cutoff_latest_event_utc": "2026-10-13T05:16:27+00:00",
+  "model": "GELAB-ZERO-4B (pilot; not MAI-UI 2B final result)",
+  "pilot40": {
+    "tasks_finished": 40,
+    "tasks_total": 40,
+    "apps": 18,
+    "baseline_success": 20,
+    "baseline_failure": 20,
+    "complexity": {
+      "low": 17,
+      "high": 6,
+      "middle": 17
+    },
+    "decisions": 406,
+    "all_decisions_one_inference": true,
+    "outcomes": {
+      "outcome_success": 20,
+      "baseline_success_success": 15,
+      "complexity_low_success": 12,
+      "outcome_failure": 19,
+      "baseline_failure_failure": 15,
+      "complexity_high_failure": 5,
+      "baseline_failure_success": 5,
+      "complexity_middle_success": 7,
+      "complexity_low_failure": 5,
+      "baseline_success_failure": 4,
+      "complexity_middle_failure": 9,
+      "complexity_high_success": 1,
+      "outcome_unknown": 1,
+      "baseline_success_unknown": 1,
+      "complexity_middle_unknown": 1
+    },
+    "probe_attempts": 101,
+    "probe_restored": 95,
+    "probe_failed": 6,
+    "structure_changed": 51,
+    "activity_changed": 0,
+    "structural_signature_changed": 58,
+    "evidence_retrieval_events": 266,
+    "eligible_candidates_total": 91,
+    "selected_records_total": 9,
+    "exact_alignment": 2
+  },
+  "extension76": {
+    "tasks_finished": 76,
+    "tasks_total": 76,
+    "tasks_active": [],
+    "tasks_not_started": [],
+    "decision_requests": 623,
+    "all_actual_requests_exactly_one_inference": true,
+    "cohort_baseline_mix": {
+      "failure": 42,
+      "success": 33,
+      "unknown": 1
+    },
+    "cohort_complexity_mix": {
+      "middle": 14,
+      "low": 45,
+      "high": 17
+    },
+    "cohort_apps": 15,
+    "outcomes_among_finished": {
+      "unknown": 10,
+      "success": 31,
+      "failure": 35
+    },
+    "unknown_breakdown": {
+      "action protocol error": 8,
+      "evaluator protocol error": 1,
+      "task initialization error": 1
+    },
+    "probe_attempts": 144,
+    "probe_restored": 129,
+    "probe_failed": 15,
+    "ui_structure": {
+      "attempts": 144,
+      "layout_changed": 87,
+      "activity_changed": 0,
+      "structural_changed": 102
+    },
+    "ui_structure_by_probe_type": {
+      "TAP_NAV": {
+        "attempts": 49,
+        "layout_changed": 49,
+        "activity_changed": 0
+      },
+      "SCROLL": {
+        "attempts": 95,
+        "layout_changed": 38,
+        "activity_changed": 0
+      }
+    },
+    "finished_event_count": 76,
+    "started_unique": 76
+  },
+  "full_profile": {
+    "tasks": 116,
+    "apps": 20,
+    "baseline_mix": {
+      "success": 53,
+      "failure": 62,
+      "unknown": 1
+    },
+    "complexity_mix": {
+      "low": 62,
+      "high": 23,
+      "middle": 31
+    },
+    "ui_structure": {
+      "attempts": 245,
+      "layout_changed": 138,
+      "activity_changed": 0,
+      "structural_changed": 160
+    },
+    "ui_structure_by_cohort": {
+      "pilot40": {
+        "attempts": 101,
+        "layout_changed": 51,
+        "activity_changed": 0,
+        "structural_changed": 58
+      },
+      "extension76": {
+        "attempts": 144,
+        "layout_changed": 87,
+        "activity_changed": 0,
+        "structural_changed": 102
+      }
+    },
+    "ui_structure_by_probe_type": {
+      "SCROLL": {
+        "attempts": 167,
+        "layout_changed": 60
+      },
+      "TAP_NAV": {
+        "attempts": 78,
+        "layout_changed": 78
+      }
+    },
+    "ui_structure_definition": {
+      "signature": "layout_signature(source) != layout_signature(probe successor)",
+      "layout_signature": "Actionable control interaction skeleton: class + resource ID; singleton controls include 64px-quantized position; repeated control positions and all text are excluded; keyboard/system overlays are ignored.",
+      "structural_signature_note": "structural_signature includes text, selected state, and 16px-quantized bounds, so scroll/text/value changes can produce noisy deltas; it is reported separately, not used as UI structure change."
+    },
+    "ui_structure_example": {
+      "task": "BrowserMaze",
+      "trial_id": "BrowserMaze-step8-request9",
+      "probe_type": "SCROLL",
+      "element": {
+        "text": "",
+        "content_desc": "",
+        "resource_id": "",
+        "class": "android.widget.ScrollView",
+        "bounds": [
+          0,
+          128,
+          1080,
+          2400
+        ],
+        "selected": false,
+        "rank": 1,
+        "score": 10.0
+      },
+      "activity_source": "com.google.android.documentsui/com.android.documentsui.files.FilesActivity",
+      "activity_successor": "com.google.android.documentsui/com.android.documentsui.files.FilesActivity",
+      "layout_source": "74ba4cff904bfed2df2e",
+      "layout_successor": "1b196dc43c474c2d13e2",
+      "source_control_count": 61,
+      "successor_control_count": 61,
+      "new_texts": [
+        "03:32, 4.77 kB, HTML document",
+        "Audio",
+        "Documents",
+        "Downloads",
+        "Files in Downloads",
+        "Grid view",
+        "Images",
+        "Large files",
+        "This week",
+        "Videos",
+        "task.html"
+      ],
+      "recovery_ok": true,
+      "source_screenshot": "experiments/info_value_profile_20261012/private_voi8-live-20261012-fd89ba/onecall_formal_cohort40_safety_v1_20261013/agent/BrowserMaze/Open_the_file_task.html_in_Downloads_in_the_file_manager_when_prompted_o/opportunity_9.png"
+    },
+    "evidence": {
+      "insert_or_replace_events": 245,
+      "retrieval_events": 730,
+      "eligible_candidates": 190,
+      "selected_records": 24,
+      "alignment_audits": 1019,
+      "source_action_matched_rounds": 5,
+      "exact_source_action_successor_matches": 5
+    },
+    "evidence_by_cohort": {
+      "pilot40": {
+        "insert_or_replace_events": 101,
+        "retrieval_events": 266,
+        "eligible_candidates": 91,
+        "selected_records": 9,
+        "alignment_audits": 404,
+        "source_action_matched_rounds": 2,
+        "exact_source_action_successor_matches": 2
+      },
+      "extension76": {
+        "retrieval_events": 464,
+        "eligible_candidates": 99,
+        "selected_records": 15,
+        "insert_or_replace_events": 144,
+        "alignment_audits": 615,
+        "source_action_matched_rounds": 3,
+        "exact_source_action_successor_matches": 3
+      }
+    }
+  },
+  "offline_proxy24": {
+    "label": "24-state descriptive offline evidence-utility pilot; no device execution; not a causal task-success estimate",
+    "n_decision_states": 24,
+    "n_cells": 96,
+    "by_condition": {
+      "E0_no_evidence": {
+        "n": 24,
+        "parse_valid": 22,
+        "target_grounded": 22,
+        "reference_path_consistent": 19,
+        "mean_latency_s": 1.8315,
+        "mean_input_tokens": 3153.4,
+        "mean_output_tokens": 125.6
+      },
+      "E1_fresh_outcome": {
+        "n": 24,
+        "parse_valid": 24,
+        "target_grounded": 24,
+        "reference_path_consistent": 20,
+        "mean_latency_s": 1.9117,
+        "mean_input_tokens": 3313.8,
+        "mean_output_tokens": 136.2
+      },
+      "E2_fresh_child_affordances": {
+        "n": 24,
+        "parse_valid": 24,
+        "target_grounded": 24,
+        "reference_path_consistent": 20,
+        "mean_latency_s": 1.477,
+        "mean_input_tokens": 3355.7,
+        "mean_output_tokens": 97.3
+      },
+      "D_wrong_source_control": {
+        "n": 24,
+        "parse_valid": 24,
+        "target_grounded": 24,
+        "reference_path_consistent": 20,
+        "mean_latency_s": 1.8919,
+        "mean_input_tokens": 3313.8,
+        "mean_output_tokens": 134.7
+      }
+    },
+    "paired_change_categories": {
+      "E1_fresh_outcome": {
+        "same_reference_path_relation": 20,
+        "baseline_invalid_output": 2,
+        "grounded_but_unresolved_change": 2
+      },
+      "E2_fresh_child_affordances": {
+        "same_reference_path_relation": 21,
+        "grounded_but_unresolved_change": 1,
+        "baseline_invalid_output": 2
+      },
+      "D_wrong_source_control": {
+        "same_reference_path_relation": 20,
+        "baseline_invalid_output": 2,
+        "grounded_but_unresolved_change": 2
+      }
+    },
+    "paired_reference_path_direction_vs_E0": {
+      "E1_fresh_outcome": {
+        "same": 20,
+        "baseline_invalid_excluded": 2,
+        "toward_reference": 1,
+        "away_from_reference": 1
+      },
+      "E2_fresh_child_affordances": {
+        "same": 21,
+        "toward_reference": 0,
+        "away_from_reference": 1,
+        "baseline_invalid_excluded": 2
+      },
+      "D_wrong_source_control": {
+        "same": 20,
+        "baseline_invalid_excluded": 2,
+        "toward_reference": 1,
+        "away_from_reference": 1
+      }
+    },
+    "task_success_effect_measured": false,
+    "action_correctness_claim": "none; path agreement and UI grounding are proxies, not ground truth",
+    "limitations": [
+      "K=1 only; no balanced exact-source K=2/3 candidate set in archived traces.",
+      "Depth-2 verified traces were only available for 3 exact same-task joins and were not powered as an arm.",
+      "Current 116-task pilot's original selector was random; evidence utility here does not validate a Top-K selection policy.",
+      "No action was executed after offline inference; evaluator completion, recovery after the chosen action, and true improvement are unknown."
+    ]
+  },
+  "p0_exact_match_smoke": {
+    "scenarios_passed": 3,
+    "scenarios_total": 3,
+    "positive_retrieval": 3,
+    "wrong_source_rejected": 3,
+    "exact_replay_successor": 3,
+    "cleanup_verified": 3,
+    "model_calls": 0
+  },
+  "onecall_live_smoke": {
+    "tasks": [
+      {
+        "task": "ContactsAddContact",
+        "requests": 9,
+        "one_inference_requests": 9,
+        "probes": 1,
+        "restored": 1,
+        "failed": 0,
+        "success": true
+      },
+      {
+        "task": "BrowserMaze",
+        "requests": 10,
+        "one_inference_requests": 10,
+        "probes": 7,
+        "restored": 6,
+        "failed": 1,
+        "success": false
+      }
+    ],
+    "requests": 19,
+    "one_inference_requests": 19,
+    "probes": 8,
+    "restored": 7,
+    "failed": 1
+  }
+}
