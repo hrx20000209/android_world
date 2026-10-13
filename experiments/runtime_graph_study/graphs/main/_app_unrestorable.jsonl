@@ -1,0 +1,46 @@
+{"key": ["com.arduia.expense", "TextView", "time", "Time"], "instance": "ExpenseAddSingle/v1", "src_cid": "0033_s4_pre"}
+{"key": ["com.arduia.expense", "CardView", "cv_lock", ""], "instance": "ExpenseAddSingle/v2", "src_cid": "0019_s3_pre"}
+{"key": ["net.gsantner.markor", "TextView", "text1", "Plain Text"], "instance": "MarkorCreateNote/v0", "src_cid": "0019_s5_pre"}
+{"key": ["net.gsantner.markor", "LinearLayout", "opoc_filesystem_item__root", "Folder .app"], "instance": "MarkorCreateNote/v1", "src_cid": "0002_s1_pre"}
+{"key": ["net.gsantner.markor", "LinearLayout", "opoc_filesystem_item__root", "Selected 2023_10_12_sure_wolf.txt"], "instance": "MarkorDeleteNewestNote/v0", "src_cid": "0013_s2_pre"}
+{"key": ["net.gsantner.markor", "TextView", "action_favourite", "Favourite"], "instance": "MarkorDeleteNewestNote/v1", "src_cid": "0010_s2_pre"}
+{"key": ["net.gsantner.markor", "LinearLayout", "opoc_filesystem_item__root", "File cool_penguin_backup.txt"], "instance": "MarkorDeleteNewestNote/v2", "src_cid": "0010_s2_pre"}
+{"key": ["net.gsantner.markor", "TextView", "action_preview", "View mode"], "instance": "MarkorDeleteNewestNote/v3", "src_cid": "0010_s2_pre"}
+{"key": ["net.gsantner.markor", "LinearLayout", "opoc_filesystem_item__root", "Folder .. 10/15/2023, 15:00"], "instance": "MarkorDeleteNewestNote/v4", "src_cid": "0021_s4_pre"}
+{"key": ["com.flauschcode.broccoli", "ImageButton", "", "Open navigation drawer"], "instance": "RecipeDeleteSingleRecipe/v0", "src_cid": "0002_s1_pre"}
+{"key": ["com.google.android.contacts", "EditText", "open_search_bar", "Search contacts"], "instance": "ContactsAddContact/v0", "src_cid": "0002_s1_pre"}
+{"key": ["com.google.android.contacts", "ImageButton", "text_input_end_icon", "Show date picker"], "instance": "ContactsAddContact/v2", "src_cid": "0032_s6_pre"}
+{"key": ["com.simplemobiletools.calendar.pro", "ImageView", "top_left_arrow", ""], "instance": "SimpleCalendarEventsOnDate/v1", "src_cid": "0003_s2_pre"}
+{"key": ["com.simplemobiletools.calendar.pro", "ImageView", "top_right_arrow", ""], "instance": "SimpleCalendarEventsOnDate/v2", "src_cid": "0003_s2_pre"}
+{"key": ["com.simplemobiletools.calendar.pro", "ImageView", "top_toolbar_search_icon", ""], "instance": "SimpleCalendarEventsOnDate/v3", "src_cid": "0013_s3_pre"}
+{"key": ["com.android.settings", "ViewGroup", "search_action_bar", "Search settings"], "instance": "SystemBluetoothTurnOn/v0", "src_cid": "0002_s1_pre"}
+{"key": ["com.android.settings", "LinearLayout", "", "See all"], "instance": "SystemBluetoothTurnOn/v1", "src_cid": "0010_s2_pre"}
+{"key": ["com.android.settings", "LinearLayout", "", "Connection preferences"], "instance": "SystemBluetoothTurnOn/v2", "src_cid": "0010_s2_pre"}
+{"key": ["net.gsantner.markor", "ImageView", "", "Bold"], "instance": "MarkorCreateNote/v0", "src_cid": "0023_s6_pre"}
+{"key": ["net.gsantner.markor", "FrameLayout", "nav_more", "More"], "instance": "MarkorCreateNote/v1", "src_cid": "0002_s1_pre"}
+{"key": ["net.gsantner.markor", "ImageView", "", "Italic"], "instance": "MarkorCreateNote/v2", "src_cid": "0023_s6_pre"}
+{"key": ["net.gsantner.markor", "ViewGroup", "toolbar", "copy_shy_guitar"], "instance": "MarkorCreateNote/v3", "src_cid": "0034_s7_pre"}
+{"key": ["net.gsantner.markor", "TextView", "action_search", "Search"], "instance": "MarkorCreateNote/v4", "src_cid": "0018_s4_pre"}
+{"key": ["org.tasks", "Button", "menu_search", "Search"], "instance": "TasksDueOnDate/v0", "src_cid": "0002_s1_pre"}
+{"key": ["org.tasks", "ImageView", "completeBox", ""], "instance": "TasksDueOnDate/v1", "src_cid": "0002_s1_pre"}
+{"key": ["org.tasks", "RelativeLayout", "rowBody", "Research Vacation Destinations"], "instance": "TasksDueOnDate/v2", "src_cid": "0002_s1_pre"}
+{"key": ["org.tasks", "RelativeLayout", "row", "My Tasks"], "instance": "TasksDueOnDate/v3", "src_cid": "0012_s2_pre"}
+{"key": ["org.tasks", "RelativeLayout", "subheader_row", "Filters"], "instance": "TasksDueOnDate/v4", "src_cid": "0012_s2_pre"}
+{"key": ["net.cozic.joplin", "ViewGroup", "", "to-do: Study Tips for Final Exams"], "instance": "NotesTodoItemCount/v4", "src_cid": "0003_s2_pre"}
+{"key": ["com.simplemobiletools.calendar.pro", "Button", "go_to_today", "Go to today"], "instance": "SimpleCalendarDeleteOneEvent/v0", "src_cid": "0013_s3_pre"}
+{"key": ["com.simplemobiletools.calendar.pro", "RelativeLayout", "event_all_day_holder", "All-day"], "instance": "SimpleCalendarDeleteOneEvent/v4", "src_cid": "0024_s4_pre"}
+{"key": ["de.dennisguse.opentracks", "ImageView", "search_button", "Search"], "instance": "SportsTrackerLongestDistanceActivity/v0", "src_cid": "0002_s1_pre"}
+{"key": ["de.dennisguse.opentracks", "ViewGroup", "", "Track"], "instance": "SportsTrackerLongestDistanceActivity/v2", "src_cid": "0002_s1_pre"}
+{"key": ["net.osmand", "ImageButton", "map_compass_button", "North is up"], "instance": "OsmAndFavorite/v0", "src_cid": "0002_s1_pre"}
+{"key": ["net.osmand", "ImageButton", "map_compass_button", "Movement direction"], "instance": "OsmAndFavorite/v1", "src_cid": "0002_s1_pre"}
+{"key": ["net.osmand", "ImageButton", "map_compass_button", "Compass direction"], "instance": "OsmAndFavorite/v2", "src_cid": "0002_s1_pre"}
+{"key": ["net.osmand", "ImageButton", "map_compass_button", "Manually rotated"], "instance": "OsmAndFavorite/v3", "src_cid": "0002_s1_pre"}
+{"key": ["net.osmand", "ImageButton", "map_zoom_in_button", "Zoom in"], "instance": "OsmAndFavorite/v4", "src_cid": "0002_s1_pre"}
+{"key": ["com.flauschcode.broccoli", "ImageButton", "", "Collapse"], "instance": "RecipeDeleteMultipleRecipesWithConstraint/v0", "src_cid": "0013_s2_pre"}
+{"key": ["com.flauschcode.broccoli", "CardView", "", "Recipe photo"], "instance": "RecipeDeleteMultipleRecipesWithConstraint/v1", "src_cid": "0020_s3_pre"}
+{"key": ["com.flauschcode.broccoli", "ImageButton", "fab_recipes", "New Recipe"], "instance": "RecipeDeleteMultipleRecipesWithConstraint/v2", "src_cid": "0015_s3_pre"}
+{"key": ["net.gsantner.markor", "LinearLayout", "opoc_filesystem_item__root", "File real_xylophone_copy.md"], "instance": "MarkorDeleteNewestNote/v0", "src_cid": "0013_s2_pre"}
+{"key": ["net.gsantner.markor", "LinearLayout", "opoc_filesystem_item__root", "Selected 2023_03_08_glad_ant.txt"], "instance": "MarkorDeleteNewestNote/v1", "src_cid": "0012_s2_pre"}
+{"key": ["net.gsantner.markor", "FrameLayout", "nav_todo", "To-Do"], "instance": "MarkorDeleteNewestNote/v2", "src_cid": "0012_s2_pre"}
+{"key": ["net.gsantner.markor", "TextView", "action_edit", "Edit mode"], "instance": "MarkorDeleteNewestNote/v3", "src_cid": "0012_s2_pre"}
+{"key": ["net.gsantner.markor", "ImageView", "", "Attach"], "instance": "MarkorDeleteNewestNote/v4", "src_cid": "0012_s2_pre"}

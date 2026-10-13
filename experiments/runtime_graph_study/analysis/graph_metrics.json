@@ -1,0 +1,5283 @@
+{
+ "ContactsAddContact": {
+  "n_obs": 99,
+  "instances": [
+   "ContactsAddContact/v0",
+   "ContactsAddContact/v1",
+   "ContactsAddContact/v2",
+   "ContactsAddContact/v3",
+   "ContactsAddContact/v4"
+  ],
+  "n_probe_obs": 52,
+  "n_agent_obs": 47,
+  "exact_shared": {
+   "per_instance": {
+    "ContactsAddContact/v0": {
+     "agent_states": 9,
+     "new_nodes": 11,
+     "new_edges": 9,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 7
+    },
+    "ContactsAddContact/v1": {
+     "agent_states": 9,
+     "agent_states_known_from_prior_runs": 3,
+     "agent_states_known_any": 9,
+     "revalidated": 2,
+     "revalidated_same": 1,
+     "new_nodes": 18,
+     "new_edges": 21,
+     "probes": 15,
+     "probe_rollback_fail": 0,
+     "convergence": 3,
+     "convergence_avoided_slots": 1
+    },
+    "ContactsAddContact/v2": {
+     "agent_states": 10,
+     "agent_states_known_from_prior_runs": 4,
+     "agent_states_known_any": 9,
+     "revalidated": 12,
+     "revalidated_same": 11,
+     "new_nodes": 9,
+     "new_edges": 9,
+     "probes": 11,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "ContactsAddContact/v3": {
+     "agent_states": 9,
+     "agent_states_known_from_prior_runs": 4,
+     "agent_states_known_any": 9,
+     "revalidated": 10,
+     "revalidated_same": 9,
+     "probes": 12,
+     "probe_rollback_fail": 0,
+     "new_edges": 11,
+     "convergence": 3,
+     "convergence_avoided_slots": 0,
+     "new_nodes": 8
+    },
+    "ContactsAddContact/v4": {
+     "agent_states": 10,
+     "agent_states_known_from_prior_runs": 4,
+     "agent_states_known_any": 10,
+     "revalidated": 14,
+     "revalidated_same": 13,
+     "probes": 13,
+     "probe_rollback_fail": 0,
+     "new_nodes": 9,
+     "new_edges": 9
+    }
+   },
+   "n_nodes": 55,
+   "n_edges": 59,
+   "n_slots": 60,
+   "multi_outcome_slots": 3
+  },
+  "exact_per_run": {
+   "per_instance": {
+    "ContactsAddContact/v0": {
+     "agent_states": 9,
+     "new_nodes": 11,
+     "new_edges": 9,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 7
+    },
+    "ContactsAddContact/v1": {
+     "agent_states": 9,
+     "new_nodes": 21,
+     "new_edges": 22,
+     "probes": 15,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 8,
+     "convergence": 2,
+     "convergence_avoided_slots": 0
+    },
+    "ContactsAddContact/v2": {
+     "agent_states": 10,
+     "new_nodes": 19,
+     "new_edges": 20,
+     "probes": 11,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 8,
+     "convergence": 3,
+     "convergence_avoided_slots": 0
+    },
+    "ContactsAddContact/v3": {
+     "agent_states": 9,
+     "new_nodes": 17,
+     "new_edges": 19,
+     "probes": 12,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 8,
+     "convergence": 3,
+     "convergence_avoided_slots": 0
+    },
+    "ContactsAddContact/v4": {
+     "agent_states": 10,
+     "new_nodes": 19,
+     "new_edges": 21,
+     "probes": 13,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 9,
+     "convergence": 3,
+     "convergence_avoided_slots": 0
+    }
+   },
+   "n_nodes": 19,
+   "n_edges": 21,
+   "n_slots": 22,
+   "multi_outcome_slots": 0
+  },
+  "struct_shared": {
+   "per_instance": {
+    "ContactsAddContact/v0": {
+     "agent_states": 9,
+     "new_nodes": 7,
+     "new_edges": 5,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 7
+    },
+    "ContactsAddContact/v1": {
+     "agent_states": 9,
+     "agent_states_known_from_prior_runs": 9,
+     "agent_states_known_any": 9,
+     "revalidated": 6,
+     "revalidated_same": 6,
+     "new_nodes": 9,
+     "new_edges": 13,
+     "probes": 15,
+     "probe_rollback_fail": 0,
+     "convergence": 4,
+     "convergence_avoided_slots": 6
+    },
+    "ContactsAddContact/v2": {
+     "agent_states": 10,
+     "agent_states_known_from_prior_runs": 10,
+     "agent_states_known_any": 10,
+     "revalidated": 17,
+     "revalidated_same": 16,
+     "new_nodes": 2,
+     "new_edges": 4,
+     "probes": 11,
+     "probe_rollback_fail": 1,
+     "convergence": 2,
+     "convergence_avoided_slots": 11
+    },
+    "ContactsAddContact/v3": {
+     "agent_states": 9,
+     "agent_states_known_from_prior_runs": 9,
+     "agent_states_known_any": 9,
+     "revalidated": 20,
+     "revalidated_same": 20,
+     "probes": 12,
+     "probe_rollback_fail": 0,
+     "new_nodes": 1,
+     "new_edges": 1
+    },
+    "ContactsAddContact/v4": {
+     "agent_states": 10,
+     "agent_states_known_from_prior_runs": 10,
+     "agent_states_known_any": 10,
+     "revalidated": 22,
+     "revalidated_same": 22,
+     "probes": 13,
+     "probe_rollback_fail": 0,
+     "new_nodes": 1,
+     "new_edges": 1
+    }
+   },
+   "n_nodes": 20,
+   "n_edges": 24,
+   "n_slots": 32,
+   "multi_outcome_slots": 1
+  },
+  "struct_per_run": {
+   "per_instance": {
+    "ContactsAddContact/v0": {
+     "agent_states": 9,
+     "new_nodes": 7,
+     "new_edges": 5,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 7
+    },
+    "ContactsAddContact/v1": {
+     "agent_states": 9,
+     "new_nodes": 14,
+     "new_edges": 16,
+     "probes": 15,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 8,
+     "convergence": 3,
+     "convergence_avoided_slots": 5
+    },
+    "ContactsAddContact/v2": {
+     "agent_states": 10,
+     "new_nodes": 11,
+     "new_edges": 15,
+     "probes": 11,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 9,
+     "convergence": 5,
+     "convergence_avoided_slots": 12
+    },
+    "ContactsAddContact/v3": {
+     "agent_states": 9,
+     "new_nodes": 11,
+     "new_edges": 13,
+     "probes": 12,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 8,
+     "convergence": 3,
+     "convergence_avoided_slots": 4
+    },
+    "ContactsAddContact/v4": {
+     "agent_states": 10,
+     "new_nodes": 12,
+     "new_edges": 14,
+     "probes": 13,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 9,
+     "convergence": 3,
+     "convergence_avoided_slots": 4
+    }
+   },
+   "n_nodes": 12,
+   "n_edges": 14,
+   "n_slots": 22,
+   "multi_outcome_slots": 0
+  },
+  "layout_shared": {
+   "per_instance": {
+    "ContactsAddContact/v0": {
+     "agent_states": 9,
+     "new_nodes": 7,
+     "new_edges": 5,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 7
+    },
+    "ContactsAddContact/v1": {
+     "agent_states": 9,
+     "agent_states_known_from_prior_runs": 9,
+     "agent_states_known_any": 9,
+     "revalidated": 6,
+     "revalidated_same": 6,
+     "new_nodes": 8,
+     "new_edges": 13,
+     "probes": 15,
+     "probe_rollback_fail": 0,
+     "convergence": 5,
+     "convergence_avoided_slots": 11
+    },
+    "ContactsAddContact/v2": {
+     "agent_states": 10,
+     "agent_states_known_from_prior_runs": 10,
+     "agent_states_known_any": 10,
+     "revalidated": 17,
+     "revalidated_same": 16,
+     "new_nodes": 2,
+     "new_edges": 4,
+     "probes": 11,
+     "probe_rollback_fail": 1,
+     "convergence": 2,
+     "convergence_avoided_slots": 11
+    },
+    "ContactsAddContact/v3": {
+     "agent_states": 9,
+     "agent_states_known_from_prior_runs": 9,
+     "agent_states_known_any": 9,
+     "revalidated": 20,
+     "revalidated_same": 20,
+     "probes": 12,
+     "probe_rollback_fail": 0,
+     "new_edges": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "ContactsAddContact/v4": {
+     "agent_states": 10,
+     "agent_states_known_from_prior_runs": 10,
+     "agent_states_known_any": 10,
+     "revalidated": 22,
+     "revalidated_same": 22,
+     "probes": 13,
+     "probe_rollback_fail": 0,
+     "new_edges": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    }
+   },
+   "n_nodes": 17,
+   "n_edges": 24,
+   "n_slots": 32,
+   "multi_outcome_slots": 1
+  },
+  "layout_per_run": {
+   "per_instance": {
+    "ContactsAddContact/v0": {
+     "agent_states": 9,
+     "new_nodes": 7,
+     "new_edges": 5,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 7
+    },
+    "ContactsAddContact/v1": {
+     "agent_states": 9,
+     "new_nodes": 13,
+     "new_edges": 16,
+     "probes": 15,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 8,
+     "convergence": 4,
+     "convergence_avoided_slots": 10
+    },
+    "ContactsAddContact/v2": {
+     "agent_states": 10,
+     "new_nodes": 11,
+     "new_edges": 15,
+     "probes": 11,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 9,
+     "convergence": 5,
+     "convergence_avoided_slots": 12
+    },
+    "ContactsAddContact/v3": {
+     "agent_states": 9,
+     "new_nodes": 10,
+     "new_edges": 13,
+     "probes": 12,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 8,
+     "convergence": 4,
+     "convergence_avoided_slots": 8
+    },
+    "ContactsAddContact/v4": {
+     "agent_states": 10,
+     "new_nodes": 11,
+     "new_edges": 14,
+     "probes": 13,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 9,
+     "convergence": 4,
+     "convergence_avoided_slots": 8
+    }
+   },
+   "n_nodes": 11,
+   "n_edges": 14,
+   "n_slots": 22,
+   "multi_outcome_slots": 0
+  },
+  "struct_ambiguous_new_states": 3,
+  "struct_distinct_states": 20
+ },
+ "ExpenseAddSingle": {
+  "n_obs": 88,
+  "instances": [
+   "ExpenseAddSingle/v0",
+   "ExpenseAddSingle/v1",
+   "ExpenseAddSingle/v2",
+   "ExpenseAddSingle/v3",
+   "ExpenseAddSingle/v4"
+  ],
+  "n_probe_obs": 39,
+  "n_agent_obs": 49,
+  "exact_shared": {
+   "per_instance": {
+    "ExpenseAddSingle/v0": {
+     "agent_states": 10,
+     "new_nodes": 11,
+     "new_edges": 11,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 9,
+     "convergence": 1,
+     "convergence_avoided_slots": 4
+    },
+    "ExpenseAddSingle/v1": {
+     "agent_states": 11,
+     "agent_states_known_from_prior_runs": 2,
+     "agent_states_known_any": 10,
+     "new_nodes": 18,
+     "revalidated": 1,
+     "revalidated_same": 0,
+     "new_edges": 21,
+     "probes": 11,
+     "probe_rollback_fail": 1,
+     "convergence": 4,
+     "convergence_avoided_slots": 2
+    },
+    "ExpenseAddSingle/v2": {
+     "agent_states": 10,
+     "agent_states_known_from_prior_runs": 3,
+     "agent_states_known_any": 10,
+     "new_nodes": 10,
+     "revalidated": 3,
+     "revalidated_same": 2,
+     "new_edges": 12,
+     "probes": 8,
+     "probe_rollback_fail": 1,
+     "convergence": 2,
+     "convergence_avoided_slots": 6
+    },
+    "ExpenseAddSingle/v3": {
+     "agent_states": 10,
+     "agent_states_known_from_prior_runs": 2,
+     "agent_states_known_any": 10,
+     "new_nodes": 13,
+     "revalidated": 3,
+     "revalidated_same": 1,
+     "new_edges": 16,
+     "probes": 8,
+     "probe_rollback_fail": 0,
+     "convergence": 3,
+     "convergence_avoided_slots": 7
+    },
+    "ExpenseAddSingle/v4": {
+     "agent_states": 8,
+     "agent_states_known_from_prior_runs": 2,
+     "agent_states_known_any": 8,
+     "new_nodes": 11,
+     "revalidated": 3,
+     "revalidated_same": 1,
+     "new_edges": 14,
+     "probes": 8,
+     "probe_rollback_fail": 0,
+     "convergence": 3,
+     "convergence_avoided_slots": 7
+    }
+   },
+   "n_nodes": 63,
+   "n_edges": 74,
+   "n_slots": 73,
+   "multi_outcome_slots": 2
+  },
+  "exact_per_run": {
+   "per_instance": {
+    "ExpenseAddSingle/v0": {
+     "agent_states": 10,
+     "new_nodes": 11,
+     "new_edges": 11,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 9,
+     "convergence": 1,
+     "convergence_avoided_slots": 4
+    },
+    "ExpenseAddSingle/v1": {
+     "agent_states": 11,
+     "new_nodes": 20,
+     "new_edges": 21,
+     "probes": 11,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 9,
+     "convergence": 3,
+     "convergence_avoided_slots": 0
+    },
+    "ExpenseAddSingle/v2": {
+     "agent_states": 10,
+     "new_nodes": 14,
+     "new_edges": 14,
+     "probes": 8,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 9,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "ExpenseAddSingle/v3": {
+     "agent_states": 10,
+     "new_nodes": 16,
+     "new_edges": 17,
+     "probes": 8,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 9,
+     "convergence": 2,
+     "convergence_avoided_slots": 0
+    },
+    "ExpenseAddSingle/v4": {
+     "agent_states": 8,
+     "new_nodes": 14,
+     "new_edges": 15,
+     "probes": 8,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 7,
+     "convergence": 2,
+     "convergence_avoided_slots": 0
+    }
+   },
+   "n_nodes": 14,
+   "n_edges": 15,
+   "n_slots": 16,
+   "multi_outcome_slots": 0
+  },
+  "struct_shared": {
+   "per_instance": {
+    "ExpenseAddSingle/v0": {
+     "agent_states": 10,
+     "new_nodes": 8,
+     "new_edges": 9,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 9,
+     "convergence": 2,
+     "convergence_avoided_slots": 8
+    },
+    "ExpenseAddSingle/v1": {
+     "agent_states": 11,
+     "agent_states_known_from_prior_runs": 6,
+     "agent_states_known_any": 10,
+     "revalidated": 5,
+     "revalidated_same": 5,
+     "new_nodes": 10,
+     "new_edges": 14,
+     "probes": 11,
+     "probe_rollback_fail": 1,
+     "convergence": 5,
+     "convergence_avoided_slots": 7
+    },
+    "ExpenseAddSingle/v2": {
+     "agent_states": 10,
+     "agent_states_known_from_prior_runs": 10,
+     "agent_states_known_any": 10,
+     "revalidated": 10,
+     "revalidated_same": 9,
+     "new_nodes": 4,
+     "new_edges": 6,
+     "probes": 8,
+     "probe_rollback_fail": 1,
+     "convergence": 2,
+     "convergence_avoided_slots": 4
+    },
+    "ExpenseAddSingle/v3": {
+     "agent_states": 10,
+     "agent_states_known_from_prior_runs": 10,
+     "agent_states_known_any": 10,
+     "revalidated": 8,
+     "revalidated_same": 8,
+     "new_nodes": 5,
+     "new_edges": 7,
+     "probes": 8,
+     "probe_rollback_fail": 0,
+     "convergence": 2,
+     "convergence_avoided_slots": 1
+    },
+    "ExpenseAddSingle/v4": {
+     "agent_states": 8,
+     "agent_states_known_from_prior_runs": 8,
+     "agent_states_known_any": 8,
+     "revalidated": 12,
+     "revalidated_same": 11,
+     "new_nodes": 5,
+     "new_edges": 5,
+     "probes": 8,
+     "probe_rollback_fail": 0
+    }
+   },
+   "n_nodes": 32,
+   "n_edges": 41,
+   "n_slots": 50,
+   "multi_outcome_slots": 2
+  },
+  "struct_per_run": {
+   "per_instance": {
+    "ExpenseAddSingle/v0": {
+     "agent_states": 10,
+     "new_nodes": 8,
+     "new_edges": 9,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 9,
+     "convergence": 2,
+     "convergence_avoided_slots": 8
+    },
+    "ExpenseAddSingle/v1": {
+     "agent_states": 11,
+     "new_nodes": 15,
+     "new_edges": 18,
+     "probes": 11,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 9,
+     "convergence": 5,
+     "convergence_avoided_slots": 6
+    },
+    "ExpenseAddSingle/v2": {
+     "agent_states": 10,
+     "new_nodes": 11,
+     "new_edges": 12,
+     "probes": 8,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 9,
+     "convergence": 2,
+     "convergence_avoided_slots": 4
+    },
+    "ExpenseAddSingle/v3": {
+     "agent_states": 10,
+     "new_nodes": 11,
+     "new_edges": 13,
+     "probes": 8,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 9,
+     "convergence": 3,
+     "convergence_avoided_slots": 5
+    },
+    "ExpenseAddSingle/v4": {
+     "agent_states": 8,
+     "new_nodes": 11,
+     "new_edges": 13,
+     "probes": 8,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 7,
+     "convergence": 3,
+     "convergence_avoided_slots": 4
+    }
+   },
+   "n_nodes": 11,
+   "n_edges": 13,
+   "n_slots": 16,
+   "multi_outcome_slots": 0
+  },
+  "layout_shared": {
+   "per_instance": {
+    "ExpenseAddSingle/v0": {
+     "agent_states": 10,
+     "new_nodes": 7,
+     "new_edges": 9,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "convergence": 3,
+     "convergence_avoided_slots": 8,
+     "agent_states_known_any": 9
+    },
+    "ExpenseAddSingle/v1": {
+     "agent_states": 11,
+     "agent_states_known_from_prior_runs": 6,
+     "agent_states_known_any": 10,
+     "revalidated": 5,
+     "revalidated_same": 5,
+     "new_edges": 12,
+     "convergence": 9,
+     "convergence_avoided_slots": 7,
+     "probes": 11,
+     "probe_rollback_fail": 1,
+     "new_nodes": 4
+    },
+    "ExpenseAddSingle/v2": {
+     "agent_states": 10,
+     "agent_states_known_from_prior_runs": 10,
+     "agent_states_known_any": 10,
+     "revalidated": 10,
+     "revalidated_same": 9,
+     "new_edges": 5,
+     "convergence": 5,
+     "convergence_avoided_slots": 4,
+     "probes": 8,
+     "probe_rollback_fail": 1
+    },
+    "ExpenseAddSingle/v3": {
+     "agent_states": 10,
+     "agent_states_known_from_prior_runs": 10,
+     "agent_states_known_any": 10,
+     "revalidated": 8,
+     "revalidated_same": 8,
+     "new_edges": 7,
+     "convergence": 7,
+     "convergence_avoided_slots": 1,
+     "probes": 8,
+     "probe_rollback_fail": 0
+    },
+    "ExpenseAddSingle/v4": {
+     "agent_states": 8,
+     "agent_states_known_from_prior_runs": 8,
+     "agent_states_known_any": 8,
+     "revalidated": 12,
+     "revalidated_same": 12,
+     "new_edges": 4,
+     "convergence": 4,
+     "convergence_avoided_slots": 0,
+     "probes": 8,
+     "probe_rollback_fail": 0
+    }
+   },
+   "n_nodes": 11,
+   "n_edges": 37,
+   "n_slots": 50,
+   "multi_outcome_slots": 1
+  },
+  "layout_per_run": {
+   "per_instance": {
+    "ExpenseAddSingle/v0": {
+     "agent_states": 10,
+     "new_nodes": 7,
+     "new_edges": 9,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "convergence": 3,
+     "convergence_avoided_slots": 8,
+     "agent_states_known_any": 9
+    },
+    "ExpenseAddSingle/v1": {
+     "agent_states": 11,
+     "new_nodes": 10,
+     "new_edges": 16,
+     "probes": 11,
+     "probe_rollback_fail": 1,
+     "convergence": 8,
+     "convergence_avoided_slots": 6,
+     "agent_states_known_any": 9
+    },
+    "ExpenseAddSingle/v2": {
+     "agent_states": 10,
+     "new_nodes": 7,
+     "new_edges": 10,
+     "probes": 8,
+     "probe_rollback_fail": 1,
+     "convergence": 4,
+     "convergence_avoided_slots": 4,
+     "agent_states_known_any": 9
+    },
+    "ExpenseAddSingle/v3": {
+     "agent_states": 10,
+     "new_nodes": 7,
+     "new_edges": 13,
+     "probes": 8,
+     "probe_rollback_fail": 0,
+     "convergence": 7,
+     "convergence_avoided_slots": 5,
+     "agent_states_known_any": 9
+    },
+    "ExpenseAddSingle/v4": {
+     "agent_states": 8,
+     "new_nodes": 7,
+     "new_edges": 13,
+     "probes": 8,
+     "probe_rollback_fail": 0,
+     "convergence": 7,
+     "convergence_avoided_slots": 4,
+     "agent_states_known_any": 7
+    }
+   },
+   "n_nodes": 7,
+   "n_edges": 13,
+   "n_slots": 16,
+   "multi_outcome_slots": 0
+  },
+  "struct_ambiguous_new_states": 21,
+  "struct_distinct_states": 32
+ },
+ "ExpenseDeleteSingle": {
+  "n_obs": 57,
+  "instances": [
+   "ExpenseDeleteSingle/v0",
+   "ExpenseDeleteSingle/v1",
+   "ExpenseDeleteSingle/v2",
+   "ExpenseDeleteSingle/v3",
+   "ExpenseDeleteSingle/v4"
+  ],
+  "n_probe_obs": 32,
+  "n_agent_obs": 25,
+  "exact_shared": {
+   "per_instance": {
+    "ExpenseDeleteSingle/v0": {
+     "agent_states": 5,
+     "new_nodes": 10,
+     "new_edges": 9,
+     "probes": 6,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 4
+    },
+    "ExpenseDeleteSingle/v1": {
+     "agent_states": 5,
+     "agent_states_known_from_prior_runs": 3,
+     "agent_states_known_any": 5,
+     "new_nodes": 5,
+     "revalidated": 5,
+     "revalidated_same": 4,
+     "new_edges": 6,
+     "probes": 6,
+     "probe_rollback_fail": 0,
+     "convergence": 1,
+     "convergence_avoided_slots": 1
+    },
+    "ExpenseDeleteSingle/v2": {
+     "agent_states": 5,
+     "agent_states_known_from_prior_runs": 3,
+     "agent_states_known_any": 5,
+     "new_nodes": 5,
+     "revalidated": 5,
+     "revalidated_same": 4,
+     "new_edges": 6,
+     "probes": 6,
+     "probe_rollback_fail": 0,
+     "convergence": 1,
+     "convergence_avoided_slots": 1
+    },
+    "ExpenseDeleteSingle/v3": {
+     "agent_states": 5,
+     "agent_states_known_from_prior_runs": 3,
+     "agent_states_known_any": 5,
+     "new_nodes": 5,
+     "revalidated": 5,
+     "revalidated_same": 4,
+     "new_edges": 7,
+     "probes": 7,
+     "probe_rollback_fail": 0,
+     "convergence": 2,
+     "convergence_avoided_slots": 1
+    },
+    "ExpenseDeleteSingle/v4": {
+     "agent_states": 5,
+     "agent_states_known_from_prior_runs": 3,
+     "agent_states_known_any": 5,
+     "new_nodes": 5,
+     "revalidated": 5,
+     "revalidated_same": 4,
+     "new_edges": 7,
+     "probes": 7,
+     "probe_rollback_fail": 0,
+     "convergence": 2,
+     "convergence_avoided_slots": 1
+    }
+   },
+   "n_nodes": 30,
+   "n_edges": 35,
+   "n_slots": 32,
+   "multi_outcome_slots": 1
+  },
+  "exact_per_run": {
+   "per_instance": {
+    "ExpenseDeleteSingle/v0": {
+     "agent_states": 5,
+     "new_nodes": 10,
+     "new_edges": 9,
+     "probes": 6,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 4
+    },
+    "ExpenseDeleteSingle/v1": {
+     "agent_states": 5,
+     "new_nodes": 10,
+     "new_edges": 9,
+     "probes": 6,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 4
+    },
+    "ExpenseDeleteSingle/v2": {
+     "agent_states": 5,
+     "new_nodes": 10,
+     "new_edges": 9,
+     "probes": 6,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 4
+    },
+    "ExpenseDeleteSingle/v3": {
+     "agent_states": 5,
+     "new_nodes": 10,
+     "new_edges": 10,
+     "probes": 7,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 4,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "ExpenseDeleteSingle/v4": {
+     "agent_states": 5,
+     "new_nodes": 10,
+     "new_edges": 10,
+     "probes": 7,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 4,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    }
+   },
+   "n_nodes": 10,
+   "n_edges": 10,
+   "n_slots": 11,
+   "multi_outcome_slots": 0
+  },
+  "struct_shared": {
+   "per_instance": {
+    "ExpenseDeleteSingle/v0": {
+     "agent_states": 5,
+     "new_nodes": 10,
+     "new_edges": 9,
+     "probes": 6,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 4
+    },
+    "ExpenseDeleteSingle/v1": {
+     "agent_states": 5,
+     "agent_states_known_from_prior_runs": 3,
+     "agent_states_known_any": 5,
+     "new_nodes": 4,
+     "revalidated": 5,
+     "revalidated_same": 4,
+     "new_edges": 6,
+     "probes": 6,
+     "probe_rollback_fail": 0,
+     "convergence": 2,
+     "convergence_avoided_slots": 1
+    },
+    "ExpenseDeleteSingle/v2": {
+     "agent_states": 5,
+     "agent_states_known_from_prior_runs": 3,
+     "agent_states_known_any": 5,
+     "new_nodes": 4,
+     "revalidated": 5,
+     "revalidated_same": 4,
+     "new_edges": 6,
+     "probes": 6,
+     "probe_rollback_fail": 0,
+     "convergence": 2,
+     "convergence_avoided_slots": 1
+    },
+    "ExpenseDeleteSingle/v3": {
+     "agent_states": 5,
+     "agent_states_known_from_prior_runs": 3,
+     "agent_states_known_any": 5,
+     "new_nodes": 4,
+     "revalidated": 5,
+     "revalidated_same": 4,
+     "new_edges": 7,
+     "probes": 7,
+     "probe_rollback_fail": 0,
+     "convergence": 3,
+     "convergence_avoided_slots": 1
+    },
+    "ExpenseDeleteSingle/v4": {
+     "agent_states": 5,
+     "agent_states_known_from_prior_runs": 3,
+     "agent_states_known_any": 5,
+     "new_nodes": 4,
+     "revalidated": 5,
+     "revalidated_same": 4,
+     "new_edges": 7,
+     "probes": 7,
+     "probe_rollback_fail": 0,
+     "convergence": 3,
+     "convergence_avoided_slots": 1
+    }
+   },
+   "n_nodes": 26,
+   "n_edges": 35,
+   "n_slots": 32,
+   "multi_outcome_slots": 1
+  },
+  "struct_per_run": {
+   "per_instance": {
+    "ExpenseDeleteSingle/v0": {
+     "agent_states": 5,
+     "new_nodes": 10,
+     "new_edges": 9,
+     "probes": 6,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 4
+    },
+    "ExpenseDeleteSingle/v1": {
+     "agent_states": 5,
+     "new_nodes": 10,
+     "new_edges": 9,
+     "probes": 6,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 4
+    },
+    "ExpenseDeleteSingle/v2": {
+     "agent_states": 5,
+     "new_nodes": 10,
+     "new_edges": 9,
+     "probes": 6,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 4
+    },
+    "ExpenseDeleteSingle/v3": {
+     "agent_states": 5,
+     "new_nodes": 10,
+     "new_edges": 10,
+     "probes": 7,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 4,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "ExpenseDeleteSingle/v4": {
+     "agent_states": 5,
+     "new_nodes": 10,
+     "new_edges": 10,
+     "probes": 7,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 4,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    }
+   },
+   "n_nodes": 10,
+   "n_edges": 10,
+   "n_slots": 11,
+   "multi_outcome_slots": 0
+  },
+  "layout_shared": {
+   "per_instance": {
+    "ExpenseDeleteSingle/v0": {
+     "agent_states": 5,
+     "new_nodes": 10,
+     "new_edges": 9,
+     "probes": 6,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 4
+    },
+    "ExpenseDeleteSingle/v1": {
+     "agent_states": 5,
+     "agent_states_known_from_prior_runs": 5,
+     "agent_states_known_any": 5,
+     "revalidated": 9,
+     "revalidated_same": 9,
+     "probes": 6,
+     "probe_rollback_fail": 0,
+     "new_edges": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 2
+    },
+    "ExpenseDeleteSingle/v2": {
+     "agent_states": 5,
+     "agent_states_known_from_prior_runs": 5,
+     "agent_states_known_any": 5,
+     "revalidated": 9,
+     "revalidated_same": 9,
+     "probes": 6,
+     "probe_rollback_fail": 0,
+     "new_edges": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 2
+    },
+    "ExpenseDeleteSingle/v3": {
+     "agent_states": 5,
+     "agent_states_known_from_prior_runs": 5,
+     "agent_states_known_any": 5,
+     "revalidated": 9,
+     "revalidated_same": 9,
+     "probes": 7,
+     "probe_rollback_fail": 0,
+     "new_edges": 2,
+     "convergence": 2,
+     "convergence_avoided_slots": 2
+    },
+    "ExpenseDeleteSingle/v4": {
+     "agent_states": 5,
+     "agent_states_known_from_prior_runs": 5,
+     "agent_states_known_any": 5,
+     "revalidated": 10,
+     "revalidated_same": 10,
+     "probes": 7,
+     "probe_rollback_fail": 0,
+     "new_edges": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 2
+    }
+   },
+   "n_nodes": 10,
+   "n_edges": 14,
+   "n_slots": 15,
+   "multi_outcome_slots": 0
+  },
+  "layout_per_run": {
+   "per_instance": {
+    "ExpenseDeleteSingle/v0": {
+     "agent_states": 5,
+     "new_nodes": 10,
+     "new_edges": 9,
+     "probes": 6,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 4
+    },
+    "ExpenseDeleteSingle/v1": {
+     "agent_states": 5,
+     "new_nodes": 10,
+     "new_edges": 9,
+     "probes": 6,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 4
+    },
+    "ExpenseDeleteSingle/v2": {
+     "agent_states": 5,
+     "new_nodes": 10,
+     "new_edges": 9,
+     "probes": 6,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 4
+    },
+    "ExpenseDeleteSingle/v3": {
+     "agent_states": 5,
+     "new_nodes": 10,
+     "new_edges": 10,
+     "probes": 7,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 4,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "ExpenseDeleteSingle/v4": {
+     "agent_states": 5,
+     "new_nodes": 10,
+     "new_edges": 10,
+     "probes": 7,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 4,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    }
+   },
+   "n_nodes": 10,
+   "n_edges": 10,
+   "n_slots": 11,
+   "multi_outcome_slots": 0
+  },
+  "struct_ambiguous_new_states": 16,
+  "struct_distinct_states": 26
+ },
+ "MarkorCreateNote": {
+  "n_obs": 99,
+  "instances": [
+   "MarkorCreateNote/v0",
+   "MarkorCreateNote/v1",
+   "MarkorCreateNote/v2",
+   "MarkorCreateNote/v3",
+   "MarkorCreateNote/v4"
+  ],
+  "n_probe_obs": 51,
+  "n_agent_obs": 48,
+  "exact_shared": {
+   "per_instance": {
+    "MarkorCreateNote/v0": {
+     "agent_states": 9,
+     "new_nodes": 17,
+     "new_edges": 16,
+     "probes": 13,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 7,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "MarkorCreateNote/v1": {
+     "agent_states": 7,
+     "agent_states_known_from_prior_runs": 2,
+     "agent_states_known_any": 6,
+     "revalidated": 1,
+     "revalidated_same": 1,
+     "new_nodes": 7,
+     "new_edges": 7,
+     "probes": 3,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 2
+    },
+    "MarkorCreateNote/v2": {
+     "agent_states": 9,
+     "agent_states_known_from_prior_runs": 4,
+     "agent_states_known_any": 8,
+     "revalidated": 10,
+     "revalidated_same": 8,
+     "probes": 13,
+     "probe_rollback_fail": 1,
+     "new_nodes": 7,
+     "new_edges": 9,
+     "convergence": 3,
+     "convergence_avoided_slots": 1
+    },
+    "MarkorCreateNote/v3": {
+     "agent_states": 16,
+     "agent_states_known_from_prior_runs": 4,
+     "agent_states_known_any": 15,
+     "revalidated": 10,
+     "revalidated_same": 8,
+     "probes": 14,
+     "probe_rollback_fail": 1,
+     "new_nodes": 14,
+     "new_edges": 17,
+     "convergence": 4,
+     "convergence_avoided_slots": 1
+    },
+    "MarkorCreateNote/v4": {
+     "agent_states": 7,
+     "agent_states_known_from_prior_runs": 3,
+     "agent_states_known_any": 6,
+     "revalidated": 9,
+     "revalidated_same": 8,
+     "probes": 8,
+     "probe_rollback_fail": 1,
+     "new_nodes": 4,
+     "new_edges": 4,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    }
+   },
+   "n_nodes": 49,
+   "n_edges": 53,
+   "n_slots": 69,
+   "multi_outcome_slots": 2
+  },
+  "exact_per_run": {
+   "per_instance": {
+    "MarkorCreateNote/v0": {
+     "agent_states": 9,
+     "new_nodes": 17,
+     "new_edges": 16,
+     "probes": 13,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 7,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "MarkorCreateNote/v1": {
+     "agent_states": 7,
+     "new_nodes": 10,
+     "new_edges": 8,
+     "probes": 3,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 5
+    },
+    "MarkorCreateNote/v2": {
+     "agent_states": 9,
+     "new_nodes": 17,
+     "new_edges": 16,
+     "probes": 13,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 7,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "MarkorCreateNote/v3": {
+     "agent_states": 16,
+     "new_nodes": 25,
+     "new_edges": 24,
+     "probes": 14,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 14,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "MarkorCreateNote/v4": {
+     "agent_states": 7,
+     "new_nodes": 13,
+     "new_edges": 11,
+     "probes": 8,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 5
+    }
+   },
+   "n_nodes": 13,
+   "n_edges": 11,
+   "n_slots": 15,
+   "multi_outcome_slots": 0
+  },
+  "struct_shared": {
+   "per_instance": {
+    "MarkorCreateNote/v0": {
+     "agent_states": 9,
+     "new_nodes": 13,
+     "new_edges": 13,
+     "probes": 13,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 8,
+     "convergence": 1,
+     "convergence_avoided_slots": 1
+    },
+    "MarkorCreateNote/v1": {
+     "agent_states": 7,
+     "agent_states_known_from_prior_runs": 3,
+     "agent_states_known_any": 6,
+     "revalidated": 1,
+     "revalidated_same": 1,
+     "new_nodes": 5,
+     "new_edges": 5,
+     "probes": 3,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 2
+    },
+    "MarkorCreateNote/v2": {
+     "agent_states": 9,
+     "agent_states_known_from_prior_runs": 6,
+     "agent_states_known_any": 9,
+     "revalidated": 13,
+     "revalidated_same": 12,
+     "probes": 13,
+     "probe_rollback_fail": 1,
+     "new_nodes": 3,
+     "new_edges": 4,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "MarkorCreateNote/v3": {
+     "agent_states": 16,
+     "agent_states_known_from_prior_runs": 7,
+     "agent_states_known_any": 16,
+     "revalidated": 13,
+     "revalidated_same": 12,
+     "probes": 14,
+     "probe_rollback_fail": 1,
+     "new_nodes": 3,
+     "new_edges": 7,
+     "convergence": 4,
+     "convergence_avoided_slots": 7
+    },
+    "MarkorCreateNote/v4": {
+     "agent_states": 7,
+     "agent_states_known_from_prior_runs": 4,
+     "agent_states_known_any": 6,
+     "revalidated": 10,
+     "revalidated_same": 9,
+     "probes": 8,
+     "probe_rollback_fail": 1,
+     "new_nodes": 2,
+     "new_edges": 3,
+     "convergence": 2,
+     "convergence_avoided_slots": 2
+    }
+   },
+   "n_nodes": 26,
+   "n_edges": 32,
+   "n_slots": 56,
+   "multi_outcome_slots": 2
+  },
+  "struct_per_run": {
+   "per_instance": {
+    "MarkorCreateNote/v0": {
+     "agent_states": 9,
+     "new_nodes": 13,
+     "new_edges": 13,
+     "probes": 13,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 8,
+     "convergence": 1,
+     "convergence_avoided_slots": 1
+    },
+    "MarkorCreateNote/v1": {
+     "agent_states": 7,
+     "new_nodes": 8,
+     "new_edges": 6,
+     "probes": 3,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 5
+    },
+    "MarkorCreateNote/v2": {
+     "agent_states": 9,
+     "new_nodes": 13,
+     "new_edges": 13,
+     "probes": 13,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 8,
+     "convergence": 1,
+     "convergence_avoided_slots": 1
+    },
+    "MarkorCreateNote/v3": {
+     "agent_states": 16,
+     "new_nodes": 14,
+     "new_edges": 16,
+     "probes": 14,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 15,
+     "convergence": 3,
+     "convergence_avoided_slots": 8
+    },
+    "MarkorCreateNote/v4": {
+     "agent_states": 7,
+     "new_nodes": 11,
+     "new_edges": 10,
+     "probes": 8,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 5,
+     "convergence": 1,
+     "convergence_avoided_slots": 2
+    }
+   },
+   "n_nodes": 11,
+   "n_edges": 10,
+   "n_slots": 15,
+   "multi_outcome_slots": 0
+  },
+  "layout_shared": {
+   "per_instance": {
+    "MarkorCreateNote/v0": {
+     "agent_states": 9,
+     "new_nodes": 13,
+     "new_edges": 13,
+     "probes": 13,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 8,
+     "convergence": 1,
+     "convergence_avoided_slots": 1
+    },
+    "MarkorCreateNote/v1": {
+     "agent_states": 7,
+     "agent_states_known_from_prior_runs": 6,
+     "agent_states_known_any": 6,
+     "revalidated": 3,
+     "revalidated_same": 3,
+     "new_nodes": 4,
+     "new_edges": 5,
+     "probes": 3,
+     "probe_rollback_fail": 1,
+     "convergence": 2,
+     "convergence_avoided_slots": 4
+    },
+    "MarkorCreateNote/v2": {
+     "agent_states": 9,
+     "agent_states_known_from_prior_runs": 9,
+     "agent_states_known_any": 9,
+     "revalidated": 20,
+     "revalidated_same": 19,
+     "probes": 13,
+     "probe_rollback_fail": 1,
+     "new_nodes": 1,
+     "new_edges": 1
+    },
+    "MarkorCreateNote/v3": {
+     "agent_states": 16,
+     "agent_states_known_from_prior_runs": 16,
+     "agent_states_known_any": 16,
+     "revalidated": 25,
+     "revalidated_same": 25,
+     "probes": 14,
+     "probe_rollback_fail": 1,
+     "new_nodes": 1,
+     "new_edges": 3,
+     "convergence": 2,
+     "convergence_avoided_slots": 15
+    },
+    "MarkorCreateNote/v4": {
+     "agent_states": 7,
+     "agent_states_known_from_prior_runs": 7,
+     "agent_states_known_any": 7,
+     "revalidated": 13,
+     "revalidated_same": 13,
+     "probes": 8,
+     "probe_rollback_fail": 1,
+     "new_edges": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    }
+   },
+   "n_nodes": 19,
+   "n_edges": 23,
+   "n_slots": 37,
+   "multi_outcome_slots": 1
+  },
+  "layout_per_run": {
+   "per_instance": {
+    "MarkorCreateNote/v0": {
+     "agent_states": 9,
+     "new_nodes": 13,
+     "new_edges": 13,
+     "probes": 13,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 8,
+     "convergence": 1,
+     "convergence_avoided_slots": 1
+    },
+    "MarkorCreateNote/v1": {
+     "agent_states": 7,
+     "new_nodes": 8,
+     "new_edges": 6,
+     "probes": 3,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 5
+    },
+    "MarkorCreateNote/v2": {
+     "agent_states": 9,
+     "new_nodes": 13,
+     "new_edges": 13,
+     "probes": 13,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 8,
+     "convergence": 1,
+     "convergence_avoided_slots": 1
+    },
+    "MarkorCreateNote/v3": {
+     "agent_states": 16,
+     "new_nodes": 14,
+     "new_edges": 16,
+     "probes": 14,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 15,
+     "convergence": 3,
+     "convergence_avoided_slots": 8
+    },
+    "MarkorCreateNote/v4": {
+     "agent_states": 7,
+     "new_nodes": 11,
+     "new_edges": 10,
+     "probes": 8,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 5,
+     "convergence": 1,
+     "convergence_avoided_slots": 2
+    }
+   },
+   "n_nodes": 11,
+   "n_edges": 10,
+   "n_slots": 15,
+   "multi_outcome_slots": 0
+  },
+  "struct_ambiguous_new_states": 7,
+  "struct_distinct_states": 26
+ },
+ "MarkorDeleteNewestNote": {
+  "n_obs": 76,
+  "instances": [
+   "MarkorDeleteNewestNote/v0",
+   "MarkorDeleteNewestNote/v1",
+   "MarkorDeleteNewestNote/v2",
+   "MarkorDeleteNewestNote/v3",
+   "MarkorDeleteNewestNote/v4"
+  ],
+  "n_probe_obs": 39,
+  "n_agent_obs": 37,
+  "exact_shared": {
+   "per_instance": {
+    "MarkorDeleteNewestNote/v0": {
+     "agent_states": 5,
+     "new_nodes": 13,
+     "new_edges": 11,
+     "probes": 9,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 3
+    },
+    "MarkorDeleteNewestNote/v1": {
+     "agent_states": 6,
+     "agent_states_known_from_prior_runs": 1,
+     "agent_states_known_any": 5,
+     "new_nodes": 12,
+     "revalidated": 1,
+     "revalidated_same": 0,
+     "new_edges": 12,
+     "probes": 8,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "MarkorDeleteNewestNote/v2": {
+     "agent_states": 6,
+     "new_nodes": 13,
+     "new_edges": 11,
+     "probes": 6,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 4
+    },
+    "MarkorDeleteNewestNote/v3": {
+     "agent_states": 10,
+     "agent_states_known_from_prior_runs": 1,
+     "agent_states_known_any": 10,
+     "new_nodes": 8,
+     "revalidated": 1,
+     "revalidated_same": 0,
+     "new_edges": 8,
+     "probes": 6,
+     "probe_rollback_fail": 1
+    },
+    "MarkorDeleteNewestNote/v4": {
+     "agent_states": 10,
+     "agent_states_known_from_prior_runs": 1,
+     "agent_states_known_any": 9,
+     "new_nodes": 9,
+     "revalidated": 1,
+     "revalidated_same": 0,
+     "new_edges": 9,
+     "probes": 10,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 6
+    }
+   },
+   "n_nodes": 55,
+   "n_edges": 51,
+   "n_slots": 61,
+   "multi_outcome_slots": 2
+  },
+  "exact_per_run": {
+   "per_instance": {
+    "MarkorDeleteNewestNote/v0": {
+     "agent_states": 5,
+     "new_nodes": 13,
+     "new_edges": 11,
+     "probes": 9,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 3
+    },
+    "MarkorDeleteNewestNote/v1": {
+     "agent_states": 6,
+     "new_nodes": 14,
+     "new_edges": 12,
+     "probes": 8,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 4
+    },
+    "MarkorDeleteNewestNote/v2": {
+     "agent_states": 6,
+     "new_nodes": 13,
+     "new_edges": 11,
+     "probes": 6,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 4
+    },
+    "MarkorDeleteNewestNote/v3": {
+     "agent_states": 10,
+     "new_nodes": 9,
+     "new_edges": 8,
+     "probes": 6,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 9
+    },
+    "MarkorDeleteNewestNote/v4": {
+     "agent_states": 10,
+     "new_nodes": 10,
+     "new_edges": 9,
+     "probes": 10,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 8,
+     "convergence": 1,
+     "convergence_avoided_slots": 6
+    }
+   },
+   "n_nodes": 10,
+   "n_edges": 9,
+   "n_slots": 14,
+   "multi_outcome_slots": 0
+  },
+  "struct_shared": {
+   "per_instance": {
+    "MarkorDeleteNewestNote/v0": {
+     "agent_states": 5,
+     "new_nodes": 12,
+     "new_edges": 11,
+     "probes": 9,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 3,
+     "convergence": 1,
+     "convergence_avoided_slots": 6
+    },
+    "MarkorDeleteNewestNote/v1": {
+     "agent_states": 6,
+     "agent_states_known_from_prior_runs": 3,
+     "agent_states_known_any": 5,
+     "revalidated": 2,
+     "revalidated_same": 2,
+     "new_nodes": 8,
+     "new_edges": 11,
+     "probes": 8,
+     "probe_rollback_fail": 1,
+     "convergence": 4,
+     "convergence_avoided_slots": 28
+    },
+    "MarkorDeleteNewestNote/v2": {
+     "agent_states": 6,
+     "agent_states_known_from_prior_runs": 5,
+     "agent_states_known_any": 6,
+     "revalidated": 2,
+     "revalidated_same": 2,
+     "new_nodes": 7,
+     "new_edges": 10,
+     "probes": 6,
+     "probe_rollback_fail": 1,
+     "convergence": 3,
+     "convergence_avoided_slots": 27
+    },
+    "MarkorDeleteNewestNote/v3": {
+     "agent_states": 10,
+     "agent_states_known_from_prior_runs": 2,
+     "agent_states_known_any": 10,
+     "revalidated": 1,
+     "revalidated_same": 1,
+     "new_nodes": 6,
+     "new_edges": 6,
+     "probes": 6,
+     "probe_rollback_fail": 1
+    },
+    "MarkorDeleteNewestNote/v4": {
+     "agent_states": 10,
+     "agent_states_known_from_prior_runs": 2,
+     "agent_states_known_any": 10,
+     "revalidated": 1,
+     "revalidated_same": 1,
+     "new_nodes": 6,
+     "new_edges": 6,
+     "probes": 10,
+     "probe_rollback_fail": 1
+    }
+   },
+   "n_nodes": 39,
+   "n_edges": 44,
+   "n_slots": 55,
+   "multi_outcome_slots": 0
+  },
+  "struct_per_run": {
+   "per_instance": {
+    "MarkorDeleteNewestNote/v0": {
+     "agent_states": 5,
+     "new_nodes": 12,
+     "new_edges": 11,
+     "probes": 9,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 3,
+     "convergence": 1,
+     "convergence_avoided_slots": 6
+    },
+    "MarkorDeleteNewestNote/v1": {
+     "agent_states": 6,
+     "new_nodes": 11,
+     "new_edges": 12,
+     "probes": 8,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 4,
+     "convergence": 3,
+     "convergence_avoided_slots": 14
+    },
+    "MarkorDeleteNewestNote/v2": {
+     "agent_states": 6,
+     "new_nodes": 11,
+     "new_edges": 11,
+     "probes": 6,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 4,
+     "convergence": 2,
+     "convergence_avoided_slots": 7
+    },
+    "MarkorDeleteNewestNote/v3": {
+     "agent_states": 10,
+     "new_nodes": 8,
+     "new_edges": 7,
+     "probes": 6,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 9
+    },
+    "MarkorDeleteNewestNote/v4": {
+     "agent_states": 10,
+     "new_nodes": 8,
+     "new_edges": 7,
+     "probes": 10,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 9
+    }
+   },
+   "n_nodes": 8,
+   "n_edges": 7,
+   "n_slots": 12,
+   "multi_outcome_slots": 0
+  },
+  "layout_shared": {
+   "per_instance": {
+    "MarkorDeleteNewestNote/v0": {
+     "agent_states": 5,
+     "new_nodes": 12,
+     "new_edges": 11,
+     "probes": 9,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 3,
+     "convergence": 1,
+     "convergence_avoided_slots": 6
+    },
+    "MarkorDeleteNewestNote/v1": {
+     "agent_states": 6,
+     "agent_states_known_from_prior_runs": 4,
+     "agent_states_known_any": 5,
+     "revalidated": 3,
+     "revalidated_same": 3,
+     "new_edges": 10,
+     "convergence": 9,
+     "convergence_avoided_slots": 17,
+     "probes": 8,
+     "probe_rollback_fail": 1,
+     "new_nodes": 2
+    },
+    "MarkorDeleteNewestNote/v2": {
+     "agent_states": 6,
+     "agent_states_known_from_prior_runs": 6,
+     "agent_states_known_any": 6,
+     "revalidated": 3,
+     "revalidated_same": 3,
+     "new_edges": 9,
+     "convergence": 7,
+     "convergence_avoided_slots": 11,
+     "probes": 6,
+     "probe_rollback_fail": 1,
+     "new_nodes": 2
+    },
+    "MarkorDeleteNewestNote/v3": {
+     "agent_states": 10,
+     "agent_states_known_from_prior_runs": 10,
+     "agent_states_known_any": 10,
+     "revalidated": 1,
+     "revalidated_same": 1,
+     "new_edges": 6,
+     "convergence": 5,
+     "convergence_avoided_slots": 0,
+     "probes": 6,
+     "probe_rollback_fail": 1,
+     "new_nodes": 1
+    },
+    "MarkorDeleteNewestNote/v4": {
+     "agent_states": 10,
+     "agent_states_known_from_prior_runs": 10,
+     "agent_states_known_any": 10,
+     "revalidated": 9,
+     "revalidated_same": 9,
+     "new_edges": 6,
+     "convergence": 4,
+     "convergence_avoided_slots": 4,
+     "probes": 10,
+     "probe_rollback_fail": 1,
+     "new_nodes": 2
+    }
+   },
+   "n_nodes": 19,
+   "n_edges": 42,
+   "n_slots": 52,
+   "multi_outcome_slots": 0
+  },
+  "layout_per_run": {
+   "per_instance": {
+    "MarkorDeleteNewestNote/v0": {
+     "agent_states": 5,
+     "new_nodes": 12,
+     "new_edges": 11,
+     "probes": 9,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 3,
+     "convergence": 1,
+     "convergence_avoided_slots": 6
+    },
+    "MarkorDeleteNewestNote/v1": {
+     "agent_states": 6,
+     "new_nodes": 8,
+     "new_edges": 12,
+     "probes": 8,
+     "probe_rollback_fail": 1,
+     "convergence": 6,
+     "convergence_avoided_slots": 14,
+     "agent_states_known_any": 4
+    },
+    "MarkorDeleteNewestNote/v2": {
+     "agent_states": 6,
+     "new_nodes": 8,
+     "new_edges": 11,
+     "probes": 6,
+     "probe_rollback_fail": 1,
+     "convergence": 5,
+     "convergence_avoided_slots": 7,
+     "agent_states_known_any": 4
+    },
+    "MarkorDeleteNewestNote/v3": {
+     "agent_states": 10,
+     "new_nodes": 4,
+     "new_edges": 7,
+     "probes": 6,
+     "probe_rollback_fail": 1,
+     "convergence": 4,
+     "convergence_avoided_slots": 0,
+     "agent_states_known_any": 9
+    },
+    "MarkorDeleteNewestNote/v4": {
+     "agent_states": 10,
+     "new_nodes": 5,
+     "new_edges": 7,
+     "probes": 10,
+     "probe_rollback_fail": 1,
+     "convergence": 3,
+     "convergence_avoided_slots": 0,
+     "agent_states_known_any": 9
+    }
+   },
+   "n_nodes": 5,
+   "n_edges": 7,
+   "n_slots": 12,
+   "multi_outcome_slots": 0
+  },
+  "struct_ambiguous_new_states": 20,
+  "struct_distinct_states": 39
+ },
+ "NotesTodoItemCount": {
+  "n_obs": 30,
+  "instances": [
+   "NotesTodoItemCount/v0",
+   "NotesTodoItemCount/v1",
+   "NotesTodoItemCount/v2",
+   "NotesTodoItemCount/v3",
+   "NotesTodoItemCount/v4"
+  ],
+  "n_probe_obs": 11,
+  "n_agent_obs": 19,
+  "exact_shared": {
+   "per_instance": {
+    "NotesTodoItemCount/v0": {
+     "agent_states": 4,
+     "new_nodes": 6,
+     "new_edges": 5,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 0,
+     "agent_states_known_any": 2
+    },
+    "NotesTodoItemCount/v1": {
+     "agent_states": 4,
+     "agent_states_known_from_prior_runs": 1,
+     "agent_states_known_any": 3,
+     "new_nodes": 5,
+     "revalidated": 1,
+     "revalidated_same": 0,
+     "new_edges": 5,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "NotesTodoItemCount/v2": {
+     "agent_states": 4,
+     "agent_states_known_from_prior_runs": 1,
+     "agent_states_known_any": 3,
+     "new_nodes": 5,
+     "revalidated": 1,
+     "revalidated_same": 0,
+     "new_edges": 5,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "NotesTodoItemCount/v3": {
+     "agent_states": 2,
+     "agent_states_known_from_prior_runs": 1,
+     "agent_states_known_any": 1,
+     "new_nodes": 4,
+     "revalidated": 1,
+     "revalidated_same": 0,
+     "new_edges": 3,
+     "probes": 2,
+     "probe_rollback_fail": 1
+    },
+    "NotesTodoItemCount/v4": {
+     "agent_states": 5,
+     "agent_states_known_from_prior_runs": 1,
+     "agent_states_known_any": 4,
+     "new_nodes": 7,
+     "revalidated": 1,
+     "revalidated_same": 0,
+     "new_edges": 6,
+     "probes": 3,
+     "probe_rollback_fail": 1
+    }
+   },
+   "n_nodes": 27,
+   "n_edges": 24,
+   "n_slots": 26,
+   "multi_outcome_slots": 1
+  },
+  "exact_per_run": {
+   "per_instance": {
+    "NotesTodoItemCount/v0": {
+     "agent_states": 4,
+     "new_nodes": 6,
+     "new_edges": 5,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 0,
+     "agent_states_known_any": 2
+    },
+    "NotesTodoItemCount/v1": {
+     "agent_states": 4,
+     "new_nodes": 6,
+     "new_edges": 5,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 0,
+     "agent_states_known_any": 2
+    },
+    "NotesTodoItemCount/v2": {
+     "agent_states": 4,
+     "new_nodes": 6,
+     "new_edges": 5,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 0,
+     "agent_states_known_any": 2
+    },
+    "NotesTodoItemCount/v3": {
+     "agent_states": 2,
+     "new_nodes": 5,
+     "new_edges": 3,
+     "probes": 2,
+     "probe_rollback_fail": 1
+    },
+    "NotesTodoItemCount/v4": {
+     "agent_states": 5,
+     "new_nodes": 8,
+     "new_edges": 6,
+     "agent_states_known_any": 3,
+     "probes": 3,
+     "probe_rollback_fail": 1
+    }
+   },
+   "n_nodes": 8,
+   "n_edges": 6,
+   "n_slots": 8,
+   "multi_outcome_slots": 0
+  },
+  "struct_shared": {
+   "per_instance": {
+    "NotesTodoItemCount/v0": {
+     "agent_states": 4,
+     "new_nodes": 6,
+     "new_edges": 5,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 0,
+     "agent_states_known_any": 2
+    },
+    "NotesTodoItemCount/v1": {
+     "agent_states": 4,
+     "agent_states_known_from_prior_runs": 1,
+     "agent_states_known_any": 3,
+     "new_nodes": 5,
+     "revalidated": 1,
+     "revalidated_same": 0,
+     "new_edges": 5,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "NotesTodoItemCount/v2": {
+     "agent_states": 4,
+     "agent_states_known_from_prior_runs": 1,
+     "agent_states_known_any": 3,
+     "new_nodes": 5,
+     "revalidated": 1,
+     "revalidated_same": 0,
+     "new_edges": 5,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "NotesTodoItemCount/v3": {
+     "agent_states": 2,
+     "agent_states_known_from_prior_runs": 1,
+     "agent_states_known_any": 1,
+     "new_nodes": 4,
+     "revalidated": 1,
+     "revalidated_same": 0,
+     "new_edges": 3,
+     "probes": 2,
+     "probe_rollback_fail": 1
+    },
+    "NotesTodoItemCount/v4": {
+     "agent_states": 5,
+     "agent_states_known_from_prior_runs": 3,
+     "agent_states_known_any": 5,
+     "new_nodes": 4,
+     "revalidated": 2,
+     "revalidated_same": 1,
+     "new_edges": 5,
+     "convergence": 1,
+     "convergence_avoided_slots": 2,
+     "probes": 3,
+     "probe_rollback_fail": 1
+    }
+   },
+   "n_nodes": 24,
+   "n_edges": 23,
+   "n_slots": 25,
+   "multi_outcome_slots": 1
+  },
+  "struct_per_run": {
+   "per_instance": {
+    "NotesTodoItemCount/v0": {
+     "agent_states": 4,
+     "new_nodes": 6,
+     "new_edges": 5,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 0,
+     "agent_states_known_any": 2
+    },
+    "NotesTodoItemCount/v1": {
+     "agent_states": 4,
+     "new_nodes": 6,
+     "new_edges": 5,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 0,
+     "agent_states_known_any": 2
+    },
+    "NotesTodoItemCount/v2": {
+     "agent_states": 4,
+     "new_nodes": 6,
+     "new_edges": 5,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 0,
+     "agent_states_known_any": 2
+    },
+    "NotesTodoItemCount/v3": {
+     "agent_states": 2,
+     "new_nodes": 5,
+     "new_edges": 3,
+     "probes": 2,
+     "probe_rollback_fail": 1
+    },
+    "NotesTodoItemCount/v4": {
+     "agent_states": 5,
+     "new_nodes": 8,
+     "new_edges": 6,
+     "agent_states_known_any": 3,
+     "probes": 3,
+     "probe_rollback_fail": 1
+    }
+   },
+   "n_nodes": 8,
+   "n_edges": 6,
+   "n_slots": 8,
+   "multi_outcome_slots": 0
+  },
+  "layout_shared": {
+   "per_instance": {
+    "NotesTodoItemCount/v0": {
+     "agent_states": 4,
+     "new_nodes": 5,
+     "new_edges": 5,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "convergence": 2,
+     "convergence_avoided_slots": 2,
+     "agent_states_known_any": 2
+    },
+    "NotesTodoItemCount/v1": {
+     "agent_states": 4,
+     "agent_states_known_from_prior_runs": 4,
+     "agent_states_known_any": 4,
+     "revalidated": 5,
+     "revalidated_same": 5,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "new_edges": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 3
+    },
+    "NotesTodoItemCount/v2": {
+     "agent_states": 4,
+     "agent_states_known_from_prior_runs": 4,
+     "agent_states_known_any": 4,
+     "revalidated": 5,
+     "revalidated_same": 5,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "new_edges": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 3
+    },
+    "NotesTodoItemCount/v3": {
+     "agent_states": 2,
+     "agent_states_known_from_prior_runs": 2,
+     "agent_states_known_any": 2,
+     "revalidated": 3,
+     "revalidated_same": 3,
+     "probes": 2,
+     "probe_rollback_fail": 1
+    },
+    "NotesTodoItemCount/v4": {
+     "agent_states": 5,
+     "agent_states_known_from_prior_runs": 4,
+     "agent_states_known_any": 5,
+     "new_nodes": 3,
+     "revalidated": 3,
+     "revalidated_same": 2,
+     "new_edges": 5,
+     "convergence": 2,
+     "convergence_avoided_slots": 9,
+     "probes": 3,
+     "probe_rollback_fail": 1
+    }
+   },
+   "n_nodes": 8,
+   "n_edges": 12,
+   "n_slots": 14,
+   "multi_outcome_slots": 1
+  },
+  "layout_per_run": {
+   "per_instance": {
+    "NotesTodoItemCount/v0": {
+     "agent_states": 4,
+     "new_nodes": 5,
+     "new_edges": 5,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "convergence": 2,
+     "convergence_avoided_slots": 2,
+     "agent_states_known_any": 2
+    },
+    "NotesTodoItemCount/v1": {
+     "agent_states": 4,
+     "new_nodes": 5,
+     "new_edges": 5,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "convergence": 2,
+     "convergence_avoided_slots": 2,
+     "agent_states_known_any": 2
+    },
+    "NotesTodoItemCount/v2": {
+     "agent_states": 4,
+     "new_nodes": 5,
+     "new_edges": 5,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "convergence": 2,
+     "convergence_avoided_slots": 2,
+     "agent_states_known_any": 2
+    },
+    "NotesTodoItemCount/v3": {
+     "agent_states": 2,
+     "new_nodes": 5,
+     "new_edges": 3,
+     "probes": 2,
+     "probe_rollback_fail": 1
+    },
+    "NotesTodoItemCount/v4": {
+     "agent_states": 5,
+     "new_nodes": 7,
+     "new_edges": 6,
+     "agent_states_known_any": 3,
+     "probes": 3,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 3
+    }
+   },
+   "n_nodes": 7,
+   "n_edges": 6,
+   "n_slots": 8,
+   "multi_outcome_slots": 0
+  },
+  "struct_ambiguous_new_states": 16,
+  "struct_distinct_states": 24
+ },
+ "OsmAndFavorite": {
+  "n_obs": 72,
+  "instances": [
+   "OsmAndFavorite/v0",
+   "OsmAndFavorite/v1",
+   "OsmAndFavorite/v2",
+   "OsmAndFavorite/v3",
+   "OsmAndFavorite/v4"
+  ],
+  "n_probe_obs": 17,
+  "n_agent_obs": 55,
+  "exact_shared": {
+   "per_instance": {
+    "OsmAndFavorite/v0": {
+     "agent_states": 13,
+     "new_nodes": 14,
+     "new_edges": 14,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 12,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "OsmAndFavorite/v1": {
+     "agent_states": 13,
+     "agent_states_known_from_prior_runs": 4,
+     "agent_states_known_any": 13,
+     "revalidated": 4,
+     "revalidated_same": 2,
+     "new_edges": 12,
+     "convergence": 2,
+     "convergence_avoided_slots": 1,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "new_nodes": 10
+    },
+    "OsmAndFavorite/v2": {
+     "agent_states": 11,
+     "agent_states_known_from_prior_runs": 5,
+     "agent_states_known_any": 11,
+     "revalidated": 5,
+     "revalidated_same": 2,
+     "new_edges": 10,
+     "convergence": 3,
+     "convergence_avoided_slots": 2,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "new_nodes": 7
+    },
+    "OsmAndFavorite/v3": {
+     "agent_states": 9,
+     "agent_states_known_from_prior_runs": 4,
+     "agent_states_known_any": 9,
+     "revalidated": 4,
+     "revalidated_same": 2,
+     "new_edges": 8,
+     "convergence": 3,
+     "convergence_avoided_slots": 5,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "new_nodes": 5
+    },
+    "OsmAndFavorite/v4": {
+     "agent_states": 9,
+     "agent_states_known_from_prior_runs": 2,
+     "agent_states_known_any": 9,
+     "revalidated": 2,
+     "revalidated_same": 1,
+     "new_nodes": 8,
+     "new_edges": 8,
+     "probes": 1,
+     "probe_rollback_fail": 1
+    }
+   },
+   "n_nodes": 44,
+   "n_edges": 52,
+   "n_slots": 54,
+   "multi_outcome_slots": 5
+  },
+  "exact_per_run": {
+   "per_instance": {
+    "OsmAndFavorite/v0": {
+     "agent_states": 13,
+     "new_nodes": 14,
+     "new_edges": 14,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 12,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "OsmAndFavorite/v1": {
+     "agent_states": 13,
+     "new_nodes": 14,
+     "new_edges": 14,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 12,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "OsmAndFavorite/v2": {
+     "agent_states": 11,
+     "new_nodes": 12,
+     "new_edges": 12,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 10,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "OsmAndFavorite/v3": {
+     "agent_states": 9,
+     "new_nodes": 10,
+     "new_edges": 10,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 8,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "OsmAndFavorite/v4": {
+     "agent_states": 9,
+     "new_nodes": 10,
+     "new_edges": 9,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 8
+    }
+   },
+   "n_nodes": 10,
+   "n_edges": 9,
+   "n_slots": 9,
+   "multi_outcome_slots": 1
+  },
+  "struct_shared": {
+   "per_instance": {
+    "OsmAndFavorite/v0": {
+     "agent_states": 13,
+     "new_nodes": 10,
+     "new_edges": 12,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 12,
+     "convergence": 3,
+     "convergence_avoided_slots": 3
+    },
+    "OsmAndFavorite/v1": {
+     "agent_states": 13,
+     "agent_states_known_from_prior_runs": 11,
+     "agent_states_known_any": 13,
+     "revalidated": 9,
+     "revalidated_same": 7,
+     "new_edges": 7,
+     "convergence": 3,
+     "convergence_avoided_slots": 3,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "new_nodes": 4
+    },
+    "OsmAndFavorite/v2": {
+     "agent_states": 11,
+     "agent_states_known_from_prior_runs": 9,
+     "agent_states_known_any": 11,
+     "revalidated": 8,
+     "revalidated_same": 5,
+     "new_edges": 7,
+     "convergence": 4,
+     "convergence_avoided_slots": 9,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "new_nodes": 3
+    },
+    "OsmAndFavorite/v3": {
+     "agent_states": 9,
+     "agent_states_known_from_prior_runs": 4,
+     "agent_states_known_any": 9,
+     "revalidated": 4,
+     "revalidated_same": 2,
+     "new_edges": 7,
+     "convergence": 3,
+     "convergence_avoided_slots": 5,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "new_nodes": 4
+    },
+    "OsmAndFavorite/v4": {
+     "agent_states": 9,
+     "agent_states_known_from_prior_runs": 5,
+     "agent_states_known_any": 9,
+     "revalidated": 4,
+     "revalidated_same": 1,
+     "new_nodes": 5,
+     "new_edges": 7,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "convergence": 2,
+     "convergence_avoided_slots": 3
+    }
+   },
+   "n_nodes": 26,
+   "n_edges": 40,
+   "n_slots": 43,
+   "multi_outcome_slots": 6
+  },
+  "struct_per_run": {
+   "per_instance": {
+    "OsmAndFavorite/v0": {
+     "agent_states": 13,
+     "new_nodes": 10,
+     "new_edges": 12,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 12,
+     "convergence": 3,
+     "convergence_avoided_slots": 3
+    },
+    "OsmAndFavorite/v1": {
+     "agent_states": 13,
+     "new_nodes": 11,
+     "new_edges": 12,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 12,
+     "convergence": 2,
+     "convergence_avoided_slots": 2
+    },
+    "OsmAndFavorite/v2": {
+     "agent_states": 11,
+     "new_nodes": 10,
+     "new_edges": 11,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 10,
+     "convergence": 2,
+     "convergence_avoided_slots": 2
+    },
+    "OsmAndFavorite/v3": {
+     "agent_states": 9,
+     "new_nodes": 9,
+     "new_edges": 9,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 8,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "OsmAndFavorite/v4": {
+     "agent_states": 9,
+     "new_nodes": 9,
+     "new_edges": 8,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 8
+    }
+   },
+   "n_nodes": 9,
+   "n_edges": 8,
+   "n_slots": 9,
+   "multi_outcome_slots": 1
+  },
+  "layout_shared": {
+   "per_instance": {
+    "OsmAndFavorite/v0": {
+     "agent_states": 13,
+     "new_nodes": 9,
+     "new_edges": 11,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 12,
+     "convergence": 3,
+     "convergence_avoided_slots": 3
+    },
+    "OsmAndFavorite/v1": {
+     "agent_states": 13,
+     "agent_states_known_from_prior_runs": 11,
+     "agent_states_known_any": 13,
+     "revalidated": 12,
+     "revalidated_same": 10,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "new_nodes": 3,
+     "new_edges": 4,
+     "convergence": 1,
+     "convergence_avoided_slots": 2
+    },
+    "OsmAndFavorite/v2": {
+     "agent_states": 11,
+     "agent_states_known_from_prior_runs": 11,
+     "agent_states_known_any": 11,
+     "revalidated": 13,
+     "revalidated_same": 13,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "new_edges": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 4
+    },
+    "OsmAndFavorite/v3": {
+     "agent_states": 9,
+     "agent_states_known_from_prior_runs": 9,
+     "agent_states_known_any": 9,
+     "revalidated": 10,
+     "revalidated_same": 10,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "new_edges": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 1
+    },
+    "OsmAndFavorite/v4": {
+     "agent_states": 9,
+     "agent_states_known_from_prior_runs": 9,
+     "agent_states_known_any": 9,
+     "revalidated": 8,
+     "revalidated_same": 8,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "new_edges": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 1
+    }
+   },
+   "n_nodes": 12,
+   "n_edges": 18,
+   "n_slots": 25,
+   "multi_outcome_slots": 4
+  },
+  "layout_per_run": {
+   "per_instance": {
+    "OsmAndFavorite/v0": {
+     "agent_states": 13,
+     "new_nodes": 9,
+     "new_edges": 11,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 12,
+     "convergence": 3,
+     "convergence_avoided_slots": 3
+    },
+    "OsmAndFavorite/v1": {
+     "agent_states": 13,
+     "new_nodes": 10,
+     "new_edges": 11,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 12,
+     "convergence": 2,
+     "convergence_avoided_slots": 2
+    },
+    "OsmAndFavorite/v2": {
+     "agent_states": 11,
+     "new_nodes": 9,
+     "new_edges": 10,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 10,
+     "convergence": 2,
+     "convergence_avoided_slots": 2
+    },
+    "OsmAndFavorite/v3": {
+     "agent_states": 9,
+     "new_nodes": 8,
+     "new_edges": 8,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 8,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "OsmAndFavorite/v4": {
+     "agent_states": 9,
+     "new_nodes": 8,
+     "new_edges": 7,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 8
+    }
+   },
+   "n_nodes": 8,
+   "n_edges": 7,
+   "n_slots": 9,
+   "multi_outcome_slots": 1
+  },
+  "struct_ambiguous_new_states": 14,
+  "struct_distinct_states": 26
+ },
+ "RecipeDeleteMultipleRecipesWithConstraint": {
+  "n_obs": 69,
+  "instances": [
+   "RecipeDeleteMultipleRecipesWithConstraint/v0",
+   "RecipeDeleteMultipleRecipesWithConstraint/v1",
+   "RecipeDeleteMultipleRecipesWithConstraint/v2",
+   "RecipeDeleteMultipleRecipesWithConstraint/v3",
+   "RecipeDeleteMultipleRecipesWithConstraint/v4"
+  ],
+  "n_probe_obs": 27,
+  "n_agent_obs": 42,
+  "exact_shared": {
+   "per_instance": {
+    "RecipeDeleteMultipleRecipesWithConstraint/v0": {
+     "agent_states": 6,
+     "new_nodes": 7,
+     "new_edges": 7,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 5,
+     "convergence": 1,
+     "convergence_avoided_slots": 4
+    },
+    "RecipeDeleteMultipleRecipesWithConstraint/v1": {
+     "agent_states": 16,
+     "agent_states_known_from_prior_runs": 1,
+     "agent_states_known_any": 15,
+     "new_nodes": 18,
+     "revalidated": 1,
+     "revalidated_same": 0,
+     "new_edges": 21,
+     "probes": 8,
+     "probe_rollback_fail": 1,
+     "convergence": 4,
+     "convergence_avoided_slots": 2
+    },
+    "RecipeDeleteMultipleRecipesWithConstraint/v2": {
+     "agent_states": 4,
+     "agent_states_known_from_prior_runs": 1,
+     "agent_states_known_any": 3,
+     "new_nodes": 5,
+     "revalidated": 1,
+     "revalidated_same": 0,
+     "new_edges": 7,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "convergence": 3,
+     "convergence_avoided_slots": 0
+    },
+    "RecipeDeleteMultipleRecipesWithConstraint/v3": {
+     "agent_states": 4,
+     "agent_states_known_from_prior_runs": 1,
+     "agent_states_known_any": 4,
+     "new_nodes": 3,
+     "revalidated": 1,
+     "revalidated_same": 0,
+     "new_edges": 4,
+     "convergence": 1,
+     "convergence_avoided_slots": 0,
+     "probes": 2,
+     "probe_rollback_fail": 0
+    },
+    "RecipeDeleteMultipleRecipesWithConstraint/v4": {
+     "agent_states": 12,
+     "agent_states_known_from_prior_runs": 5,
+     "agent_states_known_any": 12,
+     "new_nodes": 10,
+     "revalidated": 5,
+     "revalidated_same": 2,
+     "new_edges": 13,
+     "convergence": 3,
+     "convergence_avoided_slots": 3,
+     "probes": 7,
+     "probe_rollback_fail": 0
+    }
+   },
+   "n_nodes": 43,
+   "n_edges": 52,
+   "n_slots": 50,
+   "multi_outcome_slots": 2
+  },
+  "exact_per_run": {
+   "per_instance": {
+    "RecipeDeleteMultipleRecipesWithConstraint/v0": {
+     "agent_states": 6,
+     "new_nodes": 7,
+     "new_edges": 7,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 5,
+     "convergence": 1,
+     "convergence_avoided_slots": 4
+    },
+    "RecipeDeleteMultipleRecipesWithConstraint/v1": {
+     "agent_states": 16,
+     "new_nodes": 19,
+     "new_edges": 21,
+     "probes": 8,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 14,
+     "convergence": 4,
+     "convergence_avoided_slots": 2
+    },
+    "RecipeDeleteMultipleRecipesWithConstraint/v2": {
+     "agent_states": 4,
+     "new_nodes": 7,
+     "new_edges": 7,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 2,
+     "convergence": 2,
+     "convergence_avoided_slots": 0
+    },
+    "RecipeDeleteMultipleRecipesWithConstraint/v3": {
+     "agent_states": 4,
+     "new_nodes": 5,
+     "new_edges": 4,
+     "probes": 2,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 3
+    },
+    "RecipeDeleteMultipleRecipesWithConstraint/v4": {
+     "agent_states": 12,
+     "new_nodes": 14,
+     "new_edges": 14,
+     "probes": 7,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 11,
+     "convergence": 1,
+     "convergence_avoided_slots": 2
+    }
+   },
+   "n_nodes": 14,
+   "n_edges": 14,
+   "n_slots": 15,
+   "multi_outcome_slots": 1
+  },
+  "struct_shared": {
+   "per_instance": {
+    "RecipeDeleteMultipleRecipesWithConstraint/v0": {
+     "agent_states": 6,
+     "new_nodes": 6,
+     "new_edges": 7,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "convergence": 2,
+     "convergence_avoided_slots": 4,
+     "agent_states_known_any": 5
+    },
+    "RecipeDeleteMultipleRecipesWithConstraint/v1": {
+     "agent_states": 16,
+     "agent_states_known_from_prior_runs": 6,
+     "agent_states_known_any": 15,
+     "revalidated": 3,
+     "revalidated_same": 2,
+     "new_edges": 17,
+     "convergence": 11,
+     "convergence_avoided_slots": 2,
+     "probes": 8,
+     "probe_rollback_fail": 1,
+     "new_nodes": 7
+    },
+    "RecipeDeleteMultipleRecipesWithConstraint/v2": {
+     "agent_states": 4,
+     "agent_states_known_from_prior_runs": 4,
+     "agent_states_known_any": 4,
+     "revalidated": 6,
+     "revalidated_same": 6,
+     "new_nodes": 1,
+     "new_edges": 3,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "convergence": 2,
+     "convergence_avoided_slots": 0
+    },
+    "RecipeDeleteMultipleRecipesWithConstraint/v3": {
+     "agent_states": 4,
+     "agent_states_known_from_prior_runs": 4,
+     "agent_states_known_any": 4,
+     "revalidated": 6,
+     "revalidated_same": 6,
+     "probes": 2,
+     "probe_rollback_fail": 0
+    },
+    "RecipeDeleteMultipleRecipesWithConstraint/v4": {
+     "agent_states": 12,
+     "agent_states_known_from_prior_runs": 10,
+     "agent_states_known_any": 12,
+     "revalidated": 13,
+     "revalidated_same": 11,
+     "probes": 7,
+     "probe_rollback_fail": 0,
+     "new_nodes": 3,
+     "new_edges": 6,
+     "convergence": 3,
+     "convergence_avoided_slots": 5
+    }
+   },
+   "n_nodes": 17,
+   "n_edges": 33,
+   "n_slots": 32,
+   "multi_outcome_slots": 2
+  },
+  "struct_per_run": {
+   "per_instance": {
+    "RecipeDeleteMultipleRecipesWithConstraint/v0": {
+     "agent_states": 6,
+     "new_nodes": 6,
+     "new_edges": 7,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "convergence": 2,
+     "convergence_avoided_slots": 4,
+     "agent_states_known_any": 5
+    },
+    "RecipeDeleteMultipleRecipesWithConstraint/v1": {
+     "agent_states": 16,
+     "new_nodes": 11,
+     "new_edges": 19,
+     "probes": 8,
+     "probe_rollback_fail": 1,
+     "convergence": 10,
+     "convergence_avoided_slots": 2,
+     "agent_states_known_any": 14
+    },
+    "RecipeDeleteMultipleRecipesWithConstraint/v2": {
+     "agent_states": 4,
+     "new_nodes": 7,
+     "new_edges": 7,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 2,
+     "convergence": 2,
+     "convergence_avoided_slots": 0
+    },
+    "RecipeDeleteMultipleRecipesWithConstraint/v3": {
+     "agent_states": 4,
+     "new_nodes": 5,
+     "new_edges": 4,
+     "probes": 2,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 3
+    },
+    "RecipeDeleteMultipleRecipesWithConstraint/v4": {
+     "agent_states": 12,
+     "new_nodes": 12,
+     "new_edges": 12,
+     "probes": 7,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 11,
+     "convergence": 1,
+     "convergence_avoided_slots": 4
+    }
+   },
+   "n_nodes": 12,
+   "n_edges": 12,
+   "n_slots": 14,
+   "multi_outcome_slots": 1
+  },
+  "layout_shared": {
+   "per_instance": {
+    "RecipeDeleteMultipleRecipesWithConstraint/v0": {
+     "agent_states": 6,
+     "new_nodes": 6,
+     "new_edges": 7,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "convergence": 2,
+     "convergence_avoided_slots": 4,
+     "agent_states_known_any": 5
+    },
+    "RecipeDeleteMultipleRecipesWithConstraint/v1": {
+     "agent_states": 16,
+     "agent_states_known_from_prior_runs": 6,
+     "agent_states_known_any": 15,
+     "revalidated": 3,
+     "revalidated_same": 2,
+     "new_edges": 17,
+     "convergence": 11,
+     "convergence_avoided_slots": 2,
+     "probes": 8,
+     "probe_rollback_fail": 1,
+     "new_nodes": 7
+    },
+    "RecipeDeleteMultipleRecipesWithConstraint/v2": {
+     "agent_states": 4,
+     "agent_states_known_from_prior_runs": 4,
+     "agent_states_known_any": 4,
+     "revalidated": 6,
+     "revalidated_same": 6,
+     "new_nodes": 1,
+     "new_edges": 3,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "convergence": 2,
+     "convergence_avoided_slots": 0
+    },
+    "RecipeDeleteMultipleRecipesWithConstraint/v3": {
+     "agent_states": 4,
+     "agent_states_known_from_prior_runs": 4,
+     "agent_states_known_any": 4,
+     "revalidated": 6,
+     "revalidated_same": 6,
+     "probes": 2,
+     "probe_rollback_fail": 0
+    },
+    "RecipeDeleteMultipleRecipesWithConstraint/v4": {
+     "agent_states": 12,
+     "agent_states_known_from_prior_runs": 11,
+     "agent_states_known_any": 12,
+     "revalidated": 14,
+     "revalidated_same": 13,
+     "probes": 7,
+     "probe_rollback_fail": 0,
+     "new_nodes": 2,
+     "new_edges": 4,
+     "convergence": 2,
+     "convergence_avoided_slots": 1
+    }
+   },
+   "n_nodes": 16,
+   "n_edges": 31,
+   "n_slots": 31,
+   "multi_outcome_slots": 2
+  },
+  "layout_per_run": {
+   "per_instance": {
+    "RecipeDeleteMultipleRecipesWithConstraint/v0": {
+     "agent_states": 6,
+     "new_nodes": 6,
+     "new_edges": 7,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "convergence": 2,
+     "convergence_avoided_slots": 4,
+     "agent_states_known_any": 5
+    },
+    "RecipeDeleteMultipleRecipesWithConstraint/v1": {
+     "agent_states": 16,
+     "new_nodes": 11,
+     "new_edges": 19,
+     "probes": 8,
+     "probe_rollback_fail": 1,
+     "convergence": 10,
+     "convergence_avoided_slots": 2,
+     "agent_states_known_any": 14
+    },
+    "RecipeDeleteMultipleRecipesWithConstraint/v2": {
+     "agent_states": 4,
+     "new_nodes": 7,
+     "new_edges": 7,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 2,
+     "convergence": 2,
+     "convergence_avoided_slots": 0
+    },
+    "RecipeDeleteMultipleRecipesWithConstraint/v3": {
+     "agent_states": 4,
+     "new_nodes": 5,
+     "new_edges": 4,
+     "probes": 2,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 3
+    },
+    "RecipeDeleteMultipleRecipesWithConstraint/v4": {
+     "agent_states": 12,
+     "new_nodes": 12,
+     "new_edges": 12,
+     "probes": 7,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 11,
+     "convergence": 1,
+     "convergence_avoided_slots": 4
+    }
+   },
+   "n_nodes": 12,
+   "n_edges": 12,
+   "n_slots": 14,
+   "multi_outcome_slots": 1
+  },
+  "struct_ambiguous_new_states": 1,
+  "struct_distinct_states": 17
+ },
+ "RecipeDeleteSingleRecipe": {
+  "n_obs": 77,
+  "instances": [
+   "RecipeDeleteSingleRecipe/v0",
+   "RecipeDeleteSingleRecipe/v1",
+   "RecipeDeleteSingleRecipe/v2",
+   "RecipeDeleteSingleRecipe/v3",
+   "RecipeDeleteSingleRecipe/v4"
+  ],
+  "n_probe_obs": 45,
+  "n_agent_obs": 32,
+  "exact_shared": {
+   "per_instance": {
+    "RecipeDeleteSingleRecipe/v0": {
+     "agent_states": 8,
+     "new_nodes": 7,
+     "new_edges": 8,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 7,
+     "convergence": 2,
+     "convergence_avoided_slots": 1
+    },
+    "RecipeDeleteSingleRecipe/v1": {
+     "agent_states": 6,
+     "agent_states_known_from_prior_runs": 4,
+     "agent_states_known_any": 6,
+     "new_nodes": 9,
+     "revalidated": 4,
+     "revalidated_same": 3,
+     "new_edges": 11,
+     "probes": 11,
+     "probe_rollback_fail": 0,
+     "convergence": 2,
+     "convergence_avoided_slots": 1
+    },
+    "RecipeDeleteSingleRecipe/v2": {
+     "agent_states": 6,
+     "agent_states_known_from_prior_runs": 4,
+     "agent_states_known_any": 6,
+     "new_nodes": 6,
+     "revalidated": 8,
+     "revalidated_same": 6,
+     "new_edges": 8,
+     "convergence": 2,
+     "convergence_avoided_slots": 2,
+     "probes": 11,
+     "probe_rollback_fail": 0
+    },
+    "RecipeDeleteSingleRecipe/v3": {
+     "agent_states": 6,
+     "agent_states_known_from_prior_runs": 4,
+     "agent_states_known_any": 6,
+     "new_nodes": 6,
+     "revalidated": 8,
+     "revalidated_same": 6,
+     "new_edges": 8,
+     "convergence": 2,
+     "convergence_avoided_slots": 2,
+     "probes": 11,
+     "probe_rollback_fail": 0
+    },
+    "RecipeDeleteSingleRecipe/v4": {
+     "agent_states": 6,
+     "agent_states_known_from_prior_runs": 4,
+     "agent_states_known_any": 6,
+     "new_nodes": 6,
+     "revalidated": 8,
+     "revalidated_same": 6,
+     "new_edges": 8,
+     "convergence": 2,
+     "convergence_avoided_slots": 2,
+     "probes": 11,
+     "probe_rollback_fail": 0
+    }
+   },
+   "n_nodes": 34,
+   "n_edges": 43,
+   "n_slots": 40,
+   "multi_outcome_slots": 2
+  },
+  "exact_per_run": {
+   "per_instance": {
+    "RecipeDeleteSingleRecipe/v0": {
+     "agent_states": 8,
+     "new_nodes": 7,
+     "new_edges": 8,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 7,
+     "convergence": 2,
+     "convergence_avoided_slots": 1
+    },
+    "RecipeDeleteSingleRecipe/v1": {
+     "agent_states": 6,
+     "new_nodes": 13,
+     "new_edges": 13,
+     "probes": 11,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 5,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "RecipeDeleteSingleRecipe/v2": {
+     "agent_states": 6,
+     "new_nodes": 13,
+     "new_edges": 13,
+     "probes": 11,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 5,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "RecipeDeleteSingleRecipe/v3": {
+     "agent_states": 6,
+     "new_nodes": 13,
+     "new_edges": 13,
+     "probes": 11,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 5,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "RecipeDeleteSingleRecipe/v4": {
+     "agent_states": 6,
+     "new_nodes": 13,
+     "new_edges": 13,
+     "probes": 11,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 5,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    }
+   },
+   "n_nodes": 13,
+   "n_edges": 13,
+   "n_slots": 15,
+   "multi_outcome_slots": 0
+  },
+  "struct_shared": {
+   "per_instance": {
+    "RecipeDeleteSingleRecipe/v0": {
+     "agent_states": 8,
+     "new_nodes": 7,
+     "new_edges": 8,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 7,
+     "convergence": 2,
+     "convergence_avoided_slots": 1
+    },
+    "RecipeDeleteSingleRecipe/v1": {
+     "agent_states": 6,
+     "agent_states_known_from_prior_runs": 5,
+     "agent_states_known_any": 6,
+     "new_nodes": 6,
+     "revalidated": 6,
+     "revalidated_same": 5,
+     "new_edges": 9,
+     "probes": 11,
+     "probe_rollback_fail": 0,
+     "convergence": 3,
+     "convergence_avoided_slots": 1
+    },
+    "RecipeDeleteSingleRecipe/v2": {
+     "agent_states": 6,
+     "agent_states_known_from_prior_runs": 5,
+     "agent_states_known_any": 6,
+     "new_nodes": 2,
+     "revalidated": 13,
+     "revalidated_same": 12,
+     "new_edges": 4,
+     "convergence": 2,
+     "convergence_avoided_slots": 4,
+     "probes": 11,
+     "probe_rollback_fail": 0
+    },
+    "RecipeDeleteSingleRecipe/v3": {
+     "agent_states": 6,
+     "agent_states_known_from_prior_runs": 5,
+     "agent_states_known_any": 6,
+     "new_nodes": 2,
+     "revalidated": 13,
+     "revalidated_same": 12,
+     "new_edges": 4,
+     "convergence": 2,
+     "convergence_avoided_slots": 4,
+     "probes": 11,
+     "probe_rollback_fail": 0
+    },
+    "RecipeDeleteSingleRecipe/v4": {
+     "agent_states": 6,
+     "agent_states_known_from_prior_runs": 5,
+     "agent_states_known_any": 6,
+     "new_nodes": 2,
+     "revalidated": 13,
+     "revalidated_same": 12,
+     "new_edges": 4,
+     "convergence": 2,
+     "convergence_avoided_slots": 4,
+     "probes": 11,
+     "probe_rollback_fail": 0
+    }
+   },
+   "n_nodes": 19,
+   "n_edges": 29,
+   "n_slots": 27,
+   "multi_outcome_slots": 1
+  },
+  "struct_per_run": {
+   "per_instance": {
+    "RecipeDeleteSingleRecipe/v0": {
+     "agent_states": 8,
+     "new_nodes": 7,
+     "new_edges": 8,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 7,
+     "convergence": 2,
+     "convergence_avoided_slots": 1
+    },
+    "RecipeDeleteSingleRecipe/v1": {
+     "agent_states": 6,
+     "new_nodes": 11,
+     "new_edges": 12,
+     "probes": 11,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 5,
+     "convergence": 2,
+     "convergence_avoided_slots": 0
+    },
+    "RecipeDeleteSingleRecipe/v2": {
+     "agent_states": 6,
+     "new_nodes": 11,
+     "new_edges": 12,
+     "probes": 11,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 5,
+     "convergence": 2,
+     "convergence_avoided_slots": 0
+    },
+    "RecipeDeleteSingleRecipe/v3": {
+     "agent_states": 6,
+     "new_nodes": 11,
+     "new_edges": 12,
+     "probes": 11,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 5,
+     "convergence": 2,
+     "convergence_avoided_slots": 0
+    },
+    "RecipeDeleteSingleRecipe/v4": {
+     "agent_states": 6,
+     "new_nodes": 11,
+     "new_edges": 12,
+     "probes": 11,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 5,
+     "convergence": 2,
+     "convergence_avoided_slots": 0
+    }
+   },
+   "n_nodes": 11,
+   "n_edges": 12,
+   "n_slots": 15,
+   "multi_outcome_slots": 0
+  },
+  "layout_shared": {
+   "per_instance": {
+    "RecipeDeleteSingleRecipe/v0": {
+     "agent_states": 8,
+     "new_nodes": 7,
+     "new_edges": 8,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 7,
+     "convergence": 2,
+     "convergence_avoided_slots": 1
+    },
+    "RecipeDeleteSingleRecipe/v1": {
+     "agent_states": 6,
+     "agent_states_known_from_prior_runs": 6,
+     "agent_states_known_any": 6,
+     "revalidated": 8,
+     "revalidated_same": 8,
+     "new_nodes": 5,
+     "new_edges": 7,
+     "probes": 11,
+     "probe_rollback_fail": 0,
+     "convergence": 2,
+     "convergence_avoided_slots": 0
+    },
+    "RecipeDeleteSingleRecipe/v2": {
+     "agent_states": 6,
+     "agent_states_known_from_prior_runs": 6,
+     "agent_states_known_any": 6,
+     "revalidated": 17,
+     "revalidated_same": 17,
+     "probes": 11,
+     "probe_rollback_fail": 0
+    },
+    "RecipeDeleteSingleRecipe/v3": {
+     "agent_states": 6,
+     "agent_states_known_from_prior_runs": 6,
+     "agent_states_known_any": 6,
+     "revalidated": 17,
+     "revalidated_same": 17,
+     "probes": 11,
+     "probe_rollback_fail": 0
+    },
+    "RecipeDeleteSingleRecipe/v4": {
+     "agent_states": 6,
+     "agent_states_known_from_prior_runs": 6,
+     "agent_states_known_any": 6,
+     "revalidated": 17,
+     "revalidated_same": 17,
+     "probes": 11,
+     "probe_rollback_fail": 0
+    }
+   },
+   "n_nodes": 12,
+   "n_edges": 15,
+   "n_slots": 17,
+   "multi_outcome_slots": 1
+  },
+  "layout_per_run": {
+   "per_instance": {
+    "RecipeDeleteSingleRecipe/v0": {
+     "agent_states": 8,
+     "new_nodes": 7,
+     "new_edges": 8,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 7,
+     "convergence": 2,
+     "convergence_avoided_slots": 1
+    },
+    "RecipeDeleteSingleRecipe/v1": {
+     "agent_states": 6,
+     "new_nodes": 11,
+     "new_edges": 12,
+     "probes": 11,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 5,
+     "convergence": 2,
+     "convergence_avoided_slots": 0
+    },
+    "RecipeDeleteSingleRecipe/v2": {
+     "agent_states": 6,
+     "new_nodes": 11,
+     "new_edges": 12,
+     "probes": 11,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 5,
+     "convergence": 2,
+     "convergence_avoided_slots": 0
+    },
+    "RecipeDeleteSingleRecipe/v3": {
+     "agent_states": 6,
+     "new_nodes": 11,
+     "new_edges": 12,
+     "probes": 11,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 5,
+     "convergence": 2,
+     "convergence_avoided_slots": 0
+    },
+    "RecipeDeleteSingleRecipe/v4": {
+     "agent_states": 6,
+     "new_nodes": 11,
+     "new_edges": 12,
+     "probes": 11,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 5,
+     "convergence": 2,
+     "convergence_avoided_slots": 0
+    }
+   },
+   "n_nodes": 11,
+   "n_edges": 12,
+   "n_slots": 15,
+   "multi_outcome_slots": 0
+  },
+  "struct_ambiguous_new_states": 7,
+  "struct_distinct_states": 19
+ },
+ "SimpleCalendarDeleteOneEvent": {
+  "n_obs": 108,
+  "instances": [
+   "SimpleCalendarDeleteOneEvent/v0",
+   "SimpleCalendarDeleteOneEvent/v1",
+   "SimpleCalendarDeleteOneEvent/v2",
+   "SimpleCalendarDeleteOneEvent/v3",
+   "SimpleCalendarDeleteOneEvent/v4"
+  ],
+  "n_probe_obs": 51,
+  "n_agent_obs": 57,
+  "exact_shared": {
+   "per_instance": {
+    "SimpleCalendarDeleteOneEvent/v0": {
+     "agent_states": 12,
+     "new_nodes": 17,
+     "new_edges": 16,
+     "agent_states_known_any": 11,
+     "probes": 5,
+     "probe_rollback_fail": 1
+    },
+    "SimpleCalendarDeleteOneEvent/v1": {
+     "agent_states": 12,
+     "agent_states_known_from_prior_runs": 7,
+     "agent_states_known_any": 11,
+     "revalidated": 3,
+     "revalidated_same": 2,
+     "new_nodes": 10,
+     "new_edges": 16,
+     "probes": 10,
+     "probe_rollback_fail": 1,
+     "convergence": 7,
+     "convergence_avoided_slots": 18
+    },
+    "SimpleCalendarDeleteOneEvent/v2": {
+     "agent_states": 12,
+     "agent_states_known_from_prior_runs": 3,
+     "agent_states_known_any": 11,
+     "revalidated": 2,
+     "revalidated_same": 2,
+     "new_nodes": 17,
+     "new_edges": 19,
+     "probes": 10,
+     "probe_rollback_fail": 1,
+     "convergence": 2,
+     "convergence_avoided_slots": 0
+    },
+    "SimpleCalendarDeleteOneEvent/v3": {
+     "agent_states": 12,
+     "agent_states_known_from_prior_runs": 5,
+     "agent_states_known_any": 11,
+     "revalidated": 4,
+     "revalidated_same": 3,
+     "new_nodes": 16,
+     "new_edges": 16,
+     "probes": 12,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 2
+    },
+    "SimpleCalendarDeleteOneEvent/v4": {
+     "agent_states": 9,
+     "agent_states_known_from_prior_runs": 4,
+     "agent_states_known_any": 8,
+     "revalidated": 4,
+     "revalidated_same": 2,
+     "new_nodes": 11,
+     "new_edges": 12,
+     "probes": 14,
+     "probe_rollback_fail": 1,
+     "convergence": 2,
+     "convergence_avoided_slots": 7
+    }
+   },
+   "n_nodes": 71,
+   "n_edges": 79,
+   "n_slots": 90,
+   "multi_outcome_slots": 3
+  },
+  "exact_per_run": {
+   "per_instance": {
+    "SimpleCalendarDeleteOneEvent/v0": {
+     "agent_states": 12,
+     "new_nodes": 17,
+     "new_edges": 16,
+     "agent_states_known_any": 11,
+     "probes": 5,
+     "probe_rollback_fail": 1
+    },
+    "SimpleCalendarDeleteOneEvent/v1": {
+     "agent_states": 12,
+     "new_nodes": 16,
+     "new_edges": 18,
+     "agent_states_known_any": 10,
+     "probes": 10,
+     "probe_rollback_fail": 1,
+     "convergence": 4,
+     "convergence_avoided_slots": 11
+    },
+    "SimpleCalendarDeleteOneEvent/v2": {
+     "agent_states": 12,
+     "new_nodes": 20,
+     "new_edges": 21,
+     "agent_states_known_any": 10,
+     "probes": 10,
+     "probe_rollback_fail": 1,
+     "convergence": 2,
+     "convergence_avoided_slots": 0
+    },
+    "SimpleCalendarDeleteOneEvent/v3": {
+     "agent_states": 12,
+     "new_nodes": 21,
+     "new_edges": 19,
+     "agent_states_known_any": 10,
+     "probes": 12,
+     "probe_rollback_fail": 1
+    },
+    "SimpleCalendarDeleteOneEvent/v4": {
+     "agent_states": 9,
+     "new_nodes": 15,
+     "new_edges": 14,
+     "agent_states_known_any": 7,
+     "probes": 14,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 6
+    }
+   },
+   "n_nodes": 15,
+   "n_edges": 14,
+   "n_slots": 21,
+   "multi_outcome_slots": 0
+  },
+  "struct_shared": {
+   "per_instance": {
+    "SimpleCalendarDeleteOneEvent/v0": {
+     "agent_states": 12,
+     "new_nodes": 10,
+     "new_edges": 13,
+     "agent_states_known_any": 11,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "convergence": 4,
+     "convergence_avoided_slots": 7
+    },
+    "SimpleCalendarDeleteOneEvent/v1": {
+     "agent_states": 12,
+     "agent_states_known_from_prior_runs": 11,
+     "agent_states_known_any": 12,
+     "revalidated": 5,
+     "revalidated_same": 5,
+     "new_nodes": 4,
+     "new_edges": 13,
+     "probes": 10,
+     "probe_rollback_fail": 1,
+     "convergence": 9,
+     "convergence_avoided_slots": 42
+    },
+    "SimpleCalendarDeleteOneEvent/v2": {
+     "agent_states": 12,
+     "agent_states_known_from_prior_runs": 12,
+     "agent_states_known_any": 12,
+     "revalidated": 9,
+     "revalidated_same": 9,
+     "new_edges": 12,
+     "convergence": 11,
+     "convergence_avoided_slots": 82,
+     "probes": 10,
+     "probe_rollback_fail": 1,
+     "new_nodes": 1
+    },
+    "SimpleCalendarDeleteOneEvent/v3": {
+     "agent_states": 12,
+     "agent_states_known_from_prior_runs": 12,
+     "agent_states_known_any": 12,
+     "revalidated": 10,
+     "revalidated_same": 10,
+     "new_edges": 9,
+     "convergence": 8,
+     "convergence_avoided_slots": 126,
+     "probes": 12,
+     "probe_rollback_fail": 1,
+     "new_nodes": 1
+    },
+    "SimpleCalendarDeleteOneEvent/v4": {
+     "agent_states": 9,
+     "agent_states_known_from_prior_runs": 8,
+     "agent_states_known_any": 8,
+     "revalidated": 5,
+     "revalidated_same": 5,
+     "new_edges": 10,
+     "convergence": 8,
+     "convergence_avoided_slots": 152,
+     "probes": 14,
+     "probe_rollback_fail": 1,
+     "new_nodes": 3
+    }
+   },
+   "n_nodes": 19,
+   "n_edges": 57,
+   "n_slots": 72,
+   "multi_outcome_slots": 1
+  },
+  "struct_per_run": {
+   "per_instance": {
+    "SimpleCalendarDeleteOneEvent/v0": {
+     "agent_states": 12,
+     "new_nodes": 10,
+     "new_edges": 13,
+     "agent_states_known_any": 11,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "convergence": 4,
+     "convergence_avoided_slots": 7
+    },
+    "SimpleCalendarDeleteOneEvent/v1": {
+     "agent_states": 12,
+     "new_nodes": 10,
+     "new_edges": 16,
+     "agent_states_known_any": 11,
+     "probes": 10,
+     "probe_rollback_fail": 1,
+     "convergence": 7,
+     "convergence_avoided_slots": 18
+    },
+    "SimpleCalendarDeleteOneEvent/v2": {
+     "agent_states": 12,
+     "new_nodes": 7,
+     "new_edges": 16,
+     "agent_states_known_any": 11,
+     "probes": 10,
+     "probe_rollback_fail": 1,
+     "convergence": 10,
+     "convergence_avoided_slots": 13
+    },
+    "SimpleCalendarDeleteOneEvent/v3": {
+     "agent_states": 12,
+     "new_nodes": 7,
+     "new_edges": 13,
+     "agent_states_known_any": 11,
+     "probes": 12,
+     "probe_rollback_fail": 1,
+     "convergence": 7,
+     "convergence_avoided_slots": 16
+    },
+    "SimpleCalendarDeleteOneEvent/v4": {
+     "agent_states": 9,
+     "new_nodes": 9,
+     "new_edges": 14,
+     "agent_states_known_any": 7,
+     "probes": 14,
+     "probe_rollback_fail": 1,
+     "convergence": 7,
+     "convergence_avoided_slots": 12
+    }
+   },
+   "n_nodes": 9,
+   "n_edges": 14,
+   "n_slots": 21,
+   "multi_outcome_slots": 0
+  },
+  "layout_shared": {
+   "per_instance": {
+    "SimpleCalendarDeleteOneEvent/v0": {
+     "agent_states": 12,
+     "new_nodes": 10,
+     "new_edges": 13,
+     "agent_states_known_any": 11,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "convergence": 4,
+     "convergence_avoided_slots": 7
+    },
+    "SimpleCalendarDeleteOneEvent/v1": {
+     "agent_states": 12,
+     "agent_states_known_from_prior_runs": 12,
+     "agent_states_known_any": 12,
+     "revalidated": 6,
+     "revalidated_same": 6,
+     "new_nodes": 3,
+     "new_edges": 12,
+     "probes": 10,
+     "probe_rollback_fail": 1,
+     "convergence": 9,
+     "convergence_avoided_slots": 42
+    },
+    "SimpleCalendarDeleteOneEvent/v2": {
+     "agent_states": 12,
+     "agent_states_known_from_prior_runs": 12,
+     "agent_states_known_any": 12,
+     "revalidated": 10,
+     "revalidated_same": 10,
+     "new_edges": 11,
+     "convergence": 11,
+     "convergence_avoided_slots": 74,
+     "probes": 10,
+     "probe_rollback_fail": 1
+    },
+    "SimpleCalendarDeleteOneEvent/v3": {
+     "agent_states": 12,
+     "agent_states_known_from_prior_runs": 12,
+     "agent_states_known_any": 12,
+     "revalidated": 11,
+     "revalidated_same": 11,
+     "new_edges": 8,
+     "convergence": 8,
+     "convergence_avoided_slots": 104,
+     "probes": 12,
+     "probe_rollback_fail": 1
+    },
+    "SimpleCalendarDeleteOneEvent/v4": {
+     "agent_states": 9,
+     "agent_states_known_from_prior_runs": 8,
+     "agent_states_known_any": 8,
+     "revalidated": 6,
+     "revalidated_same": 6,
+     "new_edges": 9,
+     "convergence": 7,
+     "convergence_avoided_slots": 152,
+     "probes": 14,
+     "probe_rollback_fail": 1,
+     "new_nodes": 3
+    }
+   },
+   "n_nodes": 16,
+   "n_edges": 53,
+   "n_slots": 68,
+   "multi_outcome_slots": 1
+  },
+  "layout_per_run": {
+   "per_instance": {
+    "SimpleCalendarDeleteOneEvent/v0": {
+     "agent_states": 12,
+     "new_nodes": 10,
+     "new_edges": 13,
+     "agent_states_known_any": 11,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "convergence": 4,
+     "convergence_avoided_slots": 7
+    },
+    "SimpleCalendarDeleteOneEvent/v1": {
+     "agent_states": 12,
+     "new_nodes": 10,
+     "new_edges": 16,
+     "agent_states_known_any": 11,
+     "probes": 10,
+     "probe_rollback_fail": 1,
+     "convergence": 7,
+     "convergence_avoided_slots": 18
+    },
+    "SimpleCalendarDeleteOneEvent/v2": {
+     "agent_states": 12,
+     "new_nodes": 7,
+     "new_edges": 16,
+     "agent_states_known_any": 11,
+     "probes": 10,
+     "probe_rollback_fail": 1,
+     "convergence": 10,
+     "convergence_avoided_slots": 13
+    },
+    "SimpleCalendarDeleteOneEvent/v3": {
+     "agent_states": 12,
+     "new_nodes": 7,
+     "new_edges": 13,
+     "agent_states_known_any": 11,
+     "probes": 12,
+     "probe_rollback_fail": 1,
+     "convergence": 7,
+     "convergence_avoided_slots": 16
+    },
+    "SimpleCalendarDeleteOneEvent/v4": {
+     "agent_states": 9,
+     "new_nodes": 9,
+     "new_edges": 14,
+     "agent_states_known_any": 7,
+     "probes": 14,
+     "probe_rollback_fail": 1,
+     "convergence": 7,
+     "convergence_avoided_slots": 12
+    }
+   },
+   "n_nodes": 9,
+   "n_edges": 14,
+   "n_slots": 21,
+   "multi_outcome_slots": 0
+  },
+  "struct_ambiguous_new_states": 3,
+  "struct_distinct_states": 19
+ },
+ "SimpleCalendarEventsOnDate": {
+  "n_obs": 42,
+  "instances": [
+   "SimpleCalendarEventsOnDate/v0",
+   "SimpleCalendarEventsOnDate/v1",
+   "SimpleCalendarEventsOnDate/v2",
+   "SimpleCalendarEventsOnDate/v3",
+   "SimpleCalendarEventsOnDate/v4"
+  ],
+  "n_probe_obs": 18,
+  "n_agent_obs": 24,
+  "exact_shared": {
+   "per_instance": {
+    "SimpleCalendarEventsOnDate/v0": {
+     "agent_states": 3,
+     "new_nodes": 7,
+     "new_edges": 6,
+     "agent_states_known_any": 2,
+     "probes": 4,
+     "probe_rollback_fail": 0
+    },
+    "SimpleCalendarEventsOnDate/v1": {
+     "agent_states": 7,
+     "agent_states_known_from_prior_runs": 6,
+     "agent_states_known_any": 7,
+     "revalidated": 4,
+     "revalidated_same": 4,
+     "new_nodes": 3,
+     "new_edges": 3,
+     "probes": 2,
+     "probe_rollback_fail": 1
+    },
+    "SimpleCalendarEventsOnDate/v2": {
+     "agent_states": 5,
+     "agent_states_known_from_prior_runs": 5,
+     "agent_states_known_any": 5,
+     "revalidated": 5,
+     "revalidated_same": 5,
+     "new_nodes": 2,
+     "new_edges": 2,
+     "probes": 2,
+     "probe_rollback_fail": 1
+    },
+    "SimpleCalendarEventsOnDate/v3": {
+     "agent_states": 6,
+     "agent_states_known_from_prior_runs": 6,
+     "agent_states_known_any": 6,
+     "revalidated": 5,
+     "revalidated_same": 5,
+     "new_nodes": 5,
+     "new_edges": 6,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 15
+    },
+    "SimpleCalendarEventsOnDate/v4": {
+     "agent_states": 3,
+     "agent_states_known_from_prior_runs": 3,
+     "agent_states_known_any": 3,
+     "revalidated": 3,
+     "revalidated_same": 3,
+     "new_nodes": 5,
+     "new_edges": 5,
+     "probes": 5,
+     "probe_rollback_fail": 0
+    }
+   },
+   "n_nodes": 22,
+   "n_edges": 22,
+   "n_slots": 25,
+   "multi_outcome_slots": 0
+  },
+  "exact_per_run": {
+   "per_instance": {
+    "SimpleCalendarEventsOnDate/v0": {
+     "agent_states": 3,
+     "new_nodes": 7,
+     "new_edges": 6,
+     "agent_states_known_any": 2,
+     "probes": 4,
+     "probe_rollback_fail": 0
+    },
+    "SimpleCalendarEventsOnDate/v1": {
+     "agent_states": 7,
+     "new_nodes": 6,
+     "new_edges": 5,
+     "agent_states_known_any": 6,
+     "probes": 2,
+     "probe_rollback_fail": 1
+    },
+    "SimpleCalendarEventsOnDate/v2": {
+     "agent_states": 5,
+     "new_nodes": 5,
+     "new_edges": 4,
+     "agent_states_known_any": 4,
+     "probes": 2,
+     "probe_rollback_fail": 1
+    },
+    "SimpleCalendarEventsOnDate/v3": {
+     "agent_states": 6,
+     "new_nodes": 8,
+     "new_edges": 8,
+     "agent_states_known_any": 5,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 5
+    },
+    "SimpleCalendarEventsOnDate/v4": {
+     "agent_states": 3,
+     "new_nodes": 8,
+     "new_edges": 7,
+     "agent_states_known_any": 2,
+     "probes": 5,
+     "probe_rollback_fail": 0
+    }
+   },
+   "n_nodes": 8,
+   "n_edges": 7,
+   "n_slots": 8,
+   "multi_outcome_slots": 0
+  },
+  "struct_shared": {
+   "per_instance": {
+    "SimpleCalendarEventsOnDate/v0": {
+     "agent_states": 3,
+     "new_nodes": 7,
+     "new_edges": 6,
+     "agent_states_known_any": 2,
+     "probes": 4,
+     "probe_rollback_fail": 0
+    },
+    "SimpleCalendarEventsOnDate/v1": {
+     "agent_states": 7,
+     "agent_states_known_from_prior_runs": 6,
+     "agent_states_known_any": 7,
+     "revalidated": 4,
+     "revalidated_same": 4,
+     "new_nodes": 2,
+     "new_edges": 3,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "SimpleCalendarEventsOnDate/v2": {
+     "agent_states": 5,
+     "agent_states_known_from_prior_runs": 5,
+     "agent_states_known_any": 5,
+     "revalidated": 5,
+     "revalidated_same": 5,
+     "new_nodes": 1,
+     "new_edges": 2,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "SimpleCalendarEventsOnDate/v3": {
+     "agent_states": 6,
+     "agent_states_known_from_prior_runs": 6,
+     "agent_states_known_any": 6,
+     "revalidated": 5,
+     "revalidated_same": 5,
+     "new_edges": 6,
+     "convergence": 6,
+     "convergence_avoided_slots": 20,
+     "probes": 5,
+     "probe_rollback_fail": 1
+    },
+    "SimpleCalendarEventsOnDate/v4": {
+     "agent_states": 3,
+     "agent_states_known_from_prior_runs": 3,
+     "agent_states_known_any": 3,
+     "revalidated": 3,
+     "revalidated_same": 3,
+     "new_edges": 5,
+     "convergence": 5,
+     "convergence_avoided_slots": 10,
+     "probes": 5,
+     "probe_rollback_fail": 0
+    }
+   },
+   "n_nodes": 10,
+   "n_edges": 22,
+   "n_slots": 25,
+   "multi_outcome_slots": 0
+  },
+  "struct_per_run": {
+   "per_instance": {
+    "SimpleCalendarEventsOnDate/v0": {
+     "agent_states": 3,
+     "new_nodes": 7,
+     "new_edges": 6,
+     "agent_states_known_any": 2,
+     "probes": 4,
+     "probe_rollback_fail": 0
+    },
+    "SimpleCalendarEventsOnDate/v1": {
+     "agent_states": 7,
+     "new_nodes": 5,
+     "new_edges": 5,
+     "agent_states_known_any": 6,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "SimpleCalendarEventsOnDate/v2": {
+     "agent_states": 5,
+     "new_nodes": 5,
+     "new_edges": 4,
+     "agent_states_known_any": 4,
+     "probes": 2,
+     "probe_rollback_fail": 1
+    },
+    "SimpleCalendarEventsOnDate/v3": {
+     "agent_states": 6,
+     "new_nodes": 4,
+     "new_edges": 8,
+     "agent_states_known_any": 5,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "convergence": 5,
+     "convergence_avoided_slots": 5
+    },
+    "SimpleCalendarEventsOnDate/v4": {
+     "agent_states": 3,
+     "new_nodes": 4,
+     "new_edges": 7,
+     "agent_states_known_any": 2,
+     "probes": 5,
+     "probe_rollback_fail": 0,
+     "convergence": 4,
+     "convergence_avoided_slots": 0
+    }
+   },
+   "n_nodes": 4,
+   "n_edges": 7,
+   "n_slots": 8,
+   "multi_outcome_slots": 0
+  },
+  "layout_shared": {
+   "per_instance": {
+    "SimpleCalendarEventsOnDate/v0": {
+     "agent_states": 3,
+     "new_nodes": 7,
+     "new_edges": 6,
+     "agent_states_known_any": 2,
+     "probes": 4,
+     "probe_rollback_fail": 0
+    },
+    "SimpleCalendarEventsOnDate/v1": {
+     "agent_states": 7,
+     "agent_states_known_from_prior_runs": 6,
+     "agent_states_known_any": 7,
+     "revalidated": 4,
+     "revalidated_same": 4,
+     "new_nodes": 2,
+     "new_edges": 3,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "SimpleCalendarEventsOnDate/v2": {
+     "agent_states": 5,
+     "agent_states_known_from_prior_runs": 5,
+     "agent_states_known_any": 5,
+     "revalidated": 5,
+     "revalidated_same": 5,
+     "new_nodes": 1,
+     "new_edges": 2,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "SimpleCalendarEventsOnDate/v3": {
+     "agent_states": 6,
+     "agent_states_known_from_prior_runs": 6,
+     "agent_states_known_any": 6,
+     "revalidated": 5,
+     "revalidated_same": 5,
+     "new_edges": 6,
+     "convergence": 6,
+     "convergence_avoided_slots": 20,
+     "probes": 5,
+     "probe_rollback_fail": 1
+    },
+    "SimpleCalendarEventsOnDate/v4": {
+     "agent_states": 3,
+     "agent_states_known_from_prior_runs": 3,
+     "agent_states_known_any": 3,
+     "revalidated": 3,
+     "revalidated_same": 3,
+     "new_edges": 5,
+     "convergence": 5,
+     "convergence_avoided_slots": 10,
+     "probes": 5,
+     "probe_rollback_fail": 0
+    }
+   },
+   "n_nodes": 10,
+   "n_edges": 22,
+   "n_slots": 25,
+   "multi_outcome_slots": 0
+  },
+  "layout_per_run": {
+   "per_instance": {
+    "SimpleCalendarEventsOnDate/v0": {
+     "agent_states": 3,
+     "new_nodes": 7,
+     "new_edges": 6,
+     "agent_states_known_any": 2,
+     "probes": 4,
+     "probe_rollback_fail": 0
+    },
+    "SimpleCalendarEventsOnDate/v1": {
+     "agent_states": 7,
+     "new_nodes": 5,
+     "new_edges": 5,
+     "agent_states_known_any": 6,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "SimpleCalendarEventsOnDate/v2": {
+     "agent_states": 5,
+     "new_nodes": 5,
+     "new_edges": 4,
+     "agent_states_known_any": 4,
+     "probes": 2,
+     "probe_rollback_fail": 1
+    },
+    "SimpleCalendarEventsOnDate/v3": {
+     "agent_states": 6,
+     "new_nodes": 4,
+     "new_edges": 8,
+     "agent_states_known_any": 5,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "convergence": 5,
+     "convergence_avoided_slots": 5
+    },
+    "SimpleCalendarEventsOnDate/v4": {
+     "agent_states": 3,
+     "new_nodes": 4,
+     "new_edges": 7,
+     "agent_states_known_any": 2,
+     "probes": 5,
+     "probe_rollback_fail": 0,
+     "convergence": 4,
+     "convergence_avoided_slots": 0
+    }
+   },
+   "n_nodes": 4,
+   "n_edges": 7,
+   "n_slots": 8,
+   "multi_outcome_slots": 0
+  },
+  "struct_ambiguous_new_states": 0,
+  "struct_distinct_states": 10
+ },
+ "SportsTrackerLongestDistanceActivity": {
+  "n_obs": 26,
+  "instances": [
+   "SportsTrackerLongestDistanceActivity/v0",
+   "SportsTrackerLongestDistanceActivity/v1",
+   "SportsTrackerLongestDistanceActivity/v2",
+   "SportsTrackerLongestDistanceActivity/v3",
+   "SportsTrackerLongestDistanceActivity/v4"
+  ],
+  "n_probe_obs": 12,
+  "n_agent_obs": 14,
+  "exact_shared": {
+   "per_instance": {
+    "SportsTrackerLongestDistanceActivity/v0": {
+     "agent_states": 5,
+     "new_nodes": 5,
+     "new_edges": 4,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 4
+    },
+    "SportsTrackerLongestDistanceActivity/v1": {
+     "agent_states": 2,
+     "agent_states_known_from_prior_runs": 1,
+     "agent_states_known_any": 2,
+     "new_nodes": 6,
+     "revalidated": 1,
+     "revalidated_same": 0,
+     "new_edges": 6,
+     "probes": 4,
+     "probe_rollback_fail": 0
+    },
+    "SportsTrackerLongestDistanceActivity/v2": {
+     "agent_states": 2,
+     "agent_states_known_from_prior_runs": 1,
+     "agent_states_known_any": 2,
+     "new_nodes": 3,
+     "revalidated": 1,
+     "revalidated_same": 0,
+     "new_edges": 3,
+     "probes": 1,
+     "probe_rollback_fail": 1
+    },
+    "SportsTrackerLongestDistanceActivity/v3": {
+     "agent_states": 3,
+     "agent_states_known_from_prior_runs": 1,
+     "agent_states_known_any": 3,
+     "new_nodes": 4,
+     "revalidated": 1,
+     "revalidated_same": 0,
+     "new_edges": 5,
+     "probes": 3,
+     "probe_rollback_fail": 0,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "SportsTrackerLongestDistanceActivity/v4": {
+     "agent_states": 2,
+     "agent_states_known_from_prior_runs": 1,
+     "agent_states_known_any": 2,
+     "new_nodes": 3,
+     "revalidated": 1,
+     "revalidated_same": 0,
+     "new_edges": 5,
+     "convergence": 2,
+     "convergence_avoided_slots": 0,
+     "probes": 3,
+     "probe_rollback_fail": 0
+    }
+   },
+   "n_nodes": 21,
+   "n_edges": 23,
+   "n_slots": 21,
+   "multi_outcome_slots": 1
+  },
+  "exact_per_run": {
+   "per_instance": {
+    "SportsTrackerLongestDistanceActivity/v0": {
+     "agent_states": 5,
+     "new_nodes": 5,
+     "new_edges": 4,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 4
+    },
+    "SportsTrackerLongestDistanceActivity/v1": {
+     "agent_states": 2,
+     "new_nodes": 7,
+     "new_edges": 6,
+     "probes": 4,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 1
+    },
+    "SportsTrackerLongestDistanceActivity/v2": {
+     "agent_states": 2,
+     "new_nodes": 4,
+     "new_edges": 3,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 1
+    },
+    "SportsTrackerLongestDistanceActivity/v3": {
+     "agent_states": 3,
+     "new_nodes": 6,
+     "new_edges": 5,
+     "probes": 3,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 2
+    },
+    "SportsTrackerLongestDistanceActivity/v4": {
+     "agent_states": 2,
+     "new_nodes": 6,
+     "new_edges": 5,
+     "probes": 3,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 1
+    }
+   },
+   "n_nodes": 6,
+   "n_edges": 5,
+   "n_slots": 5,
+   "multi_outcome_slots": 0
+  },
+  "struct_shared": {
+   "per_instance": {
+    "SportsTrackerLongestDistanceActivity/v0": {
+     "agent_states": 5,
+     "new_nodes": 4,
+     "new_edges": 4,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 4,
+     "convergence": 1,
+     "convergence_avoided_slots": 2
+    },
+    "SportsTrackerLongestDistanceActivity/v1": {
+     "agent_states": 2,
+     "agent_states_known_from_prior_runs": 2,
+     "agent_states_known_any": 2,
+     "revalidated": 2,
+     "revalidated_same": 2,
+     "new_nodes": 2,
+     "new_edges": 4,
+     "probes": 4,
+     "probe_rollback_fail": 0,
+     "convergence": 2,
+     "convergence_avoided_slots": 2
+    },
+    "SportsTrackerLongestDistanceActivity/v2": {
+     "agent_states": 2,
+     "agent_states_known_from_prior_runs": 2,
+     "agent_states_known_any": 2,
+     "revalidated": 2,
+     "revalidated_same": 2,
+     "new_edges": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 1,
+     "probes": 1,
+     "probe_rollback_fail": 1
+    },
+    "SportsTrackerLongestDistanceActivity/v3": {
+     "agent_states": 3,
+     "agent_states_known_from_prior_runs": 3,
+     "agent_states_known_any": 3,
+     "revalidated": 4,
+     "revalidated_same": 4,
+     "new_nodes": 1,
+     "new_edges": 1,
+     "probes": 3,
+     "probe_rollback_fail": 0
+    },
+    "SportsTrackerLongestDistanceActivity/v4": {
+     "agent_states": 2,
+     "agent_states_known_from_prior_runs": 2,
+     "agent_states_known_any": 2,
+     "revalidated": 5,
+     "revalidated_same": 5,
+     "probes": 3,
+     "probe_rollback_fail": 0
+    }
+   },
+   "n_nodes": 7,
+   "n_edges": 10,
+   "n_slots": 12,
+   "multi_outcome_slots": 0
+  },
+  "struct_per_run": {
+   "per_instance": {
+    "SportsTrackerLongestDistanceActivity/v0": {
+     "agent_states": 5,
+     "new_nodes": 4,
+     "new_edges": 4,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 4,
+     "convergence": 1,
+     "convergence_avoided_slots": 2
+    },
+    "SportsTrackerLongestDistanceActivity/v1": {
+     "agent_states": 2,
+     "new_nodes": 5,
+     "new_edges": 5,
+     "probes": 4,
+     "probe_rollback_fail": 0,
+     "convergence": 1,
+     "convergence_avoided_slots": 0,
+     "agent_states_known_any": 1
+    },
+    "SportsTrackerLongestDistanceActivity/v2": {
+     "agent_states": 2,
+     "new_nodes": 3,
+     "new_edges": 2,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 1
+    },
+    "SportsTrackerLongestDistanceActivity/v3": {
+     "agent_states": 3,
+     "new_nodes": 5,
+     "new_edges": 4,
+     "probes": 3,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 2
+    },
+    "SportsTrackerLongestDistanceActivity/v4": {
+     "agent_states": 2,
+     "new_nodes": 5,
+     "new_edges": 4,
+     "probes": 3,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 1
+    }
+   },
+   "n_nodes": 5,
+   "n_edges": 4,
+   "n_slots": 5,
+   "multi_outcome_slots": 0
+  },
+  "layout_shared": {
+   "per_instance": {
+    "SportsTrackerLongestDistanceActivity/v0": {
+     "agent_states": 5,
+     "new_nodes": 4,
+     "new_edges": 4,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 4,
+     "convergence": 1,
+     "convergence_avoided_slots": 2
+    },
+    "SportsTrackerLongestDistanceActivity/v1": {
+     "agent_states": 2,
+     "agent_states_known_from_prior_runs": 2,
+     "agent_states_known_any": 2,
+     "revalidated": 2,
+     "revalidated_same": 2,
+     "new_nodes": 2,
+     "new_edges": 4,
+     "probes": 4,
+     "probe_rollback_fail": 0,
+     "convergence": 2,
+     "convergence_avoided_slots": 2
+    },
+    "SportsTrackerLongestDistanceActivity/v2": {
+     "agent_states": 2,
+     "agent_states_known_from_prior_runs": 2,
+     "agent_states_known_any": 2,
+     "revalidated": 2,
+     "revalidated_same": 2,
+     "new_edges": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 1,
+     "probes": 1,
+     "probe_rollback_fail": 1
+    },
+    "SportsTrackerLongestDistanceActivity/v3": {
+     "agent_states": 3,
+     "agent_states_known_from_prior_runs": 3,
+     "agent_states_known_any": 3,
+     "revalidated": 4,
+     "revalidated_same": 4,
+     "new_nodes": 1,
+     "new_edges": 1,
+     "probes": 3,
+     "probe_rollback_fail": 0
+    },
+    "SportsTrackerLongestDistanceActivity/v4": {
+     "agent_states": 2,
+     "agent_states_known_from_prior_runs": 2,
+     "agent_states_known_any": 2,
+     "revalidated": 5,
+     "revalidated_same": 5,
+     "probes": 3,
+     "probe_rollback_fail": 0
+    }
+   },
+   "n_nodes": 7,
+   "n_edges": 10,
+   "n_slots": 12,
+   "multi_outcome_slots": 0
+  },
+  "layout_per_run": {
+   "per_instance": {
+    "SportsTrackerLongestDistanceActivity/v0": {
+     "agent_states": 5,
+     "new_nodes": 4,
+     "new_edges": 4,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 4,
+     "convergence": 1,
+     "convergence_avoided_slots": 2
+    },
+    "SportsTrackerLongestDistanceActivity/v1": {
+     "agent_states": 2,
+     "new_nodes": 5,
+     "new_edges": 5,
+     "probes": 4,
+     "probe_rollback_fail": 0,
+     "convergence": 1,
+     "convergence_avoided_slots": 0,
+     "agent_states_known_any": 1
+    },
+    "SportsTrackerLongestDistanceActivity/v2": {
+     "agent_states": 2,
+     "new_nodes": 3,
+     "new_edges": 2,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 1
+    },
+    "SportsTrackerLongestDistanceActivity/v3": {
+     "agent_states": 3,
+     "new_nodes": 5,
+     "new_edges": 4,
+     "probes": 3,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 2
+    },
+    "SportsTrackerLongestDistanceActivity/v4": {
+     "agent_states": 2,
+     "new_nodes": 5,
+     "new_edges": 4,
+     "probes": 3,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 1
+    }
+   },
+   "n_nodes": 5,
+   "n_edges": 4,
+   "n_slots": 5,
+   "multi_outcome_slots": 0
+  },
+  "struct_ambiguous_new_states": 0,
+  "struct_distinct_states": 7
+ },
+ "SystemBluetoothTurnOn": {
+  "n_obs": 42,
+  "instances": [
+   "SystemBluetoothTurnOn/v0",
+   "SystemBluetoothTurnOn/v1",
+   "SystemBluetoothTurnOn/v2",
+   "SystemBluetoothTurnOn/v3",
+   "SystemBluetoothTurnOn/v4"
+  ],
+  "n_probe_obs": 18,
+  "n_agent_obs": 24,
+  "exact_shared": {
+   "per_instance": {
+    "SystemBluetoothTurnOn/v0": {
+     "agent_states": 4,
+     "new_nodes": 6,
+     "new_edges": 5,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 3
+    },
+    "SystemBluetoothTurnOn/v1": {
+     "agent_states": 6,
+     "agent_states_known_from_prior_runs": 2,
+     "agent_states_known_any": 6,
+     "revalidated": 2,
+     "revalidated_same": 2,
+     "new_nodes": 7,
+     "new_edges": 7,
+     "probes": 4,
+     "probe_rollback_fail": 1
+    },
+    "SystemBluetoothTurnOn/v2": {
+     "agent_states": 6,
+     "agent_states_known_from_prior_runs": 3,
+     "agent_states_known_any": 5,
+     "revalidated": 3,
+     "revalidated_same": 2,
+     "new_nodes": 6,
+     "new_edges": 7,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "convergence": 2,
+     "convergence_avoided_slots": 2
+    },
+    "SystemBluetoothTurnOn/v3": {
+     "agent_states": 4,
+     "agent_states_known_from_prior_runs": 4,
+     "agent_states_known_any": 4,
+     "revalidated": 7,
+     "revalidated_same": 6,
+     "probes": 4,
+     "probe_rollback_fail": 0,
+     "new_nodes": 2,
+     "new_edges": 2
+    },
+    "SystemBluetoothTurnOn/v4": {
+     "agent_states": 4,
+     "agent_states_known_from_prior_runs": 4,
+     "agent_states_known_any": 4,
+     "revalidated": 8,
+     "revalidated_same": 8,
+     "probes": 4,
+     "probe_rollback_fail": 0
+    }
+   },
+   "n_nodes": 21,
+   "n_edges": 21,
+   "n_slots": 22,
+   "multi_outcome_slots": 2
+  },
+  "exact_per_run": {
+   "per_instance": {
+    "SystemBluetoothTurnOn/v0": {
+     "agent_states": 4,
+     "new_nodes": 6,
+     "new_edges": 5,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 3
+    },
+    "SystemBluetoothTurnOn/v1": {
+     "agent_states": 6,
+     "new_nodes": 10,
+     "new_edges": 9,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 5
+    },
+    "SystemBluetoothTurnOn/v2": {
+     "agent_states": 6,
+     "new_nodes": 10,
+     "new_edges": 9,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 4,
+     "convergence": 1,
+     "convergence_avoided_slots": 0
+    },
+    "SystemBluetoothTurnOn/v3": {
+     "agent_states": 4,
+     "new_nodes": 7,
+     "new_edges": 6,
+     "probes": 4,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 3
+    },
+    "SystemBluetoothTurnOn/v4": {
+     "agent_states": 4,
+     "new_nodes": 7,
+     "new_edges": 6,
+     "probes": 4,
+     "probe_rollback_fail": 0,
+     "agent_states_known_any": 3
+    }
+   },
+   "n_nodes": 7,
+   "n_edges": 6,
+   "n_slots": 7,
+   "multi_outcome_slots": 0
+  },
+  "struct_shared": {
+   "per_instance": {
+    "SystemBluetoothTurnOn/v0": {
+     "agent_states": 4,
+     "new_nodes": 5,
+     "new_edges": 4,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 3
+    },
+    "SystemBluetoothTurnOn/v1": {
+     "agent_states": 6,
+     "agent_states_known_from_prior_runs": 6,
+     "agent_states_known_any": 6,
+     "revalidated": 3,
+     "revalidated_same": 3,
+     "new_edges": 3,
+     "convergence": 3,
+     "convergence_avoided_slots": 6,
+     "probes": 4,
+     "probe_rollback_fail": 1
+    },
+    "SystemBluetoothTurnOn/v2": {
+     "agent_states": 6,
+     "agent_states_known_from_prior_runs": 6,
+     "agent_states_known_any": 6,
+     "revalidated": 6,
+     "revalidated_same": 6,
+     "new_edges": 3,
+     "convergence": 3,
+     "convergence_avoided_slots": 18,
+     "probes": 4,
+     "probe_rollback_fail": 1
+    },
+    "SystemBluetoothTurnOn/v3": {
+     "agent_states": 4,
+     "agent_states_known_from_prior_runs": 4,
+     "agent_states_known_any": 4,
+     "revalidated": 7,
+     "revalidated_same": 7,
+     "probes": 4,
+     "probe_rollback_fail": 0,
+     "new_nodes": 1,
+     "new_edges": 1
+    },
+    "SystemBluetoothTurnOn/v4": {
+     "agent_states": 4,
+     "agent_states_known_from_prior_runs": 4,
+     "agent_states_known_any": 4,
+     "revalidated": 8,
+     "revalidated_same": 8,
+     "probes": 4,
+     "probe_rollback_fail": 0
+    }
+   },
+   "n_nodes": 6,
+   "n_edges": 11,
+   "n_slots": 18,
+   "multi_outcome_slots": 0
+  },
+  "struct_per_run": {
+   "per_instance": {
+    "SystemBluetoothTurnOn/v0": {
+     "agent_states": 4,
+     "new_nodes": 5,
+     "new_edges": 4,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 3
+    },
+    "SystemBluetoothTurnOn/v1": {
+     "agent_states": 6,
+     "new_nodes": 3,
+     "new_edges": 5,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "convergence": 3,
+     "convergence_avoided_slots": 0,
+     "agent_states_known_any": 5
+    },
+    "SystemBluetoothTurnOn/v2": {
+     "agent_states": 6,
+     "new_nodes": 3,
+     "new_edges": 5,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "convergence": 3,
+     "convergence_avoided_slots": 0,
+     "agent_states_known_any": 5
+    },
+    "SystemBluetoothTurnOn/v3": {
+     "agent_states": 4,
+     "new_nodes": 5,
+     "new_edges": 5,
+     "probes": 4,
+     "probe_rollback_fail": 0,
+     "convergence": 1,
+     "convergence_avoided_slots": 0,
+     "agent_states_known_any": 3
+    },
+    "SystemBluetoothTurnOn/v4": {
+     "agent_states": 4,
+     "new_nodes": 5,
+     "new_edges": 5,
+     "probes": 4,
+     "probe_rollback_fail": 0,
+     "convergence": 1,
+     "convergence_avoided_slots": 0,
+     "agent_states_known_any": 3
+    }
+   },
+   "n_nodes": 5,
+   "n_edges": 5,
+   "n_slots": 7,
+   "multi_outcome_slots": 0
+  },
+  "layout_shared": {
+   "per_instance": {
+    "SystemBluetoothTurnOn/v0": {
+     "agent_states": 4,
+     "new_nodes": 5,
+     "new_edges": 4,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 3
+    },
+    "SystemBluetoothTurnOn/v1": {
+     "agent_states": 6,
+     "agent_states_known_from_prior_runs": 6,
+     "agent_states_known_any": 6,
+     "revalidated": 3,
+     "revalidated_same": 3,
+     "new_edges": 3,
+     "convergence": 3,
+     "convergence_avoided_slots": 6,
+     "probes": 4,
+     "probe_rollback_fail": 1
+    },
+    "SystemBluetoothTurnOn/v2": {
+     "agent_states": 6,
+     "agent_states_known_from_prior_runs": 6,
+     "agent_states_known_any": 6,
+     "revalidated": 6,
+     "revalidated_same": 6,
+     "new_edges": 3,
+     "convergence": 3,
+     "convergence_avoided_slots": 18,
+     "probes": 4,
+     "probe_rollback_fail": 1
+    },
+    "SystemBluetoothTurnOn/v3": {
+     "agent_states": 4,
+     "agent_states_known_from_prior_runs": 4,
+     "agent_states_known_any": 4,
+     "revalidated": 7,
+     "revalidated_same": 7,
+     "probes": 4,
+     "probe_rollback_fail": 0,
+     "new_nodes": 1,
+     "new_edges": 1
+    },
+    "SystemBluetoothTurnOn/v4": {
+     "agent_states": 4,
+     "agent_states_known_from_prior_runs": 4,
+     "agent_states_known_any": 4,
+     "revalidated": 8,
+     "revalidated_same": 8,
+     "probes": 4,
+     "probe_rollback_fail": 0
+    }
+   },
+   "n_nodes": 6,
+   "n_edges": 11,
+   "n_slots": 18,
+   "multi_outcome_slots": 0
+  },
+  "layout_per_run": {
+   "per_instance": {
+    "SystemBluetoothTurnOn/v0": {
+     "agent_states": 4,
+     "new_nodes": 5,
+     "new_edges": 4,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 3
+    },
+    "SystemBluetoothTurnOn/v1": {
+     "agent_states": 6,
+     "new_nodes": 3,
+     "new_edges": 5,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "convergence": 3,
+     "convergence_avoided_slots": 0,
+     "agent_states_known_any": 5
+    },
+    "SystemBluetoothTurnOn/v2": {
+     "agent_states": 6,
+     "new_nodes": 3,
+     "new_edges": 5,
+     "probes": 4,
+     "probe_rollback_fail": 1,
+     "convergence": 3,
+     "convergence_avoided_slots": 0,
+     "agent_states_known_any": 5
+    },
+    "SystemBluetoothTurnOn/v3": {
+     "agent_states": 4,
+     "new_nodes": 5,
+     "new_edges": 5,
+     "probes": 4,
+     "probe_rollback_fail": 0,
+     "convergence": 1,
+     "convergence_avoided_slots": 0,
+     "agent_states_known_any": 3
+    },
+    "SystemBluetoothTurnOn/v4": {
+     "agent_states": 4,
+     "new_nodes": 5,
+     "new_edges": 5,
+     "probes": 4,
+     "probe_rollback_fail": 0,
+     "convergence": 1,
+     "convergence_avoided_slots": 0,
+     "agent_states_known_any": 3
+    }
+   },
+   "n_nodes": 5,
+   "n_edges": 5,
+   "n_slots": 7,
+   "multi_outcome_slots": 0
+  },
+  "struct_ambiguous_new_states": 0,
+  "struct_distinct_states": 6
+ },
+ "TasksDueOnDate": {
+  "n_obs": 42,
+  "instances": [
+   "TasksDueOnDate/v0",
+   "TasksDueOnDate/v1",
+   "TasksDueOnDate/v2",
+   "TasksDueOnDate/v3",
+   "TasksDueOnDate/v4"
+  ],
+  "n_probe_obs": 15,
+  "n_agent_obs": 27,
+  "exact_shared": {
+   "per_instance": {
+    "TasksDueOnDate/v0": {
+     "agent_states": 7,
+     "new_nodes": 7,
+     "new_edges": 7,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 5,
+     "convergence": 1,
+     "convergence_avoided_slots": 1
+    },
+    "TasksDueOnDate/v1": {
+     "agent_states": 4,
+     "agent_states_known_from_prior_runs": 1,
+     "agent_states_known_any": 3,
+     "new_nodes": 5,
+     "revalidated": 1,
+     "revalidated_same": 0,
+     "new_edges": 4,
+     "probes": 2,
+     "probe_rollback_fail": 1
+    },
+    "TasksDueOnDate/v2": {
+     "agent_states": 4,
+     "agent_states_known_from_prior_runs": 1,
+     "agent_states_known_any": 3,
+     "new_nodes": 6,
+     "revalidated": 1,
+     "revalidated_same": 0,
+     "new_edges": 5,
+     "probes": 2,
+     "probe_rollback_fail": 1
+    },
+    "TasksDueOnDate/v3": {
+     "agent_states": 9,
+     "agent_states_known_from_prior_runs": 5,
+     "agent_states_known_any": 9,
+     "new_nodes": 7,
+     "revalidated": 5,
+     "revalidated_same": 2,
+     "new_edges": 11,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "convergence": 4,
+     "convergence_avoided_slots": 3
+    },
+    "TasksDueOnDate/v4": {
+     "agent_states": 3,
+     "agent_states_known_from_prior_runs": 1,
+     "agent_states_known_any": 2,
+     "new_nodes": 5,
+     "revalidated": 1,
+     "revalidated_same": 0,
+     "new_edges": 7,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "convergence": 3,
+     "convergence_avoided_slots": 0
+    }
+   },
+   "n_nodes": 30,
+   "n_edges": 34,
+   "n_slots": 34,
+   "multi_outcome_slots": 2
+  },
+  "exact_per_run": {
+   "per_instance": {
+    "TasksDueOnDate/v0": {
+     "agent_states": 7,
+     "new_nodes": 7,
+     "new_edges": 7,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 5,
+     "convergence": 1,
+     "convergence_avoided_slots": 1
+    },
+    "TasksDueOnDate/v1": {
+     "agent_states": 4,
+     "new_nodes": 6,
+     "new_edges": 4,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 2
+    },
+    "TasksDueOnDate/v2": {
+     "agent_states": 4,
+     "new_nodes": 7,
+     "new_edges": 5,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 2
+    },
+    "TasksDueOnDate/v3": {
+     "agent_states": 9,
+     "new_nodes": 11,
+     "new_edges": 13,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 8,
+     "convergence": 3,
+     "convergence_avoided_slots": 2
+    },
+    "TasksDueOnDate/v4": {
+     "agent_states": 3,
+     "new_nodes": 8,
+     "new_edges": 7,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 0,
+     "agent_states_known_any": 1
+    }
+   },
+   "n_nodes": 8,
+   "n_edges": 7,
+   "n_slots": 8,
+   "multi_outcome_slots": 0
+  },
+  "struct_shared": {
+   "per_instance": {
+    "TasksDueOnDate/v0": {
+     "agent_states": 7,
+     "new_nodes": 5,
+     "new_edges": 6,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 6,
+     "convergence": 2,
+     "convergence_avoided_slots": 3
+    },
+    "TasksDueOnDate/v1": {
+     "agent_states": 4,
+     "agent_states_known_from_prior_runs": 1,
+     "agent_states_known_any": 3,
+     "revalidated": 1,
+     "revalidated_same": 1,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "new_nodes": 2,
+     "new_edges": 1
+    },
+    "TasksDueOnDate/v2": {
+     "agent_states": 4,
+     "agent_states_known_from_prior_runs": 3,
+     "agent_states_known_any": 3,
+     "revalidated": 3,
+     "revalidated_same": 3,
+     "new_nodes": 3,
+     "new_edges": 3,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 8
+    },
+    "TasksDueOnDate/v3": {
+     "agent_states": 9,
+     "agent_states_known_from_prior_runs": 9,
+     "agent_states_known_any": 9,
+     "revalidated": 8,
+     "revalidated_same": 8,
+     "new_nodes": 4,
+     "new_edges": 6,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "convergence": 2,
+     "convergence_avoided_slots": 13
+    },
+    "TasksDueOnDate/v4": {
+     "agent_states": 3,
+     "agent_states_known_from_prior_runs": 3,
+     "agent_states_known_any": 3,
+     "revalidated": 3,
+     "revalidated_same": 3,
+     "new_nodes": 2,
+     "new_edges": 5,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "convergence": 3,
+     "convergence_avoided_slots": 0
+    }
+   },
+   "n_nodes": 16,
+   "n_edges": 21,
+   "n_slots": 27,
+   "multi_outcome_slots": 0
+  },
+  "struct_per_run": {
+   "per_instance": {
+    "TasksDueOnDate/v0": {
+     "agent_states": 7,
+     "new_nodes": 5,
+     "new_edges": 6,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 6,
+     "convergence": 2,
+     "convergence_avoided_slots": 3
+    },
+    "TasksDueOnDate/v1": {
+     "agent_states": 4,
+     "new_nodes": 4,
+     "new_edges": 2,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 2
+    },
+    "TasksDueOnDate/v2": {
+     "agent_states": 4,
+     "new_nodes": 5,
+     "new_edges": 4,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 2,
+     "agent_states_known_any": 2
+    },
+    "TasksDueOnDate/v3": {
+     "agent_states": 9,
+     "new_nodes": 9,
+     "new_edges": 11,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 8,
+     "convergence": 3,
+     "convergence_avoided_slots": 12
+    },
+    "TasksDueOnDate/v4": {
+     "agent_states": 3,
+     "new_nodes": 7,
+     "new_edges": 7,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 0,
+     "agent_states_known_any": 2
+    }
+   },
+   "n_nodes": 7,
+   "n_edges": 7,
+   "n_slots": 8,
+   "multi_outcome_slots": 0
+  },
+  "layout_shared": {
+   "per_instance": {
+    "TasksDueOnDate/v0": {
+     "agent_states": 7,
+     "new_nodes": 5,
+     "new_edges": 6,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 6,
+     "convergence": 2,
+     "convergence_avoided_slots": 3
+    },
+    "TasksDueOnDate/v1": {
+     "agent_states": 4,
+     "agent_states_known_from_prior_runs": 1,
+     "agent_states_known_any": 3,
+     "revalidated": 1,
+     "revalidated_same": 1,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "new_nodes": 2,
+     "new_edges": 1
+    },
+    "TasksDueOnDate/v2": {
+     "agent_states": 4,
+     "agent_states_known_from_prior_runs": 3,
+     "agent_states_known_any": 3,
+     "revalidated": 3,
+     "revalidated_same": 3,
+     "new_nodes": 3,
+     "new_edges": 3,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 8
+    },
+    "TasksDueOnDate/v3": {
+     "agent_states": 9,
+     "agent_states_known_from_prior_runs": 9,
+     "agent_states_known_any": 9,
+     "revalidated": 8,
+     "revalidated_same": 8,
+     "new_edges": 6,
+     "convergence": 5,
+     "convergence_avoided_slots": 13,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "new_nodes": 1
+    },
+    "TasksDueOnDate/v4": {
+     "agent_states": 3,
+     "agent_states_known_from_prior_runs": 3,
+     "agent_states_known_any": 3,
+     "revalidated": 3,
+     "revalidated_same": 3,
+     "new_edges": 5,
+     "convergence": 4,
+     "convergence_avoided_slots": 0,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "new_nodes": 1
+    }
+   },
+   "n_nodes": 12,
+   "n_edges": 21,
+   "n_slots": 27,
+   "multi_outcome_slots": 0
+  },
+  "layout_per_run": {
+   "per_instance": {
+    "TasksDueOnDate/v0": {
+     "agent_states": 7,
+     "new_nodes": 5,
+     "new_edges": 6,
+     "probes": 1,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 6,
+     "convergence": 2,
+     "convergence_avoided_slots": 3
+    },
+    "TasksDueOnDate/v1": {
+     "agent_states": 4,
+     "new_nodes": 4,
+     "new_edges": 2,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "agent_states_known_any": 2
+    },
+    "TasksDueOnDate/v2": {
+     "agent_states": 4,
+     "new_nodes": 5,
+     "new_edges": 4,
+     "probes": 2,
+     "probe_rollback_fail": 1,
+     "convergence": 1,
+     "convergence_avoided_slots": 2,
+     "agent_states_known_any": 2
+    },
+    "TasksDueOnDate/v3": {
+     "agent_states": 9,
+     "new_nodes": 6,
+     "new_edges": 11,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "convergence": 6,
+     "convergence_avoided_slots": 12,
+     "agent_states_known_any": 8
+    },
+    "TasksDueOnDate/v4": {
+     "agent_states": 3,
+     "new_nodes": 5,
+     "new_edges": 7,
+     "probes": 5,
+     "probe_rollback_fail": 1,
+     "convergence": 3,
+     "convergence_avoided_slots": 0,
+     "agent_states_known_any": 2
+    }
+   },
+   "n_nodes": 5,
+   "n_edges": 7,
+   "n_slots": 8,
+   "multi_outcome_slots": 0
+  },
+  "struct_ambiguous_new_states": 4,
+  "struct_distinct_states": 16
+ }
+}

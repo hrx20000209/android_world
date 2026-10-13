@@ -1,0 +1,883 @@
+[
+ {
+  "task": "ContactsAddContact",
+  "variant": "v1",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/ContactsAddContact/v1_agent",
+  "step": 4,
+  "goal": "Create a new contact for Oliver Muller. Their number is +16322472991.",
+  "cid": "0032_s4_pre",
+  "history": [
+   "The task is to create a new contact for Oliver Muller with the phone number +16322472991. The first step is to open the Contacts app.",
+   "The task is to create a new contact for Oliver Muller. I have successfully opened the Contacts app and am now initiating the creation of a new contact.",
+   "The task is to create a new contact for Oliver Muller. I have successfully navigated to the 'Create contact' screen and am now ready to input the contact's details.",
+   "The task is to create a new contact for Oliver Muller. I am currently on the 'Create contact' screen and am about to enter the first name."
+  ],
+  "orig_slot": "INPUT_TEXT:EditText|||Last name",
+  "orig_action": {
+   "action_type": "input_text",
+   "index": null,
+   "x": 537,
+   "y": 1120,
+   "text": "Muller",
+   "direction": null,
+   "goal_status": null,
+   "app_name": null,
+   "keycode": null,
+   "clear_text": null
+  },
+  "episode_success": 1.0,
+  "evidence": [
+   "- Tapping \"Save\" at (838,211) -> opens PeopleActivity",
+   "- Tapping \"More options\" at (1017,211) -> same screen changes; shows 'Help & feedback'",
+   "- Tapping \"Add picture\" at (539,668) -> same screen changes; shows 'Add photo', 'Choose photo', 'Take photo'",
+   "- Tapping \"Show more name fields\" at (1006,857) -> same screen changes",
+   "- Tapping \"First name\" at (535,932) -> same screen changes",
+   "- Tapping \"Last name\" at (535,1117) -> same screen changes",
+   "- Tapping \"Phone\" at (535,1442) -> same screen changes",
+   "- Tapping \"Phone\" at (535,1486) -> no visible change"
+  ],
+  "struct": "99df5899039001d8",
+  "t": 1791835362.647337
+ },
+ {
+  "task": "ContactsAddContact",
+  "variant": "v2",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/ContactsAddContact/v2_agent",
+  "step": 4,
+  "goal": "Create a new contact for Muhammad Mohammed. Their number is +15377876051.",
+  "cid": "0030_s4_pre",
+  "history": [
+   "{'action': 'open_app', 'text': 'Contacts'}",
+   "The task is to create a new contact. I have successfully opened the Contacts app and am now initiating the creation process.",
+   "I have successfully navigated to the 'Create contact' screen. The next step is to input the contact's name and phone number.",
+   "I am on the 'Create contact' screen. The next step is to input the contact's name and phone number."
+  ],
+  "orig_slot": "INPUT_TEXT:EditText|||Last name",
+  "orig_action": {
+   "action_type": "input_text",
+   "index": null,
+   "x": 537,
+   "y": 1116,
+   "text": "Mohammed",
+   "direction": null,
+   "goal_status": null,
+   "app_name": null,
+   "keycode": null,
+   "clear_text": null
+  },
+  "episode_success": 1.0,
+  "evidence": [
+   "- Tapping \"Save\" at (838,211) -> opens PeopleActivity",
+   "- Tapping \"More options\" at (1017,211) -> same screen changes; shows 'Help & feedback'",
+   "- Tapping \"Add picture\" at (539,668) -> same screen changes; shows 'Add photo', 'Choose photo', 'Take photo'",
+   "- Tapping \"Show more name fields\" at (1006,857) -> same screen changes",
+   "- Tapping \"First name\" at (535,932) -> same screen changes",
+   "- Tapping \"Last name\" at (535,1117) -> same screen changes",
+   "- Tapping \"Phone\" at (535,1442) -> same screen changes",
+   "- Tapping \"Phone\" at (535,1486) -> no visible change"
+  ],
+  "struct": "99df5899039001d8",
+  "t": 1791835431.770625
+ },
+ {
+  "task": "ExpenseAddSingle",
+  "variant": "v4",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/ExpenseAddSingle/v4_agent",
+  "step": 4,
+  "goal": "Add the following expenses into the pro expense:\nname|amount_dollars|category_name|note\nGym Membership|$385.62|Health Care|Remember to transfer funds",
+  "cid": "0018_s4_pre",
+  "history": [
+   "The task is to add a new expense to the 'Pro Expense' app. The first step is to open the application.",
+   "The task is to add a new expense. The app has been opened, and the next step is to navigate to the expense entry form.",
+   "The task is to add a new expense. I am currently on the 'Expense Entry' screen and will begin by entering the expense name.",
+   "The task is to add a new expense. The app is open, and the expense name has been entered. The next step is to input the amount."
+  ],
+  "orig_slot": "INPUT_TEXT",
+  "orig_action": {
+   "action_type": "input_text",
+   "index": null,
+   "x": null,
+   "y": null,
+   "text": "Remember to transfer funds",
+   "direction": null,
+   "goal_status": null,
+   "app_name": null,
+   "keycode": null,
+   "clear_text": null
+  },
+  "episode_success": 0.0,
+  "evidence": [
+   "- Tapping \"Time\" at (889,201) -> same screen changes; shows 'AM', 'CANCEL', 'OK', 'PM', 'Switch to text input mode for '",
+   "- Tapping \"Calendar\" at (1016,201) -> same screen changes; shows 'CANCEL', 'Next month', 'OK', 'Previous month', 'Sun, Oct 15'",
+   "- Tapping \"Amount\" at (540,642) -> same screen changes",
+   "- Tapping \"Housing\" at (519,817) -> no visible change",
+   "- Tapping \"Entertainment\" at (932,817) -> no visible change",
+   "- Tapping \"Note\" at (540,1062) -> same screen changes",
+   "- Tapping \"cv_lock\" at (951,1302) -> same screen changes; shows 'NEXT'"
+  ],
+  "struct": "aec7702fefb88df4",
+  "t": 1791833185.622139
+ },
+ {
+  "task": "ExpenseAddSingle",
+  "variant": "v4",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/ExpenseAddSingle/v4_agent",
+  "step": 2,
+  "goal": "Add the following expenses into the pro expense:\nname|amount_dollars|category_name|note\nGym Membership|$385.62|Health Care|Remember to transfer funds",
+  "cid": "0010_s2_pre",
+  "history": [
+   "The task is to add a new expense to the 'Pro Expense' app. The first step is to open the application.",
+   "The task is to add a new expense. The app has been opened, and the next step is to navigate to the expense entry form."
+  ],
+  "orig_slot": "INPUT_TEXT:EditText|edt_name||Name",
+  "orig_action": {
+   "action_type": "input_text",
+   "index": null,
+   "x": 537,
+   "y": 427,
+   "text": "Gym Membership",
+   "direction": null,
+   "goal_status": null,
+   "app_name": null,
+   "keycode": null,
+   "clear_text": null
+  },
+  "episode_success": 0.0,
+  "evidence": [
+   "- Tapping \"ImageButton\" at (73,201) -> same screen changes; shows 'Home'",
+   "- Tapping \"Time\" at (889,201) -> same screen changes; shows 'AM', 'CANCEL', 'OK', 'PM', 'Switch to text input mode for '",
+   "- Tapping \"Calendar\" at (1016,201) -> same screen changes; shows 'CANCEL', 'Next month', 'OK', 'Previous month', 'Sun, Oct 15'",
+   "- Tapping \"Name\" at (540,428) -> same screen changes; keyboard appears; shows 'USD'",
+   "- Tapping \"Name\" at (540,428) -> same screen changes; keyboard appears",
+   "- Tapping \"cv_lock\" at (951,1297) -> same screen changes; shows 'NEXT'"
+  ],
+  "struct": "a892630d65093784",
+  "t": 1791833174.353895
+ },
+ {
+  "task": "MarkorCreateNote",
+  "variant": "v2",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/MarkorCreateNote/v2_agent",
+  "step": 3,
+  "goal": "Create a new note in Markor named SBCb_alert_jelly.txt with the following text: Parents' evening at school this Wednesday.",
+  "cid": "0017_s3_pre",
+  "history": [
+   "The task is to create a new note in Markor. The first step is to open the Markor app.",
+   "The Markor app has been successfully opened. The next step is to create a new note.",
+   "The Markor app is open and the 'Create new file' dialog is displayed. The next step is to enter the filename 'SBCb_alert_jelly' and set the correct file extension."
+  ],
+  "orig_slot": "Spinner|new_file_dialog__type||Plain Text",
+  "orig_action": {
+   "action_type": "click",
+   "index": null,
+   "x": 934,
+   "y": 698,
+   "text": null,
+   "direction": null,
+   "goal_status": null,
+   "app_name": null,
+   "keycode": null,
+   "clear_text": null
+  },
+  "episode_success": 0.0,
+  "evidence": [
+   "- Tapping \"my_note\" at (373,552) -> same screen changes",
+   "- Tapping \"Plain Text\" at (540,701) -> same screen changes; shows 'AsciiDoc', 'CSV', 'Markdown', 'None', 'Plain Text'",
+   "- Tapping \"OK\" at (922,1112) -> opens DocumentActivity; shows 'More options', 'Redo', 'Save', 'Search', 'Undo'"
+  ],
+  "struct": "86098fd20b54acb5",
+  "t": 1791836963.653706
+ },
+ {
+  "task": "MarkorCreateNote",
+  "variant": "v2",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/MarkorCreateNote/v2_agent",
+  "step": 1,
+  "goal": "Create a new note in Markor named SBCb_alert_jelly.txt with the following text: Parents' evening at school this Wednesday.",
+  "cid": "0002_s1_pre",
+  "history": [
+   "The task is to create a new note in Markor. The first step is to open the Markor app."
+  ],
+  "orig_slot": "ImageButton|fab_add_new_item|Create a new file or folder|Create a new file or folder",
+  "orig_action": {
+   "action_type": "click",
+   "index": null,
+   "x": 962,
+   "y": 2068,
+   "text": null,
+   "direction": null,
+   "goal_status": null,
+   "app_name": null,
+   "keycode": null,
+   "clear_text": null
+  },
+  "episode_success": 0.0,
+  "evidence": [
+   "- Tapping \"Markor\" at (540,201) -> no visible change",
+   "- Tapping \"Go to\" at (712,201) -> same screen changes; shows 'AppData (private)', 'AppData (public)', 'Favourites', 'Internal storage', 'Notebook'",
+   "- Tapping \"Sort by\" at (817,201) -> same screen changes; shows '.dotfiles', 'Date', 'Folder first', 'MIME type', 'Name'",
+   "- Tapping \"Search\" at (922,201) -> same screen changes; shows 'CANCEL', 'Case sensitive', 'OK', 'Recursive search in current di', 'Regex search'",
+   "- Tapping \"More options\" at (1027,201) -> same screen changes; shows 'Import from device', 'Settings'",
+   "- Tapping \"Create a new file or folder\" at (964,2074) -> same screen changes; keyboard appears; shows '- Files and folders are not ov', '- Folder is created without fi', 'CANCEL', 'FOLDER', 'Name'",
+   "- Tapping \"To-Do\" at (405,2263) -> same screen changes; shows 'Redo', 'Save', 'Undo', 'View mode'",
+   "- Tapping \"QuickNote\" at (675,2263) -> same screen changes; shows 'Redo', 'Save', 'Undo', 'View mode'",
+   "- Tapping \"More\" at (945,2263) -> same screen changes"
+  ],
+  "struct": "8701a93dd4f28724",
+  "t": 1791836949.473189
+ },
+ {
+  "task": "MarkorDeleteNewestNote",
+  "variant": "v4",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/MarkorDeleteNewestNote/v4_agent",
+  "step": 6,
+  "goal": "Delete the newest note in Markor.",
+  "cid": "0027_s6_pre",
+  "history": [
+   "任务目标是删除Markor应用中最新的笔记。当前正在执行第一步：打开Markor应用。",
+   "任务目标是删除Markor中最新的笔记。目前已成功打开应用，并识别出最新的笔记是 '2023_06_01_gentle_queen.md'。下一步是点击该笔记以进行删除操作。",
+   "任务目标是删除Markor中最新的笔记。目前已成功打开该笔记，下一步是点击删除按钮来删除它。",
+   "任务目标是删除Markor中最新的笔记。目前已成功打开该笔记，下一步是点击删除按钮来删除它。",
+   "任务目标是删除Markor中最新的笔记。目前已成功打开该笔记，下一步是点击删除按钮来删除它。",
+   "任务目标是删除Markor中最新的笔记。目前已成功打开该笔记，下一步是点击删除按钮来删除它。"
+  ],
+  "orig_slot": "ImageView||Delete lines|Delete lines",
+  "orig_action": {
+   "action_type": "click",
+   "index": null,
+   "x": 569,
+   "y": 2269,
+   "text": null,
+   "direction": null,
+   "goal_status": null,
+   "app_name": null,
+   "keycode": null,
+   "clear_text": null
+  },
+  "episode_success": 0.0,
+  "evidence": [
+   "- Tapping \"2023_06_01_gentle_queen\" at (540,201) -> no visible change",
+   "- Tapping \"More options\" at (1027,201) -> same screen changes; shows 'File settings', 'Info', 'Reload', 'Share', 'Tools'",
+   "- Tapping \"Check list\" at (63,2279) -> no visible change",
+   "- Tapping \"Unordered list\" at (190,2279) -> no visible change",
+   "- Tapping \"Delete lines\" at (571,2279) -> no visible change",
+   "- Tapping \"Open link\" at (698,2279) -> no visible change",
+   "- Tapping \"Attach\" at (825,2279) -> same screen changes; shows 'Audio', 'CANCEL', 'Color', 'Date', 'File'"
+  ],
+  "struct": "37095e689d20777a",
+  "t": 1791840973.774624
+ },
+ {
+  "task": "MarkorDeleteNewestNote",
+  "variant": "v4",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/MarkorDeleteNewestNote/v4_agent",
+  "step": 3,
+  "goal": "Delete the newest note in Markor.",
+  "cid": "0024_s3_pre",
+  "history": [
+   "任务目标是删除Markor应用中最新的笔记。当前正在执行第一步：打开Markor应用。",
+   "任务目标是删除Markor中最新的笔记。目前已成功打开应用，并识别出最新的笔记是 '2023_06_01_gentle_queen.md'。下一步是点击该笔记以进行删除操作。",
+   "任务目标是删除Markor中最新的笔记。目前已成功打开该笔记，下一步是点击删除按钮来删除它。"
+  ],
+  "orig_slot": "ImageView||Delete lines|Delete lines",
+  "orig_action": {
+   "action_type": "click",
+   "index": null,
+   "x": 569,
+   "y": 2269,
+   "text": null,
+   "direction": null,
+   "goal_status": null,
+   "app_name": null,
+   "keycode": null,
+   "clear_text": null
+  },
+  "episode_success": 0.0,
+  "evidence": [
+   "- Tapping \"2023_06_01_gentle_queen\" at (540,201) -> no visible change",
+   "- Tapping \"More options\" at (1027,201) -> same screen changes; shows 'File settings', 'Info', 'Reload', 'Share', 'Tools'",
+   "- Tapping \"Check list\" at (63,2279) -> no visible change",
+   "- Tapping \"Unordered list\" at (190,2279) -> no visible change",
+   "- Tapping \"Open link\" at (698,2279) -> no visible change",
+   "- Tapping \"Attach\" at (825,2279) -> same screen changes; shows 'Audio', 'CANCEL', 'Color', 'Date', 'File'"
+  ],
+  "struct": "37095e689d20777a",
+  "t": 1791840962.129406
+ },
+ {
+  "task": "OsmAndFavorite",
+  "variant": "v0",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/OsmAndFavorite/v0_agent",
+  "step": 11,
+  "goal": "Add a favorite location marker for Balzers, Liechtenstein in the OsmAnd maps app.",
+  "cid": "0021_s11_pre",
+  "history": [
+   "The task is to add a favorite location in the OsmAnd app. The first step is to open the app.",
+   "The task is to add a favorite location in the OsmAnd app. The first step is to open the app.",
+   "The task is to add a favorite location in the OsmAnd app. The app is now open, and the next step is to search for 'Balzers, Liechtenstein'.",
+   "The task is to add a favorite location in the OsmAnd app. The app is open, and the next step is to search for 'Balzers, Liechtenstein'.",
+   "The task is to add a favorite location in the OsmAnd app. The app is open, and the search for 'Balzers, Liechtenstein' has been completed. The next step is to select the search result to proceed with adding it as a favorite.",
+   "The task is to add a favorite location in the OsmAnd app. The app is open, and the location 'Balzers, Liechtenstein' has been found. The next step is to add it as a favorite.",
+   "The task is to add 'Balzers, Liechtenstein' as a favorite. I am currently on the 'Add Favorite' screen, but the name is incorrectly set to 'Liechtenstein'. The next step is to correct the name.",
+   "The task is to add 'Balzers, Liechtenstein' as a favorite. I am currently on the 'Add Favorite' screen, but the name is incorrectly set to 'Liechtenstein'. The next step is to correct the name.",
+   "The task is to add 'Balzers, Liechtenstein' as a favorite. I am on the 'Add Favorite' screen, but the name is incorrectly entered. The next step is to correct the name.",
+   "The task is to add 'Balzers, Liechtenstein' as a favorite. The app is open, the location has been found, and the 'Add Favorite' screen is displayed. The name is currently incorrect ('LiechtensteinBalzers, Liechtenstein'), and the next step is to correct it.",
+   "{'action': 'click', 'coordinate': [992, 2030]}"
+  ],
+  "orig_slot": "View|MapLayersView|Map|Map",
+  "orig_action": {
+   "action_type": "click",
+   "index": null,
+   "x": 992,
+   "y": 2030,
+   "text": null,
+   "direction": null,
+   "goal_status": null,
+   "app_name": null,
+   "keycode": null,
+   "clear_text": null
+  },
+  "episode_success": 0.0,
+  "evidence": [
+   "- Tapping \"Map\" at (540,1168) -> same screen changes",
+   "- Tapping \"Map\" at (540,1168) -> same screen changes; shows 'Copy', 'Copy', 'Cut', 'Cut', 'More options'"
+  ],
+  "struct": "a8f7927a7ebe7cd2",
+  "t": 1791839487.955076
+ },
+ {
+  "task": "OsmAndFavorite",
+  "variant": "v1",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/OsmAndFavorite/v1_agent",
+  "step": 10,
+  "goal": "Add a favorite location marker for Schaan, Liechtenstein in the OsmAnd maps app.",
+  "cid": "0021_s10_pre",
+  "history": [
+   "The task is to add a favorite location in the OsmAnd app. The first step is to open the app.",
+   "The task is to add a favorite location in the OsmAnd app. The first step is to open the app.",
+   "The task is to add a favorite location in the OsmAnd app. The app is now open, and the next step is to search for 'Schaan, Liechtenstein'.",
+   "The task is to add a favorite location in the OsmAnd app. The app is open, and the next step is to search for 'Schaan, Liechtenstein'.",
+   "The task is to add a favorite location in the OsmAnd app. The app is open, and the search for 'Schaan, Liechtenstein' has been completed. The next step is to select the search result to add it as a favorite.",
+   "The task is to add a favorite location in the OsmAnd app. The app is open, and the location 'Schaan, Liechtenstein' has been found. The next step is to add it as a favorite.",
+   "The task is to add a favorite location for 'Schaan, Liechtenstein'. I am currently on the 'Add Favorite' screen, but the name is incorrect. I need to correct the name before saving.",
+   "The task is to add a favorite location for 'Schaan, Liechtenstein'. I am currently on the 'Add Favorite' screen, but the name is incorrect. The next step is to correct the name before saving.",
+   "The task is to add a favorite location for 'Schaan, Liechtenstein'. I am on the 'Add Favorite' screen, but the name is currently incorrect. The next step is to correct the name before saving.",
+   "The task is to add a favorite location for 'Schaan, Liechtenstein'. I am on the 'Add Favorite' screen, but the name is currently incorrect. The next step is to correct the name before saving."
+  ],
+  "orig_slot": "View|MapLayersView|Map|Map",
+  "orig_action": {
+   "action_type": "click",
+   "index": null,
+   "x": 992,
+   "y": 2030,
+   "text": null,
+   "direction": null,
+   "goal_status": null,
+   "app_name": null,
+   "keycode": null,
+   "clear_text": null
+  },
+  "episode_success": 0.0,
+  "evidence": [
+   "- Tapping \"Map\" at (540,1168) -> same screen changes",
+   "- Tapping \"Map\" at (540,1168) -> same screen changes; shows 'Copy', 'Copy', 'Cut', 'Cut', 'More options'"
+  ],
+  "struct": "a8f7927a7ebe7cd2",
+  "t": 1791839552.725951
+ },
+ {
+  "task": "RecipeDeleteMultipleRecipesWithConstraint",
+  "variant": "v4",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/RecipeDeleteMultipleRecipesWithConstraint/v4_agent",
+  "step": 2,
+  "goal": "Delete the recipes from Broccoli app that use spinach in the directions.",
+  "cid": "0009_s2_pre",
+  "history": [
+   "任务目标是删除Broccoli应用中包含“spinach”的食谱。当前正准备打开Broccoli应用。",
+   "任务目标是删除Broccoli应用中包含“spinach”的食谱。目前已成功打开应用，下一步将通过搜索功能查找相关食谱。"
+  ],
+  "orig_slot": "INPUT_TEXT",
+  "orig_action": {
+   "action_type": "input_text",
+   "index": null,
+   "x": null,
+   "y": null,
+   "text": "spinach",
+   "direction": null,
+   "goal_status": null,
+   "app_name": null,
+   "keycode": null,
+   "clear_text": null
+  },
+  "episode_success": 0.0,
+  "evidence": [
+   "- Tapping \"Collapse\" at (73,348) -> same screen changes; shows 'Categories', 'Search'",
+   "- Tapping \"Recipe photo\" at (540,600) -> opens RecipeDetailsActivity",
+   "- Tapping \"Recipe photo\" at (540,936) -> opens RecipeDetailsActivity",
+   "- Tapping \"Recipe photo\" at (540,1272) -> opens RecipeDetailsActivity",
+   "- Tapping \"New Recipe\" at (964,1401) -> opens CreateAndEditRecipeActivity; shows 'Navigate up', 'SAVE'"
+  ],
+  "struct": "94be68d81767abaa",
+  "t": 1791840341.623327
+ },
+ {
+  "task": "RecipeDeleteMultipleRecipesWithConstraint",
+  "variant": "v4",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/RecipeDeleteMultipleRecipesWithConstraint/v4_agent",
+  "step": 9,
+  "goal": "Delete the recipes from Broccoli app that use spinach in the directions.",
+  "cid": "0028_s9_pre",
+  "history": [
+   "任务目标是删除Broccoli应用中包含“spinach”的食谱。当前正准备打开Broccoli应用。",
+   "任务目标是删除Broccoli应用中包含“spinach”的食谱。目前已成功打开应用，下一步将通过搜索功能查找相关食谱。",
+   "任务目标是删除Broccoli应用中包含“spinach”的食谱。目前已成功打开应用并进入搜索界面，下一步将输入关键词进行搜索。",
+   "任务目标是删除Broccoli应用中包含“spinach”的食谱。目前已成功搜索到两个相关食谱，下一步将点击其中一个以进行删除操作。",
+   "任务目标是删除Broccoli应用中包含“spinach”的食谱。目前已成功打开应用并进入了第一个目标食谱的详情页面，下一步将尝试删除该食谱。",
+   "任务目标是删除Broccoli应用中包含“spinach”的食谱。目前已成功打开应用，搜索到目标食谱，并进入了第一个食谱的详情页面。当前正准备点击删除按钮以删除该食谱。",
+   "任务目标是删除Broccoli应用中包含“spinach”的食谱。目前已成功打开应用，搜索到目标食谱，并进入了第一个食谱的详情页面。当前正准备确认删除该食谱。",
+   "任务目标是删除Broccoli应用中包含“spinach”的食谱。目前已成功打开应用，搜索到两个相关食谱，并删除了其中一个。现在正准备删除最后一个食谱。",
+   "任务目标是删除Broccoli应用中包含“spinach”的食谱。目前已成功打开应用，搜索到两个相关食谱，并删除了其中一个。现在正准备删除最后一个食谱。"
+  ],
+  "orig_slot": "LinearLayout|||Delete",
+  "orig_action": {
+   "action_type": "click",
+   "index": null,
+   "x": 652,
+   "y": 602,
+   "text": null,
+   "direction": null,
+   "goal_status": null,
+   "app_name": null,
+   "keycode": null,
+   "clear_text": null
+  },
+  "episode_success": 0.0,
+  "evidence": [
+   "- Tapping \"Edit\" at (812,475) -> opens CreateAndEditRecipeActivity; shows 'Navigate up', 'New Recipe', 'SAVE'",
+   "- Tapping \"Delete\" at (812,601) -> same screen changes; shows 'CANCEL', 'DELETE', 'Delete this recipe?'"
+  ],
+  "struct": "889b2aacf41434a0",
+  "t": 1791840374.5678248
+ },
+ {
+  "task": "RecipeDeleteSingleRecipe",
+  "variant": "v3",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/RecipeDeleteSingleRecipe/v3_agent",
+  "step": 3,
+  "goal": "Delete the following recipes from Broccoli app: Eggplant Parmesan.",
+  "cid": "0020_s3_pre",
+  "history": [
+   "任务目标是删除Broccoli应用中的'Eggplant Parmesan'食谱。当前正在执行第一步：打开Broccoli应用。",
+   "任务目标是删除'Eggplant Parmesan'食谱。目前已成功打开应用并找到了该食谱。下一步是点击该食谱进入详情页以进行删除操作。",
+   "任务目标是删除'Eggplant Parmesan'食谱。目前已成功打开应用并进入了该食谱的详情页面。下一步是找到并执行删除操作。"
+  ],
+  "orig_slot": "LinearLayout|||Delete",
+  "orig_action": {
+   "action_type": "click",
+   "index": null,
+   "x": 652,
+   "y": 602,
+   "text": null,
+   "direction": null,
+   "goal_status": null,
+   "app_name": null,
+   "keycode": null,
+   "clear_text": null
+  },
+  "episode_success": 1.0,
+  "evidence": [
+   "- Tapping \"Edit\" at (812,475) -> opens CreateAndEditRecipeActivity; shows 'Navigate up', 'New Recipe', 'SAVE'",
+   "- Tapping \"Delete\" at (812,601) -> same screen changes; shows 'CANCEL', 'DELETE', 'Delete this recipe?'"
+  ],
+  "struct": "889b2aacf41434a0",
+  "t": 1791834897.753332
+ },
+ {
+  "task": "RecipeDeleteSingleRecipe",
+  "variant": "v3",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/RecipeDeleteSingleRecipe/v3_agent",
+  "step": 2,
+  "goal": "Delete the following recipes from Broccoli app: Eggplant Parmesan.",
+  "cid": "0011_s2_pre",
+  "history": [
+   "任务目标是删除Broccoli应用中的'Eggplant Parmesan'食谱。当前正在执行第一步：打开Broccoli应用。",
+   "任务目标是删除'Eggplant Parmesan'食谱。目前已成功打开应用并找到了该食谱。下一步是点击该食谱进入详情页以进行删除操作。"
+  ],
+  "orig_slot": "ImageView||More options|More options",
+  "orig_action": {
+   "action_type": "click",
+   "index": null,
+   "x": 1025,
+   "y": 197,
+   "text": null,
+   "direction": null,
+   "goal_status": null,
+   "app_name": null,
+   "keycode": null,
+   "clear_text": null
+  },
+  "episode_success": 1.0,
+  "evidence": [
+   "- Tapping \"Recipe photo\" at (540,137) -> no visible change",
+   "- Tapping \"Mark as favorite\" at (911,201) -> same screen changes",
+   "- Tapping \"More options\" at (1027,201) -> same screen changes; shows 'Delete', 'Edit', 'Share', 'Share as file'",
+   "- Tapping \"Cook\" at (964,2221) -> opens CookingAssistantActivity; shows 'Adjust ingredients', 'Cancel'"
+  ],
+  "struct": "4f2ce9b12da08294",
+  "t": 1791834889.600002
+ },
+ {
+  "task": "SimpleCalendarDeleteOneEvent",
+  "variant": "v2",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/SimpleCalendarDeleteOneEvent/v2_agent",
+  "step": 11,
+  "goal": "In Simple Calendar Pro, delete the calendar event on 2023-10-30 at 17h with the title 'Call with Marketing'",
+  "cid": "0037_s11_pre",
+  "history": [
+   "任务目标是在 Simple Calendar Pro 中删除一个特定的日历事件。当前正准备打开该应用。",
+   "任务目标是删除一个特定的日历事件。目前已成功打开应用，但出现了一个弹窗，需要先关闭它才能继续操作。",
+   "任务目标是删除2023年10月30日的特定日历事件。目前已成功打开应用并关闭了弹窗，正准备点击10月30日以查看当天的事件。",
+   "任务目标是删除特定日历事件。目前已成功导航到2023年10月30日的日程列表，并找到了目标事件'Call with Marketing'。下一步是点击该事件以进行删除操作。",
+   "任务目标是删除2023年10月30日的特定日历事件。目前已成功打开应用并导航到10月11日。下一步是继续点击右箭头，逐日导航至目标日期。",
+   "点击左箭头按钮，进入上一天",
+   "任务目标是删除2023年10月30日的特定日历事件。目前已打开应用，但错误地导航到了10月11日。需要继续点击右箭头，逐日导航至目标日期。",
+   "任务目标是删除2023年10月30日的特定日历事件。目前已打开应用，但错误地导航到了10月12日。需要继续点击右箭头，逐日导航至目标日期。",
+   "任务目标是删除2023年10月30日的特定日历事件。目前已打开应用，但错误地导航到了10月13日。需要继续点击右箭头，逐日导航至目标日期。",
+   "任务目标是删除2023年10月30日的特定日历事件。目前已打开应用，但错误地导航到了10月14日。需要继续点击右箭头，逐日导航至目标日期。",
+   "任务目标是删除2023年10月30日的特定日历事件。目前已打开应用，但错误地导航到了10月15日。需要继续点击右箭头，逐日导航至目标日期。"
+  ],
+  "orig_slot": "ImageView|top_right_arrow||",
+  "orig_action": {
+   "action_type": "click",
+   "index": null,
+   "x": 1003,
+   "y": 386,
+   "text": null,
+   "direction": null,
+   "goal_status": null,
+   "app_name": null,
+   "keycode": null,
+   "clear_text": null
+  },
+  "episode_success": 0.0,
+  "evidence": [
+   "- Tapping \"Go to today\" at (731,212) -> same screen changes; shows 'Settings'",
+   "- Tapping \"Change view\" at (858,212) -> same screen changes; shows 'Daily view', 'Monthly and daily view', 'Monthly view', 'Simple event list', 'Weekly view'",
+   "- Tapping \"More options\" at (974,212) -> same screen changes; shows 'About', 'Add contact anniversaries', 'Add contact birthdays', 'Add holidays', 'Export events to an .ics file'",
+   "- Tapping \"September\" at (540,1316) -> no visible change",
+   "- Tapping \"top_left_arrow\" at (73,367) -> same screen changes",
+   "- Tapping \"October\" at (540,367) -> same screen changes; shows 'Cancel', 'OK'",
+   "- Tapping \"top_right_arrow\" at (1006,367) -> same screen changes; shows 'Settings'",
+   "- Tapping \"October 31 (Tue)\" at (540,388) -> same screen changes; shows 'Cancel', 'OK'",
+   "- Tapping \"October 30 (Mon)\" at (540,388) -> same screen changes; shows 'Cancel', 'OK'",
+   "- Tapping \"top_right_arrow\" at (1006,388) -> same screen changes"
+  ],
+  "struct": "9eb508030f7b60ea",
+  "t": 1791838599.43361
+ },
+ {
+  "task": "SimpleCalendarDeleteOneEvent",
+  "variant": "v3",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/SimpleCalendarDeleteOneEvent/v3_agent",
+  "step": 6,
+  "goal": "In Simple Calendar Pro, delete the calendar event on 2023-10-28 at 3h with the title 'Call with the Team'",
+  "cid": "0031_s6_pre",
+  "history": [
+   "任务目标是在 Simple Calendar Pro 中删除一个特定的日历事件。当前正准备打开该应用。",
+   "任务目标是在 Simple Calendar Pro 中删除一个特定的日历事件。应用已成功打开，但出现了一个升级提示弹窗，需要先关闭它才能继续。",
+   "任务目标是删除2023年10月28日的特定日历事件。目前已成功打开应用并关闭了弹窗，正准备选择目标日期。",
+   "任务目标是删除特定日历事件。目前已成功导航到2023年10月28日，并找到了目标事件'Call with the Team'。下一步是点击该事件以进行删除操作。",
+   "任务目标是删除2023年10月28日的特定日历事件。目前已成功打开应用并导航到10月11日。下一步是继续点击向右箭头，逐日导航至目标日期。",
+   "点击向右箭头，将日期从10月12日切换到10月13日。"
+  ],
+  "orig_slot": "ImageView|top_right_arrow||",
+  "orig_action": {
+   "action_type": "click",
+   "index": null,
+   "x": 1003,
+   "y": 386,
+   "text": null,
+   "direction": null,
+   "goal_status": null,
+   "app_name": null,
+   "keycode": null,
+   "clear_text": null
+  },
+  "episode_success": 0.0,
+  "evidence": [
+   "- Tapping \"Go to today\" at (731,212) -> same screen changes; shows 'Settings'",
+   "- Tapping \"Change view\" at (858,212) -> same screen changes; shows 'Daily view', 'Monthly and daily view', 'Monthly view', 'Simple event list', 'Weekly view'",
+   "- Tapping \"More options\" at (974,212) -> same screen changes; shows 'About', 'Add contact anniversaries', 'Add contact birthdays', 'Add holidays', 'Export events to an .ics file'",
+   "- Tapping \"September\" at (540,1316) -> no visible change",
+   "- Tapping \"top_left_arrow\" at (73,367) -> same screen changes",
+   "- Tapping \"October\" at (540,367) -> same screen changes; shows 'Cancel', 'OK'",
+   "- Tapping \"top_right_arrow\" at (1006,367) -> same screen changes",
+   "- Tapping \"October 31 (Tue)\" at (540,388) -> same screen changes; shows 'Cancel', 'OK'",
+   "- Tapping \"October 30 (Mon)\" at (540,388) -> same screen changes; shows 'Cancel', 'OK'",
+   "- Tapping \"October 28 (Sat)\" at (540,388) -> same screen changes; shows 'Cancel', 'OK'"
+  ],
+  "struct": "9eb508030f7b60ea",
+  "t": 1791838643.46704
+ },
+ {
+  "task": "SimpleCalendarEventsOnDate",
+  "variant": "v3",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/SimpleCalendarEventsOnDate/v3_agent",
+  "step": 2,
+  "goal": "What events do I have October 16 2023 in Simple Calendar Pro? Answer with the titles only. If there are multiple titles, format your answer as a comma separated list.",
+  "cid": "0003_s2_pre",
+  "history": [
+   "Open the Simple Calendar Pro app to view the calendar.",
+   "The Simple Calendar Pro app has been opened. A pop-up dialog is currently displayed, which needs to be dismissed before checking for events on Monday."
+  ],
+  "orig_slot": "View|month_view_background||#22",
+  "orig_action": {
+   "action_type": "click",
+   "index": null,
+   "x": 228,
+   "y": 1444,
+   "text": null,
+   "direction": null,
+   "goal_status": null,
+   "app_name": null,
+   "keycode": null,
+   "clear_text": null
+  },
+  "episode_success": 0.0,
+  "evidence": [
+   "- Tapping \"top_toolbar_search_icon\" at (94,212) -> same screen changes; keyboard appears",
+   "- Tapping \"Change view\" at (731,212) -> same screen changes; shows 'Daily view', 'Monthly and daily view', 'Monthly view', 'Simple event list', 'Weekly view'",
+   "- Tapping \"Settings\" at (858,212) -> opens SettingsActivity",
+   "- Tapping \"More options\" at (974,212) -> same screen changes; shows 'About', 'Add contact anniversaries', 'Add contact birthdays', 'Add holidays', 'Export events to an .ics file'",
+   "- Tapping \"September\" at (540,1316) -> same screen changes; shows 'Go to today'",
+   "- Tapping \"top_left_arrow\" at (73,367) -> same screen changes; shows 'Go to today'",
+   "- Tapping \"October\" at (540,367) -> same screen changes; shows 'Cancel', 'OK'",
+   "- Tapping \"top_right_arrow\" at (1006,367) -> same screen changes; shows 'Go to today'",
+   "- Tapping \"month_view_background\" at (386,1881) -> same screen changes; shows 'Go to today'"
+  ],
+  "struct": "c53477224e51ce7f",
+  "t": 1791836125.1306849
+ },
+ {
+  "task": "SimpleCalendarEventsOnDate",
+  "variant": "v1",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/SimpleCalendarEventsOnDate/v1_agent",
+  "step": 5,
+  "goal": "What events do I have October 24 2023 in Simple Calendar Pro? Answer with the titles only. If there are multiple titles, format your answer as a comma separated list.",
+  "cid": "0012_s5_pre",
+  "history": [
+   "Open the Simple Calendar Pro app to view the calendar.",
+   "I have opened the Simple Calendar Pro app, but a pop-up dialog has appeared. I need to dismiss this dialog to view the calendar and find the events for the Tuesday after next.",
+   "Parser fallback wait",
+   "The task is to find events for the Tuesday after next in Simple Calendar Pro. The app was opened, but a dialog appeared. The current screen is the home screen, and the app needs to be reopened to proceed.",
+   "I have opened the Simple Calendar Pro app, but a pop-up dialog is currently displayed. I need to dismiss this dialog to view the calendar and find the events for the Tuesday after next."
+  ],
+  "orig_slot": "View|month_view_background||#30",
+  "orig_action": {
+   "action_type": "click",
+   "index": null,
+   "x": 383,
+   "y": 1780,
+   "text": null,
+   "direction": null,
+   "goal_status": null,
+   "app_name": null,
+   "keycode": null,
+   "clear_text": null
+  },
+  "episode_success": 1.0,
+  "evidence": [
+   "- Tapping \"top_toolbar_search_icon\" at (94,212) -> same screen changes; keyboard appears",
+   "- Tapping \"Change view\" at (731,212) -> same screen changes; shows 'Daily view', 'Monthly and daily view', 'Monthly view', 'Simple event list', 'Weekly view'",
+   "- Tapping \"Settings\" at (858,212) -> opens SettingsActivity",
+   "- Tapping \"More options\" at (974,212) -> same screen changes; shows 'About', 'Add contact anniversaries', 'Add contact birthdays', 'Add holidays', 'Export events to an .ics file'",
+   "- Tapping \"September\" at (540,1316) -> same screen changes; shows 'Go to today'",
+   "- Tapping \"top_left_arrow\" at (73,367) -> same screen changes; shows 'Go to today'"
+  ],
+  "struct": "c53477224e51ce7f",
+  "t": 1791836072.1524632
+ },
+ {
+  "task": "SportsTrackerLongestDistanceActivity",
+  "variant": "v3",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/SportsTrackerLongestDistanceActivity/v3_agent",
+  "step": 1,
+  "goal": "What was the longest distance covered in a cycling activity in the OpenTracks app this week? Assume the week starts from Monday. Express your answer as a single number in meters rounded to the nearest integer.",
+  "cid": "0002_s1_pre",
+  "history": [
+   "Open the OpenTracks app to view the cycling activities."
+  ],
+  "orig_slot": "SWIPE:down",
+  "orig_action": {
+   "action_type": "swipe",
+   "index": null,
+   "x": null,
+   "y": null,
+   "text": null,
+   "direction": "down",
+   "goal_status": null,
+   "app_name": null,
+   "keycode": null,
+   "clear_text": null
+  },
+  "episode_success": 0.0,
+  "evidence": [
+   "- Tapping \"Search\" at (784,211) -> same screen changes; keyboard appears; shows 'Clear query', 'Submit query'",
+   "- Tapping \"Markers\" at (911,211) -> opens MarkerListActivity; shows 'You don't have any markers'",
+   "- Tapping \"More options\" at (1027,211) -> same screen changes; shows 'Help', 'Settings'",
+   "- Tapping \"Track\" at (540,379) -> opens TrackRecordedActivity; shows 'By distance', 'By distance', 'By time', 'By time', 'Intervals'",
+   "- Tapping \"Track\" at (540,566) -> opens TrackRecordedActivity; shows 'By distance', 'By distance', 'By time', 'By time', 'Intervals'",
+   "- Tapping \"Track\" at (540,711) -> opens TrackRecordedActivity; shows 'By distance', 'By distance', 'By time', 'By time', 'Intervals'",
+   "- Tapping \"Track\" at (540,2082) -> opens TrackRecordedActivity; shows 'By distance', 'By distance', 'By time', 'By time', 'Intervals'"
+  ],
+  "struct": "fbd477ee1066e1d3",
+  "t": 1791839131.218836
+ },
+ {
+  "task": "SystemBluetoothTurnOn",
+  "variant": "v3",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/SystemBluetoothTurnOn/v3_agent",
+  "step": 2,
+  "goal": "Turn bluetooth on.",
+  "cid": "0010_s2_pre",
+  "history": [
+   "The task is to turn on Bluetooth. The first step is to open the Settings app.",
+   "The task is to turn on Bluetooth. I have successfully opened the Settings app and am now navigating to the 'Connected devices' section to find the Bluetooth toggle."
+  ],
+  "orig_slot": "LinearLayout|||Pair new device",
+  "orig_action": {
+   "action_type": "click",
+   "index": null,
+   "x": 370,
+   "y": 674,
+   "text": null,
+   "direction": null,
+   "goal_status": null,
+   "app_name": null,
+   "keycode": null,
+   "clear_text": null
+  },
+  "episode_success": 1.0,
+  "evidence": [
+   "- Tapping \"Navigate up\" at (73,201) -> same screen changes",
+   "- Tapping \"Pair new device\" at (540,701) -> same screen changes",
+   "- Tapping \"Use Bluetooth\" at (540,738) -> same screen changes",
+   "- Tapping \"Bluetooth\" at (540,786) -> same screen changes",
+   "- Tapping \"See all\" at (540,1042) -> same screen changes",
+   "- Tapping \"Connection preferences\" at (540,1248) -> same screen changes"
+  ],
+  "struct": "bb72c562111d7632",
+  "t": 1791836553.426359
+ },
+ {
+  "task": "SystemBluetoothTurnOn",
+  "variant": "v2",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/SystemBluetoothTurnOn/v2_agent",
+  "step": 3,
+  "goal": "Turn bluetooth on.",
+  "cid": "0015_s3_pre",
+  "history": [
+   "The task is to turn on Bluetooth. The first step is to open the Settings app.",
+   "The task is to turn on Bluetooth. I have successfully opened the Settings app and am now navigating to the 'Connected devices' section to find the Bluetooth controls.",
+   "The task is to turn on Bluetooth. I have opened the Settings app but accidentally navigated to the 'Printing' section. I am now going back to the main Settings menu to find the correct Bluetooth settings."
+  ],
+  "orig_slot": "LinearLayout|||Bluetooth",
+  "orig_action": {
+   "action_type": "click",
+   "index": null,
+   "x": 302,
+   "y": 787,
+   "text": null,
+   "direction": null,
+   "goal_status": null,
+   "app_name": null,
+   "keycode": null,
+   "clear_text": null
+  },
+  "episode_success": 1.0,
+  "evidence": [
+   "- Tapping \"Navigate up\" at (73,201) -> same screen changes",
+   "- Tapping \"Pair new device\" at (540,701) -> same screen changes",
+   "- Tapping \"Bluetooth\" at (540,786) -> same screen changes",
+   "- Tapping \"See all\" at (540,1042) -> same screen changes",
+   "- Tapping \"Connection preferences\" at (540,1248) -> same screen changes"
+  ],
+  "struct": "bb72c562111d7632",
+  "t": 1791836524.212481
+ },
+ {
+  "task": "TasksDueOnDate",
+  "variant": "v3",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/TasksDueOnDate/v3_agent",
+  "step": 4,
+  "goal": "What tasks do I have due October 21 2023 in Tasks app? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+  "cid": "0018_s4_pre",
+  "history": [
+   "The user wants to find tasks due on October 21, 2023, in the Tasks app. The first step is to open the app.",
+   "The user wants to find tasks due on October 21, 2023. I have opened the Tasks app and am now attempting to change the view to locate tasks for a specific date.",
+   "The user wants to find tasks due on October 21, 2023. The previous attempt to open the Tasks app failed, returning to the home screen. The current step is to try opening the Tasks app again.",
+   "The user wants to find tasks due on October 21, 2023. I have successfully opened the Tasks app and am now attempting to access the date filtering options to locate the relevant tasks."
+  ],
+  "orig_slot": "View|||Grouping",
+  "orig_action": {
+   "action_type": "click",
+   "index": null,
+   "x": 241,
+   "y": 1535,
+   "text": null,
+   "direction": null,
+   "goal_status": null,
+   "app_name": null,
+   "keycode": null,
+   "clear_text": null
+  },
+  "episode_success": 0.0,
+  "evidence": [
+   "- Tapping \"Drag handle\" at (539,637) -> opens MainActivity",
+   "- Tapping \"Grouping\" at (539,1540) -> same screen changes; shows 'By creation time', 'By last modified', 'By list', 'By priority', 'By start date'"
+  ],
+  "struct": "c230efadc737f0c9",
+  "t": 1791837412.491346
+ },
+ {
+  "task": "TasksDueOnDate",
+  "variant": "v3",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/TasksDueOnDate/v3_agent",
+  "step": 3,
+  "goal": "What tasks do I have due October 21 2023 in Tasks app? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+  "cid": "0017_s3_pre",
+  "history": [
+   "The user wants to find tasks due on October 21, 2023, in the Tasks app. The first step is to open the app.",
+   "The user wants to find tasks due on October 21, 2023. I have opened the Tasks app and am now attempting to change the view to locate tasks for a specific date.",
+   "The user wants to find tasks due on October 21, 2023. The previous attempt to open the Tasks app failed, returning to the home screen. The current step is to try opening the Tasks app again."
+  ],
+  "orig_slot": "Button|menu_sort|Sort|Sort",
+  "orig_action": {
+   "action_type": "click",
+   "index": null,
+   "x": 910,
+   "y": 2260,
+   "text": null,
+   "direction": null,
+   "goal_status": null,
+   "app_name": null,
+   "keycode": null,
+   "clear_text": null
+  },
+  "episode_success": 0.0,
+  "evidence": [
+   "- Tapping \"Search\" at (1016,201) -> same screen changes; keyboard appears",
+   "- Tapping \"Overdue\" at (540,348) -> same screen changes",
+   "- Tapping \"completeBox\" at (73,495) -> same screen changes",
+   "- Tapping \"Mon\" at (1002,494) -> same screen changes; shows 'CANCEL', 'Mon', 'Next Sun', 'Next month', 'No date'",
+   "- Tapping \"Tue\" at (1008,494) -> same screen changes; shows 'CANCEL', 'Next Sun', 'Next month', 'No date', 'No time'",
+   "- Tapping \"Research Vacation Destinations\" at (540,767) -> same screen changes",
+   "- Tapping \"Tue\" at (1008,1032) -> same screen changes; shows 'CANCEL', 'Next Sun', 'Next month', 'No date', 'No time'",
+   "- Tapping \"Thu\" at (1007,1301) -> same screen changes; shows 'CANCEL', 'Next Sun', 'Next month', 'No date', 'No time'",
+   "- Tapping \"Yest\" at (1002,1453) -> same screen changes; shows 'CANCEL', 'Next Sun', 'Next month', 'No date', 'No time'",
+   "- Tapping \"ImageButton\" at (73,2263) -> same screen changes; shows 'Default list', 'Donate', 'Filters', 'Help & feedback', 'Local lists'"
+  ],
+  "struct": "0123af1ec63ef6d4",
+  "t": 1791837407.974402
+ }
+]

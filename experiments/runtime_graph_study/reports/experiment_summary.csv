@@ -1,0 +1,15 @@
+task,app,ref_attempts,ref_success,explore_success,noexp_success,replay_strict_completed,replay_strict_task_success,replay_struct_completed,replay_struct_task_success,recovery_success,recovery_model_calls,errors
+ContactsAddContact,Contacts,1,1,5/5,4/4,4/4,0/4,4/4,0/4,0/0,0,0
+ExpenseAddSingle,Pro Expense,1,1,4/5,3/4,4/4,0/4,4/4,0/4,0/0,0,0
+ExpenseDeleteSingle,Pro Expense,1,1,5/5,4/4,4/4,4/4,4/4,4/4,0/0,0,0
+MarkorCreateNote,Markor,1,1,2/5,2/4,4/4,2/4,4/4,2/4,0/0,0,0
+MarkorDeleteNewestNote,Markor,1,1,1/5,2/4,0/4,0/4,0/4,0/4,3/4,16,0
+NotesTodoItemCount,Joplin,1,1,5/5,4/4,0/4,0/4,0/4,0/4,4/4,10,0
+OsmAndFavorite,OsmAnd,2,1,3/5,3/4,2/4,2/4,2/4,2/4,2/2,10,0
+RecipeDeleteMultipleRecipesWithConstraint,Broccoli,1,1,2/5,1/4,2/4,0/4,2/4,0/4,0/2,18,0
+RecipeDeleteSingleRecipe,Broccoli,1,1,5/5,4/4,4/4,4/4,4/4,4/4,0/0,0,0
+SimpleCalendarDeleteOneEvent,Simple Calendar Pro,1,1,3/5,4/4,0/4,0/4,0/4,0/4,4/4,20,0
+SimpleCalendarEventsOnDate,Simple Calendar Pro,1,1,2/5,3/4,4/4,0/4,0/4,0/4,2/4,13,0
+SportsTrackerLongestDistanceActivity,OpenTracks,1,1,1/5,1/4,4/4,0/4,4/4,0/4,0/0,0,0
+SystemBluetoothTurnOn,Settings,1,1,5/5,4/4,0/4,0/4,0/4,0/4,4/4,19,0
+TasksDueOnDate,Tasks,3,0,1/5,0/4,4/4,0/4,0/4,0/4,0/4,12,0

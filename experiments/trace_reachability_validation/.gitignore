@@ -1,0 +1,4 @@
+raw/
+logs/
+__pycache__/
+graph_snapshots/

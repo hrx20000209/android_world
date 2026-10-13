@@ -1,0 +1,581 @@
+task,variant,mode,ref_step,ref_post_cid,live_post_cid,category,slot_id
+ContactsAddContact,v1,replay_strict,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Contacts
+ContactsAddContact,v1,replay_strict,1,0003_s2_pre,0003_r2_pre,same_exact,ImageButton|floating_action_button|Create contact|Create contact
+ContactsAddContact,v1,replay_strict,2,0004_s3_pre,0004_r3_pre,same_exact,EditText|||First name
+ContactsAddContact,v1,replay_strict,3,0005_s4_pre,0005_r4_pre,same_exact,INPUT_TEXT:EditText|||First name
+ContactsAddContact,v1,replay_strict,4,0006_s5_pre,0006_r5_pre,same_exact,INPUT_TEXT:EditText|||Last name
+ContactsAddContact,v1,replay_strict,5,0007_s6_pre,0007_r6_pre,same_exact,EditText|||Phone
+ContactsAddContact,v1,replay_strict,6,0008_s7_pre,0008_r7_pre,same_struct_dynamic_content,INPUT_TEXT:EditText|||Phone
+ContactsAddContact,v1,replay_strict,7,0009_s8_pre,0009_r8_pre,same_struct_dynamic_content,Button|toolbar_button||Save
+ContactsAddContact,v1,replay_strict,8,0010_final,0010_final,same_struct_dynamic_content,STATUS
+ContactsAddContact,v1,replay_struct,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Contacts
+ContactsAddContact,v1,replay_struct,1,0003_s2_pre,0003_r2_pre,same_exact,ImageButton|floating_action_button|Create contact|Create contact
+ContactsAddContact,v1,replay_struct,2,0004_s3_pre,0004_r3_pre,same_exact,EditText|||First name
+ContactsAddContact,v1,replay_struct,3,0005_s4_pre,0005_r4_pre,same_exact,INPUT_TEXT:EditText|||First name
+ContactsAddContact,v1,replay_struct,4,0006_s5_pre,0006_r5_pre,same_exact,INPUT_TEXT:EditText|||Last name
+ContactsAddContact,v1,replay_struct,5,0007_s6_pre,0007_r6_pre,same_exact,EditText|||Phone
+ContactsAddContact,v1,replay_struct,6,0008_s7_pre,0008_r7_pre,same_struct_dynamic_content,INPUT_TEXT:EditText|||Phone
+ContactsAddContact,v1,replay_struct,7,0009_s8_pre,0009_r8_pre,same_struct_dynamic_content,Button|toolbar_button||Save
+ContactsAddContact,v1,replay_struct,8,0010_final,0010_final,same_struct_dynamic_content,STATUS
+ContactsAddContact,v2,replay_strict,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Contacts
+ContactsAddContact,v2,replay_strict,1,0003_s2_pre,0003_r2_pre,same_exact,ImageButton|floating_action_button|Create contact|Create contact
+ContactsAddContact,v2,replay_strict,2,0004_s3_pre,0004_r3_pre,same_exact,EditText|||First name
+ContactsAddContact,v2,replay_strict,3,0005_s4_pre,0005_r4_pre,same_exact,INPUT_TEXT:EditText|||First name
+ContactsAddContact,v2,replay_strict,4,0006_s5_pre,0006_r5_pre,same_exact,INPUT_TEXT:EditText|||Last name
+ContactsAddContact,v2,replay_strict,5,0007_s6_pre,0007_r6_pre,same_exact,EditText|||Phone
+ContactsAddContact,v2,replay_strict,6,0008_s7_pre,0008_r7_pre,same_struct_dynamic_content,INPUT_TEXT:EditText|||Phone
+ContactsAddContact,v2,replay_strict,7,0009_s8_pre,0009_r8_pre,same_struct_dynamic_content,Button|toolbar_button||Save
+ContactsAddContact,v2,replay_strict,8,0010_final,0010_final,same_struct_dynamic_content,STATUS
+ContactsAddContact,v2,replay_struct,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Contacts
+ContactsAddContact,v2,replay_struct,1,0003_s2_pre,0003_r2_pre,same_exact,ImageButton|floating_action_button|Create contact|Create contact
+ContactsAddContact,v2,replay_struct,2,0004_s3_pre,0004_r3_pre,same_exact,EditText|||First name
+ContactsAddContact,v2,replay_struct,3,0005_s4_pre,0005_r4_pre,same_exact,INPUT_TEXT:EditText|||First name
+ContactsAddContact,v2,replay_struct,4,0006_s5_pre,0006_r5_pre,same_exact,INPUT_TEXT:EditText|||Last name
+ContactsAddContact,v2,replay_struct,5,0007_s6_pre,0007_r6_pre,same_exact,EditText|||Phone
+ContactsAddContact,v2,replay_struct,6,0008_s7_pre,0008_r7_pre,same_struct_dynamic_content,INPUT_TEXT:EditText|||Phone
+ContactsAddContact,v2,replay_struct,7,0009_s8_pre,0009_r8_pre,same_struct_dynamic_content,Button|toolbar_button||Save
+ContactsAddContact,v2,replay_struct,8,0010_final,0010_final,same_struct_dynamic_content,STATUS
+ContactsAddContact,v3,replay_strict,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Contacts
+ContactsAddContact,v3,replay_strict,1,0003_s2_pre,0003_r2_pre,same_exact,ImageButton|floating_action_button|Create contact|Create contact
+ContactsAddContact,v3,replay_strict,2,0004_s3_pre,0004_r3_pre,same_exact,EditText|||First name
+ContactsAddContact,v3,replay_strict,3,0005_s4_pre,0005_r4_pre,same_exact,INPUT_TEXT:EditText|||First name
+ContactsAddContact,v3,replay_strict,4,0006_s5_pre,0006_r5_pre,same_exact,INPUT_TEXT:EditText|||Last name
+ContactsAddContact,v3,replay_strict,5,0007_s6_pre,0007_r6_pre,same_exact,EditText|||Phone
+ContactsAddContact,v3,replay_strict,6,0008_s7_pre,0008_r7_pre,same_struct_dynamic_content,INPUT_TEXT:EditText|||Phone
+ContactsAddContact,v3,replay_strict,7,0009_s8_pre,0009_r8_pre,same_struct_dynamic_content,Button|toolbar_button||Save
+ContactsAddContact,v3,replay_strict,8,0010_final,0010_final,same_struct_dynamic_content,STATUS
+ContactsAddContact,v3,replay_struct,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Contacts
+ContactsAddContact,v3,replay_struct,1,0003_s2_pre,0003_r2_pre,same_exact,ImageButton|floating_action_button|Create contact|Create contact
+ContactsAddContact,v3,replay_struct,2,0004_s3_pre,0004_r3_pre,same_exact,EditText|||First name
+ContactsAddContact,v3,replay_struct,3,0005_s4_pre,0005_r4_pre,same_exact,INPUT_TEXT:EditText|||First name
+ContactsAddContact,v3,replay_struct,4,0006_s5_pre,0006_r5_pre,same_exact,INPUT_TEXT:EditText|||Last name
+ContactsAddContact,v3,replay_struct,5,0007_s6_pre,0007_r6_pre,same_exact,EditText|||Phone
+ContactsAddContact,v3,replay_struct,6,0008_s7_pre,0008_r7_pre,same_struct_dynamic_content,INPUT_TEXT:EditText|||Phone
+ContactsAddContact,v3,replay_struct,7,0009_s8_pre,0009_r8_pre,same_struct_dynamic_content,Button|toolbar_button||Save
+ContactsAddContact,v3,replay_struct,8,0010_final,0010_final,same_struct_dynamic_content,STATUS
+ContactsAddContact,v4,replay_strict,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Contacts
+ContactsAddContact,v4,replay_strict,1,0003_s2_pre,0003_r2_pre,same_exact,ImageButton|floating_action_button|Create contact|Create contact
+ContactsAddContact,v4,replay_strict,2,0004_s3_pre,0004_r3_pre,same_exact,EditText|||First name
+ContactsAddContact,v4,replay_strict,3,0005_s4_pre,0005_r4_pre,same_exact,INPUT_TEXT:EditText|||First name
+ContactsAddContact,v4,replay_strict,4,0006_s5_pre,0006_r5_pre,same_exact,INPUT_TEXT:EditText|||Last name
+ContactsAddContact,v4,replay_strict,5,0007_s6_pre,0007_r6_pre,same_exact,EditText|||Phone
+ContactsAddContact,v4,replay_strict,6,0008_s7_pre,0008_r7_pre,same_struct_dynamic_content,INPUT_TEXT:EditText|||Phone
+ContactsAddContact,v4,replay_strict,7,0009_s8_pre,0009_r8_pre,same_struct_dynamic_content,Button|toolbar_button||Save
+ContactsAddContact,v4,replay_strict,8,0010_final,0010_final,same_struct_dynamic_content,STATUS
+ContactsAddContact,v4,replay_struct,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Contacts
+ContactsAddContact,v4,replay_struct,1,0003_s2_pre,0003_r2_pre,same_exact,ImageButton|floating_action_button|Create contact|Create contact
+ContactsAddContact,v4,replay_struct,2,0004_s3_pre,0004_r3_pre,same_exact,EditText|||First name
+ContactsAddContact,v4,replay_struct,3,0005_s4_pre,0005_r4_pre,same_exact,INPUT_TEXT:EditText|||First name
+ContactsAddContact,v4,replay_struct,4,0006_s5_pre,0006_r5_pre,same_exact,INPUT_TEXT:EditText|||Last name
+ContactsAddContact,v4,replay_struct,5,0007_s6_pre,0007_r6_pre,same_exact,EditText|||Phone
+ContactsAddContact,v4,replay_struct,6,0008_s7_pre,0008_r7_pre,same_struct_dynamic_content,INPUT_TEXT:EditText|||Phone
+ContactsAddContact,v4,replay_struct,7,0009_s8_pre,0009_r8_pre,same_struct_dynamic_content,Button|toolbar_button||Save
+ContactsAddContact,v4,replay_struct,8,0010_final,0010_final,same_struct_dynamic_content,STATUS
+ExpenseAddSingle,v1,replay_strict,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Pro Expense
+ExpenseAddSingle,v1,replay_strict,1,0003_s2_pre,0003_r2_pre,same_exact,ImageButton|fb_main_add||
+ExpenseAddSingle,v1,replay_strict,2,0004_s3_pre,0004_r3_pre,same_exact,EditText|edt_name||Name
+ExpenseAddSingle,v1,replay_strict,3,0005_s4_pre,0005_r4_pre,same_struct_dynamic_content,INPUT_TEXT
+ExpenseAddSingle,v1,replay_strict,4,0006_s5_pre,0006_r5_pre,same_struct_dynamic_content,INPUT_TEXT:EditText|edt_amount||Amount
+ExpenseAddSingle,v1,replay_strict,5,0007_s6_pre,0007_r6_pre,same_struct_dynamic_content,CardView|cd_category||Housing
+ExpenseAddSingle,v1,replay_strict,6,0008_s7_pre,0008_r7_pre,same_struct_dynamic_content,INPUT_TEXT
+ExpenseAddSingle,v1,replay_strict,7,0009_s8_pre,0009_r8_pre,same_struct_dynamic_content,Button|btn_save||SAVE
+ExpenseAddSingle,v1,replay_strict,8,0010_final,0010_final,same_struct_dynamic_content,STATUS
+ExpenseAddSingle,v1,replay_struct,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Pro Expense
+ExpenseAddSingle,v1,replay_struct,1,0003_s2_pre,0003_r2_pre,same_exact,ImageButton|fb_main_add||
+ExpenseAddSingle,v1,replay_struct,2,0004_s3_pre,0004_r3_pre,same_exact,EditText|edt_name||Name
+ExpenseAddSingle,v1,replay_struct,3,0005_s4_pre,0005_r4_pre,same_struct_dynamic_content,INPUT_TEXT
+ExpenseAddSingle,v1,replay_struct,4,0006_s5_pre,0006_r5_pre,same_struct_dynamic_content,INPUT_TEXT:EditText|edt_amount||Amount
+ExpenseAddSingle,v1,replay_struct,5,0007_s6_pre,0007_r6_pre,same_struct_dynamic_content,CardView|cd_category||Housing
+ExpenseAddSingle,v1,replay_struct,6,0008_s7_pre,0008_r7_pre,same_struct_dynamic_content,INPUT_TEXT
+ExpenseAddSingle,v1,replay_struct,7,0009_s8_pre,0009_r8_pre,same_struct_dynamic_content,Button|btn_save||SAVE
+ExpenseAddSingle,v1,replay_struct,8,0010_final,0010_final,same_struct_dynamic_content,STATUS
+ExpenseAddSingle,v2,replay_strict,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Pro Expense
+ExpenseAddSingle,v2,replay_strict,1,0003_s2_pre,0003_r2_pre,same_exact,ImageButton|fb_main_add||
+ExpenseAddSingle,v2,replay_strict,2,0004_s3_pre,0004_r3_pre,same_exact,EditText|edt_name||Name
+ExpenseAddSingle,v2,replay_strict,3,0005_s4_pre,0005_r4_pre,same_struct_dynamic_content,INPUT_TEXT
+ExpenseAddSingle,v2,replay_strict,4,0006_s5_pre,0006_r5_pre,same_struct_dynamic_content,INPUT_TEXT:EditText|edt_amount||Amount
+ExpenseAddSingle,v2,replay_strict,5,0007_s6_pre,0007_r6_pre,same_struct_dynamic_content,CardView|cd_category||Housing
+ExpenseAddSingle,v2,replay_strict,6,0008_s7_pre,0008_r7_pre,same_struct_dynamic_content,INPUT_TEXT
+ExpenseAddSingle,v2,replay_strict,7,0009_s8_pre,0009_r8_pre,same_struct_dynamic_content,Button|btn_save||SAVE
+ExpenseAddSingle,v2,replay_strict,8,0010_final,0010_final,same_struct_dynamic_content,STATUS
+ExpenseAddSingle,v2,replay_struct,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Pro Expense
+ExpenseAddSingle,v2,replay_struct,1,0003_s2_pre,0003_r2_pre,same_exact,ImageButton|fb_main_add||
+ExpenseAddSingle,v2,replay_struct,2,0004_s3_pre,0004_r3_pre,same_exact,EditText|edt_name||Name
+ExpenseAddSingle,v2,replay_struct,3,0005_s4_pre,0005_r4_pre,same_struct_dynamic_content,INPUT_TEXT
+ExpenseAddSingle,v2,replay_struct,4,0006_s5_pre,0006_r5_pre,same_struct_dynamic_content,INPUT_TEXT:EditText|edt_amount||Amount
+ExpenseAddSingle,v2,replay_struct,5,0007_s6_pre,0007_r6_pre,same_struct_dynamic_content,CardView|cd_category||Housing
+ExpenseAddSingle,v2,replay_struct,6,0008_s7_pre,0008_r7_pre,same_struct_dynamic_content,INPUT_TEXT
+ExpenseAddSingle,v2,replay_struct,7,0009_s8_pre,0009_r8_pre,same_struct_dynamic_content,Button|btn_save||SAVE
+ExpenseAddSingle,v2,replay_struct,8,0010_final,0010_final,same_struct_dynamic_content,STATUS
+ExpenseAddSingle,v3,replay_strict,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Pro Expense
+ExpenseAddSingle,v3,replay_strict,1,0003_s2_pre,0003_r2_pre,same_exact,ImageButton|fb_main_add||
+ExpenseAddSingle,v3,replay_strict,2,0004_s3_pre,0004_r3_pre,same_exact,EditText|edt_name||Name
+ExpenseAddSingle,v3,replay_strict,3,0005_s4_pre,0005_r4_pre,same_struct_dynamic_content,INPUT_TEXT
+ExpenseAddSingle,v3,replay_strict,4,0006_s5_pre,0006_r5_pre,same_struct_dynamic_content,INPUT_TEXT:EditText|edt_amount||Amount
+ExpenseAddSingle,v3,replay_strict,5,0007_s6_pre,0007_r6_pre,same_struct_dynamic_content,CardView|cd_category||Housing
+ExpenseAddSingle,v3,replay_strict,6,0008_s7_pre,0008_r7_pre,same_struct_dynamic_content,INPUT_TEXT
+ExpenseAddSingle,v3,replay_strict,7,0009_s8_pre,0009_r8_pre,same_struct_dynamic_content,Button|btn_save||SAVE
+ExpenseAddSingle,v3,replay_strict,8,0010_final,0010_final,same_struct_dynamic_content,STATUS
+ExpenseAddSingle,v3,replay_struct,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Pro Expense
+ExpenseAddSingle,v3,replay_struct,1,0003_s2_pre,0003_r2_pre,same_exact,ImageButton|fb_main_add||
+ExpenseAddSingle,v3,replay_struct,2,0004_s3_pre,0004_r3_pre,same_exact,EditText|edt_name||Name
+ExpenseAddSingle,v3,replay_struct,3,0005_s4_pre,0005_r4_pre,same_struct_dynamic_content,INPUT_TEXT
+ExpenseAddSingle,v3,replay_struct,4,0006_s5_pre,0006_r5_pre,same_struct_dynamic_content,INPUT_TEXT:EditText|edt_amount||Amount
+ExpenseAddSingle,v3,replay_struct,5,0007_s6_pre,0007_r6_pre,same_struct_dynamic_content,CardView|cd_category||Housing
+ExpenseAddSingle,v3,replay_struct,6,0008_s7_pre,0008_r7_pre,same_struct_dynamic_content,INPUT_TEXT
+ExpenseAddSingle,v3,replay_struct,7,0009_s8_pre,0009_r8_pre,same_struct_dynamic_content,Button|btn_save||SAVE
+ExpenseAddSingle,v3,replay_struct,8,0010_final,0010_final,same_struct_dynamic_content,STATUS
+ExpenseAddSingle,v4,replay_strict,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Pro Expense
+ExpenseAddSingle,v4,replay_strict,1,0003_s2_pre,0003_r2_pre,same_exact,ImageButton|fb_main_add||
+ExpenseAddSingle,v4,replay_strict,2,0004_s3_pre,0004_r3_pre,same_exact,EditText|edt_name||Name
+ExpenseAddSingle,v4,replay_strict,3,0005_s4_pre,0005_r4_pre,same_struct_dynamic_content,INPUT_TEXT
+ExpenseAddSingle,v4,replay_strict,4,0006_s5_pre,0006_r5_pre,same_struct_dynamic_content,INPUT_TEXT:EditText|edt_amount||Amount
+ExpenseAddSingle,v4,replay_strict,5,0007_s6_pre,0007_r6_pre,same_struct_dynamic_content,CardView|cd_category||Housing
+ExpenseAddSingle,v4,replay_strict,6,0008_s7_pre,0008_r7_pre,same_struct_dynamic_content,INPUT_TEXT
+ExpenseAddSingle,v4,replay_strict,7,0009_s8_pre,0009_r8_pre,same_struct_dynamic_content,Button|btn_save||SAVE
+ExpenseAddSingle,v4,replay_strict,8,0010_final,0010_final,same_struct_dynamic_content,STATUS
+ExpenseAddSingle,v4,replay_struct,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Pro Expense
+ExpenseAddSingle,v4,replay_struct,1,0003_s2_pre,0003_r2_pre,same_exact,ImageButton|fb_main_add||
+ExpenseAddSingle,v4,replay_struct,2,0004_s3_pre,0004_r3_pre,same_exact,EditText|edt_name||Name
+ExpenseAddSingle,v4,replay_struct,3,0005_s4_pre,0005_r4_pre,same_struct_dynamic_content,INPUT_TEXT
+ExpenseAddSingle,v4,replay_struct,4,0006_s5_pre,0006_r5_pre,same_struct_dynamic_content,INPUT_TEXT:EditText|edt_amount||Amount
+ExpenseAddSingle,v4,replay_struct,5,0007_s6_pre,0007_r6_pre,same_struct_dynamic_content,CardView|cd_category||Housing
+ExpenseAddSingle,v4,replay_struct,6,0008_s7_pre,0008_r7_pre,same_struct_dynamic_content,INPUT_TEXT
+ExpenseAddSingle,v4,replay_struct,7,0009_s8_pre,0009_r8_pre,same_struct_dynamic_content,Button|btn_save||SAVE
+ExpenseAddSingle,v4,replay_struct,8,0010_final,0010_final,same_struct_dynamic_content,STATUS
+ExpenseDeleteSingle,v1,replay_strict,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:Pro Expense
+ExpenseDeleteSingle,v1,replay_strict,1,0003_s2_pre,0003_r2_pre,same_layout_ambiguous,RelativeLayout|cd_expense||Parking Fees
+ExpenseDeleteSingle,v1,replay_strict,2,0004_s3_pre,0004_r3_pre,same_exact,ImageView|btn_delete||
+ExpenseDeleteSingle,v1,replay_strict,3,0005_s4_pre,0005_r4_pre,same_exact,Button|btn_confirm||CONFIRM
+ExpenseDeleteSingle,v1,replay_strict,4,0006_final,0006_final,same_exact,STATUS
+ExpenseDeleteSingle,v1,replay_struct,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:Pro Expense
+ExpenseDeleteSingle,v1,replay_struct,1,0003_s2_pre,0003_r2_pre,same_layout_ambiguous,RelativeLayout|cd_expense||Parking Fees
+ExpenseDeleteSingle,v1,replay_struct,2,0004_s3_pre,0004_r3_pre,same_exact,ImageView|btn_delete||
+ExpenseDeleteSingle,v1,replay_struct,3,0005_s4_pre,0005_r4_pre,same_exact,Button|btn_confirm||CONFIRM
+ExpenseDeleteSingle,v1,replay_struct,4,0006_final,0006_final,same_exact,STATUS
+ExpenseDeleteSingle,v2,replay_strict,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:Pro Expense
+ExpenseDeleteSingle,v2,replay_strict,1,0003_s2_pre,0003_r2_pre,same_layout_ambiguous,RelativeLayout|cd_expense||Streaming Services
+ExpenseDeleteSingle,v2,replay_strict,2,0004_s3_pre,0004_r3_pre,same_exact,ImageView|btn_delete||
+ExpenseDeleteSingle,v2,replay_strict,3,0005_s4_pre,0005_r4_pre,same_exact,Button|btn_confirm||CONFIRM
+ExpenseDeleteSingle,v2,replay_strict,4,0006_final,0006_final,same_exact,STATUS
+ExpenseDeleteSingle,v2,replay_struct,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:Pro Expense
+ExpenseDeleteSingle,v2,replay_struct,1,0003_s2_pre,0003_r2_pre,same_layout_ambiguous,RelativeLayout|cd_expense||Streaming Services
+ExpenseDeleteSingle,v2,replay_struct,2,0004_s3_pre,0004_r3_pre,same_exact,ImageView|btn_delete||
+ExpenseDeleteSingle,v2,replay_struct,3,0005_s4_pre,0005_r4_pre,same_exact,Button|btn_confirm||CONFIRM
+ExpenseDeleteSingle,v2,replay_struct,4,0006_final,0006_final,same_exact,STATUS
+ExpenseDeleteSingle,v3,replay_strict,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:Pro Expense
+ExpenseDeleteSingle,v3,replay_strict,1,0003_s2_pre,0003_r2_pre,same_layout_ambiguous,RelativeLayout|cd_expense||ProDev
+ExpenseDeleteSingle,v3,replay_strict,2,0004_s3_pre,0004_r3_pre,same_exact,ImageView|btn_delete||
+ExpenseDeleteSingle,v3,replay_strict,3,0005_s4_pre,0005_r4_pre,same_exact,Button|btn_confirm||CONFIRM
+ExpenseDeleteSingle,v3,replay_strict,4,0006_final,0006_final,same_exact,STATUS
+ExpenseDeleteSingle,v3,replay_struct,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:Pro Expense
+ExpenseDeleteSingle,v3,replay_struct,1,0003_s2_pre,0003_r2_pre,same_layout_ambiguous,RelativeLayout|cd_expense||ProDev
+ExpenseDeleteSingle,v3,replay_struct,2,0004_s3_pre,0004_r3_pre,same_exact,ImageView|btn_delete||
+ExpenseDeleteSingle,v3,replay_struct,3,0005_s4_pre,0005_r4_pre,same_exact,Button|btn_confirm||CONFIRM
+ExpenseDeleteSingle,v3,replay_struct,4,0006_final,0006_final,same_exact,STATUS
+ExpenseDeleteSingle,v4,replay_strict,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:Pro Expense
+ExpenseDeleteSingle,v4,replay_strict,1,0003_s2_pre,0003_r2_pre,same_layout_ambiguous,RelativeLayout|cd_expense||Gym Membership
+ExpenseDeleteSingle,v4,replay_strict,2,0004_s3_pre,0004_r3_pre,same_exact,ImageView|btn_delete||
+ExpenseDeleteSingle,v4,replay_strict,3,0005_s4_pre,0005_r4_pre,same_exact,Button|btn_confirm||CONFIRM
+ExpenseDeleteSingle,v4,replay_strict,4,0006_final,0006_final,same_exact,STATUS
+ExpenseDeleteSingle,v4,replay_struct,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:Pro Expense
+ExpenseDeleteSingle,v4,replay_struct,1,0003_s2_pre,0003_r2_pre,same_layout_ambiguous,RelativeLayout|cd_expense||Gym Membership
+ExpenseDeleteSingle,v4,replay_struct,2,0004_s3_pre,0004_r3_pre,same_exact,ImageView|btn_delete||
+ExpenseDeleteSingle,v4,replay_struct,3,0005_s4_pre,0005_r4_pre,same_exact,Button|btn_confirm||CONFIRM
+ExpenseDeleteSingle,v4,replay_struct,4,0006_final,0006_final,same_exact,STATUS
+MarkorCreateNote,v1,replay_strict,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Markor
+MarkorCreateNote,v1,replay_strict,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,ImageButton|fab_add_new_item|Create a new file or folder|Create a new file or folder
+MarkorCreateNote,v1,replay_strict,2,0004_s3_pre,0004_r3_pre,same_struct_dynamic_content,INPUT_TEXT
+MarkorCreateNote,v1,replay_strict,3,0005_s4_pre,0005_r4_pre,same_layout_ambiguous,Button|button1||OK
+MarkorCreateNote,v1,replay_strict,4,0006_s5_pre,0006_r5_pre,same_layout_ambiguous,INPUT_TEXT
+MarkorCreateNote,v1,replay_strict,5,0007_s6_pre,0007_r6_pre,same_layout_ambiguous,TextView|action_save|Save|Save
+MarkorCreateNote,v1,replay_strict,6,0008_final,0008_final,same_layout_ambiguous,STATUS
+MarkorCreateNote,v1,replay_struct,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Markor
+MarkorCreateNote,v1,replay_struct,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,ImageButton|fab_add_new_item|Create a new file or folder|Create a new file or folder
+MarkorCreateNote,v1,replay_struct,2,0004_s3_pre,0004_r3_pre,same_struct_dynamic_content,INPUT_TEXT
+MarkorCreateNote,v1,replay_struct,3,0005_s4_pre,0005_r4_pre,same_layout_ambiguous,Button|button1||OK
+MarkorCreateNote,v1,replay_struct,4,0006_s5_pre,0006_r5_pre,same_layout_ambiguous,INPUT_TEXT
+MarkorCreateNote,v1,replay_struct,5,0007_s6_pre,0007_r6_pre,same_layout_ambiguous,TextView|action_save|Save|Save
+MarkorCreateNote,v1,replay_struct,6,0008_final,0008_final,same_layout_ambiguous,STATUS
+MarkorCreateNote,v2,replay_strict,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Markor
+MarkorCreateNote,v2,replay_strict,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,ImageButton|fab_add_new_item|Create a new file or folder|Create a new file or folder
+MarkorCreateNote,v2,replay_strict,2,0004_s3_pre,0004_r3_pre,same_struct_dynamic_content,INPUT_TEXT
+MarkorCreateNote,v2,replay_strict,3,0005_s4_pre,0005_r4_pre,same_layout_ambiguous,Button|button1||OK
+MarkorCreateNote,v2,replay_strict,4,0006_s5_pre,0006_r5_pre,same_layout_ambiguous,INPUT_TEXT
+MarkorCreateNote,v2,replay_strict,5,0007_s6_pre,0007_r6_pre,same_layout_ambiguous,TextView|action_save|Save|Save
+MarkorCreateNote,v2,replay_strict,6,0008_final,0008_final,same_layout_ambiguous,STATUS
+MarkorCreateNote,v2,replay_struct,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Markor
+MarkorCreateNote,v2,replay_struct,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,ImageButton|fab_add_new_item|Create a new file or folder|Create a new file or folder
+MarkorCreateNote,v2,replay_struct,2,0004_s3_pre,0004_r3_pre,same_struct_dynamic_content,INPUT_TEXT
+MarkorCreateNote,v2,replay_struct,3,0005_s4_pre,0005_r4_pre,same_layout_ambiguous,Button|button1||OK
+MarkorCreateNote,v2,replay_struct,4,0006_s5_pre,0006_r5_pre,same_layout_ambiguous,INPUT_TEXT
+MarkorCreateNote,v2,replay_struct,5,0007_s6_pre,0007_r6_pre,same_layout_ambiguous,TextView|action_save|Save|Save
+MarkorCreateNote,v2,replay_struct,6,0008_final,0008_final,same_layout_ambiguous,STATUS
+MarkorCreateNote,v3,replay_strict,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Markor
+MarkorCreateNote,v3,replay_strict,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,ImageButton|fab_add_new_item|Create a new file or folder|Create a new file or folder
+MarkorCreateNote,v3,replay_strict,2,0004_s3_pre,0004_r3_pre,same_struct_dynamic_content,INPUT_TEXT
+MarkorCreateNote,v3,replay_strict,3,0005_s4_pre,0005_r4_pre,same_layout_ambiguous,Button|button1||OK
+MarkorCreateNote,v3,replay_strict,4,0006_s5_pre,0006_r5_pre,same_layout_ambiguous,INPUT_TEXT
+MarkorCreateNote,v3,replay_strict,5,0007_s6_pre,0007_r6_pre,same_layout_ambiguous,TextView|action_save|Save|Save
+MarkorCreateNote,v3,replay_strict,6,0008_final,0008_final,same_layout_ambiguous,STATUS
+MarkorCreateNote,v3,replay_struct,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Markor
+MarkorCreateNote,v3,replay_struct,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,ImageButton|fab_add_new_item|Create a new file or folder|Create a new file or folder
+MarkorCreateNote,v3,replay_struct,2,0004_s3_pre,0004_r3_pre,same_struct_dynamic_content,INPUT_TEXT
+MarkorCreateNote,v3,replay_struct,3,0005_s4_pre,0005_r4_pre,same_layout_ambiguous,Button|button1||OK
+MarkorCreateNote,v3,replay_struct,4,0006_s5_pre,0006_r5_pre,same_layout_ambiguous,INPUT_TEXT
+MarkorCreateNote,v3,replay_struct,5,0007_s6_pre,0007_r6_pre,same_layout_ambiguous,TextView|action_save|Save|Save
+MarkorCreateNote,v3,replay_struct,6,0008_final,0008_final,same_layout_ambiguous,STATUS
+MarkorCreateNote,v4,replay_strict,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Markor
+MarkorCreateNote,v4,replay_strict,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,ImageButton|fab_add_new_item|Create a new file or folder|Create a new file or folder
+MarkorCreateNote,v4,replay_strict,2,0004_s3_pre,0004_r3_pre,same_struct_dynamic_content,INPUT_TEXT
+MarkorCreateNote,v4,replay_strict,3,0005_s4_pre,0005_r4_pre,same_layout_ambiguous,Button|button1||OK
+MarkorCreateNote,v4,replay_strict,4,0006_s5_pre,0006_r5_pre,same_layout_ambiguous,INPUT_TEXT
+MarkorCreateNote,v4,replay_strict,5,0007_s6_pre,0007_r6_pre,same_layout_ambiguous,TextView|action_save|Save|Save
+MarkorCreateNote,v4,replay_strict,6,0008_final,0008_final,same_layout_ambiguous,STATUS
+MarkorCreateNote,v4,replay_struct,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Markor
+MarkorCreateNote,v4,replay_struct,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,ImageButton|fab_add_new_item|Create a new file or folder|Create a new file or folder
+MarkorCreateNote,v4,replay_struct,2,0004_s3_pre,0004_r3_pre,same_struct_dynamic_content,INPUT_TEXT
+MarkorCreateNote,v4,replay_struct,3,0005_s4_pre,0005_r4_pre,same_layout_ambiguous,Button|button1||OK
+MarkorCreateNote,v4,replay_struct,4,0006_s5_pre,0006_r5_pre,same_layout_ambiguous,INPUT_TEXT
+MarkorCreateNote,v4,replay_struct,5,0007_s6_pre,0007_r6_pre,same_layout_ambiguous,TextView|action_save|Save|Save
+MarkorCreateNote,v4,replay_struct,6,0008_final,0008_final,same_layout_ambiguous,STATUS
+MarkorDeleteNewestNote,v1,replay_strict,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Markor
+MarkorDeleteNewestNote,v1,replay_strict,0,0002_s1_pre,0003_final,same_struct_dynamic_content,OPEN_APP:Markor
+MarkorDeleteNewestNote,v1,replay_struct,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Markor
+MarkorDeleteNewestNote,v1,replay_struct,0,0002_s1_pre,0003_final,same_struct_dynamic_content,OPEN_APP:Markor
+MarkorDeleteNewestNote,v2,replay_strict,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Markor
+MarkorDeleteNewestNote,v2,replay_strict,0,0002_s1_pre,0003_final,same_struct_dynamic_content,OPEN_APP:Markor
+MarkorDeleteNewestNote,v2,replay_struct,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Markor
+MarkorDeleteNewestNote,v2,replay_struct,0,0002_s1_pre,0003_final,same_struct_dynamic_content,OPEN_APP:Markor
+MarkorDeleteNewestNote,v3,replay_strict,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Markor
+MarkorDeleteNewestNote,v3,replay_strict,0,0002_s1_pre,0003_final,same_struct_dynamic_content,OPEN_APP:Markor
+MarkorDeleteNewestNote,v3,replay_struct,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Markor
+MarkorDeleteNewestNote,v3,replay_struct,0,0002_s1_pre,0003_final,same_struct_dynamic_content,OPEN_APP:Markor
+MarkorDeleteNewestNote,v4,replay_strict,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Markor
+MarkorDeleteNewestNote,v4,replay_strict,0,0002_s1_pre,0003_final,same_struct_dynamic_content,OPEN_APP:Markor
+MarkorDeleteNewestNote,v4,replay_struct,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Markor
+MarkorDeleteNewestNote,v4,replay_struct,0,0002_s1_pre,0003_final,same_struct_dynamic_content,OPEN_APP:Markor
+NotesTodoItemCount,v1,replay_strict,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:Joplin
+NotesTodoItemCount,v1,replay_strict,1,0003_s2_pre,0003_r2_pre,same_layout_ambiguous,ViewGroup|||
+NotesTodoItemCount,v1,replay_strict,1,0003_s2_pre,0004_final,same_layout_ambiguous,ViewGroup|||
+NotesTodoItemCount,v1,replay_struct,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:Joplin
+NotesTodoItemCount,v1,replay_struct,0,0002_s1_pre,0003_final,same_layout_ambiguous,OPEN_APP:Joplin
+NotesTodoItemCount,v2,replay_strict,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:Joplin
+NotesTodoItemCount,v2,replay_strict,1,0003_s2_pre,0003_r2_pre,same_layout_ambiguous,ViewGroup|||
+NotesTodoItemCount,v2,replay_strict,1,0003_s2_pre,0004_final,same_layout_ambiguous,ViewGroup|||
+NotesTodoItemCount,v2,replay_struct,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:Joplin
+NotesTodoItemCount,v2,replay_struct,0,0002_s1_pre,0003_final,same_layout_ambiguous,OPEN_APP:Joplin
+NotesTodoItemCount,v3,replay_strict,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:Joplin
+NotesTodoItemCount,v3,replay_strict,1,0003_s2_pre,0003_r2_pre,same_layout_ambiguous,ViewGroup|||
+NotesTodoItemCount,v3,replay_strict,1,0003_s2_pre,0004_final,same_layout_ambiguous,ViewGroup|||
+NotesTodoItemCount,v3,replay_struct,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:Joplin
+NotesTodoItemCount,v3,replay_struct,0,0002_s1_pre,0003_final,same_layout_ambiguous,OPEN_APP:Joplin
+NotesTodoItemCount,v4,replay_strict,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Joplin
+NotesTodoItemCount,v4,replay_strict,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,ViewGroup|||
+NotesTodoItemCount,v4,replay_strict,1,0003_s2_pre,0004_final,same_struct_dynamic_content,ViewGroup|||
+NotesTodoItemCount,v4,replay_struct,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Joplin
+NotesTodoItemCount,v4,replay_struct,0,0002_s1_pre,0003_final,same_struct_dynamic_content,OPEN_APP:Joplin
+OsmAndFavorite,v1,replay_strict,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:OsmAnd
+OsmAndFavorite,v1,replay_strict,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,ImageButton|map_search_button|Search|Search
+OsmAndFavorite,v1,replay_strict,2,0004_s3_pre,0004_r3_pre,same_struct_dynamic_content,INPUT_TEXT
+OsmAndFavorite,v1,replay_strict,3,0005_s4_pre,0005_r4_pre,same_exact,TextView|title||Liechtenstein
+OsmAndFavorite,v1,replay_strict,4,0006_s5_pre,0006_r5_pre,same_exact,View|MapLayersView|Map|Map
+OsmAndFavorite,v1,replay_strict,5,0007_s6_pre,0007_r6_pre,same_struct_dynamic_content,INPUT_TEXT
+OsmAndFavorite,v1,replay_strict,6,0008_s7_pre,0008_r7_pre,same_struct_dynamic_content,LONG_PRESS:View|MapLayersView|Map|Map
+OsmAndFavorite,v1,replay_strict,7,0009_s8_pre,0009_r8_pre,same_struct_dynamic_content,INPUT_TEXT
+OsmAndFavorite,v1,replay_strict,8,0010_s9_pre,0010_r9_pre,same_layout_ambiguous,ImageButton|map_my_location_button|Position not yet known.|Position not yet known.
+OsmAndFavorite,v1,replay_strict,9,0011_final,0011_final,same_layout_ambiguous,STATUS
+OsmAndFavorite,v1,replay_struct,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:OsmAnd
+OsmAndFavorite,v1,replay_struct,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,ImageButton|map_search_button|Search|Search
+OsmAndFavorite,v1,replay_struct,2,0004_s3_pre,0004_r3_pre,same_struct_dynamic_content,INPUT_TEXT
+OsmAndFavorite,v1,replay_struct,3,0005_s4_pre,0005_r4_pre,same_exact,TextView|title||Liechtenstein
+OsmAndFavorite,v1,replay_struct,4,0006_s5_pre,0006_r5_pre,same_exact,View|MapLayersView|Map|Map
+OsmAndFavorite,v1,replay_struct,5,0007_s6_pre,0007_r6_pre,same_struct_dynamic_content,INPUT_TEXT
+OsmAndFavorite,v1,replay_struct,6,0008_s7_pre,0008_r7_pre,same_struct_dynamic_content,LONG_PRESS:View|MapLayersView|Map|Map
+OsmAndFavorite,v1,replay_struct,7,0009_s8_pre,0009_r8_pre,same_struct_dynamic_content,INPUT_TEXT
+OsmAndFavorite,v1,replay_struct,8,0010_s9_pre,0010_r9_pre,same_layout_ambiguous,ImageButton|map_my_location_button|Position not yet known.|Position not yet known.
+OsmAndFavorite,v1,replay_struct,9,0011_final,0011_final,same_layout_ambiguous,STATUS
+OsmAndFavorite,v2,replay_strict,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:OsmAnd
+OsmAndFavorite,v2,replay_strict,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,ImageButton|map_search_button|Search|Search
+OsmAndFavorite,v2,replay_strict,2,0004_s3_pre,0004_r3_pre,same_struct_dynamic_content,INPUT_TEXT
+OsmAndFavorite,v2,replay_strict,3,0005_s4_pre,0005_r4_pre,same_exact,TextView|title||Liechtenstein
+OsmAndFavorite,v2,replay_strict,4,0006_s5_pre,0006_r5_pre,same_exact,View|MapLayersView|Map|Map
+OsmAndFavorite,v2,replay_strict,5,0007_s6_pre,0007_r6_pre,same_struct_dynamic_content,INPUT_TEXT
+OsmAndFavorite,v2,replay_strict,6,0008_s7_pre,0008_r7_pre,same_struct_dynamic_content,LONG_PRESS:View|MapLayersView|Map|Map
+OsmAndFavorite,v2,replay_strict,7,0009_s8_pre,0009_r8_pre,same_struct_dynamic_content,INPUT_TEXT
+OsmAndFavorite,v2,replay_strict,8,0010_s9_pre,0010_r9_pre,same_layout_ambiguous,ImageButton|map_my_location_button|Position not yet known.|Position not yet known.
+OsmAndFavorite,v2,replay_strict,9,0011_final,0011_final,same_layout_ambiguous,STATUS
+OsmAndFavorite,v2,replay_struct,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:OsmAnd
+OsmAndFavorite,v2,replay_struct,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,ImageButton|map_search_button|Search|Search
+OsmAndFavorite,v2,replay_struct,2,0004_s3_pre,0004_r3_pre,same_struct_dynamic_content,INPUT_TEXT
+OsmAndFavorite,v2,replay_struct,3,0005_s4_pre,0005_r4_pre,same_exact,TextView|title||Liechtenstein
+OsmAndFavorite,v2,replay_struct,4,0006_s5_pre,0006_r5_pre,same_exact,View|MapLayersView|Map|Map
+OsmAndFavorite,v2,replay_struct,5,0007_s6_pre,0007_r6_pre,same_struct_dynamic_content,INPUT_TEXT
+OsmAndFavorite,v2,replay_struct,6,0008_s7_pre,0008_r7_pre,same_struct_dynamic_content,LONG_PRESS:View|MapLayersView|Map|Map
+OsmAndFavorite,v2,replay_struct,7,0009_s8_pre,0009_r8_pre,same_struct_dynamic_content,INPUT_TEXT
+OsmAndFavorite,v2,replay_struct,8,0010_s9_pre,0010_r9_pre,same_layout_ambiguous,ImageButton|map_my_location_button|Position not yet known.|Position not yet known.
+OsmAndFavorite,v2,replay_struct,9,0011_final,0011_final,same_layout_ambiguous,STATUS
+OsmAndFavorite,v3,replay_strict,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:OsmAnd
+OsmAndFavorite,v3,replay_strict,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,ImageButton|map_search_button|Search|Search
+OsmAndFavorite,v3,replay_strict,2,0004_s3_pre,0004_r3_pre,same_layout_ambiguous,INPUT_TEXT
+OsmAndFavorite,v3,replay_strict,2,0004_s3_pre,0005_final,same_layout_ambiguous,INPUT_TEXT
+OsmAndFavorite,v3,replay_struct,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:OsmAnd
+OsmAndFavorite,v3,replay_struct,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,ImageButton|map_search_button|Search|Search
+OsmAndFavorite,v3,replay_struct,2,0004_s3_pre,0004_r3_pre,same_layout_ambiguous,INPUT_TEXT
+OsmAndFavorite,v3,replay_struct,2,0004_s3_pre,0005_final,same_layout_ambiguous,INPUT_TEXT
+OsmAndFavorite,v4,replay_strict,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:OsmAnd
+OsmAndFavorite,v4,replay_strict,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,ImageButton|map_search_button|Search|Search
+OsmAndFavorite,v4,replay_strict,2,0004_s3_pre,0004_r3_pre,same_layout_ambiguous,INPUT_TEXT
+OsmAndFavorite,v4,replay_strict,2,0004_s3_pre,0005_final,same_layout_ambiguous,INPUT_TEXT
+OsmAndFavorite,v4,replay_struct,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:OsmAnd
+OsmAndFavorite,v4,replay_struct,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,ImageButton|map_search_button|Search|Search
+OsmAndFavorite,v4,replay_struct,2,0004_s3_pre,0004_r3_pre,same_layout_ambiguous,INPUT_TEXT
+OsmAndFavorite,v4,replay_struct,2,0004_s3_pre,0005_final,same_layout_ambiguous,INPUT_TEXT
+RecipeDeleteMultipleRecipesWithConstraint,v1,replay_strict,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Broccoli
+RecipeDeleteMultipleRecipesWithConstraint,v1,replay_strict,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,Button|action_search|Search|Search
+RecipeDeleteMultipleRecipesWithConstraint,v1,replay_strict,2,0004_s3_pre,0004_r3_pre,different_state,INPUT_TEXT
+RecipeDeleteMultipleRecipesWithConstraint,v1,replay_strict,2,0004_s3_pre,0005_final,different_state,INPUT_TEXT
+RecipeDeleteMultipleRecipesWithConstraint,v1,replay_struct,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Broccoli
+RecipeDeleteMultipleRecipesWithConstraint,v1,replay_struct,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,Button|action_search|Search|Search
+RecipeDeleteMultipleRecipesWithConstraint,v1,replay_struct,2,0004_s3_pre,0004_r3_pre,different_state,INPUT_TEXT
+RecipeDeleteMultipleRecipesWithConstraint,v1,replay_struct,2,0004_s3_pre,0005_final,different_state,INPUT_TEXT
+RecipeDeleteMultipleRecipesWithConstraint,v2,replay_strict,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Broccoli
+RecipeDeleteMultipleRecipesWithConstraint,v2,replay_strict,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,Button|action_search|Search|Search
+RecipeDeleteMultipleRecipesWithConstraint,v2,replay_strict,2,0004_s3_pre,0004_r3_pre,same_struct_dynamic_content,INPUT_TEXT
+RecipeDeleteMultipleRecipesWithConstraint,v2,replay_strict,3,0005_final,0005_final,same_struct_dynamic_content,STATUS
+RecipeDeleteMultipleRecipesWithConstraint,v2,replay_struct,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Broccoli
+RecipeDeleteMultipleRecipesWithConstraint,v2,replay_struct,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,Button|action_search|Search|Search
+RecipeDeleteMultipleRecipesWithConstraint,v2,replay_struct,2,0004_s3_pre,0004_r3_pre,same_struct_dynamic_content,INPUT_TEXT
+RecipeDeleteMultipleRecipesWithConstraint,v2,replay_struct,3,0005_final,0005_final,same_struct_dynamic_content,STATUS
+RecipeDeleteMultipleRecipesWithConstraint,v3,replay_strict,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Broccoli
+RecipeDeleteMultipleRecipesWithConstraint,v3,replay_strict,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,Button|action_search|Search|Search
+RecipeDeleteMultipleRecipesWithConstraint,v3,replay_strict,2,0004_s3_pre,0004_r3_pre,same_struct_dynamic_content,INPUT_TEXT
+RecipeDeleteMultipleRecipesWithConstraint,v3,replay_strict,3,0005_final,0005_final,same_struct_dynamic_content,STATUS
+RecipeDeleteMultipleRecipesWithConstraint,v3,replay_struct,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Broccoli
+RecipeDeleteMultipleRecipesWithConstraint,v3,replay_struct,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,Button|action_search|Search|Search
+RecipeDeleteMultipleRecipesWithConstraint,v3,replay_struct,2,0004_s3_pre,0004_r3_pre,same_struct_dynamic_content,INPUT_TEXT
+RecipeDeleteMultipleRecipesWithConstraint,v3,replay_struct,3,0005_final,0005_final,same_struct_dynamic_content,STATUS
+RecipeDeleteMultipleRecipesWithConstraint,v4,replay_strict,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Broccoli
+RecipeDeleteMultipleRecipesWithConstraint,v4,replay_strict,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,Button|action_search|Search|Search
+RecipeDeleteMultipleRecipesWithConstraint,v4,replay_strict,2,0004_s3_pre,0004_r3_pre,different_state,INPUT_TEXT
+RecipeDeleteMultipleRecipesWithConstraint,v4,replay_strict,2,0004_s3_pre,0005_final,different_state,INPUT_TEXT
+RecipeDeleteMultipleRecipesWithConstraint,v4,replay_struct,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Broccoli
+RecipeDeleteMultipleRecipesWithConstraint,v4,replay_struct,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,Button|action_search|Search|Search
+RecipeDeleteMultipleRecipesWithConstraint,v4,replay_struct,2,0004_s3_pre,0004_r3_pre,different_state,INPUT_TEXT
+RecipeDeleteMultipleRecipesWithConstraint,v4,replay_struct,2,0004_s3_pre,0005_final,different_state,INPUT_TEXT
+RecipeDeleteSingleRecipe,v1,replay_strict,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:Broccoli
+RecipeDeleteSingleRecipe,v1,replay_strict,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,CardView|||Recipe photo
+RecipeDeleteSingleRecipe,v1,replay_strict,2,0004_s3_pre,0004_r3_pre,same_exact,ImageView||More options|More options
+RecipeDeleteSingleRecipe,v1,replay_strict,3,0005_s4_pre,0005_r4_pre,same_exact,LinearLayout|||Delete
+RecipeDeleteSingleRecipe,v1,replay_strict,4,0006_s5_pre,0006_r5_pre,same_exact,Button|button1||DELETE
+RecipeDeleteSingleRecipe,v1,replay_strict,5,0007_final,0007_final,same_exact,STATUS
+RecipeDeleteSingleRecipe,v1,replay_struct,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:Broccoli
+RecipeDeleteSingleRecipe,v1,replay_struct,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,CardView|||Recipe photo
+RecipeDeleteSingleRecipe,v1,replay_struct,2,0004_s3_pre,0004_r3_pre,same_exact,ImageView||More options|More options
+RecipeDeleteSingleRecipe,v1,replay_struct,3,0005_s4_pre,0005_r4_pre,same_exact,LinearLayout|||Delete
+RecipeDeleteSingleRecipe,v1,replay_struct,4,0006_s5_pre,0006_r5_pre,same_exact,Button|button1||DELETE
+RecipeDeleteSingleRecipe,v1,replay_struct,5,0007_final,0007_final,same_exact,STATUS
+RecipeDeleteSingleRecipe,v2,replay_strict,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:Broccoli
+RecipeDeleteSingleRecipe,v2,replay_strict,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,CardView|||Recipe photo
+RecipeDeleteSingleRecipe,v2,replay_strict,2,0004_s3_pre,0004_r3_pre,same_exact,ImageView||More options|More options
+RecipeDeleteSingleRecipe,v2,replay_strict,3,0005_s4_pre,0005_r4_pre,same_exact,LinearLayout|||Delete
+RecipeDeleteSingleRecipe,v2,replay_strict,4,0006_s5_pre,0006_r5_pre,same_exact,Button|button1||DELETE
+RecipeDeleteSingleRecipe,v2,replay_strict,5,0007_final,0007_final,same_exact,STATUS
+RecipeDeleteSingleRecipe,v2,replay_struct,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:Broccoli
+RecipeDeleteSingleRecipe,v2,replay_struct,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,CardView|||Recipe photo
+RecipeDeleteSingleRecipe,v2,replay_struct,2,0004_s3_pre,0004_r3_pre,same_exact,ImageView||More options|More options
+RecipeDeleteSingleRecipe,v2,replay_struct,3,0005_s4_pre,0005_r4_pre,same_exact,LinearLayout|||Delete
+RecipeDeleteSingleRecipe,v2,replay_struct,4,0006_s5_pre,0006_r5_pre,same_exact,Button|button1||DELETE
+RecipeDeleteSingleRecipe,v2,replay_struct,5,0007_final,0007_final,same_exact,STATUS
+RecipeDeleteSingleRecipe,v3,replay_strict,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:Broccoli
+RecipeDeleteSingleRecipe,v3,replay_strict,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,CardView|||Recipe photo
+RecipeDeleteSingleRecipe,v3,replay_strict,2,0004_s3_pre,0004_r3_pre,same_exact,ImageView||More options|More options
+RecipeDeleteSingleRecipe,v3,replay_strict,3,0005_s4_pre,0005_r4_pre,same_exact,LinearLayout|||Delete
+RecipeDeleteSingleRecipe,v3,replay_strict,4,0006_s5_pre,0006_r5_pre,same_exact,Button|button1||DELETE
+RecipeDeleteSingleRecipe,v3,replay_strict,5,0007_final,0007_final,same_exact,STATUS
+RecipeDeleteSingleRecipe,v3,replay_struct,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:Broccoli
+RecipeDeleteSingleRecipe,v3,replay_struct,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,CardView|||Recipe photo
+RecipeDeleteSingleRecipe,v3,replay_struct,2,0004_s3_pre,0004_r3_pre,same_exact,ImageView||More options|More options
+RecipeDeleteSingleRecipe,v3,replay_struct,3,0005_s4_pre,0005_r4_pre,same_exact,LinearLayout|||Delete
+RecipeDeleteSingleRecipe,v3,replay_struct,4,0006_s5_pre,0006_r5_pre,same_exact,Button|button1||DELETE
+RecipeDeleteSingleRecipe,v3,replay_struct,5,0007_final,0007_final,same_exact,STATUS
+RecipeDeleteSingleRecipe,v4,replay_strict,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:Broccoli
+RecipeDeleteSingleRecipe,v4,replay_strict,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,CardView|||Recipe photo
+RecipeDeleteSingleRecipe,v4,replay_strict,2,0004_s3_pre,0004_r3_pre,same_exact,ImageView||More options|More options
+RecipeDeleteSingleRecipe,v4,replay_strict,3,0005_s4_pre,0005_r4_pre,same_exact,LinearLayout|||Delete
+RecipeDeleteSingleRecipe,v4,replay_strict,4,0006_s5_pre,0006_r5_pre,same_exact,Button|button1||DELETE
+RecipeDeleteSingleRecipe,v4,replay_strict,5,0007_final,0007_final,same_exact,STATUS
+RecipeDeleteSingleRecipe,v4,replay_struct,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,OPEN_APP:Broccoli
+RecipeDeleteSingleRecipe,v4,replay_struct,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,CardView|||Recipe photo
+RecipeDeleteSingleRecipe,v4,replay_struct,2,0004_s3_pre,0004_r3_pre,same_exact,ImageView||More options|More options
+RecipeDeleteSingleRecipe,v4,replay_struct,3,0005_s4_pre,0005_r4_pre,same_exact,LinearLayout|||Delete
+RecipeDeleteSingleRecipe,v4,replay_struct,4,0006_s5_pre,0006_r5_pre,same_exact,Button|button1||DELETE
+RecipeDeleteSingleRecipe,v4,replay_struct,5,0007_final,0007_final,same_exact,STATUS
+SimpleCalendarDeleteOneEvent,v1,replay_strict,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Simple Calendar Pro
+SimpleCalendarDeleteOneEvent,v1,replay_strict,1,0003_s2_pre,0003_r2_pre,same_exact,Button|button1||OK
+SimpleCalendarDeleteOneEvent,v1,replay_strict,2,0004_s3_pre,0004_r3_pre,same_struct_dynamic_content,View|month_view_background||#22
+SimpleCalendarDeleteOneEvent,v1,replay_strict,2,0004_s3_pre,0005_final,same_struct_dynamic_content,View|month_view_background||#22
+SimpleCalendarDeleteOneEvent,v1,replay_struct,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Simple Calendar Pro
+SimpleCalendarDeleteOneEvent,v1,replay_struct,1,0003_s2_pre,0003_r2_pre,same_exact,Button|button1||OK
+SimpleCalendarDeleteOneEvent,v1,replay_struct,1,0003_s2_pre,0004_final,same_exact,Button|button1||OK
+SimpleCalendarDeleteOneEvent,v2,replay_strict,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Simple Calendar Pro
+SimpleCalendarDeleteOneEvent,v2,replay_strict,1,0003_s2_pre,0003_r2_pre,same_exact,Button|button1||OK
+SimpleCalendarDeleteOneEvent,v2,replay_strict,2,0004_s3_pre,0004_r3_pre,same_struct_dynamic_content,View|month_view_background||#22
+SimpleCalendarDeleteOneEvent,v2,replay_strict,2,0004_s3_pre,0005_final,same_struct_dynamic_content,View|month_view_background||#22
+SimpleCalendarDeleteOneEvent,v2,replay_struct,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Simple Calendar Pro
+SimpleCalendarDeleteOneEvent,v2,replay_struct,1,0003_s2_pre,0003_r2_pre,same_exact,Button|button1||OK
+SimpleCalendarDeleteOneEvent,v2,replay_struct,1,0003_s2_pre,0004_final,same_exact,Button|button1||OK
+SimpleCalendarDeleteOneEvent,v3,replay_strict,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Simple Calendar Pro
+SimpleCalendarDeleteOneEvent,v3,replay_strict,1,0003_s2_pre,0003_r2_pre,same_exact,Button|button1||OK
+SimpleCalendarDeleteOneEvent,v3,replay_strict,2,0004_s3_pre,0004_r3_pre,same_struct_dynamic_content,View|month_view_background||#22
+SimpleCalendarDeleteOneEvent,v3,replay_strict,2,0004_s3_pre,0005_final,same_struct_dynamic_content,View|month_view_background||#22
+SimpleCalendarDeleteOneEvent,v3,replay_struct,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Simple Calendar Pro
+SimpleCalendarDeleteOneEvent,v3,replay_struct,1,0003_s2_pre,0003_r2_pre,same_exact,Button|button1||OK
+SimpleCalendarDeleteOneEvent,v3,replay_struct,1,0003_s2_pre,0004_final,same_exact,Button|button1||OK
+SimpleCalendarDeleteOneEvent,v4,replay_strict,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Simple Calendar Pro
+SimpleCalendarDeleteOneEvent,v4,replay_strict,1,0003_s2_pre,0003_r2_pre,same_exact,Button|button1||OK
+SimpleCalendarDeleteOneEvent,v4,replay_strict,2,0004_s3_pre,0004_r3_pre,same_struct_dynamic_content,View|month_view_background||#22
+SimpleCalendarDeleteOneEvent,v4,replay_strict,2,0004_s3_pre,0005_final,same_struct_dynamic_content,View|month_view_background||#22
+SimpleCalendarDeleteOneEvent,v4,replay_struct,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Simple Calendar Pro
+SimpleCalendarDeleteOneEvent,v4,replay_struct,1,0003_s2_pre,0003_r2_pre,same_exact,Button|button1||OK
+SimpleCalendarDeleteOneEvent,v4,replay_struct,1,0003_s2_pre,0004_final,same_exact,Button|button1||OK
+SimpleCalendarEventsOnDate,v1,replay_strict,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Simple Calendar Pro
+SimpleCalendarEventsOnDate,v1,replay_strict,1,0003_s2_pre,0003_r2_pre,same_exact,Button|button1||OK
+SimpleCalendarEventsOnDate,v1,replay_strict,2,0004_s3_pre,0004_r3_pre,same_struct_dynamic_content,View|month_view_background||#33
+SimpleCalendarEventsOnDate,v1,replay_strict,3,0005_final,0005_final,same_struct_dynamic_content,STATUS
+SimpleCalendarEventsOnDate,v1,replay_struct,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Simple Calendar Pro
+SimpleCalendarEventsOnDate,v1,replay_struct,1,0003_s2_pre,0003_r2_pre,same_exact,Button|button1||OK
+SimpleCalendarEventsOnDate,v1,replay_struct,1,0003_s2_pre,0004_final,same_exact,Button|button1||OK
+SimpleCalendarEventsOnDate,v2,replay_strict,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Simple Calendar Pro
+SimpleCalendarEventsOnDate,v2,replay_strict,1,0003_s2_pre,0003_r2_pre,same_exact,Button|button1||OK
+SimpleCalendarEventsOnDate,v2,replay_strict,2,0004_s3_pre,0004_r3_pre,same_struct_dynamic_content,View|month_view_background||#33
+SimpleCalendarEventsOnDate,v2,replay_strict,3,0005_final,0005_final,same_struct_dynamic_content,STATUS
+SimpleCalendarEventsOnDate,v2,replay_struct,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Simple Calendar Pro
+SimpleCalendarEventsOnDate,v2,replay_struct,1,0003_s2_pre,0003_r2_pre,same_exact,Button|button1||OK
+SimpleCalendarEventsOnDate,v2,replay_struct,1,0003_s2_pre,0004_final,same_exact,Button|button1||OK
+SimpleCalendarEventsOnDate,v3,replay_strict,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Simple Calendar Pro
+SimpleCalendarEventsOnDate,v3,replay_strict,1,0003_s2_pre,0003_r2_pre,same_exact,Button|button1||OK
+SimpleCalendarEventsOnDate,v3,replay_strict,2,0004_s3_pre,0004_r3_pre,same_struct_dynamic_content,View|month_view_background||#33
+SimpleCalendarEventsOnDate,v3,replay_strict,3,0005_final,0005_final,same_struct_dynamic_content,STATUS
+SimpleCalendarEventsOnDate,v3,replay_struct,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Simple Calendar Pro
+SimpleCalendarEventsOnDate,v3,replay_struct,1,0003_s2_pre,0003_r2_pre,same_exact,Button|button1||OK
+SimpleCalendarEventsOnDate,v3,replay_struct,1,0003_s2_pre,0004_final,same_exact,Button|button1||OK
+SimpleCalendarEventsOnDate,v4,replay_strict,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Simple Calendar Pro
+SimpleCalendarEventsOnDate,v4,replay_strict,1,0003_s2_pre,0003_r2_pre,same_exact,Button|button1||OK
+SimpleCalendarEventsOnDate,v4,replay_strict,2,0004_s3_pre,0004_r3_pre,same_struct_dynamic_content,View|month_view_background||#33
+SimpleCalendarEventsOnDate,v4,replay_strict,3,0005_final,0005_final,same_struct_dynamic_content,STATUS
+SimpleCalendarEventsOnDate,v4,replay_struct,0,0002_s1_pre,0002_r1_pre,same_exact,OPEN_APP:Simple Calendar Pro
+SimpleCalendarEventsOnDate,v4,replay_struct,1,0003_s2_pre,0003_r2_pre,same_exact,Button|button1||OK
+SimpleCalendarEventsOnDate,v4,replay_struct,1,0003_s2_pre,0004_final,same_exact,Button|button1||OK
+SportsTrackerLongestDistanceActivity,v1,replay_strict,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:OpenTracks
+SportsTrackerLongestDistanceActivity,v1,replay_strict,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,SWIPE:down
+SportsTrackerLongestDistanceActivity,v1,replay_strict,2,0004_final,0004_final,same_struct_dynamic_content,STATUS
+SportsTrackerLongestDistanceActivity,v1,replay_struct,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:OpenTracks
+SportsTrackerLongestDistanceActivity,v1,replay_struct,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,SWIPE:down
+SportsTrackerLongestDistanceActivity,v1,replay_struct,2,0004_final,0004_final,same_struct_dynamic_content,STATUS
+SportsTrackerLongestDistanceActivity,v2,replay_strict,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:OpenTracks
+SportsTrackerLongestDistanceActivity,v2,replay_strict,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,SWIPE:down
+SportsTrackerLongestDistanceActivity,v2,replay_strict,2,0004_final,0004_final,same_struct_dynamic_content,STATUS
+SportsTrackerLongestDistanceActivity,v2,replay_struct,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:OpenTracks
+SportsTrackerLongestDistanceActivity,v2,replay_struct,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,SWIPE:down
+SportsTrackerLongestDistanceActivity,v2,replay_struct,2,0004_final,0004_final,same_struct_dynamic_content,STATUS
+SportsTrackerLongestDistanceActivity,v3,replay_strict,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:OpenTracks
+SportsTrackerLongestDistanceActivity,v3,replay_strict,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,SWIPE:down
+SportsTrackerLongestDistanceActivity,v3,replay_strict,2,0004_final,0004_final,same_struct_dynamic_content,STATUS
+SportsTrackerLongestDistanceActivity,v3,replay_struct,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:OpenTracks
+SportsTrackerLongestDistanceActivity,v3,replay_struct,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,SWIPE:down
+SportsTrackerLongestDistanceActivity,v3,replay_struct,2,0004_final,0004_final,same_struct_dynamic_content,STATUS
+SportsTrackerLongestDistanceActivity,v4,replay_strict,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:OpenTracks
+SportsTrackerLongestDistanceActivity,v4,replay_strict,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,SWIPE:down
+SportsTrackerLongestDistanceActivity,v4,replay_strict,2,0004_final,0004_final,same_struct_dynamic_content,STATUS
+SportsTrackerLongestDistanceActivity,v4,replay_struct,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:OpenTracks
+SportsTrackerLongestDistanceActivity,v4,replay_struct,1,0003_s2_pre,0003_r2_pre,same_struct_dynamic_content,SWIPE:down
+SportsTrackerLongestDistanceActivity,v4,replay_struct,2,0004_final,0004_final,same_struct_dynamic_content,STATUS
+SystemBluetoothTurnOn,v1,replay_strict,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,SWIPE:down
+SystemBluetoothTurnOn,v1,replay_strict,0,0002_s1_pre,0003_final,same_layout_ambiguous,SWIPE:down
+SystemBluetoothTurnOn,v1,replay_struct,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,SWIPE:down
+SystemBluetoothTurnOn,v1,replay_struct,0,0002_s1_pre,0003_final,same_layout_ambiguous,SWIPE:down
+SystemBluetoothTurnOn,v2,replay_strict,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,SWIPE:down
+SystemBluetoothTurnOn,v2,replay_strict,0,0002_s1_pre,0003_final,same_layout_ambiguous,SWIPE:down
+SystemBluetoothTurnOn,v2,replay_struct,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,SWIPE:down
+SystemBluetoothTurnOn,v2,replay_struct,0,0002_s1_pre,0003_final,same_layout_ambiguous,SWIPE:down
+SystemBluetoothTurnOn,v3,replay_strict,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,SWIPE:down
+SystemBluetoothTurnOn,v3,replay_strict,0,0002_s1_pre,0003_final,same_layout_ambiguous,SWIPE:down
+SystemBluetoothTurnOn,v3,replay_struct,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,SWIPE:down
+SystemBluetoothTurnOn,v3,replay_struct,0,0002_s1_pre,0003_final,same_layout_ambiguous,SWIPE:down
+SystemBluetoothTurnOn,v4,replay_strict,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,SWIPE:down
+SystemBluetoothTurnOn,v4,replay_strict,0,0002_s1_pre,0003_final,same_layout_ambiguous,SWIPE:down
+SystemBluetoothTurnOn,v4,replay_struct,0,0002_s1_pre,0002_r1_pre,same_layout_ambiguous,SWIPE:down
+SystemBluetoothTurnOn,v4,replay_struct,0,0002_s1_pre,0003_final,same_layout_ambiguous,SWIPE:down
+TasksDueOnDate,v1,replay_strict,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Tasks
+TasksDueOnDate,v1,replay_strict,1,0003_s2_pre,0003_r2_pre,same_layout_ambiguous,Button|menu_sort|Sort|Sort
+TasksDueOnDate,v1,replay_strict,2,0004_s3_pre,0004_r3_pre,same_exact,View|||Grouping
+TasksDueOnDate,v1,replay_strict,3,0005_s4_pre,0005_r4_pre,same_layout_ambiguous,View|||By due date
+TasksDueOnDate,v1,replay_strict,4,0006_s5_pre,0006_r5_pre,same_layout_ambiguous,SWIPE:down
+TasksDueOnDate,v1,replay_strict,5,0007_s6_pre,0007_r6_pre,same_exact,View|||Sorting
+TasksDueOnDate,v1,replay_strict,6,0008_s7_pre,0008_r7_pre,same_exact,View|||By due date
+TasksDueOnDate,v1,replay_strict,7,0009_s8_pre,0009_r8_pre,same_struct_dynamic_content,View|||Drag handle
+TasksDueOnDate,v1,replay_strict,8,0010_s9_pre,0010_r9_pre,same_struct_dynamic_content,SWIPE:down
+TasksDueOnDate,v1,replay_strict,9,0011_final,0011_final,same_struct_dynamic_content,SWIPE:down
+TasksDueOnDate,v1,replay_struct,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Tasks
+TasksDueOnDate,v1,replay_struct,1,0003_s2_pre,0003_r2_pre,same_layout_ambiguous,Button|menu_sort|Sort|Sort
+TasksDueOnDate,v1,replay_struct,2,0004_s3_pre,0004_r3_pre,same_exact,View|||Grouping
+TasksDueOnDate,v1,replay_struct,3,0005_s4_pre,0005_r4_pre,same_layout_ambiguous,View|||By due date
+TasksDueOnDate,v1,replay_struct,4,0006_s5_pre,0006_r5_pre,same_layout_ambiguous,SWIPE:down
+TasksDueOnDate,v1,replay_struct,5,0007_s6_pre,0007_r6_pre,same_exact,View|||Sorting
+TasksDueOnDate,v1,replay_struct,6,0008_s7_pre,0008_r7_pre,same_exact,View|||By due date
+TasksDueOnDate,v1,replay_struct,6,0008_s7_pre,0009_final,same_exact,View|||By due date
+TasksDueOnDate,v2,replay_strict,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Tasks
+TasksDueOnDate,v2,replay_strict,1,0003_s2_pre,0003_r2_pre,same_layout_ambiguous,Button|menu_sort|Sort|Sort
+TasksDueOnDate,v2,replay_strict,2,0004_s3_pre,0004_r3_pre,same_exact,View|||Grouping
+TasksDueOnDate,v2,replay_strict,3,0005_s4_pre,0005_r4_pre,same_layout_ambiguous,View|||By due date
+TasksDueOnDate,v2,replay_strict,4,0006_s5_pre,0006_r5_pre,same_layout_ambiguous,SWIPE:down
+TasksDueOnDate,v2,replay_strict,5,0007_s6_pre,0007_r6_pre,same_exact,View|||Sorting
+TasksDueOnDate,v2,replay_strict,6,0008_s7_pre,0008_r7_pre,same_exact,View|||By due date
+TasksDueOnDate,v2,replay_strict,7,0009_s8_pre,0009_r8_pre,same_struct_dynamic_content,View|||Drag handle
+TasksDueOnDate,v2,replay_strict,8,0010_s9_pre,0010_r9_pre,same_struct_dynamic_content,SWIPE:down
+TasksDueOnDate,v2,replay_strict,9,0011_final,0011_final,same_struct_dynamic_content,SWIPE:down
+TasksDueOnDate,v2,replay_struct,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Tasks
+TasksDueOnDate,v2,replay_struct,1,0003_s2_pre,0003_r2_pre,same_layout_ambiguous,Button|menu_sort|Sort|Sort
+TasksDueOnDate,v2,replay_struct,2,0004_s3_pre,0004_r3_pre,same_exact,View|||Grouping
+TasksDueOnDate,v2,replay_struct,3,0005_s4_pre,0005_r4_pre,same_layout_ambiguous,View|||By due date
+TasksDueOnDate,v2,replay_struct,4,0006_s5_pre,0006_r5_pre,same_layout_ambiguous,SWIPE:down
+TasksDueOnDate,v2,replay_struct,5,0007_s6_pre,0007_r6_pre,same_exact,View|||Sorting
+TasksDueOnDate,v2,replay_struct,6,0008_s7_pre,0008_r7_pre,same_exact,View|||By due date
+TasksDueOnDate,v2,replay_struct,6,0008_s7_pre,0009_final,same_exact,View|||By due date
+TasksDueOnDate,v3,replay_strict,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Tasks
+TasksDueOnDate,v3,replay_strict,1,0003_s2_pre,0003_r2_pre,same_layout_ambiguous,Button|menu_sort|Sort|Sort
+TasksDueOnDate,v3,replay_strict,2,0004_s3_pre,0004_r3_pre,same_exact,View|||Grouping
+TasksDueOnDate,v3,replay_strict,3,0005_s4_pre,0005_r4_pre,same_layout_ambiguous,View|||By due date
+TasksDueOnDate,v3,replay_strict,4,0006_s5_pre,0006_r5_pre,same_layout_ambiguous,SWIPE:down
+TasksDueOnDate,v3,replay_strict,5,0007_s6_pre,0007_r6_pre,same_exact,View|||Sorting
+TasksDueOnDate,v3,replay_strict,6,0008_s7_pre,0008_r7_pre,same_exact,View|||By due date
+TasksDueOnDate,v3,replay_strict,7,0009_s8_pre,0009_r8_pre,same_struct_dynamic_content,View|||Drag handle
+TasksDueOnDate,v3,replay_strict,8,0010_s9_pre,0010_r9_pre,same_struct_dynamic_content,SWIPE:down
+TasksDueOnDate,v3,replay_strict,9,0011_final,0011_final,same_struct_dynamic_content,SWIPE:down
+TasksDueOnDate,v3,replay_struct,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Tasks
+TasksDueOnDate,v3,replay_struct,1,0003_s2_pre,0003_r2_pre,same_layout_ambiguous,Button|menu_sort|Sort|Sort
+TasksDueOnDate,v3,replay_struct,2,0004_s3_pre,0004_r3_pre,same_exact,View|||Grouping
+TasksDueOnDate,v3,replay_struct,3,0005_s4_pre,0005_r4_pre,same_layout_ambiguous,View|||By due date
+TasksDueOnDate,v3,replay_struct,4,0006_s5_pre,0006_r5_pre,same_layout_ambiguous,SWIPE:down
+TasksDueOnDate,v3,replay_struct,5,0007_s6_pre,0007_r6_pre,same_exact,View|||Sorting
+TasksDueOnDate,v3,replay_struct,6,0008_s7_pre,0008_r7_pre,same_exact,View|||By due date
+TasksDueOnDate,v3,replay_struct,6,0008_s7_pre,0009_final,same_exact,View|||By due date
+TasksDueOnDate,v4,replay_strict,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Tasks
+TasksDueOnDate,v4,replay_strict,1,0003_s2_pre,0003_r2_pre,same_layout_ambiguous,Button|menu_sort|Sort|Sort
+TasksDueOnDate,v4,replay_strict,2,0004_s3_pre,0004_r3_pre,same_exact,View|||Grouping
+TasksDueOnDate,v4,replay_strict,3,0005_s4_pre,0005_r4_pre,same_layout_ambiguous,View|||By due date
+TasksDueOnDate,v4,replay_strict,4,0006_s5_pre,0006_r5_pre,same_layout_ambiguous,SWIPE:down
+TasksDueOnDate,v4,replay_strict,5,0007_s6_pre,0007_r6_pre,same_exact,View|||Sorting
+TasksDueOnDate,v4,replay_strict,6,0008_s7_pre,0008_r7_pre,same_exact,View|||By due date
+TasksDueOnDate,v4,replay_strict,7,0009_s8_pre,0009_r8_pre,same_struct_dynamic_content,View|||Drag handle
+TasksDueOnDate,v4,replay_strict,8,0010_s9_pre,0010_r9_pre,same_struct_dynamic_content,SWIPE:down
+TasksDueOnDate,v4,replay_strict,9,0011_final,0011_final,same_struct_dynamic_content,SWIPE:down
+TasksDueOnDate,v4,replay_struct,0,0002_s1_pre,0002_r1_pre,same_struct_dynamic_content,OPEN_APP:Tasks
+TasksDueOnDate,v4,replay_struct,1,0003_s2_pre,0003_r2_pre,same_layout_ambiguous,Button|menu_sort|Sort|Sort
+TasksDueOnDate,v4,replay_struct,2,0004_s3_pre,0004_r3_pre,same_exact,View|||Grouping
+TasksDueOnDate,v4,replay_struct,3,0005_s4_pre,0005_r4_pre,same_layout_ambiguous,View|||By due date
+TasksDueOnDate,v4,replay_struct,4,0006_s5_pre,0006_r5_pre,same_layout_ambiguous,SWIPE:down
+TasksDueOnDate,v4,replay_struct,5,0007_s6_pre,0007_r6_pre,same_exact,View|||Sorting
+TasksDueOnDate,v4,replay_struct,6,0008_s7_pre,0008_r7_pre,same_exact,View|||By due date
+TasksDueOnDate,v4,replay_struct,6,0008_s7_pre,0009_final,same_exact,View|||By due date

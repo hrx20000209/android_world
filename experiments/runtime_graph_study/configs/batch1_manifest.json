@@ -1,0 +1,109 @@
+{
+ "name": "batch1",
+ "tasks": [
+  {
+   "task": "ExpenseDeleteSingle",
+   "app": "Pro Expense",
+   "category": "list item deletion",
+   "variant_mechanism": "A param (target name) + B app data (expense list)",
+   "seeds": [
+    1001,
+    1002,
+    1003,
+    1004,
+    1005
+   ]
+  },
+  {
+   "task": "ExpenseAddSingle",
+   "app": "Pro Expense",
+   "category": "form data entry",
+   "variant_mechanism": "A param (name/amount/category/note)",
+   "seeds": [
+    1001,
+    1002,
+    1003,
+    1004,
+    1005
+   ]
+  },
+  {
+   "task": "MarkorCreateNote",
+   "app": "Markor",
+   "category": "item creation + text entry",
+   "variant_mechanism": "A param (file name, text)",
+   "seeds": [
+    1001,
+    1002,
+    1003,
+    1004,
+    1005
+   ]
+  },
+  {
+   "task": "MarkorDeleteNewestNote",
+   "app": "Markor",
+   "category": "list deletion, data-only variation",
+   "variant_mechanism": "B app data only (goal identical)",
+   "seeds": [
+    1001,
+    1002,
+    1003,
+    1004,
+    1005
+   ]
+  },
+  {
+   "task": "RecipeDeleteSingleRecipe",
+   "app": "Broccoli",
+   "category": "list item deletion",
+   "variant_mechanism": "A param + B app data (recipe list)",
+   "seeds": [
+    1001,
+    1002,
+    1003,
+    1004,
+    1005
+   ]
+  },
+  {
+   "task": "ContactsAddContact",
+   "app": "Contacts",
+   "category": "form data entry",
+   "variant_mechanism": "A param (name, phone)",
+   "seeds": [
+    1001,
+    1002,
+    1003,
+    1004,
+    1005
+   ]
+  },
+  {
+   "task": "SimpleCalendarEventsOnDate",
+   "app": "Simple Calendar Pro",
+   "category": "navigation + information retrieval",
+   "variant_mechanism": "A param (date) + B data (events) + D navigation (month/day)",
+   "seeds": [
+    1001,
+    1002,
+    1003,
+    1004,
+    1006
+   ]
+  },
+  {
+   "task": "SystemBluetoothTurnOn",
+   "app": "Settings",
+   "category": "stable settings toggle (control)",
+   "variant_mechanism": "none: identical goal; runtime noise-floor control",
+   "seeds": [
+    1001,
+    1002,
+    1003,
+    1004,
+    1005
+   ]
+  }
+ ]
+}

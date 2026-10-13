@@ -1,0 +1,276 @@
+{
+ "BASE": {
+  "all": {
+   "episodes": 36,
+   "success": 32,
+   "errors": 0,
+   "steps": 282,
+   "calls": 282,
+   "jumps": 0,
+   "jump_steps": 0,
+   "jump_rejected": 0,
+   "shortcut_hops": 0,
+   "repairs": 0,
+   "probes": 0,
+   "disabled": 0,
+   "requery": 0,
+   "wall_s_mean": 34.3,
+   "succ_steps_mean": 8.19,
+   "succ_calls_mean": 8.19
+  },
+  "pass0 (cross-task only)": {
+   "episodes": 12,
+   "success": 9,
+   "errors": 0,
+   "steps": 90,
+   "calls": 90,
+   "jumps": 0,
+   "jump_steps": 0,
+   "jump_rejected": 0,
+   "shortcut_hops": 0,
+   "repairs": 0,
+   "probes": 0,
+   "disabled": 0,
+   "requery": 0,
+   "wall_s_mean": 33.8,
+   "succ_steps_mean": 8.44,
+   "succ_calls_mean": 8.44
+  },
+  "pass1-2 (+same-task history)": {
+   "episodes": 24,
+   "success": 23,
+   "errors": 0,
+   "steps": 192,
+   "calls": 192,
+   "jumps": 0,
+   "jump_steps": 0,
+   "jump_rejected": 0,
+   "shortcut_hops": 0,
+   "repairs": 0,
+   "probes": 0,
+   "disabled": 0,
+   "requery": 0,
+   "wall_s_mean": 34.6,
+   "succ_steps_mean": 8.09,
+   "succ_calls_mean": 8.09
+  }
+ },
+ "G": {
+  "all": {
+   "episodes": 36,
+   "success": 32,
+   "errors": 0,
+   "steps": 273,
+   "calls": 260,
+   "jumps": 39,
+   "jump_steps": 13,
+   "jump_rejected": 36,
+   "shortcut_hops": 0,
+   "repairs": 0,
+   "probes": 0,
+   "disabled": 0,
+   "requery": 0,
+   "wall_s_mean": 33.6,
+   "succ_steps_mean": 7.81,
+   "succ_calls_mean": 7.44
+  },
+  "pass0 (cross-task only)": {
+   "episodes": 12,
+   "success": 9,
+   "errors": 0,
+   "steps": 89,
+   "calls": 89,
+   "jumps": 0,
+   "jump_steps": 0,
+   "jump_rejected": 0,
+   "shortcut_hops": 0,
+   "repairs": 0,
+   "probes": 0,
+   "disabled": 0,
+   "requery": 0,
+   "wall_s_mean": 33.7,
+   "succ_steps_mean": 8.33,
+   "succ_calls_mean": 8.33
+  },
+  "pass1-2 (+same-task history)": {
+   "episodes": 24,
+   "success": 23,
+   "errors": 0,
+   "steps": 184,
+   "calls": 171,
+   "jumps": 39,
+   "jump_steps": 13,
+   "jump_rejected": 36,
+   "shortcut_hops": 0,
+   "repairs": 0,
+   "probes": 0,
+   "disabled": 0,
+   "requery": 0,
+   "wall_s_mean": 33.5,
+   "succ_steps_mean": 7.61,
+   "succ_calls_mean": 7.09
+  },
+  "paired_vs_BASE": {
+   "pairs": 36,
+   "arm_only": 1,
+   "base_only": 1,
+   "both_success_pairs": 31,
+   "both_success_steps": [
+    253,
+    243
+   ],
+   "both_success_calls": [
+    253,
+    231
+   ]
+  }
+ },
+ "GX": {
+  "all": {
+   "episodes": 36,
+   "success": 31,
+   "errors": 0,
+   "steps": 311,
+   "calls": 320,
+   "jumps": 37,
+   "jump_steps": 10,
+   "jump_rejected": 35,
+   "shortcut_hops": 0,
+   "repairs": 0,
+   "probes": 194,
+   "disabled": 19,
+   "requery": 19,
+   "wall_s_mean": 44.5,
+   "succ_steps_mean": 8.48,
+   "succ_calls_mean": 8.65
+  },
+  "pass0 (cross-task only)": {
+   "episodes": 12,
+   "success": 9,
+   "errors": 0,
+   "steps": 110,
+   "calls": 118,
+   "jumps": 0,
+   "jump_steps": 0,
+   "jump_rejected": 0,
+   "shortcut_hops": 0,
+   "repairs": 0,
+   "probes": 68,
+   "disabled": 8,
+   "requery": 8,
+   "wall_s_mean": 48.2,
+   "succ_steps_mean": 9.56,
+   "succ_calls_mean": 10.22
+  },
+  "pass1-2 (+same-task history)": {
+   "episodes": 24,
+   "success": 22,
+   "errors": 0,
+   "steps": 201,
+   "calls": 202,
+   "jumps": 37,
+   "jump_steps": 10,
+   "jump_rejected": 35,
+   "shortcut_hops": 0,
+   "repairs": 0,
+   "probes": 126,
+   "disabled": 11,
+   "requery": 11,
+   "wall_s_mean": 42.7,
+   "succ_steps_mean": 8.05,
+   "succ_calls_mean": 8.0
+  },
+  "paired_vs_BASE": {
+   "pairs": 36,
+   "arm_only": 1,
+   "base_only": 2,
+   "both_success_pairs": 30,
+   "both_success_steps": [
+    248,
+    256
+   ],
+   "both_success_calls": [
+    248,
+    260
+   ]
+  }
+ },
+ "GC": {
+  "paired_vs_BASE": {
+   "pairs": 0,
+   "arm_only": 0,
+   "base_only": 0,
+   "both_success_pairs": 0,
+   "both_success_steps": [
+    0,
+    0
+   ],
+   "both_success_calls": [
+    0,
+    0
+   ]
+  }
+ },
+ "per_task": {
+  "ExpenseAddSingle": {
+   "BASE": "3/3 calls=26 jumped=0",
+   "G": "2/3 calls=24 jumped=1",
+   "GX": "3/3 calls=34 jumped=1"
+  },
+  "ExpenseDeleteMultiple": {
+   "BASE": "3/3 calls=36 jumped=0",
+   "G": "3/3 calls=33 jumped=0",
+   "GX": "3/3 calls=33 jumped=0"
+  },
+  "ExpenseDeleteSingle": {
+   "BASE": "3/3 calls=15 jumped=0",
+   "G": "3/3 calls=15 jumped=0",
+   "GX": "3/3 calls=15 jumped=0"
+  },
+  "MarkorCreateFolder": {
+   "BASE": "3/3 calls=15 jumped=0",
+   "G": "3/3 calls=14 jumped=1",
+   "GX": "3/3 calls=15 jumped=1"
+  },
+  "MarkorCreateNote": {
+   "BASE": "1/3 calls=22 jumped=0",
+   "G": "2/3 calls=20 jumped=0",
+   "GX": "2/3 calls=33 jumped=0"
+  },
+  "MarkorDeleteNote": {
+   "BASE": "3/3 calls=15 jumped=0",
+   "G": "3/3 calls=15 jumped=0",
+   "GX": "3/3 calls=18 jumped=0"
+  },
+  "RecipeAddSingleRecipe": {
+   "BASE": "3/3 calls=47 jumped=0",
+   "G": "3/3 calls=43 jumped=1",
+   "GX": "3/3 calls=45 jumped=0"
+  },
+  "RecipeDeleteMultipleRecipes": {
+   "BASE": "3/3 calls=42 jumped=0",
+   "G": "3/3 calls=34 jumped=8",
+   "GX": "3/3 calls=38 jumped=7"
+  },
+  "RecipeDeleteSingleRecipe": {
+   "BASE": "3/3 calls=18 jumped=0",
+   "G": "3/3 calls=16 jumped=2",
+   "GX": "3/3 calls=20 jumped=1"
+  },
+  "SimpleCalendarDeleteOneEvent": {
+   "BASE": "3/3 calls=21 jumped=0",
+   "G": "3/3 calls=21 jumped=0",
+   "GX": "1/3 calls=36 jumped=0"
+  },
+  "SimpleCalendarEventsOnDate": {
+   "BASE": "2/3 calls=10 jumped=0",
+   "G": "2/3 calls=10 jumped=0",
+   "GX": "2/3 calls=11 jumped=0"
+  },
+  "SimpleCalendarLocationOfEvent": {
+   "BASE": "2/3 calls=15 jumped=0",
+   "G": "2/3 calls=15 jumped=0",
+   "GX": "2/3 calls=22 jumped=0"
+  }
+ }
+}

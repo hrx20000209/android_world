@@ -1,0 +1,674 @@
+[
+ {
+  "kind": "struct_merge",
+  "a": {
+   "task": "MarkorDeleteNewestNote",
+   "var": "v1",
+   "cid": "0024_s5_pre",
+   "exact_sig": "f57e9e1fbaa68dae",
+   "struct_sig": "8701a93dd4f28724",
+   "layout_sig": "f804eb175d067991",
+   "activity": "net.gsantner.markor/net.gsantner.markor.activity.MainActivity"
+  },
+  "b": {
+   "task": "MarkorDeleteNewestNote",
+   "var": "v2",
+   "cid": "0023_s5_pre",
+   "exact_sig": "fea794835aec8ee9",
+   "struct_sig": "8701a93dd4f28724",
+   "layout_sig": "f804eb175d067991",
+   "activity": "net.gsantner.markor/net.gsantner.markor.activity.MainActivity"
+  }
+ },
+ {
+  "kind": "struct_merge",
+  "a": {
+   "task": "ContactsAddContact",
+   "var": "v1",
+   "cid": "0037_s8_probe12_post",
+   "exact_sig": "08084c8a2ccaca7a",
+   "struct_sig": "faf26e71f34d0fe0",
+   "layout_sig": "694d9da2b15819b2",
+   "activity": "com.google.android.contacts/com.google.android.apps.contacts.editor.ContactEditorActivity"
+  },
+  "b": {
+   "task": "ContactsAddContact",
+   "var": "v3",
+   "cid": "0036_s8_probe11_post",
+   "exact_sig": "c226b1feaecb3dc8",
+   "struct_sig": "faf26e71f34d0fe0",
+   "layout_sig": "694d9da2b15819b2",
+   "activity": "com.google.android.contacts/com.google.android.apps.contacts.editor.ContactEditorActivity"
+  }
+ },
+ {
+  "kind": "struct_merge",
+  "a": {
+   "task": "RecipeDeleteMultipleRecipesWithConstraint",
+   "var": "v0",
+   "cid": "0013_s2_pre",
+   "exact_sig": "9592ded45633e8be",
+   "struct_sig": "94be68d81767abaa",
+   "layout_sig": "a388e073bde319fc",
+   "activity": "com.flauschcode.broccoli/com.flauschcode.broccoli.MainActivity"
+  },
+  "b": {
+   "task": "RecipeDeleteMultipleRecipesWithConstraint",
+   "var": "v3",
+   "cid": "0009_s2_pre",
+   "exact_sig": "d52fa5e3c085fa8d",
+   "struct_sig": "94be68d81767abaa",
+   "layout_sig": "a388e073bde319fc",
+   "activity": "com.flauschcode.broccoli/com.flauschcode.broccoli.MainActivity"
+  }
+ },
+ {
+  "kind": "struct_merge",
+  "a": {
+   "task": "ContactsAddContact",
+   "var": "v1",
+   "cid": "0027_s3_probe11_post",
+   "exact_sig": "3541252cf55bcf1b",
+   "struct_sig": "6d45852478ec9857",
+   "layout_sig": "694d9da2b15819b2",
+   "activity": "com.google.android.contacts/com.google.android.apps.contacts.editor.ContactEditorActivity"
+  },
+  "b": {
+   "task": "ContactsAddContact",
+   "var": "v3",
+   "cid": "0010_s2_pre",
+   "exact_sig": "abcfa55d4ca60268",
+   "struct_sig": "6d45852478ec9857",
+   "layout_sig": "694d9da2b15819b2",
+   "activity": "com.google.android.contacts/com.google.android.apps.contacts.editor.ContactEditorActivity"
+  }
+ },
+ {
+  "kind": "struct_merge",
+  "a": {
+   "task": "TasksDueOnDate",
+   "var": "v3",
+   "cid": "0012_s2_pre",
+   "exact_sig": "1c52828ee046f6fc",
+   "struct_sig": "94ab7d7ddd339fa5",
+   "layout_sig": "b0870632e114af02",
+   "activity": "org.tasks/com.todoroo.astrid.activity.MainActivity"
+  },
+  "b": {
+   "task": "TasksDueOnDate",
+   "var": "v4",
+   "cid": "0012_s2_pre",
+   "exact_sig": "42806af9f2540a1a",
+   "struct_sig": "94ab7d7ddd339fa5",
+   "layout_sig": "b0870632e114af02",
+   "activity": "org.tasks/com.todoroo.astrid.activity.MainActivity"
+  }
+ },
+ {
+  "kind": "struct_merge",
+  "a": {
+   "task": "SimpleCalendarDeleteOneEvent",
+   "var": "v2",
+   "cid": "0016_s3_probe6_post",
+   "exact_sig": "0ae1be872c6b6963",
+   "struct_sig": "8a466c3ac5bc1de9",
+   "layout_sig": "ff13563cd0648559",
+   "activity": "com.simplemobiletools.calendar.pro/com.simplemobiletools.calendar.pro.activities.MainActivity"
+  },
+  "b": {
+   "task": "SimpleCalendarDeleteOneEvent",
+   "var": "v3",
+   "cid": "0016_s3_probe6_post",
+   "exact_sig": "5772034475b86e46",
+   "struct_sig": "8a466c3ac5bc1de9",
+   "layout_sig": "ff13563cd0648559",
+   "activity": "com.simplemobiletools.calendar.pro/com.simplemobiletools.calendar.pro.activities.MainActivity"
+  }
+ },
+ {
+  "kind": "struct_merge",
+  "a": {
+   "task": "TasksDueOnDate",
+   "var": "v3",
+   "cid": "0021_s7_pre",
+   "exact_sig": "ba7cb8d4b07d1537",
+   "struct_sig": "0123af1ec63ef6d4",
+   "layout_sig": "2f3b6620cf98a28c",
+   "activity": "org.tasks/com.todoroo.astrid.activity.MainActivity"
+  },
+  "b": {
+   "task": "TasksDueOnDate",
+   "var": "v4",
+   "cid": "0016_s2_pre_requery",
+   "exact_sig": "bce5fc734a186b20",
+   "struct_sig": "0123af1ec63ef6d4",
+   "layout_sig": "2f3b6620cf98a28c",
+   "activity": "org.tasks/com.todoroo.astrid.activity.MainActivity"
+  }
+ },
+ {
+  "kind": "struct_merge",
+  "a": {
+   "task": "SystemBluetoothTurnOn",
+   "var": "v2",
+   "cid": "0016_s4_pre",
+   "exact_sig": "f02dfe8e6cd700a4",
+   "struct_sig": "bb72c562111d7632",
+   "layout_sig": "ed899d3f6fb0d150",
+   "activity": "com.android.settings/com.android.settings.SubSettings"
+  },
+  "b": {
+   "task": "SystemBluetoothTurnOn",
+   "var": "v3",
+   "cid": "0011_s3_pre",
+   "exact_sig": "e620b29032402bd6",
+   "struct_sig": "bb72c562111d7632",
+   "layout_sig": "ed899d3f6fb0d150",
+   "activity": "com.android.settings/com.android.settings.SubSettings"
+  }
+ },
+ {
+  "kind": "struct_merge",
+  "a": {
+   "task": "OsmAndFavorite",
+   "var": "v3",
+   "cid": "0016_s6_pre",
+   "exact_sig": "fa192f62b4293dec",
+   "struct_sig": "a8df841926009a09",
+   "layout_sig": "1040e3492d72aef0",
+   "activity": "net.osmand/net.osmand.plus.activities.MapActivity"
+  },
+  "b": {
+   "task": "OsmAndFavorite",
+   "var": "v4",
+   "cid": "0011_s6_pre",
+   "exact_sig": "915ec627d20b2b28",
+   "struct_sig": "a8df841926009a09",
+   "layout_sig": "1040e3492d72aef0",
+   "activity": "net.osmand/net.osmand.plus.activities.MapActivity"
+  }
+ },
+ {
+  "kind": "struct_merge",
+  "a": {
+   "task": "RecipeDeleteMultipleRecipesWithConstraint",
+   "var": "v1",
+   "cid": "0033_s12_pre",
+   "exact_sig": "dfd984e039aeb82b",
+   "struct_sig": "4f2ce9b12da08294",
+   "layout_sig": "181a6633025bb33d",
+   "activity": "com.flauschcode.broccoli/com.flauschcode.broccoli.recipe.details.RecipeDetailsActivity"
+  },
+  "b": {
+   "task": "RecipeDeleteMultipleRecipesWithConstraint",
+   "var": "v4",
+   "cid": "0027_s8_pre",
+   "exact_sig": "b64365bf830f795d",
+   "struct_sig": "4f2ce9b12da08294",
+   "layout_sig": "181a6633025bb33d",
+   "activity": "com.flauschcode.broccoli/com.flauschcode.broccoli.recipe.details.RecipeDetailsActivity"
+  }
+ },
+ {
+  "kind": "struct_merge",
+  "a": {
+   "task": "SportsTrackerLongestDistanceActivity",
+   "var": "v1",
+   "cid": "0003_s1_probe1_post",
+   "exact_sig": "f7966ad5c2541e34",
+   "struct_sig": "a8a426304773c452",
+   "layout_sig": "8f6d7e50fe990ab3",
+   "activity": "de.dennisguse.opentracks/de.dennisguse.opentracks.ui.markers.MarkerListActivity"
+  },
+  "b": {
+   "task": "SportsTrackerLongestDistanceActivity",
+   "var": "v3",
+   "cid": "0005_s1_probe2_post",
+   "exact_sig": "62207c3edff3d116",
+   "struct_sig": "a8a426304773c452",
+   "layout_sig": "8f6d7e50fe990ab3",
+   "activity": "de.dennisguse.opentracks/de.dennisguse.opentracks.ui.markers.MarkerListActivity"
+  }
+ },
+ {
+  "kind": "struct_merge",
+  "a": {
+   "task": "SportsTrackerLongestDistanceActivity",
+   "var": "v0",
+   "cid": "0002_s1_pre",
+   "exact_sig": "909d5d8d05ec6e6b",
+   "struct_sig": "fbd477ee1066e1d3",
+   "layout_sig": "91220b1f5ce31ec7",
+   "activity": "de.dennisguse.opentracks/de.dennisguse.opentracks.TrackListActivity"
+  },
+  "b": {
+   "task": "SportsTrackerLongestDistanceActivity",
+   "var": "v1",
+   "cid": "0014_final",
+   "exact_sig": "f3a9226bf699ed2b",
+   "struct_sig": "fbd477ee1066e1d3",
+   "layout_sig": "91220b1f5ce31ec7",
+   "activity": "de.dennisguse.opentracks/de.dennisguse.opentracks.TrackListActivity"
+  }
+ },
+ {
+  "kind": "struct_merge",
+  "a": {
+   "task": "MarkorCreateNote",
+   "var": "v1",
+   "cid": "0013_s3_pre",
+   "exact_sig": "16b46f40093cd5c8",
+   "struct_sig": "86098fd20b54acb5",
+   "layout_sig": "3912a5e01696850a",
+   "activity": "net.gsantner.markor/net.gsantner.markor.activity.MainActivity"
+  },
+  "b": {
+   "task": "MarkorCreateNote",
+   "var": "v2",
+   "cid": "0017_s3_pre",
+   "exact_sig": "7301b7b6d6226329",
+   "struct_sig": "86098fd20b54acb5",
+   "layout_sig": "3912a5e01696850a",
+   "activity": "net.gsantner.markor/net.gsantner.markor.activity.MainActivity"
+  }
+ },
+ {
+  "kind": "struct_merge",
+  "a": {
+   "task": "MarkorCreateNote",
+   "var": "v2",
+   "cid": "0018_s4_pre",
+   "exact_sig": "425080a3606ceb82",
+   "struct_sig": "0d803a876bd3ef16",
+   "layout_sig": "af034ddeb1838a69",
+   "activity": "net.gsantner.markor/net.gsantner.markor.activity.MainActivity"
+  },
+  "b": {
+   "task": "MarkorCreateNote",
+   "var": "v3",
+   "cid": "0020_s5_probe7_post",
+   "exact_sig": "9ca11c70a299070b",
+   "struct_sig": "0d803a876bd3ef16",
+   "layout_sig": "af034ddeb1838a69",
+   "activity": "net.gsantner.markor/net.gsantner.markor.activity.MainActivity"
+  }
+ },
+ {
+  "kind": "struct_merge",
+  "a": {
+   "task": "MarkorDeleteNewestNote",
+   "var": "v0",
+   "cid": "0013_s2_pre",
+   "exact_sig": "44a7f45baad00636",
+   "struct_sig": "f1317674fb82ad66",
+   "layout_sig": "89455cf6a481f390",
+   "activity": "net.gsantner.markor/net.gsantner.markor.activity.MainActivity"
+  },
+  "b": {
+   "task": "MarkorDeleteNewestNote",
+   "var": "v2",
+   "cid": "0021_s3_pre",
+   "exact_sig": "869264aa1e0d48b9",
+   "struct_sig": "f1317674fb82ad66",
+   "layout_sig": "89455cf6a481f390",
+   "activity": "net.gsantner.markor/net.gsantner.markor.activity.MainActivity"
+  }
+ },
+ {
+  "kind": "struct_merge",
+  "a": {
+   "task": "ExpenseAddSingle",
+   "var": "v2",
+   "cid": "0031_s8_pre",
+   "exact_sig": "f66417cf9d9407f1",
+   "struct_sig": "8a66cb969c44b759",
+   "layout_sig": "a5287c3ad265a8fa",
+   "activity": "com.arduia.expense/com.arduia.expense.ui.MainActivity"
+  },
+  "b": {
+   "task": "ExpenseAddSingle",
+   "var": "v3",
+   "cid": "0022_s6_pre",
+   "exact_sig": "cb95b0df8180beed",
+   "struct_sig": "8a66cb969c44b759",
+   "layout_sig": "a5287c3ad265a8fa",
+   "activity": "com.arduia.expense/com.arduia.expense.ui.MainActivity"
+  }
+ },
+ {
+  "kind": "layout_only",
+  "a": {
+   "task": "NotesTodoItemCount",
+   "var": "v0",
+   "cid": "0010_s2_pre",
+   "exact_sig": "6a5eb9853958d809",
+   "struct_sig": "6ad5a406b57b6f0f",
+   "layout_sig": "2f0923d04fe9eb24",
+   "activity": "net.cozic.joplin/net.cozic.joplin.MainActivity"
+  },
+  "b": {
+   "task": "NotesTodoItemCount",
+   "var": "v3",
+   "cid": "0003_s1_probe1_post",
+   "exact_sig": "1b2785a4a8d1de65",
+   "struct_sig": "01e90d5e47a7cf4b",
+   "layout_sig": "2f0923d04fe9eb24",
+   "activity": "net.cozic.joplin/net.cozic.joplin.MainActivity"
+  }
+ },
+ {
+  "kind": "layout_only",
+  "a": {
+   "task": "NotesTodoItemCount",
+   "var": "v1",
+   "cid": "0005_s1_probe2_post",
+   "exact_sig": "5d2ffabfef252828",
+   "struct_sig": "26d46ca0c2410172",
+   "layout_sig": "b3f044f70ad70fc4",
+   "activity": "net.cozic.joplin/net.cozic.joplin.MainActivity"
+  },
+  "b": {
+   "task": "NotesTodoItemCount",
+   "var": "v3",
+   "cid": "0005_s1_probe2_post",
+   "exact_sig": "6bba9fc7c38542a2",
+   "struct_sig": "b52899de611a10bd",
+   "layout_sig": "b3f044f70ad70fc4",
+   "activity": "net.cozic.joplin/net.cozic.joplin.MainActivity"
+  }
+ },
+ {
+  "kind": "layout_only",
+  "a": {
+   "task": "ExpenseAddSingle",
+   "var": "v2",
+   "cid": "0022_s3_probe8_post",
+   "exact_sig": "fc48b937680eb937",
+   "struct_sig": "8c594a8476f09186",
+   "layout_sig": "93b34caefc9c6ac6",
+   "activity": "com.arduia.expense/com.arduia.expense.ui.MainActivity"
+  },
+  "b": {
+   "task": "ExpenseAddSingle",
+   "var": "v3",
+   "cid": "0020_s4_pre",
+   "exact_sig": "367492991acf2d6f",
+   "struct_sig": "aec7702fefb88df4",
+   "layout_sig": "93b34caefc9c6ac6",
+   "activity": "com.arduia.expense/com.arduia.expense.ui.MainActivity"
+  }
+ },
+ {
+  "kind": "layout_only",
+  "a": {
+   "task": "SimpleCalendarDeleteOneEvent",
+   "var": "v0",
+   "cid": "0024_s9_pre",
+   "exact_sig": "b60feef4dbb17b26",
+   "struct_sig": "d34cf6bfd71bebc9",
+   "layout_sig": "29106c30056ba8af",
+   "activity": "com.simplemobiletools.calendar.pro/com.simplemobiletools.calendar.pro.activities.EventActivity"
+  },
+  "b": {
+   "task": "SimpleCalendarDeleteOneEvent",
+   "var": "v2",
+   "cid": "0025_s4_pre",
+   "exact_sig": "e46348a6cdcb32eb",
+   "struct_sig": "6e93570f3ce31273",
+   "layout_sig": "29106c30056ba8af",
+   "activity": "com.simplemobiletools.calendar.pro/com.simplemobiletools.calendar.pro.activities.EventActivity"
+  }
+ },
+ {
+  "kind": "layout_only",
+  "a": {
+   "task": "RecipeDeleteSingleRecipe",
+   "var": "v2",
+   "cid": "0005_s1_probe2_post",
+   "exact_sig": "567023fbd1e0b780",
+   "struct_sig": "27d3b314cfb5aae1",
+   "layout_sig": "a73bf8e9325a033c",
+   "activity": "com.flauschcode.broccoli/com.flauschcode.broccoli.MainActivity"
+  },
+  "b": {
+   "task": "RecipeDeleteSingleRecipe",
+   "var": "v4",
+   "cid": "0005_s1_probe2_post",
+   "exact_sig": "b4c07790b5ea46a9",
+   "struct_sig": "4ecd5872a202e381",
+   "layout_sig": "a73bf8e9325a033c",
+   "activity": "com.flauschcode.broccoli/com.flauschcode.broccoli.MainActivity"
+  }
+ },
+ {
+  "kind": "layout_only",
+  "a": {
+   "task": "RecipeDeleteMultipleRecipesWithConstraint",
+   "var": "v1",
+   "cid": "0032_s11_pre",
+   "exact_sig": "5d64ed65a81d7413",
+   "struct_sig": "dc9c9f93e8b1780a",
+   "layout_sig": "66020c626301b3a2",
+   "activity": "com.flauschcode.broccoli/com.flauschcode.broccoli.MainActivity"
+  },
+  "b": {
+   "task": "RecipeDeleteMultipleRecipesWithConstraint",
+   "var": "v4",
+   "cid": "0026_s7_pre",
+   "exact_sig": "59eefc9a0395599e",
+   "struct_sig": "e4cece9f78a7d726",
+   "layout_sig": "66020c626301b3a2",
+   "activity": "com.flauschcode.broccoli/com.flauschcode.broccoli.MainActivity"
+  }
+ },
+ {
+  "kind": "layout_only",
+  "a": {
+   "task": "ExpenseDeleteSingle",
+   "var": "v0",
+   "cid": "0007_s1_probe3_post",
+   "exact_sig": "abfb40ad8fd04e97",
+   "struct_sig": "38f46d403d26f3cc",
+   "layout_sig": "9ff023abade07167",
+   "activity": "com.arduia.expense/com.arduia.expense.ui.MainActivity"
+  },
+  "b": {
+   "task": "ExpenseDeleteSingle",
+   "var": "v4",
+   "cid": "0007_s1_probe3_post",
+   "exact_sig": "e19bcc95a5326006",
+   "struct_sig": "6fbff7dbaba129a4",
+   "layout_sig": "9ff023abade07167",
+   "activity": "com.arduia.expense/com.arduia.expense.ui.MainActivity"
+  }
+ },
+ {
+  "kind": "layout_only",
+  "a": {
+   "task": "MarkorDeleteNewestNote",
+   "var": "v0",
+   "cid": "0023_s3_pre",
+   "exact_sig": "a236d8b7682ebe09",
+   "struct_sig": "9af2ae7b49b433eb",
+   "layout_sig": "11784247e019830c",
+   "activity": "net.gsantner.markor/net.gsantner.markor.activity.MainActivity"
+  },
+  "b": {
+   "task": "MarkorDeleteNewestNote",
+   "var": "v1",
+   "cid": "0023_s4_pre",
+   "exact_sig": "61171bc2f04db239",
+   "struct_sig": "78a18fc716e08adb",
+   "layout_sig": "11784247e019830c",
+   "activity": "net.gsantner.markor/net.gsantner.markor.activity.MainActivity"
+  }
+ },
+ {
+  "kind": "layout_only",
+  "a": {
+   "task": "OsmAndFavorite",
+   "var": "v0",
+   "cid": "0015_s5_pre",
+   "exact_sig": "7bb862fc63325601",
+   "struct_sig": "0c2fa7693961e610",
+   "layout_sig": "60bbec7a3c63de7d",
+   "activity": "net.osmand/net.osmand.plus.activities.MapActivity"
+  },
+  "b": {
+   "task": "OsmAndFavorite",
+   "var": "v3",
+   "cid": "0015_s5_pre",
+   "exact_sig": "bf654c49d8ef6b68",
+   "struct_sig": "2ffe50d4e875953f",
+   "layout_sig": "60bbec7a3c63de7d",
+   "activity": "net.osmand/net.osmand.plus.activities.MapActivity"
+  }
+ },
+ {
+  "kind": "layout_only",
+  "a": {
+   "task": "OsmAndFavorite",
+   "var": "v2",
+   "cid": "0016_s6_pre",
+   "exact_sig": "afbc0fda929a01cb",
+   "struct_sig": "a8f7927a7ebe7cd2",
+   "layout_sig": "1040e3492d72aef0",
+   "activity": "net.osmand/net.osmand.plus.activities.MapActivity"
+  },
+  "b": {
+   "task": "OsmAndFavorite",
+   "var": "v4",
+   "cid": "0011_s6_pre",
+   "exact_sig": "915ec627d20b2b28",
+   "struct_sig": "a8df841926009a09",
+   "layout_sig": "1040e3492d72aef0",
+   "activity": "net.osmand/net.osmand.plus.activities.MapActivity"
+  }
+ },
+ {
+  "kind": "layout_only",
+  "a": {
+   "task": "OsmAndFavorite",
+   "var": "v2",
+   "cid": "0014_s4_pre",
+   "exact_sig": "d422dd18019fe8a9",
+   "struct_sig": "d4d6f0ce2de443d2",
+   "layout_sig": "a1c4d5c30c303e28",
+   "activity": "net.osmand/net.osmand.plus.activities.MapActivity"
+  },
+  "b": {
+   "task": "OsmAndFavorite",
+   "var": "v3",
+   "cid": "0014_s4_pre",
+   "exact_sig": "92584906f1490b0c",
+   "struct_sig": "4281e99f4138e952",
+   "layout_sig": "a1c4d5c30c303e28",
+   "activity": "net.osmand/net.osmand.plus.activities.MapActivity"
+  }
+ },
+ {
+  "kind": "layout_only",
+  "a": {
+   "task": "OsmAndFavorite",
+   "var": "v0",
+   "cid": "0003_s1_probe1_post",
+   "exact_sig": "4cf11acd4b19c46b",
+   "struct_sig": "9fe997eacf417aa4",
+   "layout_sig": "bd2e6e32c07e7f05",
+   "activity": "net.osmand/net.osmand.plus.activities.MapActivity"
+  },
+  "b": {
+   "task": "OsmAndFavorite",
+   "var": "v1",
+   "cid": "0009_s1_probe4_post",
+   "exact_sig": "6e71117bfb366df6",
+   "struct_sig": "8cb09ee67c29ef8a",
+   "layout_sig": "bd2e6e32c07e7f05",
+   "activity": "net.osmand/net.osmand.plus.activities.MapActivity"
+  }
+ },
+ {
+  "kind": "layout_only",
+  "a": {
+   "task": "ExpenseAddSingle",
+   "var": "v1",
+   "cid": "0009_s1_probe4_post",
+   "exact_sig": "9beebdee98ce4d9a",
+   "struct_sig": "ba35dde7f0a9de3d",
+   "layout_sig": "baa2e0a1a6199157",
+   "activity": "com.arduia.expense/com.arduia.expense.ui.MainActivity"
+  },
+  "b": {
+   "task": "ExpenseAddSingle",
+   "var": "v3",
+   "cid": "0007_s1_probe3_post",
+   "exact_sig": "5fd35edd42bc1c90",
+   "struct_sig": "9f811942e7c1cf82",
+   "layout_sig": "baa2e0a1a6199157",
+   "activity": "com.arduia.expense/com.arduia.expense.ui.MainActivity"
+  }
+ },
+ {
+  "kind": "layout_only",
+  "a": {
+   "task": "MarkorDeleteNewestNote",
+   "var": "v3",
+   "cid": "0024_s8_pre",
+   "exact_sig": "b0913c568767b20f",
+   "struct_sig": "7c502a8ef7313c71",
+   "layout_sig": "189841b0e91b6b1c",
+   "activity": "net.gsantner.markor/net.gsantner.markor.activity.DocumentActivity"
+  },
+  "b": {
+   "task": "MarkorDeleteNewestNote",
+   "var": "v4",
+   "cid": "0012_s2_pre",
+   "exact_sig": "6e9b7006aa080fde",
+   "struct_sig": "37095e689d20777a",
+   "layout_sig": "189841b0e91b6b1c",
+   "activity": "net.gsantner.markor/net.gsantner.markor.activity.DocumentActivity"
+  }
+ },
+ {
+  "kind": "layout_only",
+  "a": {
+   "task": "TasksDueOnDate",
+   "var": "v3",
+   "cid": "0005_s1_probe2_post",
+   "exact_sig": "850d22d843af47d9",
+   "struct_sig": "aacb1e8a65e39be0",
+   "layout_sig": "70f9aeaec281f3d6",
+   "activity": "org.tasks/com.todoroo.astrid.activity.MainActivity"
+  },
+  "b": {
+   "task": "TasksDueOnDate",
+   "var": "v4",
+   "cid": "0007_s1_probe3_post",
+   "exact_sig": "46f3460a7a49e62d",
+   "struct_sig": "081da6effe549292",
+   "layout_sig": "70f9aeaec281f3d6",
+   "activity": "org.tasks/com.todoroo.astrid.activity.MainActivity"
+  }
+ },
+ {
+  "kind": "layout_only",
+  "a": {
+   "task": "ContactsAddContact",
+   "var": "v1",
+   "cid": "0043_s8_probe15_post",
+   "exact_sig": "e6058223dc540e18",
+   "struct_sig": "5f4844fbbf7bb6b4",
+   "layout_sig": "3046f45a483e4016",
+   "activity": "com.simplemobiletools.smsmessenger/com.simplemobiletools.smsmessenger.activities.ThreadActivity"
+  },
+  "b": {
+   "task": "ContactsAddContact",
+   "var": "v4",
+   "cid": "0036_s9_probe11_post",
+   "exact_sig": "b21a8ff52edc4139",
+   "struct_sig": "aae6d672c1fc3e54",
+   "layout_sig": "3046f45a483e4016",
+   "activity": "com.simplemobiletools.smsmessenger/com.simplemobiletools.smsmessenger.activities.ThreadActivity"
+  }
+ }
+]

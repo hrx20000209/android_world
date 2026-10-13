@@ -1,0 +1,53 @@
+{
+ "name": "phase2",
+ "tasks": [
+  {
+   "task": "ExpenseDeleteSingle",
+   "seeds": [
+    1011,
+    1012,
+    1013
+   ]
+  },
+  {
+   "task": "RecipeDeleteSingleRecipe",
+   "seeds": [
+    1011,
+    1012,
+    1014
+   ]
+  },
+  {
+   "task": "SimpleCalendarEventsOnDate",
+   "seeds": [
+    1011,
+    1012,
+    1016
+   ]
+  },
+  {
+   "task": "SystemBluetoothTurnOn",
+   "seeds": [
+    1011,
+    1012,
+    1013
+   ]
+  },
+  {
+   "task": "NotesTodoItemCount",
+   "seeds": [
+    1015,
+    1022,
+    1025
+   ]
+  },
+  {
+   "task": "ContactsAddContact",
+   "seeds": [
+    1011,
+    1012,
+    1013
+   ]
+  }
+ ]
+}

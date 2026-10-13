@@ -1,0 +1,83 @@
+{
+ "name": "batch2",
+ "tasks": [
+  {
+   "task": "TasksDueOnDate",
+   "app": "Tasks",
+   "category": "list + information retrieval",
+   "variant_mechanism": "A param (date) + B data (tasks)",
+   "seeds": [
+    1001,
+    1002,
+    1003,
+    1004,
+    1006
+   ]
+  },
+  {
+   "task": "NotesTodoItemCount",
+   "app": "Joplin",
+   "category": "multi-page navigation + counting",
+   "variant_mechanism": "A param (folder) + B data (notes)",
+   "seeds": [
+    1001,
+    1002,
+    1003,
+    1004,
+    1006
+   ]
+  },
+  {
+   "task": "SimpleCalendarDeleteOneEvent",
+   "app": "Simple Calendar Pro",
+   "category": "navigation + deletion",
+   "variant_mechanism": "A param (date/title) + B data",
+   "seeds": [
+    1001,
+    1002,
+    1003,
+    1004,
+    1005
+   ]
+  },
+  {
+   "task": "SportsTrackerLongestDistanceActivity",
+   "app": "OpenTracks",
+   "category": "list + information retrieval",
+   "variant_mechanism": "A param (activity type) + B data",
+   "seeds": [
+    1001,
+    1002,
+    1003,
+    1004,
+    1005
+   ]
+  },
+  {
+   "task": "OsmAndFavorite",
+   "app": "OsmAnd",
+   "category": "search + map UI (dynamic map content)",
+   "variant_mechanism": "A param (location) + C runtime map rendering",
+   "seeds": [
+    1001,
+    1002,
+    1003,
+    1004,
+    1006
+   ]
+  },
+  {
+   "task": "RecipeDeleteMultipleRecipesWithConstraint",
+   "app": "Broccoli",
+   "category": "search/filter + multi deletion",
+   "variant_mechanism": "A param (ingredient) + B data",
+   "seeds": [
+    1001,
+    1002,
+    1003,
+    1005,
+    1006
+   ]
+  }
+ ]
+}

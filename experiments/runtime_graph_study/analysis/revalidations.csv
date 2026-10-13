@@ -1,0 +1,1046 @@
+task,rule,shared,instance,origin,slot_id,same_outcome,n_prior,prior_dsts,outcome,dst_cid,src_cid,prior_dst_cid,prior_ep_instance
+ContactsAddContact,exact,True,ContactsAddContact/v1,agent,OPEN_APP:Contacts,True,1,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ContactsAddContact/v0
+ContactsAddContact,exact,True,ContactsAddContact/v1,agent,EditText|||First name,False,1,1,new_screen,0022_s3_pre,0012_s2_pre,0009_s3_pre,ContactsAddContact/v0
+ContactsAddContact,exact,True,ContactsAddContact/v2,agent,OPEN_APP:Contacts,True,2,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ContactsAddContact/v1
+ContactsAddContact,exact,True,ContactsAddContact/v2,explore,ImageButton||Open navigation drawer|Open navigation drawer,True,1,1,new_screen,0005_s1_probe2_post,0002_s1_pre,0003_s1_probe1_post,ContactsAddContact/v1
+ContactsAddContact,exact,True,ContactsAddContact/v2,explore,FrameLayout|selected_account_disc|Signed in as Device Account and settings.|Signed in as Device Account and settings.,False,1,1,new_screen,0007_s1_probe3_post,0002_s1_pre,0005_s1_probe2_post,ContactsAddContact/v1
+ContactsAddContact,exact,True,ContactsAddContact/v2,agent,ImageButton|floating_action_button|Create contact|Create contact,True,2,1,new_screen,0010_s2_pre,0002_s1_pre,0012_s2_pre,ContactsAddContact/v1
+ContactsAddContact,exact,True,ContactsAddContact/v2,explore,ImageView||More options|More options,True,1,1,new_screen,0011_s2_probe4_post,0010_s2_pre,0013_s2_probe5_post,ContactsAddContact/v1
+ContactsAddContact,exact,True,ContactsAddContact/v2,explore,Button|button_change_photo||Add picture,True,1,1,new_screen,0013_s2_probe5_post,0010_s2_pre,0015_s2_probe6_post,ContactsAddContact/v1
+ContactsAddContact,exact,True,ContactsAddContact/v2,explore,FrameLayout|expansion_view_container||Show more name fields,True,1,1,in_place_content_change,0015_s2_probe6_post,0010_s2_pre,0017_s2_probe7_post,ContactsAddContact/v1
+ContactsAddContact,exact,True,ContactsAddContact/v2,explore,ImageButton|text_input_end_icon|Show date picker|Show date picker,True,1,1,new_screen,0017_s2_probe7_post,0010_s2_pre,0019_s2_probe8_post,ContactsAddContact/v1
+ContactsAddContact,exact,True,ContactsAddContact/v2,agent,EditText|||First name,True,2,2,new_screen,0020_s3_pre,0010_s2_pre,0022_s3_pre,ContactsAddContact/v1
+ContactsAddContact,exact,True,ContactsAddContact/v2,explore,ImageView||More options|More options,True,1,1,new_screen,0021_s3_probe8_post,0020_s3_pre,0023_s3_probe9_post,ContactsAddContact/v1
+ContactsAddContact,exact,True,ContactsAddContact/v2,explore,Button|button_change_photo||Add picture,True,1,1,new_screen,0023_s3_probe9_post,0020_s3_pre,0025_s3_probe10_post,ContactsAddContact/v1
+ContactsAddContact,exact,True,ContactsAddContact/v2,explore,FrameLayout|expansion_view_container||Show more name fields,True,1,1,new_screen,0025_s3_probe10_post,0020_s3_pre,0027_s3_probe11_post,ContactsAddContact/v1
+ContactsAddContact,exact,True,ContactsAddContact/v3,agent,OPEN_APP:Contacts,True,3,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ContactsAddContact/v2
+ContactsAddContact,exact,True,ContactsAddContact/v3,explore,ImageButton||Open navigation drawer|Open navigation drawer,True,2,1,new_screen,0003_s1_probe1_post,0002_s1_pre,0005_s1_probe2_post,ContactsAddContact/v2
+ContactsAddContact,exact,True,ContactsAddContact/v3,explore,FrameLayout|selected_account_disc|Signed in as Device Account and settings.|Signed in as Device Account and settings.,True,2,2,new_screen,0005_s1_probe2_post,0002_s1_pre,0007_s1_probe3_post,ContactsAddContact/v2
+ContactsAddContact,exact,True,ContactsAddContact/v3,explore,ImageButton|floating_action_button|Create contact|Create contact,True,3,1,new_screen,0007_s1_probe3_post,0002_s1_pre,0010_s2_pre,ContactsAddContact/v2
+ContactsAddContact,exact,True,ContactsAddContact/v3,agent,ImageButton|floating_action_button|Create contact|Create contact,True,3,1,new_screen,0010_s2_pre,0002_s1_pre,0010_s2_pre,ContactsAddContact/v2
+ContactsAddContact,exact,True,ContactsAddContact/v3,explore,ImageView||More options|More options,True,2,1,new_screen,0011_s2_probe4_post,0010_s2_pre,0011_s2_probe4_post,ContactsAddContact/v2
+ContactsAddContact,exact,True,ContactsAddContact/v3,explore,Button|button_change_photo||Add picture,True,2,1,new_screen,0013_s2_probe5_post,0010_s2_pre,0013_s2_probe5_post,ContactsAddContact/v2
+ContactsAddContact,exact,True,ContactsAddContact/v3,explore,FrameLayout|expansion_view_container||Show more name fields,True,2,1,in_place_content_change,0015_s2_probe6_post,0010_s2_pre,0015_s2_probe6_post,ContactsAddContact/v2
+ContactsAddContact,exact,True,ContactsAddContact/v3,agent,EditText|||First name,True,3,2,new_screen,0018_s3_pre,0010_s2_pre,0020_s3_pre,ContactsAddContact/v2
+ContactsAddContact,exact,True,ContactsAddContact/v3,agent,INPUT_TEXT:EditText|||First name,False,1,1,new_screen,0028_s4_pre,0018_s3_pre,0010_s4_pre,ContactsAddContact/v0
+ContactsAddContact,exact,True,ContactsAddContact/v4,agent,OPEN_APP:Contacts,True,4,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ContactsAddContact/v3
+ContactsAddContact,exact,True,ContactsAddContact/v4,explore,ImageButton||Open navigation drawer|Open navigation drawer,True,3,1,new_screen,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,ContactsAddContact/v3
+ContactsAddContact,exact,True,ContactsAddContact/v4,explore,FrameLayout|selected_account_disc|Signed in as Device Account and settings.|Signed in as Device Account and settings.,True,3,2,new_screen,0005_s1_probe2_post,0002_s1_pre,0005_s1_probe2_post,ContactsAddContact/v3
+ContactsAddContact,exact,True,ContactsAddContact/v4,explore,ImageButton|floating_action_button|Create contact|Create contact,True,5,1,new_screen,0007_s1_probe3_post,0002_s1_pre,0010_s2_pre,ContactsAddContact/v3
+ContactsAddContact,exact,True,ContactsAddContact/v4,explore,FrameLayout|highlights|Highlights|Highlights,True,1,1,new_screen,0009_s1_probe4_post,0002_s1_pre,0009_s1_probe4_post,ContactsAddContact/v1
+ContactsAddContact,exact,True,ContactsAddContact/v4,agent,ImageButton|floating_action_button|Create contact|Create contact,True,5,1,new_screen,0012_s2_pre,0002_s1_pre,0010_s2_pre,ContactsAddContact/v3
+ContactsAddContact,exact,True,ContactsAddContact/v4,explore,ImageView||More options|More options,True,3,1,new_screen,0013_s2_probe5_post,0012_s2_pre,0011_s2_probe4_post,ContactsAddContact/v3
+ContactsAddContact,exact,True,ContactsAddContact/v4,explore,Button|button_change_photo||Add picture,True,3,1,new_screen,0015_s2_probe6_post,0012_s2_pre,0013_s2_probe5_post,ContactsAddContact/v3
+ContactsAddContact,exact,True,ContactsAddContact/v4,explore,FrameLayout|expansion_view_container||Show more name fields,True,3,1,in_place_content_change,0017_s2_probe7_post,0012_s2_pre,0015_s2_probe6_post,ContactsAddContact/v3
+ContactsAddContact,exact,True,ContactsAddContact/v4,agent,EditText|||First name,True,4,2,new_screen,0020_s3_pre,0012_s2_pre,0018_s3_pre,ContactsAddContact/v3
+ContactsAddContact,exact,True,ContactsAddContact/v4,explore,ImageView||More options|More options,True,1,1,new_screen,0021_s3_probe8_post,0020_s3_pre,0019_s3_probe7_post,ContactsAddContact/v3
+ContactsAddContact,exact,True,ContactsAddContact/v4,explore,Button|button_change_photo||Add picture,True,1,1,new_screen,0023_s3_probe9_post,0020_s3_pre,0021_s3_probe8_post,ContactsAddContact/v3
+ContactsAddContact,exact,True,ContactsAddContact/v4,explore,FrameLayout|expansion_view_container||Show more name fields,True,1,1,new_screen,0025_s3_probe10_post,0020_s3_pre,0023_s3_probe9_post,ContactsAddContact/v3
+ContactsAddContact,exact,True,ContactsAddContact/v4,agent,INPUT_TEXT:EditText|||First name,False,2,2,new_screen,0030_s4_pre,0020_s3_pre,0028_s4_pre,ContactsAddContact/v3
+ContactsAddContact,struct,True,ContactsAddContact/v1,agent,OPEN_APP:Contacts,True,1,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ContactsAddContact/v0
+ContactsAddContact,struct,True,ContactsAddContact/v1,agent,EditText|||First name,True,1,1,new_screen,0022_s3_pre,0012_s2_pre,0009_s3_pre,ContactsAddContact/v0
+ContactsAddContact,struct,True,ContactsAddContact/v1,agent,INPUT_TEXT:EditText|||Last name,True,1,1,new_screen,0033_s5_pre,0032_s4_pre,0011_s5_pre,ContactsAddContact/v0
+ContactsAddContact,struct,True,ContactsAddContact/v1,agent,EditText|||Phone,True,1,1,no_change,0034_s6_pre,0033_s5_pre,0012_s6_pre,ContactsAddContact/v0
+ContactsAddContact,struct,True,ContactsAddContact/v1,agent,Button|toolbar_button||Save,True,1,1,new_screen,0036_s8_pre,0035_s7_pre,0014_s8_pre,ContactsAddContact/v0
+ContactsAddContact,struct,True,ContactsAddContact/v1,agent,STATUS,True,1,1,no_change,0047_final,0036_s8_pre,0015_final,ContactsAddContact/v0
+ContactsAddContact,struct,True,ContactsAddContact/v2,agent,OPEN_APP:Contacts,True,2,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ContactsAddContact/v1
+ContactsAddContact,struct,True,ContactsAddContact/v2,explore,ImageButton||Open navigation drawer|Open navigation drawer,True,1,1,new_screen,0005_s1_probe2_post,0002_s1_pre,0003_s1_probe1_post,ContactsAddContact/v1
+ContactsAddContact,struct,True,ContactsAddContact/v2,explore,FrameLayout|selected_account_disc|Signed in as Device Account and settings.|Signed in as Device Account and settings.,False,1,1,new_screen,0007_s1_probe3_post,0002_s1_pre,0005_s1_probe2_post,ContactsAddContact/v1
+ContactsAddContact,struct,True,ContactsAddContact/v2,agent,ImageButton|floating_action_button|Create contact|Create contact,True,2,1,new_screen,0010_s2_pre,0002_s1_pre,0012_s2_pre,ContactsAddContact/v1
+ContactsAddContact,struct,True,ContactsAddContact/v2,explore,ImageView||More options|More options,True,1,1,new_screen,0011_s2_probe4_post,0010_s2_pre,0013_s2_probe5_post,ContactsAddContact/v1
+ContactsAddContact,struct,True,ContactsAddContact/v2,explore,Button|button_change_photo||Add picture,True,1,1,new_screen,0013_s2_probe5_post,0010_s2_pre,0015_s2_probe6_post,ContactsAddContact/v1
+ContactsAddContact,struct,True,ContactsAddContact/v2,explore,FrameLayout|expansion_view_container||Show more name fields,True,1,1,in_place_content_change,0015_s2_probe6_post,0010_s2_pre,0017_s2_probe7_post,ContactsAddContact/v1
+ContactsAddContact,struct,True,ContactsAddContact/v2,explore,ImageButton|text_input_end_icon|Show date picker|Show date picker,True,1,1,new_screen,0017_s2_probe7_post,0010_s2_pre,0019_s2_probe8_post,ContactsAddContact/v1
+ContactsAddContact,struct,True,ContactsAddContact/v2,agent,EditText|||First name,True,2,1,new_screen,0020_s3_pre,0010_s2_pre,0022_s3_pre,ContactsAddContact/v1
+ContactsAddContact,struct,True,ContactsAddContact/v2,explore,ImageView||More options|More options,True,1,1,new_screen,0021_s3_probe8_post,0020_s3_pre,0023_s3_probe9_post,ContactsAddContact/v1
+ContactsAddContact,struct,True,ContactsAddContact/v2,explore,Button|button_change_photo||Add picture,True,1,1,new_screen,0023_s3_probe9_post,0020_s3_pre,0025_s3_probe10_post,ContactsAddContact/v1
+ContactsAddContact,struct,True,ContactsAddContact/v2,explore,FrameLayout|expansion_view_container||Show more name fields,True,1,1,new_screen,0025_s3_probe10_post,0020_s3_pre,0027_s3_probe11_post,ContactsAddContact/v1
+ContactsAddContact,struct,True,ContactsAddContact/v2,agent,INPUT_TEXT:EditText|||First name,True,1,1,new_screen,0030_s4_pre,0020_s3_pre,0010_s4_pre,ContactsAddContact/v0
+ContactsAddContact,struct,True,ContactsAddContact/v2,agent,INPUT_TEXT:EditText|||Last name,True,2,1,new_screen,0031_s5_pre,0030_s4_pre,0033_s5_pre,ContactsAddContact/v1
+ContactsAddContact,struct,True,ContactsAddContact/v2,agent,INPUT_TEXT,True,2,1,new_screen,0038_s8_pre,0037_s7_pre,0035_s7_pre,ContactsAddContact/v1
+ContactsAddContact,struct,True,ContactsAddContact/v2,agent,Button|toolbar_button||Save,True,2,1,new_screen,0039_s9_pre,0038_s8_pre,0036_s8_pre,ContactsAddContact/v1
+ContactsAddContact,struct,True,ContactsAddContact/v2,agent,STATUS,True,2,1,no_change,0040_final,0039_s9_pre,0047_final,ContactsAddContact/v1
+ContactsAddContact,struct,True,ContactsAddContact/v3,agent,OPEN_APP:Contacts,True,3,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ContactsAddContact/v2
+ContactsAddContact,struct,True,ContactsAddContact/v3,explore,ImageButton||Open navigation drawer|Open navigation drawer,True,2,1,new_screen,0003_s1_probe1_post,0002_s1_pre,0005_s1_probe2_post,ContactsAddContact/v2
+ContactsAddContact,struct,True,ContactsAddContact/v3,explore,FrameLayout|selected_account_disc|Signed in as Device Account and settings.|Signed in as Device Account and settings.,True,2,2,new_screen,0005_s1_probe2_post,0002_s1_pre,0007_s1_probe3_post,ContactsAddContact/v2
+ContactsAddContact,struct,True,ContactsAddContact/v3,explore,ImageButton|floating_action_button|Create contact|Create contact,True,3,1,new_screen,0007_s1_probe3_post,0002_s1_pre,0010_s2_pre,ContactsAddContact/v2
+ContactsAddContact,struct,True,ContactsAddContact/v3,agent,ImageButton|floating_action_button|Create contact|Create contact,True,3,1,new_screen,0010_s2_pre,0002_s1_pre,0010_s2_pre,ContactsAddContact/v2
+ContactsAddContact,struct,True,ContactsAddContact/v3,explore,ImageView||More options|More options,True,2,1,new_screen,0011_s2_probe4_post,0010_s2_pre,0011_s2_probe4_post,ContactsAddContact/v2
+ContactsAddContact,struct,True,ContactsAddContact/v3,explore,Button|button_change_photo||Add picture,True,2,1,new_screen,0013_s2_probe5_post,0010_s2_pre,0013_s2_probe5_post,ContactsAddContact/v2
+ContactsAddContact,struct,True,ContactsAddContact/v3,explore,FrameLayout|expansion_view_container||Show more name fields,True,2,1,in_place_content_change,0015_s2_probe6_post,0010_s2_pre,0015_s2_probe6_post,ContactsAddContact/v2
+ContactsAddContact,struct,True,ContactsAddContact/v3,agent,EditText|||First name,True,3,1,new_screen,0018_s3_pre,0010_s2_pre,0020_s3_pre,ContactsAddContact/v2
+ContactsAddContact,struct,True,ContactsAddContact/v3,explore,ImageView||More options|More options,True,2,1,new_screen,0019_s3_probe7_post,0018_s3_pre,0021_s3_probe8_post,ContactsAddContact/v2
+ContactsAddContact,struct,True,ContactsAddContact/v3,explore,Button|button_change_photo||Add picture,True,2,1,new_screen,0021_s3_probe8_post,0018_s3_pre,0023_s3_probe9_post,ContactsAddContact/v2
+ContactsAddContact,struct,True,ContactsAddContact/v3,explore,FrameLayout|expansion_view_container||Show more name fields,True,2,1,new_screen,0023_s3_probe9_post,0018_s3_pre,0025_s3_probe10_post,ContactsAddContact/v2
+ContactsAddContact,struct,True,ContactsAddContact/v3,agent,INPUT_TEXT:EditText|||First name,True,2,1,new_screen,0028_s4_pre,0018_s3_pre,0030_s4_pre,ContactsAddContact/v2
+ContactsAddContact,struct,True,ContactsAddContact/v3,agent,INPUT_TEXT:EditText|||Last name,True,3,1,new_screen,0029_s5_pre,0028_s4_pre,0031_s5_pre,ContactsAddContact/v2
+ContactsAddContact,struct,True,ContactsAddContact/v3,agent,EditText|||Phone,True,2,1,no_change,0030_s6_pre,0029_s5_pre,0034_s6_pre,ContactsAddContact/v1
+ContactsAddContact,struct,True,ContactsAddContact/v3,agent,INPUT_TEXT,True,3,1,new_screen,0031_s7_pre,0030_s6_pre,0038_s8_pre,ContactsAddContact/v2
+ContactsAddContact,struct,True,ContactsAddContact/v3,agent,Button|toolbar_button||Save,True,3,1,new_screen,0032_s8_pre,0031_s7_pre,0039_s9_pre,ContactsAddContact/v2
+ContactsAddContact,struct,True,ContactsAddContact/v3,explore,Button|menu_insert_or_edit|Edit contact|Edit contact,True,1,1,new_screen,0036_s8_probe11_post,0032_s8_pre,0037_s8_probe12_post,ContactsAddContact/v1
+ContactsAddContact,struct,True,ContactsAddContact/v3,explore,Button|menu_star|Add to favorites|Add to favorites,True,1,1,in_place_content_change,0038_s8_probe12_post,0032_s8_pre,0039_s8_probe13_post,ContactsAddContact/v1
+ContactsAddContact,struct,True,ContactsAddContact/v3,agent,STATUS,True,3,1,no_change,0041_final,0032_s8_pre,0040_final,ContactsAddContact/v2
+ContactsAddContact,struct,True,ContactsAddContact/v4,agent,OPEN_APP:Contacts,True,4,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ContactsAddContact/v3
+ContactsAddContact,struct,True,ContactsAddContact/v4,explore,ImageButton||Open navigation drawer|Open navigation drawer,True,3,1,new_screen,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,ContactsAddContact/v3
+ContactsAddContact,struct,True,ContactsAddContact/v4,explore,FrameLayout|selected_account_disc|Signed in as Device Account and settings.|Signed in as Device Account and settings.,True,3,2,new_screen,0005_s1_probe2_post,0002_s1_pre,0005_s1_probe2_post,ContactsAddContact/v3
+ContactsAddContact,struct,True,ContactsAddContact/v4,explore,ImageButton|floating_action_button|Create contact|Create contact,True,5,1,new_screen,0007_s1_probe3_post,0002_s1_pre,0010_s2_pre,ContactsAddContact/v3
+ContactsAddContact,struct,True,ContactsAddContact/v4,explore,FrameLayout|highlights|Highlights|Highlights,True,1,1,new_screen,0009_s1_probe4_post,0002_s1_pre,0009_s1_probe4_post,ContactsAddContact/v1
+ContactsAddContact,struct,True,ContactsAddContact/v4,agent,ImageButton|floating_action_button|Create contact|Create contact,True,5,1,new_screen,0012_s2_pre,0002_s1_pre,0010_s2_pre,ContactsAddContact/v3
+ContactsAddContact,struct,True,ContactsAddContact/v4,explore,ImageView||More options|More options,True,3,1,new_screen,0013_s2_probe5_post,0012_s2_pre,0011_s2_probe4_post,ContactsAddContact/v3
+ContactsAddContact,struct,True,ContactsAddContact/v4,explore,Button|button_change_photo||Add picture,True,3,1,new_screen,0015_s2_probe6_post,0012_s2_pre,0013_s2_probe5_post,ContactsAddContact/v3
+ContactsAddContact,struct,True,ContactsAddContact/v4,explore,FrameLayout|expansion_view_container||Show more name fields,True,3,1,in_place_content_change,0017_s2_probe7_post,0012_s2_pre,0015_s2_probe6_post,ContactsAddContact/v3
+ContactsAddContact,struct,True,ContactsAddContact/v4,agent,EditText|||First name,True,4,1,new_screen,0020_s3_pre,0012_s2_pre,0018_s3_pre,ContactsAddContact/v3
+ContactsAddContact,struct,True,ContactsAddContact/v4,explore,ImageView||More options|More options,True,3,1,new_screen,0021_s3_probe8_post,0020_s3_pre,0019_s3_probe7_post,ContactsAddContact/v3
+ContactsAddContact,struct,True,ContactsAddContact/v4,explore,Button|button_change_photo||Add picture,True,3,1,new_screen,0023_s3_probe9_post,0020_s3_pre,0021_s3_probe8_post,ContactsAddContact/v3
+ContactsAddContact,struct,True,ContactsAddContact/v4,explore,FrameLayout|expansion_view_container||Show more name fields,True,3,1,new_screen,0025_s3_probe10_post,0020_s3_pre,0023_s3_probe9_post,ContactsAddContact/v3
+ContactsAddContact,struct,True,ContactsAddContact/v4,agent,INPUT_TEXT:EditText|||First name,True,3,1,new_screen,0030_s4_pre,0020_s3_pre,0028_s4_pre,ContactsAddContact/v3
+ContactsAddContact,struct,True,ContactsAddContact/v4,agent,INPUT_TEXT:EditText|||Last name,True,4,1,new_screen,0031_s5_pre,0030_s4_pre,0029_s5_pre,ContactsAddContact/v3
+ContactsAddContact,struct,True,ContactsAddContact/v4,agent,SWIPE:down,True,1,1,no_change,0032_s6_pre,0031_s5_pre,0032_s6_pre,ContactsAddContact/v2
+ContactsAddContact,struct,True,ContactsAddContact/v4,agent,EditText|||Phone,True,3,1,no_change,0033_s7_pre,0032_s6_pre,0030_s6_pre,ContactsAddContact/v3
+ContactsAddContact,struct,True,ContactsAddContact/v4,agent,INPUT_TEXT:EditText|||Phone,True,1,1,new_screen,0034_s8_pre,0033_s7_pre,0013_s7_pre,ContactsAddContact/v0
+ContactsAddContact,struct,True,ContactsAddContact/v4,agent,Button|toolbar_button||Save,True,4,1,new_screen,0035_s9_pre,0034_s8_pre,0032_s8_pre,ContactsAddContact/v3
+ContactsAddContact,struct,True,ContactsAddContact/v4,explore,Button|menu_insert_or_edit|Edit contact|Edit contact,True,2,1,new_screen,0039_s9_probe12_post,0035_s9_pre,0036_s8_probe11_post,ContactsAddContact/v3
+ContactsAddContact,struct,True,ContactsAddContact/v4,explore,Button|menu_star|Add to favorites|Add to favorites,True,2,1,in_place_content_change,0041_s9_probe13_post,0035_s9_pre,0038_s8_probe12_post,ContactsAddContact/v3
+ContactsAddContact,struct,True,ContactsAddContact/v4,agent,STATUS,True,4,1,no_change,0044_final,0035_s9_pre,0041_final,ContactsAddContact/v3
+ContactsAddContact,layout,True,ContactsAddContact/v1,agent,OPEN_APP:Contacts,True,1,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ContactsAddContact/v0
+ContactsAddContact,layout,True,ContactsAddContact/v1,agent,EditText|||First name,True,1,1,new_screen,0022_s3_pre,0012_s2_pre,0009_s3_pre,ContactsAddContact/v0
+ContactsAddContact,layout,True,ContactsAddContact/v1,agent,INPUT_TEXT:EditText|||Last name,True,1,1,new_screen,0033_s5_pre,0032_s4_pre,0011_s5_pre,ContactsAddContact/v0
+ContactsAddContact,layout,True,ContactsAddContact/v1,agent,EditText|||Phone,True,1,1,no_change,0034_s6_pre,0033_s5_pre,0012_s6_pre,ContactsAddContact/v0
+ContactsAddContact,layout,True,ContactsAddContact/v1,agent,Button|toolbar_button||Save,True,1,1,new_screen,0036_s8_pre,0035_s7_pre,0014_s8_pre,ContactsAddContact/v0
+ContactsAddContact,layout,True,ContactsAddContact/v1,agent,STATUS,True,1,1,no_change,0047_final,0036_s8_pre,0015_final,ContactsAddContact/v0
+ContactsAddContact,layout,True,ContactsAddContact/v2,agent,OPEN_APP:Contacts,True,2,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ContactsAddContact/v1
+ContactsAddContact,layout,True,ContactsAddContact/v2,explore,ImageButton||Open navigation drawer|Open navigation drawer,True,1,1,new_screen,0005_s1_probe2_post,0002_s1_pre,0003_s1_probe1_post,ContactsAddContact/v1
+ContactsAddContact,layout,True,ContactsAddContact/v2,explore,FrameLayout|selected_account_disc|Signed in as Device Account and settings.|Signed in as Device Account and settings.,False,1,1,new_screen,0007_s1_probe3_post,0002_s1_pre,0005_s1_probe2_post,ContactsAddContact/v1
+ContactsAddContact,layout,True,ContactsAddContact/v2,agent,ImageButton|floating_action_button|Create contact|Create contact,True,2,1,new_screen,0010_s2_pre,0002_s1_pre,0012_s2_pre,ContactsAddContact/v1
+ContactsAddContact,layout,True,ContactsAddContact/v2,explore,ImageView||More options|More options,True,1,1,new_screen,0011_s2_probe4_post,0010_s2_pre,0013_s2_probe5_post,ContactsAddContact/v1
+ContactsAddContact,layout,True,ContactsAddContact/v2,explore,Button|button_change_photo||Add picture,True,1,1,new_screen,0013_s2_probe5_post,0010_s2_pre,0015_s2_probe6_post,ContactsAddContact/v1
+ContactsAddContact,layout,True,ContactsAddContact/v2,explore,FrameLayout|expansion_view_container||Show more name fields,True,1,1,in_place_content_change,0015_s2_probe6_post,0010_s2_pre,0017_s2_probe7_post,ContactsAddContact/v1
+ContactsAddContact,layout,True,ContactsAddContact/v2,explore,ImageButton|text_input_end_icon|Show date picker|Show date picker,True,1,1,new_screen,0017_s2_probe7_post,0010_s2_pre,0019_s2_probe8_post,ContactsAddContact/v1
+ContactsAddContact,layout,True,ContactsAddContact/v2,agent,EditText|||First name,True,2,1,new_screen,0020_s3_pre,0010_s2_pre,0022_s3_pre,ContactsAddContact/v1
+ContactsAddContact,layout,True,ContactsAddContact/v2,explore,ImageView||More options|More options,True,1,1,new_screen,0021_s3_probe8_post,0020_s3_pre,0023_s3_probe9_post,ContactsAddContact/v1
+ContactsAddContact,layout,True,ContactsAddContact/v2,explore,Button|button_change_photo||Add picture,True,1,1,new_screen,0023_s3_probe9_post,0020_s3_pre,0025_s3_probe10_post,ContactsAddContact/v1
+ContactsAddContact,layout,True,ContactsAddContact/v2,explore,FrameLayout|expansion_view_container||Show more name fields,True,1,1,new_screen,0025_s3_probe10_post,0020_s3_pre,0027_s3_probe11_post,ContactsAddContact/v1
+ContactsAddContact,layout,True,ContactsAddContact/v2,agent,INPUT_TEXT:EditText|||First name,True,1,1,new_screen,0030_s4_pre,0020_s3_pre,0010_s4_pre,ContactsAddContact/v0
+ContactsAddContact,layout,True,ContactsAddContact/v2,agent,INPUT_TEXT:EditText|||Last name,True,2,1,new_screen,0031_s5_pre,0030_s4_pre,0033_s5_pre,ContactsAddContact/v1
+ContactsAddContact,layout,True,ContactsAddContact/v2,agent,INPUT_TEXT,True,2,1,new_screen,0038_s8_pre,0037_s7_pre,0035_s7_pre,ContactsAddContact/v1
+ContactsAddContact,layout,True,ContactsAddContact/v2,agent,Button|toolbar_button||Save,True,2,1,new_screen,0039_s9_pre,0038_s8_pre,0036_s8_pre,ContactsAddContact/v1
+ContactsAddContact,layout,True,ContactsAddContact/v2,agent,STATUS,True,2,1,no_change,0040_final,0039_s9_pre,0047_final,ContactsAddContact/v1
+ContactsAddContact,layout,True,ContactsAddContact/v3,agent,OPEN_APP:Contacts,True,3,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ContactsAddContact/v2
+ContactsAddContact,layout,True,ContactsAddContact/v3,explore,ImageButton||Open navigation drawer|Open navigation drawer,True,2,1,new_screen,0003_s1_probe1_post,0002_s1_pre,0005_s1_probe2_post,ContactsAddContact/v2
+ContactsAddContact,layout,True,ContactsAddContact/v3,explore,FrameLayout|selected_account_disc|Signed in as Device Account and settings.|Signed in as Device Account and settings.,True,2,2,new_screen,0005_s1_probe2_post,0002_s1_pre,0007_s1_probe3_post,ContactsAddContact/v2
+ContactsAddContact,layout,True,ContactsAddContact/v3,explore,ImageButton|floating_action_button|Create contact|Create contact,True,3,1,new_screen,0007_s1_probe3_post,0002_s1_pre,0010_s2_pre,ContactsAddContact/v2
+ContactsAddContact,layout,True,ContactsAddContact/v3,agent,ImageButton|floating_action_button|Create contact|Create contact,True,3,1,new_screen,0010_s2_pre,0002_s1_pre,0010_s2_pre,ContactsAddContact/v2
+ContactsAddContact,layout,True,ContactsAddContact/v3,explore,ImageView||More options|More options,True,2,1,new_screen,0011_s2_probe4_post,0010_s2_pre,0011_s2_probe4_post,ContactsAddContact/v2
+ContactsAddContact,layout,True,ContactsAddContact/v3,explore,Button|button_change_photo||Add picture,True,2,1,new_screen,0013_s2_probe5_post,0010_s2_pre,0013_s2_probe5_post,ContactsAddContact/v2
+ContactsAddContact,layout,True,ContactsAddContact/v3,explore,FrameLayout|expansion_view_container||Show more name fields,True,2,1,in_place_content_change,0015_s2_probe6_post,0010_s2_pre,0015_s2_probe6_post,ContactsAddContact/v2
+ContactsAddContact,layout,True,ContactsAddContact/v3,agent,EditText|||First name,True,3,1,new_screen,0018_s3_pre,0010_s2_pre,0020_s3_pre,ContactsAddContact/v2
+ContactsAddContact,layout,True,ContactsAddContact/v3,explore,ImageView||More options|More options,True,2,1,new_screen,0019_s3_probe7_post,0018_s3_pre,0021_s3_probe8_post,ContactsAddContact/v2
+ContactsAddContact,layout,True,ContactsAddContact/v3,explore,Button|button_change_photo||Add picture,True,2,1,new_screen,0021_s3_probe8_post,0018_s3_pre,0023_s3_probe9_post,ContactsAddContact/v2
+ContactsAddContact,layout,True,ContactsAddContact/v3,explore,FrameLayout|expansion_view_container||Show more name fields,True,2,1,new_screen,0023_s3_probe9_post,0018_s3_pre,0025_s3_probe10_post,ContactsAddContact/v2
+ContactsAddContact,layout,True,ContactsAddContact/v3,agent,INPUT_TEXT:EditText|||First name,True,2,1,new_screen,0028_s4_pre,0018_s3_pre,0030_s4_pre,ContactsAddContact/v2
+ContactsAddContact,layout,True,ContactsAddContact/v3,agent,INPUT_TEXT:EditText|||Last name,True,3,1,new_screen,0029_s5_pre,0028_s4_pre,0031_s5_pre,ContactsAddContact/v2
+ContactsAddContact,layout,True,ContactsAddContact/v3,agent,EditText|||Phone,True,2,1,no_change,0030_s6_pre,0029_s5_pre,0034_s6_pre,ContactsAddContact/v1
+ContactsAddContact,layout,True,ContactsAddContact/v3,agent,INPUT_TEXT,True,3,1,new_screen,0031_s7_pre,0030_s6_pre,0038_s8_pre,ContactsAddContact/v2
+ContactsAddContact,layout,True,ContactsAddContact/v3,agent,Button|toolbar_button||Save,True,3,1,new_screen,0032_s8_pre,0031_s7_pre,0039_s9_pre,ContactsAddContact/v2
+ContactsAddContact,layout,True,ContactsAddContact/v3,explore,Button|menu_insert_or_edit|Edit contact|Edit contact,True,1,1,new_screen,0036_s8_probe11_post,0032_s8_pre,0037_s8_probe12_post,ContactsAddContact/v1
+ContactsAddContact,layout,True,ContactsAddContact/v3,explore,Button|menu_star|Add to favorites|Add to favorites,True,1,1,in_place_content_change,0038_s8_probe12_post,0032_s8_pre,0039_s8_probe13_post,ContactsAddContact/v1
+ContactsAddContact,layout,True,ContactsAddContact/v3,agent,STATUS,True,3,1,no_change,0041_final,0032_s8_pre,0040_final,ContactsAddContact/v2
+ContactsAddContact,layout,True,ContactsAddContact/v4,agent,OPEN_APP:Contacts,True,4,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ContactsAddContact/v3
+ContactsAddContact,layout,True,ContactsAddContact/v4,explore,ImageButton||Open navigation drawer|Open navigation drawer,True,3,1,new_screen,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,ContactsAddContact/v3
+ContactsAddContact,layout,True,ContactsAddContact/v4,explore,FrameLayout|selected_account_disc|Signed in as Device Account and settings.|Signed in as Device Account and settings.,True,3,2,new_screen,0005_s1_probe2_post,0002_s1_pre,0005_s1_probe2_post,ContactsAddContact/v3
+ContactsAddContact,layout,True,ContactsAddContact/v4,explore,ImageButton|floating_action_button|Create contact|Create contact,True,5,1,new_screen,0007_s1_probe3_post,0002_s1_pre,0010_s2_pre,ContactsAddContact/v3
+ContactsAddContact,layout,True,ContactsAddContact/v4,explore,FrameLayout|highlights|Highlights|Highlights,True,1,1,new_screen,0009_s1_probe4_post,0002_s1_pre,0009_s1_probe4_post,ContactsAddContact/v1
+ContactsAddContact,layout,True,ContactsAddContact/v4,agent,ImageButton|floating_action_button|Create contact|Create contact,True,5,1,new_screen,0012_s2_pre,0002_s1_pre,0010_s2_pre,ContactsAddContact/v3
+ContactsAddContact,layout,True,ContactsAddContact/v4,explore,ImageView||More options|More options,True,3,1,new_screen,0013_s2_probe5_post,0012_s2_pre,0011_s2_probe4_post,ContactsAddContact/v3
+ContactsAddContact,layout,True,ContactsAddContact/v4,explore,Button|button_change_photo||Add picture,True,3,1,new_screen,0015_s2_probe6_post,0012_s2_pre,0013_s2_probe5_post,ContactsAddContact/v3
+ContactsAddContact,layout,True,ContactsAddContact/v4,explore,FrameLayout|expansion_view_container||Show more name fields,True,3,1,in_place_content_change,0017_s2_probe7_post,0012_s2_pre,0015_s2_probe6_post,ContactsAddContact/v3
+ContactsAddContact,layout,True,ContactsAddContact/v4,agent,EditText|||First name,True,4,1,new_screen,0020_s3_pre,0012_s2_pre,0018_s3_pre,ContactsAddContact/v3
+ContactsAddContact,layout,True,ContactsAddContact/v4,explore,ImageView||More options|More options,True,3,1,new_screen,0021_s3_probe8_post,0020_s3_pre,0019_s3_probe7_post,ContactsAddContact/v3
+ContactsAddContact,layout,True,ContactsAddContact/v4,explore,Button|button_change_photo||Add picture,True,3,1,new_screen,0023_s3_probe9_post,0020_s3_pre,0021_s3_probe8_post,ContactsAddContact/v3
+ContactsAddContact,layout,True,ContactsAddContact/v4,explore,FrameLayout|expansion_view_container||Show more name fields,True,3,1,new_screen,0025_s3_probe10_post,0020_s3_pre,0023_s3_probe9_post,ContactsAddContact/v3
+ContactsAddContact,layout,True,ContactsAddContact/v4,agent,INPUT_TEXT:EditText|||First name,True,3,1,new_screen,0030_s4_pre,0020_s3_pre,0028_s4_pre,ContactsAddContact/v3
+ContactsAddContact,layout,True,ContactsAddContact/v4,agent,INPUT_TEXT:EditText|||Last name,True,4,1,new_screen,0031_s5_pre,0030_s4_pre,0029_s5_pre,ContactsAddContact/v3
+ContactsAddContact,layout,True,ContactsAddContact/v4,agent,SWIPE:down,True,1,1,no_change,0032_s6_pre,0031_s5_pre,0032_s6_pre,ContactsAddContact/v2
+ContactsAddContact,layout,True,ContactsAddContact/v4,agent,EditText|||Phone,True,3,1,no_change,0033_s7_pre,0032_s6_pre,0030_s6_pre,ContactsAddContact/v3
+ContactsAddContact,layout,True,ContactsAddContact/v4,agent,INPUT_TEXT:EditText|||Phone,True,1,1,new_screen,0034_s8_pre,0033_s7_pre,0013_s7_pre,ContactsAddContact/v0
+ContactsAddContact,layout,True,ContactsAddContact/v4,agent,Button|toolbar_button||Save,True,4,1,new_screen,0035_s9_pre,0034_s8_pre,0032_s8_pre,ContactsAddContact/v3
+ContactsAddContact,layout,True,ContactsAddContact/v4,explore,Button|menu_insert_or_edit|Edit contact|Edit contact,True,2,1,new_screen,0039_s9_probe12_post,0035_s9_pre,0036_s8_probe11_post,ContactsAddContact/v3
+ContactsAddContact,layout,True,ContactsAddContact/v4,explore,Button|menu_star|Add to favorites|Add to favorites,True,2,1,in_place_content_change,0041_s9_probe13_post,0035_s9_pre,0038_s8_probe12_post,ContactsAddContact/v3
+ContactsAddContact,layout,True,ContactsAddContact/v4,agent,STATUS,True,4,1,no_change,0044_final,0035_s9_pre,0041_final,ContactsAddContact/v3
+ExpenseAddSingle,exact,True,ExpenseAddSingle/v1,agent,OPEN_APP:Pro Expense,False,2,1,new_screen,0002_s1_pre,0001_s0_pre,0015_s3_pre,ExpenseAddSingle/v0
+ExpenseAddSingle,exact,True,ExpenseAddSingle/v2,agent,OPEN_APP:Pro Expense,False,3,2,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ExpenseAddSingle/v1
+ExpenseAddSingle,exact,True,ExpenseAddSingle/v2,explore,TextView|calendar|Calendar|Calendar,True,1,1,new_screen,0013_s2_probe5_post,0012_s2_pre,0015_s2_probe6_post,ExpenseAddSingle/v1
+ExpenseAddSingle,exact,True,ExpenseAddSingle/v2,explore,CardView|cv_lock||,True,1,1,new_screen,0015_s2_probe6_post,0012_s2_pre,0017_s2_probe7_post,ExpenseAddSingle/v1
+ExpenseAddSingle,exact,True,ExpenseAddSingle/v3,agent,OPEN_APP:Pro Expense,False,4,3,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ExpenseAddSingle/v2
+ExpenseAddSingle,exact,True,ExpenseAddSingle/v3,explore,TextView|calendar|Calendar|Calendar,True,2,1,new_screen,0013_s2_probe5_post,0012_s2_pre,0013_s2_probe5_post,ExpenseAddSingle/v2
+ExpenseAddSingle,exact,True,ExpenseAddSingle/v3,agent,INPUT_TEXT:EditText|edt_name||Name,False,1,1,new_screen,0016_s3_pre,0012_s2_pre,0017_s5_pre,ExpenseAddSingle/v0
+ExpenseAddSingle,exact,True,ExpenseAddSingle/v4,agent,OPEN_APP:Pro Expense,False,5,4,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ExpenseAddSingle/v3
+ExpenseAddSingle,exact,True,ExpenseAddSingle/v4,explore,TextView|calendar|Calendar|Calendar,True,3,1,new_screen,0011_s2_probe4_post,0010_s2_pre,0013_s2_probe5_post,ExpenseAddSingle/v3
+ExpenseAddSingle,exact,True,ExpenseAddSingle/v4,agent,INPUT_TEXT:EditText|edt_name||Name,False,2,2,new_screen,0014_s3_pre,0010_s2_pre,0016_s3_pre,ExpenseAddSingle/v3
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v1,agent,OPEN_APP:Pro Expense,True,2,1,new_screen,0002_s1_pre,0001_s0_pre,0015_s3_pre,ExpenseAddSingle/v0
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v1,agent,ImageButton|fb_main_add||,True,2,1,new_screen,0012_s2_pre,0002_s1_pre,0016_s4_pre,ExpenseAddSingle/v0
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v1,agent,INPUT_TEXT,True,1,1,new_screen,0042_s9_pre,0041_s8_pre,0020_s8_pre,ExpenseAddSingle/v0
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v1,agent,Button|btn_save||SAVE,True,1,1,new_screen,0043_s10_pre,0042_s9_pre,0021_s9_pre,ExpenseAddSingle/v0
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v1,agent,STATUS,True,1,1,no_change,0044_final,0043_s10_pre,0022_final,ExpenseAddSingle/v0
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v2,agent,OPEN_APP:Pro Expense,True,3,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ExpenseAddSingle/v1
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v2,explore,ImageButton|fb_main_add||,True,3,1,new_screen,0009_s1_probe4_post,0002_s1_pre,0012_s2_pre,ExpenseAddSingle/v1
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v2,agent,ImageButton|fb_main_add||,True,3,1,new_screen,0012_s2_pre,0002_s1_pre,0012_s2_pre,ExpenseAddSingle/v1
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v2,explore,TextView|calendar|Calendar|Calendar,True,1,1,new_screen,0013_s2_probe5_post,0012_s2_pre,0015_s2_probe6_post,ExpenseAddSingle/v1
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v2,explore,CardView|cv_lock||,True,1,1,new_screen,0015_s2_probe6_post,0012_s2_pre,0017_s2_probe7_post,ExpenseAddSingle/v1
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v2,agent,ImageButton|fb_main_add||,True,3,1,new_screen,0027_s4_pre,0026_s3_pre_requery,0012_s2_pre,ExpenseAddSingle/v1
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v2,agent,INPUT_TEXT,False,2,1,new_screen,0029_s6_pre,0028_s5_pre,0042_s9_pre,ExpenseAddSingle/v1
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v2,agent,INPUT_TEXT,True,2,1,new_screen,0031_s8_pre,0030_s7_pre,0042_s9_pre,ExpenseAddSingle/v1
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v2,agent,Button|btn_save||SAVE,True,2,1,new_screen,0032_s9_pre,0031_s8_pre,0043_s10_pre,ExpenseAddSingle/v1
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v2,agent,STATUS,True,2,1,no_change,0033_final,0032_s9_pre,0044_final,ExpenseAddSingle/v1
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v3,agent,OPEN_APP:Pro Expense,True,4,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ExpenseAddSingle/v2
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v3,agent,ImageButton|fb_main_add||,True,6,1,new_screen,0012_s2_pre,0002_s1_pre,0027_s4_pre,ExpenseAddSingle/v2
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v3,explore,TextView|calendar|Calendar|Calendar,True,2,1,new_screen,0013_s2_probe5_post,0012_s2_pre,0013_s2_probe5_post,ExpenseAddSingle/v2
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v3,agent,INPUT_TEXT:EditText|edt_name||Name,True,1,1,new_screen,0016_s3_pre,0012_s2_pre,0017_s5_pre,ExpenseAddSingle/v0
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v3,explore,TextView|calendar|Calendar|Calendar,True,1,1,new_screen,0017_s3_probe6_post,0016_s3_pre,0020_s3_probe7_post,ExpenseAddSingle/v2
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v3,agent,INPUT_TEXT:EditText|edt_amount||Amount,True,1,1,new_screen,0020_s4_pre,0016_s3_pre,0018_s6_pre,ExpenseAddSingle/v0
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v3,agent,Button|btn_save||SAVE,True,3,1,new_screen,0028_s9_pre,0027_s8_pre,0032_s9_pre,ExpenseAddSingle/v2
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v3,agent,STATUS,True,3,1,no_change,0032_final,0028_s9_pre,0033_final,ExpenseAddSingle/v2
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v4,agent,OPEN_APP:Pro Expense,True,5,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ExpenseAddSingle/v3
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v4,agent,ImageButton|fb_main_add||,True,7,1,new_screen,0010_s2_pre,0002_s1_pre,0012_s2_pre,ExpenseAddSingle/v3
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v4,explore,TextView|calendar|Calendar|Calendar,True,3,1,new_screen,0011_s2_probe4_post,0010_s2_pre,0013_s2_probe5_post,ExpenseAddSingle/v3
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v4,agent,INPUT_TEXT:EditText|edt_name||Name,True,2,1,new_screen,0014_s3_pre,0010_s2_pre,0016_s3_pre,ExpenseAddSingle/v3
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v4,explore,TextView|calendar|Calendar|Calendar,True,2,1,new_screen,0015_s3_probe5_post,0014_s3_pre,0017_s3_probe6_post,ExpenseAddSingle/v3
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v4,agent,INPUT_TEXT:EditText|edt_amount||Amount,True,2,1,new_screen,0018_s4_pre,0014_s3_pre,0020_s4_pre,ExpenseAddSingle/v3
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v4,agent,INPUT_TEXT,True,4,2,new_screen,0019_s5_pre,0018_s4_pre,0031_s8_pre,ExpenseAddSingle/v2
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v4,explore,TextView|calendar|Calendar|Calendar,True,1,1,new_screen,0020_s5_probe6_post,0019_s5_pre,0023_s6_probe7_post,ExpenseAddSingle/v3
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v4,agent,SWIPE:left,True,1,1,new_screen,0023_s6_pre,0019_s5_pre,0026_s7_pre,ExpenseAddSingle/v3
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v4,agent,Button|btn_save||SAVE,True,4,1,new_screen,0024_s7_pre,0023_s6_pre,0028_s9_pre,ExpenseAddSingle/v3
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v4,explore,RelativeLayout|cd_expense||Crowdfunding,False,1,1,new_screen,0027_s7_probe8_post,0024_s7_pre,0005_s1_probe2_post,ExpenseAddSingle/v1
+ExpenseAddSingle,struct,True,ExpenseAddSingle/v4,agent,STATUS,True,4,1,no_change,0030_final,0024_s7_pre,0032_final,ExpenseAddSingle/v3
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v1,agent,OPEN_APP:Pro Expense,True,2,1,new_screen,0002_s1_pre,0001_s0_pre,0015_s3_pre,ExpenseAddSingle/v0
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v1,agent,ImageButton|fb_main_add||,True,2,1,new_screen,0012_s2_pre,0002_s1_pre,0016_s4_pre,ExpenseAddSingle/v0
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v1,agent,INPUT_TEXT,True,1,1,new_screen,0042_s9_pre,0041_s8_pre,0020_s8_pre,ExpenseAddSingle/v0
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v1,agent,Button|btn_save||SAVE,True,1,1,new_screen,0043_s10_pre,0042_s9_pre,0021_s9_pre,ExpenseAddSingle/v0
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v1,agent,STATUS,True,1,1,no_change,0044_final,0043_s10_pre,0022_final,ExpenseAddSingle/v0
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v2,agent,OPEN_APP:Pro Expense,True,3,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ExpenseAddSingle/v1
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v2,explore,ImageButton|fb_main_add||,True,3,1,new_screen,0009_s1_probe4_post,0002_s1_pre,0012_s2_pre,ExpenseAddSingle/v1
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v2,agent,ImageButton|fb_main_add||,True,3,1,new_screen,0012_s2_pre,0002_s1_pre,0012_s2_pre,ExpenseAddSingle/v1
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v2,explore,TextView|calendar|Calendar|Calendar,True,1,1,new_screen,0013_s2_probe5_post,0012_s2_pre,0015_s2_probe6_post,ExpenseAddSingle/v1
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v2,explore,CardView|cv_lock||,True,1,1,new_screen,0015_s2_probe6_post,0012_s2_pre,0017_s2_probe7_post,ExpenseAddSingle/v1
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v2,agent,ImageButton|fb_main_add||,True,3,1,new_screen,0027_s4_pre,0026_s3_pre_requery,0012_s2_pre,ExpenseAddSingle/v1
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v2,agent,INPUT_TEXT,False,2,1,new_screen,0029_s6_pre,0028_s5_pre,0042_s9_pre,ExpenseAddSingle/v1
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v2,agent,INPUT_TEXT,True,2,1,new_screen,0031_s8_pre,0030_s7_pre,0042_s9_pre,ExpenseAddSingle/v1
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v2,agent,Button|btn_save||SAVE,True,2,1,new_screen,0032_s9_pre,0031_s8_pre,0043_s10_pre,ExpenseAddSingle/v1
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v2,agent,STATUS,True,2,1,no_change,0033_final,0032_s9_pre,0044_final,ExpenseAddSingle/v1
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v3,agent,OPEN_APP:Pro Expense,True,4,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ExpenseAddSingle/v2
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v3,agent,ImageButton|fb_main_add||,True,6,1,new_screen,0012_s2_pre,0002_s1_pre,0027_s4_pre,ExpenseAddSingle/v2
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v3,explore,TextView|calendar|Calendar|Calendar,True,2,1,new_screen,0013_s2_probe5_post,0012_s2_pre,0013_s2_probe5_post,ExpenseAddSingle/v2
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v3,agent,INPUT_TEXT:EditText|edt_name||Name,True,1,1,new_screen,0016_s3_pre,0012_s2_pre,0017_s5_pre,ExpenseAddSingle/v0
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v3,explore,TextView|calendar|Calendar|Calendar,True,1,1,new_screen,0017_s3_probe6_post,0016_s3_pre,0020_s3_probe7_post,ExpenseAddSingle/v2
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v3,agent,INPUT_TEXT:EditText|edt_amount||Amount,True,1,1,new_screen,0020_s4_pre,0016_s3_pre,0018_s6_pre,ExpenseAddSingle/v0
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v3,agent,Button|btn_save||SAVE,True,3,1,new_screen,0028_s9_pre,0027_s8_pre,0032_s9_pre,ExpenseAddSingle/v2
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v3,agent,STATUS,True,3,1,no_change,0032_final,0028_s9_pre,0033_final,ExpenseAddSingle/v2
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v4,agent,OPEN_APP:Pro Expense,True,5,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ExpenseAddSingle/v3
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v4,agent,ImageButton|fb_main_add||,True,7,1,new_screen,0010_s2_pre,0002_s1_pre,0012_s2_pre,ExpenseAddSingle/v3
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v4,explore,TextView|calendar|Calendar|Calendar,True,3,1,new_screen,0011_s2_probe4_post,0010_s2_pre,0013_s2_probe5_post,ExpenseAddSingle/v3
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v4,agent,INPUT_TEXT:EditText|edt_name||Name,True,2,1,new_screen,0014_s3_pre,0010_s2_pre,0016_s3_pre,ExpenseAddSingle/v3
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v4,explore,TextView|calendar|Calendar|Calendar,True,2,1,new_screen,0015_s3_probe5_post,0014_s3_pre,0017_s3_probe6_post,ExpenseAddSingle/v3
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v4,agent,INPUT_TEXT:EditText|edt_amount||Amount,True,2,1,new_screen,0018_s4_pre,0014_s3_pre,0020_s4_pre,ExpenseAddSingle/v3
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v4,agent,INPUT_TEXT,True,4,2,new_screen,0019_s5_pre,0018_s4_pre,0031_s8_pre,ExpenseAddSingle/v2
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v4,explore,TextView|calendar|Calendar|Calendar,True,1,1,new_screen,0020_s5_probe6_post,0019_s5_pre,0023_s6_probe7_post,ExpenseAddSingle/v3
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v4,agent,SWIPE:left,True,1,1,new_screen,0023_s6_pre,0019_s5_pre,0026_s7_pre,ExpenseAddSingle/v3
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v4,agent,Button|btn_save||SAVE,True,4,1,new_screen,0024_s7_pre,0023_s6_pre,0028_s9_pre,ExpenseAddSingle/v3
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v4,explore,RelativeLayout|cd_expense||Crowdfunding,True,1,1,new_screen,0027_s7_probe8_post,0024_s7_pre,0005_s1_probe2_post,ExpenseAddSingle/v1
+ExpenseAddSingle,layout,True,ExpenseAddSingle/v4,agent,STATUS,True,4,1,no_change,0030_final,0024_s7_pre,0032_final,ExpenseAddSingle/v3
+ExpenseDeleteSingle,exact,True,ExpenseDeleteSingle/v1,agent,OPEN_APP:Pro Expense,False,1,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ExpenseDeleteSingle/v0
+ExpenseDeleteSingle,exact,True,ExpenseDeleteSingle/v1,agent,Button|btn_confirm||CONFIRM,True,1,1,new_screen,0016_s4_pre,0015_s3_pre,0016_s4_pre,ExpenseDeleteSingle/v0
+ExpenseDeleteSingle,exact,True,ExpenseDeleteSingle/v1,explore,ImageButton|||,True,1,1,new_screen,0017_s4_probe5_post,0016_s4_pre,0017_s4_probe5_post,ExpenseDeleteSingle/v0
+ExpenseDeleteSingle,exact,True,ExpenseDeleteSingle/v1,explore,ImageButton|fb_main_add||,True,1,1,new_screen,0019_s4_probe6_post,0016_s4_pre,0019_s4_probe6_post,ExpenseDeleteSingle/v0
+ExpenseDeleteSingle,exact,True,ExpenseDeleteSingle/v1,agent,STATUS,True,1,1,no_change,0022_final,0016_s4_pre,0022_final,ExpenseDeleteSingle/v0
+ExpenseDeleteSingle,exact,True,ExpenseDeleteSingle/v2,agent,OPEN_APP:Pro Expense,False,2,2,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ExpenseDeleteSingle/v1
+ExpenseDeleteSingle,exact,True,ExpenseDeleteSingle/v2,agent,Button|btn_confirm||CONFIRM,True,2,1,new_screen,0016_s4_pre,0015_s3_pre,0016_s4_pre,ExpenseDeleteSingle/v1
+ExpenseDeleteSingle,exact,True,ExpenseDeleteSingle/v2,explore,ImageButton|||,True,2,1,new_screen,0017_s4_probe5_post,0016_s4_pre,0017_s4_probe5_post,ExpenseDeleteSingle/v1
+ExpenseDeleteSingle,exact,True,ExpenseDeleteSingle/v2,explore,ImageButton|fb_main_add||,True,2,1,new_screen,0019_s4_probe6_post,0016_s4_pre,0019_s4_probe6_post,ExpenseDeleteSingle/v1
+ExpenseDeleteSingle,exact,True,ExpenseDeleteSingle/v2,agent,STATUS,True,2,1,no_change,0022_final,0016_s4_pre,0022_final,ExpenseDeleteSingle/v1
+ExpenseDeleteSingle,exact,True,ExpenseDeleteSingle/v3,agent,OPEN_APP:Pro Expense,False,3,3,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ExpenseDeleteSingle/v2
+ExpenseDeleteSingle,exact,True,ExpenseDeleteSingle/v3,agent,Button|btn_confirm||CONFIRM,True,3,1,new_screen,0018_s4_pre,0017_s3_pre,0016_s4_pre,ExpenseDeleteSingle/v2
+ExpenseDeleteSingle,exact,True,ExpenseDeleteSingle/v3,explore,ImageButton|||,True,3,1,new_screen,0019_s4_probe6_post,0018_s4_pre,0017_s4_probe5_post,ExpenseDeleteSingle/v2
+ExpenseDeleteSingle,exact,True,ExpenseDeleteSingle/v3,explore,ImageButton|fb_main_add||,True,3,1,new_screen,0021_s4_probe7_post,0018_s4_pre,0019_s4_probe6_post,ExpenseDeleteSingle/v2
+ExpenseDeleteSingle,exact,True,ExpenseDeleteSingle/v3,agent,STATUS,True,3,1,no_change,0024_final,0018_s4_pre,0022_final,ExpenseDeleteSingle/v2
+ExpenseDeleteSingle,exact,True,ExpenseDeleteSingle/v4,agent,OPEN_APP:Pro Expense,False,4,4,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ExpenseDeleteSingle/v3
+ExpenseDeleteSingle,exact,True,ExpenseDeleteSingle/v4,agent,Button|btn_confirm||CONFIRM,True,4,1,new_screen,0018_s4_pre,0017_s3_pre,0018_s4_pre,ExpenseDeleteSingle/v3
+ExpenseDeleteSingle,exact,True,ExpenseDeleteSingle/v4,explore,ImageButton|||,True,4,1,new_screen,0019_s4_probe6_post,0018_s4_pre,0019_s4_probe6_post,ExpenseDeleteSingle/v3
+ExpenseDeleteSingle,exact,True,ExpenseDeleteSingle/v4,explore,ImageButton|fb_main_add||,True,4,1,new_screen,0021_s4_probe7_post,0018_s4_pre,0021_s4_probe7_post,ExpenseDeleteSingle/v3
+ExpenseDeleteSingle,exact,True,ExpenseDeleteSingle/v4,agent,STATUS,True,4,1,no_change,0024_final,0018_s4_pre,0024_final,ExpenseDeleteSingle/v3
+ExpenseDeleteSingle,struct,True,ExpenseDeleteSingle/v1,agent,OPEN_APP:Pro Expense,False,1,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ExpenseDeleteSingle/v0
+ExpenseDeleteSingle,struct,True,ExpenseDeleteSingle/v1,agent,Button|btn_confirm||CONFIRM,True,1,1,new_screen,0016_s4_pre,0015_s3_pre,0016_s4_pre,ExpenseDeleteSingle/v0
+ExpenseDeleteSingle,struct,True,ExpenseDeleteSingle/v1,explore,ImageButton|||,True,1,1,new_screen,0017_s4_probe5_post,0016_s4_pre,0017_s4_probe5_post,ExpenseDeleteSingle/v0
+ExpenseDeleteSingle,struct,True,ExpenseDeleteSingle/v1,explore,ImageButton|fb_main_add||,True,1,1,new_screen,0019_s4_probe6_post,0016_s4_pre,0019_s4_probe6_post,ExpenseDeleteSingle/v0
+ExpenseDeleteSingle,struct,True,ExpenseDeleteSingle/v1,agent,STATUS,True,1,1,no_change,0022_final,0016_s4_pre,0022_final,ExpenseDeleteSingle/v0
+ExpenseDeleteSingle,struct,True,ExpenseDeleteSingle/v2,agent,OPEN_APP:Pro Expense,False,2,2,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ExpenseDeleteSingle/v1
+ExpenseDeleteSingle,struct,True,ExpenseDeleteSingle/v2,agent,Button|btn_confirm||CONFIRM,True,2,1,new_screen,0016_s4_pre,0015_s3_pre,0016_s4_pre,ExpenseDeleteSingle/v1
+ExpenseDeleteSingle,struct,True,ExpenseDeleteSingle/v2,explore,ImageButton|||,True,2,1,new_screen,0017_s4_probe5_post,0016_s4_pre,0017_s4_probe5_post,ExpenseDeleteSingle/v1
+ExpenseDeleteSingle,struct,True,ExpenseDeleteSingle/v2,explore,ImageButton|fb_main_add||,True,2,1,new_screen,0019_s4_probe6_post,0016_s4_pre,0019_s4_probe6_post,ExpenseDeleteSingle/v1
+ExpenseDeleteSingle,struct,True,ExpenseDeleteSingle/v2,agent,STATUS,True,2,1,no_change,0022_final,0016_s4_pre,0022_final,ExpenseDeleteSingle/v1
+ExpenseDeleteSingle,struct,True,ExpenseDeleteSingle/v3,agent,OPEN_APP:Pro Expense,False,3,3,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ExpenseDeleteSingle/v2
+ExpenseDeleteSingle,struct,True,ExpenseDeleteSingle/v3,agent,Button|btn_confirm||CONFIRM,True,3,1,new_screen,0018_s4_pre,0017_s3_pre,0016_s4_pre,ExpenseDeleteSingle/v2
+ExpenseDeleteSingle,struct,True,ExpenseDeleteSingle/v3,explore,ImageButton|||,True,3,1,new_screen,0019_s4_probe6_post,0018_s4_pre,0017_s4_probe5_post,ExpenseDeleteSingle/v2
+ExpenseDeleteSingle,struct,True,ExpenseDeleteSingle/v3,explore,ImageButton|fb_main_add||,True,3,1,new_screen,0021_s4_probe7_post,0018_s4_pre,0019_s4_probe6_post,ExpenseDeleteSingle/v2
+ExpenseDeleteSingle,struct,True,ExpenseDeleteSingle/v3,agent,STATUS,True,3,1,no_change,0024_final,0018_s4_pre,0022_final,ExpenseDeleteSingle/v2
+ExpenseDeleteSingle,struct,True,ExpenseDeleteSingle/v4,agent,OPEN_APP:Pro Expense,False,4,4,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ExpenseDeleteSingle/v3
+ExpenseDeleteSingle,struct,True,ExpenseDeleteSingle/v4,agent,Button|btn_confirm||CONFIRM,True,4,1,new_screen,0018_s4_pre,0017_s3_pre,0018_s4_pre,ExpenseDeleteSingle/v3
+ExpenseDeleteSingle,struct,True,ExpenseDeleteSingle/v4,explore,ImageButton|||,True,4,1,new_screen,0019_s4_probe6_post,0018_s4_pre,0019_s4_probe6_post,ExpenseDeleteSingle/v3
+ExpenseDeleteSingle,struct,True,ExpenseDeleteSingle/v4,explore,ImageButton|fb_main_add||,True,4,1,new_screen,0021_s4_probe7_post,0018_s4_pre,0021_s4_probe7_post,ExpenseDeleteSingle/v3
+ExpenseDeleteSingle,struct,True,ExpenseDeleteSingle/v4,agent,STATUS,True,4,1,no_change,0024_final,0018_s4_pre,0024_final,ExpenseDeleteSingle/v3
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v1,agent,OPEN_APP:Pro Expense,True,1,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ExpenseDeleteSingle/v0
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v1,explore,ImageButton|||,True,1,1,new_screen,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,ExpenseDeleteSingle/v0
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v1,explore,Button|btn_more_logs||MORE,True,1,1,new_screen,0007_s1_probe3_post,0002_s1_pre,0007_s1_probe3_post,ExpenseDeleteSingle/v0
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v1,explore,Button|btn_edit||EDIT,True,1,1,new_screen,0011_s2_probe4_post,0010_s2_pre,0011_s2_probe4_post,ExpenseDeleteSingle/v0
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v1,agent,ImageView|btn_delete||,True,1,1,new_screen,0015_s3_pre,0010_s2_pre,0015_s3_pre,ExpenseDeleteSingle/v0
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v1,agent,Button|btn_confirm||CONFIRM,True,1,1,new_screen,0016_s4_pre,0015_s3_pre,0016_s4_pre,ExpenseDeleteSingle/v0
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v1,explore,ImageButton|||,True,1,1,new_screen,0017_s4_probe5_post,0016_s4_pre,0017_s4_probe5_post,ExpenseDeleteSingle/v0
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v1,explore,ImageButton|fb_main_add||,True,1,1,new_screen,0019_s4_probe6_post,0016_s4_pre,0019_s4_probe6_post,ExpenseDeleteSingle/v0
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v1,agent,STATUS,True,1,1,no_change,0022_final,0016_s4_pre,0022_final,ExpenseDeleteSingle/v0
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v2,agent,OPEN_APP:Pro Expense,True,2,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ExpenseDeleteSingle/v1
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v2,explore,ImageButton|||,True,2,1,new_screen,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,ExpenseDeleteSingle/v1
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v2,explore,Button|btn_more_logs||MORE,True,2,1,new_screen,0007_s1_probe3_post,0002_s1_pre,0007_s1_probe3_post,ExpenseDeleteSingle/v1
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v2,explore,Button|btn_edit||EDIT,True,2,1,new_screen,0011_s2_probe4_post,0010_s2_pre,0011_s2_probe4_post,ExpenseDeleteSingle/v1
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v2,agent,ImageView|btn_delete||,True,2,1,new_screen,0015_s3_pre,0010_s2_pre,0015_s3_pre,ExpenseDeleteSingle/v1
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v2,agent,Button|btn_confirm||CONFIRM,True,2,1,new_screen,0016_s4_pre,0015_s3_pre,0016_s4_pre,ExpenseDeleteSingle/v1
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v2,explore,ImageButton|||,True,2,1,new_screen,0017_s4_probe5_post,0016_s4_pre,0017_s4_probe5_post,ExpenseDeleteSingle/v1
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v2,explore,ImageButton|fb_main_add||,True,2,1,new_screen,0019_s4_probe6_post,0016_s4_pre,0019_s4_probe6_post,ExpenseDeleteSingle/v1
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v2,agent,STATUS,True,2,1,no_change,0022_final,0016_s4_pre,0022_final,ExpenseDeleteSingle/v1
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v3,agent,OPEN_APP:Pro Expense,True,3,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ExpenseDeleteSingle/v2
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v3,explore,ImageButton|||,True,3,1,new_screen,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,ExpenseDeleteSingle/v2
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v3,explore,Button|btn_more_logs||MORE,True,3,1,new_screen,0007_s1_probe3_post,0002_s1_pre,0007_s1_probe3_post,ExpenseDeleteSingle/v2
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v3,explore,Button|btn_edit||EDIT,True,3,1,new_screen,0013_s2_probe5_post,0012_s2_pre,0011_s2_probe4_post,ExpenseDeleteSingle/v2
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v3,agent,ImageView|btn_delete||,True,3,1,new_screen,0017_s3_pre,0012_s2_pre,0015_s3_pre,ExpenseDeleteSingle/v2
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v3,agent,Button|btn_confirm||CONFIRM,True,3,1,new_screen,0018_s4_pre,0017_s3_pre,0016_s4_pre,ExpenseDeleteSingle/v2
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v3,explore,ImageButton|||,True,3,1,new_screen,0019_s4_probe6_post,0018_s4_pre,0017_s4_probe5_post,ExpenseDeleteSingle/v2
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v3,explore,ImageButton|fb_main_add||,True,3,1,new_screen,0021_s4_probe7_post,0018_s4_pre,0019_s4_probe6_post,ExpenseDeleteSingle/v2
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v3,agent,STATUS,True,3,1,no_change,0024_final,0018_s4_pre,0022_final,ExpenseDeleteSingle/v2
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v4,agent,OPEN_APP:Pro Expense,True,4,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,ExpenseDeleteSingle/v3
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v4,explore,ImageButton|||,True,4,1,new_screen,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,ExpenseDeleteSingle/v3
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v4,explore,Button|btn_more_logs||MORE,True,4,1,new_screen,0007_s1_probe3_post,0002_s1_pre,0007_s1_probe3_post,ExpenseDeleteSingle/v3
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v4,explore,ImageButton|fb_main_add||,True,1,1,new_screen,0009_s1_probe4_post,0002_s1_pre,0009_s1_probe4_post,ExpenseDeleteSingle/v3
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v4,explore,Button|btn_edit||EDIT,True,4,1,new_screen,0013_s2_probe5_post,0012_s2_pre,0013_s2_probe5_post,ExpenseDeleteSingle/v3
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v4,agent,ImageView|btn_delete||,True,4,1,new_screen,0017_s3_pre,0012_s2_pre,0017_s3_pre,ExpenseDeleteSingle/v3
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v4,agent,Button|btn_confirm||CONFIRM,True,4,1,new_screen,0018_s4_pre,0017_s3_pre,0018_s4_pre,ExpenseDeleteSingle/v3
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v4,explore,ImageButton|||,True,4,1,new_screen,0019_s4_probe6_post,0018_s4_pre,0019_s4_probe6_post,ExpenseDeleteSingle/v3
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v4,explore,ImageButton|fb_main_add||,True,4,1,new_screen,0021_s4_probe7_post,0018_s4_pre,0021_s4_probe7_post,ExpenseDeleteSingle/v3
+ExpenseDeleteSingle,layout,True,ExpenseDeleteSingle/v4,agent,STATUS,True,4,1,no_change,0024_final,0018_s4_pre,0024_final,ExpenseDeleteSingle/v3
+MarkorCreateNote,exact,True,MarkorCreateNote/v1,agent,OPEN_APP:Markor,True,1,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,MarkorCreateNote/v0
+MarkorCreateNote,exact,True,MarkorCreateNote/v2,agent,OPEN_APP:Markor,True,2,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,MarkorCreateNote/v1
+MarkorCreateNote,exact,True,MarkorCreateNote/v2,explore,ViewGroup|toolbar||Markor,True,1,1,no_change,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,MarkorCreateNote/v0
+MarkorCreateNote,exact,True,MarkorCreateNote/v2,explore,TextView|action_go_to|Go to|Go to,True,1,1,new_screen,0004_s1_probe2_post,0002_s1_pre,0004_s1_probe2_post,MarkorCreateNote/v0
+MarkorCreateNote,exact,True,MarkorCreateNote/v2,explore,TextView|action_sort|Sort by|Sort by,True,1,1,new_screen,0006_s1_probe3_post,0002_s1_pre,0006_s1_probe3_post,MarkorCreateNote/v0
+MarkorCreateNote,exact,True,MarkorCreateNote/v2,explore,TextView|action_search|Search|Search,True,1,1,new_screen,0008_s1_probe4_post,0002_s1_pre,0008_s1_probe4_post,MarkorCreateNote/v0
+MarkorCreateNote,exact,True,MarkorCreateNote/v2,explore,ImageView||More options|More options,True,1,1,new_screen,0010_s1_probe5_post,0002_s1_pre,0010_s1_probe5_post,MarkorCreateNote/v0
+MarkorCreateNote,exact,True,MarkorCreateNote/v2,agent,ImageButton|fab_add_new_item|Create a new file or folder|Create a new file or folder,True,1,1,new_screen,0013_s2_pre,0002_s1_pre,0013_s2_pre,MarkorCreateNote/v0
+MarkorCreateNote,exact,True,MarkorCreateNote/v2,explore,Spinner|new_file_dialog__type||Plain Text,True,1,1,new_screen,0014_s2_probe6_post,0013_s2_pre,0014_s2_probe6_post,MarkorCreateNote/v0
+MarkorCreateNote,exact,True,MarkorCreateNote/v2,agent,INPUT_TEXT:EditText|new_file_dialog__name||my_note,False,1,1,new_screen,0017_s3_pre,0013_s2_pre,0013_s3_pre,MarkorCreateNote/v1
+MarkorCreateNote,exact,True,MarkorCreateNote/v2,agent,TextView|text1||Plain Text,False,1,1,new_screen,0019_s5_pre,0018_s4_pre,0019_s5_pre,MarkorCreateNote/v0
+MarkorCreateNote,exact,True,MarkorCreateNote/v3,agent,OPEN_APP:Markor,True,3,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,MarkorCreateNote/v2
+MarkorCreateNote,exact,True,MarkorCreateNote/v3,explore,ViewGroup|toolbar||Markor,True,2,1,no_change,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,MarkorCreateNote/v2
+MarkorCreateNote,exact,True,MarkorCreateNote/v3,explore,TextView|action_go_to|Go to|Go to,True,2,1,new_screen,0004_s1_probe2_post,0002_s1_pre,0004_s1_probe2_post,MarkorCreateNote/v2
+MarkorCreateNote,exact,True,MarkorCreateNote/v3,explore,TextView|action_sort|Sort by|Sort by,True,2,1,new_screen,0006_s1_probe3_post,0002_s1_pre,0006_s1_probe3_post,MarkorCreateNote/v2
+MarkorCreateNote,exact,True,MarkorCreateNote/v3,explore,TextView|action_search|Search|Search,True,2,1,new_screen,0008_s1_probe4_post,0002_s1_pre,0008_s1_probe4_post,MarkorCreateNote/v2
+MarkorCreateNote,exact,True,MarkorCreateNote/v3,explore,ImageView||More options|More options,True,2,1,new_screen,0010_s1_probe5_post,0002_s1_pre,0010_s1_probe5_post,MarkorCreateNote/v2
+MarkorCreateNote,exact,True,MarkorCreateNote/v3,agent,ImageButton|fab_add_new_item|Create a new file or folder|Create a new file or folder,True,2,1,new_screen,0013_s2_pre,0002_s1_pre,0013_s2_pre,MarkorCreateNote/v2
+MarkorCreateNote,exact,True,MarkorCreateNote/v3,explore,Spinner|new_file_dialog__type||Plain Text,True,2,1,new_screen,0014_s2_probe6_post,0013_s2_pre,0014_s2_probe6_post,MarkorCreateNote/v2
+MarkorCreateNote,exact,True,MarkorCreateNote/v3,agent,INPUT_TEXT:EditText|new_file_dialog__name||my_note,False,2,2,new_screen,0017_s3_pre,0013_s2_pre,0017_s3_pre,MarkorCreateNote/v2
+MarkorCreateNote,exact,True,MarkorCreateNote/v3,agent,TextView|text1||Plain Text,False,2,2,new_screen,0019_s5_pre,0018_s4_pre,0019_s5_pre,MarkorCreateNote/v2
+MarkorCreateNote,exact,True,MarkorCreateNote/v4,agent,OPEN_APP:Markor,True,4,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,MarkorCreateNote/v3
+MarkorCreateNote,exact,True,MarkorCreateNote/v4,explore,ViewGroup|toolbar||Markor,True,3,1,no_change,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,MarkorCreateNote/v3
+MarkorCreateNote,exact,True,MarkorCreateNote/v4,explore,TextView|action_go_to|Go to|Go to,True,3,1,new_screen,0004_s1_probe2_post,0002_s1_pre,0004_s1_probe2_post,MarkorCreateNote/v3
+MarkorCreateNote,exact,True,MarkorCreateNote/v4,explore,TextView|action_sort|Sort by|Sort by,True,3,1,new_screen,0006_s1_probe3_post,0002_s1_pre,0006_s1_probe3_post,MarkorCreateNote/v3
+MarkorCreateNote,exact,True,MarkorCreateNote/v4,explore,TextView|action_search|Search|Search,True,3,1,new_screen,0008_s1_probe4_post,0002_s1_pre,0008_s1_probe4_post,MarkorCreateNote/v3
+MarkorCreateNote,exact,True,MarkorCreateNote/v4,explore,ImageView||More options|More options,True,3,1,new_screen,0010_s1_probe5_post,0002_s1_pre,0010_s1_probe5_post,MarkorCreateNote/v3
+MarkorCreateNote,exact,True,MarkorCreateNote/v4,agent,ImageButton|fab_add_new_item|Create a new file or folder|Create a new file or folder,True,3,1,new_screen,0013_s2_pre,0002_s1_pre,0013_s2_pre,MarkorCreateNote/v3
+MarkorCreateNote,exact,True,MarkorCreateNote/v4,explore,Spinner|new_file_dialog__type||Plain Text,True,3,1,new_screen,0014_s2_probe6_post,0013_s2_pre,0014_s2_probe6_post,MarkorCreateNote/v3
+MarkorCreateNote,exact,True,MarkorCreateNote/v4,agent,INPUT_TEXT:EditText|new_file_dialog__name||my_note,False,3,3,new_screen,0017_s3_pre,0013_s2_pre,0017_s3_pre,MarkorCreateNote/v3
+MarkorCreateNote,struct,True,MarkorCreateNote/v1,agent,OPEN_APP:Markor,True,1,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,MarkorCreateNote/v0
+MarkorCreateNote,struct,True,MarkorCreateNote/v2,agent,OPEN_APP:Markor,True,2,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,MarkorCreateNote/v1
+MarkorCreateNote,struct,True,MarkorCreateNote/v2,explore,ViewGroup|toolbar||Markor,True,1,1,no_change,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,MarkorCreateNote/v0
+MarkorCreateNote,struct,True,MarkorCreateNote/v2,explore,TextView|action_go_to|Go to|Go to,True,1,1,new_screen,0004_s1_probe2_post,0002_s1_pre,0004_s1_probe2_post,MarkorCreateNote/v0
+MarkorCreateNote,struct,True,MarkorCreateNote/v2,explore,TextView|action_sort|Sort by|Sort by,True,1,1,new_screen,0006_s1_probe3_post,0002_s1_pre,0006_s1_probe3_post,MarkorCreateNote/v0
+MarkorCreateNote,struct,True,MarkorCreateNote/v2,explore,TextView|action_search|Search|Search,True,1,1,new_screen,0008_s1_probe4_post,0002_s1_pre,0008_s1_probe4_post,MarkorCreateNote/v0
+MarkorCreateNote,struct,True,MarkorCreateNote/v2,explore,ImageView||More options|More options,True,1,1,new_screen,0010_s1_probe5_post,0002_s1_pre,0010_s1_probe5_post,MarkorCreateNote/v0
+MarkorCreateNote,struct,True,MarkorCreateNote/v2,agent,ImageButton|fab_add_new_item|Create a new file or folder|Create a new file or folder,True,1,1,new_screen,0013_s2_pre,0002_s1_pre,0013_s2_pre,MarkorCreateNote/v0
+MarkorCreateNote,struct,True,MarkorCreateNote/v2,explore,Spinner|new_file_dialog__type||Plain Text,True,2,1,new_screen,0014_s2_probe6_post,0013_s2_pre,0018_s4_pre,MarkorCreateNote/v0
+MarkorCreateNote,struct,True,MarkorCreateNote/v2,agent,INPUT_TEXT:EditText|new_file_dialog__name||my_note,True,1,1,new_screen,0017_s3_pre,0013_s2_pre,0013_s3_pre,MarkorCreateNote/v1
+MarkorCreateNote,struct,True,MarkorCreateNote/v2,agent,Spinner|new_file_dialog__type||Plain Text,True,2,1,new_screen,0018_s4_pre,0017_s3_pre,0018_s4_pre,MarkorCreateNote/v0
+MarkorCreateNote,struct,True,MarkorCreateNote/v2,agent,TextView|text1||Plain Text,True,1,1,new_screen,0019_s5_pre,0018_s4_pre,0019_s5_pre,MarkorCreateNote/v0
+MarkorCreateNote,struct,True,MarkorCreateNote/v2,explore,Spinner|new_file_dialog__type||Plain Text,True,1,1,new_screen,0020_s5_probe7_post,0019_s5_pre,0020_s5_probe7_post,MarkorCreateNote/v0
+MarkorCreateNote,struct,True,MarkorCreateNote/v2,agent,Button|button1||OK,False,1,1,new_screen,0023_s6_pre,0019_s5_pre,0023_s6_pre,MarkorCreateNote/v0
+MarkorCreateNote,struct,True,MarkorCreateNote/v3,agent,OPEN_APP:Markor,True,3,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,MarkorCreateNote/v2
+MarkorCreateNote,struct,True,MarkorCreateNote/v3,explore,ViewGroup|toolbar||Markor,True,2,1,no_change,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,MarkorCreateNote/v2
+MarkorCreateNote,struct,True,MarkorCreateNote/v3,explore,TextView|action_go_to|Go to|Go to,True,2,1,new_screen,0004_s1_probe2_post,0002_s1_pre,0004_s1_probe2_post,MarkorCreateNote/v2
+MarkorCreateNote,struct,True,MarkorCreateNote/v3,explore,TextView|action_sort|Sort by|Sort by,True,2,1,new_screen,0006_s1_probe3_post,0002_s1_pre,0006_s1_probe3_post,MarkorCreateNote/v2
+MarkorCreateNote,struct,True,MarkorCreateNote/v3,explore,TextView|action_search|Search|Search,True,2,1,new_screen,0008_s1_probe4_post,0002_s1_pre,0008_s1_probe4_post,MarkorCreateNote/v2
+MarkorCreateNote,struct,True,MarkorCreateNote/v3,explore,ImageView||More options|More options,True,2,1,new_screen,0010_s1_probe5_post,0002_s1_pre,0010_s1_probe5_post,MarkorCreateNote/v2
+MarkorCreateNote,struct,True,MarkorCreateNote/v3,agent,ImageButton|fab_add_new_item|Create a new file or folder|Create a new file or folder,True,2,1,new_screen,0013_s2_pre,0002_s1_pre,0013_s2_pre,MarkorCreateNote/v2
+MarkorCreateNote,struct,True,MarkorCreateNote/v3,explore,Spinner|new_file_dialog__type||Plain Text,True,4,1,new_screen,0014_s2_probe6_post,0013_s2_pre,0018_s4_pre,MarkorCreateNote/v2
+MarkorCreateNote,struct,True,MarkorCreateNote/v3,agent,INPUT_TEXT:EditText|new_file_dialog__name||my_note,True,2,1,new_screen,0017_s3_pre,0013_s2_pre,0017_s3_pre,MarkorCreateNote/v2
+MarkorCreateNote,struct,True,MarkorCreateNote/v3,agent,Spinner|new_file_dialog__type||Plain Text,True,4,1,new_screen,0018_s4_pre,0017_s3_pre,0018_s4_pre,MarkorCreateNote/v2
+MarkorCreateNote,struct,True,MarkorCreateNote/v3,agent,TextView|text1||Plain Text,True,2,1,new_screen,0019_s5_pre,0018_s4_pre,0019_s5_pre,MarkorCreateNote/v2
+MarkorCreateNote,struct,True,MarkorCreateNote/v3,explore,Spinner|new_file_dialog__type||Plain Text,True,2,1,new_screen,0020_s5_probe7_post,0019_s5_pre,0020_s5_probe7_post,MarkorCreateNote/v2
+MarkorCreateNote,struct,True,MarkorCreateNote/v3,agent,Button|button1||OK,False,2,2,new_screen,0023_s6_pre,0019_s5_pre,0023_s6_pre,MarkorCreateNote/v2
+MarkorCreateNote,struct,True,MarkorCreateNote/v4,agent,OPEN_APP:Markor,True,4,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,MarkorCreateNote/v3
+MarkorCreateNote,struct,True,MarkorCreateNote/v4,explore,ViewGroup|toolbar||Markor,True,3,1,no_change,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,MarkorCreateNote/v3
+MarkorCreateNote,struct,True,MarkorCreateNote/v4,explore,TextView|action_go_to|Go to|Go to,True,3,1,new_screen,0004_s1_probe2_post,0002_s1_pre,0004_s1_probe2_post,MarkorCreateNote/v3
+MarkorCreateNote,struct,True,MarkorCreateNote/v4,explore,TextView|action_sort|Sort by|Sort by,True,3,1,new_screen,0006_s1_probe3_post,0002_s1_pre,0006_s1_probe3_post,MarkorCreateNote/v3
+MarkorCreateNote,struct,True,MarkorCreateNote/v4,explore,TextView|action_search|Search|Search,True,3,1,new_screen,0008_s1_probe4_post,0002_s1_pre,0008_s1_probe4_post,MarkorCreateNote/v3
+MarkorCreateNote,struct,True,MarkorCreateNote/v4,explore,ImageView||More options|More options,True,3,1,new_screen,0010_s1_probe5_post,0002_s1_pre,0010_s1_probe5_post,MarkorCreateNote/v3
+MarkorCreateNote,struct,True,MarkorCreateNote/v4,agent,ImageButton|fab_add_new_item|Create a new file or folder|Create a new file or folder,True,3,1,new_screen,0013_s2_pre,0002_s1_pre,0013_s2_pre,MarkorCreateNote/v3
+MarkorCreateNote,struct,True,MarkorCreateNote/v4,explore,Spinner|new_file_dialog__type||Plain Text,True,6,1,new_screen,0014_s2_probe6_post,0013_s2_pre,0018_s4_pre,MarkorCreateNote/v3
+MarkorCreateNote,struct,True,MarkorCreateNote/v4,agent,INPUT_TEXT:EditText|new_file_dialog__name||my_note,True,3,1,new_screen,0017_s3_pre,0013_s2_pre,0017_s3_pre,MarkorCreateNote/v3
+MarkorCreateNote,struct,True,MarkorCreateNote/v4,agent,Button|button1||OK,False,1,1,new_screen,0018_s4_pre,0017_s3_pre,0014_s4_pre,MarkorCreateNote/v1
+MarkorCreateNote,layout,True,MarkorCreateNote/v1,agent,OPEN_APP:Markor,True,1,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,MarkorCreateNote/v0
+MarkorCreateNote,layout,True,MarkorCreateNote/v1,agent,TextView|action_save|Save|Save,True,1,1,no_change,0016_s6_pre,0015_s5_pre,0037_s8_pre,MarkorCreateNote/v0
+MarkorCreateNote,layout,True,MarkorCreateNote/v1,agent,STATUS,True,1,1,no_change,0017_final,0016_s6_pre,0038_final,MarkorCreateNote/v0
+MarkorCreateNote,layout,True,MarkorCreateNote/v2,agent,OPEN_APP:Markor,True,2,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,MarkorCreateNote/v1
+MarkorCreateNote,layout,True,MarkorCreateNote/v2,explore,ViewGroup|toolbar||Markor,True,1,1,no_change,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,MarkorCreateNote/v0
+MarkorCreateNote,layout,True,MarkorCreateNote/v2,explore,TextView|action_go_to|Go to|Go to,True,1,1,new_screen,0004_s1_probe2_post,0002_s1_pre,0004_s1_probe2_post,MarkorCreateNote/v0
+MarkorCreateNote,layout,True,MarkorCreateNote/v2,explore,TextView|action_sort|Sort by|Sort by,True,1,1,new_screen,0006_s1_probe3_post,0002_s1_pre,0006_s1_probe3_post,MarkorCreateNote/v0
+MarkorCreateNote,layout,True,MarkorCreateNote/v2,explore,TextView|action_search|Search|Search,True,1,1,new_screen,0008_s1_probe4_post,0002_s1_pre,0008_s1_probe4_post,MarkorCreateNote/v0
+MarkorCreateNote,layout,True,MarkorCreateNote/v2,explore,ImageView||More options|More options,True,1,1,new_screen,0010_s1_probe5_post,0002_s1_pre,0010_s1_probe5_post,MarkorCreateNote/v0
+MarkorCreateNote,layout,True,MarkorCreateNote/v2,agent,ImageButton|fab_add_new_item|Create a new file or folder|Create a new file or folder,True,1,1,new_screen,0013_s2_pre,0002_s1_pre,0013_s2_pre,MarkorCreateNote/v0
+MarkorCreateNote,layout,True,MarkorCreateNote/v2,explore,Spinner|new_file_dialog__type||Plain Text,True,2,1,new_screen,0014_s2_probe6_post,0013_s2_pre,0018_s4_pre,MarkorCreateNote/v0
+MarkorCreateNote,layout,True,MarkorCreateNote/v2,agent,INPUT_TEXT:EditText|new_file_dialog__name||my_note,True,1,1,new_screen,0017_s3_pre,0013_s2_pre,0013_s3_pre,MarkorCreateNote/v1
+MarkorCreateNote,layout,True,MarkorCreateNote/v2,agent,Spinner|new_file_dialog__type||Plain Text,True,2,1,new_screen,0018_s4_pre,0017_s3_pre,0018_s4_pre,MarkorCreateNote/v0
+MarkorCreateNote,layout,True,MarkorCreateNote/v2,agent,TextView|text1||Plain Text,True,1,1,new_screen,0019_s5_pre,0018_s4_pre,0019_s5_pre,MarkorCreateNote/v0
+MarkorCreateNote,layout,True,MarkorCreateNote/v2,explore,Spinner|new_file_dialog__type||Plain Text,True,1,1,new_screen,0020_s5_probe7_post,0019_s5_pre,0020_s5_probe7_post,MarkorCreateNote/v0
+MarkorCreateNote,layout,True,MarkorCreateNote/v2,agent,Button|button1||OK,True,1,1,new_screen,0023_s6_pre,0019_s5_pre,0023_s6_pre,MarkorCreateNote/v0
+MarkorCreateNote,layout,True,MarkorCreateNote/v2,explore,TextView|action_search|Search|Search,False,1,1,new_screen,0025_s6_probe9_post,0023_s6_pre,0025_s6_probe9_post,MarkorCreateNote/v0
+MarkorCreateNote,layout,True,MarkorCreateNote/v2,explore,ImageView||More options|More options,True,1,1,new_screen,0028_s6_probe10_post,0023_s6_pre,0028_s6_probe10_post,MarkorCreateNote/v0
+MarkorCreateNote,layout,True,MarkorCreateNote/v2,explore,ImageView||Check list|Check list,True,1,1,no_change,0030_s6_probe11_post,0023_s6_pre,0030_s6_probe11_post,MarkorCreateNote/v0
+MarkorCreateNote,layout,True,MarkorCreateNote/v2,explore,ImageView||Unordered list|Unordered list,True,1,1,no_change,0031_s6_probe12_post,0023_s6_pre,0031_s6_probe12_post,MarkorCreateNote/v0
+MarkorCreateNote,layout,True,MarkorCreateNote/v2,agent,INPUT_TEXT,True,1,1,new_screen,0036_s7_pre,0035_s6_pre_requery,0036_s7_pre,MarkorCreateNote/v0
+MarkorCreateNote,layout,True,MarkorCreateNote/v2,agent,TextView|action_save|Save|Save,True,2,1,no_change,0037_s8_pre,0036_s7_pre,0016_s6_pre,MarkorCreateNote/v1
+MarkorCreateNote,layout,True,MarkorCreateNote/v2,agent,STATUS,True,2,1,no_change,0038_final,0037_s8_pre,0017_final,MarkorCreateNote/v1
+MarkorCreateNote,layout,True,MarkorCreateNote/v3,agent,OPEN_APP:Markor,True,3,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,MarkorCreateNote/v2
+MarkorCreateNote,layout,True,MarkorCreateNote/v3,explore,ViewGroup|toolbar||Markor,True,2,1,no_change,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,MarkorCreateNote/v2
+MarkorCreateNote,layout,True,MarkorCreateNote/v3,explore,TextView|action_go_to|Go to|Go to,True,2,1,new_screen,0004_s1_probe2_post,0002_s1_pre,0004_s1_probe2_post,MarkorCreateNote/v2
+MarkorCreateNote,layout,True,MarkorCreateNote/v3,explore,TextView|action_sort|Sort by|Sort by,True,2,1,new_screen,0006_s1_probe3_post,0002_s1_pre,0006_s1_probe3_post,MarkorCreateNote/v2
+MarkorCreateNote,layout,True,MarkorCreateNote/v3,explore,TextView|action_search|Search|Search,True,2,1,new_screen,0008_s1_probe4_post,0002_s1_pre,0008_s1_probe4_post,MarkorCreateNote/v2
+MarkorCreateNote,layout,True,MarkorCreateNote/v3,explore,ImageView||More options|More options,True,2,1,new_screen,0010_s1_probe5_post,0002_s1_pre,0010_s1_probe5_post,MarkorCreateNote/v2
+MarkorCreateNote,layout,True,MarkorCreateNote/v3,agent,ImageButton|fab_add_new_item|Create a new file or folder|Create a new file or folder,True,2,1,new_screen,0013_s2_pre,0002_s1_pre,0013_s2_pre,MarkorCreateNote/v2
+MarkorCreateNote,layout,True,MarkorCreateNote/v3,explore,Spinner|new_file_dialog__type||Plain Text,True,4,1,new_screen,0014_s2_probe6_post,0013_s2_pre,0018_s4_pre,MarkorCreateNote/v2
+MarkorCreateNote,layout,True,MarkorCreateNote/v3,agent,INPUT_TEXT:EditText|new_file_dialog__name||my_note,True,2,1,new_screen,0017_s3_pre,0013_s2_pre,0017_s3_pre,MarkorCreateNote/v2
+MarkorCreateNote,layout,True,MarkorCreateNote/v3,agent,Spinner|new_file_dialog__type||Plain Text,True,4,1,new_screen,0018_s4_pre,0017_s3_pre,0018_s4_pre,MarkorCreateNote/v2
+MarkorCreateNote,layout,True,MarkorCreateNote/v3,agent,TextView|text1||Plain Text,True,2,1,new_screen,0019_s5_pre,0018_s4_pre,0019_s5_pre,MarkorCreateNote/v2
+MarkorCreateNote,layout,True,MarkorCreateNote/v3,explore,Spinner|new_file_dialog__type||Plain Text,True,2,1,new_screen,0020_s5_probe7_post,0019_s5_pre,0020_s5_probe7_post,MarkorCreateNote/v2
+MarkorCreateNote,layout,True,MarkorCreateNote/v3,agent,Button|button1||OK,True,2,1,new_screen,0023_s6_pre,0019_s5_pre,0023_s6_pre,MarkorCreateNote/v2
+MarkorCreateNote,layout,True,MarkorCreateNote/v3,explore,TextView|action_search|Search|Search,True,2,2,new_screen,0025_s6_probe9_post,0023_s6_pre,0025_s6_probe9_post,MarkorCreateNote/v2
+MarkorCreateNote,layout,True,MarkorCreateNote/v3,explore,ImageView||More options|More options,True,2,1,new_screen,0028_s6_probe10_post,0023_s6_pre,0028_s6_probe10_post,MarkorCreateNote/v2
+MarkorCreateNote,layout,True,MarkorCreateNote/v3,explore,ImageView||Check list|Check list,True,2,1,no_change,0030_s6_probe11_post,0023_s6_pre,0030_s6_probe11_post,MarkorCreateNote/v2
+MarkorCreateNote,layout,True,MarkorCreateNote/v3,explore,ImageView||Unordered list|Unordered list,True,2,1,no_change,0031_s6_probe12_post,0023_s6_pre,0031_s6_probe12_post,MarkorCreateNote/v2
+MarkorCreateNote,layout,True,MarkorCreateNote/v3,agent,INPUT_TEXT,True,2,1,new_screen,0041_s9_pre,0040_s8_pre,0036_s7_pre,MarkorCreateNote/v2
+MarkorCreateNote,layout,True,MarkorCreateNote/v3,agent,INPUT_TEXT,True,1,1,new_screen,0042_s10_pre,0041_s9_pre,0015_s5_pre,MarkorCreateNote/v1
+MarkorCreateNote,layout,True,MarkorCreateNote/v3,agent,INPUT_TEXT,True,1,1,new_screen,0043_s11_pre,0042_s10_pre,0015_s5_pre,MarkorCreateNote/v1
+MarkorCreateNote,layout,True,MarkorCreateNote/v3,agent,INPUT_TEXT,True,1,1,new_screen,0044_s12_pre,0043_s11_pre,0015_s5_pre,MarkorCreateNote/v1
+MarkorCreateNote,layout,True,MarkorCreateNote/v3,agent,INPUT_TEXT,True,1,1,new_screen,0045_s13_pre,0044_s12_pre,0015_s5_pre,MarkorCreateNote/v1
+MarkorCreateNote,layout,True,MarkorCreateNote/v3,agent,INPUT_TEXT,True,1,1,new_screen,0046_s14_pre,0045_s13_pre,0015_s5_pre,MarkorCreateNote/v1
+MarkorCreateNote,layout,True,MarkorCreateNote/v3,agent,INPUT_TEXT,True,1,1,new_screen,0047_s15_pre,0046_s14_pre,0015_s5_pre,MarkorCreateNote/v1
+MarkorCreateNote,layout,True,MarkorCreateNote/v3,agent,STATUS,True,3,1,no_change,0048_final,0047_s15_pre,0038_final,MarkorCreateNote/v2
+MarkorCreateNote,layout,True,MarkorCreateNote/v4,agent,OPEN_APP:Markor,True,4,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,MarkorCreateNote/v3
+MarkorCreateNote,layout,True,MarkorCreateNote/v4,explore,ViewGroup|toolbar||Markor,True,3,1,no_change,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,MarkorCreateNote/v3
+MarkorCreateNote,layout,True,MarkorCreateNote/v4,explore,TextView|action_go_to|Go to|Go to,True,3,1,new_screen,0004_s1_probe2_post,0002_s1_pre,0004_s1_probe2_post,MarkorCreateNote/v3
+MarkorCreateNote,layout,True,MarkorCreateNote/v4,explore,TextView|action_sort|Sort by|Sort by,True,3,1,new_screen,0006_s1_probe3_post,0002_s1_pre,0006_s1_probe3_post,MarkorCreateNote/v3
+MarkorCreateNote,layout,True,MarkorCreateNote/v4,explore,TextView|action_search|Search|Search,True,3,1,new_screen,0008_s1_probe4_post,0002_s1_pre,0008_s1_probe4_post,MarkorCreateNote/v3
+MarkorCreateNote,layout,True,MarkorCreateNote/v4,explore,ImageView||More options|More options,True,3,1,new_screen,0010_s1_probe5_post,0002_s1_pre,0010_s1_probe5_post,MarkorCreateNote/v3
+MarkorCreateNote,layout,True,MarkorCreateNote/v4,agent,ImageButton|fab_add_new_item|Create a new file or folder|Create a new file or folder,True,3,1,new_screen,0013_s2_pre,0002_s1_pre,0013_s2_pre,MarkorCreateNote/v3
+MarkorCreateNote,layout,True,MarkorCreateNote/v4,explore,Spinner|new_file_dialog__type||Plain Text,True,6,1,new_screen,0014_s2_probe6_post,0013_s2_pre,0018_s4_pre,MarkorCreateNote/v3
+MarkorCreateNote,layout,True,MarkorCreateNote/v4,agent,INPUT_TEXT:EditText|new_file_dialog__name||my_note,True,3,1,new_screen,0017_s3_pre,0013_s2_pre,0017_s3_pre,MarkorCreateNote/v3
+MarkorCreateNote,layout,True,MarkorCreateNote/v4,agent,Button|button1||OK,True,1,1,new_screen,0018_s4_pre,0017_s3_pre,0014_s4_pre,MarkorCreateNote/v1
+MarkorCreateNote,layout,True,MarkorCreateNote/v4,agent,INPUT_TEXT,True,3,1,new_screen,0025_s5_pre,0024_s4_pre_requery,0041_s9_pre,MarkorCreateNote/v3
+MarkorCreateNote,layout,True,MarkorCreateNote/v4,agent,TextView|action_save|Save|Save,True,3,1,no_change,0026_s6_pre,0025_s5_pre,0037_s8_pre,MarkorCreateNote/v2
+MarkorCreateNote,layout,True,MarkorCreateNote/v4,agent,STATUS,True,4,1,no_change,0027_final,0026_s6_pre,0048_final,MarkorCreateNote/v3
+MarkorDeleteNewestNote,exact,True,MarkorDeleteNewestNote/v1,agent,OPEN_APP:Markor,False,1,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,MarkorDeleteNewestNote/v0
+MarkorDeleteNewestNote,exact,True,MarkorDeleteNewestNote/v3,agent,OPEN_APP:Markor,False,2,2,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,MarkorDeleteNewestNote/v1
+MarkorDeleteNewestNote,exact,True,MarkorDeleteNewestNote/v4,agent,OPEN_APP:Markor,False,3,3,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,MarkorDeleteNewestNote/v3
+MarkorDeleteNewestNote,struct,True,MarkorDeleteNewestNote/v1,agent,OPEN_APP:Markor,True,1,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,MarkorDeleteNewestNote/v0
+MarkorDeleteNewestNote,struct,True,MarkorDeleteNewestNote/v1,agent,STATUS,True,1,1,no_change,0025_final,0024_s5_pre,0025_final,MarkorDeleteNewestNote/v0
+MarkorDeleteNewestNote,struct,True,MarkorDeleteNewestNote/v2,agent,OPEN_APP:Markor,True,2,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,MarkorDeleteNewestNote/v1
+MarkorDeleteNewestNote,struct,True,MarkorDeleteNewestNote/v2,agent,STATUS,True,2,1,no_change,0024_final,0023_s5_pre,0025_final,MarkorDeleteNewestNote/v1
+MarkorDeleteNewestNote,struct,True,MarkorDeleteNewestNote/v3,agent,OPEN_APP:Markor,True,3,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,MarkorDeleteNewestNote/v2
+MarkorDeleteNewestNote,struct,True,MarkorDeleteNewestNote/v4,agent,OPEN_APP:Markor,True,4,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,MarkorDeleteNewestNote/v3
+MarkorDeleteNewestNote,layout,True,MarkorDeleteNewestNote/v1,agent,OPEN_APP:Markor,True,1,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,MarkorDeleteNewestNote/v0
+MarkorDeleteNewestNote,layout,True,MarkorDeleteNewestNote/v1,agent,Button|button1||OK,True,1,1,new_screen,0024_s5_pre,0023_s4_pre,0024_s4_pre,MarkorDeleteNewestNote/v0
+MarkorDeleteNewestNote,layout,True,MarkorDeleteNewestNote/v1,agent,STATUS,True,1,1,no_change,0025_final,0024_s5_pre,0025_final,MarkorDeleteNewestNote/v0
+MarkorDeleteNewestNote,layout,True,MarkorDeleteNewestNote/v2,agent,OPEN_APP:Markor,True,2,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,MarkorDeleteNewestNote/v1
+MarkorDeleteNewestNote,layout,True,MarkorDeleteNewestNote/v2,agent,Button|button1||OK,True,2,1,new_screen,0023_s5_pre,0022_s4_pre,0024_s5_pre,MarkorDeleteNewestNote/v1
+MarkorDeleteNewestNote,layout,True,MarkorDeleteNewestNote/v2,agent,STATUS,True,2,1,no_change,0024_final,0023_s5_pre,0025_final,MarkorDeleteNewestNote/v1
+MarkorDeleteNewestNote,layout,True,MarkorDeleteNewestNote/v3,agent,OPEN_APP:Markor,True,3,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,MarkorDeleteNewestNote/v2
+MarkorDeleteNewestNote,layout,True,MarkorDeleteNewestNote/v4,agent,OPEN_APP:Markor,True,4,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,MarkorDeleteNewestNote/v3
+MarkorDeleteNewestNote,layout,True,MarkorDeleteNewestNote/v4,agent,ImageView||Delete lines|Delete lines,True,8,1,new_screen,0024_s3_pre,0023_s2_pre_requery,0026_final,MarkorDeleteNewestNote/v3
+MarkorDeleteNewestNote,layout,True,MarkorDeleteNewestNote/v4,agent,ImageView||Delete lines|Delete lines,True,8,1,new_screen,0025_s4_pre,0024_s3_pre,0026_final,MarkorDeleteNewestNote/v3
+MarkorDeleteNewestNote,layout,True,MarkorDeleteNewestNote/v4,agent,ImageView||Delete lines|Delete lines,True,8,1,no_change,0026_s5_pre,0025_s4_pre,0026_final,MarkorDeleteNewestNote/v3
+MarkorDeleteNewestNote,layout,True,MarkorDeleteNewestNote/v4,agent,ImageView||Delete lines|Delete lines,True,8,1,no_change,0027_s6_pre,0026_s5_pre,0026_final,MarkorDeleteNewestNote/v3
+MarkorDeleteNewestNote,layout,True,MarkorDeleteNewestNote/v4,agent,ImageView||Delete lines|Delete lines,True,8,1,no_change,0028_s7_pre,0027_s6_pre,0026_final,MarkorDeleteNewestNote/v3
+MarkorDeleteNewestNote,layout,True,MarkorDeleteNewestNote/v4,agent,ImageView||Delete lines|Delete lines,True,8,1,no_change,0029_s8_pre,0028_s7_pre,0026_final,MarkorDeleteNewestNote/v3
+MarkorDeleteNewestNote,layout,True,MarkorDeleteNewestNote/v4,agent,ImageView||Delete lines|Delete lines,True,8,1,no_change,0030_s9_pre,0029_s8_pre,0026_final,MarkorDeleteNewestNote/v3
+MarkorDeleteNewestNote,layout,True,MarkorDeleteNewestNote/v4,agent,ImageView||Delete lines|Delete lines,True,8,1,no_change,0031_final,0030_s9_pre,0026_final,MarkorDeleteNewestNote/v3
+NotesTodoItemCount,exact,True,NotesTodoItemCount/v1,agent,OPEN_APP:Joplin,False,1,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,NotesTodoItemCount/v0
+NotesTodoItemCount,exact,True,NotesTodoItemCount/v2,agent,OPEN_APP:Joplin,False,2,2,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,NotesTodoItemCount/v1
+NotesTodoItemCount,exact,True,NotesTodoItemCount/v3,agent,OPEN_APP:Joplin,False,3,3,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,NotesTodoItemCount/v2
+NotesTodoItemCount,exact,True,NotesTodoItemCount/v4,agent,OPEN_APP:Joplin,False,4,4,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,NotesTodoItemCount/v3
+NotesTodoItemCount,struct,True,NotesTodoItemCount/v1,agent,OPEN_APP:Joplin,False,1,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,NotesTodoItemCount/v0
+NotesTodoItemCount,struct,True,NotesTodoItemCount/v2,agent,OPEN_APP:Joplin,False,2,2,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,NotesTodoItemCount/v1
+NotesTodoItemCount,struct,True,NotesTodoItemCount/v3,agent,OPEN_APP:Joplin,False,3,3,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,NotesTodoItemCount/v2
+NotesTodoItemCount,struct,True,NotesTodoItemCount/v4,agent,OPEN_APP:Joplin,False,4,4,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,NotesTodoItemCount/v3
+NotesTodoItemCount,struct,True,NotesTodoItemCount/v4,agent,ViewGroup|||,True,1,1,new_screen,0011_s3_pre,0010_s2_pre_requery,0010_s2_pre,NotesTodoItemCount/v0
+NotesTodoItemCount,layout,True,NotesTodoItemCount/v1,agent,OPEN_APP:Joplin,True,1,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,NotesTodoItemCount/v0
+NotesTodoItemCount,layout,True,NotesTodoItemCount/v1,explore,Button||Sidebar|Sidebar,True,1,1,new_screen,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,NotesTodoItemCount/v0
+NotesTodoItemCount,layout,True,NotesTodoItemCount/v1,explore,ViewGroup|||,True,1,1,new_screen,0005_s1_probe2_post,0002_s1_pre,0005_s1_probe2_post,NotesTodoItemCount/v0
+NotesTodoItemCount,layout,True,NotesTodoItemCount/v1,agent,ViewGroup|||,True,1,1,new_screen,0010_s2_pre,0009_s1_pre_requery,0010_s2_pre,NotesTodoItemCount/v0
+NotesTodoItemCount,layout,True,NotesTodoItemCount/v1,agent,STATUS,True,1,1,no_change,0012_final,0011_s3_pre,0012_final,NotesTodoItemCount/v0
+NotesTodoItemCount,layout,True,NotesTodoItemCount/v2,agent,OPEN_APP:Joplin,True,2,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,NotesTodoItemCount/v1
+NotesTodoItemCount,layout,True,NotesTodoItemCount/v2,explore,Button||Sidebar|Sidebar,True,2,1,new_screen,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,NotesTodoItemCount/v1
+NotesTodoItemCount,layout,True,NotesTodoItemCount/v2,explore,ViewGroup|||,True,2,1,new_screen,0005_s1_probe2_post,0002_s1_pre,0005_s1_probe2_post,NotesTodoItemCount/v1
+NotesTodoItemCount,layout,True,NotesTodoItemCount/v2,agent,ViewGroup|||,True,2,1,new_screen,0010_s2_pre,0009_s1_pre_requery,0010_s2_pre,NotesTodoItemCount/v1
+NotesTodoItemCount,layout,True,NotesTodoItemCount/v2,agent,STATUS,True,2,1,no_change,0012_final,0011_s3_pre,0012_final,NotesTodoItemCount/v1
+NotesTodoItemCount,layout,True,NotesTodoItemCount/v3,agent,OPEN_APP:Joplin,True,3,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,NotesTodoItemCount/v2
+NotesTodoItemCount,layout,True,NotesTodoItemCount/v3,explore,Button||Sidebar|Sidebar,True,3,1,new_screen,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,NotesTodoItemCount/v2
+NotesTodoItemCount,layout,True,NotesTodoItemCount/v3,explore,ViewGroup|||,True,3,1,new_screen,0005_s1_probe2_post,0002_s1_pre,0005_s1_probe2_post,NotesTodoItemCount/v2
+NotesTodoItemCount,layout,True,NotesTodoItemCount/v4,agent,OPEN_APP:Joplin,False,4,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,NotesTodoItemCount/v3
+NotesTodoItemCount,layout,True,NotesTodoItemCount/v4,agent,ViewGroup|||,True,3,1,new_screen,0011_s3_pre,0010_s2_pre_requery,0010_s2_pre,NotesTodoItemCount/v2
+NotesTodoItemCount,layout,True,NotesTodoItemCount/v4,agent,STATUS,True,3,1,no_change,0013_final,0012_s4_pre,0012_final,NotesTodoItemCount/v2
+OsmAndFavorite,exact,True,OsmAndFavorite/v1,agent,OPEN_APP:OsmAnd,False,2,2,new_screen,0002_s1_pre,0001_s0_pre,0012_s2_pre,OsmAndFavorite/v0
+OsmAndFavorite,exact,True,OsmAndFavorite/v1,agent,OPEN_APP:OsmAnd,True,2,2,new_screen,0013_s2_pre,0012_s1_pre_requery,0012_s2_pre,OsmAndFavorite/v0
+OsmAndFavorite,exact,True,OsmAndFavorite/v1,agent,ImageButton|map_search_button|Search|Search,True,1,1,new_screen,0014_s3_pre,0013_s2_pre,0013_s3_pre,OsmAndFavorite/v0
+OsmAndFavorite,exact,True,OsmAndFavorite/v1,agent,INPUT_TEXT,False,1,1,new_screen,0015_s4_pre,0014_s3_pre,0014_s4_pre,OsmAndFavorite/v0
+OsmAndFavorite,exact,True,OsmAndFavorite/v2,agent,OPEN_APP:OsmAnd,False,4,3,new_screen,0002_s1_pre,0001_s0_pre,0013_s2_pre,OsmAndFavorite/v1
+OsmAndFavorite,exact,True,OsmAndFavorite/v2,agent,OPEN_APP:OsmAnd,True,4,3,new_screen,0012_s2_pre,0011_s1_pre_requery,0013_s2_pre,OsmAndFavorite/v1
+OsmAndFavorite,exact,True,OsmAndFavorite/v2,agent,ImageButton|map_search_button|Search|Search,True,2,1,new_screen,0013_s3_pre,0012_s2_pre,0014_s3_pre,OsmAndFavorite/v1
+OsmAndFavorite,exact,True,OsmAndFavorite/v2,agent,INPUT_TEXT,False,2,2,new_screen,0014_s4_pre,0013_s3_pre,0015_s4_pre,OsmAndFavorite/v1
+OsmAndFavorite,exact,True,OsmAndFavorite/v2,agent,INPUT_TEXT,False,1,1,new_screen,0017_s7_pre,0016_s6_pre,0018_s7_pre,OsmAndFavorite/v1
+OsmAndFavorite,exact,True,OsmAndFavorite/v3,agent,OPEN_APP:OsmAnd,False,6,4,new_screen,0002_s1_pre,0001_s0_pre,0012_s2_pre,OsmAndFavorite/v2
+OsmAndFavorite,exact,True,OsmAndFavorite/v3,agent,OPEN_APP:OsmAnd,True,6,4,new_screen,0012_s2_pre,0011_s1_pre_requery,0012_s2_pre,OsmAndFavorite/v2
+OsmAndFavorite,exact,True,OsmAndFavorite/v3,agent,ImageButton|map_search_button|Search|Search,True,3,1,new_screen,0013_s3_pre,0012_s2_pre,0013_s3_pre,OsmAndFavorite/v2
+OsmAndFavorite,exact,True,OsmAndFavorite/v3,agent,INPUT_TEXT,False,3,3,new_screen,0014_s4_pre,0013_s3_pre,0014_s4_pre,OsmAndFavorite/v2
+OsmAndFavorite,exact,True,OsmAndFavorite/v4,agent,OPEN_APP:OsmAnd,True,8,5,new_screen,0002_s1_pre,0001_s0_pre,0012_s2_pre,OsmAndFavorite/v3
+OsmAndFavorite,exact,True,OsmAndFavorite/v4,agent,OPEN_APP:OsmAnd,False,8,5,new_screen,0007_s2_pre,0006_s1_pre_requery,0012_s2_pre,OsmAndFavorite/v3
+OsmAndFavorite,struct,True,OsmAndFavorite/v1,agent,OPEN_APP:OsmAnd,False,2,2,new_screen,0002_s1_pre,0001_s0_pre,0012_s2_pre,OsmAndFavorite/v0
+OsmAndFavorite,struct,True,OsmAndFavorite/v1,agent,OPEN_APP:OsmAnd,True,2,2,new_screen,0013_s2_pre,0012_s1_pre_requery,0012_s2_pre,OsmAndFavorite/v0
+OsmAndFavorite,struct,True,OsmAndFavorite/v1,agent,ImageButton|map_search_button|Search|Search,True,1,1,new_screen,0014_s3_pre,0013_s2_pre,0013_s3_pre,OsmAndFavorite/v0
+OsmAndFavorite,struct,True,OsmAndFavorite/v1,agent,INPUT_TEXT,True,1,1,new_screen,0015_s4_pre,0014_s3_pre,0014_s4_pre,OsmAndFavorite/v0
+OsmAndFavorite,struct,True,OsmAndFavorite/v1,agent,TextView|title||Liechtenstein,False,1,1,new_screen,0016_s5_pre,0015_s4_pre,0015_s5_pre,OsmAndFavorite/v0
+OsmAndFavorite,struct,True,OsmAndFavorite/v1,agent,LONG_PRESS:View|MapLayersView|Map|Map,True,1,1,new_screen,0019_s8_pre,0018_s7_pre,0019_s9_pre,OsmAndFavorite/v0
+OsmAndFavorite,struct,True,OsmAndFavorite/v1,agent,View|MapLayersView|Map|Map,True,1,1,new_screen,0020_s9_pre,0019_s8_pre,0020_s10_pre,OsmAndFavorite/v0
+OsmAndFavorite,struct,True,OsmAndFavorite/v1,agent,View|MapLayersView|Map|Map,True,4,2,no_change,0021_s10_pre,0020_s9_pre,0023_final,OsmAndFavorite/v0
+OsmAndFavorite,struct,True,OsmAndFavorite/v1,agent,View|MapLayersView|Map|Map,True,4,2,new_screen,0022_s11_pre,0021_s10_pre,0023_final,OsmAndFavorite/v0
+OsmAndFavorite,struct,True,OsmAndFavorite/v2,agent,OPEN_APP:OsmAnd,False,4,3,new_screen,0002_s1_pre,0001_s0_pre,0013_s2_pre,OsmAndFavorite/v1
+OsmAndFavorite,struct,True,OsmAndFavorite/v2,agent,OPEN_APP:OsmAnd,True,4,3,new_screen,0012_s2_pre,0011_s1_pre_requery,0013_s2_pre,OsmAndFavorite/v1
+OsmAndFavorite,struct,True,OsmAndFavorite/v2,agent,ImageButton|map_search_button|Search|Search,True,2,1,new_screen,0013_s3_pre,0012_s2_pre,0014_s3_pre,OsmAndFavorite/v1
+OsmAndFavorite,struct,True,OsmAndFavorite/v2,agent,INPUT_TEXT,True,2,1,new_screen,0014_s4_pre,0013_s3_pre,0015_s4_pre,OsmAndFavorite/v1
+OsmAndFavorite,struct,True,OsmAndFavorite/v2,agent,TextView|title||Liechtenstein,False,2,2,new_screen,0015_s5_pre,0014_s4_pre,0016_s5_pre,OsmAndFavorite/v1
+OsmAndFavorite,struct,True,OsmAndFavorite/v2,agent,INPUT_TEXT,True,1,1,new_screen,0017_s7_pre,0016_s6_pre,0018_s7_pre,OsmAndFavorite/v1
+OsmAndFavorite,struct,True,OsmAndFavorite/v2,agent,LONG_PRESS:View|MapLayersView|Map|Map,True,2,1,new_screen,0018_s8_pre,0017_s7_pre,0019_s8_pre,OsmAndFavorite/v1
+OsmAndFavorite,struct,True,OsmAndFavorite/v2,agent,ImageButton|map_my_location_button|Position not yet known.|Position not yet known.,False,1,1,new_screen,0020_s10_pre,0019_s9_pre,0023_s12_pre,OsmAndFavorite/v1
+OsmAndFavorite,struct,True,OsmAndFavorite/v3,agent,OPEN_APP:OsmAnd,False,6,4,new_screen,0002_s1_pre,0001_s0_pre,0012_s2_pre,OsmAndFavorite/v2
+OsmAndFavorite,struct,True,OsmAndFavorite/v3,agent,OPEN_APP:OsmAnd,True,6,4,new_screen,0012_s2_pre,0011_s1_pre_requery,0012_s2_pre,OsmAndFavorite/v2
+OsmAndFavorite,struct,True,OsmAndFavorite/v3,agent,ImageButton|map_search_button|Search|Search,True,3,1,new_screen,0013_s3_pre,0012_s2_pre,0013_s3_pre,OsmAndFavorite/v2
+OsmAndFavorite,struct,True,OsmAndFavorite/v3,agent,INPUT_TEXT,False,3,1,new_screen,0014_s4_pre,0013_s3_pre,0014_s4_pre,OsmAndFavorite/v2
+OsmAndFavorite,struct,True,OsmAndFavorite/v4,agent,OPEN_APP:OsmAnd,True,8,5,new_screen,0002_s1_pre,0001_s0_pre,0012_s2_pre,OsmAndFavorite/v3
+OsmAndFavorite,struct,True,OsmAndFavorite/v4,agent,OPEN_APP:OsmAnd,False,8,5,new_screen,0007_s2_pre,0006_s1_pre_requery,0012_s2_pre,OsmAndFavorite/v3
+OsmAndFavorite,struct,True,OsmAndFavorite/v4,agent,INPUT_TEXT,False,4,2,new_screen,0009_s4_pre,0008_s3_pre,0014_s4_pre,OsmAndFavorite/v3
+OsmAndFavorite,struct,True,OsmAndFavorite/v4,agent,ImageButton|map_my_location_button|Position not yet known.|Position not yet known.,False,1,1,new_screen,0013_s8_pre,0012_s7_pre,0018_s8_pre,OsmAndFavorite/v3
+OsmAndFavorite,layout,True,OsmAndFavorite/v1,agent,OPEN_APP:OsmAnd,True,2,2,new_screen,0002_s1_pre,0001_s0_pre,0012_s2_pre,OsmAndFavorite/v0
+OsmAndFavorite,layout,True,OsmAndFavorite/v1,explore,View|MapLayersView|Map|Map,True,1,1,no_change,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,OsmAndFavorite/v0
+OsmAndFavorite,layout,True,OsmAndFavorite/v1,explore,ImageButton|map_layers_button|Configure map|Configure map,False,1,1,new_screen,0004_s1_probe2_post,0002_s1_pre,0004_s1_probe2_post,OsmAndFavorite/v0
+OsmAndFavorite,layout,True,OsmAndFavorite/v1,explore,ImageButton|map_search_button|Search|Search,True,1,1,new_screen,0006_s1_probe3_post,0002_s1_pre,0005_s1_probe3_post,OsmAndFavorite/v0
+OsmAndFavorite,layout,True,OsmAndFavorite/v1,agent,OPEN_APP:OsmAnd,True,2,2,new_screen,0013_s2_pre,0012_s1_pre_requery,0012_s2_pre,OsmAndFavorite/v0
+OsmAndFavorite,layout,True,OsmAndFavorite/v1,agent,ImageButton|map_search_button|Search|Search,True,1,1,new_screen,0014_s3_pre,0013_s2_pre,0013_s3_pre,OsmAndFavorite/v0
+OsmAndFavorite,layout,True,OsmAndFavorite/v1,agent,INPUT_TEXT,True,1,1,new_screen,0015_s4_pre,0014_s3_pre,0014_s4_pre,OsmAndFavorite/v0
+OsmAndFavorite,layout,True,OsmAndFavorite/v1,agent,TextView|title||Liechtenstein,False,1,1,new_screen,0016_s5_pre,0015_s4_pre,0015_s5_pre,OsmAndFavorite/v0
+OsmAndFavorite,layout,True,OsmAndFavorite/v1,agent,LONG_PRESS:View|MapLayersView|Map|Map,True,1,1,new_screen,0019_s8_pre,0018_s7_pre,0019_s9_pre,OsmAndFavorite/v0
+OsmAndFavorite,layout,True,OsmAndFavorite/v1,agent,View|MapLayersView|Map|Map,True,1,1,new_screen,0020_s9_pre,0019_s8_pre,0020_s10_pre,OsmAndFavorite/v0
+OsmAndFavorite,layout,True,OsmAndFavorite/v1,agent,View|MapLayersView|Map|Map,True,4,2,no_change,0021_s10_pre,0020_s9_pre,0023_final,OsmAndFavorite/v0
+OsmAndFavorite,layout,True,OsmAndFavorite/v1,agent,View|MapLayersView|Map|Map,True,4,2,new_screen,0022_s11_pre,0021_s10_pre,0023_final,OsmAndFavorite/v0
+OsmAndFavorite,layout,True,OsmAndFavorite/v2,agent,OPEN_APP:OsmAnd,True,4,2,new_screen,0002_s1_pre,0001_s0_pre,0013_s2_pre,OsmAndFavorite/v1
+OsmAndFavorite,layout,True,OsmAndFavorite/v2,explore,View|MapLayersView|Map|Map,True,2,1,no_change,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,OsmAndFavorite/v1
+OsmAndFavorite,layout,True,OsmAndFavorite/v2,explore,ImageButton|map_layers_button|Configure map|Configure map,True,2,2,no_change,0004_s1_probe2_post,0002_s1_pre,0004_s1_probe2_post,OsmAndFavorite/v1
+OsmAndFavorite,layout,True,OsmAndFavorite/v2,explore,ImageButton|map_search_button|Search|Search,True,2,1,new_screen,0005_s1_probe3_post,0002_s1_pre,0006_s1_probe3_post,OsmAndFavorite/v1
+OsmAndFavorite,layout,True,OsmAndFavorite/v2,agent,OPEN_APP:OsmAnd,True,4,2,new_screen,0012_s2_pre,0011_s1_pre_requery,0013_s2_pre,OsmAndFavorite/v1
+OsmAndFavorite,layout,True,OsmAndFavorite/v2,agent,ImageButton|map_search_button|Search|Search,True,2,1,new_screen,0013_s3_pre,0012_s2_pre,0014_s3_pre,OsmAndFavorite/v1
+OsmAndFavorite,layout,True,OsmAndFavorite/v2,agent,INPUT_TEXT,True,2,1,new_screen,0014_s4_pre,0013_s3_pre,0015_s4_pre,OsmAndFavorite/v1
+OsmAndFavorite,layout,True,OsmAndFavorite/v2,agent,TextView|title||Liechtenstein,True,2,2,new_screen,0015_s5_pre,0014_s4_pre,0016_s5_pre,OsmAndFavorite/v1
+OsmAndFavorite,layout,True,OsmAndFavorite/v2,agent,View|MapLayersView|Map|Map,True,1,1,new_screen,0016_s6_pre,0015_s5_pre,0016_s6_pre,OsmAndFavorite/v0
+OsmAndFavorite,layout,True,OsmAndFavorite/v2,agent,INPUT_TEXT,True,1,1,new_screen,0017_s7_pre,0016_s6_pre,0018_s7_pre,OsmAndFavorite/v1
+OsmAndFavorite,layout,True,OsmAndFavorite/v2,agent,LONG_PRESS:View|MapLayersView|Map|Map,True,2,1,new_screen,0018_s8_pre,0017_s7_pre,0019_s8_pre,OsmAndFavorite/v1
+OsmAndFavorite,layout,True,OsmAndFavorite/v2,agent,ImageButton|map_my_location_button|Position not yet known.|Position not yet known.,True,1,1,new_screen,0020_s10_pre,0019_s9_pre,0023_s12_pre,OsmAndFavorite/v1
+OsmAndFavorite,layout,True,OsmAndFavorite/v2,agent,STATUS,True,1,1,no_change,0021_final,0020_s10_pre,0024_final,OsmAndFavorite/v1
+OsmAndFavorite,layout,True,OsmAndFavorite/v3,agent,OPEN_APP:OsmAnd,True,6,2,new_screen,0002_s1_pre,0001_s0_pre,0012_s2_pre,OsmAndFavorite/v2
+OsmAndFavorite,layout,True,OsmAndFavorite/v3,explore,View|MapLayersView|Map|Map,True,3,1,no_change,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,OsmAndFavorite/v2
+OsmAndFavorite,layout,True,OsmAndFavorite/v3,explore,ImageButton|map_layers_button|Configure map|Configure map,True,3,2,no_change,0004_s1_probe2_post,0002_s1_pre,0004_s1_probe2_post,OsmAndFavorite/v2
+OsmAndFavorite,layout,True,OsmAndFavorite/v3,explore,ImageButton|map_search_button|Search|Search,True,3,1,new_screen,0005_s1_probe3_post,0002_s1_pre,0005_s1_probe3_post,OsmAndFavorite/v2
+OsmAndFavorite,layout,True,OsmAndFavorite/v3,agent,OPEN_APP:OsmAnd,True,6,2,new_screen,0012_s2_pre,0011_s1_pre_requery,0012_s2_pre,OsmAndFavorite/v2
+OsmAndFavorite,layout,True,OsmAndFavorite/v3,agent,ImageButton|map_search_button|Search|Search,True,3,1,new_screen,0013_s3_pre,0012_s2_pre,0013_s3_pre,OsmAndFavorite/v2
+OsmAndFavorite,layout,True,OsmAndFavorite/v3,agent,INPUT_TEXT,True,3,1,new_screen,0014_s4_pre,0013_s3_pre,0014_s4_pre,OsmAndFavorite/v2
+OsmAndFavorite,layout,True,OsmAndFavorite/v3,agent,View|MapLayersView|Map|Map,True,2,1,new_screen,0016_s6_pre,0015_s5_pre,0016_s6_pre,OsmAndFavorite/v2
+OsmAndFavorite,layout,True,OsmAndFavorite/v3,agent,ImageButton|map_my_location_button|Position not yet known.|Position not yet known.,True,2,1,new_screen,0018_s8_pre,0017_s7_pre,0020_s10_pre,OsmAndFavorite/v2
+OsmAndFavorite,layout,True,OsmAndFavorite/v3,agent,STATUS,True,2,1,no_change,0019_final,0018_s8_pre,0021_final,OsmAndFavorite/v2
+OsmAndFavorite,layout,True,OsmAndFavorite/v4,agent,OPEN_APP:OsmAnd,True,8,2,new_screen,0002_s1_pre,0001_s0_pre,0012_s2_pre,OsmAndFavorite/v3
+OsmAndFavorite,layout,True,OsmAndFavorite/v4,agent,OPEN_APP:OsmAnd,True,8,2,new_screen,0007_s2_pre,0006_s1_pre_requery,0012_s2_pre,OsmAndFavorite/v3
+OsmAndFavorite,layout,True,OsmAndFavorite/v4,agent,ImageButton|map_search_button|Search|Search,True,4,1,new_screen,0008_s3_pre,0007_s2_pre,0013_s3_pre,OsmAndFavorite/v3
+OsmAndFavorite,layout,True,OsmAndFavorite/v4,agent,INPUT_TEXT,True,4,1,new_screen,0009_s4_pre,0008_s3_pre,0014_s4_pre,OsmAndFavorite/v3
+OsmAndFavorite,layout,True,OsmAndFavorite/v4,agent,View|MapLayersView|Map|Map,True,3,1,new_screen,0011_s6_pre,0010_s5_pre,0016_s6_pre,OsmAndFavorite/v3
+OsmAndFavorite,layout,True,OsmAndFavorite/v4,agent,INPUT_TEXT,True,2,1,new_screen,0012_s7_pre,0011_s6_pre,0017_s7_pre,OsmAndFavorite/v2
+OsmAndFavorite,layout,True,OsmAndFavorite/v4,agent,ImageButton|map_my_location_button|Position not yet known.|Position not yet known.,True,3,1,new_screen,0013_s8_pre,0012_s7_pre,0018_s8_pre,OsmAndFavorite/v3
+OsmAndFavorite,layout,True,OsmAndFavorite/v4,agent,STATUS,True,3,1,no_change,0014_final,0013_s8_pre,0019_final,OsmAndFavorite/v3
+RecipeDeleteMultipleRecipesWithConstraint,exact,True,RecipeDeleteMultipleRecipesWithConstraint/v1,agent,OPEN_APP:Broccoli,False,2,1,new_screen,0002_s1_pre,0001_s0_pre,0018_s3_pre,RecipeDeleteMultipleRecipesWithConstraint/v0
+RecipeDeleteMultipleRecipesWithConstraint,exact,True,RecipeDeleteMultipleRecipesWithConstraint/v2,agent,OPEN_APP:Broccoli,False,3,2,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,exact,True,RecipeDeleteMultipleRecipesWithConstraint/v3,agent,OPEN_APP:Broccoli,False,4,3,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,RecipeDeleteMultipleRecipesWithConstraint/v2
+RecipeDeleteMultipleRecipesWithConstraint,exact,True,RecipeDeleteMultipleRecipesWithConstraint/v4,agent,OPEN_APP:Broccoli,False,5,4,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,RecipeDeleteMultipleRecipesWithConstraint/v3
+RecipeDeleteMultipleRecipesWithConstraint,exact,True,RecipeDeleteMultipleRecipesWithConstraint/v4,agent,LinearLayout|||Delete,True,3,1,new_screen,0025_s6_pre,0020_s5_pre,0035_s14_pre,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,exact,True,RecipeDeleteMultipleRecipesWithConstraint/v4,agent,Button|button1||DELETE,False,3,3,new_screen,0026_s7_pre,0025_s6_pre,0036_s15_pre,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,exact,True,RecipeDeleteMultipleRecipesWithConstraint/v4,agent,LinearLayout|||Delete,True,3,1,new_screen,0029_s10_pre,0028_s9_pre,0035_s14_pre,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,exact,True,RecipeDeleteMultipleRecipesWithConstraint/v4,agent,Button|button1||DELETE,False,3,3,new_screen,0030_s11_pre,0029_s10_pre,0036_s15_pre,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,struct,True,RecipeDeleteMultipleRecipesWithConstraint/v1,agent,OPEN_APP:Broccoli,True,2,1,new_screen,0002_s1_pre,0001_s0_pre,0018_s3_pre,RecipeDeleteMultipleRecipesWithConstraint/v0
+RecipeDeleteMultipleRecipesWithConstraint,struct,True,RecipeDeleteMultipleRecipesWithConstraint/v1,agent,Button|action_search|Search|Search,True,3,1,new_screen,0012_s2_pre,0002_s1_pre,0019_s4_pre,RecipeDeleteMultipleRecipesWithConstraint/v0
+RecipeDeleteMultipleRecipesWithConstraint,struct,True,RecipeDeleteMultipleRecipesWithConstraint/v1,agent,INPUT_TEXT,False,1,1,new_screen,0020_s3_pre,0012_s2_pre,0020_s5_pre,RecipeDeleteMultipleRecipesWithConstraint/v0
+RecipeDeleteMultipleRecipesWithConstraint,struct,True,RecipeDeleteMultipleRecipesWithConstraint/v2,agent,OPEN_APP:Broccoli,True,3,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,struct,True,RecipeDeleteMultipleRecipesWithConstraint/v2,explore,Spinner|spinner|Categories|Categories,True,1,1,new_screen,0005_s1_probe2_post,0002_s1_pre,0003_s1_probe1_post,RecipeDeleteMultipleRecipesWithConstraint/v0
+RecipeDeleteMultipleRecipesWithConstraint,struct,True,RecipeDeleteMultipleRecipesWithConstraint/v2,explore,Button|action_search|Search|Search,True,4,1,new_screen,0007_s1_probe3_post,0002_s1_pre,0012_s2_pre,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,struct,True,RecipeDeleteMultipleRecipesWithConstraint/v2,agent,Button|action_search|Search|Search,True,4,1,new_screen,0011_s2_pre,0002_s1_pre,0012_s2_pre,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,struct,True,RecipeDeleteMultipleRecipesWithConstraint/v2,agent,INPUT_TEXT,True,2,2,new_screen,0015_s3_pre,0011_s2_pre,0020_s3_pre,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,struct,True,RecipeDeleteMultipleRecipesWithConstraint/v2,agent,STATUS,True,1,1,no_change,0020_final,0019_s3_pre_requery,0037_final,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,struct,True,RecipeDeleteMultipleRecipesWithConstraint/v3,agent,OPEN_APP:Broccoli,True,4,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,RecipeDeleteMultipleRecipesWithConstraint/v2
+RecipeDeleteMultipleRecipesWithConstraint,struct,True,RecipeDeleteMultipleRecipesWithConstraint/v3,explore,Spinner|spinner|Categories|Categories,True,2,1,new_screen,0003_s1_probe1_post,0002_s1_pre,0005_s1_probe2_post,RecipeDeleteMultipleRecipesWithConstraint/v2
+RecipeDeleteMultipleRecipesWithConstraint,struct,True,RecipeDeleteMultipleRecipesWithConstraint/v3,explore,Button|action_search|Search|Search,True,6,1,new_screen,0005_s1_probe2_post,0002_s1_pre,0011_s2_pre,RecipeDeleteMultipleRecipesWithConstraint/v2
+RecipeDeleteMultipleRecipesWithConstraint,struct,True,RecipeDeleteMultipleRecipesWithConstraint/v3,agent,Button|action_search|Search|Search,True,6,1,new_screen,0009_s2_pre,0002_s1_pre,0011_s2_pre,RecipeDeleteMultipleRecipesWithConstraint/v2
+RecipeDeleteMultipleRecipesWithConstraint,struct,True,RecipeDeleteMultipleRecipesWithConstraint/v3,agent,INPUT_TEXT,True,3,2,new_screen,0010_s3_pre,0009_s2_pre,0015_s3_pre,RecipeDeleteMultipleRecipesWithConstraint/v2
+RecipeDeleteMultipleRecipesWithConstraint,struct,True,RecipeDeleteMultipleRecipesWithConstraint/v3,agent,STATUS,True,1,1,no_change,0011_final,0010_s3_pre,0021_final,RecipeDeleteMultipleRecipesWithConstraint/v0
+RecipeDeleteMultipleRecipesWithConstraint,struct,True,RecipeDeleteMultipleRecipesWithConstraint/v4,agent,OPEN_APP:Broccoli,True,5,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,RecipeDeleteMultipleRecipesWithConstraint/v3
+RecipeDeleteMultipleRecipesWithConstraint,struct,True,RecipeDeleteMultipleRecipesWithConstraint/v4,explore,Spinner|spinner|Categories|Categories,True,3,1,new_screen,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,RecipeDeleteMultipleRecipesWithConstraint/v3
+RecipeDeleteMultipleRecipesWithConstraint,struct,True,RecipeDeleteMultipleRecipesWithConstraint/v4,explore,Button|action_search|Search|Search,True,8,1,new_screen,0005_s1_probe2_post,0002_s1_pre,0009_s2_pre,RecipeDeleteMultipleRecipesWithConstraint/v3
+RecipeDeleteMultipleRecipesWithConstraint,struct,True,RecipeDeleteMultipleRecipesWithConstraint/v4,agent,Button|action_search|Search|Search,True,8,1,new_screen,0009_s2_pre,0002_s1_pre,0009_s2_pre,RecipeDeleteMultipleRecipesWithConstraint/v3
+RecipeDeleteMultipleRecipesWithConstraint,struct,True,RecipeDeleteMultipleRecipesWithConstraint/v4,agent,INPUT_TEXT,False,4,2,new_screen,0010_s3_pre,0009_s2_pre,0010_s3_pre,RecipeDeleteMultipleRecipesWithConstraint/v3
+RecipeDeleteMultipleRecipesWithConstraint,struct,True,RecipeDeleteMultipleRecipesWithConstraint/v4,explore,ImageView||More options|More options,True,3,1,new_screen,0017_s4_probe6_post,0011_s4_pre,0034_s13_pre,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,struct,True,RecipeDeleteMultipleRecipesWithConstraint/v4,agent,ImageView||More options|More options,True,3,1,new_screen,0020_s5_pre,0011_s4_pre,0034_s13_pre,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,struct,True,RecipeDeleteMultipleRecipesWithConstraint/v4,agent,LinearLayout|||Delete,True,3,1,new_screen,0025_s6_pre,0020_s5_pre,0035_s14_pre,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,struct,True,RecipeDeleteMultipleRecipesWithConstraint/v4,agent,Button|button1||DELETE,False,3,3,new_screen,0026_s7_pre,0025_s6_pre,0036_s15_pre,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,struct,True,RecipeDeleteMultipleRecipesWithConstraint/v4,agent,ImageView||More options|More options,True,3,1,new_screen,0028_s9_pre,0027_s8_pre,0034_s13_pre,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,struct,True,RecipeDeleteMultipleRecipesWithConstraint/v4,agent,LinearLayout|||Delete,True,3,1,new_screen,0029_s10_pre,0028_s9_pre,0035_s14_pre,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,struct,True,RecipeDeleteMultipleRecipesWithConstraint/v4,agent,Button|button1||DELETE,True,3,3,new_screen,0030_s11_pre,0029_s10_pre,0036_s15_pre,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,struct,True,RecipeDeleteMultipleRecipesWithConstraint/v4,agent,STATUS,True,2,1,no_change,0031_final,0030_s11_pre,0020_final,RecipeDeleteMultipleRecipesWithConstraint/v2
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v1,agent,OPEN_APP:Broccoli,True,2,1,new_screen,0002_s1_pre,0001_s0_pre,0018_s3_pre,RecipeDeleteMultipleRecipesWithConstraint/v0
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v1,agent,Button|action_search|Search|Search,True,3,1,new_screen,0012_s2_pre,0002_s1_pre,0019_s4_pre,RecipeDeleteMultipleRecipesWithConstraint/v0
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v1,agent,INPUT_TEXT,False,1,1,new_screen,0020_s3_pre,0012_s2_pre,0020_s5_pre,RecipeDeleteMultipleRecipesWithConstraint/v0
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v2,agent,OPEN_APP:Broccoli,True,3,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v2,explore,Spinner|spinner|Categories|Categories,True,1,1,new_screen,0005_s1_probe2_post,0002_s1_pre,0003_s1_probe1_post,RecipeDeleteMultipleRecipesWithConstraint/v0
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v2,explore,Button|action_search|Search|Search,True,4,1,new_screen,0007_s1_probe3_post,0002_s1_pre,0012_s2_pre,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v2,agent,Button|action_search|Search|Search,True,4,1,new_screen,0011_s2_pre,0002_s1_pre,0012_s2_pre,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v2,agent,INPUT_TEXT,True,2,2,new_screen,0015_s3_pre,0011_s2_pre,0020_s3_pre,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v2,agent,STATUS,True,1,1,no_change,0020_final,0019_s3_pre_requery,0037_final,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v3,agent,OPEN_APP:Broccoli,True,4,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,RecipeDeleteMultipleRecipesWithConstraint/v2
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v3,explore,Spinner|spinner|Categories|Categories,True,2,1,new_screen,0003_s1_probe1_post,0002_s1_pre,0005_s1_probe2_post,RecipeDeleteMultipleRecipesWithConstraint/v2
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v3,explore,Button|action_search|Search|Search,True,6,1,new_screen,0005_s1_probe2_post,0002_s1_pre,0011_s2_pre,RecipeDeleteMultipleRecipesWithConstraint/v2
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v3,agent,Button|action_search|Search|Search,True,6,1,new_screen,0009_s2_pre,0002_s1_pre,0011_s2_pre,RecipeDeleteMultipleRecipesWithConstraint/v2
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v3,agent,INPUT_TEXT,True,3,2,new_screen,0010_s3_pre,0009_s2_pre,0015_s3_pre,RecipeDeleteMultipleRecipesWithConstraint/v2
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v3,agent,STATUS,True,1,1,no_change,0011_final,0010_s3_pre,0021_final,RecipeDeleteMultipleRecipesWithConstraint/v0
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v4,agent,OPEN_APP:Broccoli,True,5,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,RecipeDeleteMultipleRecipesWithConstraint/v3
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v4,explore,Spinner|spinner|Categories|Categories,True,3,1,new_screen,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,RecipeDeleteMultipleRecipesWithConstraint/v3
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v4,explore,Button|action_search|Search|Search,True,8,1,new_screen,0005_s1_probe2_post,0002_s1_pre,0009_s2_pre,RecipeDeleteMultipleRecipesWithConstraint/v3
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v4,agent,Button|action_search|Search|Search,True,8,1,new_screen,0009_s2_pre,0002_s1_pre,0009_s2_pre,RecipeDeleteMultipleRecipesWithConstraint/v3
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v4,agent,INPUT_TEXT,False,4,2,new_screen,0010_s3_pre,0009_s2_pre,0010_s3_pre,RecipeDeleteMultipleRecipesWithConstraint/v3
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v4,explore,ImageView||More options|More options,True,3,1,new_screen,0017_s4_probe6_post,0011_s4_pre,0034_s13_pre,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v4,agent,ImageView||More options|More options,True,3,1,new_screen,0020_s5_pre,0011_s4_pre,0034_s13_pre,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v4,agent,LinearLayout|||Delete,True,3,1,new_screen,0025_s6_pre,0020_s5_pre,0035_s14_pre,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v4,agent,Button|button1||DELETE,True,3,3,new_screen,0026_s7_pre,0025_s6_pre,0036_s15_pre,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v4,agent,CardView|||Recipe photo,True,1,1,new_screen,0027_s8_pre,0026_s7_pre,0033_s12_pre,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v4,agent,ImageView||More options|More options,True,3,1,new_screen,0028_s9_pre,0027_s8_pre,0034_s13_pre,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v4,agent,LinearLayout|||Delete,True,3,1,new_screen,0029_s10_pre,0028_s9_pre,0035_s14_pre,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v4,agent,Button|button1||DELETE,True,3,3,new_screen,0030_s11_pre,0029_s10_pre,0036_s15_pre,RecipeDeleteMultipleRecipesWithConstraint/v1
+RecipeDeleteMultipleRecipesWithConstraint,layout,True,RecipeDeleteMultipleRecipesWithConstraint/v4,agent,STATUS,True,2,1,no_change,0031_final,0030_s11_pre,0020_final,RecipeDeleteMultipleRecipesWithConstraint/v2
+RecipeDeleteSingleRecipe,exact,True,RecipeDeleteSingleRecipe/v1,agent,OPEN_APP:Broccoli,False,2,2,new_screen,0002_s1_pre,0001_s0_pre,0007_s2_pre,RecipeDeleteSingleRecipe/v0
+RecipeDeleteSingleRecipe,exact,True,RecipeDeleteSingleRecipe/v1,agent,LinearLayout|||Delete,True,1,1,new_screen,0025_s4_pre,0020_s3_pre,0011_s6_pre,RecipeDeleteSingleRecipe/v0
+RecipeDeleteSingleRecipe,exact,True,RecipeDeleteSingleRecipe/v1,agent,Button|button1||DELETE,True,1,1,new_screen,0026_s5_pre,0025_s4_pre,0012_s7_pre,RecipeDeleteSingleRecipe/v0
+RecipeDeleteSingleRecipe,exact,True,RecipeDeleteSingleRecipe/v1,agent,STATUS,True,1,1,no_change,0035_final,0026_s5_pre,0013_final,RecipeDeleteSingleRecipe/v0
+RecipeDeleteSingleRecipe,exact,True,RecipeDeleteSingleRecipe/v2,agent,OPEN_APP:Broccoli,False,3,3,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,exact,True,RecipeDeleteSingleRecipe/v2,explore,LinearLayout|||Edit,False,1,1,new_screen,0021_s3_probe8_post,0020_s3_pre,0021_s3_probe8_post,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,exact,True,RecipeDeleteSingleRecipe/v2,agent,LinearLayout|||Delete,True,2,1,new_screen,0025_s4_pre,0020_s3_pre,0025_s4_pre,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,exact,True,RecipeDeleteSingleRecipe/v2,agent,Button|button1||DELETE,True,2,1,new_screen,0026_s5_pre,0025_s4_pre,0026_s5_pre,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,exact,True,RecipeDeleteSingleRecipe/v2,explore,Spinner|spinner|Categories|Categories,True,1,1,new_screen,0027_s5_probe9_post,0026_s5_pre,0027_s5_probe9_post,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,exact,True,RecipeDeleteSingleRecipe/v2,explore,Button|action_search|Search|Search,True,1,1,new_screen,0029_s5_probe10_post,0026_s5_pre,0029_s5_probe10_post,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,exact,True,RecipeDeleteSingleRecipe/v2,explore,ImageButton|fab_recipes|New Recipe|New Recipe,True,1,1,new_screen,0032_s5_probe11_post,0026_s5_pre,0032_s5_probe11_post,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,exact,True,RecipeDeleteSingleRecipe/v2,agent,STATUS,True,2,1,no_change,0035_final,0026_s5_pre,0035_final,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,exact,True,RecipeDeleteSingleRecipe/v3,agent,OPEN_APP:Broccoli,False,4,4,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,exact,True,RecipeDeleteSingleRecipe/v3,explore,LinearLayout|||Edit,False,2,2,new_screen,0021_s3_probe8_post,0020_s3_pre,0021_s3_probe8_post,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,exact,True,RecipeDeleteSingleRecipe/v3,agent,LinearLayout|||Delete,True,3,1,new_screen,0025_s4_pre,0020_s3_pre,0025_s4_pre,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,exact,True,RecipeDeleteSingleRecipe/v3,agent,Button|button1||DELETE,True,3,1,new_screen,0026_s5_pre,0025_s4_pre,0026_s5_pre,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,exact,True,RecipeDeleteSingleRecipe/v3,explore,Spinner|spinner|Categories|Categories,True,2,1,new_screen,0027_s5_probe9_post,0026_s5_pre,0027_s5_probe9_post,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,exact,True,RecipeDeleteSingleRecipe/v3,explore,Button|action_search|Search|Search,True,2,1,new_screen,0029_s5_probe10_post,0026_s5_pre,0029_s5_probe10_post,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,exact,True,RecipeDeleteSingleRecipe/v3,explore,ImageButton|fab_recipes|New Recipe|New Recipe,True,2,1,new_screen,0032_s5_probe11_post,0026_s5_pre,0032_s5_probe11_post,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,exact,True,RecipeDeleteSingleRecipe/v3,agent,STATUS,True,3,1,no_change,0035_final,0026_s5_pre,0035_final,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,exact,True,RecipeDeleteSingleRecipe/v4,agent,OPEN_APP:Broccoli,False,5,5,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,exact,True,RecipeDeleteSingleRecipe/v4,explore,LinearLayout|||Edit,False,3,3,new_screen,0021_s3_probe8_post,0020_s3_pre,0021_s3_probe8_post,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,exact,True,RecipeDeleteSingleRecipe/v4,agent,LinearLayout|||Delete,True,4,1,new_screen,0025_s4_pre,0020_s3_pre,0025_s4_pre,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,exact,True,RecipeDeleteSingleRecipe/v4,agent,Button|button1||DELETE,True,4,1,new_screen,0026_s5_pre,0025_s4_pre,0026_s5_pre,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,exact,True,RecipeDeleteSingleRecipe/v4,explore,Spinner|spinner|Categories|Categories,True,3,1,new_screen,0027_s5_probe9_post,0026_s5_pre,0027_s5_probe9_post,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,exact,True,RecipeDeleteSingleRecipe/v4,explore,Button|action_search|Search|Search,True,3,1,new_screen,0029_s5_probe10_post,0026_s5_pre,0029_s5_probe10_post,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,exact,True,RecipeDeleteSingleRecipe/v4,explore,ImageButton|fab_recipes|New Recipe|New Recipe,True,3,1,new_screen,0032_s5_probe11_post,0026_s5_pre,0032_s5_probe11_post,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,exact,True,RecipeDeleteSingleRecipe/v4,agent,STATUS,True,4,1,no_change,0035_final,0026_s5_pre,0035_final,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v1,agent,OPEN_APP:Broccoli,False,2,2,new_screen,0002_s1_pre,0001_s0_pre,0007_s2_pre,RecipeDeleteSingleRecipe/v0
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v1,explore,ImageView||More options|More options,True,1,1,new_screen,0017_s2_probe7_post,0011_s2_pre,0010_s5_pre,RecipeDeleteSingleRecipe/v0
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v1,agent,ImageView||More options|More options,True,1,1,new_screen,0020_s3_pre,0011_s2_pre,0010_s5_pre,RecipeDeleteSingleRecipe/v0
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v1,agent,LinearLayout|||Delete,True,1,1,new_screen,0025_s4_pre,0020_s3_pre,0011_s6_pre,RecipeDeleteSingleRecipe/v0
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v1,agent,Button|button1||DELETE,True,1,1,new_screen,0026_s5_pre,0025_s4_pre,0012_s7_pre,RecipeDeleteSingleRecipe/v0
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v1,agent,STATUS,True,1,1,no_change,0035_final,0026_s5_pre,0013_final,RecipeDeleteSingleRecipe/v0
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v2,agent,OPEN_APP:Broccoli,False,3,3,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v2,explore,ImageView|backdrop|Recipe photo|Recipe photo,True,1,1,no_change,0012_s2_probe4_post,0011_s2_pre,0012_s2_probe4_post,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v2,explore,Button|action_details_like|Mark as favorite|Mark as favorite,True,1,1,in_place_content_change,0013_s2_probe5_post,0011_s2_pre,0013_s2_probe5_post,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v2,explore,ImageView||More options|More options,True,3,1,new_screen,0015_s2_probe6_post,0011_s2_pre,0020_s3_pre,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v2,explore,ImageButton|fab_cooking_assistant|Cook|Cook,True,1,1,new_screen,0017_s2_probe7_post,0011_s2_pre,0015_s2_probe6_post,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v2,agent,ImageView||More options|More options,True,3,1,new_screen,0020_s3_pre,0011_s2_pre,0020_s3_pre,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v2,explore,LinearLayout|||Edit,True,1,1,new_screen,0021_s3_probe8_post,0020_s3_pre,0021_s3_probe8_post,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v2,agent,LinearLayout|||Delete,True,2,1,new_screen,0025_s4_pre,0020_s3_pre,0025_s4_pre,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v2,agent,Button|button1||DELETE,True,2,1,new_screen,0026_s5_pre,0025_s4_pre,0026_s5_pre,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v2,explore,Spinner|spinner|Categories|Categories,True,1,1,new_screen,0027_s5_probe9_post,0026_s5_pre,0027_s5_probe9_post,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v2,explore,Button|action_search|Search|Search,True,1,1,new_screen,0029_s5_probe10_post,0026_s5_pre,0029_s5_probe10_post,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v2,explore,ImageButton|fab_recipes|New Recipe|New Recipe,True,1,1,new_screen,0032_s5_probe11_post,0026_s5_pre,0032_s5_probe11_post,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v2,agent,STATUS,True,2,1,no_change,0035_final,0026_s5_pre,0035_final,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v3,agent,OPEN_APP:Broccoli,False,4,4,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v3,explore,ImageView|backdrop|Recipe photo|Recipe photo,True,2,1,no_change,0012_s2_probe4_post,0011_s2_pre,0012_s2_probe4_post,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v3,explore,Button|action_details_like|Mark as favorite|Mark as favorite,True,2,1,in_place_content_change,0013_s2_probe5_post,0011_s2_pre,0013_s2_probe5_post,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v3,explore,ImageView||More options|More options,True,5,1,new_screen,0015_s2_probe6_post,0011_s2_pre,0020_s3_pre,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v3,explore,ImageButton|fab_cooking_assistant|Cook|Cook,True,2,1,new_screen,0017_s2_probe7_post,0011_s2_pre,0017_s2_probe7_post,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v3,agent,ImageView||More options|More options,True,5,1,new_screen,0020_s3_pre,0011_s2_pre,0020_s3_pre,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v3,explore,LinearLayout|||Edit,True,2,1,new_screen,0021_s3_probe8_post,0020_s3_pre,0021_s3_probe8_post,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v3,agent,LinearLayout|||Delete,True,3,1,new_screen,0025_s4_pre,0020_s3_pre,0025_s4_pre,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v3,agent,Button|button1||DELETE,True,3,1,new_screen,0026_s5_pre,0025_s4_pre,0026_s5_pre,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v3,explore,Spinner|spinner|Categories|Categories,True,2,1,new_screen,0027_s5_probe9_post,0026_s5_pre,0027_s5_probe9_post,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v3,explore,Button|action_search|Search|Search,True,2,1,new_screen,0029_s5_probe10_post,0026_s5_pre,0029_s5_probe10_post,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v3,explore,ImageButton|fab_recipes|New Recipe|New Recipe,True,2,1,new_screen,0032_s5_probe11_post,0026_s5_pre,0032_s5_probe11_post,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v3,agent,STATUS,True,3,1,no_change,0035_final,0026_s5_pre,0035_final,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v4,agent,OPEN_APP:Broccoli,False,5,5,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v4,explore,ImageView|backdrop|Recipe photo|Recipe photo,True,3,1,no_change,0012_s2_probe4_post,0011_s2_pre,0012_s2_probe4_post,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v4,explore,Button|action_details_like|Mark as favorite|Mark as favorite,True,3,1,in_place_content_change,0013_s2_probe5_post,0011_s2_pre,0013_s2_probe5_post,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v4,explore,ImageView||More options|More options,True,7,1,new_screen,0015_s2_probe6_post,0011_s2_pre,0020_s3_pre,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v4,explore,ImageButton|fab_cooking_assistant|Cook|Cook,True,3,1,new_screen,0017_s2_probe7_post,0011_s2_pre,0017_s2_probe7_post,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v4,agent,ImageView||More options|More options,True,7,1,new_screen,0020_s3_pre,0011_s2_pre,0020_s3_pre,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v4,explore,LinearLayout|||Edit,True,3,1,new_screen,0021_s3_probe8_post,0020_s3_pre,0021_s3_probe8_post,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v4,agent,LinearLayout|||Delete,True,4,1,new_screen,0025_s4_pre,0020_s3_pre,0025_s4_pre,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v4,agent,Button|button1||DELETE,True,4,1,new_screen,0026_s5_pre,0025_s4_pre,0026_s5_pre,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v4,explore,Spinner|spinner|Categories|Categories,True,3,1,new_screen,0027_s5_probe9_post,0026_s5_pre,0027_s5_probe9_post,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v4,explore,Button|action_search|Search|Search,True,3,1,new_screen,0029_s5_probe10_post,0026_s5_pre,0029_s5_probe10_post,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v4,explore,ImageButton|fab_recipes|New Recipe|New Recipe,True,3,1,new_screen,0032_s5_probe11_post,0026_s5_pre,0032_s5_probe11_post,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,struct,True,RecipeDeleteSingleRecipe/v4,agent,STATUS,True,4,1,no_change,0035_final,0026_s5_pre,0035_final,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v1,agent,OPEN_APP:Broccoli,True,2,2,new_screen,0002_s1_pre,0001_s0_pre,0007_s2_pre,RecipeDeleteSingleRecipe/v0
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v1,explore,CardView|||Recipe photo,True,1,1,new_screen,0008_s1_probe3_post,0002_s1_pre,0009_s4_pre,RecipeDeleteSingleRecipe/v0
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v1,agent,CardView|||Recipe photo,True,1,1,new_screen,0011_s2_pre,0002_s1_pre,0009_s4_pre,RecipeDeleteSingleRecipe/v0
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v1,explore,ImageView||More options|More options,True,1,1,new_screen,0017_s2_probe7_post,0011_s2_pre,0010_s5_pre,RecipeDeleteSingleRecipe/v0
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v1,agent,ImageView||More options|More options,True,1,1,new_screen,0020_s3_pre,0011_s2_pre,0010_s5_pre,RecipeDeleteSingleRecipe/v0
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v1,agent,LinearLayout|||Delete,True,1,1,new_screen,0025_s4_pre,0020_s3_pre,0011_s6_pre,RecipeDeleteSingleRecipe/v0
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v1,agent,Button|button1||DELETE,True,1,1,new_screen,0026_s5_pre,0025_s4_pre,0012_s7_pre,RecipeDeleteSingleRecipe/v0
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v1,agent,STATUS,True,1,1,no_change,0035_final,0026_s5_pre,0013_final,RecipeDeleteSingleRecipe/v0
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v2,agent,OPEN_APP:Broccoli,True,3,2,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v2,explore,Spinner|spinner|Categories|Categories,True,1,1,new_screen,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v2,explore,Button|action_search|Search|Search,True,1,1,new_screen,0005_s1_probe2_post,0002_s1_pre,0005_s1_probe2_post,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v2,explore,CardView|||Recipe photo,True,3,1,new_screen,0008_s1_probe3_post,0002_s1_pre,0011_s2_pre,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v2,agent,CardView|||Recipe photo,True,3,1,new_screen,0011_s2_pre,0002_s1_pre,0011_s2_pre,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v2,explore,ImageView|backdrop|Recipe photo|Recipe photo,True,1,1,no_change,0012_s2_probe4_post,0011_s2_pre,0012_s2_probe4_post,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v2,explore,Button|action_details_like|Mark as favorite|Mark as favorite,True,1,1,in_place_content_change,0013_s2_probe5_post,0011_s2_pre,0013_s2_probe5_post,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v2,explore,ImageView||More options|More options,True,3,1,new_screen,0015_s2_probe6_post,0011_s2_pre,0020_s3_pre,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v2,explore,ImageButton|fab_cooking_assistant|Cook|Cook,True,1,1,new_screen,0017_s2_probe7_post,0011_s2_pre,0015_s2_probe6_post,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v2,agent,ImageView||More options|More options,True,3,1,new_screen,0020_s3_pre,0011_s2_pre,0020_s3_pre,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v2,explore,LinearLayout|||Edit,True,1,1,new_screen,0021_s3_probe8_post,0020_s3_pre,0021_s3_probe8_post,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v2,agent,LinearLayout|||Delete,True,2,1,new_screen,0025_s4_pre,0020_s3_pre,0025_s4_pre,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v2,agent,Button|button1||DELETE,True,2,1,new_screen,0026_s5_pre,0025_s4_pre,0026_s5_pre,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v2,explore,Spinner|spinner|Categories|Categories,True,1,1,new_screen,0027_s5_probe9_post,0026_s5_pre,0027_s5_probe9_post,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v2,explore,Button|action_search|Search|Search,True,1,1,new_screen,0029_s5_probe10_post,0026_s5_pre,0029_s5_probe10_post,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v2,explore,ImageButton|fab_recipes|New Recipe|New Recipe,True,1,1,new_screen,0032_s5_probe11_post,0026_s5_pre,0032_s5_probe11_post,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v2,agent,STATUS,True,2,1,no_change,0035_final,0026_s5_pre,0035_final,RecipeDeleteSingleRecipe/v1
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v3,agent,OPEN_APP:Broccoli,True,4,2,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v3,explore,Spinner|spinner|Categories|Categories,True,2,1,new_screen,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v3,explore,Button|action_search|Search|Search,True,2,1,new_screen,0005_s1_probe2_post,0002_s1_pre,0005_s1_probe2_post,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v3,explore,CardView|||Recipe photo,True,5,1,new_screen,0008_s1_probe3_post,0002_s1_pre,0011_s2_pre,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v3,agent,CardView|||Recipe photo,True,5,1,new_screen,0011_s2_pre,0002_s1_pre,0011_s2_pre,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v3,explore,ImageView|backdrop|Recipe photo|Recipe photo,True,2,1,no_change,0012_s2_probe4_post,0011_s2_pre,0012_s2_probe4_post,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v3,explore,Button|action_details_like|Mark as favorite|Mark as favorite,True,2,1,in_place_content_change,0013_s2_probe5_post,0011_s2_pre,0013_s2_probe5_post,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v3,explore,ImageView||More options|More options,True,5,1,new_screen,0015_s2_probe6_post,0011_s2_pre,0020_s3_pre,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v3,explore,ImageButton|fab_cooking_assistant|Cook|Cook,True,2,1,new_screen,0017_s2_probe7_post,0011_s2_pre,0017_s2_probe7_post,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v3,agent,ImageView||More options|More options,True,5,1,new_screen,0020_s3_pre,0011_s2_pre,0020_s3_pre,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v3,explore,LinearLayout|||Edit,True,2,1,new_screen,0021_s3_probe8_post,0020_s3_pre,0021_s3_probe8_post,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v3,agent,LinearLayout|||Delete,True,3,1,new_screen,0025_s4_pre,0020_s3_pre,0025_s4_pre,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v3,agent,Button|button1||DELETE,True,3,1,new_screen,0026_s5_pre,0025_s4_pre,0026_s5_pre,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v3,explore,Spinner|spinner|Categories|Categories,True,2,1,new_screen,0027_s5_probe9_post,0026_s5_pre,0027_s5_probe9_post,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v3,explore,Button|action_search|Search|Search,True,2,1,new_screen,0029_s5_probe10_post,0026_s5_pre,0029_s5_probe10_post,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v3,explore,ImageButton|fab_recipes|New Recipe|New Recipe,True,2,1,new_screen,0032_s5_probe11_post,0026_s5_pre,0032_s5_probe11_post,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v3,agent,STATUS,True,3,1,no_change,0035_final,0026_s5_pre,0035_final,RecipeDeleteSingleRecipe/v2
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v4,agent,OPEN_APP:Broccoli,True,5,2,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v4,explore,Spinner|spinner|Categories|Categories,True,3,1,new_screen,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v4,explore,Button|action_search|Search|Search,True,3,1,new_screen,0005_s1_probe2_post,0002_s1_pre,0005_s1_probe2_post,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v4,explore,CardView|||Recipe photo,True,7,1,new_screen,0008_s1_probe3_post,0002_s1_pre,0011_s2_pre,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v4,agent,CardView|||Recipe photo,True,7,1,new_screen,0011_s2_pre,0002_s1_pre,0011_s2_pre,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v4,explore,ImageView|backdrop|Recipe photo|Recipe photo,True,3,1,no_change,0012_s2_probe4_post,0011_s2_pre,0012_s2_probe4_post,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v4,explore,Button|action_details_like|Mark as favorite|Mark as favorite,True,3,1,in_place_content_change,0013_s2_probe5_post,0011_s2_pre,0013_s2_probe5_post,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v4,explore,ImageView||More options|More options,True,7,1,new_screen,0015_s2_probe6_post,0011_s2_pre,0020_s3_pre,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v4,explore,ImageButton|fab_cooking_assistant|Cook|Cook,True,3,1,new_screen,0017_s2_probe7_post,0011_s2_pre,0017_s2_probe7_post,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v4,agent,ImageView||More options|More options,True,7,1,new_screen,0020_s3_pre,0011_s2_pre,0020_s3_pre,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v4,explore,LinearLayout|||Edit,True,3,1,new_screen,0021_s3_probe8_post,0020_s3_pre,0021_s3_probe8_post,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v4,agent,LinearLayout|||Delete,True,4,1,new_screen,0025_s4_pre,0020_s3_pre,0025_s4_pre,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v4,agent,Button|button1||DELETE,True,4,1,new_screen,0026_s5_pre,0025_s4_pre,0026_s5_pre,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v4,explore,Spinner|spinner|Categories|Categories,True,3,1,new_screen,0027_s5_probe9_post,0026_s5_pre,0027_s5_probe9_post,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v4,explore,Button|action_search|Search|Search,True,3,1,new_screen,0029_s5_probe10_post,0026_s5_pre,0029_s5_probe10_post,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v4,explore,ImageButton|fab_recipes|New Recipe|New Recipe,True,3,1,new_screen,0032_s5_probe11_post,0026_s5_pre,0032_s5_probe11_post,RecipeDeleteSingleRecipe/v3
+RecipeDeleteSingleRecipe,layout,True,RecipeDeleteSingleRecipe/v4,agent,STATUS,True,4,1,no_change,0035_final,0026_s5_pre,0035_final,RecipeDeleteSingleRecipe/v3
+SimpleCalendarDeleteOneEvent,exact,True,SimpleCalendarDeleteOneEvent/v1,agent,OPEN_APP:Simple Calendar Pro,True,1,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SimpleCalendarDeleteOneEvent/v0
+SimpleCalendarDeleteOneEvent,exact,True,SimpleCalendarDeleteOneEvent/v1,agent,Button|button1||OK,True,1,1,new_screen,0003_s2_pre,0002_s1_pre,0003_s2_pre,SimpleCalendarDeleteOneEvent/v0
+SimpleCalendarDeleteOneEvent,exact,True,SimpleCalendarDeleteOneEvent/v1,agent,Button|button1||Yes,False,1,1,new_screen,0036_s11_pre,0035_s10_pre,0026_s11_pre,SimpleCalendarDeleteOneEvent/v0
+SimpleCalendarDeleteOneEvent,exact,True,SimpleCalendarDeleteOneEvent/v2,agent,OPEN_APP:Simple Calendar Pro,True,2,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SimpleCalendarDeleteOneEvent/v1
+SimpleCalendarDeleteOneEvent,exact,True,SimpleCalendarDeleteOneEvent/v2,agent,Button|button1||OK,True,2,1,new_screen,0003_s2_pre,0002_s1_pre,0003_s2_pre,SimpleCalendarDeleteOneEvent/v1
+SimpleCalendarDeleteOneEvent,exact,True,SimpleCalendarDeleteOneEvent/v3,agent,OPEN_APP:Simple Calendar Pro,True,3,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SimpleCalendarDeleteOneEvent/v2
+SimpleCalendarDeleteOneEvent,exact,True,SimpleCalendarDeleteOneEvent/v3,agent,Button|button1||OK,True,3,1,new_screen,0003_s2_pre,0002_s1_pre,0003_s2_pre,SimpleCalendarDeleteOneEvent/v2
+SimpleCalendarDeleteOneEvent,exact,True,SimpleCalendarDeleteOneEvent/v3,agent,ImageView|top_right_arrow||,True,1,1,new_screen,0031_s6_pre,0030_s5_pre,0020_s5_pre,SimpleCalendarDeleteOneEvent/v0
+SimpleCalendarDeleteOneEvent,exact,True,SimpleCalendarDeleteOneEvent/v3,agent,ImageView|top_right_arrow||,False,1,1,new_screen,0032_s7_pre,0031_s6_pre,0021_s6_pre,SimpleCalendarDeleteOneEvent/v0
+SimpleCalendarDeleteOneEvent,exact,True,SimpleCalendarDeleteOneEvent/v4,agent,OPEN_APP:Simple Calendar Pro,True,4,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SimpleCalendarDeleteOneEvent/v3
+SimpleCalendarDeleteOneEvent,exact,True,SimpleCalendarDeleteOneEvent/v4,agent,Button|button1||OK,True,4,1,new_screen,0003_s2_pre,0002_s1_pre,0003_s2_pre,SimpleCalendarDeleteOneEvent/v3
+SimpleCalendarDeleteOneEvent,exact,True,SimpleCalendarDeleteOneEvent/v4,agent,View|month_view_background||#36,False,1,1,new_screen,0015_s3_pre,0003_s2_pre,0015_s3_pre,SimpleCalendarDeleteOneEvent/v2
+SimpleCalendarDeleteOneEvent,exact,True,SimpleCalendarDeleteOneEvent/v4,agent,Button|button1||Yes,False,2,2,new_screen,0035_s8_pre,0034_s7_pre,0036_s11_pre,SimpleCalendarDeleteOneEvent/v1
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v1,agent,OPEN_APP:Simple Calendar Pro,True,1,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SimpleCalendarDeleteOneEvent/v0
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v1,agent,Button|button1||OK,True,1,1,new_screen,0003_s2_pre,0002_s1_pre,0003_s2_pre,SimpleCalendarDeleteOneEvent/v0
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v1,agent,ImageView|top_right_arrow||#1,True,1,1,new_screen,0030_s5_pre,0029_s4_pre_requery,0019_s4_pre,SimpleCalendarDeleteOneEvent/v0
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v1,agent,Button|button1||Yes,True,1,1,new_screen,0036_s11_pre,0035_s10_pre,0026_s11_pre,SimpleCalendarDeleteOneEvent/v0
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v1,agent,STATUS,True,1,1,no_change,0037_final,0036_s11_pre,0027_final,SimpleCalendarDeleteOneEvent/v0
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v2,agent,OPEN_APP:Simple Calendar Pro,True,2,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SimpleCalendarDeleteOneEvent/v1
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v2,agent,Button|button1||OK,True,2,1,new_screen,0003_s2_pre,0002_s1_pre,0003_s2_pre,SimpleCalendarDeleteOneEvent/v1
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v2,agent,ImageView|top_right_arrow||#1,True,2,1,new_screen,0031_s5_pre,0030_s4_pre_requery,0030_s5_pre,SimpleCalendarDeleteOneEvent/v1
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v2,agent,ImageView|top_right_arrow||#1,True,2,1,new_screen,0033_s7_pre,0032_s6_pre,0030_s5_pre,SimpleCalendarDeleteOneEvent/v1
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v2,agent,ImageView|top_right_arrow||,True,3,2,new_screen,0034_s8_pre,0033_s7_pre,0022_s7_pre,SimpleCalendarDeleteOneEvent/v0
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v2,agent,ImageView|top_right_arrow||,True,3,2,new_screen,0035_s9_pre,0034_s8_pre,0022_s7_pre,SimpleCalendarDeleteOneEvent/v0
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v2,agent,ImageView|top_right_arrow||,True,3,2,new_screen,0036_s10_pre,0035_s9_pre,0022_s7_pre,SimpleCalendarDeleteOneEvent/v0
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v2,agent,ImageView|top_right_arrow||,True,1,1,new_screen,0037_s11_pre,0036_s10_pre,0023_s8_pre,SimpleCalendarDeleteOneEvent/v0
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v2,agent,ImageView|top_right_arrow||,True,3,2,new_screen,0038_final,0037_s11_pre,0022_s7_pre,SimpleCalendarDeleteOneEvent/v0
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v3,agent,OPEN_APP:Simple Calendar Pro,True,3,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SimpleCalendarDeleteOneEvent/v2
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v3,agent,Button|button1||OK,True,3,1,new_screen,0003_s2_pre,0002_s1_pre,0003_s2_pre,SimpleCalendarDeleteOneEvent/v2
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v3,agent,ImageView|top_right_arrow||#1,True,4,1,new_screen,0030_s5_pre,0029_s4_pre_requery,0033_s7_pre,SimpleCalendarDeleteOneEvent/v2
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v3,agent,ImageView|top_right_arrow||,True,7,2,new_screen,0031_s6_pre,0030_s5_pre,0038_final,SimpleCalendarDeleteOneEvent/v2
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v3,agent,ImageView|top_right_arrow||,True,7,2,new_screen,0032_s7_pre,0031_s6_pre,0038_final,SimpleCalendarDeleteOneEvent/v2
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v3,agent,ImageView|top_right_arrow||,True,7,2,new_screen,0033_s8_pre,0032_s7_pre,0038_final,SimpleCalendarDeleteOneEvent/v2
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v3,agent,ImageView|top_right_arrow||,True,2,1,new_screen,0034_s9_pre,0033_s8_pre,0037_s11_pre,SimpleCalendarDeleteOneEvent/v2
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v3,agent,ImageView|top_right_arrow||,True,7,2,new_screen,0035_s10_pre,0034_s9_pre,0038_final,SimpleCalendarDeleteOneEvent/v2
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v3,agent,ImageView|top_right_arrow||,True,7,2,new_screen,0036_s11_pre,0035_s10_pre,0038_final,SimpleCalendarDeleteOneEvent/v2
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v3,agent,ImageView|top_right_arrow||,True,7,2,new_screen,0037_final,0036_s11_pre,0038_final,SimpleCalendarDeleteOneEvent/v2
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v4,agent,OPEN_APP:Simple Calendar Pro,True,4,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SimpleCalendarDeleteOneEvent/v3
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v4,agent,Button|button1||OK,True,4,1,new_screen,0003_s2_pre,0002_s1_pre,0003_s2_pre,SimpleCalendarDeleteOneEvent/v3
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v4,agent,View|month_view_background||#36,True,1,1,new_screen,0015_s3_pre,0003_s2_pre,0015_s3_pre,SimpleCalendarDeleteOneEvent/v2
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v4,agent,Button|button1||Yes,True,2,1,new_screen,0035_s8_pre,0034_s7_pre,0036_s11_pre,SimpleCalendarDeleteOneEvent/v1
+SimpleCalendarDeleteOneEvent,struct,True,SimpleCalendarDeleteOneEvent/v4,agent,STATUS,True,2,1,no_change,0036_final,0035_s8_pre,0037_final,SimpleCalendarDeleteOneEvent/v1
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v1,agent,OPEN_APP:Simple Calendar Pro,True,1,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SimpleCalendarDeleteOneEvent/v0
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v1,agent,Button|button1||OK,True,1,1,new_screen,0003_s2_pre,0002_s1_pre,0003_s2_pre,SimpleCalendarDeleteOneEvent/v0
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v1,agent,ImageView|top_right_arrow||#1,True,1,1,new_screen,0030_s5_pre,0029_s4_pre_requery,0019_s4_pre,SimpleCalendarDeleteOneEvent/v0
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v1,agent,Button|delete|Delete|Delete,True,1,1,new_screen,0035_s10_pre,0034_s9_pre,0025_s10_pre,SimpleCalendarDeleteOneEvent/v0
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v1,agent,Button|button1||Yes,True,1,1,new_screen,0036_s11_pre,0035_s10_pre,0026_s11_pre,SimpleCalendarDeleteOneEvent/v0
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v1,agent,STATUS,True,1,1,no_change,0037_final,0036_s11_pre,0027_final,SimpleCalendarDeleteOneEvent/v0
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v2,agent,OPEN_APP:Simple Calendar Pro,True,2,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SimpleCalendarDeleteOneEvent/v1
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v2,agent,Button|button1||OK,True,2,1,new_screen,0003_s2_pre,0002_s1_pre,0003_s2_pre,SimpleCalendarDeleteOneEvent/v1
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v2,explore,ImageButton|||,True,1,1,new_screen,0026_s4_probe10_post,0025_s4_pre,0025_s4_probe10_post,SimpleCalendarDeleteOneEvent/v1
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v2,agent,ImageView|top_right_arrow||#1,True,2,1,new_screen,0031_s5_pre,0030_s4_pre_requery,0030_s5_pre,SimpleCalendarDeleteOneEvent/v1
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v2,agent,ImageView|top_right_arrow||#1,True,2,1,new_screen,0033_s7_pre,0032_s6_pre,0030_s5_pre,SimpleCalendarDeleteOneEvent/v1
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v2,agent,ImageView|top_right_arrow||,True,3,2,new_screen,0034_s8_pre,0033_s7_pre,0022_s7_pre,SimpleCalendarDeleteOneEvent/v0
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v2,agent,ImageView|top_right_arrow||,True,3,2,new_screen,0035_s9_pre,0034_s8_pre,0022_s7_pre,SimpleCalendarDeleteOneEvent/v0
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v2,agent,ImageView|top_right_arrow||,True,3,2,new_screen,0036_s10_pre,0035_s9_pre,0022_s7_pre,SimpleCalendarDeleteOneEvent/v0
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v2,agent,ImageView|top_right_arrow||,True,1,1,new_screen,0037_s11_pre,0036_s10_pre,0023_s8_pre,SimpleCalendarDeleteOneEvent/v0
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v2,agent,ImageView|top_right_arrow||,True,3,2,new_screen,0038_final,0037_s11_pre,0022_s7_pre,SimpleCalendarDeleteOneEvent/v0
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v3,agent,OPEN_APP:Simple Calendar Pro,True,3,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SimpleCalendarDeleteOneEvent/v2
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v3,agent,Button|button1||OK,True,3,1,new_screen,0003_s2_pre,0002_s1_pre,0003_s2_pre,SimpleCalendarDeleteOneEvent/v2
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v3,explore,ImageButton|||,True,2,1,new_screen,0025_s4_probe12_post,0024_s4_pre,0026_s4_probe10_post,SimpleCalendarDeleteOneEvent/v2
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v3,agent,ImageView|top_right_arrow||#1,True,4,1,new_screen,0030_s5_pre,0029_s4_pre_requery,0033_s7_pre,SimpleCalendarDeleteOneEvent/v2
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v3,agent,ImageView|top_right_arrow||,True,7,2,new_screen,0031_s6_pre,0030_s5_pre,0038_final,SimpleCalendarDeleteOneEvent/v2
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v3,agent,ImageView|top_right_arrow||,True,7,2,new_screen,0032_s7_pre,0031_s6_pre,0038_final,SimpleCalendarDeleteOneEvent/v2
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v3,agent,ImageView|top_right_arrow||,True,7,2,new_screen,0033_s8_pre,0032_s7_pre,0038_final,SimpleCalendarDeleteOneEvent/v2
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v3,agent,ImageView|top_right_arrow||,True,2,1,new_screen,0034_s9_pre,0033_s8_pre,0037_s11_pre,SimpleCalendarDeleteOneEvent/v2
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v3,agent,ImageView|top_right_arrow||,True,7,2,new_screen,0035_s10_pre,0034_s9_pre,0038_final,SimpleCalendarDeleteOneEvent/v2
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v3,agent,ImageView|top_right_arrow||,True,7,2,new_screen,0036_s11_pre,0035_s10_pre,0038_final,SimpleCalendarDeleteOneEvent/v2
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v3,agent,ImageView|top_right_arrow||,True,7,2,new_screen,0037_final,0036_s11_pre,0038_final,SimpleCalendarDeleteOneEvent/v2
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v4,agent,OPEN_APP:Simple Calendar Pro,True,4,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SimpleCalendarDeleteOneEvent/v3
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v4,agent,Button|button1||OK,True,4,1,new_screen,0003_s2_pre,0002_s1_pre,0003_s2_pre,SimpleCalendarDeleteOneEvent/v3
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v4,agent,View|month_view_background||#36,True,1,1,new_screen,0015_s3_pre,0003_s2_pre,0015_s3_pre,SimpleCalendarDeleteOneEvent/v2
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v4,agent,Button|delete|Delete|Delete,True,2,1,new_screen,0034_s7_pre,0033_s6_pre,0035_s10_pre,SimpleCalendarDeleteOneEvent/v1
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v4,agent,Button|button1||Yes,True,2,1,new_screen,0035_s8_pre,0034_s7_pre,0036_s11_pre,SimpleCalendarDeleteOneEvent/v1
+SimpleCalendarDeleteOneEvent,layout,True,SimpleCalendarDeleteOneEvent/v4,agent,STATUS,True,2,1,no_change,0036_final,0035_s8_pre,0037_final,SimpleCalendarDeleteOneEvent/v1
+SimpleCalendarEventsOnDate,exact,True,SimpleCalendarEventsOnDate/v1,agent,OPEN_APP:Simple Calendar Pro,True,1,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SimpleCalendarEventsOnDate/v0
+SimpleCalendarEventsOnDate,exact,True,SimpleCalendarEventsOnDate/v1,agent,Button|button1||OK,True,1,1,new_screen,0003_s2_pre,0002_s1_pre,0003_s2_pre,SimpleCalendarEventsOnDate/v0
+SimpleCalendarEventsOnDate,exact,True,SimpleCalendarEventsOnDate/v1,agent,OPEN_APP:Simple Calendar Pro,True,1,1,new_screen,0011_s4_pre,0010_s3_pre,0002_s1_pre,SimpleCalendarEventsOnDate/v0
+SimpleCalendarEventsOnDate,exact,True,SimpleCalendarEventsOnDate/v1,agent,Button|button1||OK,True,1,1,new_screen,0012_s5_pre,0011_s4_pre,0003_s2_pre,SimpleCalendarEventsOnDate/v0
+SimpleCalendarEventsOnDate,exact,True,SimpleCalendarEventsOnDate/v2,agent,OPEN_APP:Simple Calendar Pro,True,3,1,new_screen,0002_s1_pre,0001_s0_pre,0011_s4_pre,SimpleCalendarEventsOnDate/v1
+SimpleCalendarEventsOnDate,exact,True,SimpleCalendarEventsOnDate/v2,agent,Button|button1||OK,True,3,1,new_screen,0003_s2_pre,0002_s1_pre,0012_s5_pre,SimpleCalendarEventsOnDate/v1
+SimpleCalendarEventsOnDate,exact,True,SimpleCalendarEventsOnDate/v2,agent,OPEN_APP:Simple Calendar Pro,True,3,1,new_screen,0010_s3_pre,0009_s2_pre_requery,0011_s4_pre,SimpleCalendarEventsOnDate/v1
+SimpleCalendarEventsOnDate,exact,True,SimpleCalendarEventsOnDate/v2,agent,Button|button1||OK,True,3,1,new_screen,0011_s4_pre,0010_s3_pre,0012_s5_pre,SimpleCalendarEventsOnDate/v1
+SimpleCalendarEventsOnDate,exact,True,SimpleCalendarEventsOnDate/v2,agent,STATUS,True,1,1,no_change,0012_final,0011_s4_pre,0013_final,SimpleCalendarEventsOnDate/v0
+SimpleCalendarEventsOnDate,exact,True,SimpleCalendarEventsOnDate/v3,agent,OPEN_APP:Simple Calendar Pro,True,5,1,new_screen,0002_s1_pre,0001_s0_pre,0010_s3_pre,SimpleCalendarEventsOnDate/v2
+SimpleCalendarEventsOnDate,exact,True,SimpleCalendarEventsOnDate/v3,agent,Button|button1||OK,True,5,1,new_screen,0003_s2_pre,0002_s1_pre,0011_s4_pre,SimpleCalendarEventsOnDate/v2
+SimpleCalendarEventsOnDate,exact,True,SimpleCalendarEventsOnDate/v3,agent,OPEN_APP:Simple Calendar Pro,True,5,1,new_screen,0018_s4_pre,0017_s3_pre_requery,0010_s3_pre,SimpleCalendarEventsOnDate/v2
+SimpleCalendarEventsOnDate,exact,True,SimpleCalendarEventsOnDate/v3,agent,Button|button1||OK,True,5,1,new_screen,0019_s5_pre,0018_s4_pre,0011_s4_pre,SimpleCalendarEventsOnDate/v2
+SimpleCalendarEventsOnDate,exact,True,SimpleCalendarEventsOnDate/v3,agent,STATUS,True,2,1,no_change,0020_final,0019_s5_pre,0012_final,SimpleCalendarEventsOnDate/v2
+SimpleCalendarEventsOnDate,exact,True,SimpleCalendarEventsOnDate/v4,agent,OPEN_APP:Simple Calendar Pro,True,7,1,new_screen,0002_s1_pre,0001_s0_pre,0018_s4_pre,SimpleCalendarEventsOnDate/v3
+SimpleCalendarEventsOnDate,exact,True,SimpleCalendarEventsOnDate/v4,agent,Button|button1||OK,True,7,1,new_screen,0003_s2_pre,0002_s1_pre,0019_s5_pre,SimpleCalendarEventsOnDate/v3
+SimpleCalendarEventsOnDate,exact,True,SimpleCalendarEventsOnDate/v4,agent,STATUS,True,3,1,no_change,0015_final,0003_s2_pre,0020_final,SimpleCalendarEventsOnDate/v3
+SimpleCalendarEventsOnDate,struct,True,SimpleCalendarEventsOnDate/v1,agent,OPEN_APP:Simple Calendar Pro,True,1,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SimpleCalendarEventsOnDate/v0
+SimpleCalendarEventsOnDate,struct,True,SimpleCalendarEventsOnDate/v1,agent,Button|button1||OK,True,1,1,new_screen,0003_s2_pre,0002_s1_pre,0003_s2_pre,SimpleCalendarEventsOnDate/v0
+SimpleCalendarEventsOnDate,struct,True,SimpleCalendarEventsOnDate/v1,agent,OPEN_APP:Simple Calendar Pro,True,1,1,new_screen,0011_s4_pre,0010_s3_pre,0002_s1_pre,SimpleCalendarEventsOnDate/v0
+SimpleCalendarEventsOnDate,struct,True,SimpleCalendarEventsOnDate/v1,agent,Button|button1||OK,True,1,1,new_screen,0012_s5_pre,0011_s4_pre,0003_s2_pre,SimpleCalendarEventsOnDate/v0
+SimpleCalendarEventsOnDate,struct,True,SimpleCalendarEventsOnDate/v2,agent,OPEN_APP:Simple Calendar Pro,True,3,1,new_screen,0002_s1_pre,0001_s0_pre,0011_s4_pre,SimpleCalendarEventsOnDate/v1
+SimpleCalendarEventsOnDate,struct,True,SimpleCalendarEventsOnDate/v2,agent,Button|button1||OK,True,3,1,new_screen,0003_s2_pre,0002_s1_pre,0012_s5_pre,SimpleCalendarEventsOnDate/v1
+SimpleCalendarEventsOnDate,struct,True,SimpleCalendarEventsOnDate/v2,agent,OPEN_APP:Simple Calendar Pro,True,3,1,new_screen,0010_s3_pre,0009_s2_pre_requery,0011_s4_pre,SimpleCalendarEventsOnDate/v1
+SimpleCalendarEventsOnDate,struct,True,SimpleCalendarEventsOnDate/v2,agent,Button|button1||OK,True,3,1,new_screen,0011_s4_pre,0010_s3_pre,0012_s5_pre,SimpleCalendarEventsOnDate/v1
+SimpleCalendarEventsOnDate,struct,True,SimpleCalendarEventsOnDate/v2,agent,STATUS,True,1,1,no_change,0012_final,0011_s4_pre,0013_final,SimpleCalendarEventsOnDate/v0
+SimpleCalendarEventsOnDate,struct,True,SimpleCalendarEventsOnDate/v3,agent,OPEN_APP:Simple Calendar Pro,True,5,1,new_screen,0002_s1_pre,0001_s0_pre,0010_s3_pre,SimpleCalendarEventsOnDate/v2
+SimpleCalendarEventsOnDate,struct,True,SimpleCalendarEventsOnDate/v3,agent,Button|button1||OK,True,5,1,new_screen,0003_s2_pre,0002_s1_pre,0011_s4_pre,SimpleCalendarEventsOnDate/v2
+SimpleCalendarEventsOnDate,struct,True,SimpleCalendarEventsOnDate/v3,agent,OPEN_APP:Simple Calendar Pro,True,5,1,new_screen,0018_s4_pre,0017_s3_pre_requery,0010_s3_pre,SimpleCalendarEventsOnDate/v2
+SimpleCalendarEventsOnDate,struct,True,SimpleCalendarEventsOnDate/v3,agent,Button|button1||OK,True,5,1,new_screen,0019_s5_pre,0018_s4_pre,0011_s4_pre,SimpleCalendarEventsOnDate/v2
+SimpleCalendarEventsOnDate,struct,True,SimpleCalendarEventsOnDate/v3,agent,STATUS,True,2,1,no_change,0020_final,0019_s5_pre,0012_final,SimpleCalendarEventsOnDate/v2
+SimpleCalendarEventsOnDate,struct,True,SimpleCalendarEventsOnDate/v4,agent,OPEN_APP:Simple Calendar Pro,True,7,1,new_screen,0002_s1_pre,0001_s0_pre,0018_s4_pre,SimpleCalendarEventsOnDate/v3
+SimpleCalendarEventsOnDate,struct,True,SimpleCalendarEventsOnDate/v4,agent,Button|button1||OK,True,7,1,new_screen,0003_s2_pre,0002_s1_pre,0019_s5_pre,SimpleCalendarEventsOnDate/v3
+SimpleCalendarEventsOnDate,struct,True,SimpleCalendarEventsOnDate/v4,agent,STATUS,True,3,1,no_change,0015_final,0003_s2_pre,0020_final,SimpleCalendarEventsOnDate/v3
+SimpleCalendarEventsOnDate,layout,True,SimpleCalendarEventsOnDate/v1,agent,OPEN_APP:Simple Calendar Pro,True,1,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SimpleCalendarEventsOnDate/v0
+SimpleCalendarEventsOnDate,layout,True,SimpleCalendarEventsOnDate/v1,agent,Button|button1||OK,True,1,1,new_screen,0003_s2_pre,0002_s1_pre,0003_s2_pre,SimpleCalendarEventsOnDate/v0
+SimpleCalendarEventsOnDate,layout,True,SimpleCalendarEventsOnDate/v1,agent,OPEN_APP:Simple Calendar Pro,True,1,1,new_screen,0011_s4_pre,0010_s3_pre,0002_s1_pre,SimpleCalendarEventsOnDate/v0
+SimpleCalendarEventsOnDate,layout,True,SimpleCalendarEventsOnDate/v1,agent,Button|button1||OK,True,1,1,new_screen,0012_s5_pre,0011_s4_pre,0003_s2_pre,SimpleCalendarEventsOnDate/v0
+SimpleCalendarEventsOnDate,layout,True,SimpleCalendarEventsOnDate/v2,agent,OPEN_APP:Simple Calendar Pro,True,3,1,new_screen,0002_s1_pre,0001_s0_pre,0011_s4_pre,SimpleCalendarEventsOnDate/v1
+SimpleCalendarEventsOnDate,layout,True,SimpleCalendarEventsOnDate/v2,agent,Button|button1||OK,True,3,1,new_screen,0003_s2_pre,0002_s1_pre,0012_s5_pre,SimpleCalendarEventsOnDate/v1
+SimpleCalendarEventsOnDate,layout,True,SimpleCalendarEventsOnDate/v2,agent,OPEN_APP:Simple Calendar Pro,True,3,1,new_screen,0010_s3_pre,0009_s2_pre_requery,0011_s4_pre,SimpleCalendarEventsOnDate/v1
+SimpleCalendarEventsOnDate,layout,True,SimpleCalendarEventsOnDate/v2,agent,Button|button1||OK,True,3,1,new_screen,0011_s4_pre,0010_s3_pre,0012_s5_pre,SimpleCalendarEventsOnDate/v1
+SimpleCalendarEventsOnDate,layout,True,SimpleCalendarEventsOnDate/v2,agent,STATUS,True,1,1,no_change,0012_final,0011_s4_pre,0013_final,SimpleCalendarEventsOnDate/v0
+SimpleCalendarEventsOnDate,layout,True,SimpleCalendarEventsOnDate/v3,agent,OPEN_APP:Simple Calendar Pro,True,5,1,new_screen,0002_s1_pre,0001_s0_pre,0010_s3_pre,SimpleCalendarEventsOnDate/v2
+SimpleCalendarEventsOnDate,layout,True,SimpleCalendarEventsOnDate/v3,agent,Button|button1||OK,True,5,1,new_screen,0003_s2_pre,0002_s1_pre,0011_s4_pre,SimpleCalendarEventsOnDate/v2
+SimpleCalendarEventsOnDate,layout,True,SimpleCalendarEventsOnDate/v3,agent,OPEN_APP:Simple Calendar Pro,True,5,1,new_screen,0018_s4_pre,0017_s3_pre_requery,0010_s3_pre,SimpleCalendarEventsOnDate/v2
+SimpleCalendarEventsOnDate,layout,True,SimpleCalendarEventsOnDate/v3,agent,Button|button1||OK,True,5,1,new_screen,0019_s5_pre,0018_s4_pre,0011_s4_pre,SimpleCalendarEventsOnDate/v2
+SimpleCalendarEventsOnDate,layout,True,SimpleCalendarEventsOnDate/v3,agent,STATUS,True,2,1,no_change,0020_final,0019_s5_pre,0012_final,SimpleCalendarEventsOnDate/v2
+SimpleCalendarEventsOnDate,layout,True,SimpleCalendarEventsOnDate/v4,agent,OPEN_APP:Simple Calendar Pro,True,7,1,new_screen,0002_s1_pre,0001_s0_pre,0018_s4_pre,SimpleCalendarEventsOnDate/v3
+SimpleCalendarEventsOnDate,layout,True,SimpleCalendarEventsOnDate/v4,agent,Button|button1||OK,True,7,1,new_screen,0003_s2_pre,0002_s1_pre,0019_s5_pre,SimpleCalendarEventsOnDate/v3
+SimpleCalendarEventsOnDate,layout,True,SimpleCalendarEventsOnDate/v4,agent,STATUS,True,3,1,no_change,0015_final,0003_s2_pre,0020_final,SimpleCalendarEventsOnDate/v3
+SportsTrackerLongestDistanceActivity,exact,True,SportsTrackerLongestDistanceActivity/v1,agent,OPEN_APP:OpenTracks,False,2,1,new_screen,0002_s1_pre,0001_s0_pre,0008_s2_pre,SportsTrackerLongestDistanceActivity/v0
+SportsTrackerLongestDistanceActivity,exact,True,SportsTrackerLongestDistanceActivity/v2,agent,OPEN_APP:OpenTracks,False,3,2,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SportsTrackerLongestDistanceActivity/v1
+SportsTrackerLongestDistanceActivity,exact,True,SportsTrackerLongestDistanceActivity/v3,agent,OPEN_APP:OpenTracks,False,4,3,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SportsTrackerLongestDistanceActivity/v2
+SportsTrackerLongestDistanceActivity,exact,True,SportsTrackerLongestDistanceActivity/v4,agent,OPEN_APP:OpenTracks,False,5,4,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SportsTrackerLongestDistanceActivity/v3
+SportsTrackerLongestDistanceActivity,struct,True,SportsTrackerLongestDistanceActivity/v1,agent,OPEN_APP:OpenTracks,True,2,1,new_screen,0002_s1_pre,0001_s0_pre,0008_s2_pre,SportsTrackerLongestDistanceActivity/v0
+SportsTrackerLongestDistanceActivity,struct,True,SportsTrackerLongestDistanceActivity/v1,agent,STATUS,True,1,1,no_change,0014_final,0002_s1_pre,0011_final,SportsTrackerLongestDistanceActivity/v0
+SportsTrackerLongestDistanceActivity,struct,True,SportsTrackerLongestDistanceActivity/v2,agent,OPEN_APP:OpenTracks,True,3,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SportsTrackerLongestDistanceActivity/v1
+SportsTrackerLongestDistanceActivity,struct,True,SportsTrackerLongestDistanceActivity/v2,agent,STATUS,True,2,1,no_change,0006_final,0002_s1_pre,0014_final,SportsTrackerLongestDistanceActivity/v1
+SportsTrackerLongestDistanceActivity,struct,True,SportsTrackerLongestDistanceActivity/v3,agent,OPEN_APP:OpenTracks,True,4,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SportsTrackerLongestDistanceActivity/v2
+SportsTrackerLongestDistanceActivity,struct,True,SportsTrackerLongestDistanceActivity/v3,explore,Button|track_list_markers|Markers|Markers,True,1,1,new_screen,0005_s1_probe2_post,0002_s1_pre,0003_s1_probe1_post,SportsTrackerLongestDistanceActivity/v1
+SportsTrackerLongestDistanceActivity,struct,True,SportsTrackerLongestDistanceActivity/v3,explore,ImageView||More options|More options,True,1,1,new_screen,0007_s1_probe3_post,0002_s1_pre,0005_s1_probe2_post,SportsTrackerLongestDistanceActivity/v1
+SportsTrackerLongestDistanceActivity,struct,True,SportsTrackerLongestDistanceActivity/v3,agent,STATUS,True,3,1,no_change,0011_final,0010_s2_pre,0006_final,SportsTrackerLongestDistanceActivity/v2
+SportsTrackerLongestDistanceActivity,struct,True,SportsTrackerLongestDistanceActivity/v4,agent,OPEN_APP:OpenTracks,True,5,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SportsTrackerLongestDistanceActivity/v3
+SportsTrackerLongestDistanceActivity,struct,True,SportsTrackerLongestDistanceActivity/v4,explore,Button|track_list_markers|Markers|Markers,True,2,1,new_screen,0003_s1_probe1_post,0002_s1_pre,0005_s1_probe2_post,SportsTrackerLongestDistanceActivity/v3
+SportsTrackerLongestDistanceActivity,struct,True,SportsTrackerLongestDistanceActivity/v4,explore,ImageView||More options|More options,True,2,1,new_screen,0005_s1_probe2_post,0002_s1_pre,0007_s1_probe3_post,SportsTrackerLongestDistanceActivity/v3
+SportsTrackerLongestDistanceActivity,struct,True,SportsTrackerLongestDistanceActivity/v4,explore,Button|aggregated_stats_button||,True,1,1,new_screen,0007_s1_probe3_post,0002_s1_pre,0003_s1_probe1_post,SportsTrackerLongestDistanceActivity/v3
+SportsTrackerLongestDistanceActivity,struct,True,SportsTrackerLongestDistanceActivity/v4,agent,STATUS,True,4,1,no_change,0010_final,0002_s1_pre,0011_final,SportsTrackerLongestDistanceActivity/v3
+SportsTrackerLongestDistanceActivity,layout,True,SportsTrackerLongestDistanceActivity/v1,agent,OPEN_APP:OpenTracks,True,2,1,new_screen,0002_s1_pre,0001_s0_pre,0008_s2_pre,SportsTrackerLongestDistanceActivity/v0
+SportsTrackerLongestDistanceActivity,layout,True,SportsTrackerLongestDistanceActivity/v1,agent,STATUS,True,1,1,no_change,0014_final,0002_s1_pre,0011_final,SportsTrackerLongestDistanceActivity/v0
+SportsTrackerLongestDistanceActivity,layout,True,SportsTrackerLongestDistanceActivity/v2,agent,OPEN_APP:OpenTracks,True,3,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SportsTrackerLongestDistanceActivity/v1
+SportsTrackerLongestDistanceActivity,layout,True,SportsTrackerLongestDistanceActivity/v2,agent,STATUS,True,2,1,no_change,0006_final,0002_s1_pre,0014_final,SportsTrackerLongestDistanceActivity/v1
+SportsTrackerLongestDistanceActivity,layout,True,SportsTrackerLongestDistanceActivity/v3,agent,OPEN_APP:OpenTracks,True,4,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SportsTrackerLongestDistanceActivity/v2
+SportsTrackerLongestDistanceActivity,layout,True,SportsTrackerLongestDistanceActivity/v3,explore,Button|track_list_markers|Markers|Markers,True,1,1,new_screen,0005_s1_probe2_post,0002_s1_pre,0003_s1_probe1_post,SportsTrackerLongestDistanceActivity/v1
+SportsTrackerLongestDistanceActivity,layout,True,SportsTrackerLongestDistanceActivity/v3,explore,ImageView||More options|More options,True,1,1,new_screen,0007_s1_probe3_post,0002_s1_pre,0005_s1_probe2_post,SportsTrackerLongestDistanceActivity/v1
+SportsTrackerLongestDistanceActivity,layout,True,SportsTrackerLongestDistanceActivity/v3,agent,STATUS,True,3,1,no_change,0011_final,0010_s2_pre,0006_final,SportsTrackerLongestDistanceActivity/v2
+SportsTrackerLongestDistanceActivity,layout,True,SportsTrackerLongestDistanceActivity/v4,agent,OPEN_APP:OpenTracks,True,5,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SportsTrackerLongestDistanceActivity/v3
+SportsTrackerLongestDistanceActivity,layout,True,SportsTrackerLongestDistanceActivity/v4,explore,Button|track_list_markers|Markers|Markers,True,2,1,new_screen,0003_s1_probe1_post,0002_s1_pre,0005_s1_probe2_post,SportsTrackerLongestDistanceActivity/v3
+SportsTrackerLongestDistanceActivity,layout,True,SportsTrackerLongestDistanceActivity/v4,explore,ImageView||More options|More options,True,2,1,new_screen,0005_s1_probe2_post,0002_s1_pre,0007_s1_probe3_post,SportsTrackerLongestDistanceActivity/v3
+SportsTrackerLongestDistanceActivity,layout,True,SportsTrackerLongestDistanceActivity/v4,explore,Button|aggregated_stats_button||,True,1,1,new_screen,0007_s1_probe3_post,0002_s1_pre,0003_s1_probe1_post,SportsTrackerLongestDistanceActivity/v3
+SportsTrackerLongestDistanceActivity,layout,True,SportsTrackerLongestDistanceActivity/v4,agent,STATUS,True,4,1,no_change,0010_final,0002_s1_pre,0011_final,SportsTrackerLongestDistanceActivity/v3
+SystemBluetoothTurnOn,exact,True,SystemBluetoothTurnOn/v1,agent,TextView||Predicted app: Settings|Settings,True,1,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SystemBluetoothTurnOn/v0
+SystemBluetoothTurnOn,exact,True,SystemBluetoothTurnOn/v1,agent,LinearLayout|||Connected devices,True,1,1,new_screen,0010_s2_pre,0002_s1_pre,0009_s2_pre,SystemBluetoothTurnOn/v0
+SystemBluetoothTurnOn,exact,True,SystemBluetoothTurnOn/v2,agent,TextView||Predicted app: Settings|Settings,True,2,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SystemBluetoothTurnOn/v1
+SystemBluetoothTurnOn,exact,True,SystemBluetoothTurnOn/v2,agent,LinearLayout|||Connected devices,True,2,1,new_screen,0010_s2_pre,0002_s1_pre,0010_s2_pre,SystemBluetoothTurnOn/v1
+SystemBluetoothTurnOn,exact,True,SystemBluetoothTurnOn/v2,agent,LinearLayout|||Bluetooth,False,1,1,new_screen,0016_s4_pre,0015_s3_pre,0017_s5_pre,SystemBluetoothTurnOn/v1
+SystemBluetoothTurnOn,exact,True,SystemBluetoothTurnOn/v3,agent,TextView||Predicted app: Settings|Settings,True,3,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SystemBluetoothTurnOn/v2
+SystemBluetoothTurnOn,exact,True,SystemBluetoothTurnOn/v3,explore,"ImageView|account_avatar|Profile picture, double tap to open Google Account|Profile picture, double tap to open Google Account",True,1,1,left_app,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,SystemBluetoothTurnOn/v0
+SystemBluetoothTurnOn,exact,True,SystemBluetoothTurnOn/v3,explore,LinearLayout|||Network & internet,False,1,1,new_screen,0005_s1_probe2_post,0002_s1_pre,0003_s1_probe1_post,SystemBluetoothTurnOn/v1
+SystemBluetoothTurnOn,exact,True,SystemBluetoothTurnOn/v3,explore,LinearLayout|||Connected devices,True,3,1,new_screen,0007_s1_probe3_post,0002_s1_pre,0010_s2_pre,SystemBluetoothTurnOn/v2
+SystemBluetoothTurnOn,exact,True,SystemBluetoothTurnOn/v3,agent,LinearLayout|||Connected devices,True,3,1,new_screen,0010_s2_pre,0002_s1_pre,0010_s2_pre,SystemBluetoothTurnOn/v2
+SystemBluetoothTurnOn,exact,True,SystemBluetoothTurnOn/v3,agent,LinearLayout|||Pair new device,True,1,1,new_screen,0011_s3_pre,0010_s2_pre,0010_s3_pre,SystemBluetoothTurnOn/v0
+SystemBluetoothTurnOn,exact,True,SystemBluetoothTurnOn/v3,agent,STATUS,True,1,1,no_change,0016_final,0011_s3_pre,0011_final,SystemBluetoothTurnOn/v0
+SystemBluetoothTurnOn,exact,True,SystemBluetoothTurnOn/v4,agent,TextView||Predicted app: Settings|Settings,True,4,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SystemBluetoothTurnOn/v3
+SystemBluetoothTurnOn,exact,True,SystemBluetoothTurnOn/v4,explore,"ImageView|account_avatar|Profile picture, double tap to open Google Account|Profile picture, double tap to open Google Account",True,2,1,left_app,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,SystemBluetoothTurnOn/v3
+SystemBluetoothTurnOn,exact,True,SystemBluetoothTurnOn/v4,explore,LinearLayout|||Network & internet,True,2,2,new_screen,0005_s1_probe2_post,0002_s1_pre,0005_s1_probe2_post,SystemBluetoothTurnOn/v3
+SystemBluetoothTurnOn,exact,True,SystemBluetoothTurnOn/v4,explore,LinearLayout|||Connected devices,True,5,1,new_screen,0007_s1_probe3_post,0002_s1_pre,0010_s2_pre,SystemBluetoothTurnOn/v3
+SystemBluetoothTurnOn,exact,True,SystemBluetoothTurnOn/v4,agent,LinearLayout|||Connected devices,True,5,1,new_screen,0010_s2_pre,0002_s1_pre,0010_s2_pre,SystemBluetoothTurnOn/v3
+SystemBluetoothTurnOn,exact,True,SystemBluetoothTurnOn/v4,agent,LinearLayout|||Pair new device,True,2,1,new_screen,0011_s3_pre,0010_s2_pre,0011_s3_pre,SystemBluetoothTurnOn/v3
+SystemBluetoothTurnOn,exact,True,SystemBluetoothTurnOn/v4,explore,LinearLayout|||Device name,True,1,1,new_screen,0012_s3_probe4_post,0011_s3_pre,0012_s3_probe4_post,SystemBluetoothTurnOn/v3
+SystemBluetoothTurnOn,exact,True,SystemBluetoothTurnOn/v4,agent,STATUS,True,2,1,no_change,0016_final,0011_s3_pre,0016_final,SystemBluetoothTurnOn/v3
+SystemBluetoothTurnOn,struct,True,SystemBluetoothTurnOn/v1,agent,TextView||Predicted app: Settings|Settings,True,1,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SystemBluetoothTurnOn/v0
+SystemBluetoothTurnOn,struct,True,SystemBluetoothTurnOn/v1,agent,LinearLayout|||Connected devices,True,1,1,new_screen,0010_s2_pre,0002_s1_pre,0009_s2_pre,SystemBluetoothTurnOn/v0
+SystemBluetoothTurnOn,struct,True,SystemBluetoothTurnOn/v1,agent,STATUS,True,1,1,no_change,0018_final,0017_s5_pre,0011_final,SystemBluetoothTurnOn/v0
+SystemBluetoothTurnOn,struct,True,SystemBluetoothTurnOn/v2,agent,TextView||Predicted app: Settings|Settings,True,2,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SystemBluetoothTurnOn/v1
+SystemBluetoothTurnOn,struct,True,SystemBluetoothTurnOn/v2,agent,LinearLayout|||Connected devices,True,2,1,new_screen,0010_s2_pre,0002_s1_pre,0010_s2_pre,SystemBluetoothTurnOn/v1
+SystemBluetoothTurnOn,struct,True,SystemBluetoothTurnOn/v2,explore,LinearLayout|||Connection preferences,True,1,1,in_place_content_change,0011_s2_probe4_post,0010_s2_pre,0016_s4_pre,SystemBluetoothTurnOn/v1
+SystemBluetoothTurnOn,struct,True,SystemBluetoothTurnOn/v2,agent,ImageButton||Navigate up|Navigate up,True,1,1,new_screen,0015_s3_pre,0014_s2_pre_requery,0015_s3_pre,SystemBluetoothTurnOn/v1
+SystemBluetoothTurnOn,struct,True,SystemBluetoothTurnOn/v2,agent,LinearLayout|||Bluetooth,True,1,1,new_screen,0016_s4_pre,0015_s3_pre,0017_s5_pre,SystemBluetoothTurnOn/v1
+SystemBluetoothTurnOn,struct,True,SystemBluetoothTurnOn/v2,agent,STATUS,True,2,1,no_change,0018_final,0017_s5_pre,0018_final,SystemBluetoothTurnOn/v1
+SystemBluetoothTurnOn,struct,True,SystemBluetoothTurnOn/v3,agent,TextView||Predicted app: Settings|Settings,True,3,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SystemBluetoothTurnOn/v2
+SystemBluetoothTurnOn,struct,True,SystemBluetoothTurnOn/v3,explore,"ImageView|account_avatar|Profile picture, double tap to open Google Account|Profile picture, double tap to open Google Account",True,1,1,left_app,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,SystemBluetoothTurnOn/v0
+SystemBluetoothTurnOn,struct,True,SystemBluetoothTurnOn/v3,explore,LinearLayout|||Network & internet,True,1,1,new_screen,0005_s1_probe2_post,0002_s1_pre,0003_s1_probe1_post,SystemBluetoothTurnOn/v1
+SystemBluetoothTurnOn,struct,True,SystemBluetoothTurnOn/v3,explore,LinearLayout|||Connected devices,True,3,1,new_screen,0007_s1_probe3_post,0002_s1_pre,0010_s2_pre,SystemBluetoothTurnOn/v2
+SystemBluetoothTurnOn,struct,True,SystemBluetoothTurnOn/v3,agent,LinearLayout|||Connected devices,True,3,1,new_screen,0010_s2_pre,0002_s1_pre,0010_s2_pre,SystemBluetoothTurnOn/v2
+SystemBluetoothTurnOn,struct,True,SystemBluetoothTurnOn/v3,agent,LinearLayout|||Pair new device,True,1,1,new_screen,0011_s3_pre,0010_s2_pre,0010_s3_pre,SystemBluetoothTurnOn/v0
+SystemBluetoothTurnOn,struct,True,SystemBluetoothTurnOn/v3,agent,STATUS,True,3,1,no_change,0016_final,0011_s3_pre,0018_final,SystemBluetoothTurnOn/v2
+SystemBluetoothTurnOn,struct,True,SystemBluetoothTurnOn/v4,agent,TextView||Predicted app: Settings|Settings,True,4,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SystemBluetoothTurnOn/v3
+SystemBluetoothTurnOn,struct,True,SystemBluetoothTurnOn/v4,explore,"ImageView|account_avatar|Profile picture, double tap to open Google Account|Profile picture, double tap to open Google Account",True,2,1,left_app,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,SystemBluetoothTurnOn/v3
+SystemBluetoothTurnOn,struct,True,SystemBluetoothTurnOn/v4,explore,LinearLayout|||Network & internet,True,2,1,new_screen,0005_s1_probe2_post,0002_s1_pre,0005_s1_probe2_post,SystemBluetoothTurnOn/v3
+SystemBluetoothTurnOn,struct,True,SystemBluetoothTurnOn/v4,explore,LinearLayout|||Connected devices,True,5,1,new_screen,0007_s1_probe3_post,0002_s1_pre,0010_s2_pre,SystemBluetoothTurnOn/v3
+SystemBluetoothTurnOn,struct,True,SystemBluetoothTurnOn/v4,agent,LinearLayout|||Connected devices,True,5,1,new_screen,0010_s2_pre,0002_s1_pre,0010_s2_pre,SystemBluetoothTurnOn/v3
+SystemBluetoothTurnOn,struct,True,SystemBluetoothTurnOn/v4,agent,LinearLayout|||Pair new device,True,2,1,new_screen,0011_s3_pre,0010_s2_pre,0011_s3_pre,SystemBluetoothTurnOn/v3
+SystemBluetoothTurnOn,struct,True,SystemBluetoothTurnOn/v4,explore,LinearLayout|||Device name,True,1,1,new_screen,0012_s3_probe4_post,0011_s3_pre,0012_s3_probe4_post,SystemBluetoothTurnOn/v3
+SystemBluetoothTurnOn,struct,True,SystemBluetoothTurnOn/v4,agent,STATUS,True,4,1,no_change,0016_final,0011_s3_pre,0016_final,SystemBluetoothTurnOn/v3
+SystemBluetoothTurnOn,layout,True,SystemBluetoothTurnOn/v1,agent,TextView||Predicted app: Settings|Settings,True,1,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SystemBluetoothTurnOn/v0
+SystemBluetoothTurnOn,layout,True,SystemBluetoothTurnOn/v1,agent,LinearLayout|||Connected devices,True,1,1,new_screen,0010_s2_pre,0002_s1_pre,0009_s2_pre,SystemBluetoothTurnOn/v0
+SystemBluetoothTurnOn,layout,True,SystemBluetoothTurnOn/v1,agent,STATUS,True,1,1,no_change,0018_final,0017_s5_pre,0011_final,SystemBluetoothTurnOn/v0
+SystemBluetoothTurnOn,layout,True,SystemBluetoothTurnOn/v2,agent,TextView||Predicted app: Settings|Settings,True,2,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SystemBluetoothTurnOn/v1
+SystemBluetoothTurnOn,layout,True,SystemBluetoothTurnOn/v2,agent,LinearLayout|||Connected devices,True,2,1,new_screen,0010_s2_pre,0002_s1_pre,0010_s2_pre,SystemBluetoothTurnOn/v1
+SystemBluetoothTurnOn,layout,True,SystemBluetoothTurnOn/v2,explore,LinearLayout|||Connection preferences,True,1,1,in_place_content_change,0011_s2_probe4_post,0010_s2_pre,0016_s4_pre,SystemBluetoothTurnOn/v1
+SystemBluetoothTurnOn,layout,True,SystemBluetoothTurnOn/v2,agent,ImageButton||Navigate up|Navigate up,True,1,1,new_screen,0015_s3_pre,0014_s2_pre_requery,0015_s3_pre,SystemBluetoothTurnOn/v1
+SystemBluetoothTurnOn,layout,True,SystemBluetoothTurnOn/v2,agent,LinearLayout|||Bluetooth,True,1,1,new_screen,0016_s4_pre,0015_s3_pre,0017_s5_pre,SystemBluetoothTurnOn/v1
+SystemBluetoothTurnOn,layout,True,SystemBluetoothTurnOn/v2,agent,STATUS,True,2,1,no_change,0018_final,0017_s5_pre,0018_final,SystemBluetoothTurnOn/v1
+SystemBluetoothTurnOn,layout,True,SystemBluetoothTurnOn/v3,agent,TextView||Predicted app: Settings|Settings,True,3,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SystemBluetoothTurnOn/v2
+SystemBluetoothTurnOn,layout,True,SystemBluetoothTurnOn/v3,explore,"ImageView|account_avatar|Profile picture, double tap to open Google Account|Profile picture, double tap to open Google Account",True,1,1,left_app,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,SystemBluetoothTurnOn/v0
+SystemBluetoothTurnOn,layout,True,SystemBluetoothTurnOn/v3,explore,LinearLayout|||Network & internet,True,1,1,new_screen,0005_s1_probe2_post,0002_s1_pre,0003_s1_probe1_post,SystemBluetoothTurnOn/v1
+SystemBluetoothTurnOn,layout,True,SystemBluetoothTurnOn/v3,explore,LinearLayout|||Connected devices,True,3,1,new_screen,0007_s1_probe3_post,0002_s1_pre,0010_s2_pre,SystemBluetoothTurnOn/v2
+SystemBluetoothTurnOn,layout,True,SystemBluetoothTurnOn/v3,agent,LinearLayout|||Connected devices,True,3,1,new_screen,0010_s2_pre,0002_s1_pre,0010_s2_pre,SystemBluetoothTurnOn/v2
+SystemBluetoothTurnOn,layout,True,SystemBluetoothTurnOn/v3,agent,LinearLayout|||Pair new device,True,1,1,new_screen,0011_s3_pre,0010_s2_pre,0010_s3_pre,SystemBluetoothTurnOn/v0
+SystemBluetoothTurnOn,layout,True,SystemBluetoothTurnOn/v3,agent,STATUS,True,3,1,no_change,0016_final,0011_s3_pre,0018_final,SystemBluetoothTurnOn/v2
+SystemBluetoothTurnOn,layout,True,SystemBluetoothTurnOn/v4,agent,TextView||Predicted app: Settings|Settings,True,4,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,SystemBluetoothTurnOn/v3
+SystemBluetoothTurnOn,layout,True,SystemBluetoothTurnOn/v4,explore,"ImageView|account_avatar|Profile picture, double tap to open Google Account|Profile picture, double tap to open Google Account",True,2,1,left_app,0003_s1_probe1_post,0002_s1_pre,0003_s1_probe1_post,SystemBluetoothTurnOn/v3
+SystemBluetoothTurnOn,layout,True,SystemBluetoothTurnOn/v4,explore,LinearLayout|||Network & internet,True,2,1,new_screen,0005_s1_probe2_post,0002_s1_pre,0005_s1_probe2_post,SystemBluetoothTurnOn/v3
+SystemBluetoothTurnOn,layout,True,SystemBluetoothTurnOn/v4,explore,LinearLayout|||Connected devices,True,5,1,new_screen,0007_s1_probe3_post,0002_s1_pre,0010_s2_pre,SystemBluetoothTurnOn/v3
+SystemBluetoothTurnOn,layout,True,SystemBluetoothTurnOn/v4,agent,LinearLayout|||Connected devices,True,5,1,new_screen,0010_s2_pre,0002_s1_pre,0010_s2_pre,SystemBluetoothTurnOn/v3
+SystemBluetoothTurnOn,layout,True,SystemBluetoothTurnOn/v4,agent,LinearLayout|||Pair new device,True,2,1,new_screen,0011_s3_pre,0010_s2_pre,0011_s3_pre,SystemBluetoothTurnOn/v3
+SystemBluetoothTurnOn,layout,True,SystemBluetoothTurnOn/v4,explore,LinearLayout|||Device name,True,1,1,new_screen,0012_s3_probe4_post,0011_s3_pre,0012_s3_probe4_post,SystemBluetoothTurnOn/v3
+SystemBluetoothTurnOn,layout,True,SystemBluetoothTurnOn/v4,agent,STATUS,True,4,1,no_change,0016_final,0011_s3_pre,0016_final,SystemBluetoothTurnOn/v3
+TasksDueOnDate,exact,True,TasksDueOnDate/v1,agent,OPEN_APP:Tasks,False,1,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,TasksDueOnDate/v0
+TasksDueOnDate,exact,True,TasksDueOnDate/v2,agent,OPEN_APP:Tasks,False,2,2,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,TasksDueOnDate/v1
+TasksDueOnDate,exact,True,TasksDueOnDate/v3,agent,OPEN_APP:Tasks,False,3,3,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,TasksDueOnDate/v2
+TasksDueOnDate,exact,True,TasksDueOnDate/v3,agent,OPEN_APP:Tasks,False,3,3,new_screen,0017_s3_pre,0016_s2_pre_requery,0002_s1_pre,TasksDueOnDate/v2
+TasksDueOnDate,exact,True,TasksDueOnDate/v3,agent,View|||Grouping,True,1,1,new_screen,0019_s5_pre,0018_s4_pre,0008_s3_pre,TasksDueOnDate/v0
+TasksDueOnDate,exact,True,TasksDueOnDate/v3,agent,View|||By due date,True,1,1,new_screen,0020_s6_pre,0019_s5_pre,0009_s4_pre,TasksDueOnDate/v0
+TasksDueOnDate,exact,True,TasksDueOnDate/v3,agent,View|||Drag handle,False,1,1,new_screen,0021_s7_pre,0020_s6_pre,0010_s5_pre,TasksDueOnDate/v0
+TasksDueOnDate,exact,True,TasksDueOnDate/v4,agent,OPEN_APP:Tasks,False,5,5,new_screen,0002_s1_pre,0001_s0_pre,0017_s3_pre,TasksDueOnDate/v3
+TasksDueOnDate,struct,True,TasksDueOnDate/v1,agent,OPEN_APP:Tasks,True,1,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,TasksDueOnDate/v0
+TasksDueOnDate,struct,True,TasksDueOnDate/v2,agent,OPEN_APP:Tasks,True,2,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,TasksDueOnDate/v1
+TasksDueOnDate,struct,True,TasksDueOnDate/v2,agent,SWIPE:down,True,1,1,new_screen,0010_s3_pre,0009_s2_pre,0011_s6_pre,TasksDueOnDate/v0
+TasksDueOnDate,struct,True,TasksDueOnDate/v2,agent,STATUS,True,1,1,no_change,0011_final,0010_s3_pre,0012_final,TasksDueOnDate/v0
+TasksDueOnDate,struct,True,TasksDueOnDate/v3,agent,OPEN_APP:Tasks,True,3,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,TasksDueOnDate/v2
+TasksDueOnDate,struct,True,TasksDueOnDate/v3,agent,OPEN_APP:Tasks,True,3,1,new_screen,0017_s3_pre,0016_s2_pre_requery,0002_s1_pre,TasksDueOnDate/v2
+TasksDueOnDate,struct,True,TasksDueOnDate/v3,agent,Button|menu_sort|Sort|Sort,True,1,1,new_screen,0018_s4_pre,0017_s3_pre,0007_s2_pre,TasksDueOnDate/v0
+TasksDueOnDate,struct,True,TasksDueOnDate/v3,agent,View|||Grouping,True,1,1,new_screen,0019_s5_pre,0018_s4_pre,0008_s3_pre,TasksDueOnDate/v0
+TasksDueOnDate,struct,True,TasksDueOnDate/v3,agent,View|||By due date,True,1,1,new_screen,0020_s6_pre,0019_s5_pre,0009_s4_pre,TasksDueOnDate/v0
+TasksDueOnDate,struct,True,TasksDueOnDate/v3,agent,View|||Drag handle,True,1,1,new_screen,0021_s7_pre,0020_s6_pre,0010_s5_pre,TasksDueOnDate/v0
+TasksDueOnDate,struct,True,TasksDueOnDate/v3,agent,SWIPE:down,True,2,1,new_screen,0022_s8_pre,0021_s7_pre,0010_s3_pre,TasksDueOnDate/v2
+TasksDueOnDate,struct,True,TasksDueOnDate/v3,agent,STATUS,True,2,1,no_change,0023_final,0022_s8_pre,0011_final,TasksDueOnDate/v2
+TasksDueOnDate,struct,True,TasksDueOnDate/v4,agent,OPEN_APP:Tasks,True,5,1,new_screen,0002_s1_pre,0001_s0_pre,0017_s3_pre,TasksDueOnDate/v3
+TasksDueOnDate,struct,True,TasksDueOnDate/v4,agent,ImageButton|||,True,1,1,new_screen,0012_s2_pre,0002_s1_pre,0012_s2_pre,TasksDueOnDate/v3
+TasksDueOnDate,struct,True,TasksDueOnDate/v4,agent,STATUS,True,3,1,no_change,0017_final,0016_s2_pre_requery,0023_final,TasksDueOnDate/v3
+TasksDueOnDate,layout,True,TasksDueOnDate/v1,agent,OPEN_APP:Tasks,True,1,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,TasksDueOnDate/v0
+TasksDueOnDate,layout,True,TasksDueOnDate/v2,agent,OPEN_APP:Tasks,True,2,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,TasksDueOnDate/v1
+TasksDueOnDate,layout,True,TasksDueOnDate/v2,agent,SWIPE:down,True,1,1,new_screen,0010_s3_pre,0009_s2_pre,0011_s6_pre,TasksDueOnDate/v0
+TasksDueOnDate,layout,True,TasksDueOnDate/v2,agent,STATUS,True,1,1,no_change,0011_final,0010_s3_pre,0012_final,TasksDueOnDate/v0
+TasksDueOnDate,layout,True,TasksDueOnDate/v3,agent,OPEN_APP:Tasks,True,3,1,new_screen,0002_s1_pre,0001_s0_pre,0002_s1_pre,TasksDueOnDate/v2
+TasksDueOnDate,layout,True,TasksDueOnDate/v3,agent,OPEN_APP:Tasks,True,3,1,new_screen,0017_s3_pre,0016_s2_pre_requery,0002_s1_pre,TasksDueOnDate/v2
+TasksDueOnDate,layout,True,TasksDueOnDate/v3,agent,Button|menu_sort|Sort|Sort,True,1,1,new_screen,0018_s4_pre,0017_s3_pre,0007_s2_pre,TasksDueOnDate/v0
+TasksDueOnDate,layout,True,TasksDueOnDate/v3,agent,View|||Grouping,True,1,1,new_screen,0019_s5_pre,0018_s4_pre,0008_s3_pre,TasksDueOnDate/v0
+TasksDueOnDate,layout,True,TasksDueOnDate/v3,agent,View|||By due date,True,1,1,new_screen,0020_s6_pre,0019_s5_pre,0009_s4_pre,TasksDueOnDate/v0
+TasksDueOnDate,layout,True,TasksDueOnDate/v3,agent,View|||Drag handle,True,1,1,new_screen,0021_s7_pre,0020_s6_pre,0010_s5_pre,TasksDueOnDate/v0
+TasksDueOnDate,layout,True,TasksDueOnDate/v3,agent,SWIPE:down,True,2,1,new_screen,0022_s8_pre,0021_s7_pre,0010_s3_pre,TasksDueOnDate/v2
+TasksDueOnDate,layout,True,TasksDueOnDate/v3,agent,STATUS,True,2,1,no_change,0023_final,0022_s8_pre,0011_final,TasksDueOnDate/v2
+TasksDueOnDate,layout,True,TasksDueOnDate/v4,agent,OPEN_APP:Tasks,True,5,1,new_screen,0002_s1_pre,0001_s0_pre,0017_s3_pre,TasksDueOnDate/v3
+TasksDueOnDate,layout,True,TasksDueOnDate/v4,agent,ImageButton|||,True,1,1,new_screen,0012_s2_pre,0002_s1_pre,0012_s2_pre,TasksDueOnDate/v3
+TasksDueOnDate,layout,True,TasksDueOnDate/v4,agent,STATUS,True,3,1,no_change,0017_final,0016_s2_pre_requery,0023_final,TasksDueOnDate/v3

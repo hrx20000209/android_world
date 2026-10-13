@@ -1,0 +1,281 @@
+{
+ "BASE": {
+  "episodes": 26,
+  "success": 21,
+  "errors": 0,
+  "steps": 164,
+  "model_calls": 164,
+  "prefills": 0,
+  "rejected": 0,
+  "rollback_fail": 0,
+  "wall_s_mean": 29.372692307692315,
+  "model_s_total": 307.6,
+  "prefill_s_total": 0,
+  "episodes_with_prefill": 0
+ },
+ "BASE2": {
+  "episodes": 26,
+  "success": 25,
+  "errors": 0,
+  "steps": 166,
+  "model_calls": 166,
+  "prefills": 0,
+  "rejected": 0,
+  "rollback_fail": 0,
+  "wall_s_mean": 29.49307692307692,
+  "model_s_total": 312.9,
+  "prefill_s_total": 0,
+  "episodes_with_prefill": 0,
+  "paired_vs_base": {
+   "pairs": 26,
+   "arm_only": 4,
+   "base_only": 0,
+   "calls_saved": -2,
+   "steps_diff": 2
+  }
+ },
+ "BASE3": {
+  "episodes": 20,
+  "success": 19,
+  "errors": 0,
+  "steps": 117,
+  "model_calls": 117,
+  "prefills": 0,
+  "rejected": 0,
+  "rollback_fail": 0,
+  "wall_s_mean": 29.122999999999998,
+  "model_s_total": 220.5,
+  "prefill_s_total": 0,
+  "episodes_with_prefill": 0,
+  "paired_vs_base": {
+   "pairs": 20,
+   "arm_only": 2,
+   "base_only": 1,
+   "calls_saved": -2,
+   "steps_diff": 2
+  }
+ },
+ "PF": {
+  "episodes": 26,
+  "success": 22,
+  "errors": 0,
+  "steps": 171,
+  "model_calls": 151,
+  "prefills": 20,
+  "rejected": 0,
+  "rollback_fail": 0,
+  "wall_s_mean": 29.185384615384617,
+  "model_s_total": 267.2,
+  "prefill_s_total": 0.8,
+  "episodes_with_prefill": 13,
+  "paired_vs_base": {
+   "pairs": 26,
+   "arm_only": 2,
+   "base_only": 1,
+   "calls_saved": 13,
+   "steps_diff": 7
+  }
+ },
+ "PFV": {
+  "episodes": 26,
+  "success": 21,
+  "errors": 0,
+  "steps": 168,
+  "model_calls": 150,
+  "prefills": 18,
+  "rejected": 1,
+  "rollback_fail": 0,
+  "wall_s_mean": 28.681153846153844,
+  "model_s_total": 268.3,
+  "prefill_s_total": 17.4,
+  "episodes_with_prefill": 12,
+  "paired_vs_base": {
+   "pairs": 26,
+   "arm_only": 1,
+   "base_only": 1,
+   "calls_saved": 14,
+   "steps_diff": 4
+  }
+ },
+ "PFVS": {
+  "episodes": 26,
+  "success": 20,
+  "errors": 0,
+  "steps": 170,
+  "model_calls": 152,
+  "prefills": 18,
+  "rejected": 0,
+  "rollback_fail": 0,
+  "wall_s_mean": 29.125,
+  "model_s_total": 274.2,
+  "prefill_s_total": 18.0,
+  "episodes_with_prefill": 12,
+  "paired_vs_base": {
+   "pairs": 26,
+   "arm_only": 1,
+   "base_only": 2,
+   "calls_saved": 12,
+   "steps_diff": 6
+  }
+ },
+ "PFVL": {
+  "episodes": 26,
+  "success": 22,
+  "errors": 0,
+  "steps": 162,
+  "model_calls": 159,
+  "prefills": 3,
+  "rejected": 0,
+  "rollback_fail": 0,
+  "wall_s_mean": 28.60076923076923,
+  "model_s_total": 294.9,
+  "prefill_s_total": 2.2,
+  "episodes_with_prefill": 3,
+  "paired_vs_base": {
+   "pairs": 26,
+   "arm_only": 2,
+   "base_only": 1,
+   "calls_saved": 5,
+   "steps_diff": -2
+  }
+ },
+ "PFVA": {
+  "episodes": 26,
+  "success": 24,
+  "errors": 0,
+  "steps": 166,
+  "model_calls": 156,
+  "prefills": 10,
+  "rejected": 1,
+  "rollback_fail": 0,
+  "wall_s_mean": 29.447307692307692,
+  "model_s_total": 291.4,
+  "prefill_s_total": 9.4,
+  "episodes_with_prefill": 7,
+  "paired_vs_base": {
+   "pairs": 26,
+   "arm_only": 4,
+   "base_only": 1,
+   "calls_saved": 8,
+   "steps_diff": 2
+  }
+ },
+ "PFVA2": {
+  "episodes": 19,
+  "success": 17,
+  "errors": 0,
+  "steps": 112,
+  "model_calls": 100,
+  "prefills": 12,
+  "rejected": 1,
+  "rollback_fail": 0,
+  "wall_s_mean": 30.05842105263158,
+  "model_s_total": 190.1,
+  "prefill_s_total": 13.0,
+  "episodes_with_prefill": 9,
+  "paired_vs_base": {
+   "pairs": 19,
+   "arm_only": 1,
+   "base_only": 1,
+   "calls_saved": 11,
+   "steps_diff": 1
+  }
+ },
+ "per_task": {
+  "ContactsAddContact": {
+   "BASE": "3/3 calls=27 pf=0",
+   "BASE2": "3/3 calls=27 pf=0",
+   "BASE3": "3/3 calls=27 pf=0",
+   "PF": "3/3 calls=24 pf=3",
+   "PFV": "3/3 calls=24 pf=3",
+   "PFVA": "3/3 calls=24 pf=3",
+   "PFVA2": "3/3 calls=24 pf=3",
+   "PFVL": "3/3 calls=27 pf=0",
+   "PFVS": "3/3 calls=24 pf=3"
+  },
+  "ExpenseAddSingle": {
+   "BASE": "2/3 calls=26 pf=0",
+   "BASE2": "3/3 calls=27 pf=0",
+   "BASE3": "2/3 calls=26 pf=0",
+   "PF": "2/3 calls=30 pf=6",
+   "PFV": "2/3 calls=30 pf=6",
+   "PFVA": "2/3 calls=26 pf=0",
+   "PFVA2": "2/3 calls=26 pf=0",
+   "PFVL": "3/3 calls=27 pf=0",
+   "PFVS": "1/3 calls=30 pf=6"
+  },
+  "ExpenseDeleteSingle": {
+   "BASE": "3/3 calls=15 pf=0",
+   "BASE2": "3/3 calls=15 pf=0",
+   "BASE3": "3/3 calls=15 pf=0",
+   "PF": "3/3 calls=15 pf=0",
+   "PFV": "3/3 calls=15 pf=0",
+   "PFVA": "3/3 calls=15 pf=0",
+   "PFVA2": "3/3 calls=15 pf=0",
+   "PFVL": "3/3 calls=15 pf=0",
+   "PFVS": "3/3 calls=15 pf=0"
+  },
+  "MarkorCreateNote": {
+   "BASE": "0/3 calls=28 pf=0",
+   "BASE2": "2/3 calls=25 pf=0",
+   "PF": "1/3 calls=23 pf=0",
+   "PFV": "0/3 calls=22 pf=0",
+   "PFVA": "3/3 calls=27 pf=0",
+   "PFVL": "1/3 calls=26 pf=0",
+   "PFVS": "0/3 calls=24 pf=0"
+  },
+  "NotesTodoItemCount": {
+   "BASE": "2/2 calls=6 pf=0",
+   "BASE2": "2/2 calls=6 pf=0",
+   "BASE3": "2/2 calls=7 pf=0",
+   "PF": "2/2 calls=6 pf=2",
+   "PFV": "2/2 calls=6 pf=0",
+   "PFVA": "2/2 calls=6 pf=0",
+   "PFVA2": "2/2 calls=7 pf=0",
+   "PFVL": "2/2 calls=6 pf=0",
+   "PFVS": "2/2 calls=6 pf=0"
+  },
+  "RecipeDeleteSingleRecipe": {
+   "BASE": "3/3 calls=18 pf=0",
+   "BASE2": "3/3 calls=18 pf=0",
+   "BASE3": "3/3 calls=18 pf=0",
+   "PF": "3/3 calls=12 pf=6",
+   "PFV": "3/3 calls=12 pf=6",
+   "PFVA": "3/3 calls=12 pf=6",
+   "PFVA2": "3/3 calls=12 pf=6",
+   "PFVL": "3/3 calls=15 pf=3",
+   "PFVS": "3/3 calls=12 pf=6"
+  },
+  "SimpleCalendarDeleteOneEvent": {
+   "BASE": "3/3 calls=21 pf=0",
+   "BASE2": "3/3 calls=21 pf=0",
+   "PF": "3/3 calls=21 pf=0",
+   "PFV": "3/3 calls=21 pf=0",
+   "PFVA": "3/3 calls=21 pf=0",
+   "PFVL": "3/3 calls=21 pf=0",
+   "PFVS": "3/3 calls=21 pf=0"
+  },
+  "SimpleCalendarEventsOnDate": {
+   "BASE": "2/3 calls=11 pf=0",
+   "BASE2": "3/3 calls=12 pf=0",
+   "BASE3": "3/3 calls=12 pf=0",
+   "PF": "2/3 calls=11 pf=0",
+   "PFV": "2/3 calls=11 pf=0",
+   "PFVA": "2/3 calls=11 pf=0",
+   "PFVA2": "1/2 calls=7 pf=0",
+   "PFVL": "1/3 calls=10 pf=0",
+   "PFVS": "2/3 calls=11 pf=0"
+  },
+  "SystemBluetoothTurnOn": {
+   "BASE": "3/3 calls=12 pf=0",
+   "BASE2": "3/3 calls=15 pf=0",
+   "BASE3": "3/3 calls=12 pf=0",
+   "PF": "3/3 calls=9 pf=3",
+   "PFV": "3/3 calls=9 pf=3",
+   "PFVA": "3/3 calls=14 pf=1",
+   "PFVA2": "3/3 calls=9 pf=3",
+   "PFVL": "3/3 calls=12 pf=0",
+   "PFVS": "3/3 calls=9 pf=3"
+  }
+ }
+}

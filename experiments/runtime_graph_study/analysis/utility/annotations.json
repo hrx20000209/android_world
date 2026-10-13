@@ -1,0 +1,72 @@
+{
+ "reviewer": "Claude (visual inspection of the stored screenshot, goal and history; not a human annotator)",
+ "unchanged_states": [
+  0,
+  1,
+  4,
+  5,
+  8,
+  9,
+  11,
+  12,
+  13,
+  14,
+  15,
+  16,
+  17,
+  19,
+  20,
+  21
+ ],
+ "changed": {
+  "2": {
+   "A": "valid (type note text)",
+   "B": "valid (scroll category row to reach Health Care)",
+   "C": "valid (same as B)",
+   "B_vs_A": "neutral",
+   "C_vs_A": "neutral"
+  },
+  "3": {
+   "A": "redundant tap on already-focused Name field",
+   "B": "types 'Gym Membership' directly (saves one step)",
+   "C": "same as A",
+   "B_vs_A": "beneficial (minor)",
+   "C_vs_A": "none"
+  },
+  "6": {
+   "A": "wrong: 'Delete lines' (repeats a no-op loop)",
+   "B": "wrong: same, although evidence says 'no visible change'",
+   "C": "'More options': escapes loop, not clearly correct",
+   "B_vs_A": "none",
+   "C_vs_A": "uncertain"
+  },
+  "7": {
+   "A": "wrong: 'Delete lines'",
+   "B": "wrong: same",
+   "C": "'More options', not clearly correct",
+   "B_vs_A": "none",
+   "C_vs_A": "uncertain"
+  },
+  "10": {
+   "A": "types query (no coordinate)",
+   "B": "types query into search field (same intent)",
+   "C": "same as B",
+   "B_vs_A": "neutral",
+   "C_vs_A": "neutral"
+  },
+  "18": {
+   "A": "scroll list (reasonable)",
+   "B": "open aggregated stats (uncertain)",
+   "C": "STATUS terminate without answer: wrong",
+   "B_vs_A": "uncertain",
+   "C_vs_A": "harmful"
+  },
+  "22": {
+   "A": "open drawer (exploratory)",
+   "B": "open search (exploratory)",
+   "C": "same as B",
+   "B_vs_A": "neutral",
+   "C_vs_A": "neutral"
+  }
+ }
+}

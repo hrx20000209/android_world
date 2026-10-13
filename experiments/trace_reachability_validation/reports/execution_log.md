@@ -1,0 +1,467 @@
+# Execution log (trace/reachability study)
+- 10-13 08:43:54 ExpenseDeleteSingle s1011 TG rc=0 succ=1.0 steps=5 probes=2 err=None 39s
+- 10-13 08:44:26 ExpenseDeleteSingle s1011 RR rc=0 succ=1.0 steps=5 probes=2 err=None 32s
+- 10-13 08:45:01 ExpenseDeleteSingle s1012 RR rc=0 succ=1.0 steps=5 probes=5 err=None 35s
+- 10-13 08:45:36 ExpenseDeleteSingle s1012 TG rc=0 succ=1.0 steps=5 probes=5 err=None 35s
+- 10-13 08:46:16 ExpenseDeleteSingle s1013 TG rc=0 succ=1.0 steps=5 probes=4 err=None 40s
+- 10-13 08:46:55 ExpenseDeleteSingle s1013 RR rc=0 succ=1.0 steps=5 probes=4 err=None 38s
+- 10-13 08:47:36 RecipeDeleteSingleRecipe s1011 TG rc=0 succ=1.0 steps=6 probes=8 err=None 41s
+- 10-13 08:48:17 RecipeDeleteSingleRecipe s1011 RR rc=0 succ=1.0 steps=6 probes=8 err=None 41s
+- 10-13 08:48:57 RecipeDeleteSingleRecipe s1012 RR rc=0 succ=1.0 steps=6 probes=7 err=None 40s
+- 10-13 08:49:36 RecipeDeleteSingleRecipe s1012 TG rc=0 succ=1.0 steps=6 probes=7 err=None 39s
+- 10-13 08:50:18 RecipeDeleteSingleRecipe s1014 TG rc=0 succ=1.0 steps=6 probes=8 err=None 42s
+- 10-13 08:50:58 RecipeDeleteSingleRecipe s1014 RR rc=0 succ=1.0 steps=6 probes=8 err=None 40s
+- 10-13 08:51:24 SimpleCalendarEventsOnDate s1011 TG rc=0 succ=0.0 steps=3 probes=2 err=None 26s
+- 10-13 08:51:44 SimpleCalendarEventsOnDate s1011 RR rc=0 succ=0.0 steps=3 probes=1 err=None 21s
+- 10-13 08:52:19 SimpleCalendarEventsOnDate s1012 RR rc=0 succ=0.0 steps=6 probes=1 err=None 34s
+- 10-13 08:52:54 SimpleCalendarEventsOnDate s1012 TG rc=0 succ=1.0 steps=6 probes=2 err=None 35s
+- 10-13 08:53:30 SimpleCalendarEventsOnDate s1016 TG rc=0 succ=1.0 steps=5 probes=4 err=None 36s
+- 10-13 08:54:03 SimpleCalendarEventsOnDate s1016 RR rc=0 succ=1.0 steps=4 probes=4 err=None 33s
+- 10-13 08:54:40 SystemBluetoothTurnOn s1011 TG rc=0 succ=1.0 steps=6 probes=1 err=None 37s
+- 10-13 08:55:16 SystemBluetoothTurnOn s1011 RR rc=0 succ=1.0 steps=6 probes=2 err=None 36s
+- 10-13 08:55:53 SystemBluetoothTurnOn s1012 RR rc=0 succ=1.0 steps=6 probes=3 err=None 37s
+- 10-13 08:56:28 SystemBluetoothTurnOn s1012 TG rc=0 succ=1.0 steps=6 probes=3 err=None 35s
+- 10-13 08:57:02 SystemBluetoothTurnOn s1013 TG rc=0 succ=1.0 steps=6 probes=3 err=None 34s
+- 10-13 08:57:43 SystemBluetoothTurnOn s1013 RR rc=0 succ=1.0 steps=7 probes=3 err=None 40s
+- 10-13 08:58:13 NotesTodoItemCount s1015 TG rc=0 succ=1.0 steps=3 probes=1 err=None 30s
+- 10-13 08:58:44 NotesTodoItemCount s1015 RR rc=0 succ=1.0 steps=3 probes=1 err=None 30s
+- 10-13 08:59:29 NotesTodoItemCount s1022 RR rc=0 succ=1.0 steps=7 probes=1 err=None 45s
+- 10-13 09:00:13 NotesTodoItemCount s1022 TG rc=0 succ=1.0 steps=7 probes=2 err=None 44s
+- 10-13 09:00:47 NotesTodoItemCount s1025 TG rc=0 succ=1.0 steps=4 probes=1 err=None 35s
+- 10-13 09:01:21 NotesTodoItemCount s1025 RR rc=0 succ=1.0 steps=4 probes=1 err=None 33s
+- 10-13 09:02:35 ContactsAddContact s1011 TG rc=0 succ=1.0 steps=12 probes=8 err=None 74s
+- 10-13 09:03:33 ContactsAddContact s1011 RR rc=0 succ=1.0 steps=10 probes=2 err=None 59s
+- 10-13 09:04:29 ContactsAddContact s1012 RR rc=0 succ=0.0 steps=11 probes=1 err=None 56s
+- 10-13 09:05:21 ContactsAddContact s1012 TG rc=0 succ=0.0 steps=9 probes=2 err=None 51s
+- 10-13 09:06:21 ContactsAddContact s1013 TG rc=0 succ=0.0 steps=12 probes=2 err=None 60s
+- 10-13 09:07:16 ContactsAddContact s1013 RR rc=0 succ=0.0 steps=12 probes=2 err=None 55s
+- 10-13 09:07:16 phase2 driver finished
+- 10-13 09:08:24 ExpenseDeleteSingle s1011 TG1 rc=0 succ=1.0 steps=5 probes=7 err=None 38s
+- 10-13 09:08:59 ExpenseDeleteSingle s1012 TG1 rc=0 succ=1.0 steps=5 probes=7 err=None 35s
+- 10-13 09:09:35 ExpenseDeleteSingle s1013 TG1 rc=0 succ=1.0 steps=5 probes=7 err=None 35s
+- 10-13 09:10:13 RecipeDeleteSingleRecipe s1011 TG1 rc=0 succ=1.0 steps=6 probes=9 err=None 38s
+- 10-13 09:10:51 RecipeDeleteSingleRecipe s1012 TG1 rc=0 succ=1.0 steps=6 probes=9 err=None 39s
+- 10-13 09:11:30 RecipeDeleteSingleRecipe s1014 TG1 rc=0 succ=1.0 steps=6 probes=9 err=None 39s
+- 10-13 09:11:54 SimpleCalendarEventsOnDate s1011 TG1 rc=0 succ=0.0 steps=3 probes=4 err=None 24s
+- 10-13 09:12:19 SimpleCalendarEventsOnDate s1012 TG1 rc=0 succ=0.0 steps=3 probes=4 err=None 25s
+- 10-13 09:12:52 SimpleCalendarEventsOnDate s1016 TG1 rc=0 succ=1.0 steps=4 probes=10 err=None 33s
+- 10-13 09:13:20 SystemBluetoothTurnOn s1011 TG1 rc=0 succ=1.0 steps=4 probes=5 err=None 28s
+- 10-13 09:13:48 SystemBluetoothTurnOn s1012 TG1 rc=0 succ=1.0 steps=4 probes=5 err=None 28s
+- 10-13 09:14:16 SystemBluetoothTurnOn s1013 TG1 rc=0 succ=1.0 steps=4 probes=5 err=None 28s
+- 10-13 09:14:44 NotesTodoItemCount s1015 TG1 rc=0 succ=1.0 steps=2 probes=2 err=None 28s
+- 10-13 09:15:30 NotesTodoItemCount s1022 TG1 rc=0 succ=1.0 steps=5 probes=3 err=None 46s
+- 10-13 09:16:09 NotesTodoItemCount s1025 TG1 rc=0 succ=1.0 steps=4 probes=2 err=None 39s
+- 10-13 09:17:12 ContactsAddContact s1011 TG1 rc=0 succ=1.0 steps=9 probes=13 err=None 63s
+- 10-13 09:18:17 ContactsAddContact s1012 TG1 rc=0 succ=1.0 steps=9 probes=14 err=None 65s
+- 10-13 09:19:22 ContactsAddContact s1013 TG1 rc=0 succ=1.0 steps=9 probes=14 err=None 65s
+- 10-13 09:19:22 phase2 driver finished
+- 10-13 09:20:33 ExpenseDeleteSingle s1011 RR1 rc=0 succ=1.0 steps=5 probes=7 err=None 40s
+- 10-13 09:21:08 ExpenseDeleteSingle s1012 RR1 rc=0 succ=1.0 steps=5 probes=7 err=None 35s
+- 10-13 09:21:46 ExpenseDeleteSingle s1013 RR1 rc=0 succ=1.0 steps=5 probes=7 err=None 38s
+- 10-13 09:22:24 RecipeDeleteSingleRecipe s1011 RR1 rc=0 succ=1.0 steps=6 probes=9 err=None 39s
+- 10-13 09:23:04 RecipeDeleteSingleRecipe s1012 RR1 rc=0 succ=1.0 steps=6 probes=9 err=None 39s
+- 10-13 09:23:43 RecipeDeleteSingleRecipe s1014 RR1 rc=0 succ=1.0 steps=6 probes=9 err=None 40s
+- 10-13 09:24:08 SimpleCalendarEventsOnDate s1011 RR1 rc=0 succ=0.0 steps=3 probes=4 err=None 24s
+- 10-13 09:24:34 SimpleCalendarEventsOnDate s1012 RR1 rc=0 succ=0.0 steps=3 probes=4 err=None 26s
+- 10-13 09:25:07 SimpleCalendarEventsOnDate s1016 RR1 rc=0 succ=1.0 steps=4 probes=9 err=None 33s
+- 10-13 09:25:36 SystemBluetoothTurnOn s1011 RR1 rc=0 succ=1.0 steps=4 probes=5 err=None 29s
+- 10-13 09:26:05 SystemBluetoothTurnOn s1012 RR1 rc=0 succ=1.0 steps=4 probes=5 err=None 29s
+- 10-13 09:26:34 SystemBluetoothTurnOn s1013 RR1 rc=0 succ=1.0 steps=4 probes=5 err=None 29s
+- 10-13 09:27:02 NotesTodoItemCount s1015 RR1 rc=0 succ=1.0 steps=2 probes=2 err=None 28s
+- 10-13 09:27:39 NotesTodoItemCount s1022 RR1 rc=0 succ=1.0 steps=4 probes=3 err=None 37s
+- 10-13 09:28:15 NotesTodoItemCount s1025 RR1 rc=0 succ=1.0 steps=4 probes=2 err=None 37s
+- 10-13 09:29:18 ContactsAddContact s1011 RR1 rc=0 succ=1.0 steps=9 probes=14 err=None 63s
+- 10-13 09:30:23 ContactsAddContact s1012 RR1 rc=0 succ=1.0 steps=9 probes=14 err=None 65s
+- 10-13 09:31:30 ContactsAddContact s1013 RR1 rc=0 succ=1.0 steps=9 probes=14 err=None 67s
+- 10-13 09:31:30 phase2 driver finished
+- 10-13 09:54:18 ExpenseDeleteSingle s1031 BASE rc=0 succ=1.0 steps=5 probes=None err=None 27s
+- 10-13 09:54:43 ExpenseDeleteSingle s1031 PF rc=0 succ=1.0 steps=5 probes=None err=None 25s
+- 10-13 09:55:09 ExpenseDeleteSingle s1031 PFV rc=0 succ=1.0 steps=5 probes=None err=None 26s
+- 10-13 09:55:36 ExpenseDeleteSingle s1031 PFVS rc=0 succ=1.0 steps=5 probes=None err=None 26s
+- 10-13 09:56:02 ExpenseDeleteSingle s1031 PFVL rc=0 succ=1.0 steps=5 probes=None err=None 26s
+- 10-13 09:56:28 ExpenseDeleteSingle s1033 PFVL rc=0 succ=1.0 steps=5 probes=None err=None 26s
+- 10-13 09:56:53 ExpenseDeleteSingle s1033 PFVS rc=0 succ=1.0 steps=5 probes=None err=None 26s
+- 10-13 09:57:20 ExpenseDeleteSingle s1033 PFV rc=0 succ=1.0 steps=5 probes=None err=None 26s
+- 10-13 09:57:46 ExpenseDeleteSingle s1033 PF rc=0 succ=1.0 steps=5 probes=None err=None 26s
+- 10-13 09:58:13 ExpenseDeleteSingle s1033 BASE rc=0 succ=1.0 steps=5 probes=None err=None 27s
+- 10-13 09:58:39 ExpenseDeleteSingle s1034 BASE rc=0 succ=1.0 steps=5 probes=None err=None 26s
+- 10-13 09:59:06 ExpenseDeleteSingle s1034 PF rc=0 succ=1.0 steps=5 probes=None err=None 27s
+- 10-13 09:59:32 ExpenseDeleteSingle s1034 PFV rc=0 succ=1.0 steps=5 probes=None err=None 27s
+- 10-13 09:59:59 ExpenseDeleteSingle s1034 PFVS rc=0 succ=1.0 steps=5 probes=None err=None 26s
+- 10-13 10:00:24 ExpenseDeleteSingle s1034 PFVL rc=0 succ=1.0 steps=5 probes=None err=None 25s
+- 10-13 10:01:07 ExpenseAddSingle s1031 BASE rc=0 succ=0.0 steps=9 probes=None err=None 43s
+- 10-13 10:01:55 ExpenseAddSingle s1031 PF rc=0 succ=1.0 steps=12 probes=None err=None 48s
+- 10-13 10:02:44 ExpenseAddSingle s1031 PFV rc=0 succ=1.0 steps=12 probes=None err=None 49s
+- 10-13 10:03:34 ExpenseAddSingle s1031 PFVS rc=0 succ=1.0 steps=12 probes=None err=None 50s
+- 10-13 10:04:20 ExpenseAddSingle s1031 PFVL rc=0 succ=1.0 steps=10 probes=None err=None 46s
+- 10-13 10:05:04 ExpenseAddSingle s1032 PFVL rc=0 succ=1.0 steps=9 probes=None err=None 45s
+- 10-13 10:05:58 ExpenseAddSingle s1032 PFVS rc=0 succ=0.0 steps=12 probes=None err=None 54s
+- 10-13 10:06:51 ExpenseAddSingle s1032 PFV rc=0 succ=1.0 steps=12 probes=None err=None 53s
+- 10-13 10:07:41 ExpenseAddSingle s1032 PF rc=0 succ=1.0 steps=12 probes=None err=None 50s
+- 10-13 10:08:26 ExpenseAddSingle s1032 BASE rc=0 succ=1.0 steps=9 probes=None err=None 45s
+- 10-13 10:09:08 ExpenseAddSingle s1033 BASE rc=0 succ=1.0 steps=8 probes=None err=None 42s
+- 10-13 10:10:01 ExpenseAddSingle s1033 PF rc=0 succ=0.0 steps=12 probes=None err=None 53s
+- 10-13 10:10:55 ExpenseAddSingle s1033 PFV rc=0 succ=0.0 steps=12 probes=None err=None 54s
+- 10-13 10:11:47 ExpenseAddSingle s1033 PFVS rc=0 succ=0.0 steps=12 probes=None err=None 52s
+- 10-13 10:12:27 ExpenseAddSingle s1033 PFVL rc=0 succ=1.0 steps=8 probes=None err=None 40s
+- 10-13 10:12:58 RecipeDeleteSingleRecipe s1031 BASE rc=0 succ=1.0 steps=6 probes=None err=None 30s
+- 10-13 10:13:23 RecipeDeleteSingleRecipe s1031 PF rc=0 succ=1.0 steps=6 probes=None err=None 25s
+- 10-13 10:13:49 RecipeDeleteSingleRecipe s1031 PFV rc=0 succ=1.0 steps=6 probes=None err=None 27s
+- 10-13 10:14:17 RecipeDeleteSingleRecipe s1031 PFVS rc=0 succ=1.0 steps=6 probes=None err=None 27s
+- 10-13 10:14:44 RecipeDeleteSingleRecipe s1031 PFVL rc=0 succ=1.0 steps=6 probes=None err=None 27s
+- 10-13 10:15:11 RecipeDeleteSingleRecipe s1032 PFVL rc=0 succ=1.0 steps=6 probes=None err=None 27s
+- 10-13 10:15:37 RecipeDeleteSingleRecipe s1032 PFVS rc=0 succ=1.0 steps=6 probes=None err=None 26s
+- 10-13 10:16:05 RecipeDeleteSingleRecipe s1032 PFV rc=0 succ=1.0 steps=6 probes=None err=None 27s
+- 10-13 10:16:31 RecipeDeleteSingleRecipe s1032 PF rc=0 succ=1.0 steps=6 probes=None err=None 26s
+- 10-13 10:16:59 RecipeDeleteSingleRecipe s1032 BASE rc=0 succ=1.0 steps=6 probes=None err=None 29s
+- 10-13 10:17:31 RecipeDeleteSingleRecipe s1033 BASE rc=0 succ=1.0 steps=6 probes=None err=None 31s
+- 10-13 10:17:56 RecipeDeleteSingleRecipe s1033 PF rc=0 succ=1.0 steps=6 probes=None err=None 25s
+- 10-13 10:18:22 RecipeDeleteSingleRecipe s1033 PFV rc=0 succ=1.0 steps=6 probes=None err=None 26s
+- 10-13 10:18:48 RecipeDeleteSingleRecipe s1033 PFVS rc=0 succ=1.0 steps=6 probes=None err=None 26s
+- 10-13 10:19:17 RecipeDeleteSingleRecipe s1033 PFVL rc=0 succ=1.0 steps=6 probes=None err=None 29s
+- 10-13 10:20:03 ContactsAddContact s1031 BASE rc=0 succ=1.0 steps=9 probes=None err=None 46s
+- 10-13 10:20:47 ContactsAddContact s1031 PF rc=0 succ=1.0 steps=9 probes=None err=None 44s
+- 10-13 10:21:31 ContactsAddContact s1031 PFV rc=0 succ=1.0 steps=9 probes=None err=None 44s
+- 10-13 10:22:15 ContactsAddContact s1031 PFVS rc=0 succ=1.0 steps=9 probes=None err=None 45s
+- 10-13 10:23:00 ContactsAddContact s1031 PFVL rc=0 succ=1.0 steps=9 probes=None err=None 45s
+- 10-13 10:23:45 ContactsAddContact s1032 PFVL rc=0 succ=1.0 steps=9 probes=None err=None 44s
+- 10-13 10:24:29 ContactsAddContact s1032 PFVS rc=0 succ=1.0 steps=9 probes=None err=None 45s
+- 10-13 10:25:13 ContactsAddContact s1032 PFV rc=0 succ=1.0 steps=9 probes=None err=None 44s
+- 10-13 10:25:54 ContactsAddContact s1032 PF rc=0 succ=1.0 steps=9 probes=None err=None 41s
+- 10-13 10:26:38 ContactsAddContact s1032 BASE rc=0 succ=1.0 steps=9 probes=None err=None 44s
+- 10-13 10:27:24 ContactsAddContact s1033 BASE rc=0 succ=1.0 steps=9 probes=None err=None 46s
+- 10-13 10:28:05 ContactsAddContact s1033 PF rc=0 succ=1.0 steps=9 probes=None err=None 41s
+- 10-13 10:28:47 ContactsAddContact s1033 PFV rc=0 succ=1.0 steps=9 probes=None err=None 42s
+- 10-13 10:29:28 ContactsAddContact s1033 PFVS rc=0 succ=1.0 steps=9 probes=None err=None 41s
+- 10-13 10:30:13 ContactsAddContact s1033 PFVL rc=0 succ=1.0 steps=9 probes=None err=None 45s
+- 10-13 10:30:33 SystemBluetoothTurnOn s1031 BASE rc=0 succ=1.0 steps=4 probes=None err=None 20s
+- 10-13 10:30:49 SystemBluetoothTurnOn s1031 PF rc=0 succ=1.0 steps=4 probes=None err=None 17s
+- 10-13 10:31:07 SystemBluetoothTurnOn s1031 PFV rc=0 succ=1.0 steps=4 probes=None err=None 18s
+- 10-13 10:31:26 SystemBluetoothTurnOn s1031 PFVS rc=0 succ=1.0 steps=4 probes=None err=None 19s
+- 10-13 10:31:46 SystemBluetoothTurnOn s1031 PFVL rc=0 succ=1.0 steps=4 probes=None err=None 20s
+- 10-13 10:32:06 SystemBluetoothTurnOn s1032 PFVL rc=0 succ=1.0 steps=4 probes=None err=None 20s
+- 10-13 10:32:25 SystemBluetoothTurnOn s1032 PFVS rc=0 succ=1.0 steps=4 probes=None err=None 20s
+- 10-13 10:32:44 SystemBluetoothTurnOn s1032 PFV rc=0 succ=1.0 steps=4 probes=None err=None 18s
+- 10-13 10:33:01 SystemBluetoothTurnOn s1032 PF rc=0 succ=1.0 steps=4 probes=None err=None 17s
+- 10-13 10:33:20 SystemBluetoothTurnOn s1032 BASE rc=0 succ=1.0 steps=4 probes=None err=None 19s
+- 10-13 10:33:38 SystemBluetoothTurnOn s1033 BASE rc=0 succ=1.0 steps=4 probes=None err=None 18s
+- 10-13 10:33:56 SystemBluetoothTurnOn s1033 PF rc=0 succ=1.0 steps=4 probes=None err=None 17s
+- 10-13 10:34:14 SystemBluetoothTurnOn s1033 PFV rc=0 succ=1.0 steps=4 probes=None err=None 19s
+- 10-13 10:34:33 SystemBluetoothTurnOn s1033 PFVS rc=0 succ=1.0 steps=4 probes=None err=None 18s
+- 10-13 10:34:52 SystemBluetoothTurnOn s1033 PFVL rc=0 succ=1.0 steps=4 probes=None err=None 19s
+- 10-13 10:35:20 NotesTodoItemCount s1031 BASE rc=0 succ=1.0 steps=4 probes=None err=None 28s
+- 10-13 10:35:50 NotesTodoItemCount s1031 PF rc=0 succ=1.0 steps=6 probes=None err=None 30s
+- 10-13 10:36:17 NotesTodoItemCount s1031 PFV rc=0 succ=1.0 steps=4 probes=None err=None 28s
+- 10-13 10:36:44 NotesTodoItemCount s1031 PFVS rc=0 succ=1.0 steps=4 probes=None err=None 26s
+- 10-13 10:37:11 NotesTodoItemCount s1031 PFVL rc=0 succ=1.0 steps=4 probes=None err=None 27s
+- 10-13 10:37:31 NotesTodoItemCount s1040 PFVL rc=0 succ=1.0 steps=2 probes=None err=None 19s
+- 10-13 10:37:50 NotesTodoItemCount s1040 PFVS rc=0 succ=1.0 steps=2 probes=None err=None 19s
+- 10-13 10:38:09 NotesTodoItemCount s1040 PFV rc=0 succ=1.0 steps=2 probes=None err=None 20s
+- 10-13 10:38:29 NotesTodoItemCount s1040 PF rc=0 succ=1.0 steps=2 probes=None err=None 20s
+- 10-13 10:38:48 NotesTodoItemCount s1040 BASE rc=0 succ=1.0 steps=2 probes=None err=None 19s
+- 10-13 10:39:09 SimpleCalendarEventsOnDate s1032 BASE rc=0 succ=1.0 steps=4 probes=None err=None 20s
+- 10-13 10:39:28 SimpleCalendarEventsOnDate s1032 PF rc=0 succ=1.0 steps=4 probes=None err=None 20s
+- 10-13 10:39:49 SimpleCalendarEventsOnDate s1032 PFV rc=0 succ=1.0 steps=4 probes=None err=None 21s
+- 10-13 10:40:10 SimpleCalendarEventsOnDate s1032 PFVS rc=0 succ=1.0 steps=4 probes=None err=None 21s
+- 10-13 10:40:28 SimpleCalendarEventsOnDate s1032 PFVL rc=0 succ=0.0 steps=3 probes=None err=None 18s
+- 10-13 10:40:46 SimpleCalendarEventsOnDate s1037 PFVL rc=0 succ=0.0 steps=3 probes=None err=None 18s
+- 10-13 10:41:04 SimpleCalendarEventsOnDate s1037 PFVS rc=0 succ=0.0 steps=3 probes=None err=None 18s
+- 10-13 10:41:22 SimpleCalendarEventsOnDate s1037 PFV rc=0 succ=0.0 steps=3 probes=None err=None 18s
+- 10-13 10:41:39 SimpleCalendarEventsOnDate s1037 PF rc=0 succ=0.0 steps=3 probes=None err=None 17s
+- 10-13 10:41:57 SimpleCalendarEventsOnDate s1037 BASE rc=0 succ=0.0 steps=3 probes=None err=None 17s
+- 10-13 10:42:18 SimpleCalendarEventsOnDate s1039 BASE rc=0 succ=1.0 steps=4 probes=None err=None 21s
+- 10-13 10:42:39 SimpleCalendarEventsOnDate s1039 PF rc=0 succ=1.0 steps=4 probes=None err=None 21s
+- 10-13 10:43:00 SimpleCalendarEventsOnDate s1039 PFV rc=0 succ=1.0 steps=4 probes=None err=None 21s
+- 10-13 10:43:21 SimpleCalendarEventsOnDate s1039 PFVS rc=0 succ=1.0 steps=4 probes=None err=None 21s
+- 10-13 10:43:42 SimpleCalendarEventsOnDate s1039 PFVL rc=0 succ=1.0 steps=4 probes=None err=None 21s
+- 10-13 10:44:16 SimpleCalendarDeleteOneEvent s1031 BASE rc=0 succ=1.0 steps=7 probes=None err=None 34s
+- 10-13 10:45:17 SimpleCalendarDeleteOneEvent s1031 PF rc=0 succ=1.0 steps=7 probes=None err=None 61s
+- 10-13 10:45:50 SimpleCalendarDeleteOneEvent s1031 PFV rc=0 succ=1.0 steps=7 probes=None err=None 34s
+- 10-13 10:46:24 SimpleCalendarDeleteOneEvent s1031 PFVS rc=0 succ=1.0 steps=7 probes=None err=None 34s
+- 10-13 10:46:57 SimpleCalendarDeleteOneEvent s1031 PFVL rc=0 succ=1.0 steps=7 probes=None err=None 32s
+- 10-13 10:47:31 SimpleCalendarDeleteOneEvent s1032 PFVL rc=0 succ=1.0 steps=7 probes=None err=None 34s
+- 10-13 10:48:04 SimpleCalendarDeleteOneEvent s1032 PFVS rc=0 succ=1.0 steps=7 probes=None err=None 33s
+- 10-13 10:48:39 SimpleCalendarDeleteOneEvent s1032 PFV rc=0 succ=1.0 steps=7 probes=None err=None 34s
+- 10-13 10:49:13 SimpleCalendarDeleteOneEvent s1032 PF rc=0 succ=1.0 steps=7 probes=None err=None 34s
+- 10-13 10:49:47 SimpleCalendarDeleteOneEvent s1032 BASE rc=0 succ=1.0 steps=7 probes=None err=None 34s
+- 10-13 10:50:19 SimpleCalendarDeleteOneEvent s1033 BASE rc=0 succ=1.0 steps=7 probes=None err=None 33s
+- 10-13 10:50:51 SimpleCalendarDeleteOneEvent s1033 PF rc=0 succ=1.0 steps=7 probes=None err=None 32s
+- 10-13 10:51:24 SimpleCalendarDeleteOneEvent s1033 PFV rc=0 succ=1.0 steps=7 probes=None err=None 33s
+- 10-13 10:51:57 SimpleCalendarDeleteOneEvent s1033 PFVS rc=0 succ=1.0 steps=7 probes=None err=None 33s
+- 10-13 10:52:30 SimpleCalendarDeleteOneEvent s1033 PFVL rc=0 succ=1.0 steps=7 probes=None err=None 33s
+- 10-13 10:53:23 MarkorCreateNote s1031 BASE rc=0 succ=0.0 steps=11 probes=None err=None 53s
+- 10-13 10:54:02 MarkorCreateNote s1031 PF rc=0 succ=0.0 steps=7 probes=None err=None 38s
+- 10-13 10:54:38 MarkorCreateNote s1031 PFV rc=0 succ=0.0 steps=7 probes=None err=None 36s
+- 10-13 10:55:26 MarkorCreateNote s1031 PFVS rc=0 succ=0.0 steps=9 probes=None err=None 48s
+- 10-13 10:56:15 MarkorCreateNote s1031 PFVL rc=0 succ=0.0 steps=10 probes=None err=None 49s
+- 10-13 10:57:03 MarkorCreateNote s1032 PFVL rc=0 succ=0.0 steps=9 probes=None err=None 48s
+- 10-13 10:57:50 MarkorCreateNote s1032 PFVS rc=0 succ=0.0 steps=9 probes=None err=None 47s
+- 10-13 10:58:36 MarkorCreateNote s1032 PFV rc=0 succ=0.0 steps=9 probes=None err=None 46s
+- 10-13 10:59:23 MarkorCreateNote s1032 PF rc=0 succ=0.0 steps=9 probes=None err=None 46s
+- 10-13 11:00:11 MarkorCreateNote s1032 BASE rc=0 succ=0.0 steps=9 probes=None err=None 48s
+- 10-13 11:00:54 MarkorCreateNote s1033 BASE rc=0 succ=0.0 steps=8 probes=None err=None 43s
+- 10-13 11:01:31 MarkorCreateNote s1033 PF rc=0 succ=1.0 steps=7 probes=None err=None 37s
+- 10-13 11:02:06 MarkorCreateNote s1033 PFV rc=0 succ=0.0 steps=6 probes=None err=None 34s
+- 10-13 11:02:40 MarkorCreateNote s1033 PFVS rc=0 succ=0.0 steps=6 probes=None err=None 34s
+- 10-13 11:03:17 MarkorCreateNote s1033 PFVL rc=0 succ=1.0 steps=7 probes=None err=None 37s
+- 10-13 11:03:17 phase3 driver finished
+- 10-13 11:04:47 ExpenseDeleteSingle s1031 PFVA rc=0 succ=1.0 steps=5 probes=None err=None 26s
+- 10-13 11:05:14 ExpenseDeleteSingle s1033 PFVA rc=0 succ=1.0 steps=5 probes=None err=None 27s
+- 10-13 11:05:40 ExpenseDeleteSingle s1034 PFVA rc=0 succ=1.0 steps=5 probes=None err=None 26s
+- 10-13 11:06:25 ExpenseAddSingle s1031 PFVA rc=0 succ=1.0 steps=10 probes=None err=None 45s
+- 10-13 11:07:06 ExpenseAddSingle s1032 PFVA rc=0 succ=0.0 steps=8 probes=None err=None 41s
+- 10-13 11:07:48 ExpenseAddSingle s1033 PFVA rc=0 succ=1.0 steps=8 probes=None err=None 43s
+- 10-13 11:08:16 RecipeDeleteSingleRecipe s1031 PFVA rc=0 succ=1.0 steps=6 probes=None err=None 28s
+- 10-13 11:08:43 RecipeDeleteSingleRecipe s1032 PFVA rc=0 succ=1.0 steps=6 probes=None err=None 27s
+- 10-13 11:09:11 RecipeDeleteSingleRecipe s1033 PFVA rc=0 succ=1.0 steps=6 probes=None err=None 27s
+- 10-13 11:09:53 ContactsAddContact s1031 PFVA rc=0 succ=1.0 steps=9 probes=None err=None 42s
+- 10-13 11:10:34 ContactsAddContact s1032 PFVA rc=0 succ=1.0 steps=9 probes=None err=None 41s
+- 10-13 11:11:15 ContactsAddContact s1033 PFVA rc=0 succ=1.0 steps=9 probes=None err=None 41s
+- 10-13 11:11:36 SystemBluetoothTurnOn s1031 PFVA rc=0 succ=1.0 steps=4 probes=None err=None 21s
+- 10-13 11:11:58 SystemBluetoothTurnOn s1032 PFVA rc=0 succ=1.0 steps=4 probes=None err=None 22s
+- 10-13 11:12:30 SystemBluetoothTurnOn s1033 PFVA rc=0 succ=1.0 steps=7 probes=None err=None 32s
+- 10-13 11:12:59 NotesTodoItemCount s1031 PFVA rc=0 succ=1.0 steps=4 probes=None err=None 29s
+- 10-13 11:13:21 NotesTodoItemCount s1040 PFVA rc=0 succ=1.0 steps=2 probes=None err=None 21s
+- 10-13 11:13:43 SimpleCalendarEventsOnDate s1032 PFVA rc=0 succ=1.0 steps=4 probes=None err=None 22s
+- 10-13 11:14:02 SimpleCalendarEventsOnDate s1037 PFVA rc=0 succ=0.0 steps=3 probes=None err=None 18s
+- 10-13 11:14:24 SimpleCalendarEventsOnDate s1039 PFVA rc=0 succ=1.0 steps=4 probes=None err=None 22s
+- 10-13 11:14:58 SimpleCalendarDeleteOneEvent s1031 PFVA rc=0 succ=1.0 steps=7 probes=None err=None 34s
+- 10-13 11:15:32 SimpleCalendarDeleteOneEvent s1032 PFVA rc=0 succ=1.0 steps=7 probes=None err=None 34s
+- 10-13 11:16:05 SimpleCalendarDeleteOneEvent s1033 PFVA rc=0 succ=1.0 steps=7 probes=None err=None 32s
+- 10-13 11:16:54 MarkorCreateNote s1031 PFVA rc=0 succ=1.0 steps=10 probes=None err=None 50s
+- 10-13 11:17:34 MarkorCreateNote s1032 PFVA rc=0 succ=1.0 steps=7 probes=None err=None 40s
+- 10-13 11:18:23 MarkorCreateNote s1033 PFVA rc=0 succ=1.0 steps=10 probes=None err=None 49s
+- 10-13 11:18:23 phase3 driver finished
+- 10-13 11:19:00 ExpenseDeleteSingle s1031 BASE2 rc=0 succ=1.0 steps=5 probes=None err=None 27s
+- 10-13 11:19:26 ExpenseDeleteSingle s1033 BASE2 rc=0 succ=1.0 steps=5 probes=None err=None 26s
+- 10-13 11:19:52 ExpenseDeleteSingle s1034 BASE2 rc=0 succ=1.0 steps=5 probes=None err=None 26s
+- 10-13 11:20:37 ExpenseAddSingle s1031 BASE2 rc=0 succ=1.0 steps=10 probes=None err=None 44s
+- 10-13 11:21:21 ExpenseAddSingle s1032 BASE2 rc=0 succ=1.0 steps=9 probes=None err=None 44s
+- 10-13 11:22:02 ExpenseAddSingle s1033 BASE2 rc=0 succ=1.0 steps=8 probes=None err=None 41s
+- 10-13 11:22:33 RecipeDeleteSingleRecipe s1031 BASE2 rc=0 succ=1.0 steps=6 probes=None err=None 31s
+- 10-13 11:23:02 RecipeDeleteSingleRecipe s1032 BASE2 rc=0 succ=1.0 steps=6 probes=None err=None 29s
+- 10-13 11:23:32 RecipeDeleteSingleRecipe s1033 BASE2 rc=0 succ=1.0 steps=6 probes=None err=None 30s
+- 10-13 11:24:17 ContactsAddContact s1031 BASE2 rc=0 succ=1.0 steps=9 probes=None err=None 45s
+- 10-13 11:25:03 ContactsAddContact s1032 BASE2 rc=0 succ=1.0 steps=9 probes=None err=None 46s
+- 10-13 11:25:46 ContactsAddContact s1033 BASE2 rc=0 succ=1.0 steps=9 probes=None err=None 43s
+- 10-13 11:26:06 SystemBluetoothTurnOn s1031 BASE2 rc=0 succ=1.0 steps=4 probes=None err=None 20s
+- 10-13 11:26:39 SystemBluetoothTurnOn s1032 BASE2 rc=0 succ=1.0 steps=7 probes=None err=None 32s
+- 10-13 11:26:59 SystemBluetoothTurnOn s1033 BASE2 rc=0 succ=1.0 steps=4 probes=None err=None 20s
+- 10-13 11:27:27 NotesTodoItemCount s1031 BASE2 rc=0 succ=1.0 steps=4 probes=None err=None 28s
+- 10-13 11:27:47 NotesTodoItemCount s1040 BASE2 rc=0 succ=1.0 steps=2 probes=None err=None 20s
+- 10-13 11:28:09 SimpleCalendarEventsOnDate s1032 BASE2 rc=0 succ=1.0 steps=4 probes=None err=None 22s
+- 10-13 11:28:29 SimpleCalendarEventsOnDate s1037 BASE2 rc=0 succ=1.0 steps=4 probes=None err=None 20s
+- 10-13 11:28:50 SimpleCalendarEventsOnDate s1039 BASE2 rc=0 succ=1.0 steps=4 probes=None err=None 21s
+- 10-13 11:29:23 SimpleCalendarDeleteOneEvent s1031 BASE2 rc=0 succ=1.0 steps=7 probes=None err=None 33s
+- 10-13 11:29:57 SimpleCalendarDeleteOneEvent s1032 BASE2 rc=0 succ=1.0 steps=7 probes=None err=None 34s
+- 10-13 11:30:30 SimpleCalendarDeleteOneEvent s1033 BASE2 rc=0 succ=1.0 steps=7 probes=None err=None 33s
+- 10-13 11:31:15 MarkorCreateNote s1031 BASE2 rc=0 succ=0.0 steps=9 probes=None err=None 45s
+- 10-13 11:31:54 MarkorCreateNote s1032 BASE2 rc=0 succ=1.0 steps=7 probes=None err=None 39s
+- 10-13 11:32:40 MarkorCreateNote s1033 BASE2 rc=0 succ=1.0 steps=9 probes=None err=None 45s
+- 10-13 11:32:40 phase3 driver finished
+- 10-13 11:56:35 ExpenseDeleteSingle s1011 TG1C rc=0 succ=1.0 steps=5 probes=6 err=None 35s
+- 10-13 11:57:08 ExpenseDeleteSingle s1012 TG1C rc=0 succ=1.0 steps=5 probes=7 err=None 33s
+- 10-13 11:57:41 ExpenseDeleteSingle s1013 TG1C rc=0 succ=1.0 steps=5 probes=7 err=None 33s
+- 10-13 11:58:18 RecipeDeleteSingleRecipe s1011 TG1C rc=0 succ=1.0 steps=6 probes=9 err=None 36s
+- 10-13 11:58:53 RecipeDeleteSingleRecipe s1012 TG1C rc=0 succ=1.0 steps=6 probes=9 err=None 36s
+- 10-13 11:59:30 RecipeDeleteSingleRecipe s1014 TG1C rc=0 succ=1.0 steps=6 probes=9 err=None 37s
+- 10-13 11:59:54 SimpleCalendarEventsOnDate s1011 TG1C rc=0 succ=0.0 steps=3 probes=5 err=None 24s
+- 10-13 12:00:18 SimpleCalendarEventsOnDate s1012 TG1C rc=0 succ=0.0 steps=3 probes=4 err=None 24s
+- 10-13 12:00:51 SimpleCalendarEventsOnDate s1016 TG1C rc=0 succ=1.0 steps=4 probes=9 err=None 33s
+- 10-13 12:01:19 SystemBluetoothTurnOn s1011 TG1C rc=0 succ=1.0 steps=4 probes=5 err=None 28s
+- 10-13 12:01:48 SystemBluetoothTurnOn s1012 TG1C rc=0 succ=1.0 steps=4 probes=5 err=None 29s
+- 10-13 12:02:15 SystemBluetoothTurnOn s1013 TG1C rc=0 succ=1.0 steps=4 probes=5 err=None 27s
+- 10-13 12:02:41 NotesTodoItemCount s1015 TG1C rc=0 succ=1.0 steps=2 probes=2 err=None 26s
+- 10-13 12:03:14 NotesTodoItemCount s1022 TG1C rc=0 succ=1.0 steps=4 probes=3 err=None 33s
+- 10-13 12:03:50 NotesTodoItemCount s1025 TG1C rc=0 succ=1.0 steps=4 probes=2 err=None 36s
+- 10-13 12:04:52 ContactsAddContact s1011 TG1C rc=0 succ=1.0 steps=9 probes=14 err=None 63s
+- 10-13 12:05:56 ContactsAddContact s1012 TG1C rc=0 succ=1.0 steps=9 probes=14 err=None 63s
+- 10-13 12:06:58 ContactsAddContact s1013 TG1C rc=0 succ=1.0 steps=9 probes=14 err=None 63s
+- 10-13 12:06:58 phase2 driver finished
+- 10-13 12:07:26 ExpenseDeleteSingle s1031 BASE3 rc=0 succ=1.0 steps=5 probes=None err=None 27s
+- 10-13 12:07:52 ExpenseDeleteSingle s1031 PFVA2 rc=0 succ=1.0 steps=5 probes=None err=None 27s
+- 10-13 12:08:19 ExpenseDeleteSingle s1033 PFVA2 rc=0 succ=1.0 steps=5 probes=None err=None 27s
+- 10-13 12:08:44 ExpenseDeleteSingle s1033 BASE3 rc=0 succ=1.0 steps=5 probes=None err=None 25s
+- 10-13 12:09:11 ExpenseDeleteSingle s1034 BASE3 rc=0 succ=1.0 steps=5 probes=None err=None 26s
+- 10-13 12:09:37 ExpenseDeleteSingle s1034 PFVA2 rc=0 succ=1.0 steps=5 probes=None err=None 26s
+- 10-13 12:10:22 ExpenseAddSingle s1031 BASE3 rc=0 succ=1.0 steps=10 probes=None err=None 45s
+- 10-13 12:11:08 ExpenseAddSingle s1031 PFVA2 rc=0 succ=1.0 steps=10 probes=None err=None 46s
+- 10-13 12:11:52 ExpenseAddSingle s1032 PFVA2 rc=0 succ=0.0 steps=8 probes=None err=None 44s
+- 10-13 12:12:34 ExpenseAddSingle s1032 BASE3 rc=0 succ=0.0 steps=8 probes=None err=None 43s
+- 10-13 12:13:17 ExpenseAddSingle s1033 BASE3 rc=0 succ=1.0 steps=8 probes=None err=None 42s
+- 10-13 12:14:00 ExpenseAddSingle s1033 PFVA2 rc=0 succ=1.0 steps=8 probes=None err=None 44s
+- 10-13 12:14:32 RecipeDeleteSingleRecipe s1031 BASE3 rc=0 succ=1.0 steps=6 probes=None err=None 31s
+- 10-13 12:14:59 RecipeDeleteSingleRecipe s1031 PFVA2 rc=0 succ=1.0 steps=6 probes=None err=None 27s
+- 10-13 12:15:25 RecipeDeleteSingleRecipe s1032 PFVA2 rc=0 succ=1.0 steps=6 probes=None err=None 27s
+- 10-13 12:15:56 RecipeDeleteSingleRecipe s1032 BASE3 rc=0 succ=1.0 steps=6 probes=None err=None 31s
+- 10-13 12:16:28 RecipeDeleteSingleRecipe s1033 BASE3 rc=0 succ=1.0 steps=6 probes=None err=None 32s
+- 10-13 12:16:55 RecipeDeleteSingleRecipe s1033 PFVA2 rc=0 succ=1.0 steps=6 probes=None err=None 27s
+- 10-13 12:17:41 ContactsAddContact s1031 BASE3 rc=0 succ=1.0 steps=9 probes=None err=None 46s
+- 10-13 12:18:27 ContactsAddContact s1031 PFVA2 rc=0 succ=1.0 steps=9 probes=None err=None 46s
+- 10-13 12:19:12 ContactsAddContact s1032 PFVA2 rc=0 succ=1.0 steps=9 probes=None err=None 45s
+- 10-13 12:19:55 ContactsAddContact s1032 BASE3 rc=0 succ=1.0 steps=9 probes=None err=None 43s
+- 10-13 12:20:40 ContactsAddContact s1033 BASE3 rc=0 succ=1.0 steps=9 probes=None err=None 45s
+- 10-13 12:21:26 ContactsAddContact s1033 PFVA2 rc=0 succ=1.0 steps=9 probes=None err=None 45s
+- 10-13 12:21:47 SystemBluetoothTurnOn s1031 BASE3 rc=0 succ=1.0 steps=4 probes=None err=None 21s
+- 10-13 12:22:06 SystemBluetoothTurnOn s1031 PFVA2 rc=0 succ=1.0 steps=4 probes=None err=None 18s
+- 10-13 12:22:25 SystemBluetoothTurnOn s1032 PFVA2 rc=0 succ=1.0 steps=4 probes=None err=None 19s
+- 10-13 12:22:44 SystemBluetoothTurnOn s1032 BASE3 rc=0 succ=1.0 steps=4 probes=None err=None 19s
+- 10-13 12:23:06 SystemBluetoothTurnOn s1033 BASE3 rc=0 succ=1.0 steps=4 probes=None err=None 22s
+- 10-13 12:23:35 SystemBluetoothTurnOn s1033 PFVA2 rc=0 succ=1.0 steps=4 probes=None err=None 29s
+- 10-13 12:24:36 NotesTodoItemCount s1031 BASE3 rc=0 succ=1.0 steps=5 probes=None err=None 61s
+- 10-13 12:25:18 NotesTodoItemCount s1031 PFVA2 rc=0 succ=1.0 steps=4 probes=None err=None 43s
+- 10-13 12:26:17 NotesTodoItemCount s1040 PFVA2 rc=0 succ=1.0 steps=3 probes=None err=None 59s
+- 10-13 12:26:45 NotesTodoItemCount s1040 BASE3 rc=0 succ=1.0 steps=2 probes=None err=None 27s
+- 10-13 12:27:06 SimpleCalendarEventsOnDate s1032 BASE3 rc=0 succ=1.0 steps=4 probes=None err=None 21s
+- 10-13 12:27:27 SimpleCalendarEventsOnDate s1032 PFVA2 rc=0 succ=1.0 steps=4 probes=None err=None 21s
+- 10-13 12:27:45 SimpleCalendarEventsOnDate s1037 PFVA2 rc=0 succ=0.0 steps=3 probes=None err=None 19s
+- 10-13 12:28:06 SimpleCalendarEventsOnDate s1037 BASE3 rc=0 succ=1.0 steps=4 probes=None err=None 21s
+- 10-13 12:28:29 SimpleCalendarEventsOnDate s1039 BASE3 rc=0 succ=1.0 steps=4 probes=None err=None 23s
+- 10-13 12:28:38 replicates stopped by user request (BASE3/PFVA2 partial)
+- 10-13 12:45:19 SEQ BASE ExpenseDeleteSingle p0 s1061 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 27s
+- 10-13 12:45:47 SEQ G ExpenseDeleteSingle p0 s1061 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 28s
+- 10-13 12:46:22 SEQ GX ExpenseDeleteSingle p0 s1061 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=7 err=None 34s
+- 10-13 12:47:06 SEQ G ExpenseAddSingle p0 s1061 rc=0 succ=1.0 steps=8 calls=8 jumps=0/0 probes=0 err=None 45s
+- 10-13 12:48:01 SEQ GX ExpenseAddSingle p0 s1061 rc=0 succ=1.0 steps=11 calls=12 jumps=0/0 probes=5 err=None 55s
+- 10-13 12:48:42 SEQ BASE ExpenseAddSingle p0 s1061 rc=0 succ=1.0 steps=9 calls=9 jumps=0/0 probes=0 err=None 41s
+- 10-13 12:49:52 SEQ GX ExpenseDeleteMultiple p0 s1061 rc=0 succ=1.0 steps=11 calls=11 jumps=0/0 probes=16 err=None 69s
+- 10-13 12:50:42 SEQ BASE ExpenseDeleteMultiple p0 s1061 rc=0 succ=1.0 steps=11 calls=11 jumps=0/0 probes=0 err=None 50s
+- 10-13 12:51:31 SEQ G ExpenseDeleteMultiple p0 s1061 rc=0 succ=1.0 steps=11 calls=11 jumps=0/0 probes=0 err=None 50s
+- 10-13 12:51:57 SEQ BASE ExpenseDeleteSingle p1 s1062 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 26s
+- 10-13 12:52:23 SEQ G ExpenseDeleteSingle p1 s1062 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 26s
+- 10-13 12:52:58 SEQ GX ExpenseDeleteSingle p1 s1062 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=7 err=None 34s
+- 10-13 12:53:37 SEQ G ExpenseAddSingle p1 s1062 rc=0 succ=1.0 steps=8 calls=8 jumps=0/0 probes=0 err=None 39s
+- 10-13 12:54:43 SEQ GX ExpenseAddSingle p1 s1062 rc=0 succ=1.0 steps=12 calls=13 jumps=2/0 probes=5 err=None 65s
+- 10-13 12:55:26 SEQ BASE ExpenseAddSingle p1 s1062 rc=0 succ=1.0 steps=8 calls=8 jumps=0/0 probes=0 err=None 43s
+- 10-13 12:56:32 SEQ GX ExpenseDeleteMultiple p1 s1062 rc=0 succ=1.0 steps=11 calls=11 jumps=4/0 probes=13 err=None 66s
+- 10-13 12:57:27 SEQ BASE ExpenseDeleteMultiple p1 s1062 rc=0 succ=1.0 steps=14 calls=14 jumps=0/0 probes=0 err=None 55s
+- 10-13 12:58:18 SEQ G ExpenseDeleteMultiple p1 s1062 rc=0 succ=1.0 steps=11 calls=11 jumps=4/0 probes=0 err=None 50s
+- 10-13 12:58:45 SEQ BASE ExpenseDeleteSingle p2 s1063 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 27s
+- 10-13 12:59:12 SEQ G ExpenseDeleteSingle p2 s1063 rc=0 succ=1.0 steps=5 calls=5 jumps=2/0 probes=0 err=None 27s
+- 10-13 12:59:47 SEQ GX ExpenseDeleteSingle p2 s1063 rc=0 succ=1.0 steps=5 calls=5 jumps=2/0 probes=7 err=None 35s
+- 10-13 13:00:31 SEQ G ExpenseAddSingle p2 s1063 rc=0 succ=0.0 steps=9 calls=8 jumps=3/1 probes=0 err=None 44s
+- 10-13 13:01:22 SEQ GX ExpenseAddSingle p2 s1063 rc=0 succ=1.0 steps=9 calls=9 jumps=2/1 probes=4 err=None 51s
+- 10-13 13:02:07 SEQ BASE ExpenseAddSingle p2 s1063 rc=0 succ=1.0 steps=9 calls=9 jumps=0/0 probes=0 err=None 45s
+- 10-13 13:03:15 SEQ GX ExpenseDeleteMultiple p2 s1063 rc=0 succ=1.0 steps=11 calls=11 jumps=5/0 probes=13 err=None 68s
+- 10-13 13:04:01 SEQ BASE ExpenseDeleteMultiple p2 s1063 rc=0 succ=1.0 steps=11 calls=11 jumps=0/0 probes=0 err=None 46s
+- 10-13 13:04:53 SEQ G ExpenseDeleteMultiple p2 s1063 rc=0 succ=1.0 steps=11 calls=11 jumps=5/0 probes=0 err=None 52s
+- 10-13 13:05:23 SEQ BASE RecipeDeleteSingleRecipe p0 s1061 rc=0 succ=1.0 steps=6 calls=6 jumps=0/0 probes=0 err=None 30s
+- 10-13 13:05:53 SEQ G RecipeDeleteSingleRecipe p0 s1061 rc=0 succ=1.0 steps=6 calls=6 jumps=0/0 probes=0 err=None 29s
+- 10-13 13:06:33 SEQ GX RecipeDeleteSingleRecipe p0 s1061 rc=0 succ=1.0 steps=8 calls=9 jumps=0/0 probes=1 err=None 40s
+- 10-13 13:07:37 SEQ G RecipeAddSingleRecipe p0 s1061 rc=0 succ=1.0 steps=14 calls=14 jumps=0/0 probes=0 err=None 64s
+- 10-13 13:08:50 SEQ GX RecipeAddSingleRecipe p0 s1061 rc=0 succ=1.0 steps=16 calls=17 jumps=0/0 probes=1 err=None 73s
+- 10-13 13:09:54 SEQ BASE RecipeAddSingleRecipe p0 s1061 rc=0 succ=1.0 steps=14 calls=14 jumps=0/0 probes=0 err=None 64s
+- 10-13 13:11:02 SEQ GX RecipeDeleteMultipleRecipes p0 s1061 rc=0 succ=1.0 steps=16 calls=17 jumps=0/0 probes=1 err=None 68s
+- 10-13 13:12:10 SEQ BASE RecipeDeleteMultipleRecipes p0 s1061 rc=0 succ=1.0 steps=14 calls=14 jumps=0/0 probes=0 err=None 68s
+- 10-13 13:13:09 SEQ G RecipeDeleteMultipleRecipes p0 s1061 rc=0 succ=1.0 steps=14 calls=14 jumps=0/0 probes=0 err=None 58s
+- 10-13 13:13:39 SEQ BASE RecipeDeleteSingleRecipe p1 s1062 rc=0 succ=1.0 steps=6 calls=6 jumps=0/0 probes=0 err=None 30s
+- 10-13 13:14:08 SEQ G RecipeDeleteSingleRecipe p1 s1062 rc=0 succ=1.0 steps=6 calls=6 jumps=0/0 probes=0 err=None 30s
+- 10-13 13:14:42 SEQ GX RecipeDeleteSingleRecipe p1 s1062 rc=0 succ=1.0 steps=6 calls=6 jumps=0/0 probes=6 err=None 34s
+- 10-13 13:15:44 SEQ G RecipeAddSingleRecipe p1 s1062 rc=0 succ=1.0 steps=14 calls=14 jumps=0/0 probes=0 err=None 62s
+- 10-13 13:16:52 SEQ GX RecipeAddSingleRecipe p1 s1062 rc=0 succ=1.0 steps=14 calls=14 jumps=0/0 probes=7 err=None 68s
+- 10-13 13:17:56 SEQ BASE RecipeAddSingleRecipe p1 s1062 rc=0 succ=1.0 steps=15 calls=15 jumps=0/0 probes=0 err=None 64s
+- 10-13 13:19:04 SEQ GX RecipeDeleteMultipleRecipes p1 s1062 rc=0 succ=1.0 steps=14 calls=12 jumps=6/2 probes=12 err=None 68s
+- 10-13 13:19:59 SEQ BASE RecipeDeleteMultipleRecipes p1 s1062 rc=0 succ=1.0 steps=14 calls=14 jumps=0/0 probes=0 err=None 55s
+- 10-13 13:20:56 SEQ G RecipeDeleteMultipleRecipes p1 s1062 rc=0 succ=1.0 steps=14 calls=12 jumps=6/2 probes=0 err=None 57s
+- 10-13 13:21:26 SEQ BASE RecipeDeleteSingleRecipe p2 s1063 rc=0 succ=1.0 steps=6 calls=6 jumps=0/0 probes=0 err=None 30s
+- 10-13 13:21:53 SEQ G RecipeDeleteSingleRecipe p2 s1063 rc=0 succ=1.0 steps=6 calls=4 jumps=3/2 probes=0 err=None 27s
+- 10-13 13:22:27 SEQ GX RecipeDeleteSingleRecipe p2 s1063 rc=0 succ=1.0 steps=6 calls=5 jumps=3/1 probes=5 err=None 34s
+- 10-13 13:23:31 SEQ G RecipeAddSingleRecipe p2 s1063 rc=0 succ=1.0 steps=16 calls=15 jumps=1/1 probes=0 err=None 64s
+- 10-13 13:24:41 SEQ GX RecipeAddSingleRecipe p2 s1063 rc=0 succ=1.0 steps=14 calls=14 jumps=0/0 probes=7 err=None 70s
+- 10-13 13:25:56 SEQ BASE RecipeAddSingleRecipe p2 s1063 rc=0 succ=1.0 steps=18 calls=18 jumps=0/0 probes=0 err=None 74s
+- 10-13 13:26:55 SEQ GX RecipeDeleteMultipleRecipes p2 s1063 rc=0 succ=1.0 steps=14 calls=9 jumps=7/5 probes=6 err=None 60s
+- 10-13 13:27:54 SEQ BASE RecipeDeleteMultipleRecipes p2 s1063 rc=0 succ=1.0 steps=14 calls=14 jumps=0/0 probes=0 err=None 58s
+- 10-13 13:28:41 SEQ G RecipeDeleteMultipleRecipes p2 s1063 rc=0 succ=1.0 steps=14 calls=8 jumps=7/6 probes=0 err=None 47s
+- 10-13 13:29:12 SEQ BASE MarkorCreateNote p0 s1061 rc=0 succ=0.0 steps=6 calls=6 jumps=0/0 probes=0 err=None 31s
+- 10-13 13:29:43 SEQ G MarkorCreateNote p0 s1061 rc=0 succ=0.0 steps=6 calls=6 jumps=0/0 probes=0 err=None 30s
+- 10-13 13:31:01 SEQ GX MarkorCreateNote p0 s1061 rc=0 succ=0.0 steps=16 calls=17 jumps=0/0 probes=8 err=None 78s
+- 10-13 13:31:30 SEQ G MarkorDeleteNote p0 s1061 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 29s
+- 10-13 13:32:06 SEQ GX MarkorDeleteNote p0 s1061 rc=0 succ=1.0 steps=5 calls=6 jumps=0/0 probes=7 err=None 36s
+- 10-13 13:32:35 SEQ BASE MarkorDeleteNote p0 s1061 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 29s
+- 10-13 13:33:14 SEQ GX MarkorCreateFolder p0 s1061 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=9 err=None 39s
+- 10-13 13:33:42 SEQ BASE MarkorCreateFolder p0 s1061 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 28s
+- 10-13 13:34:13 SEQ G MarkorCreateFolder p0 s1061 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 31s
+- 10-13 13:34:45 SEQ BASE MarkorCreateNote p1 s1062 rc=0 succ=0.0 steps=6 calls=6 jumps=0/0 probes=0 err=None 32s
+- 10-13 13:35:22 SEQ G MarkorCreateNote p1 s1062 rc=0 succ=1.0 steps=7 calls=7 jumps=0/0 probes=0 err=None 36s
+- 10-13 13:36:01 SEQ GX MarkorCreateNote p1 s1062 rc=0 succ=1.0 steps=7 calls=8 jumps=0/0 probes=1 err=None 39s
+- 10-13 13:36:31 SEQ G MarkorDeleteNote p1 s1062 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 30s
+- 10-13 13:37:03 SEQ GX MarkorDeleteNote p1 s1062 rc=0 succ=1.0 steps=5 calls=6 jumps=0/0 probes=1 err=None 32s
+- 10-13 13:37:33 SEQ BASE MarkorDeleteNote p1 s1062 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 30s
+- 10-13 13:38:07 SEQ GX MarkorCreateFolder p1 s1062 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=4 err=None 34s
+- 10-13 13:38:33 SEQ BASE MarkorCreateFolder p1 s1062 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 27s
+- 10-13 13:39:01 SEQ G MarkorCreateFolder p1 s1062 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 28s
+- 10-13 13:39:50 SEQ BASE MarkorCreateNote p2 s1063 rc=0 succ=1.0 steps=10 calls=10 jumps=0/0 probes=0 err=None 49s
+- 10-13 13:40:27 SEQ G MarkorCreateNote p2 s1063 rc=0 succ=1.0 steps=7 calls=7 jumps=0/0 probes=0 err=None 37s
+- 10-13 13:41:10 SEQ GX MarkorCreateNote p2 s1063 rc=0 succ=1.0 steps=7 calls=8 jumps=0/0 probes=4 err=None 43s
+- 10-13 13:41:41 SEQ G MarkorDeleteNote p2 s1063 rc=0 succ=1.0 steps=5 calls=5 jumps=2/0 probes=0 err=None 32s
+- 10-13 13:42:13 SEQ GX MarkorDeleteNote p2 s1063 rc=0 succ=1.0 steps=5 calls=6 jumps=0/0 probes=1 err=None 32s
+- 10-13 13:42:41 SEQ BASE MarkorDeleteNote p2 s1063 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 28s
+- 10-13 13:43:12 SEQ GX MarkorCreateFolder p2 s1063 rc=0 succ=1.0 steps=5 calls=5 jumps=1/1 probes=2 err=None 31s
+- 10-13 13:43:41 SEQ BASE MarkorCreateFolder p2 s1063 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 29s
+- 10-13 13:44:07 SEQ G MarkorCreateFolder p2 s1063 rc=0 succ=1.0 steps=5 calls=4 jumps=1/1 probes=0 err=None 26s
+- 10-13 13:44:25 SEQ BASE SimpleCalendarEventsOnDate p0 s1061 rc=0 succ=0.0 steps=3 calls=3 jumps=0/0 probes=0 err=None 19s
+- 10-13 13:44:43 SEQ G SimpleCalendarEventsOnDate p0 s1061 rc=0 succ=0.0 steps=3 calls=3 jumps=0/0 probes=0 err=None 18s
+- 10-13 13:45:06 SEQ GX SimpleCalendarEventsOnDate p0 s1061 rc=0 succ=0.0 steps=3 calls=3 jumps=0/0 probes=4 err=None 23s
+- 10-13 13:45:40 SEQ G SimpleCalendarDeleteOneEvent p0 s1061 rc=0 succ=1.0 steps=7 calls=7 jumps=0/0 probes=0 err=None 34s
+- 10-13 13:46:24 SEQ GX SimpleCalendarDeleteOneEvent p0 s1061 rc=0 succ=1.0 steps=9 calls=10 jumps=0/0 probes=2 err=None 44s
+- 10-13 13:46:57 SEQ BASE SimpleCalendarDeleteOneEvent p0 s1061 rc=0 succ=1.0 steps=7 calls=7 jumps=0/0 probes=0 err=None 33s
+- 10-13 13:47:52 SEQ GX SimpleCalendarLocationOfEvent p0 s1061 rc=0 succ=0.0 steps=5 calls=6 jumps=0/0 probes=7 err=None 55s
+- 10-13 13:48:16 SEQ BASE SimpleCalendarLocationOfEvent p0 s1061 rc=0 succ=0.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 24s
+- 10-13 13:48:41 SEQ G SimpleCalendarLocationOfEvent p0 s1061 rc=0 succ=0.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 25s
+- 10-13 13:48:59 SEQ BASE SimpleCalendarEventsOnDate p1 s1062 rc=0 succ=1.0 steps=3 calls=3 jumps=0/0 probes=0 err=None 19s
+- 10-13 13:49:20 SEQ G SimpleCalendarEventsOnDate p1 s1062 rc=0 succ=1.0 steps=3 calls=3 jumps=0/0 probes=0 err=None 20s
+- 10-13 13:49:43 SEQ GX SimpleCalendarEventsOnDate p1 s1062 rc=0 succ=1.0 steps=4 calls=4 jumps=1/0 probes=3 err=None 24s
+- 10-13 13:50:17 SEQ G SimpleCalendarDeleteOneEvent p1 s1062 rc=0 succ=1.0 steps=7 calls=7 jumps=1/0 probes=0 err=None 34s
+- 10-13 13:51:12 SEQ GX SimpleCalendarDeleteOneEvent p1 s1062 rc=0 succ=0.0 steps=12 calls=13 jumps=1/0 probes=4 err=None 54s
+- 10-13 13:51:44 SEQ BASE SimpleCalendarDeleteOneEvent p1 s1062 rc=0 succ=1.0 steps=7 calls=7 jumps=0/0 probes=0 err=None 32s
+- 10-13 13:52:20 SEQ GX SimpleCalendarLocationOfEvent p1 s1062 rc=0 succ=1.0 steps=7 calls=8 jumps=0/0 probes=2 err=None 36s
+- 10-13 13:52:45 SEQ BASE SimpleCalendarLocationOfEvent p1 s1062 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 24s
+- 10-13 13:53:09 SEQ G SimpleCalendarLocationOfEvent p1 s1062 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 24s
+- 10-13 13:53:30 SEQ BASE SimpleCalendarEventsOnDate p2 s1063 rc=0 succ=1.0 steps=4 calls=4 jumps=0/0 probes=0 err=None 21s
+- 10-13 13:53:51 SEQ G SimpleCalendarEventsOnDate p2 s1063 rc=0 succ=1.0 steps=4 calls=4 jumps=1/0 probes=0 err=None 22s
+- 10-13 13:54:15 SEQ GX SimpleCalendarEventsOnDate p2 s1063 rc=0 succ=1.0 steps=4 calls=4 jumps=1/0 probes=3 err=None 24s
+- 10-13 13:54:51 SEQ G SimpleCalendarDeleteOneEvent p2 s1063 rc=0 succ=1.0 steps=7 calls=7 jumps=3/0 probes=0 err=None 36s
+- 10-13 13:55:47 SEQ GX SimpleCalendarDeleteOneEvent p2 s1063 rc=0 succ=0.0 steps=12 calls=13 jumps=1/0 probes=5 err=None 55s
+- 10-13 13:56:19 SEQ BASE SimpleCalendarDeleteOneEvent p2 s1063 rc=0 succ=1.0 steps=7 calls=7 jumps=0/0 probes=0 err=None 32s
+- 10-13 13:56:57 SEQ GX SimpleCalendarLocationOfEvent p2 s1063 rc=0 succ=1.0 steps=7 calls=8 jumps=1/0 probes=4 err=None 38s
+- 10-13 13:57:23 SEQ BASE SimpleCalendarLocationOfEvent p2 s1063 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 26s
+- 10-13 13:57:50 SEQ G SimpleCalendarLocationOfEvent p2 s1063 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 26s
+- 10-13 13:57:50 SEQ DRIVER DONE
+- 10-13 13:58:24 SEQ GC ExpenseDeleteSingle p0 s1061 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 26s
+- 10-13 13:59:05 SEQ GC ExpenseAddSingle p0 s1061 rc=0 succ=1.0 steps=8 calls=8 jumps=0/0 probes=0 err=None 42s
+- 10-13 13:59:54 SEQ GC ExpenseDeleteMultiple p0 s1061 rc=0 succ=1.0 steps=11 calls=11 jumps=0/0 probes=0 err=None 48s
+- 10-13 14:00:20 SEQ GC ExpenseDeleteSingle p1 s1062 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 27s
+- 10-13 14:01:55 SEQ GC ExpenseAddSingle p1 s1062 rc=0 succ=1.0 steps=8 calls=8 jumps=0/0 probes=0 err=None 95s
+- 10-13 14:03:02 SEQ GC ExpenseDeleteMultiple p1 s1062 rc=0 succ=1.0 steps=13 calls=11 jumps=3/2 probes=0 err=None 67s
+- 10-13 14:03:26 SEQ GC ExpenseDeleteSingle p2 s1063 rc=0 succ=1.0 steps=4 calls=3 jumps=1/1 probes=0 err=None 24s
+- 10-13 14:04:04 SEQ GC ExpenseAddSingle p2 s1063 rc=0 succ=0.0 steps=8 calls=6 jumps=2/2 probes=0 err=None 37s
+- 10-13 14:04:52 SEQ GC ExpenseDeleteMultiple p2 s1063 rc=0 succ=1.0 steps=10 calls=7 jumps=4/3 probes=0 err=None 49s
+- 10-13 14:05:24 SEQ GC RecipeDeleteSingleRecipe p0 s1061 rc=0 succ=1.0 steps=6 calls=6 jumps=0/0 probes=0 err=None 32s
+- 10-13 14:06:27 SEQ GC RecipeAddSingleRecipe p0 s1061 rc=0 succ=1.0 steps=14 calls=14 jumps=0/0 probes=0 err=None 62s
+- 10-13 14:07:22 SEQ GC RecipeDeleteMultipleRecipes p0 s1061 rc=0 succ=1.0 steps=14 calls=14 jumps=0/0 probes=0 err=None 56s
+- 10-13 14:07:52 SEQ GC RecipeDeleteSingleRecipe p1 s1062 rc=0 succ=1.0 steps=6 calls=6 jumps=0/0 probes=0 err=None 30s
+- 10-13 14:08:52 SEQ GC RecipeAddSingleRecipe p1 s1062 rc=0 succ=1.0 steps=14 calls=14 jumps=0/0 probes=0 err=None 60s
+- 10-13 14:09:44 SEQ GC RecipeDeleteMultipleRecipes p1 s1062 rc=0 succ=1.0 steps=13 calls=8 jumps=3/5 probes=0 err=None 52s
+- 10-13 14:10:05 SEQ GC RecipeDeleteSingleRecipe p2 s1063 rc=0 succ=1.0 steps=6 calls=2 jumps=1/4 probes=0 err=None 21s
+- 10-13 14:11:10 SEQ GC RecipeAddSingleRecipe p2 s1063 rc=0 succ=1.0 steps=16 calls=15 jumps=1/1 probes=0 err=None 65s
+- 10-13 14:12:00 SEQ GC RecipeDeleteMultipleRecipes p2 s1063 rc=0 succ=1.0 steps=13 calls=6 jumps=4/7 probes=0 err=None 50s
+- 10-13 14:13:04 SEQ GC MarkorCreateNote p0 s1061 rc=0 succ=0.0 steps=14 calls=14 jumps=0/0 probes=0 err=None 65s
+- 10-13 14:13:33 SEQ GC MarkorDeleteNote p0 s1061 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 29s
+- 10-13 14:14:02 SEQ GC MarkorCreateFolder p0 s1061 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 29s
+- 10-13 14:14:36 SEQ GC MarkorCreateNote p1 s1062 rc=0 succ=0.0 steps=6 calls=6 jumps=0/0 probes=0 err=None 33s
+- 10-13 14:15:05 SEQ GC MarkorDeleteNote p1 s1062 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 29s
+- 10-13 14:15:32 SEQ GC MarkorCreateFolder p1 s1062 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 28s
+- 10-13 14:16:23 SEQ GC MarkorCreateNote p2 s1063 rc=0 succ=1.0 steps=10 calls=10 jumps=0/0 probes=0 err=None 51s
+- 10-13 14:16:54 SEQ GC MarkorDeleteNote p2 s1063 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 31s
+- 10-13 14:17:19 SEQ GC MarkorCreateFolder p2 s1063 rc=0 succ=1.0 steps=5 calls=3 jumps=2/2 probes=0 err=None 25s
+- 10-13 14:17:41 SEQ GC SimpleCalendarEventsOnDate p0 s1061 rc=0 succ=0.0 steps=4 calls=4 jumps=0/0 probes=0 err=None 22s
+- 10-13 14:18:15 SEQ GC SimpleCalendarDeleteOneEvent p0 s1061 rc=0 succ=1.0 steps=7 calls=7 jumps=0/0 probes=0 err=None 33s
+- 10-13 14:18:41 SEQ GC SimpleCalendarLocationOfEvent p0 s1061 rc=0 succ=0.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 26s
+- 10-13 14:18:58 SEQ GC SimpleCalendarEventsOnDate p1 s1062 rc=0 succ=1.0 steps=3 calls=3 jumps=0/0 probes=0 err=None 18s
+- 10-13 14:19:32 SEQ GC SimpleCalendarDeleteOneEvent p1 s1062 rc=0 succ=1.0 steps=7 calls=7 jumps=1/0 probes=0 err=None 34s
+- 10-13 14:19:56 SEQ GC SimpleCalendarLocationOfEvent p1 s1062 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 24s
+- 10-13 14:20:18 SEQ GC SimpleCalendarEventsOnDate p2 s1063 rc=0 succ=1.0 steps=4 calls=4 jumps=1/0 probes=0 err=None 21s
+- 10-13 14:20:46 SEQ GC SimpleCalendarDeleteOneEvent p2 s1063 rc=0 succ=1.0 steps=7 calls=4 jumps=2/3 probes=0 err=None 29s
+- 10-13 14:21:13 SEQ GC SimpleCalendarLocationOfEvent p2 s1063 rc=0 succ=1.0 steps=5 calls=5 jumps=0/0 probes=0 err=None 27s
+- 10-13 14:21:13 SEQ DRIVER DONE
+- 10-13 14:21:13 GC CHAIN DONE

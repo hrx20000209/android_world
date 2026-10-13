@@ -1,0 +1,76 @@
+{
+ "name": "phase3",
+ "tasks": [
+  {
+   "task": "ExpenseDeleteSingle",
+   "seeds": [
+    1031,
+    1033,
+    1034
+   ]
+  },
+  {
+   "task": "ExpenseAddSingle",
+   "seeds": [
+    1031,
+    1032,
+    1033
+   ]
+  },
+  {
+   "task": "RecipeDeleteSingleRecipe",
+   "seeds": [
+    1031,
+    1032,
+    1033
+   ]
+  },
+  {
+   "task": "ContactsAddContact",
+   "seeds": [
+    1031,
+    1032,
+    1033
+   ]
+  },
+  {
+   "task": "SystemBluetoothTurnOn",
+   "seeds": [
+    1031,
+    1032,
+    1033
+   ]
+  },
+  {
+   "task": "NotesTodoItemCount",
+   "seeds": [
+    1031,
+    1040
+   ]
+  },
+  {
+   "task": "SimpleCalendarEventsOnDate",
+   "seeds": [
+    1032,
+    1037,
+    1039
+   ]
+  },
+  {
+   "task": "SimpleCalendarDeleteOneEvent",
+   "seeds": [
+    1031,
+    1032,
+    1033
+   ]
+  },
+  {
+   "task": "MarkorCreateNote",
+   "seeds": [
+    1031,
+    1032,
+    1033
+   ]
+  }
+ ]
+}

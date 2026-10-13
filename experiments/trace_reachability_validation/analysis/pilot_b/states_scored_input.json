@@ -1,0 +1,734 @@
+[
+ {
+  "sid": "pb0",
+  "task": "SimpleCalendarDeleteOneEvent",
+  "app": "Simple Calendar Pro",
+  "set": "E",
+  "accept": [
+   "top_right_arrow",
+   "Change view",
+   "|More options|",
+   "month_view_background"
+  ],
+  "efficient": [
+   "Change view",
+   "|More options|",
+   "month_view_background"
+  ],
+  "orig_tok": "L|ImageView|top_left_arrow",
+  "goal": "In Simple Calendar Pro, delete the calendar event on 2023-10-30 at 17h with the title 'Call with Marketing'",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/SimpleCalendarDeleteOneEvent/v2_agent",
+  "cid": "0031_s5_pre"
+ },
+ {
+  "sid": "pb1",
+  "task": "SimpleCalendarDeleteOneEvent",
+  "app": "Simple Calendar Pro",
+  "set": "N",
+  "accept": [
+   "top_right_arrow",
+   "Change view",
+   "|More options|",
+   "month_view_background"
+  ],
+  "efficient": [
+   "Change view",
+   "|More options|",
+   "month_view_background"
+  ],
+  "orig_tok": "L|ImageView|top_right_arrow",
+  "goal": "In Simple Calendar Pro, delete the calendar event on 2023-10-28 at 3h with the title 'Call with the Team'",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/SimpleCalendarDeleteOneEvent/v3_agent",
+  "cid": "0036_s11_pre"
+ },
+ {
+  "sid": "pb2",
+  "task": "SimpleCalendarDeleteOneEvent",
+  "app": "Simple Calendar Pro",
+  "set": "N",
+  "accept": [
+   "top_right_arrow",
+   "Change view",
+   "|More options|",
+   "month_view_background"
+  ],
+  "efficient": [
+   "Change view",
+   "|More options|",
+   "month_view_background"
+  ],
+  "orig_tok": "L|ImageView|top_right_arrow",
+  "goal": "In Simple Calendar Pro, delete the calendar event on 2023-10-30 at 17h with the title 'Call with Marketing'",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/SimpleCalendarDeleteOneEvent/v2_agent",
+  "cid": "0032_s6_pre"
+ },
+ {
+  "sid": "pb3",
+  "task": "MarkorDeleteNewestNote",
+  "app": "Markor",
+  "set": "E",
+  "accept": [
+   "LONG_PRESS:L|LinearLayout|opoc_filesystem_item__root",
+   "Sort by"
+  ],
+  "efficient": [],
+  "orig_tok": "L|LinearLayout|opoc_filesystem_item__root",
+  "goal": "Delete the newest note in Markor.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/MarkorDeleteNewestNote/v4_agent",
+  "cid": "0002_s1_pre"
+ },
+ {
+  "sid": "pb4",
+  "task": "SimpleCalendarDeleteOneEvent",
+  "app": "Simple Calendar Pro",
+  "set": "N",
+  "accept": [
+   "top_right_arrow",
+   "Change view",
+   "|More options|",
+   "month_view_background"
+  ],
+  "efficient": [
+   "Change view",
+   "|More options|",
+   "month_view_background"
+  ],
+  "orig_tok": "L|ImageView|top_right_arrow",
+  "goal": "In Simple Calendar Pro, delete the calendar event on 2023-10-28 at 3h with the title 'Call with the Team'",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/SimpleCalendarDeleteOneEvent/v3_agent",
+  "cid": "0031_s6_pre"
+ },
+ {
+  "sid": "pb5",
+  "task": "SimpleCalendarDeleteOneEvent",
+  "app": "Simple Calendar Pro",
+  "set": "N",
+  "accept": [
+   "top_right_arrow",
+   "Change view",
+   "|More options|",
+   "month_view_background"
+  ],
+  "efficient": [
+   "Change view",
+   "|More options|",
+   "month_view_background"
+  ],
+  "orig_tok": "L|ImageView|top_right_arrow",
+  "goal": "In Simple Calendar Pro, delete the calendar event on 2023-10-30 at 17h with the title 'Call with Marketing'",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/SimpleCalendarDeleteOneEvent/v2_agent",
+  "cid": "0030_s4_pre_requery"
+ },
+ {
+  "sid": "pb6",
+  "task": "SimpleCalendarDeleteOneEvent",
+  "app": "Simple Calendar Pro",
+  "set": "N",
+  "accept": [
+   "top_right_arrow",
+   "Change view",
+   "|More options|",
+   "month_view_background"
+  ],
+  "efficient": [
+   "Change view",
+   "|More options|",
+   "month_view_background"
+  ],
+  "orig_tok": "L|ImageView|top_right_arrow",
+  "goal": "In Simple Calendar Pro, delete the calendar event on 2023-10-28 at 3h with the title 'Call with the Team'",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/SimpleCalendarDeleteOneEvent/v3_agent",
+  "cid": "0030_s5_pre"
+ },
+ {
+  "sid": "pb7",
+  "task": "SimpleCalendarDeleteOneEvent",
+  "app": "Simple Calendar Pro",
+  "set": "N",
+  "accept": [
+   "top_right_arrow",
+   "Change view",
+   "|More options|",
+   "month_view_background"
+  ],
+  "efficient": [
+   "Change view",
+   "|More options|",
+   "month_view_background"
+  ],
+  "orig_tok": "L|ImageView|top_right_arrow",
+  "goal": "In Simple Calendar Pro, delete the calendar event on 2023-10-30 at 17h with the title 'Call with Marketing'",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/SimpleCalendarDeleteOneEvent/v2_agent",
+  "cid": "0034_s8_pre"
+ },
+ {
+  "sid": "pb8",
+  "task": "SimpleCalendarDeleteOneEvent",
+  "app": "Simple Calendar Pro",
+  "set": "N",
+  "accept": [
+   "top_right_arrow",
+   "Change view",
+   "|More options|",
+   "month_view_background"
+  ],
+  "efficient": [
+   "Change view",
+   "|More options|",
+   "month_view_background"
+  ],
+  "orig_tok": "L|ImageView|top_right_arrow",
+  "goal": "In Simple Calendar Pro, delete the calendar event on 2023-10-28 at 3h with the title 'Call with the Team'",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/SimpleCalendarDeleteOneEvent/v3_agent",
+  "cid": "0032_s7_pre"
+ },
+ {
+  "sid": "pb9",
+  "task": "SportsTrackerLongestDistanceActivity",
+  "app": "OpenTracks",
+  "set": "E",
+  "accept": [
+   "SWIPE:",
+   "ANSWER"
+  ],
+  "efficient": [],
+  "orig_tok": "E|ViewGroup|||Track",
+  "goal": "What was the longest distance covered in a running activity in the OpenTracks app this week? Assume the week starts from Monday. Express your answer as a single number in meters rounded to the nearest integer.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/SportsTrackerLongestDistanceActivity/v0_agent",
+  "cid": "0008_s2_pre"
+ },
+ {
+  "sid": "pb10",
+  "task": "MarkorCreateNote",
+  "app": "Markor",
+  "set": "C",
+  "accept": [
+   "TYPE:new_file_dialog__ext",
+   "new_file_dialog__type"
+  ],
+  "efficient": [],
+  "orig_tok": "E|Spinner|new_file_dialog__type||Plain Text",
+  "goal": "Create a new note in Markor named 2023_10_12_brave_wolf.txt with the following text: Weekend plans: Hiking trip to Blue Mountain.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/MarkorCreateNote/v0_agent",
+  "cid": "0017_s3_pre"
+ },
+ {
+  "sid": "pb11",
+  "task": "RecipeDeleteSingleRecipe",
+  "app": "Broccoli",
+  "set": "C",
+  "accept": [
+   "Recipe photo"
+  ],
+  "efficient": [],
+  "orig_tok": "E|CardView|||Recipe photo",
+  "goal": "Delete the following recipes from Broccoli app: Vegetable Stir Fry with Tofu.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/RecipeDeleteSingleRecipe/v4_noexp",
+  "cid": "0002_s1_pre"
+ },
+ {
+  "sid": "pb12",
+  "task": "ContactsAddContact",
+  "app": "Contacts",
+  "set": "C",
+  "accept": [
+   "Create contact"
+  ],
+  "efficient": [],
+  "orig_tok": "E|ImageButton|floating_action_button|Create contact|Create contact",
+  "goal": "Create a new contact for Lily Mohammed. Their number is +18694582719.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/ContactsAddContact/v4_agent",
+  "cid": "0002_s1_pre"
+ },
+ {
+  "sid": "pb13",
+  "task": "SimpleCalendarEventsOnDate",
+  "app": "Simple Calendar Pro",
+  "set": "C",
+  "accept": [
+   "month_view_background"
+  ],
+  "efficient": [],
+  "orig_tok": "L|View|month_view_background",
+  "goal": "What events do I have October 23 2023 in Simple Calendar Pro? Answer with the titles only. If there are multiple titles, format your answer as a comma separated list.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/SimpleCalendarEventsOnDate/v2_noexp",
+  "cid": "0003_s2_pre"
+ },
+ {
+  "sid": "pb14",
+  "task": "ExpenseAddSingle",
+  "app": "Pro Expense",
+  "set": "C",
+  "accept": [
+   "TYPE:edt_amount"
+  ],
+  "efficient": [],
+  "orig_tok": "TYPE:edt_amount",
+  "goal": "Add the following expenses into the pro expense:\nname|amount_dollars|category_name|note\nProDev|$464.19|Education|Remember to transfer funds",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/ExpenseAddSingle/v3_noexp",
+  "cid": "0004_s3_pre"
+ },
+ {
+  "sid": "pb15",
+  "task": "RecipeDeleteMultipleRecipesWithConstraint",
+  "app": "Broccoli",
+  "set": "C",
+  "accept": [
+   "|Delete"
+  ],
+  "efficient": [],
+  "orig_tok": "E|LinearLayout|||Delete",
+  "goal": "Delete the recipes from Broccoli app that use quinoa in the directions.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/RecipeDeleteMultipleRecipesWithConstraint/v1_noexp",
+  "cid": "0010_s9_pre"
+ },
+ {
+  "sid": "pb16",
+  "task": "ContactsAddContact",
+  "app": "Contacts",
+  "set": "C",
+  "accept": [
+   "TYPE:"
+  ],
+  "efficient": [],
+  "orig_tok": "TYPE:",
+  "goal": "Create a new contact for Oliver Muller. Their number is +16322472991.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/ContactsAddContact/v1_agent",
+  "cid": "0032_s4_pre"
+ },
+ {
+  "sid": "pb17",
+  "task": "ContactsAddContact",
+  "app": "Contacts",
+  "set": "C",
+  "accept": [
+   "TYPE:"
+  ],
+  "efficient": [],
+  "orig_tok": "TYPE:",
+  "goal": "Create a new contact for Muhammad Mohammed. Their number is +15377876051.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/ContactsAddContact/v2_noexp",
+  "cid": "0005_s4_pre"
+ },
+ {
+  "sid": "pb18",
+  "task": "ExpenseDeleteSingle",
+  "app": "Pro Expense",
+  "set": "C",
+  "accept": [
+   "btn_delete"
+  ],
+  "efficient": [],
+  "orig_tok": "E|ImageView|btn_delete||",
+  "goal": "Delete the following expenses from pro expense: Parking Fees.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/ExpenseDeleteSingle/v1_noexp",
+  "cid": "0003_s2_pre"
+ },
+ {
+  "sid": "pb19",
+  "task": "RecipeDeleteMultipleRecipesWithConstraint",
+  "app": "Broccoli",
+  "set": "C",
+  "accept": [
+   "|More options|"
+  ],
+  "efficient": [],
+  "orig_tok": "E|ImageView||More options|More options",
+  "goal": "Delete the recipes from Broccoli app that use quinoa in the directions.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/RecipeDeleteMultipleRecipesWithConstraint/v1_noexp",
+  "cid": "0013_s12_pre"
+ },
+ {
+  "sid": "pb20",
+  "task": "ExpenseAddSingle",
+  "app": "Pro Expense",
+  "set": "C",
+  "accept": [
+   "SWIPE:left"
+  ],
+  "efficient": [],
+  "orig_tok": "SWIPE:left",
+  "goal": "Add the following expenses into the pro expense:\nname|amount_dollars|category_name|note\nProDev|$464.19|Education|Remember to transfer funds",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/ExpenseAddSingle/v3_noexp",
+  "cid": "0007_s6_pre"
+ },
+ {
+  "sid": "pb21",
+  "task": "SystemBluetoothTurnOn",
+  "app": "Settings",
+  "set": "C",
+  "accept": [
+   "Navigate up"
+  ],
+  "efficient": [],
+  "orig_tok": "E|ImageButton||Navigate up|Navigate up",
+  "goal": "Turn bluetooth on.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/SystemBluetoothTurnOn/v1_agent",
+  "cid": "0014_s2_pre_requery"
+ },
+ {
+  "sid": "pb22",
+  "task": "RecipeDeleteSingleRecipe",
+  "app": "Broccoli",
+  "set": "C",
+  "accept": [
+   "|Delete"
+  ],
+  "efficient": [],
+  "orig_tok": "E|LinearLayout|||Delete",
+  "goal": "Delete the following recipes from Broccoli app: Moroccan Chickpea Stew.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/RecipeDeleteSingleRecipe/v1_noexp",
+  "cid": "0004_s3_pre"
+ },
+ {
+  "sid": "pb23",
+  "task": "RecipeDeleteSingleRecipe",
+  "app": "Broccoli",
+  "set": "C",
+  "accept": [
+   "Recipe photo"
+  ],
+  "efficient": [],
+  "orig_tok": "E|CardView|||Recipe photo",
+  "goal": "Delete the following recipes from Broccoli app: Quick Fried Rice.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/RecipeDeleteSingleRecipe/v0_agent",
+  "cid": "0008_s3_pre"
+ },
+ {
+  "sid": "pb24",
+  "task": "ExpenseAddSingle",
+  "app": "Pro Expense",
+  "set": "C",
+  "accept": [
+   "SWIPE:left"
+  ],
+  "efficient": [],
+  "orig_tok": "SWIPE:left",
+  "goal": "Add the following expenses into the pro expense:\nname|amount_dollars|category_name|note\nProDev|$464.19|Education|Remember to transfer funds",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/ExpenseAddSingle/v3_noexp",
+  "cid": "0005_s4_pre"
+ },
+ {
+  "sid": "pb25",
+  "task": "SimpleCalendarDeleteOneEvent",
+  "app": "Simple Calendar Pro",
+  "set": "C",
+  "accept": [
+   "month_view_background"
+  ],
+  "efficient": [],
+  "orig_tok": "L|View|month_view_background",
+  "goal": "In Simple Calendar Pro, delete the calendar event on 2023-10-28 at 3h with the title 'Call with the Team'",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/SimpleCalendarDeleteOneEvent/v3_agent",
+  "cid": "0003_s2_pre"
+ },
+ {
+  "sid": "pb26",
+  "task": "SimpleCalendarDeleteOneEvent",
+  "app": "Simple Calendar Pro",
+  "set": "C",
+  "accept": [
+   "month_view_background"
+  ],
+  "efficient": [],
+  "orig_tok": "L|View|month_view_background",
+  "goal": "In Simple Calendar Pro, delete the calendar event on 2023-10-16 at 6h with the title 'Catch up on Campaign'",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/SimpleCalendarDeleteOneEvent/v0_agent",
+  "cid": "0003_s2_pre"
+ },
+ {
+  "sid": "pb27",
+  "task": "SimpleCalendarDeleteOneEvent",
+  "app": "Simple Calendar Pro",
+  "set": "C",
+  "accept": [
+   "month_view_background"
+  ],
+  "efficient": [],
+  "orig_tok": "L|View|month_view_background",
+  "goal": "In Simple Calendar Pro, delete the calendar event on 2023-10-30 at 12h with the title 'Catch up on Budget Planning'",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/SimpleCalendarDeleteOneEvent/v4_agent",
+  "cid": "0003_s2_pre"
+ },
+ {
+  "sid": "pb28",
+  "task": "SimpleCalendarEventsOnDate",
+  "app": "Simple Calendar Pro",
+  "set": "C",
+  "accept": [
+   "month_view_background"
+  ],
+  "efficient": [],
+  "orig_tok": "L|View|month_view_background",
+  "goal": "What events do I have October 24 2023 in Simple Calendar Pro? Answer with the titles only. If there are multiple titles, format your answer as a comma separated list.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/SimpleCalendarEventsOnDate/v1_noexp",
+  "cid": "0003_s2_pre"
+ },
+ {
+  "sid": "pb29",
+  "task": "MarkorCreateNote",
+  "app": "Markor",
+  "set": "C",
+  "accept": [
+   "button1||OK"
+  ],
+  "efficient": [],
+  "orig_tok": "E|Button|button1||OK",
+  "goal": "Create a new note in Markor named irhK_busy_mouse.md with the following text: I think, therefore I am.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/MarkorCreateNote/v1_agent",
+  "cid": "0013_s3_pre"
+ },
+ {
+  "sid": "pb30",
+  "task": "SystemBluetoothTurnOn",
+  "app": "Settings",
+  "set": "C",
+  "accept": [
+   "Connected devices",
+   "Search settings"
+  ],
+  "efficient": [],
+  "orig_tok": "E|LinearLayout|||Connected devices",
+  "goal": "Turn bluetooth on.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/SystemBluetoothTurnOn/v2_agent",
+  "cid": "0002_s1_pre"
+ },
+ {
+  "sid": "pb31",
+  "task": "RecipeDeleteMultipleRecipesWithConstraint",
+  "app": "Broccoli",
+  "set": "C",
+  "accept": [
+   "Recipe photo"
+  ],
+  "efficient": [],
+  "orig_tok": "E|CardView|||Recipe photo",
+  "goal": "Delete the recipes from Broccoli app that use quinoa in the directions.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/RecipeDeleteMultipleRecipesWithConstraint/v1_noexp",
+  "cid": "0004_s3_pre"
+ },
+ {
+  "sid": "pb32",
+  "task": "NotesTodoItemCount",
+  "app": "Joplin",
+  "set": "C",
+  "accept": [
+   "Finance",
+   "E|ViewGroup|||"
+  ],
+  "efficient": [],
+  "orig_tok": "E|ViewGroup|||",
+  "goal": "How many to-dos do I have in the 'Finance' folder in the Joplin app? Express your answer as just a single number.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/NotesTodoItemCount/v2_noexp",
+  "cid": "0002_s1_pre"
+ },
+ {
+  "sid": "pb33",
+  "task": "MarkorCreateNote",
+  "app": "Markor",
+  "set": "C",
+  "accept": [
+   "TYPE:new_file_dialog__name"
+  ],
+  "efficient": [],
+  "orig_tok": "TYPE:new_file_dialog__name",
+  "goal": "Create a new note in Markor named active_zebra_2J9w.md with the following text: Beauty is in the eye of the beholder.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/MarkorCreateNote/v4_agent",
+  "cid": "0013_s2_pre"
+ },
+ {
+  "sid": "pb34",
+  "task": "MarkorCreateNote",
+  "app": "Markor",
+  "set": "C",
+  "accept": [
+   "fab_add_new_item"
+  ],
+  "efficient": [],
+  "orig_tok": "E|ImageButton|fab_add_new_item|Create a new file or folder|Create a new file or folder",
+  "goal": "Create a new note in Markor named active_zebra_2J9w.md with the following text: Beauty is in the eye of the beholder.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/MarkorCreateNote/v4_agent",
+  "cid": "0002_s1_pre"
+ },
+ {
+  "sid": "pb35",
+  "task": "SystemBluetoothTurnOn",
+  "app": "Settings",
+  "set": "C",
+  "accept": [
+   "Navigate up"
+  ],
+  "efficient": [],
+  "orig_tok": "E|ImageButton||Navigate up|Navigate up",
+  "goal": "Turn bluetooth on.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/SystemBluetoothTurnOn/v2_agent",
+  "cid": "0014_s2_pre_requery"
+ },
+ {
+  "sid": "pb36",
+  "task": "ExpenseDeleteSingle",
+  "app": "Pro Expense",
+  "set": "C",
+  "accept": [
+   "Gym Membership"
+  ],
+  "efficient": [],
+  "orig_tok": "E|RelativeLayout|cd_expense||Gym Membership",
+  "goal": "Delete the following expenses from pro expense: Gym Membership.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/ExpenseDeleteSingle/v4_noexp",
+  "cid": "0002_s1_pre"
+ },
+ {
+  "sid": "pb37",
+  "task": "SimpleCalendarEventsOnDate",
+  "app": "Simple Calendar Pro",
+  "set": "C",
+  "accept": [
+   "month_view_background"
+  ],
+  "efficient": [],
+  "orig_tok": "L|View|month_view_background",
+  "goal": "What events do I have October 16 2023 in Simple Calendar Pro? Answer with the titles only. If there are multiple titles, format your answer as a comma separated list.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/SimpleCalendarEventsOnDate/v3_noexp",
+  "cid": "0003_s2_pre"
+ },
+ {
+  "sid": "pb38",
+  "task": "ExpenseDeleteSingle",
+  "app": "Pro Expense",
+  "set": "C",
+  "accept": [
+   "ProDev"
+  ],
+  "efficient": [],
+  "orig_tok": "E|RelativeLayout|cd_expense||ProDev",
+  "goal": "Delete the following expenses from pro expense: ProDev.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/ExpenseDeleteSingle/v3_noexp",
+  "cid": "0002_s1_pre"
+ },
+ {
+  "sid": "pb39",
+  "task": "MarkorDeleteNewestNote",
+  "app": "Markor",
+  "set": "C",
+  "accept": [
+   "LONG_PRESS:L|LinearLayout|opoc_filesystem_item__root",
+   "Sort by"
+  ],
+  "efficient": [],
+  "orig_tok": "LONG_PRESS:L|LinearLayout|opoc_filesystem_item__root",
+  "goal": "Delete the newest note in Markor.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/MarkorDeleteNewestNote/v0_agent",
+  "cid": "0002_s1_pre"
+ },
+ {
+  "sid": "pb40",
+  "task": "MarkorDeleteNewestNote",
+  "app": "Markor",
+  "set": "C",
+  "accept": [
+   "LONG_PRESS:L|LinearLayout|opoc_filesystem_item__root",
+   "Sort by"
+  ],
+  "efficient": [],
+  "orig_tok": "LONG_PRESS:L|LinearLayout|opoc_filesystem_item__root",
+  "goal": "Delete the newest note in Markor.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/MarkorDeleteNewestNote/v1_agent",
+  "cid": "0002_s1_pre"
+ },
+ {
+  "sid": "pb41",
+  "task": "MarkorDeleteNewestNote",
+  "app": "Markor",
+  "set": "C",
+  "accept": [
+   "action_delete_selected_items"
+  ],
+  "efficient": [],
+  "orig_tok": "E|TextView|action_delete_selected_items|Delete|Delete",
+  "goal": "Delete the newest note in Markor.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/MarkorDeleteNewestNote/v1_agent",
+  "cid": "0022_s3_pre"
+ },
+ {
+  "sid": "pb42",
+  "task": "NotesTodoItemCount",
+  "app": "Joplin",
+  "set": "C",
+  "accept": [
+   "Health",
+   "E|ViewGroup|||"
+  ],
+  "efficient": [],
+  "orig_tok": "E|ViewGroup|||",
+  "goal": "How many to-dos do I have in the 'Health' folder in the Joplin app? Express your answer as just a single number.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/NotesTodoItemCount/v1_noexp",
+  "cid": "0003_s2_pre"
+ },
+ {
+  "sid": "pb43",
+  "task": "NotesTodoItemCount",
+  "app": "Joplin",
+  "set": "C",
+  "accept": [
+   "Ideas",
+   "E|ViewGroup|||"
+  ],
+  "efficient": [],
+  "orig_tok": "E|ViewGroup|||",
+  "goal": "How many to-dos do I have in the 'Ideas' folder in the Joplin app? Express your answer as just a single number.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/NotesTodoItemCount/v4_noexp",
+  "cid": "0002_s1_pre"
+ },
+ {
+  "sid": "div0",
+  "task": "SimpleCalendarEventsOnDate",
+  "app": "Simple Calendar Pro",
+  "set": "E",
+  "accept": [
+   "month_view_background",
+   "Change view"
+  ],
+  "efficient": [],
+  "orig_tok": "STATUS",
+  "goal": "What events do I have October 27 2023 in Simple Calendar Pro? Answer with the titles only. If there are multiple titles, format your answer as a comma separated list.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/SimpleCalendarEventsOnDate/v0_agent",
+  "cid": "0003_s2_pre"
+ },
+ {
+  "sid": "div1",
+  "task": "SimpleCalendarEventsOnDate",
+  "app": "Simple Calendar Pro",
+  "set": "E",
+  "accept": [
+   "month_view_background",
+   "Change view"
+  ],
+  "efficient": [],
+  "orig_tok": "STATUS",
+  "goal": "What events do I have October 23 2023 in Simple Calendar Pro? Answer with the titles only. If there are multiple titles, format your answer as a comma separated list.",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/SimpleCalendarEventsOnDate/v2_agent",
+  "cid": "0011_s4_pre"
+ },
+ {
+  "sid": "div4",
+  "task": "SimpleCalendarDeleteOneEvent",
+  "app": "Simple Calendar Pro",
+  "set": "N",
+  "accept": [
+   "top_right_arrow",
+   "Change view",
+   "|More options|",
+   "month_view_background"
+  ],
+  "efficient": [
+   "Change view",
+   "|More options|",
+   "month_view_background"
+  ],
+  "orig_tok": "L|ImageView|top_right_arrow",
+  "goal": "In Simple Calendar Pro, delete the calendar event on 2023-10-28 at 3h with the title 'Call with the Team'",
+  "ep": "/Users/huangrunxi/Projects/android_world/experiments/runtime_graph_study/raw/main/SimpleCalendarDeleteOneEvent/v3_agent",
+  "cid": "0029_s4_pre_requery"
+ }
+]

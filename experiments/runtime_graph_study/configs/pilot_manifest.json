@@ -1,0 +1,4 @@
+{"name": "pilot", "tasks": [
+  {"task": "ExpenseDeleteSingle", "seeds": [1001, 1002, 1003]},
+  {"task": "MarkorCreateNote", "seeds": [1001, 1002, 1003]}
+]}

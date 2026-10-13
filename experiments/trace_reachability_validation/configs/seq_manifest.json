@@ -1,0 +1,121 @@
+{
+ "apps": [
+  {
+   "app": "Pro Expense",
+   "tasks": [
+    {
+     "task": "ExpenseDeleteSingle",
+     "seeds": [
+      1061,
+      1062,
+      1063
+     ]
+    },
+    {
+     "task": "ExpenseAddSingle",
+     "seeds": [
+      1061,
+      1062,
+      1063
+     ]
+    },
+    {
+     "task": "ExpenseDeleteMultiple",
+     "seeds": [
+      1061,
+      1062,
+      1063
+     ]
+    }
+   ]
+  },
+  {
+   "app": "Broccoli",
+   "tasks": [
+    {
+     "task": "RecipeDeleteSingleRecipe",
+     "seeds": [
+      1061,
+      1062,
+      1063
+     ]
+    },
+    {
+     "task": "RecipeAddSingleRecipe",
+     "seeds": [
+      1061,
+      1062,
+      1063
+     ]
+    },
+    {
+     "task": "RecipeDeleteMultipleRecipes",
+     "seeds": [
+      1061,
+      1062,
+      1063
+     ]
+    }
+   ]
+  },
+  {
+   "app": "Markor",
+   "tasks": [
+    {
+     "task": "MarkorCreateNote",
+     "seeds": [
+      1061,
+      1062,
+      1063
+     ]
+    },
+    {
+     "task": "MarkorDeleteNote",
+     "seeds": [
+      1061,
+      1062,
+      1063
+     ]
+    },
+    {
+     "task": "MarkorCreateFolder",
+     "seeds": [
+      1061,
+      1062,
+      1063
+     ],
+     "note": "identical goal across seeds (time-based folder name): runtime-noise control"
+    }
+   ]
+  },
+  {
+   "app": "Simple Calendar Pro",
+   "tasks": [
+    {
+     "task": "SimpleCalendarEventsOnDate",
+     "seeds": [
+      1061,
+      1062,
+      1063
+     ]
+    },
+    {
+     "task": "SimpleCalendarDeleteOneEvent",
+     "seeds": [
+      1061,
+      1062,
+      1063
+     ]
+    },
+    {
+     "task": "SimpleCalendarLocationOfEvent",
+     "seeds": [
+      1061,
+      1062,
+      1063
+     ]
+    }
+   ]
+  }
+ ]
+}

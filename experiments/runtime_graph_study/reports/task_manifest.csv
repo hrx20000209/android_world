@@ -1,0 +1,15 @@
+Task ID,App,Task Name,Workflow Category,Variant Mechanism,Seeds,Planned Runs
+1,Pro Expense,ExpenseDeleteSingle,list item deletion,A param (target name) + B app data (expense list),1001 1002 1003 1004 1005,1-3 clean ref + 5 agent+explore + 4 agent no-explore + 4 strict + 4 struct replay
+2,Pro Expense,ExpenseAddSingle,form data entry,A param (name/amount/category/note),1001 1002 1003 1004 1005,1-3 clean ref + 5 agent+explore + 4 agent no-explore + 4 strict + 4 struct replay
+3,Markor,MarkorCreateNote,item creation + text entry,"A param (file name, text)",1001 1002 1003 1004 1005,1-3 clean ref + 5 agent+explore + 4 agent no-explore + 4 strict + 4 struct replay
+4,Markor,MarkorDeleteNewestNote,"list deletion, data-only variation",B app data only (goal identical),1001 1002 1003 1004 1005,1-3 clean ref + 5 agent+explore + 4 agent no-explore + 4 strict + 4 struct replay
+5,Broccoli,RecipeDeleteSingleRecipe,list item deletion,A param + B app data (recipe list),1001 1002 1003 1004 1005,1-3 clean ref + 5 agent+explore + 4 agent no-explore + 4 strict + 4 struct replay
+6,Contacts,ContactsAddContact,form data entry,"A param (name, phone)",1001 1002 1003 1004 1005,1-3 clean ref + 5 agent+explore + 4 agent no-explore + 4 strict + 4 struct replay
+7,Simple Calendar Pro,SimpleCalendarEventsOnDate,navigation + information retrieval,A param (date) + B data (events) + D navigation (month/day),1001 1002 1003 1004 1006,1-3 clean ref + 5 agent+explore + 4 agent no-explore + 4 strict + 4 struct replay
+8,Settings,SystemBluetoothTurnOn,stable settings toggle (control),none: identical goal; runtime noise-floor control,1001 1002 1003 1004 1005,1-3 clean ref + 5 agent+explore + 4 agent no-explore + 4 strict + 4 struct replay
+9,Tasks,TasksDueOnDate,list + information retrieval,A param (date) + B data (tasks),1001 1002 1003 1004 1006,1-3 clean ref + 5 agent+explore + 4 agent no-explore + 4 strict + 4 struct replay
+10,Joplin,NotesTodoItemCount,multi-page navigation + counting,A param (folder) + B data (notes),1001 1002 1003 1004 1006,1-3 clean ref + 5 agent+explore + 4 agent no-explore + 4 strict + 4 struct replay
+11,Simple Calendar Pro,SimpleCalendarDeleteOneEvent,navigation + deletion,A param (date/title) + B data,1001 1002 1003 1004 1005,1-3 clean ref + 5 agent+explore + 4 agent no-explore + 4 strict + 4 struct replay
+12,OpenTracks,SportsTrackerLongestDistanceActivity,list + information retrieval,A param (activity type) + B data,1001 1002 1003 1004 1005,1-3 clean ref + 5 agent+explore + 4 agent no-explore + 4 strict + 4 struct replay
+13,OsmAnd,OsmAndFavorite,search + map UI (dynamic map content),A param (location) + C runtime map rendering,1001 1002 1003 1004 1006,1-3 clean ref + 5 agent+explore + 4 agent no-explore + 4 strict + 4 struct replay
+14,Broccoli,RecipeDeleteMultipleRecipesWithConstraint,search/filter + multi deletion,A param (ingredient) + B data,1001 1002 1003 1005 1006,1-3 clean ref + 5 agent+explore + 4 agent no-explore + 4 strict + 4 struct replay

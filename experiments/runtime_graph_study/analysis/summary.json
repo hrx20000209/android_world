@@ -1,0 +1,608 @@
+{
+ "success_table": [
+  {
+   "task": "ContactsAddContact",
+   "app": "Contacts",
+   "ref_attempts": 1,
+   "ref_success": 1,
+   "explore_success": "5/5",
+   "noexp_success": "4/4",
+   "replay_strict_completed": "4/4",
+   "replay_strict_task_success": "0/4",
+   "replay_struct_completed": "4/4",
+   "replay_struct_task_success": "0/4",
+   "recovery_success": "0/0",
+   "recovery_model_calls": 0,
+   "errors": 0
+  },
+  {
+   "task": "ExpenseAddSingle",
+   "app": "Pro Expense",
+   "ref_attempts": 1,
+   "ref_success": 1,
+   "explore_success": "4/5",
+   "noexp_success": "3/4",
+   "replay_strict_completed": "4/4",
+   "replay_strict_task_success": "0/4",
+   "replay_struct_completed": "4/4",
+   "replay_struct_task_success": "0/4",
+   "recovery_success": "0/0",
+   "recovery_model_calls": 0,
+   "errors": 0
+  },
+  {
+   "task": "ExpenseDeleteSingle",
+   "app": "Pro Expense",
+   "ref_attempts": 1,
+   "ref_success": 1,
+   "explore_success": "5/5",
+   "noexp_success": "4/4",
+   "replay_strict_completed": "4/4",
+   "replay_strict_task_success": "4/4",
+   "replay_struct_completed": "4/4",
+   "replay_struct_task_success": "4/4",
+   "recovery_success": "0/0",
+   "recovery_model_calls": 0,
+   "errors": 0
+  },
+  {
+   "task": "MarkorCreateNote",
+   "app": "Markor",
+   "ref_attempts": 1,
+   "ref_success": 1,
+   "explore_success": "2/5",
+   "noexp_success": "2/4",
+   "replay_strict_completed": "4/4",
+   "replay_strict_task_success": "2/4",
+   "replay_struct_completed": "4/4",
+   "replay_struct_task_success": "2/4",
+   "recovery_success": "0/0",
+   "recovery_model_calls": 0,
+   "errors": 0
+  },
+  {
+   "task": "MarkorDeleteNewestNote",
+   "app": "Markor",
+   "ref_attempts": 1,
+   "ref_success": 1,
+   "explore_success": "1/5",
+   "noexp_success": "2/4",
+   "replay_strict_completed": "0/4",
+   "replay_strict_task_success": "0/4",
+   "replay_struct_completed": "0/4",
+   "replay_struct_task_success": "0/4",
+   "recovery_success": "3/4",
+   "recovery_model_calls": 16,
+   "errors": 0
+  },
+  {
+   "task": "NotesTodoItemCount",
+   "app": "Joplin",
+   "ref_attempts": 1,
+   "ref_success": 1,
+   "explore_success": "5/5",
+   "noexp_success": "4/4",
+   "replay_strict_completed": "0/4",
+   "replay_strict_task_success": "0/4",
+   "replay_struct_completed": "0/4",
+   "replay_struct_task_success": "0/4",
+   "recovery_success": "4/4",
+   "recovery_model_calls": 10,
+   "errors": 0
+  },
+  {
+   "task": "OsmAndFavorite",
+   "app": "OsmAnd",
+   "ref_attempts": 2,
+   "ref_success": 1,
+   "explore_success": "3/5",
+   "noexp_success": "3/4",
+   "replay_strict_completed": "2/4",
+   "replay_strict_task_success": "2/4",
+   "replay_struct_completed": "2/4",
+   "replay_struct_task_success": "2/4",
+   "recovery_success": "2/2",
+   "recovery_model_calls": 10,
+   "errors": 0
+  },
+  {
+   "task": "RecipeDeleteMultipleRecipesWithConstraint",
+   "app": "Broccoli",
+   "ref_attempts": 1,
+   "ref_success": 1,
+   "explore_success": "2/5",
+   "noexp_success": "1/4",
+   "replay_strict_completed": "2/4",
+   "replay_strict_task_success": "0/4",
+   "replay_struct_completed": "2/4",
+   "replay_struct_task_success": "0/4",
+   "recovery_success": "0/2",
+   "recovery_model_calls": 18,
+   "errors": 0
+  },
+  {
+   "task": "RecipeDeleteSingleRecipe",
+   "app": "Broccoli",
+   "ref_attempts": 1,
+   "ref_success": 1,
+   "explore_success": "5/5",
+   "noexp_success": "4/4",
+   "replay_strict_completed": "4/4",
+   "replay_strict_task_success": "4/4",
+   "replay_struct_completed": "4/4",
+   "replay_struct_task_success": "4/4",
+   "recovery_success": "0/0",
+   "recovery_model_calls": 0,
+   "errors": 0
+  },
+  {
+   "task": "SimpleCalendarDeleteOneEvent",
+   "app": "Simple Calendar Pro",
+   "ref_attempts": 1,
+   "ref_success": 1,
+   "explore_success": "3/5",
+   "noexp_success": "4/4",
+   "replay_strict_completed": "0/4",
+   "replay_strict_task_success": "0/4",
+   "replay_struct_completed": "0/4",
+   "replay_struct_task_success": "0/4",
+   "recovery_success": "4/4",
+   "recovery_model_calls": 20,
+   "errors": 0
+  },
+  {
+   "task": "SimpleCalendarEventsOnDate",
+   "app": "Simple Calendar Pro",
+   "ref_attempts": 1,
+   "ref_success": 1,
+   "explore_success": "2/5",
+   "noexp_success": "3/4",
+   "replay_strict_completed": "4/4",
+   "replay_strict_task_success": "0/4",
+   "replay_struct_completed": "0/4",
+   "replay_struct_task_success": "0/4",
+   "recovery_success": "2/4",
+   "recovery_model_calls": 13,
+   "errors": 0
+  },
+  {
+   "task": "SportsTrackerLongestDistanceActivity",
+   "app": "OpenTracks",
+   "ref_attempts": 1,
+   "ref_success": 1,
+   "explore_success": "1/5",
+   "noexp_success": "1/4",
+   "replay_strict_completed": "4/4",
+   "replay_strict_task_success": "0/4",
+   "replay_struct_completed": "4/4",
+   "replay_struct_task_success": "0/4",
+   "recovery_success": "0/0",
+   "recovery_model_calls": 0,
+   "errors": 0
+  },
+  {
+   "task": "SystemBluetoothTurnOn",
+   "app": "Settings",
+   "ref_attempts": 1,
+   "ref_success": 1,
+   "explore_success": "5/5",
+   "noexp_success": "4/4",
+   "replay_strict_completed": "0/4",
+   "replay_strict_task_success": "0/4",
+   "replay_struct_completed": "0/4",
+   "replay_struct_task_success": "0/4",
+   "recovery_success": "4/4",
+   "recovery_model_calls": 19,
+   "errors": 0
+  },
+  {
+   "task": "TasksDueOnDate",
+   "app": "Tasks",
+   "ref_attempts": 3,
+   "ref_success": 0,
+   "explore_success": "1/5",
+   "noexp_success": "0/4",
+   "replay_strict_completed": "4/4",
+   "replay_strict_task_success": "0/4",
+   "replay_struct_completed": "0/4",
+   "replay_struct_task_success": "0/4",
+   "recovery_success": "0/4",
+   "recovery_model_calls": 12,
+   "errors": 0
+  }
+ ],
+ "explore_vs_noexp": {
+  "pairs": 56,
+  "both": 33,
+  "explore_only": 3,
+  "noexp_only": 6,
+  "neither": 14,
+  "explore_success": 36,
+  "noexp_success": 39,
+  "episodes_with_rollback_failure": 35,
+  "noexp_only_with_rollback_failure": 6
+ },
+ "corresponding_steps": {
+  "definition": "structure-aware replay decisions whose live pre-state matched the reference pre-state at struct or layout level",
+  "n": 278,
+  "n_tasks": 14,
+  "screenshot_changed": {
+   "pooled": {
+    "k": 173,
+    "n": 278,
+    "p": 0.6223
+   },
+   "per_task_avg": 0.6448
+  },
+  "screenshot_changed_0.5pct": {
+   "pooled": {
+    "k": 120,
+    "n": 278,
+    "p": 0.4317
+   },
+   "per_task_avg": 0.4832
+  },
+  "a11y_exact_changed": {
+   "pooled": {
+    "k": 139,
+    "n": 278,
+    "p": 0.5
+   },
+   "per_task_avg": 0.5041
+  },
+  "struct_sig_changed": {
+   "pooled": {
+    "k": 55,
+    "n": 278,
+    "p": 0.1978
+   },
+   "per_task_avg": 0.2165
+  },
+  "clickable_set_changed": {
+   "pooled": {
+    "k": 101,
+    "n": 278,
+    "p": 0.3633
+   },
+   "per_task_avg": 0.352
+  },
+  "clickable_struct_changed (tautologically 0 given layout match)": {
+   "pooled": {
+    "k": 0,
+    "n": 278,
+    "p": 0.0
+   },
+   "per_task_avg": 0.0
+  },
+  "content_sig_changed": {
+   "pooled": {
+    "k": 101,
+    "n": 278,
+    "p": 0.3633
+   },
+   "per_task_avg": 0.3501
+  },
+  "elements_added_or_removed": {
+   "pooled": {
+    "k": 139,
+    "n": 278,
+    "p": 0.5
+   },
+   "per_task_avg": 0.5041
+  },
+  "element_moved": {
+   "pooled": {
+    "k": 62,
+    "n": 278,
+    "p": 0.223
+   },
+   "per_task_avg": 0.2107
+  },
+  "rid_set_changed": {
+   "pooled": {
+    "k": 8,
+    "n": 278,
+    "p": 0.0288
+   },
+   "per_task_avg": 0.034
+  },
+  "drift_px_when_moved": {
+   "n": 62,
+   "median": 120.8,
+   "max": 908.6
+  }
+ },
+ "rq4": {
+  "screenshot_changed": 173,
+  "of_which_clickable_struct_changed": 0,
+  "of_which_clickable_set_changed": 97,
+  "of_which_struct_sig_changed": 55,
+  "screenshot_unchanged_but_clickable_set_changed": 4,
+  "a11y_exact_equal_but_screenshot_changed": 38,
+  "a11y_exact_equal_but_screenshot_changed_tasks": [
+   "OsmAndFavorite",
+   "RecipeDeleteSingleRecipe",
+   "SimpleCalendarDeleteOneEvent",
+   "SimpleCalendarEventsOnDate",
+   "TasksDueOnDate"
+  ]
+ },
+ "transition_outcomes_replay_strict": {
+  "same_exact": 96,
+  "same_struct_dynamic_content": 131,
+  "same_layout_ambiguous": 69,
+  "different_state": 4,
+  "n": 300
+ },
+ "transition_outcomes_replay_struct": {
+  "same_exact": 108,
+  "same_struct_dynamic_content": 102,
+  "same_layout_ambiguous": 66,
+  "different_state": 4,
+  "n": 280
+ },
+ "replay_strict": {
+  "episodes": 56,
+  "causes": {
+   "completed": 36,
+   "ambiguous_target": 13,
+   "missing_target": 2,
+   "changed_ui_hierarchy": 2,
+   "coordinate_drift": 3
+  },
+  "causes_refined": {
+   "completed": 36,
+   "target_not_on_screen": 14,
+   "duplicate_targets": 4,
+   "changed_ui_hierarchy": 2
+  },
+  "task_success_without_recovery": 12,
+  "divergence_ref_step_median": 2.0,
+  "grounded_steps": 166,
+  "relocated": 0,
+  "coord_hit_same_target": 148,
+  "parameter_bound_steps": 37,
+  "match_categories": {
+   "exact_selector": 132,
+   "ambiguous": 29,
+   "none": 2,
+   "structural_unique": 3
+  }
+ },
+ "replay_struct": {
+  "episodes": 56,
+  "causes": {
+   "completed": 28,
+   "ambiguous_target": 24,
+   "missing_target": 2,
+   "changed_ui_hierarchy": 2
+  },
+  "causes_refined": {
+   "completed": 28,
+   "target_not_on_screen": 10,
+   "duplicate_targets": 16,
+   "changed_ui_hierarchy": 2
+  },
+  "task_success_without_recovery": 12,
+  "divergence_ref_step_median": 2.0,
+  "grounded_steps": 158,
+  "relocated": 0,
+  "coord_hit_same_target": 148,
+  "parameter_bound_steps": 37,
+  "match_categories": {
+   "exact_selector": 132,
+   "ambiguous": 24,
+   "none": 2
+  }
+ },
+ "agent_alignment_noexp": {
+  "trajectories": 56,
+  "ref_steps": 352,
+  "var_steps": 369,
+  "matched": 299,
+  "matched_struct": 242,
+  "matched_layout_only": 57,
+  "ref_only": 53,
+  "var_only": 70,
+  "identical_length_and_all_struct": 11,
+  "reconverged_after_divergence": 21,
+  "diverged": 27,
+  "pairs": 299,
+  "pairs_same_slot": 235,
+  "pairs_pix_changed": 198,
+  "pairs_clickable_set_changed": 134,
+  "pairs_same_slot_same_next": 150,
+  "pairs_same_slot_diff_next": 85
+ },
+ "probes": {
+  "n": 427,
+  "outcomes": {
+   "new_screen": 354,
+   "in_place_content_change": 18,
+   "left_app": 7,
+   "no_change": 48
+  },
+  "rollback_ok": {
+   "k": 380,
+   "n": 427,
+   "p": 0.8899
+  },
+  "rollback_methods": {
+   "back|False": 32,
+   "back|True": 296,
+   "reselect|True": 5,
+   "retap|True": 13,
+   "back+graph|True": 18,
+   "back+graph|False": 8,
+   "none_needed|True": 48,
+   "retap|False": 5,
+   "reselect+back|False": 2
+  },
+  "t_total_median": 1.749,
+  "t_total_p90": 2.6018000000000003,
+  "t_rollback_median_when_needed": 0.848,
+  "priority": {
+   "discover": 313,
+   "revalidate": 114
+  },
+  "dst_graph_match": {
+   "new": 88,
+   "struct": 266,
+   "ambiguous": 73
+  }
+ },
+ "windows": {
+  "n": 500,
+  "stop": {
+   "plan_exhausted": 191,
+   "rollback_failed": 47,
+   "disabled": 211,
+   "budget": 48,
+   "max_probes": 3
+  },
+  "model_latency_median": 2.0345,
+  "model_latency_p90": 2.6648000000000005,
+  "windows_with_probes": 158,
+  "plan_sums": {
+   "plan_slots": 3769,
+   "plan_safe": 2086,
+   "plan_discover": 1380,
+   "plan_revalidate": 312,
+   "plan_skip_known_same_instance": 65,
+   "plan_skip_known_unrestorable": 2,
+   "plan_skip_family_unrestorable": 13,
+   "plan_skip_app_unrestorable": 314
+  }
+ },
+ "graph": {
+  "exact": {
+   "agent_states": 500,
+   "new_nodes": 565,
+   "new_edges": 622,
+   "probes": 427,
+   "probe_rollback_fail": 47,
+   "agent_states_known_any": 457,
+   "later_agent_states": 400,
+   "agent_states_known_from_prior_runs": 159,
+   "later_agent_states_known_from_prior_runs": 159,
+   "later_agent_states_known_any": 376,
+   "revalidated": 218,
+   "later_revalidated": 218,
+   "revalidated_same": 155,
+   "later_revalidated_same": 155,
+   "later_new_nodes": 427,
+   "later_new_edges": 494,
+   "later_probes": 369,
+   "later_probe_rollback_fail": 35,
+   "convergence": 98,
+   "later_convergence": 90,
+   "convergence_avoided_slots": 114,
+   "later_convergence_avoided_slots": 104,
+   "nodes": 565,
+   "edges": 622,
+   "slots": 657,
+   "multi_outcome_slots": 28,
+   "per_run_nodes_sum": 785,
+   "reval_explore": {
+    "k": 69,
+    "n": 74,
+    "p": 0.9324
+   },
+   "reval_agent": {
+    "k": 86,
+    "n": 144,
+    "p": 0.5972
+   }
+  },
+  "struct": {
+   "agent_states": 500,
+   "new_nodes": 287,
+   "new_edges": 422,
+   "probes": 427,
+   "probe_rollback_fail": 47,
+   "agent_states_known_any": 472,
+   "later_agent_states": 400,
+   "agent_states_known_from_prior_runs": 303,
+   "later_agent_states_known_from_prior_runs": 303,
+   "later_agent_states_known_any": 389,
+   "revalidated": 364,
+   "later_revalidated": 364,
+   "revalidated_same": 333,
+   "later_revalidated_same": 333,
+   "later_new_nodes": 177,
+   "later_new_edges": 310,
+   "later_probes": 369,
+   "later_probe_rollback_fail": 35,
+   "convergence": 163,
+   "later_convergence": 144,
+   "convergence_avoided_slots": 656,
+   "later_convergence_avoided_slots": 621,
+   "nodes": 287,
+   "edges": 422,
+   "slots": 506,
+   "multi_outcome_slots": 17,
+   "per_run_nodes_sum": 583,
+   "reval_explore": {
+    "k": 112,
+    "n": 114,
+    "p": 0.9825
+   },
+   "reval_agent": {
+    "k": 221,
+    "n": 250,
+    "p": 0.884
+   }
+  },
+  "layout": {
+   "agent_states": 500,
+   "new_nodes": 175,
+   "new_edges": 333,
+   "probes": 427,
+   "probe_rollback_fail": 47,
+   "agent_states_known_any": 476,
+   "later_agent_states": 400,
+   "agent_states_known_from_prior_runs": 372,
+   "later_agent_states_known_from_prior_runs": 372,
+   "later_agent_states_known_any": 393,
+   "revalidated": 463,
+   "later_revalidated": 463,
+   "revalidated_same": 455,
+   "later_revalidated_same": 455,
+   "later_new_nodes": 68,
+   "later_new_edges": 222,
+   "later_probes": 369,
+   "later_probe_rollback_fail": 35,
+   "convergence": 182,
+   "later_convergence": 161,
+   "convergence_avoided_slots": 606,
+   "later_convergence_avoided_slots": 569,
+   "nodes": 175,
+   "edges": 333,
+   "slots": 423,
+   "multi_outcome_slots": 12,
+   "per_run_nodes_sum": 535,
+   "reval_explore": {
+    "k": 159,
+    "n": 162,
+    "p": 0.9815
+   },
+   "reval_agent": {
+    "k": 296,
+    "n": 301,
+    "p": 0.9834
+   }
+  },
+  "struct_ambiguous_new_states": 112,
+  "struct_distinct_states": 287
+ },
+ "evidence_relevance": {
+  "agent_click_steps": 272,
+  "state_known": 191,
+  "slot_observed_before": 146,
+  "observed_outcome_matched_struct": 122,
+  "slot_observed_by_explorer_before": 21,
+  "observed_in_same_run": 45,
+  "observed_outcome_matched_layout_only": 4,
+  "observed_outcome_differed": 20
+ }
+}

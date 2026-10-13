@@ -1,0 +1,5 @@
+raw/
+logs/
+analysis_pilot*/
+figures_pilot/
+__pycache__/

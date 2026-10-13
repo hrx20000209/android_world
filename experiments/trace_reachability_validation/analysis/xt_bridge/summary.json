@@ -1,0 +1,166 @@
+{
+ "all": {
+  "n": 146,
+  "P0": {
+   "top1": 0.048,
+   "top3": 0.493
+  },
+  "TRACE": {
+   "top1": 0.425,
+   "top3": 0.719
+  },
+  "BR_agent": {
+   "top1": 0.432,
+   "top3": 0.747
+  },
+  "BR_full": {
+   "top1": 0.432,
+   "top3": 0.753
+  },
+  "BR_oracleGraph": {
+   "top1": 0.5,
+   "top3": 0.808
+  },
+  "GOAL": {
+   "top1": 0.144,
+   "top3": 0.521
+  },
+  "GOAL+BR_full": {
+   "top1": 0.473,
+   "top3": 0.774
+  },
+  "GOAL+BR_oracleGraph": {
+   "top1": 0.541,
+   "top3": 0.829
+  }
+ },
+ "gap (no cross-task trace at page)": {
+  "n": 72,
+  "P0": {
+   "top1": 0.083,
+   "top3": 0.653
+  },
+  "TRACE": {
+   "top1": 0.083,
+   "top3": 0.653
+  },
+  "BR_agent": {
+   "top1": 0.083,
+   "top3": 0.653
+  },
+  "BR_full": {
+   "top1": 0.083,
+   "top3": 0.653
+  },
+  "BR_oracleGraph": {
+   "top1": 0.236,
+   "top3": 0.792
+  },
+  "GOAL": {
+   "top1": 0.264,
+   "top3": 0.694
+  },
+  "GOAL+BR_full": {
+   "top1": 0.264,
+   "top3": 0.694
+  },
+  "GOAL+BR_oracleGraph": {
+   "top1": 0.417,
+   "top3": 0.833
+  }
+ },
+ "covered by cross-task trace": {
+  "n": 74,
+  "P0": {
+   "top1": 0.014,
+   "top3": 0.338
+  },
+  "TRACE": {
+   "top1": 0.757,
+   "top3": 0.784
+  },
+  "BR_agent": {
+   "top1": 0.77,
+   "top3": 0.838
+  },
+  "BR_full": {
+   "top1": 0.77,
+   "top3": 0.851
+  },
+  "BR_oracleGraph": {
+   "top1": 0.757,
+   "top3": 0.824
+  },
+  "GOAL": {
+   "top1": 0.027,
+   "top3": 0.351
+  },
+  "GOAL+BR_full": {
+   "top1": 0.676,
+   "top3": 0.851
+  },
+  "GOAL+BR_oracleGraph": {
+   "top1": 0.662,
+   "top3": 0.824
+  }
+ },
+ "target_outcome_known": {
+  "agent_graph": 57,
+  "full_graph": 61,
+  "n": 146,
+  "bridge_full": 53
+ },
+ "gap_bridge_diagnostics": {
+  "n": 72,
+  "target_is_bridge_oracle": 11,
+  "mean_bridge_cands_oracle": 0.7083333333333334,
+  "mean_cands": 5.222222222222222,
+  "mean_dst_known_oracle": 3.0
+ },
+ "per_app_top1": {
+  "Broccoli": {
+   "P0": 0.0,
+   "TRACE": 0.404,
+   "BR_agent": 0.404,
+   "BR_full": 0.404,
+   "BR_oracleGraph": 0.615,
+   "GOAL": 0.0,
+   "GOAL+BR_full": 0.404,
+   "GOAL+BR_oracleGraph": 0.615,
+   "n": 52
+  },
+  "Markor": {
+   "P0": 0.28,
+   "TRACE": 0.4,
+   "BR_agent": 0.4,
+   "BR_full": 0.4,
+   "BR_oracleGraph": 0.4,
+   "GOAL": 0.28,
+   "GOAL+BR_full": 0.36,
+   "GOAL+BR_oracleGraph": 0.36,
+   "n": 25
+  },
+  "Pro Expense": {
+   "P0": 0.0,
+   "TRACE": 0.091,
+   "BR_agent": 0.091,
+   "BR_full": 0.091,
+   "BR_oracleGraph": 0.091,
+   "GOAL": 0.455,
+   "GOAL+BR_full": 0.545,
+   "GOAL+BR_oracleGraph": 0.545,
+   "n": 22
+  },
+  "Simple Calendar Pro": {
+   "P0": 0.0,
+   "TRACE": 0.617,
+   "BR_agent": 0.638,
+   "BR_full": 0.638,
+   "BR_oracleGraph": 0.617,
+   "GOAL": 0.085,
+   "GOAL+BR_full": 0.574,
+   "GOAL+BR_oracleGraph": 0.553,
+   "n": 47
+  }
+ }
+}

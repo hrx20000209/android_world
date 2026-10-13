@@ -1,0 +1,277 @@
+{
+ "q1": {
+  "episodes": 143,
+  "mean_steps": 6.881118881118881,
+  "mean_distinct_pages": 4.874125874125874,
+  "revisit_step_fraction": 0.2916666666666667,
+  "mean_top1_page_share": 0.3674762785776771,
+  "steps_on_pages_shared_with_other_tasks": 0.22459349593495934,
+  "per_app_shared": {
+   "Pro Expense": {
+    "pages": 19,
+    "pages_in_>=2_tasks": 1
+   },
+   "Markor": {
+    "pages": 30,
+    "pages_in_>=2_tasks": 4
+   },
+   "Broccoli": {
+    "pages": 22,
+    "pages_in_>=2_tasks": 3
+   },
+   "Contacts": {
+    "pages": 6,
+    "pages_in_>=2_tasks": 0
+   },
+   "Simple Calendar Pro": {
+    "pages": 13,
+    "pages_in_>=2_tasks": 3
+   },
+   "Settings": {
+    "pages": 5,
+    "pages_in_>=2_tasks": 0
+   },
+   "Tasks": {
+    "pages": 17,
+    "pages_in_>=2_tasks": 0
+   },
+   "Joplin": {
+    "pages": 17,
+    "pages_in_>=2_tasks": 0
+   },
+   "OpenTracks": {
+    "pages": 3,
+    "pages_in_>=2_tasks": 0
+   },
+   "OsmAnd": {
+    "pages": 28,
+    "pages_in_>=2_tasks": 0
+   }
+  },
+  "per_task_distinct_pages_union": {
+   "ContactsAddContact": 6,
+   "ExpenseAddSingle": 7,
+   "ExpenseDeleteSingle": 13,
+   "MarkorCreateNote": 16,
+   "MarkorDeleteNewestNote": 18,
+   "NotesTodoItemCount": 17,
+   "OsmAndFavorite": 28,
+   "RecipeDeleteMultipleRecipesWithConstraint": 14,
+   "RecipeDeleteSingleRecipe": 11,
+   "SimpleCalendarDeleteOneEvent": 12,
+   "SimpleCalendarEventsOnDate": 4,
+   "SportsTrackerLongestDistanceActivity": 3,
+   "SystemBluetoothTurnOn": 5,
+   "TasksDueOnDate": 17
+  }
+ },
+ "q2": {
+  "warm": {
+   "s0": {
+    "clicks": 9,
+    "eligible": 0,
+    "top1": 0,
+    "top1_rate": null,
+    "eligible_rate": 0.0,
+    "twohop_top1": 0,
+    "twohop_pairs": 0
+   },
+   "s1": {
+    "clicks": 114,
+    "eligible": 92,
+    "top1": 60,
+    "top1_rate": 0.6521739130434783,
+    "eligible_rate": 0.8070175438596491,
+    "twohop_top1": 6,
+    "twohop_pairs": 21
+   },
+   "s2-3": {
+    "clicks": 164,
+    "eligible": 78,
+    "top1": 50,
+    "top1_rate": 0.6410256410256411,
+    "eligible_rate": 0.47560975609756095,
+    "twohop_top1": 6,
+    "twohop_pairs": 28
+   },
+   "s4+": {
+    "clicks": 246,
+    "eligible": 106,
+    "top1": 84,
+    "top1_rate": 0.7924528301886793,
+    "eligible_rate": 0.43089430894308944,
+    "twohop_top1": 33,
+    "twohop_pairs": 49
+   }
+  },
+  "loto": {
+   "s0": {
+    "clicks": 9,
+    "eligible": 0,
+    "top1": 0,
+    "top1_rate": null,
+    "eligible_rate": 0.0,
+    "twohop_top1": 0,
+    "twohop_pairs": 0
+   },
+   "s1": {
+    "clicks": 114,
+    "eligible": 92,
+    "top1": 0,
+    "top1_rate": 0.0,
+    "eligible_rate": 0.8070175438596491,
+    "twohop_top1": 0,
+    "twohop_pairs": 21
+   },
+   "s2-3": {
+    "clicks": 164,
+    "eligible": 78,
+    "top1": 39,
+    "top1_rate": 0.5,
+    "eligible_rate": 0.47560975609756095,
+    "twohop_top1": 1,
+    "twohop_pairs": 28
+   },
+   "s4+": {
+    "clicks": 246,
+    "eligible": 106,
+    "top1": 72,
+    "top1_rate": 0.6792452830188679,
+    "eligible_rate": 0.43089430894308944,
+    "twohop_top1": 23,
+    "twohop_pairs": 49
+   }
+  },
+  "loao": {
+   "s0": {
+    "clicks": 9,
+    "eligible": 0,
+    "top1": 0,
+    "top1_rate": null,
+    "eligible_rate": 0.0,
+    "twohop_top1": 0,
+    "twohop_pairs": 0
+   },
+   "s1": {
+    "clicks": 114,
+    "eligible": 92,
+    "top1": 0,
+    "top1_rate": 0.0,
+    "eligible_rate": 0.8070175438596491,
+    "twohop_top1": 0,
+    "twohop_pairs": 21
+   },
+   "s2-3": {
+    "clicks": 164,
+    "eligible": 78,
+    "top1": 15,
+    "top1_rate": 0.19230769230769232,
+    "eligible_rate": 0.47560975609756095,
+    "twohop_top1": 1,
+    "twohop_pairs": 28
+   },
+   "s4+": {
+    "clicks": 246,
+    "eligible": 106,
+    "top1": 65,
+    "top1_rate": 0.6132075471698113,
+    "eligible_rate": 0.43089430894308944,
+    "twohop_top1": 23,
+    "twohop_pairs": 49
+   }
+  },
+  "cold": {
+   "s0": {
+    "clicks": 9,
+    "eligible": 0,
+    "top1": 0,
+    "top1_rate": null,
+    "eligible_rate": 0.0,
+    "twohop_top1": 0,
+    "twohop_pairs": 0
+   },
+   "s1": {
+    "clicks": 114,
+    "eligible": 92,
+    "top1": 0,
+    "top1_rate": 0.0,
+    "eligible_rate": 0.8070175438596491,
+    "twohop_top1": 0,
+    "twohop_pairs": 21
+   },
+   "s2-3": {
+    "clicks": 164,
+    "eligible": 78,
+    "top1": 15,
+    "top1_rate": 0.19230769230769232,
+    "eligible_rate": 0.47560975609756095,
+    "twohop_top1": 1,
+    "twohop_pairs": 28
+   },
+   "s4+": {
+    "clicks": 246,
+    "eligible": 106,
+    "top1": 65,
+    "top1_rate": 0.6132075471698113,
+    "eligible_rate": 0.43089430894308944,
+    "twohop_top1": 23,
+    "twohop_pairs": 49
+   }
+  }
+ },
+ "q3": {
+  "warm": {
+   "unknown": 223,
+   "n": 533,
+   "agent_only": 228,
+   "both": 78,
+   "explore_only": 4
+  },
+  "loto": {
+   "unknown": 441,
+   "n": 533,
+   "agent_only": 64,
+   "both": 24,
+   "explore_only": 4
+  },
+  "cold": {
+   "unknown": 484,
+   "n": 533,
+   "agent_only": 40,
+   "both": 5,
+   "explore_only": 4
+  }
+ },
+ "q4": {
+  "none": {
+   "n": 220
+  },
+  "n>=1,dom>=0.0": {
+   "fires": 479,
+   "correct": 321,
+   "succ_known": 287,
+   "succ_matches_real": 245
+  },
+  "all": {
+   "n": 479
+  },
+  "n>=2,dom>=0.6": {
+   "fires": 246,
+   "correct": 182,
+   "succ_known": 173,
+   "succ_matches_real": 151
+  },
+  "n>=3,dom>=0.8": {
+   "fires": 167,
+   "correct": 131,
+   "succ_known": 126,
+   "succ_matches_real": 114
+  },
+  "n>=5,dom>=0.9": {
+   "fires": 74,
+   "correct": 69,
+   "succ_known": 69,
+   "succ_matches_real": 61
+  }
+ }
+}
