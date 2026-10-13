@@ -1,0 +1,1 @@
+{"task": "OsmAndTrack", "variant": "p0_FULL", "mode": "agent", "steps": 20, "agent_steps": 20, "done": false, "model_calls": 21, "final_cid": "0032_final", "n_probes": 4, "explore_disabled": "rollback_failed@3", "store_eps": 20, "m_probes_e1": 0, "m_probes_e2": 4, "m_calls": 21, "m_e2_hit": 1, "m_reuse_hits": 1, "m_requery": 1, "is_successful": 0.0, "wall_s": 83.42}

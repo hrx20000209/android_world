@@ -1,0 +1,2 @@
+{"step": 0, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "OPEN_APP:Markor", "count": 13, "total": 42}, "mode": "none", "window_s": 0.0}
+{"step": 1, "probes": [], "stop": "", "gate": {"key": "layout", "order": 1, "top": "E|Button||Search|Search", "count": 1, "total": 2}, "mode": "none", "window_s": 0.004}

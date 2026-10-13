@@ -1,0 +1,1 @@
+{"task": "MarkorTranscribeVideo", "variant": "p0_BASE", "mode": "agent", "steps": 14, "agent_steps": 14, "done": true, "model_calls": 14, "final_cid": "0015_final", "n_probes": 0, "explore_disabled": "", "store_eps": 0, "m_calls": 14, "is_successful": 0.0, "wall_s": 59.68}

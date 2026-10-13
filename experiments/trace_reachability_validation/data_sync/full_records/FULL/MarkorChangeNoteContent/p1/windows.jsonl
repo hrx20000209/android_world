@@ -1,0 +1,6 @@
+{"step": 0, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "OPEN_APP:Simple Calendar Pro", "count": 9, "total": 33}, "mode": "none", "window_s": 0.0}
+{"step": 2, "probes": [], "stop": "", "gate": {"key": "struct", "order": 2, "top": "TYPE:new_file_dialog__name", "count": 3, "total": 5}, "mode": "none", "window_s": 0.0}
+{"step": 3, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "TYPE:new_file_dialog__name", "count": 4, "total": 12}, "mode": "none", "window_s": 0.0}
+{"step": 4, "probes": [], "stop": "", "gate": {"key": "layout", "order": 1, "top": "TYPE:", "count": 1, "total": 2}, "mode": "none", "window_s": 0.001}
+{"step": 5, "probes": [], "stop": "", "gate": {"key": "layout", "order": 2, "top": "E|ImageView||More options|More options", "count": 1, "total": 1}, "mode": "none", "window_s": 0.001}
+{"step": 6, "probes": [], "stop": "", "gate": {"key": "layout", "order": 1, "top": "STATUS", "count": 1, "total": 2}, "mode": "none", "window_s": 0.001}

@@ -1,0 +1,1 @@
+{"task": "ClockStopWatchRunning", "variant": "p0_FULL", "mode": "agent", "steps": 5, "agent_steps": 5, "done": true, "model_calls": 6, "final_cid": "0010_final", "n_probes": 1, "explore_disabled": "rollback_failed@1", "store_eps": 2, "m_probes_e1": 0, "m_probes_e2": 1, "m_calls": 6, "m_requery": 1, "is_successful": 1.0, "wall_s": 23.21}

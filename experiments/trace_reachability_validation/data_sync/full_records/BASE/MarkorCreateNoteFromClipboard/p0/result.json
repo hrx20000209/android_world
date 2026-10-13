@@ -1,0 +1,1 @@
+{"task": "MarkorCreateNoteFromClipboard", "variant": "p0_BASE", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "final_cid": "0010_final", "n_probes": 0, "explore_disabled": "", "store_eps": 0, "m_calls": 9, "is_successful": 1.0, "wall_s": 49.42}

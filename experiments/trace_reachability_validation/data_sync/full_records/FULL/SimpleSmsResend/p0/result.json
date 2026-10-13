@@ -1,0 +1,1 @@
+{"task": "SimpleSmsResend", "variant": "p0_FULL", "mode": "agent", "steps": 7, "agent_steps": 7, "done": true, "model_calls": 8, "final_cid": "0023_final", "n_probes": 5, "explore_disabled": "rollback_failed@3", "store_eps": 36, "m_probes_e1": 1, "m_probes_e2": 4, "m_calls": 8, "m_e1_hit": 1, "m_reuse_hits": 1, "m_requery": 1, "is_successful": 1.0, "wall_s": 59.5}

@@ -1,0 +1,1 @@
+{"task": "CameraTakePhoto", "variant": "p1_BASE", "mode": "agent", "steps": 10, "agent_steps": 10, "done": false, "model_calls": 10, "final_cid": "0011_final", "n_probes": 0, "explore_disabled": "", "store_eps": 0, "m_calls": 10, "is_successful": 0.0, "wall_s": 41.73}

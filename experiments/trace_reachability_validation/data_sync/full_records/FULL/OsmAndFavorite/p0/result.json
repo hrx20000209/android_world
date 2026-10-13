@@ -1,0 +1,1 @@
+{"task": "OsmAndFavorite", "variant": "p0_FULL", "mode": "agent", "steps": 13, "agent_steps": 13, "done": false, "model_calls": 14, "final_cid": "0031_final", "n_probes": 5, "explore_disabled": "rollback_failed@2", "store_eps": 20, "m_probes_e1": 0, "m_probes_e2": 5, "m_calls": 14, "m_e2_hit": 1, "m_reuse_hits": 1, "m_requery": 1, "is_successful": 0.0, "wall_s": 63.56}

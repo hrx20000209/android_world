@@ -1,0 +1,1 @@
+{"task": "RecipeDeleteDuplicateRecipes", "variant": "p0_FULL", "mode": "agent", "steps": 10, "agent_steps": 10, "done": true, "model_calls": 10, "final_cid": "0026_final", "n_probes": 5, "explore_disabled": "", "store_eps": 21, "m_probes_e1": 1, "m_probes_e2": 4, "m_calls": 10, "is_successful": 0.0, "wall_s": 47.93}

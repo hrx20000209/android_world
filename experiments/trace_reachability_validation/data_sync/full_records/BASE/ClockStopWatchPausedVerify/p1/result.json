@@ -1,0 +1,1 @@
+{"task": "ClockStopWatchPausedVerify", "variant": "p1_BASE", "mode": "agent", "steps": 1, "agent_steps": 1, "done": true, "model_calls": 1, "final_cid": "0002_final", "n_probes": 0, "explore_disabled": "", "store_eps": 0, "m_calls": 1, "is_successful": 0.0, "wall_s": 6.94}

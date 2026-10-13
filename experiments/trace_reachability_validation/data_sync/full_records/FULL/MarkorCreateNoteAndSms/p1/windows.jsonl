@@ -1,0 +1,12 @@
+{"step": 0, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "OPEN_APP:Simple Calendar Pro", "count": 9, "total": 35}, "mode": "none", "window_s": 0.0}
+{"step": 2, "probes": [], "stop": "", "gate": {"key": "struct", "order": 2, "top": "TYPE:new_file_dialog__name", "count": 3, "total": 6}, "mode": "none", "window_s": 0.0}
+{"step": 3, "probes": [], "stop": "", "gate": {"key": "struct", "order": 3, "top": "E|Button|button1||OK", "count": 1, "total": 1}, "mode": "none", "window_s": 0.0}
+{"step": 4, "probes": [], "stop": "", "gate": {"key": "struct", "order": 3, "top": "TYPE:", "count": 1, "total": 1}, "mode": "none", "window_s": 0.001}
+{"step": 5, "probes": [], "stop": "", "gate": {"key": "struct", "order": 3, "top": "E|TextView|action_save|Save|Save", "count": 1, "total": 1}, "mode": "none", "window_s": 0.001}
+{"step": 6, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "E|LinearLayout|||Plain Text", "count": 1, "total": 1}, "mode": "none", "window_s": 0.001}
+{"step": 7, "probes": [], "stop": "", "gate": {"key": "struct", "order": 1, "top": "SWIPE:left", "count": 1, "total": 1}, "mode": "none", "window_s": 0.0}
+{"step": 8, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "SWIPE:left", "count": 1, "total": 3}, "mode": "none", "window_s": 0.001}
+{"step": 9, "probes": [], "stop": "", "gate": {"key": "layout", "order": 1, "top": "TYPE:", "count": 1, "total": 1}, "mode": "none", "window_s": 0.001}
+{"step": 10, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "E|LinearLayout|contacts_letter_fastscroller||", "count": 1, "total": 1}, "mode": "none", "window_s": 0.0}
+{"step": 11, "probes": [], "stop": "", "gate": {"key": "struct", "order": 1, "top": "E|Button|thread_send_message|OK|SMS", "count": 1, "total": 1}, "mode": "none", "window_s": 0.0}
+{"step": 12, "probes": [], "stop": "", "gate": {"key": "struct", "order": 1, "top": "STATUS", "count": 1, "total": 1}, "mode": "none", "window_s": 0.0}

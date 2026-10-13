@@ -1,0 +1,3 @@
+{"step": 0, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "OPEN_APP:Simple Calendar Pro", "count": 15, "total": 63}, "mode": "none", "window_s": 0.0}
+{"step": 1, "probes": [], "stop": "", "gate": {"key": "struct", "order": 1, "top": "E|Button|button1||OK", "count": 15, "total": 15}, "mode": "none", "window_s": 0.0}
+{"step": 2, "probes": [], "stop": "", "gate": {"key": "struct", "order": 2, "top": "L|View|month_view_background", "count": 14, "total": 15}, "mode": "none", "window_s": 0.002}

@@ -1,0 +1,1 @@
+{"task": "ExpenseAddMultipleFromGallery", "variant": "p0_FULL", "mode": "agent", "steps": 8, "agent_steps": 8, "done": true, "model_calls": 9, "final_cid": "0013_final", "n_probes": 1, "explore_disabled": "rollback_failed@1", "store_eps": 5, "m_probes_e1": 0, "m_probes_e2": 1, "m_calls": 9, "m_requery": 1, "is_successful": 0.0, "wall_s": 34.72}

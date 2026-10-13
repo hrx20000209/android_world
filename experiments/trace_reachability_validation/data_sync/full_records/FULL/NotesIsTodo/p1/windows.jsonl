@@ -1,0 +1,5 @@
+{"step": 0, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "OPEN_APP:Markor", "count": 13, "total": 40}, "mode": "none", "window_s": 0.0}
+{"step": 1, "probes": [], "stop": "", "gate": {"key": "layout", "order": 0, "top": "STATUS", "count": 1, "total": 1}, "mode": "none", "window_s": 0.004}
+{"step": 2, "probes": [], "stop": "", "gate": {"key": "layout", "order": 0, "top": "WAIT", "count": 4, "total": 7}, "mode": "none", "window_s": 0.001}
+{"step": 3, "probes": [], "stop": "", "gate": {"key": "layout", "order": 1, "top": "E|ViewGroup|||Budget Spreadsheet", "count": 1, "total": 3}, "mode": "none", "window_s": 0.002}
+{"step": 4, "probes": [], "stop": "", "gate": {"key": "layout", "order": 0, "top": "STATUS", "count": 3, "total": 3}, "mode": "none", "window_s": 0.001}

@@ -1,0 +1,1 @@
+{"task": "ClockTimerEntry", "variant": "p0_FULL", "mode": "agent", "steps": 10, "agent_steps": 10, "done": false, "model_calls": 11, "final_cid": "0016_final", "n_probes": 1, "explore_disabled": "rollback_failed@2", "store_eps": 3, "m_probes_e1": 0, "m_probes_e2": 1, "m_calls": 11, "m_requery": 1, "is_successful": 0.0, "wall_s": 46.33}

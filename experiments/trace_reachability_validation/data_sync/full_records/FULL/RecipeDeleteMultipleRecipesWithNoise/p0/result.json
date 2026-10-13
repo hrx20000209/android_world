@@ -1,0 +1,1 @@
+{"task": "RecipeDeleteMultipleRecipesWithNoise", "variant": "p0_FULL", "mode": "agent", "steps": 20, "agent_steps": 20, "done": false, "model_calls": 20, "final_cid": "0024_final", "n_probes": 1, "explore_disabled": "", "store_eps": 22, "m_probes_e1": 1, "m_probes_e2": 0, "m_calls": 20, "is_successful": 0.0, "wall_s": 82.16}

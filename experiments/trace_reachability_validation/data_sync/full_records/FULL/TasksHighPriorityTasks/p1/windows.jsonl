@@ -1,0 +1,2 @@
+{"step": 0, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "E|TextView||Predicted app: Settings|Settings", "count": 20, "total": 41}, "mode": "none", "window_s": 0.0}
+{"step": 1, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "SWIPE:down", "count": 1, "total": 2}, "mode": "none", "window_s": 0.001}

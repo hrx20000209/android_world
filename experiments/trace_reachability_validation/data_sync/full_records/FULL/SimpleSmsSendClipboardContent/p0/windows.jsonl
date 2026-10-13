@@ -1,0 +1,8 @@
+{"step": 0, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "OPEN_APP:Simple SMS Messenger", "count": 3, "total": 3}, "mode": "none", "window_s": 0.0}
+{"step": 1, "probes": [], "stop": "", "gate": {"key": "struct", "order": 1, "top": "L|FrameLayout|conversation_frame", "count": 2, "total": 3}, "mode": "none", "window_s": 0.0}
+{"step": 2, "probes": [], "stop": "", "gate": {"key": "struct", "order": 2, "top": "TYPE:new_conversation_address", "count": 1, "total": 1}, "mode": "none", "window_s": 0.001}
+{"step": 3, "probes": [], "stop": "", "gate": {"key": "struct", "order": 1, "top": "E|LinearLayout|contacts_letter_fastscroller||", "count": 1, "total": 1}, "mode": "none", "window_s": 0.0}
+{"step": 4, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "TYPE:", "count": 1, "total": 1}, "mode": "none", "window_s": 0.0}
+{"step": 5, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "TYPE:", "count": 1, "total": 1}, "mode": "none", "window_s": 0.0}
+{"step": 6, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "E|Button|thread_send_message|OK|SMS", "count": 2, "total": 2}, "mode": "none", "window_s": 0.0}
+{"step": 7, "probes": [], "stop": "", "gate": {"key": "layout", "order": 1, "top": "STATUS", "count": 2, "total": 2}, "mode": "none", "window_s": 0.001}

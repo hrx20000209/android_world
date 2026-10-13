@@ -1,0 +1,118 @@
+{"key": ["com.dimowner.audiorecorder", "Button", "btn_action", "Get started"], "instance": "AudioRecorderRecordAudio/p0_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["com.dimowner.audiorecorder", "ImageButton", "btn_settings", "Settings"], "instance": "AudioRecorderRecordAudioWithFileName/p0_FULL", "src_cid": "0014_s4_pre"}
+{"key": ["com.android.camera2", "Button", "accessibility_filmstrip_toggle_button", "FILMSTRIP"], "instance": "CameraTakePhoto/p0_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["com.android.camera2", "FrameLayout", "", "Switch to Camera Mode"], "instance": "CameraTakeVideo/p0_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["com.google.android.deskclock", "ImageView", "overflow_action_button", "More options"], "instance": "ClockStopWatchPausedVerify/p0_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["com.google.android.deskclock", "ViewGroup", "", "You can find the privacy policy here"], "instance": "ClockStopWatchRunning/p0_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["com.google.android.deskclock", "Button", "fab", "Add city"], "instance": "ClockTimerEntry/p0_FULL", "src_cid": "0003_s2_pre"}
+{"key": ["com.google.android.contacts", "EditText", "open_search_bar", "Search contacts"], "instance": "ContactsAddContact/p0_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["com.google.android.contacts", "ImageView", "", "More options"], "instance": "ContactsNewContactDraft/p0_FULL", "src_cid": "0017_s9_pre"}
+{"key": ["com.simplemobiletools.gallery.pro", "ImageView", "top_toolbar_search_icon", "Search"], "instance": "ExpenseAddMultipleFromGallery/p0_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["net.gsantner.markor", "TextView", "action_preview", "View mode"], "instance": "ExpenseAddMultipleFromMarkor/p0_FULL", "src_cid": "0009_s2_pre"}
+{"key": ["com.arduia.expense", "LinearLayoutCompat", "dest_home", "Home"], "instance": "ExpenseDeleteDuplicates/p0_FULL", "src_cid": "0006_s2_pre"}
+{"key": ["com.arduia.expense", "LinearLayoutCompat", "dest_expense_logs", "Expense Logs"], "instance": "ExpenseDeleteDuplicates2/p0_FULL", "src_cid": "0010_s2_pre_reuse"}
+{"key": ["com.google.android.documentsui", "TextView", "option_menu_search", "Search"], "instance": "FilesDeleteFile/p0_FULL", "src_cid": "0003_s2_pre"}
+{"key": ["com.google.android.documentsui", "LinearLayout", "", "sdk_gphone64_arm64"], "instance": "FilesMoveFile/p0_FULL", "src_cid": "0010_s2_pre_reuse"}
+{"key": ["net.gsantner.markor", "LinearLayout", "opoc_filesystem_item__root", "Folder .app"], "instance": "MarkorAddNoteHeader/p0_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["net.gsantner.markor", "ImageButton", "fab_add_new_item", "Create a new file or folder"], "instance": "MarkorChangeNoteContent/p0_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["net.gsantner.markor", "FrameLayout", "nav_more", "More"], "instance": "MarkorCreateFolder/p0_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["net.gsantner.markor", "TextView", "action_search", "Search"], "instance": "MarkorCreateNote/p0_FULL", "src_cid": "0005_s4_pre"}
+{"key": ["net.gsantner.markor", "LinearLayout", "", "Plain Text"], "instance": "MarkorCreateNoteAndSms/p0_FULL", "src_cid": "0018_s7_pre"}
+{"key": ["net.gsantner.markor", "ImageView", "", "More options"], "instance": "MarkorCreateNoteFromClipboard/p0_FULL", "src_cid": "0010_s5_pre"}
+{"key": ["net.gsantner.markor", "TextView", "action_favourite", "Favourite"], "instance": "MarkorDeleteAllNotes/p0_FULL", "src_cid": "0007_s4_pre"}
+{"key": ["net.gsantner.markor", "TextView", "action_info_selected_item", "Details"], "instance": "MarkorDeleteNewestNote/p0_FULL", "src_cid": "0007_s4_pre"}
+{"key": ["net.gsantner.markor", "ImageView", "", "Check list"], "instance": "MarkorEditNote/p0_FULL", "src_cid": "0008_s5_pre"}
+{"key": ["net.gsantner.markor", "TextView", "text1", "TravelItineraries/2023_04_06_final_good_banana.md"], "instance": "MarkorMoveNote/p0_FULL", "src_cid": "0008_s5_pre"}
+{"key": ["com.simplemobiletools.gallery.pro", "Button", "show_all", "Show all folders content"], "instance": "MarkorTranscribeReceipt/p0_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["org.videolan.vlc", "TextView", "ml_menu_display_list", "Display in list"], "instance": "MarkorTranscribeVideo/p0_FULL", "src_cid": "0007_s6_pre"}
+{"key": ["net.cozic.joplin", "ViewGroup", "", "to-do: Conference Notes - Tech Summit 2024"], "instance": "NotesMeetingAttendeeCount/p0_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["net.cozic.joplin", "ViewGroup", "", "to-do: Code Snippets - Python"], "instance": "NotesRecipeIngredientCount/p0_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["com.google.android.dialer", "EditText", "open_search_bar", "Search contacts & places"], "instance": "OpenAppTaskEval/p0_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["net.osmand", "LinearLayout", "", "Address"], "instance": "OsmAndFavorite/p0_FULL", "src_cid": "0011_s2_pre_reuse"}
+{"key": ["net.osmand", "ImageButton", "map_compass_button", "North is up"], "instance": "OsmAndMarker/p0_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["net.osmand", "LinearLayout", "buttonToolbar", "SHOW ON MAP"], "instance": "OsmAndTrack/p0_FULL", "src_cid": "0011_s3_pre"}
+{"key": ["com.flauschcode.broccoli", "ImageButton", "", "Open navigation drawer"], "instance": "RecipeAddMultipleRecipes/p0_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["com.simplemobiletools.gallery.pro", "Button", "folder_view", "Switch to folder view"], "instance": "RecipeAddMultipleRecipesFromImage/p0_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["net.gsantner.markor", "ViewGroup", "toolbar", "recipes"], "instance": "RecipeAddMultipleRecipesFromMarkor2/p0_FULL", "src_cid": "0015_s6_pre"}
+{"key": ["com.flauschcode.broccoli", "ImageButton", "", "Collapse"], "instance": "RecipeDeleteMultipleRecipesWithConstraint/p0_FULL", "src_cid": "0006_s2_pre"}
+{"key": ["com.flauschcode.broccoli", "CardView", "", "Recipe photo"], "instance": "RecipeDeleteSingleWithRecipeWithNoise/p0_FULL", "src_cid": "0029_s18_pre"}
+{"key": ["code.name.monkey.retromusic", "ViewGroup", "", "Bright Lights"], "instance": "RetroCreatePlaylist/p0_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["code.name.monkey.retromusic", "ViewGroup", "", "Chasing Shadows"], "instance": "RetroPlayingQueue/p0_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["code.name.monkey.retromusic", "ViewGroup", "", "City of Stars"], "instance": "RetroPlaylistDuration/p0_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["code.name.monkey.retromusic", "ViewGroup", "", "Endless Summer"], "instance": "RetroSavePlaylist/p0_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["com.simplemobiletools.gallery.pro", "TextView", "actionbar_title", "1 / 1"], "instance": "SaveCopyOfReceiptTaskEval/p0_FULL", "src_cid": "0016_s3_pre"}
+{"key": ["com.simplemobiletools.calendar.pro", "Button", "settings", "Settings"], "instance": "SimpleCalendarAddOneEvent/p0_FULL", "src_cid": "0011_s3_pre"}
+{"key": ["com.simplemobiletools.calendar.pro", "TextView", "", "19"], "instance": "SimpleCalendarAddOneEventInTwoWeeks/p0_FULL", "src_cid": "0018_s6_pre"}
+{"key": ["com.simplemobiletools.calendar.pro", "RelativeLayout", "fab_extended_overlay", ""], "instance": "SimpleCalendarAddOneEventRelativeDay/p0_FULL", "src_cid": "0007_s3_pre"}
+{"key": ["com.simplemobiletools.calendar.pro", "ImageView", "top_left_arrow", ""], "instance": "SimpleCalendarAddOneEventTomorrow/p0_FULL", "src_cid": "0007_s3_pre"}
+{"key": ["com.simplemobiletools.calendar.pro", "ImageView", "top_toolbar_search_icon", ""], "instance": "SimpleCalendarDeleteEvents/p0_FULL", "src_cid": "0014_s4_pre"}
+{"key": ["com.simplemobiletools.calendar.pro", "ImageView", "top_right_arrow", ""], "instance": "SimpleCalendarEventsInNextWeek/p0_FULL", "src_cid": "0021_s5_pre"}
+{"key": ["com.simplemobiletools.calendar.pro", "b", "", "September"], "instance": "SimpleCalendarNextMeetingWithPerson/p0_FULL", "src_cid": "0009_s3_pre"}
+{"key": ["com.simplemobiletools.draw.pro", "ImageView", "bucket_fill", "Bucket fill"], "instance": "SimpleDrawProCreateDrawing/p0_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["com.android.systemui", "FrameLayout", "expandableNotificationRow", "+10394691481"], "instance": "SimpleSmsReply/p0_FULL", "src_cid": "0001_s0_pre"}
+{"key": ["com.simplemobiletools.smsmessenger", "TextView", "actionbar_title", "1 / 2"], "instance": "SimpleSmsResend/p0_FULL", "src_cid": "0015_s3_pre"}
+{"key": ["com.simplemobiletools.smsmessenger", "LinearLayout", "contacts_letter_fastscroller", ""], "instance": "SimpleSmsSend/p0_FULL", "src_cid": "0004_s3_pre"}
+{"key": ["com.simplemobiletools.smsmessenger", "TextView", "actionbar_title", "1 / 1"], "instance": "SimpleSmsSendReceivedAddress/p0_FULL", "src_cid": "0007_s3_pre"}
+{"key": ["de.dennisguse.opentracks", "ImageView", "search_button", "Search"], "instance": "SportsTrackerActivitiesCountForWeek/p0_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["com.android.systemui", "TextView", "header_label", "Silent"], "instance": "SystemBluetoothTurnOff/p0_FULL", "src_cid": "0005_s4_pre"}
+{"key": ["com.android.settings", "ViewGroup", "search_action_bar", "Search settings"], "instance": "SystemBluetoothTurnOffVerify/p0_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["com.android.settings", "LinearLayout", "", "See all"], "instance": "SystemBluetoothTurnOn/p0_FULL", "src_cid": "0010_s2_pre_reuse"}
+{"key": ["com.android.settings", "LinearLayout", "", "Bluetooth"], "instance": "SystemBluetoothTurnOnVerify/p0_FULL", "src_cid": "0009_s3_pre"}
+{"key": ["com.android.settings", "LinearLayout", "", "Notifications"], "instance": "SystemBrightnessMax/p0_FULL", "src_cid": "0013_s6_pre"}
+{"key": ["com.google.android.apps.messaging", "EditText", "searchbar", "Search images & videos"], "instance": "SystemCopyToClipboard/p0_FULL", "src_cid": "0007_s2_pre"}
+{"key": ["com.android.settings", "LinearLayout", "", "Connection preferences"], "instance": "SystemWifiTurnOff/p0_FULL", "src_cid": "0012_s4_pre"}
+{"key": ["com.android.settings", "LinearLayout", "", "Internet"], "instance": "SystemWifiTurnOffVerify/p0_FULL", "src_cid": "0014_s6_pre_reuse"}
+{"key": ["org.tasks", "Button", "menu_search", "Search"], "instance": "TasksCompletedTasksForDate/p0_FULL", "src_cid": "0004_s1_pre"}
+{"key": ["org.tasks", "RelativeLayout", "rowBody", "Clean Out Fridge"], "instance": "TasksDueNextWeek/p0_FULL", "src_cid": "0004_s1_pre"}
+{"key": ["org.tasks", "RelativeLayout", "row", "My Tasks"], "instance": "TasksHighPriorityTasks/p0_FULL", "src_cid": "0005_s2_pre"}
+{"key": ["org.tasks", "View", "", "Ascending"], "instance": "TasksHighPriorityTasksDueOnDate/p0_FULL", "src_cid": "0005_s2_pre"}
+{"key": ["com.android.systemui", "FrameLayout", "", "Internet"], "instance": "TurnOnWifiAndOpenApp/p0_FULL", "src_cid": "0010_s3_pre"}
+{"key": ["org.videolan.vlc", "TextView", "ml_menu_display_grid", "Display in grid"], "instance": "VlcCreatePlaylist/p0_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["org.videolan.vlc", "TextView", "", "Browser"], "instance": "VlcCreateTwoPlaylists/p0_FULL", "src_cid": "0010_s2_pre"}
+{"key": ["com.dimowner.audiorecorder", "LinearLayout", "", "Information"], "instance": "AudioRecorderRecordAudio/p1_FULL", "src_cid": "0009_s8_pre"}
+{"key": ["com.android.systemui", "ImageButton", "", "Show roots"], "instance": "BrowserMaze/p1_FULL", "src_cid": "0021_s17_pre"}
+{"key": ["com.android.systemui", "FrameLayout", "expandableNotificationRow", "Android System"], "instance": "BrowserMultiply/p1_FULL", "src_cid": "0001_s0_pre"}
+{"key": ["com.android.camera2", "LinearLayout", "mode_options_toggle", "Options"], "instance": "CameraTakePhoto/p1_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["com.android.camera2", "View", "rounded_thumbnail_view", ""], "instance": "CameraTakeVideo/p1_FULL", "src_cid": "0018_s6_pre"}
+{"key": ["com.google.android.deskclock", "FrameLayout", "tab_menu_alarm", "Alarm"], "instance": "ClockStopWatchPausedVerify/p1_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["com.google.android.deskclock", "FrameLayout", "tab_menu_timer", "Timer"], "instance": "ClockStopWatchRunning/p1_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["com.google.android.deskclock", "FrameLayout", "tab_menu_stopwatch", "Stopwatch"], "instance": "ClockTimerEntry/p1_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["com.google.android.contacts", "Button", "button_change_photo", "Add picture"], "instance": "ContactsNewContactDraft/p1_FULL", "src_cid": "0014_s8_pre"}
+{"key": ["com.simplemobiletools.gallery.pro", "Button", "open_camera", "Open camera"], "instance": "ExpenseAddMultipleFromGallery/p1_FULL", "src_cid": "0006_s2_pre"}
+{"key": ["net.gsantner.markor", "ImageView", "search_button", "Search"], "instance": "ExpenseAddMultipleFromMarkor/p1_FULL", "src_cid": "0009_s4_pre"}
+{"key": ["com.arduia.expense", "TextView", "time", "Time"], "instance": "ExpenseAddSingle/p1_FULL", "src_cid": "0007_s3_pre"}
+{"key": ["com.google.android.documentsui", "LinearLayout", "", "q2a8_fancy_banana.mp3"], "instance": "FilesDeleteFile/p1_FULL", "src_cid": "0006_s2_pre"}
+{"key": ["com.google.android.documentsui", "LinearLayout", "", "Open with"], "instance": "FilesMoveFile/p1_FULL", "src_cid": "0009_s6_pre"}
+{"key": ["net.gsantner.markor", "LinearLayout", "", "Wrap words"], "instance": "MarkorAddNoteHeader/p1_FULL", "src_cid": "0018_s9_pre"}
+{"key": ["net.gsantner.markor", "ImageView", "", "Bold"], "instance": "MarkorCreateNote/p1_FULL", "src_cid": "0007_s4_pre"}
+{"key": ["net.gsantner.markor", "ViewGroup", "toolbar", "quick_eagle_2023_03_14"], "instance": "MarkorCreateNoteFromClipboard/p1_FULL", "src_cid": "0017_s12_pre"}
+{"key": ["net.gsantner.markor", "LinearLayout", "opoc_filesystem_item__root", "Folder .. /storage/emulated/0/Documents/markor"], "instance": "MarkorDeleteAllNotes/p1_FULL", "src_cid": "0028_s11_pre"}
+{"key": ["net.gsantner.markor", "LinearLayout", "opoc_filesystem_item__root", "Selected 2023_04_29_silly_quilt.txt"], "instance": "MarkorDeleteNewestNote/p1_FULL", "src_cid": "0007_s4_pre"}
+{"key": ["net.gsantner.markor", "FrameLayout", "nav_todo", "To-Do"], "instance": "MarkorDeleteNote/p1_FULL", "src_cid": "0007_s4_pre"}
+{"key": ["net.gsantner.markor", "ViewGroup", "toolbar", "note_agyQi"], "instance": "MarkorEditNote/p1_FULL", "src_cid": "0011_s6_pre"}
+{"key": ["net.gsantner.markor", "ViewGroup", "toolbar", "fb6ymuw7"], "instance": "MarkorMergeNotes/p1_FULL", "src_cid": "0019_s12_pre"}
+{"key": ["net.gsantner.markor", "TextView", "text1", "BookNotes/Qigo_proud_wolf.md"], "instance": "MarkorMoveNote/p1_FULL", "src_cid": "0008_s5_pre"}
+{"key": ["org.videolan.vlc", "TextView", "", "Internal memory"], "instance": "MarkorTranscribeVideo/p1_FULL", "src_cid": "0019_s11_pre"}
+{"key": ["net.cozic.joplin", "ViewGroup", "", "Actions"], "instance": "NotesMeetingAttendeeCount/p1_FULL", "src_cid": "0003_s2_pre"}
+{"key": ["net.osmand", "ImageButton", "map_compass_button", "Movement direction"], "instance": "OsmAndFavorite/p1_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["net.osmand", "View", "MapLayersView", "Map"], "instance": "OsmAndMarker/p1_FULL", "src_cid": "0012_s4_pre"}
+{"key": ["net.osmand", "ImageButton", "map_compass_button", "Compass direction"], "instance": "OsmAndTrack/p1_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["android", "LinearLayout", "item", "Drive"], "instance": "RecipeAddMultipleRecipesFromImage/p1_FULL", "src_cid": "0015_s5_pre"}
+{"key": ["com.flauschcode.broccoli", "Button", "action_search", "Search"], "instance": "RecipeDeleteMultipleRecipes/p1_FULL", "src_cid": "0003_s2_pre"}
+{"key": ["com.flauschcode.broccoli", "ImageButton", "fab_recipes", "New Recipe"], "instance": "RecipeDeleteMultipleRecipesWithConstraint/p1_FULL", "src_cid": "0011_s5_pre"}
+{"key": ["code.name.monkey.retromusic", "ViewGroup", "", "Forever Young"], "instance": "RetroCreatePlaylist/p1_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["code.name.monkey.retromusic", "ViewGroup", "", "Golden Days"], "instance": "RetroPlayingQueue/p1_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["code.name.monkey.retromusic", "ViewGroup", "", "Heartbeat Away"], "instance": "RetroPlaylistDuration/p1_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["code.name.monkey.retromusic", "ViewGroup", "", "Lost in the Echo"], "instance": "RetroSavePlaylist/p1_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["com.simplemobiletools.calendar.pro", "TextView", "top_value", "October"], "instance": "SimpleCalendarAddOneEvent/p1_FULL", "src_cid": "0016_s4_pre"}
+{"key": ["com.simplemobiletools.calendar.pro", "TextView", "", "15"], "instance": "SimpleCalendarAddOneEventInTwoWeeks/p1_FULL", "src_cid": "0019_s8_pre"}
+{"key": ["com.simplemobiletools.calendar.pro", "View", "month_view_background", ""], "instance": "SimpleCalendarAddRepeatingEvent/p1_FULL", "src_cid": "0009_s3_pre"}
+{"key": ["com.google.android.apps.messaging", "ImageView", "", "More options"], "instance": "SimpleSmsResend/p1_FULL", "src_cid": "0016_s5_pre"}
+{"key": ["com.simplemobiletools.smsmessenger", "Button", "manage_people", "Add Person"], "instance": "SimpleSmsSend/p1_FULL", "src_cid": "0008_s3_pre_after_jump"}
+{"key": ["com.simplemobiletools.smsmessenger", "ImageView", "", "More options"], "instance": "SimpleSmsSendReceivedAddress/p1_FULL", "src_cid": "0016_s4_pre"}
+{"key": ["com.android.settings", "LinearLayout", "switch_bar", "Use Bluetooth"], "instance": "SystemBluetoothTurnOffVerify/p1_FULL", "src_cid": "0009_s4_pre"}
+{"key": ["org.tasks", "RelativeLayout", "subheader_row", "Filters"], "instance": "TasksCompletedTasksForDate/p1_FULL", "src_cid": "0003_s2_pre"}
+{"key": ["org.tasks", "ImageButton", "", "Collapse"], "instance": "TasksHighPriorityTasksDueOnDate/p1_FULL", "src_cid": "0003_s2_pre"}
+{"key": ["com.android.settings", "ImageButton", "", "Collapse"], "instance": "TurnOnWifiAndOpenApp/p1_FULL", "src_cid": "0036_s19_pre"}
+{"key": ["org.videolan.vlc", "FrameLayout", "nav_audio", "Audio"], "instance": "VlcCreatePlaylist/p1_FULL", "src_cid": "0002_s1_pre"}
+{"key": ["org.videolan.vlc", "FrameLayout", "nav_more", "More"], "instance": "VlcCreateTwoPlaylists/p1_FULL", "src_cid": "0002_s1_pre"}

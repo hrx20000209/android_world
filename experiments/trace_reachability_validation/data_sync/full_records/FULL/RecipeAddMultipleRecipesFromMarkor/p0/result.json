@@ -1,0 +1,1 @@
+{"task": "RecipeAddMultipleRecipesFromMarkor", "variant": "p0_FULL", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 8, "final_cid": "0015_final", "n_probes": 1, "explore_disabled": "", "store_eps": 20, "m_probes_e1": 0, "m_probes_e2": 1, "m_calls": 8, "m_jumps": 1, "m_jump_steps": 1, "m_jump_commit_steps": 0, "is_successful": 0.0, "wall_s": 49.12}

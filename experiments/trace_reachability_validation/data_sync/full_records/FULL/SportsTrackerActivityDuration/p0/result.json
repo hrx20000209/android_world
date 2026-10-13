@@ -1,0 +1,1 @@
+{"task": "SportsTrackerActivityDuration", "variant": "p0_FULL", "mode": "agent", "steps": 2, "agent_steps": 2, "done": true, "model_calls": 2, "final_cid": "0013_final", "n_probes": 3, "explore_disabled": "", "store_eps": 38, "m_probes_e1": 0, "m_probes_e2": 3, "m_calls": 2, "is_successful": 1.0, "wall_s": 15.81}

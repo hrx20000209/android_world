@@ -1,0 +1,1 @@
+{"task": "RecipeAddSingleRecipe", "variant": "p0_FULL", "mode": "agent", "steps": 15, "agent_steps": 15, "done": true, "model_calls": 15, "final_cid": "0036_final", "n_probes": 8, "explore_disabled": "", "store_eps": 20, "m_probes_e1": 0, "m_probes_e2": 8, "m_calls": 15, "is_successful": 1.0, "wall_s": 76.9}

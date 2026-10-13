@@ -1,0 +1,5 @@
+{"step": 0, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "OPEN_APP:Markor", "count": 13, "total": 54}, "mode": "none", "window_s": 0.0}
+{"step": 1, "probes": [], "stop": "", "gate": {"key": "layout", "order": 1, "top": "E|CardView|||Recipe photo", "count": 1, "total": 1}, "mode": "none", "window_s": 0.0}
+{"step": 3, "probes": [], "stop": "", "gate": {"key": "struct", "order": 1, "top": "E|LinearLayout|||Delete", "count": 8, "total": 8}, "mode": "none", "window_s": 0.0}
+{"step": 4, "probes": [], "stop": "", "gate": {"key": "struct", "order": 2, "top": "E|Button|button1||DELETE", "count": 6, "total": 6}, "mode": "none", "window_s": 0.0}
+{"step": 5, "probes": [], "stop": "", "gate": {"key": "struct", "order": 3, "top": "STATUS", "count": 3, "total": 3}, "mode": "none", "window_s": 0.0}

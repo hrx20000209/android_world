@@ -77,6 +77,27 @@ class Store:
           return None, key, info
     return None, None, {"order": -1}
 
+  def task_dominants(self, own, state, key):
+    """Per task template: dominant continuation (and its support) at the
+    longest matched context, using the same key as the global prediction."""
+    if not hasattr(self, "_tidx"):
+      self._tidx = {}
+      for d in self.data:
+        ix = self._tidx.setdefault(d["task"], {"struct": PA.Index(), "layout": PA.Index()})
+        for k2 in ("struct", "layout"):
+          ix[k2].add_seq([dict(x, state=x[k2], fam=x["tok"]) for x in d["seq"]])
+    out = {}
+    seq = [dict(x, state=x[key]) for x in own] + [{"state": state[key], "tok": "", "fam": None}]
+    for task, ix in self._tidx.items():
+      counts = ix[key].lookup(seq, len(seq) - 1)
+      for k in range(PA.K_MAX, -1, -1):
+        c = counts[k]
+        if c and sum(c.values()) > 0:
+          tok, n = c.most_common(1)[0]
+          out[task] = (tok, n, sum(c.values()))
+          break
+    return out
+
   def successor(self, key, sig, tok):
     c = self.succ[key].get((sig, tok))
     return c.most_common(1)[0][0] if c else None
@@ -254,18 +275,35 @@ class SeqEpisode(R.Episode):
           slot = s
           break
       if slot is None:
+        self._jump_absent = getattr(self, "_jump_absent", 0) + 1
         break
       node = ui.nodes[slot.node_idx]
       self.dev.tap(*node.center)
       post = self.dev.capture(f"s{k + j}_jpost", settle=True)
-      exp = hop["expect"].get(hop["key"]) if hop["key"] == "struct" else hop["expect"]["layout"]
-      got = post["ui"].struct_sig if hop["key"] == "struct" else post["ui"].layout_sig
+      # Verify at layout level: struct signatures split the same page across
+      # variants when titles carry data (14/16 false splits in manual review).
+      exp = hop["expect"].get("layout")
+      got = post["ui"].layout_sig
+      is_commit = not slot.safe
       label = U.label_of(ui, node) or slot.sel.get("rid") or slot.sel.get("cls")
       row = {"step": k + j, "kind": "jump", "tok": hop["tok"], "expected": exp, "match": got == exp,
              "shortcut": bool(hop.get("shortcut")), "pre": R.strip(cap), "post_cid": post["cid"]}
+      if got != exp and is_commit:
+        # The commit happened and cannot be undone: record it as an executed
+        # step in the agent's history, stop the chain, hand over to the model.
+        summary = f"Tapped \"{label}\"."
+        agent._actions.append({"summary": summary})  # pylint: disable=protected-access
+        agent._summaries.append(summary)  # pylint: disable=protected-access
+        own.append(own_entry(ui, hop["tok"], hop["tok"]))
+        row.update(summary=summary, rollback={"ok": False, "method": "none_after_commit"})
+        self._jump_mismatch = getattr(self, "_jump_mismatch", 0) + 1
+        steps.append(row)
+        self.log("steps", row)
+        ok += 1
+        break
       if got != exp:
-        res = _restore(explorer, ui, post["ui"], k + j)
-        row["rollback"] = res
+        row["rollback"] = _restore(explorer, ui, post["ui"], k + j)
+        self._jump_mismatch = getattr(self, "_jump_mismatch", 0) + 1
         self.log("steps", row)
         break
       summary = f"Tapped \"{label}\"."

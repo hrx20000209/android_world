@@ -1,0 +1,4 @@
+{"step": 0, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "E|TextView||Predicted app: Settings|Settings", "count": 15, "total": 36}, "mode": "none", "window_s": 0.0}
+{"step": 2, "probes": [], "stop": "", "gate": {"key": "struct", "order": 2, "top": "E|LinearLayout|||Connection preferences", "count": 7, "total": 14}, "mode": "none", "window_s": 0.001}
+{"step": 3, "probes": [], "stop": "", "gate": {"key": "struct", "order": 3, "top": "SWIPE:up", "count": 4, "total": 5}, "mode": "none", "window_s": 0.0}
+{"step": 5, "probes": [], "stop": "", "gate": {"key": "struct", "order": 3, "top": "STATUS", "count": 3, "total": 5}, "mode": "none", "window_s": 0.0}

@@ -1,0 +1,1 @@
+{"task": "RecipeDeleteMultipleRecipes", "variant": "p0_FULL", "mode": "agent", "steps": 14, "agent_steps": 14, "done": true, "model_calls": 14, "final_cid": "0047_final", "n_probes": 12, "explore_disabled": "", "store_eps": 21, "m_probes_e1": 0, "m_probes_e2": 12, "m_calls": 14, "m_e2_hit": 3, "m_reuse_hits": 3, "is_successful": 1.0, "wall_s": 66.87}

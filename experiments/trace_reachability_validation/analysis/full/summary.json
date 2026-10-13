@@ -1,0 +1,548 @@
+{
+ "BASE": {
+  "all": {
+   "episodes": 232,
+   "success": 117,
+   "errors": 0,
+   "steps": 2320,
+   "calls": 2320,
+   "mean_steps_success": 7.68,
+   "wall_s_mean": 43.1,
+   "m_calls": 2320,
+   "m_e1_hit": 0,
+   "m_e2_hit": 0,
+   "m_jump_absent": 0,
+   "m_jump_commit_steps": 0,
+   "m_jump_mismatch": 0,
+   "m_jump_rejected": 0,
+   "m_jump_steps": 0,
+   "m_jumps": 0,
+   "m_probes_e1": 0,
+   "m_probes_e2": 0,
+   "m_requery": 0,
+   "m_reuse_hits": 0,
+   "m_reuse_miss": 0
+  },
+  "pass0": {
+   "episodes": 116,
+   "success": 51,
+   "errors": 0,
+   "steps": 1166,
+   "calls": 1166,
+   "mean_steps_success": 7.41,
+   "wall_s_mean": 43.9,
+   "m_calls": 1166,
+   "m_e1_hit": 0,
+   "m_e2_hit": 0,
+   "m_jump_absent": 0,
+   "m_jump_commit_steps": 0,
+   "m_jump_mismatch": 0,
+   "m_jump_rejected": 0,
+   "m_jump_steps": 0,
+   "m_jumps": 0,
+   "m_probes_e1": 0,
+   "m_probes_e2": 0,
+   "m_requery": 0,
+   "m_reuse_hits": 0,
+   "m_reuse_miss": 0
+  },
+  "pass1": {
+   "episodes": 116,
+   "success": 66,
+   "errors": 0,
+   "steps": 1154,
+   "calls": 1154,
+   "mean_steps_success": 7.88,
+   "wall_s_mean": 42.3,
+   "m_calls": 1154,
+   "m_e1_hit": 0,
+   "m_e2_hit": 0,
+   "m_jump_absent": 0,
+   "m_jump_commit_steps": 0,
+   "m_jump_mismatch": 0,
+   "m_jump_rejected": 0,
+   "m_jump_steps": 0,
+   "m_jumps": 0,
+   "m_probes_e1": 0,
+   "m_probes_e2": 0,
+   "m_requery": 0,
+   "m_reuse_hits": 0,
+   "m_reuse_miss": 0
+  },
+  "pass1_postfix": {
+   "episodes": 91,
+   "success": 52,
+   "errors": 0,
+   "steps": 855,
+   "calls": 855,
+   "mean_steps_success": 7.46,
+   "wall_s_mean": 41.1,
+   "m_calls": 855,
+   "m_e1_hit": 0,
+   "m_e2_hit": 0,
+   "m_jump_absent": 0,
+   "m_jump_commit_steps": 0,
+   "m_jump_mismatch": 0,
+   "m_jump_rejected": 0,
+   "m_jump_steps": 0,
+   "m_jumps": 0,
+   "m_probes_e1": 0,
+   "m_probes_e2": 0,
+   "m_requery": 0,
+   "m_reuse_hits": 0,
+   "m_reuse_miss": 0
+  }
+ },
+ "FULL": {
+  "all": {
+   "episodes": 232,
+   "success": 108,
+   "errors": 0,
+   "steps": 2461,
+   "calls": 2494,
+   "mean_steps_success": 8.23,
+   "wall_s_mean": 48.4,
+   "m_calls": 2494,
+   "m_e1_hit": 57,
+   "m_e2_hit": 17,
+   "m_jump_absent": 49,
+   "m_jump_commit_steps": 9,
+   "m_jump_mismatch": 11,
+   "m_jump_rejected": 135,
+   "m_jump_steps": 90,
+   "m_jumps": 212,
+   "m_probes_e1": 118,
+   "m_probes_e2": 358,
+   "m_requery": 123,
+   "m_reuse_hits": 54,
+   "m_reuse_miss": 20
+  },
+  "pass0": {
+   "episodes": 116,
+   "success": 52,
+   "errors": 0,
+   "steps": 1218,
+   "calls": 1265,
+   "mean_steps_success": 8.27,
+   "wall_s_mean": 49.4,
+   "m_calls": 1265,
+   "m_e1_hit": 31,
+   "m_e2_hit": 13,
+   "m_jump_absent": 0,
+   "m_jump_commit_steps": 0,
+   "m_jump_mismatch": 0,
+   "m_jump_rejected": 57,
+   "m_jump_steps": 29,
+   "m_jumps": 84,
+   "m_probes_e1": 60,
+   "m_probes_e2": 245,
+   "m_requery": 76,
+   "m_reuse_hits": 29,
+   "m_reuse_miss": 15
+  },
+  "pass1": {
+   "episodes": 116,
+   "success": 56,
+   "errors": 0,
+   "steps": 1243,
+   "calls": 1229,
+   "mean_steps_success": 8.2,
+   "wall_s_mean": 47.3,
+   "m_calls": 1229,
+   "m_e1_hit": 26,
+   "m_e2_hit": 4,
+   "m_jump_absent": 49,
+   "m_jump_commit_steps": 9,
+   "m_jump_mismatch": 11,
+   "m_jump_rejected": 78,
+   "m_jump_steps": 61,
+   "m_jumps": 128,
+   "m_probes_e1": 58,
+   "m_probes_e2": 113,
+   "m_requery": 47,
+   "m_reuse_hits": 25,
+   "m_reuse_miss": 5
+  },
+  "pass1_postfix": {
+   "episodes": 91,
+   "success": 45,
+   "errors": 0,
+   "steps": 933,
+   "calls": 910,
+   "mean_steps_success": 8.0,
+   "wall_s_mean": 46.1,
+   "m_calls": 910,
+   "m_e1_hit": 25,
+   "m_e2_hit": 3,
+   "m_jump_absent": 49,
+   "m_jump_commit_steps": 7,
+   "m_jump_mismatch": 11,
+   "m_jump_rejected": 60,
+   "m_jump_steps": 55,
+   "m_jumps": 106,
+   "m_probes_e1": 45,
+   "m_probes_e2": 79,
+   "m_requery": 32,
+   "m_reuse_hits": 23,
+   "m_reuse_miss": 5
+  }
+ },
+ "FULLNE": {
+  "all": {
+   "episodes": 46,
+   "success": 20,
+   "errors": 0,
+   "steps": 557,
+   "calls": 552,
+   "mean_steps_success": 9.35,
+   "wall_s_mean": 50.9,
+   "m_calls": 552,
+   "m_e1_hit": 6,
+   "m_e2_hit": 0,
+   "m_jump_absent": 9,
+   "m_jump_commit_steps": 0,
+   "m_jump_mismatch": 3,
+   "m_jump_rejected": 12,
+   "m_jump_steps": 10,
+   "m_jumps": 22,
+   "m_probes_e1": 13,
+   "m_probes_e2": 0,
+   "m_requery": 5,
+   "m_reuse_hits": 6,
+   "m_reuse_miss": 0
+  },
+  "pass0": {
+   "episodes": 46,
+   "success": 20,
+   "errors": 0,
+   "steps": 557,
+   "calls": 552,
+   "mean_steps_success": 9.35,
+   "wall_s_mean": 50.9,
+   "m_calls": 552,
+   "m_e1_hit": 6,
+   "m_e2_hit": 0,
+   "m_jump_absent": 9,
+   "m_jump_commit_steps": 0,
+   "m_jump_mismatch": 3,
+   "m_jump_rejected": 12,
+   "m_jump_steps": 10,
+   "m_jumps": 22,
+   "m_probes_e1": 13,
+   "m_probes_e2": 0,
+   "m_requery": 5,
+   "m_reuse_hits": 6,
+   "m_reuse_miss": 0
+  }
+ },
+ "FULL2": {
+  "all": {
+   "episodes": 53,
+   "success": 24,
+   "errors": 0,
+   "steps": 598,
+   "calls": 585,
+   "mean_steps_success": 8.71,
+   "wall_s_mean": 52.7,
+   "m_calls": 585,
+   "m_e1_hit": 5,
+   "m_e2_hit": 0,
+   "m_jump_absent": 6,
+   "m_jump_commit_steps": 5,
+   "m_jump_mismatch": 7,
+   "m_jump_rejected": 9,
+   "m_jump_steps": 18,
+   "m_jumps": 26,
+   "m_probes_e1": 13,
+   "m_probes_e2": 0,
+   "m_requery": 5,
+   "m_reuse_hits": 5,
+   "m_reuse_miss": 0
+  },
+  "pass0": {
+   "episodes": 53,
+   "success": 24,
+   "errors": 0,
+   "steps": 598,
+   "calls": 585,
+   "mean_steps_success": 8.71,
+   "wall_s_mean": 52.7,
+   "m_calls": 585,
+   "m_e1_hit": 5,
+   "m_e2_hit": 0,
+   "m_jump_absent": 6,
+   "m_jump_commit_steps": 5,
+   "m_jump_mismatch": 7,
+   "m_jump_rejected": 9,
+   "m_jump_steps": 18,
+   "m_jumps": 26,
+   "m_probes_e1": 13,
+   "m_probes_e2": 0,
+   "m_requery": 5,
+   "m_reuse_hits": 5,
+   "m_reuse_miss": 0
+  }
+ },
+ "paired": {
+  "all": {
+   "pairs": 232,
+   "full_only": 11,
+   "base_only": 20,
+   "both": 97,
+   "both_steps": [
+    690,
+    789
+   ],
+   "both_calls": [
+    690,
+    780
+   ],
+   "both_wall": [
+    3193,
+    3800
+   ]
+  },
+  "pass0": {
+   "pairs": 116,
+   "full_only": 8,
+   "base_only": 7,
+   "both": 44,
+   "both_steps": [
+    305,
+    366
+   ],
+   "both_calls": [
+    305,
+    378
+   ],
+   "both_wall": [
+    1439,
+    1837
+   ]
+  },
+  "pass1": {
+   "pairs": 116,
+   "full_only": 3,
+   "base_only": 13,
+   "both": 53,
+   "both_steps": [
+    385,
+    423
+   ],
+   "both_calls": [
+    385,
+    402
+   ],
+   "both_wall": [
+    1754,
+    1962
+   ]
+  },
+  "pass1_postfix": {
+   "pairs": 91,
+   "full_only": 2,
+   "base_only": 9,
+   "both": 43,
+   "both_steps": [
+    296,
+    334
+   ],
+   "both_calls": [
+    296,
+    312
+   ],
+   "both_wall": [
+    1372,
+    1561
+   ]
+  }
+ },
+ "paired_FULL2": {
+  "all": {
+   "pairs": 53,
+   "full_only": 4,
+   "base_only": 1,
+   "both": 20,
+   "both_steps": [
+    149,
+    169
+   ],
+   "both_calls": [
+    149,
+    161
+   ],
+   "both_wall": [
+    714,
+    788
+   ]
+  },
+  "pass0": {
+   "pairs": 53,
+   "full_only": 4,
+   "base_only": 1,
+   "both": 20,
+   "both_steps": [
+    149,
+    169
+   ],
+   "both_calls": [
+    149,
+    161
+   ],
+   "both_wall": [
+    714,
+    788
+   ]
+  },
+  "pass1": {
+   "pairs": 0,
+   "full_only": 0,
+   "base_only": 0,
+   "both": 0,
+   "both_steps": [
+    0,
+    0
+   ],
+   "both_calls": [
+    0,
+    0
+   ],
+   "both_wall": [
+    0,
+    0
+   ]
+  },
+  "pass1_postfix": {
+   "pairs": 0,
+   "full_only": 0,
+   "base_only": 0,
+   "both": 0,
+   "both_steps": [
+    0,
+    0
+   ],
+   "both_calls": [
+    0,
+    0
+   ],
+   "both_wall": [
+    0,
+    0
+   ]
+  }
+ },
+ "per_app": {
+  "Audio": {
+   "BASE": "2/4 calls=47",
+   "FULL": "2/4 calls=50",
+   "FULL2": "1/2 calls=24",
+   "FULLNE": "2/2 calls=23"
+  },
+  "Browser": {
+   "BASE": "0/6 calls=120",
+   "FULL": "0/6 calls=122",
+   "FULL2": "0/3 calls=60",
+   "FULLNE": "0/3 calls=60"
+  },
+  "Camera": {
+   "BASE": "1/4 calls=33",
+   "FULL": "0/4 calls=37",
+   "FULL2": "1/2 calls=15",
+   "FULLNE": "0/2 calls=20"
+  },
+  "Clock": {
+   "BASE": "3/6 calls=27",
+   "FULL": "4/6 calls=56",
+   "FULL2": "2/3 calls=27",
+   "FULLNE": "2/3 calls=28"
+  },
+  "Contacts": {
+   "BASE": "4/4 calls=39",
+   "FULL": "3/4 calls=43",
+   "FULL2": "2/2 calls=19",
+   "FULLNE": "2/2 calls=21"
+  },
+  "Expense": {
+   "BASE": "10/18 calls=221",
+   "FULL": "9/18 calls=217",
+   "FULL2": "4/9 calls=90",
+   "FULLNE": "4/9 calls=117"
+  },
+  "Files": {
+   "BASE": "2/4 calls=50",
+   "FULL": "2/4 calls=56",
+   "FULL2": "1/2 calls=30",
+   "FULLNE": "1/2 calls=22"
+  },
+  "Markor": {
+   "BASE": "15/28 calls=304",
+   "FULL": "13/28 calls=351",
+   "FULL2": "6/14 calls=152",
+   "FULLNE": "4/14 calls=166"
+  },
+  "Notes": {
+   "BASE": "7/8 calls=37",
+   "FULL": "7/8 calls=45",
+   "FULL2": "4/4 calls=21",
+   "FULLNE": "3/4 calls=20"
+  },
+  "Open": {
+   "BASE": "2/2 calls=7",
+   "FULL": "2/2 calls=10",
+   "FULL2": "1/1 calls=5",
+   "FULLNE": "1/1 calls=8"
+  },
+  "Osm": {
+   "BASE": "2/6 calls=87",
+   "FULL": "2/6 calls=97",
+   "FULL2": "1/3 calls=39",
+   "FULLNE": "1/3 calls=47"
+  },
+  "Recipe": {
+   "BASE": "10/26 calls=346",
+   "FULL": "9/26 calls=342",
+   "FULL2": "1/8 calls=103",
+   "FULLNE": "0/1 calls=20"
+  },
+  "Retro": {
+   "BASE": "1/8 calls=151",
+   "FULL": "0/8 calls=160"
+  },
+  "SaveCopy": {
+   "BASE": "2/2 calls=16",
+   "FULL": "2/2 calls=19"
+  },
+  "SimpleCalendar": {
+   "BASE": "18/34 calls=313",
+   "FULL": "18/34 calls=340"
+  },
+  "SimpleDraw": {
+   "BASE": "2/2 calls=17",
+   "FULL": "1/2 calls=28"
+  },
+  "SimpleSms": {
+   "BASE": "7/12 calls=105",
+   "FULL": "7/12 calls=100"
+  },
+  "Sports": {
+   "BASE": "4/12 calls=38",
+   "FULL": "2/12 calls=59"
+  },
+  "System": {
+   "BASE": "20/26 calls=157",
+   "FULL": "22/26 calls=178"
+  },
+  "Tasks": {
+   "BASE": "3/12 calls=63",
+   "FULL": "2/12 calls=67"
+  },
+  "Turn": {
+   "BASE": "2/4 calls=62",
+   "FULL": "1/4 calls=33"
+  },
+  "Vlc": {
+   "BASE": "0/4 calls=80",
+   "FULL": "0/4 calls=84"
+  }
+ }
+}

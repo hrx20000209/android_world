@@ -1,0 +1,1 @@
+{"task": "AudioRecorderRecordAudioWithFileName", "variant": "p0_BASE", "mode": "agent", "steps": 13, "agent_steps": 13, "done": true, "model_calls": 13, "final_cid": "0014_final", "n_probes": 0, "explore_disabled": "", "store_eps": 0, "m_calls": 13, "is_successful": 1.0, "wall_s": 56.0}

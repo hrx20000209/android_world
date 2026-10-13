@@ -1,0 +1,1 @@
+{"task": "TasksDueOnDate", "variant": "p0_BASE", "mode": "agent", "steps": 4, "agent_steps": 4, "done": true, "model_calls": 4, "final_cid": "0005_final", "n_probes": 0, "explore_disabled": "", "store_eps": 0, "m_calls": 4, "is_successful": 0.0, "wall_s": 20.22}
