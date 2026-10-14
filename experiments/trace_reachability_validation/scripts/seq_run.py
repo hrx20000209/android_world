@@ -286,7 +286,7 @@ class SeqEpisode(R.Episode):
       got = post["ui"].layout_sig
       is_commit = not slot.safe
       label = U.label_of(ui, node) or slot.sel.get("rid") or slot.sel.get("cls")
-      row = {"step": k + j, "kind": "jump", "tok": hop["tok"], "expected": exp, "match": got == exp,
+      row = {"step": k + j, "kind": "jump", "scope": hop.get("scope"), "tok": hop["tok"], "expected": exp, "match": got == exp,
              "shortcut": bool(hop.get("shortcut")), "pre": R.strip(cap), "post_cid": post["cid"]}
       if got != exp and is_commit:
         # The commit happened and cannot be undone: record it as an executed

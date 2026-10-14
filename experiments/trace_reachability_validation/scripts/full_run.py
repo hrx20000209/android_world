@@ -35,6 +35,8 @@ os.environ.setdefault("SEQ_ARM", os.environ.get("FULL_ARM", "BASE"))
 import seq_run as S  # noqa: E402  (patches rgs_run.Episode; we override below)
 import common as C  # noqa: E402
 import rgs_run as R  # noqa: E402
+import proc_replay as P  # noqa: E402
+from android_world.env import adb_utils  # noqa: E402
 from android_world.env import json_action  # noqa: E402
 
 U = C.U
@@ -49,8 +51,9 @@ class FullEpisode(S.SeqEpisode):
     gdir.mkdir(parents=True, exist_ok=True)
     full = ARM.startswith("FULL")
     store = S.Store(gdir / "store.json") if full else None
-    self._same = S.Store(gdir / "store.json", only_task=self.args.task) if (full and ARM not in ("FULL2", "FULL3")) else None
+    self._same = S.Store(gdir / "store.json", only_task=self.args.task) if (full and ARM not in ("FULL2", "FULL3", "FULL4", "FULL5")) else None
     self._last_model_commit = False
+    pr = P.ProcReplay(goal) if ARM == "FULL5" else None
     graph = R.Graph(gdir / "graph.jsonl", gdir / "unrestorable.jsonl") if full else R.Graph(None)
     instance = f"{self.args.task}/{self.args.variant}"
     cfg = R.ExploreCfg(enabled=full, budget_s=6.0, max_probes=3, max_depth=1)
@@ -75,6 +78,17 @@ class FullEpisode(S.SeqEpisode):
       if prev is not None:
         self.ingest_agent(graph, instance, prev, pre)
         prev = None
+      if pr is not None:      # R3: episode-local entity procedure replay
+        pr.set_post(ui)
+        plan = pr.plan(ui)
+        if plan:
+          m["replays"] += 1
+          ok = self.exec_replay(plan, pr, pre, own, agent, steps, k, graph, instance)
+          m["replay_steps"] += ok
+          m["replay_full"] += ok == len(plan["template"])
+          if ok:
+            k += ok
+            continue
       if store is not None:   # R1
         path = self.plan_jump(store, graph, own, ui, used)
         if path:
@@ -121,6 +135,8 @@ class FullEpisode(S.SeqEpisode):
       summary, exec_s = self.commit(agent, d, goal)
       own.append(S.own_entry(ui, tok, fam))
       self._last_model_commit = bool(fam) and is_commit_token(ui, fam)
+      if pr is not None:
+        pr.record(ui, a.__dict__, tok, sel, self._last_model_commit)
       row = {"step": k, "kind": "model", "pre": R.strip(pre), "action": a.__dict__, "tok": tok, "summary": summary,
              "model_latency_s": d["model_latency_s"], "requery": requery,
              "probes": [{k2: v2 for k2, v2 in p.items() if k2 != "dst_ui"} for p in xrec["probes"]] if xrec else []}
@@ -144,7 +160,7 @@ class FullEpisode(S.SeqEpisode):
     return res
 
   def plan_jump(self, store, graph, own, ui, used):
-    if ARM == "FULL3":
+    if ARM in ("FULL3", "FULL4", "FULL5"):
       return self.plan_jump_invariant(store, graph, own, ui, used)
     path = S.SeqEpisode.plan_jump(self, store, graph, own, ui, used)
     if ARM == "FULL2":
@@ -175,12 +191,17 @@ class FullEpisode(S.SeqEpisode):
       agent_acted = any(not x["tok"].startswith(("OPEN_APP", "STATUS", "WAIT")) for x in own)
       cross_ok = (len(doms) >= 2 and all(d[0] == top for d in doms.values())
                   and info.get("order", 0) >= 1 and agent_acted)
-      if not (same_ok or cross_ok):
+      if ARM in ("FULL4", "FULL5"):
+        cross_ok = False   # cross-task evidence is survivor-biased: only orders E1 probes
+      # FULL5: confirming the model's OWN just-chosen commit needs no history
+      # evidence beyond which dialog button follows (intent is the model's).
+      confirm_ok = (ARM == "FULL5" and i == 0 and self._last_model_commit and is_dialog_button(ui, top))
+      if not (same_ok or cross_ok or confirm_ok):
         break
       nxt = {k2: store.successor(k2, cur[k2], top) for k2 in ("struct", "layout")}
       if nxt["layout"] is None:
         break
-      chain.append({"tok": top, "key": key, "expect": nxt, "gate": info, "scope": "same" if same_ok else "cross",
+      chain.append({"tok": top, "key": key, "expect": nxt, "gate": info, "scope": "same" if same_ok else ("cross" if cross_ok else "confirm"),
                     "commit_ok": (i == 0 and self._last_model_commit)})
       sim_own.append({"state": cur["struct"], "struct": cur["struct"], "layout": cur["layout"], "tok": top, "fam": top})
       cur = {k2: (nxt[k2] or "") for k2 in ("struct", "layout")}
@@ -188,6 +209,51 @@ class FullEpisode(S.SeqEpisode):
       return []
     used[(ui.struct_sig, chain[0]["tok"])] += 1
     return chain
+
+  def exec_replay(self, plan, pr, pre, own, agent, steps, k, graph, instance):
+    """Follow the model's own demonstrated procedure for the next goal entity;
+    stop before its commit and on the first landing mismatch."""
+    ok, cap = 0, pre
+    for j, h in enumerate(plan["template"]):
+      ui = cap["ui"]
+      if j == 0:
+        node = plan["node"]
+        label = plan["entity"]
+      else:
+        slot = next((sl for sl in U.enumerate_slots(ui) if C.family_of_sel(sl.sel) == h["tok"] and sl.safe), None)
+        if slot is None:
+          self.log("steps", {"step": k + j, "kind": "replay_absent", "tok": h["tok"], "entity": plan["entity"]})
+          break
+        node = ui.nodes[slot.node_idx]
+        label = U.label_of(ui, node) or slot.sel.get("rid") or slot.sel.get("cls")
+      x, y = node.center
+      if h["at"] == "long_press":
+        adb_utils.long_press(int(x), int(y), self.dev.ctrl)
+        summary = f"Long-pressed \"{label}\"."
+      else:
+        self.dev.tap(x, y)
+        summary = f"Tapped \"{label}\"."
+      post = self.dev.capture(f"s{k + j}_rpost", settle=True, pause=1.0 if j == 0 else None)
+      match = post["ui"].activity == h["post_act"]
+      action = {"action_type": h["at"], "x": int(x), "y": int(y)}
+      tok, _, sel = C.action_token(ui, action)
+      agent._actions.append({"summary": summary})  # pylint: disable=protected-access
+      agent._summaries.append(summary)  # pylint: disable=protected-access
+      own.append(S.own_entry(ui, tok, tok))
+      pr.record(ui, action, tok, sel, False, origin="replay")
+      pr.set_post(post["ui"])
+      self.ingest_agent(graph, instance, {"pre": cap, "slot_id": tok, "sel": sel, "action": action, "step": k + j}, post)
+      row = {"step": k + j, "kind": "replay", "entity": plan["entity"], "tok": tok, "match": match,
+             "summary": summary, "pre": R.strip(cap), "post_cid": post["cid"]}
+      steps.append(row)
+      self.log("steps", row)
+      ok += 1
+      cap = post
+      if not match:
+        break
+    pr.tried.add(plan["entity"])
+    pr.open = plan["entity"]      # closed only by the model's own commit
+    return ok
 
   def window(self, ex, store, own, pre, step, instance):
     """E1 then E2; nothing else."""
@@ -210,7 +276,7 @@ class FullEpisode(S.SeqEpisode):
       seen_here = any(o["instance"] == instance for o in graph_obs(ex.graph, ui.struct_sig, s.slot_id))
       if not seen_here:
         targets.append(("E1", s))
-    elif info.get("order", -1) < 0 and ARM not in ("FULLNE", "FULL2", "FULL3"):   # gap page (E2 off in FULLNE/FULL2/FULL3)
+    elif info.get("order", -1) < 0 and ARM not in ("FULLNE", "FULL2", "FULL3", "FULL4", "FULL5"):   # gap page (E2 off in FULLNE/FULL2/FULL3)
       for p, s in plan:
         if p == 0 and len(targets) < 3:      # unknown out-edges only
           targets.append(("E2", s))
@@ -240,6 +306,13 @@ def is_commit_token(ui, fam):
   for sl in U.enumerate_slots(ui):
     if C.family_of_sel(sl.sel) == fam:
       return sl.unsafe_reason in ("unsafe_label", "dialog_action_button")
+  return False
+
+
+def is_dialog_button(ui, fam):
+  for sl in U.enumerate_slots(ui):
+    if C.family_of_sel(sl.sel) == fam:
+      return sl.unsafe_reason == "dialog_action_button"
   return False
 
 

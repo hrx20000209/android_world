@@ -1164,3 +1164,671 @@
 - 10-14 00:28:34 tunnel down
 - 10-14 00:29:04 tunnel down
 - 10-14 00:29:34 tunnel down
+- 10-14 00:30:04 tunnel down
+- 10-14 00:30:34 tunnel down
+- 10-14 00:31:04 tunnel down
+- 10-14 00:31:34 tunnel down
+- 10-14 00:32:04 tunnel down
+- 10-14 00:32:34 tunnel down
+- 10-14 00:33:04 tunnel down
+- 10-14 00:33:35 tunnel down
+- 10-14 00:34:05 tunnel down
+- 10-14 00:34:35 tunnel down
+- 10-14 00:35:05 tunnel down
+- 10-14 00:35:35 tunnel down
+- 10-14 00:36:05 tunnel down
+- 10-14 00:36:35 tunnel down
+- 10-14 00:37:05 tunnel down
+- 10-14 00:37:35 tunnel down
+- 10-14 00:38:05 tunnel down
+- 10-14 00:38:35 tunnel down
+- 10-14 00:39:05 tunnel down
+- 10-14 00:39:35 tunnel down
+- 10-14 00:40:05 tunnel down
+- 10-14 00:40:35 tunnel down
+- 10-14 00:41:05 tunnel down
+- 10-14 00:41:35 tunnel down
+- 10-14 00:42:05 tunnel down
+- 10-14 00:42:35 tunnel down
+- 10-14 00:43:05 tunnel down
+- 10-14 00:43:35 tunnel down
+- 10-14 00:44:05 tunnel down
+- 10-14 00:44:35 tunnel down
+- 10-14 00:45:05 tunnel down
+- 10-14 00:45:36 tunnel down
+- 10-14 00:46:06 tunnel down
+- 10-14 00:46:36 tunnel down
+- 10-14 00:47:06 tunnel down
+- 10-14 00:47:36 tunnel down
+- 10-14 00:48:06 tunnel down
+- 10-14 00:48:36 tunnel down
+- 10-14 00:49:06 tunnel down
+- 10-14 00:49:36 tunnel down
+- 10-14 00:50:06 tunnel down
+- 10-14 00:50:36 tunnel down
+- 10-14 00:51:06 tunnel down
+- 10-14 00:51:36 tunnel down
+- 10-14 00:52:06 tunnel down
+- 10-14 00:52:36 tunnel down
+- 10-14 00:53:06 tunnel down
+- 10-14 00:53:36 tunnel down
+- 10-14 00:54:06 tunnel down
+- 10-14 00:54:36 tunnel down
+- 10-14 00:55:06 tunnel down
+- 10-14 00:55:36 tunnel down
+- 10-14 00:56:06 tunnel down
+- 10-14 00:56:36 tunnel down
+- 10-14 00:57:06 tunnel down
+- 10-14 00:57:37 tunnel down
+- 10-14 00:58:07 tunnel down
+- 10-14 00:58:37 tunnel down
+- 10-14 00:59:07 tunnel down
+- 10-14 00:59:37 tunnel down
+- 10-14 01:00:07 tunnel down
+- 10-14 01:00:53 FULLRUN p0 FULL3 TasksDueOnDate rc=0 succ=1.0 steps=2 calls=2 jump=0 probes=0 err=None 16s
+- 10-14 01:01:28 FULLRUN p0 FULL3 TasksHighPriorityTasks rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=0 err=None 36s
+- 10-14 01:02:03 FULLRUN p0 FULL3 TasksHighPriorityTasksDueOnDate rc=0 succ=0.0 steps=6 calls=7 jump=0 probes=1 err=None 34s
+- 10-14 01:02:23 FULLRUN p0 FULL3 TasksIncompleteTasksOnDate rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=0 err=None 21s
+- 10-14 01:03:13 FULLRUN p0 FULL3 TurnOffWifiAndTurnOnBluetooth rc=0 succ=1.0 steps=11 calls=12 jump=0 probes=3 err=None 49s
+- 10-14 01:03:49 FULLRUN p0 FULL3 TurnOnWifiAndOpenApp rc=0 succ=1.0 steps=7 calls=7 jump=0 probes=0 err=None 37s
+- 10-14 01:05:11 FULLRUN p0 FULL3 VlcCreatePlaylist rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 82s
+- 10-14 01:06:23 FULLRUN p0 FULL3 VlcCreateTwoPlaylists rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 72s
+- 10-14 01:06:23 FULLRUN PASS 0 DONE
+- 10-14 01:07:15 FULLRUN p1 FULL3 AudioRecorderRecordAudio rc=0 succ=0.0 steps=12 calls=13 jump=0 probes=1 err=None 53s
+- 10-14 01:08:07 FULLRUN p1 FULL3 AudioRecorderRecordAudioWithFileName rc=0 succ=1.0 steps=11 calls=11 jump=0 probes=0 err=None 51s
+- 10-14 01:09:13 FULLRUN p1 FULL3 BrowserDraw rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=1 err=None 66s
+- 10-14 01:10:19 FULLRUN p1 FULL3 BrowserMaze rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=1 err=None 66s
+- 10-14 01:11:26 FULLRUN p1 FULL3 BrowserMultiply rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=1 err=None 67s
+- 10-14 01:11:54 FULLRUN p1 FULL3 CameraTakePhoto rc=0 succ=0.0 steps=5 calls=5 jump=0 probes=0 err=None 28s
+- 10-14 01:12:44 FULLRUN p1 FULL3 CameraTakeVideo rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 49s
+- 10-14 01:13:27 FULLRUN p1 FULL3 ClockStopWatchPausedVerify rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 43s
+- 10-14 01:13:47 FULLRUN p1 FULL3 ClockStopWatchRunning rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=0 err=None 20s
+- 10-14 01:14:30 FULLRUN p1 FULL3 ClockTimerEntry rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 43s
+- 10-14 01:15:14 FULLRUN p1 FULL3 ContactsAddContact rc=0 succ=1.0 steps=9 calls=9 jump=0 probes=1 err=None 43s
+- 10-14 01:16:00 FULLRUN p1 FULL3 ContactsNewContactDraft rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=1 err=None 47s
+- 10-14 01:17:17 FULLRUN p1 FULL3 ExpenseAddMultiple rc=0 succ=1.0 steps=20 calls=20 jump=0 probes=1 err=None 76s
+- 10-14 01:17:57 FULLRUN p1 FULL3 ExpenseAddMultipleFromGallery rc=0 succ=0.0 steps=8 calls=8 jump=0 probes=1 err=None 41s
+- 10-14 01:18:16 FULLRUN p1 FULL3 ExpenseAddMultipleFromMarkor rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=0 err=None 19s
+- 10-14 01:18:59 FULLRUN p1 FULL3 ExpenseAddSingle rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=1 err=None 44s
+- 10-14 01:19:27 FULLRUN p1 FULL3 ExpenseDeleteDuplicates rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=1 err=None 28s
+- 10-14 01:20:15 FULLRUN p1 FULL3 ExpenseDeleteDuplicates2 rc=0 succ=1.0 steps=9 calls=9 jump=0 probes=2 err=None 48s
+- 10-14 01:21:03 FULLRUN p1 FULL3 ExpenseDeleteMultiple rc=0 succ=1.0 steps=11 calls=9 jump=2 probes=1 err=None 48s
+- 10-14 01:22:30 FULLRUN p1 FULL3 ExpenseDeleteMultiple2 rc=0 succ=1.0 steps=20 calls=17 jump=3 probes=4 err=None 87s
+- 10-14 01:22:55 FULLRUN p1 FULL3 ExpenseDeleteSingle rc=0 succ=1.0 steps=5 calls=4 jump=1 probes=0 err=None 24s
+- 10-14 01:23:49 FULLRUN p1 FULL3 FilesDeleteFile rc=0 succ=1.0 steps=11 calls=11 jump=0 probes=1 err=None 54s
+- 10-14 01:24:49 FULLRUN p1 FULL3 FilesMoveFile rc=0 succ=1.0 steps=13 calls=14 jump=0 probes=2 err=None 60s
+- 10-14 01:25:41 FULLRUN p1 FULL3 MarkorAddNoteHeader rc=0 succ=0.0 steps=12 calls=12 jump=0 probes=0 err=None 52s
+- 10-14 01:26:32 FULLRUN p1 FULL3 MarkorChangeNoteContent rc=0 succ=0.0 steps=12 calls=12 jump=0 probes=0 err=None 51s
+- 10-14 01:27:00 FULLRUN p1 FULL3 MarkorCreateFolder rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=0 err=None 28s
+- 10-14 01:27:37 FULLRUN p1 FULL3 MarkorCreateNote rc=0 succ=1.0 steps=7 calls=7 jump=0 probes=0 err=None 37s
+- 10-14 01:28:56 FULLRUN p1 FULL3 MarkorCreateNoteAndSms rc=0 succ=1.0 steps=15 calls=15 jump=0 probes=0 err=None 79s
+- 10-14 01:30:03 FULLRUN p1 FULL3 MarkorCreateNoteFromClipboard rc=0 succ=0.0 steps=14 calls=14 jump=0 probes=0 err=None 67s
+- 10-14 01:30:41 FULLRUN p1 FULL3 MarkorDeleteAllNotes rc=0 succ=1.0 steps=7 calls=7 jump=1 probes=1 err=None 38s
+- 10-14 01:31:07 FULLRUN p1 FULL3 MarkorDeleteNewestNote rc=0 succ=1.0 steps=5 calls=4 jump=1 probes=0 err=None 26s
+- 10-14 01:31:36 FULLRUN p1 FULL3 MarkorDeleteNote rc=0 succ=1.0 steps=5 calls=4 jump=1 probes=0 err=None 29s
+- 10-14 01:33:09 FULLRUN p1 FULL3 MarkorEditNote rc=0 succ=0.0 steps=12 calls=12 jump=0 probes=0 err=None 93s
+- 10-14 01:34:33 FULLRUN p1 FULL3 MarkorMergeNotes rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 84s
+- 10-14 01:35:27 FULLRUN p1 FULL3 MarkorMoveNote rc=0 succ=1.0 steps=11 calls=11 jump=0 probes=1 err=None 54s
+- 10-14 01:36:38 FULLRUN p1 FULL3 MarkorTranscribeReceipt rc=0 succ=0.0 steps=16 calls=16 jump=0 probes=1 err=None 71s
+- 10-14 01:37:12 FULLRUN p1 FULL3 MarkorTranscribeVideo rc=0 succ=0.0 steps=6 calls=6 jump=0 probes=0 err=None 34s
+- 10-14 01:37:44 FULLRUN p1 FULL3 NotesIsTodo rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=0 err=None 31s
+- 10-14 01:38:07 FULLRUN p1 FULL3 NotesMeetingAttendeeCount rc=0 succ=1.0 steps=3 calls=3 jump=0 probes=0 err=None 23s
+- 10-14 01:38:57 FULLRUN p1 FULL3 NotesRecipeIngredientCount rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 51s
+- 10-14 01:39:19 FULLRUN p1 FULL3 NotesTodoItemCount rc=0 succ=1.0 steps=2 calls=2 jump=0 probes=0 err=None 22s
+- 10-14 01:39:33 FULLRUN p1 FULL3 OpenAppTaskEval rc=0 succ=1.0 steps=2 calls=2 jump=0 probes=0 err=None 13s
+- 10-14 01:40:12 FULLRUN p1 FULL3 OsmAndFavorite rc=0 succ=1.0 steps=8 calls=8 jump=0 probes=0 err=None 39s
+- 10-14 01:41:10 FULLRUN p1 FULL3 OsmAndMarker rc=0 succ=1.0 steps=13 calls=14 jump=0 probes=2 err=None 58s
+- 10-14 01:42:36 FULLRUN p1 FULL3 OsmAndTrack rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=2 err=None 87s
+- 10-14 01:44:04 FULLRUN p1 FULL3 RecipeAddMultipleRecipes rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=1 err=None 87s
+- 10-14 01:45:26 FULLRUN p1 FULL3 RecipeAddMultipleRecipesFromImage rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=3 err=None 82s
+- 10-14 01:47:08 FULLRUN p1 FULL3 RecipeAddMultipleRecipesFromMarkor rc=0 succ=0.0 steps=19 calls=19 jump=0 probes=0 err=None 102s
+- 10-14 01:48:41 FULLRUN p1 FULL3 RecipeAddMultipleRecipesFromMarkor2 rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 93s
+- 10-14 01:49:55 FULLRUN p1 FULL3 RecipeAddSingleRecipe rc=0 succ=1.0 steps=14 calls=14 jump=0 probes=0 err=None 74s
+- 10-14 01:50:27 FULLRUN p1 FULL3 RecipeDeleteDuplicateRecipes rc=0 succ=1.0 steps=6 calls=5 jump=1 probes=3 err=None 32s
+- 10-14 01:50:58 FULLRUN p1 FULL3 RecipeDeleteDuplicateRecipes2 rc=0 succ=0.0 steps=6 calls=5 jump=1 probes=3 err=None 31s
+- 10-14 01:52:22 FULLRUN p1 FULL3 RecipeDeleteDuplicateRecipes3 rc=0 succ=0.0 steps=20 calls=18 jump=2 probes=8 err=None 85s
+- 10-14 01:53:19 FULLRUN p1 FULL3 RecipeDeleteMultipleRecipes rc=0 succ=1.0 steps=14 calls=10 jump=4 probes=3 err=None 56s
+- 10-14 01:53:43 FULLRUN p1 FULL3 RecipeDeleteMultipleRecipesWithConstraint rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=1 err=None 24s
+- 10-14 01:54:39 FULLRUN p1 FULL3 RecipeDeleteMultipleRecipesWithNoise rc=0 succ=0.0 steps=12 calls=10 jump=2 probes=4 err=None 56s
+- 10-14 01:55:09 FULLRUN p1 FULL3 RecipeDeleteSingleRecipe rc=0 succ=1.0 steps=6 calls=5 jump=1 probes=2 err=None 30s
+- 10-14 01:56:22 FULLRUN p1 FULL3 RecipeDeleteSingleWithRecipeWithNoise rc=0 succ=1.0 steps=16 calls=16 jump=1 probes=2 err=None 73s
+- 10-14 01:57:54 FULLRUN p1 FULL3 RetroCreatePlaylist rc=0 succ=0.0 steps=20 calls=21 jump=0 probes=4 err=None 91s
+- 10-14 01:59:14 FULLRUN p1 FULL3 RetroPlayingQueue rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 80s
+- 10-14 02:00:32 FULLRUN p1 FULL3 RetroPlaylistDuration rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 78s
+- 10-14 02:02:06 FULLRUN p1 FULL3 RetroSavePlaylist rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 95s
+- 10-14 02:02:49 FULLRUN p1 FULL3 SaveCopyOfReceiptTaskEval rc=0 succ=1.0 steps=8 calls=8 jump=0 probes=2 err=None 42s
+- 10-14 02:03:56 FULLRUN p1 FULL3 SimpleCalendarAddOneEvent rc=0 succ=1.0 steps=17 calls=16 jump=1 probes=1 err=None 68s
+- 10-14 02:05:14 FULLRUN p1 FULL3 SimpleCalendarAddOneEventInTwoWeeks rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=6 err=None 78s
+- 10-14 02:06:28 FULLRUN p1 FULL3 SimpleCalendarAddOneEventRelativeDay rc=0 succ=0.0 steps=20 calls=18 jump=2 probes=5 err=None 74s
+- 10-14 02:07:34 FULLRUN p1 FULL3 SimpleCalendarAddOneEventTomorrow rc=0 succ=1.0 steps=17 calls=15 jump=2 probes=3 err=None 65s
+- 10-14 02:08:53 FULLRUN p1 FULL3 SimpleCalendarAddRepeatingEvent rc=0 succ=1.0 steps=19 calls=19 jump=1 probes=3 err=None 79s
+- 10-14 02:09:12 FULLRUN p1 FULL3 SimpleCalendarAnyEventsOnDate rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=1 err=None 19s
+- 10-14 02:10:09 FULLRUN p1 FULL3 SimpleCalendarDeleteEvents rc=0 succ=1.0 steps=13 calls=13 jump=0 probes=2 err=None 57s
+- 10-14 02:11:01 FULLRUN p1 FULL3 SimpleCalendarDeleteEventsOnRelativeDay rc=0 succ=1.0 steps=12 calls=9 jump=3 probes=1 err=None 52s
+- 10-14 02:11:35 FULLRUN p1 FULL3 SimpleCalendarDeleteOneEvent rc=0 succ=1.0 steps=7 calls=6 jump=1 probes=2 err=None 34s
+- 10-14 02:11:57 FULLRUN p1 FULL3 SimpleCalendarEventOnDateAtTime rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=2 err=None 22s
+- 10-14 02:12:17 FULLRUN p1 FULL3 SimpleCalendarEventsInNextWeek rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=1 err=None 20s
+- 10-14 02:12:57 FULLRUN p1 FULL3 SimpleCalendarEventsInTimeRange rc=0 succ=0.0 steps=10 calls=8 jump=2 probes=1 err=None 41s
+- 10-14 02:13:29 FULLRUN p1 FULL3 SimpleCalendarEventsOnDate rc=0 succ=0.0 steps=8 calls=6 jump=2 probes=1 err=None 32s
+- 10-14 02:13:52 FULLRUN p1 FULL3 SimpleCalendarFirstEventAfterStartTime rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=2 err=None 23s
+- 10-14 02:14:31 FULLRUN p1 FULL3 SimpleCalendarLocationOfEvent rc=0 succ=0.0 steps=9 calls=7 jump=2 probes=1 err=None 39s
+- 10-14 02:14:50 FULLRUN p1 FULL3 SimpleCalendarNextEvent rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=1 err=None 18s
+- 10-14 02:15:13 FULLRUN p1 FULL3 SimpleCalendarNextMeetingWithPerson rc=0 succ=0.0 steps=5 calls=5 jump=0 probes=1 err=None 24s
+- 10-14 02:16:31 FULLRUN p1 FULL3 SimpleDrawProCreateDrawing rc=0 succ=0.0 steps=18 calls=18 jump=0 probes=0 err=None 78s
+- 10-14 02:17:33 FULLRUN p1 FULL3 SimpleSmsReply rc=0 succ=1.0 steps=11 calls=11 jump=0 probes=1 err=None 61s
+- 10-14 02:18:28 FULLRUN p1 FULL3 SimpleSmsReplyMostRecent rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=1 err=None 55s
+- 10-14 02:19:49 FULLRUN p1 FULL3 SimpleSmsResend rc=0 succ=0.0 steps=12 calls=12 jump=0 probes=1 err=None 81s
+- 10-14 02:20:35 FULLRUN p1 FULL3 SimpleSmsSend rc=0 succ=1.0 steps=7 calls=7 jump=0 probes=0 err=None 47s
+- 10-14 02:21:23 FULLRUN p1 FULL3 SimpleSmsSendClipboardContent rc=0 succ=0.0 steps=8 calls=8 jump=0 probes=0 err=None 48s
+- 10-14 02:22:37 FULLRUN p1 FULL3 SimpleSmsSendReceivedAddress rc=0 succ=0.0 steps=11 calls=11 jump=0 probes=1 err=None 74s
+- 10-14 02:22:52 FULLRUN p1 FULL3 SportsTrackerActivitiesCountForWeek rc=0 succ=1.0 steps=2 calls=2 jump=0 probes=0 err=None 15s
+- 10-14 02:23:09 FULLRUN p1 FULL3 SportsTrackerActivitiesOnDate rc=0 succ=0.0 steps=2 calls=2 jump=0 probes=0 err=None 17s
+- 10-14 02:23:36 FULLRUN p1 FULL3 SportsTrackerActivityDuration rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=0 err=None 27s
+- 10-14 02:23:57 FULLRUN p1 FULL3 SportsTrackerLongestDistanceActivity rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=0 err=None 20s
+- 10-14 02:24:19 FULLRUN p1 FULL3 SportsTrackerTotalDistanceForCategoryOverInterval rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=0 err=None 22s
+- 10-14 02:24:34 FULLRUN p1 FULL3 SportsTrackerTotalDurationForCategoryThisWeek rc=0 succ=0.0 steps=2 calls=2 jump=0 probes=0 err=None 16s
+- 10-14 02:24:57 FULLRUN p1 FULL3 SystemBluetoothTurnOff rc=0 succ=1.0 steps=4 calls=5 jump=0 probes=2 err=None 23s
+- 10-14 02:25:43 FULLRUN p1 FULL3 SystemBluetoothTurnOffVerify rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=0 err=None 46s
+- 10-14 02:26:04 FULLRUN p1 FULL3 SystemBluetoothTurnOn rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=1 err=None 21s
+- 10-14 02:26:27 FULLRUN p1 FULL3 SystemBluetoothTurnOnVerify rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=1 err=None 24s
+- 10-14 02:26:57 FULLRUN p1 FULL3 SystemBrightnessMax rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=1 err=None 29s
+- 10-14 02:27:18 FULLRUN p1 FULL3 SystemBrightnessMaxVerify rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=3 err=None 22s
+- 10-14 02:28:02 FULLRUN p1 FULL3 SystemBrightnessMin rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=2 err=None 43s
+- 10-14 02:28:23 FULLRUN p1 FULL3 SystemBrightnessMinVerify rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=2 err=None 22s
+- 10-14 02:29:09 FULLRUN p1 FULL3 SystemCopyToClipboard rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 45s
+- 10-14 02:29:33 FULLRUN p1 FULL3 SystemWifiTurnOff rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=2 err=None 24s
+- 10-14 02:30:00 FULLRUN p1 FULL3 SystemWifiTurnOffVerify rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=2 err=None 28s
+- 10-14 02:30:24 FULLRUN p1 FULL3 SystemWifiTurnOn rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=2 err=None 23s
+- 10-14 02:30:43 FULLRUN p1 FULL3 SystemWifiTurnOnVerify rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=2 err=None 20s
+- 10-14 02:31:14 FULLRUN p1 FULL3 TasksCompletedTasksForDate rc=0 succ=0.0 steps=6 calls=6 jump=0 probes=0 err=None 30s
+- 10-14 02:31:36 FULLRUN p1 FULL3 TasksDueNextWeek rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=0 err=None 22s
+- 10-14 02:32:23 FULLRUN p1 FULL3 TasksDueOnDate rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 47s
+- 10-14 02:32:38 FULLRUN p1 FULL3 TasksHighPriorityTasks rc=0 succ=1.0 steps=2 calls=2 jump=0 probes=0 err=None 15s
+- 10-14 02:33:02 FULLRUN p1 FULL3 TasksHighPriorityTasksDueOnDate rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=0 err=None 24s
+- 10-14 02:33:16 FULLRUN p1 FULL3 TasksIncompleteTasksOnDate rc=0 succ=1.0 steps=2 calls=2 jump=0 probes=0 err=None 14s
+- 10-14 02:33:55 FULLRUN p1 FULL3 TurnOffWifiAndTurnOnBluetooth rc=0 succ=1.0 steps=9 calls=9 jump=0 probes=3 err=None 39s
+- 10-14 02:34:37 FULLRUN p1 FULL3 TurnOnWifiAndOpenApp rc=0 succ=0.5 steps=9 calls=9 jump=0 probes=3 err=None 41s
+- 10-14 02:35:50 FULLRUN p1 FULL3 VlcCreatePlaylist rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 74s
+- 10-14 02:37:03 FULLRUN p1 FULL3 VlcCreateTwoPlaylists rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 73s
+- 10-14 02:37:03 FULLRUN PASS 1 DONE
+- 10-14 02:37:03 FULLRUN DRIVER DONE FULL3
+
+## 2026-10-14 FULL3 完成 → FULL4
+- 00:25–01:00 LabServer 直连断开；改为经 ras.cse.ust.hk 跳转（用户手动打开 ControlMaster；新保活脚本 runtime_graph_study/scripts/tunnel_keepalive_jump.sh）。
+- FULL3：115/232 vs BASE 117/232；配对 15/17；回滚失败后的重新请求 22（v1 为 123）；有导航跳步的 episode 2 vs 7，全是 Calendar 的跨任务 "New Event" 跳步。
+- FULL4：跨任务证据不再授权执行，只用来给 E1 排序；跳步记录加 scope 字段。02:4x 启动 `full_driver.py FULL4`。
+- 10-14 02:39:17 FULLRUN p0 FULL4 AudioRecorderRecordAudio rc=0 succ=0.0 steps=12 calls=12 jump=0 probes=0 err=None 46s
+- 10-14 02:40:05 FULLRUN p0 FULL4 AudioRecorderRecordAudioWithFileName rc=0 succ=1.0 steps=11 calls=11 jump=0 probes=0 err=None 48s
+- 10-14 02:41:10 FULLRUN p0 FULL4 BrowserDraw rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 65s
+- 10-14 02:42:18 FULLRUN p0 FULL4 BrowserMaze rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 68s
+- 10-14 02:43:21 FULLRUN p0 FULL4 BrowserMultiply rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 63s
+- 10-14 02:43:48 FULLRUN p0 FULL4 CameraTakePhoto rc=0 succ=0.0 steps=5 calls=5 jump=0 probes=0 err=None 28s
+- 10-14 02:44:38 FULLRUN p0 FULL4 CameraTakeVideo rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 49s
+- 10-14 02:45:23 FULLRUN p0 FULL4 ClockStopWatchPausedVerify rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 45s
+- 10-14 02:45:44 FULLRUN p0 FULL4 ClockStopWatchRunning rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=0 err=None 21s
+- 10-14 02:46:30 FULLRUN p0 FULL4 ClockTimerEntry rc=0 succ=0.0 steps=10 calls=11 jump=0 probes=1 err=None 47s
+- 10-14 02:47:13 FULLRUN p0 FULL4 ContactsAddContact rc=0 succ=1.0 steps=9 calls=9 jump=0 probes=0 err=None 43s
+- 10-14 02:48:06 FULLRUN p0 FULL4 ContactsNewContactDraft rc=0 succ=1.0 steps=11 calls=11 jump=0 probes=0 err=None 53s
+- 10-14 02:49:27 FULLRUN p0 FULL4 ExpenseAddMultiple rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 81s
+- 10-14 02:50:07 FULLRUN p0 FULL4 ExpenseAddMultipleFromGallery rc=0 succ=0.0 steps=9 calls=9 jump=0 probes=0 err=None 40s
+- 10-14 02:51:13 FULLRUN p0 FULL4 ExpenseAddMultipleFromMarkor rc=0 succ=0.0 steps=16 calls=16 jump=0 probes=0 err=None 66s
+- 10-14 02:52:00 FULLRUN p0 FULL4 ExpenseAddSingle rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 47s
+- 10-14 02:52:36 FULLRUN p0 FULL4 ExpenseDeleteDuplicates rc=0 succ=1.0 steps=7 calls=7 jump=0 probes=0 err=None 36s
+- 10-14 02:53:15 FULLRUN p0 FULL4 ExpenseDeleteDuplicates2 rc=0 succ=0.0 steps=8 calls=9 jump=0 probes=2 err=None 39s
+- 10-14 02:54:03 FULLRUN p0 FULL4 ExpenseDeleteMultiple rc=0 succ=1.0 steps=11 calls=11 jump=0 probes=1 err=None 48s
+- 10-14 02:55:24 FULLRUN p0 FULL4 ExpenseDeleteMultiple2 rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=1 err=None 81s
+- 10-14 02:55:52 FULLRUN p0 FULL4 ExpenseDeleteSingle rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=0 err=None 28s
+- 10-14 02:56:37 FULLRUN p0 FULL4 FilesDeleteFile rc=0 succ=1.0 steps=9 calls=9 jump=0 probes=0 err=None 46s
+- 10-14 02:57:38 FULLRUN p0 FULL4 FilesMoveFile rc=0 succ=0.0 steps=13 calls=14 jump=0 probes=2 err=None 61s
+- 10-14 02:58:33 FULLRUN p0 FULL4 MarkorAddNoteHeader rc=0 succ=0.0 steps=12 calls=12 jump=0 probes=0 err=None 55s
+- 10-14 02:59:27 FULLRUN p0 FULL4 MarkorChangeNoteContent rc=0 succ=0.0 steps=12 calls=12 jump=0 probes=0 err=None 54s
+- 10-14 02:59:56 FULLRUN p0 FULL4 MarkorCreateFolder rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=0 err=None 29s
+- 10-14 03:00:44 FULLRUN p0 FULL4 MarkorCreateNote rc=0 succ=0.0 steps=9 calls=9 jump=0 probes=1 err=None 48s
+- 10-14 03:02:17 FULLRUN p0 FULL4 MarkorCreateNoteAndSms rc=0 succ=0.0 steps=18 calls=18 jump=0 probes=1 err=None 93s
+- 10-14 03:03:27 FULLRUN p0 FULL4 MarkorCreateNoteFromClipboard rc=0 succ=1.0 steps=14 calls=14 jump=0 probes=1 err=None 69s
+- 10-14 03:04:07 FULLRUN p0 FULL4 MarkorDeleteAllNotes rc=0 succ=1.0 steps=8 calls=8 jump=0 probes=3 err=None 40s
+- 10-14 03:04:34 FULLRUN p0 FULL4 MarkorDeleteNewestNote rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=1 err=None 28s
+- 10-14 03:05:22 FULLRUN p0 FULL4 MarkorDeleteNote rc=0 succ=1.0 steps=8 calls=9 jump=0 probes=1 err=None 48s
+- 10-14 03:05:49 FULLRUN p0 FULL4 MarkorEditNote rc=0 succ=0.0 steps=5 calls=5 jump=0 probes=0 err=None 26s
+- 10-14 03:07:07 FULLRUN p0 FULL4 MarkorMergeNotes rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=1 err=None 79s
+- 10-14 03:08:17 FULLRUN p0 FULL4 MarkorMoveNote rc=0 succ=0.0 steps=14 calls=15 jump=0 probes=1 err=None 70s
+- 10-14 03:09:42 FULLRUN p0 FULL4 MarkorTranscribeReceipt rc=0 succ=0.0 steps=18 calls=18 jump=0 probes=0 err=None 85s
+- 10-14 03:10:26 FULLRUN p0 FULL4 MarkorTranscribeVideo rc=0 succ=0.0 steps=8 calls=8 jump=0 probes=0 err=None 44s
+- 10-14 03:11:04 FULLRUN p0 FULL4 NotesIsTodo rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=0 err=None 37s
+- 10-14 03:11:35 FULLRUN p0 FULL4 NotesMeetingAttendeeCount rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=0 err=None 31s
+- 10-14 03:12:15 FULLRUN p0 FULL4 NotesRecipeIngredientCount rc=0 succ=1.0 steps=8 calls=8 jump=0 probes=0 err=None 40s
+- 10-14 03:12:43 FULLRUN p0 FULL4 NotesTodoItemCount rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=0 err=None 28s
+- 10-14 03:13:00 FULLRUN p0 FULL4 OpenAppTaskEval rc=0 succ=1.0 steps=3 calls=3 jump=0 probes=0 err=None 17s
+- 10-14 03:13:51 FULLRUN p0 FULL4 OsmAndFavorite rc=0 succ=1.0 steps=11 calls=11 jump=0 probes=0 err=None 51s
+- 10-14 03:15:12 FULLRUN p0 FULL4 OsmAndMarker rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=1 err=None 81s
+- 10-14 03:16:36 FULLRUN p0 FULL4 OsmAndTrack rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=1 err=None 84s
+- 10-14 03:18:05 FULLRUN p0 FULL4 RecipeAddMultipleRecipes rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 89s
+- 10-14 03:19:22 FULLRUN p0 FULL4 RecipeAddMultipleRecipesFromImage rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 77s
+- 10-14 03:20:58 FULLRUN p0 FULL4 RecipeAddMultipleRecipesFromMarkor rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 95s
+- 10-14 03:22:23 FULLRUN p0 FULL4 RecipeAddMultipleRecipesFromMarkor2 rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 85s
+- 10-14 03:23:37 FULLRUN p0 FULL4 RecipeAddSingleRecipe rc=0 succ=1.0 steps=15 calls=15 jump=0 probes=0 err=None 74s
+- 10-14 03:24:23 FULLRUN p0 FULL4 RecipeDeleteDuplicateRecipes rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=1 err=None 46s
+- 10-14 03:25:45 FULLRUN p0 FULL4 RecipeDeleteDuplicateRecipes2 rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=6 err=None 82s
+- 10-14 03:26:18 FULLRUN p0 FULL4 RecipeDeleteDuplicateRecipes3 rc=0 succ=0.0 steps=6 calls=6 jump=0 probes=3 err=None 33s
+- 10-14 03:27:16 FULLRUN p0 FULL4 RecipeDeleteMultipleRecipes rc=0 succ=1.0 steps=14 calls=14 jump=0 probes=1 err=None 58s
+- 10-14 03:27:40 FULLRUN p0 FULL4 RecipeDeleteMultipleRecipesWithConstraint rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=1 err=None 23s
+- 10-14 03:29:06 FULLRUN p0 FULL4 RecipeDeleteMultipleRecipesWithNoise rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=8 err=None 87s
+- 10-14 03:29:36 FULLRUN p0 FULL4 RecipeDeleteSingleRecipe rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=2 err=None 30s
+- 10-14 03:31:00 FULLRUN p0 FULL4 RecipeDeleteSingleWithRecipeWithNoise rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=6 err=None 83s
+- 10-14 03:32:04 FULLRUN p0 FULL4 RetroCreatePlaylist rc=0 succ=0.0 steps=14 calls=14 jump=0 probes=0 err=None 65s
+- 10-14 03:33:12 FULLRUN p0 FULL4 RetroPlayingQueue rc=0 succ=0.0 steps=14 calls=14 jump=0 probes=0 err=None 67s
+- 10-14 03:34:38 FULLRUN p0 FULL4 RetroPlaylistDuration rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 86s
+- 10-14 03:35:57 FULLRUN p0 FULL4 RetroSavePlaylist rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 79s
+- 10-14 03:36:39 FULLRUN p0 FULL4 SaveCopyOfReceiptTaskEval rc=0 succ=1.0 steps=8 calls=8 jump=0 probes=0 err=None 42s
+- 10-14 03:37:49 FULLRUN p0 FULL4 SimpleCalendarAddOneEvent rc=0 succ=1.0 steps=17 calls=17 jump=0 probes=0 err=None 70s
+- 10-14 03:39:01 FULLRUN p0 FULL4 SimpleCalendarAddOneEventInTwoWeeks rc=0 succ=0.0 steps=17 calls=18 jump=0 probes=2 err=None 72s
+- 10-14 03:40:05 FULLRUN p0 FULL4 SimpleCalendarAddOneEventRelativeDay rc=0 succ=0.0 steps=16 calls=16 jump=0 probes=2 err=None 64s
+- 10-14 03:41:24 FULLRUN p0 FULL4 SimpleCalendarAddOneEventTomorrow rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=3 err=None 78s
+- 10-14 03:42:42 FULLRUN p0 FULL4 SimpleCalendarAddRepeatingEvent rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=4 err=None 79s
+- 10-14 03:43:05 FULLRUN p0 FULL4 SimpleCalendarAnyEventsOnDate rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=2 err=None 23s
+- 10-14 03:43:50 FULLRUN p0 FULL4 SimpleCalendarDeleteEvents rc=0 succ=1.0 steps=9 calls=9 jump=0 probes=2 err=None 45s
+- 10-14 03:44:36 FULLRUN p0 FULL4 SimpleCalendarDeleteEventsOnRelativeDay rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=2 err=None 46s
+- 10-14 03:45:11 FULLRUN p0 FULL4 SimpleCalendarDeleteOneEvent rc=0 succ=1.0 steps=7 calls=7 jump=0 probes=2 err=None 35s
+- 10-14 03:45:54 FULLRUN p0 FULL4 SimpleCalendarEventOnDateAtTime rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=2 err=None 43s
+- 10-14 03:46:38 FULLRUN p0 FULL4 SimpleCalendarEventsInNextWeek rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=1 err=None 44s
+- 10-14 03:46:58 FULLRUN p0 FULL4 SimpleCalendarEventsInTimeRange rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=0 err=None 20s
+- 10-14 03:47:28 FULLRUN p0 FULL4 SimpleCalendarEventsOnDate rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=2 err=None 29s
+- 10-14 03:47:51 FULLRUN p0 FULL4 SimpleCalendarFirstEventAfterStartTime rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=2 err=None 23s
+- 10-14 03:48:17 FULLRUN p0 FULL4 SimpleCalendarLocationOfEvent rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=1 err=None 26s
+- 10-14 03:48:35 FULLRUN p0 FULL4 SimpleCalendarNextEvent rc=0 succ=1.0 steps=3 calls=3 jump=0 probes=1 err=None 19s
+- 10-14 03:49:02 FULLRUN p0 FULL4 SimpleCalendarNextMeetingWithPerson rc=0 succ=0.0 steps=5 calls=5 jump=0 probes=1 err=None 26s
+- 10-14 03:50:20 FULLRUN p0 FULL4 SimpleDrawProCreateDrawing rc=0 succ=0.0 steps=18 calls=18 jump=0 probes=0 err=None 78s
+- 10-14 03:51:08 FULLRUN p0 FULL4 SimpleSmsReply rc=0 succ=1.0 steps=8 calls=8 jump=0 probes=0 err=None 48s
+- 10-14 03:52:00 FULLRUN p0 FULL4 SimpleSmsReplyMostRecent rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=0 err=None 52s
+- 10-14 03:53:21 FULLRUN p0 FULL4 SimpleSmsResend rc=0 succ=1.0 steps=12 calls=12 jump=0 probes=1 err=None 81s
+- 10-14 03:54:08 FULLRUN p0 FULL4 SimpleSmsSend rc=0 succ=1.0 steps=7 calls=7 jump=0 probes=0 err=None 47s
+- 10-14 03:54:49 FULLRUN p0 FULL4 SimpleSmsSendClipboardContent rc=0 succ=0.0 steps=6 calls=6 jump=0 probes=0 err=None 41s
+- 10-14 03:56:05 FULLRUN p0 FULL4 SimpleSmsSendReceivedAddress rc=0 succ=0.0 steps=12 calls=12 jump=0 probes=1 err=None 76s
+- 10-14 03:56:19 FULLRUN p0 FULL4 SportsTrackerActivitiesCountForWeek rc=0 succ=0.0 steps=2 calls=2 jump=0 probes=0 err=None 14s
+- 10-14 03:56:41 FULLRUN p0 FULL4 SportsTrackerActivitiesOnDate rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=0 err=None 22s
+- 10-14 03:56:54 FULLRUN p0 FULL4 SportsTrackerActivityDuration rc=0 succ=1.0 steps=2 calls=2 jump=0 probes=0 err=None 13s
+- 10-14 03:57:37 FULLRUN p0 FULL4 SportsTrackerLongestDistanceActivity rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 43s
+- 10-14 03:58:53 FULLRUN p0 FULL4 SportsTrackerTotalDistanceForCategoryOverInterval rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 75s
+- 10-14 03:59:07 FULLRUN p0 FULL4 SportsTrackerTotalDurationForCategoryThisWeek rc=0 succ=0.0 steps=2 calls=2 jump=0 probes=0 err=None 14s
+- 10-14 03:59:33 FULLRUN p0 FULL4 SystemBluetoothTurnOff rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=0 err=None 26s
+- 10-14 04:00:13 FULLRUN p0 FULL4 SystemBluetoothTurnOffVerify rc=0 succ=1.0 steps=8 calls=9 jump=0 probes=2 err=None 40s
+- 10-14 04:00:34 FULLRUN p0 FULL4 SystemBluetoothTurnOn rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=0 err=None 21s
+- 10-14 04:00:57 FULLRUN p0 FULL4 SystemBluetoothTurnOnVerify rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=0 err=None 23s
+- 10-14 04:01:47 FULLRUN p0 FULL4 SystemBrightnessMax rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=0 err=None 50s
+- 10-14 04:02:16 FULLRUN p0 FULL4 SystemBrightnessMaxVerify rc=0 succ=1.0 steps=5 calls=6 jump=0 probes=1 err=None 29s
+- 10-14 04:02:41 FULLRUN p0 FULL4 SystemBrightnessMin rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=0 err=None 26s
+- 10-14 04:03:12 FULLRUN p0 FULL4 SystemBrightnessMinVerify rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=1 err=None 30s
+- 10-14 04:04:04 FULLRUN p0 FULL4 SystemCopyToClipboard rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 53s
+- 10-14 04:04:33 FULLRUN p0 FULL4 SystemWifiTurnOff rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=0 err=None 29s
+- 10-14 04:04:58 FULLRUN p0 FULL4 SystemWifiTurnOffVerify rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=0 err=None 25s
+- 10-14 04:05:22 FULLRUN p0 FULL4 SystemWifiTurnOn rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=1 err=None 24s
+- 10-14 04:05:42 FULLRUN p0 FULL4 SystemWifiTurnOnVerify rc=0 succ=1.0 steps=3 calls=4 jump=0 probes=2 err=None 20s
+- 10-14 04:06:27 FULLRUN p0 FULL4 TasksCompletedTasksForDate rc=0 succ=0.0 steps=9 calls=9 jump=0 probes=0 err=None 45s
+- 10-14 04:06:51 FULLRUN p0 FULL4 TasksDueNextWeek rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=0 err=None 23s
+- 10-14 04:07:06 FULLRUN p0 FULL4 TasksDueOnDate rc=0 succ=1.0 steps=2 calls=2 jump=0 probes=0 err=None 15s
+- 10-14 04:07:22 FULLRUN p0 FULL4 TasksHighPriorityTasks rc=0 succ=1.0 steps=2 calls=2 jump=0 probes=0 err=None 16s
+- 10-14 04:07:46 FULLRUN p0 FULL4 TasksHighPriorityTasksDueOnDate rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=0 err=None 24s
+- 10-14 04:08:08 FULLRUN p0 FULL4 TasksIncompleteTasksOnDate rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=0 err=None 22s
+- 10-14 04:08:48 FULLRUN p0 FULL4 TurnOffWifiAndTurnOnBluetooth rc=0 succ=1.0 steps=9 calls=9 jump=0 probes=2 err=None 40s
+- 10-14 04:10:20 FULLRUN p0 FULL4 TurnOnWifiAndOpenApp rc=0 succ=0.5 steps=20 calls=20 jump=0 probes=2 err=None 92s
+- 10-14 04:11:37 FULLRUN p0 FULL4 VlcCreatePlaylist rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 77s
+- 10-14 04:12:56 FULLRUN p0 FULL4 VlcCreateTwoPlaylists rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 78s
+- 10-14 04:12:56 FULLRUN PASS 0 DONE
+- 10-14 04:13:46 FULLRUN p1 FULL4 AudioRecorderRecordAudio rc=0 succ=1.0 steps=12 calls=13 jump=0 probes=1 err=None 50s
+- 10-14 04:14:37 FULLRUN p1 FULL4 AudioRecorderRecordAudioWithFileName rc=0 succ=1.0 steps=11 calls=11 jump=0 probes=0 err=None 51s
+- 10-14 04:15:47 FULLRUN p1 FULL4 BrowserDraw rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=1 err=None 70s
+- 10-14 04:16:34 FULLRUN p1 FULL4 BrowserMaze rc=0 succ=0.0 steps=11 calls=11 jump=0 probes=0 err=None 47s
+- 10-14 04:17:46 FULLRUN p1 FULL4 BrowserMultiply rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=1 err=None 72s
+- 10-14 04:18:37 FULLRUN p1 FULL4 CameraTakePhoto rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 51s
+- 10-14 04:18:58 FULLRUN p1 FULL4 CameraTakeVideo rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=0 err=None 22s
+- 10-14 04:19:42 FULLRUN p1 FULL4 ClockStopWatchPausedVerify rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=0 err=None 43s
+- 10-14 04:20:02 FULLRUN p1 FULL4 ClockStopWatchRunning rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=0 err=None 20s
+- 10-14 04:20:45 FULLRUN p1 FULL4 ClockTimerEntry rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 43s
+- 10-14 04:21:26 FULLRUN p1 FULL4 ContactsAddContact rc=0 succ=1.0 steps=9 calls=9 jump=0 probes=1 err=None 42s
+- 10-14 04:22:13 FULLRUN p1 FULL4 ContactsNewContactDraft rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=1 err=None 46s
+- 10-14 04:23:31 FULLRUN p1 FULL4 ExpenseAddMultiple rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=1 err=None 78s
+- 10-14 04:24:51 FULLRUN p1 FULL4 ExpenseAddMultipleFromGallery rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=2 err=None 80s
+- 10-14 04:25:48 FULLRUN p1 FULL4 ExpenseAddMultipleFromMarkor rc=0 succ=0.0 steps=13 calls=13 jump=0 probes=1 err=None 58s
+- 10-14 04:26:31 FULLRUN p1 FULL4 ExpenseAddSingle rc=0 succ=1.0 steps=9 calls=9 jump=0 probes=1 err=None 42s
+- 10-14 04:27:02 FULLRUN p1 FULL4 ExpenseDeleteDuplicates rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=1 err=None 32s
+- 10-14 04:27:34 FULLRUN p1 FULL4 ExpenseDeleteDuplicates2 rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=1 err=None 31s
+- 10-14 04:28:21 FULLRUN p1 FULL4 ExpenseDeleteMultiple rc=0 succ=1.0 steps=11 calls=9 jump=2 probes=1 err=None 47s
+- 10-14 04:29:31 FULLRUN p1 FULL4 ExpenseDeleteMultiple2 rc=0 succ=1.0 steps=17 calls=17 jump=0 probes=1 err=None 71s
+- 10-14 04:29:58 FULLRUN p1 FULL4 ExpenseDeleteSingle rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=0 err=None 27s
+- 10-14 04:30:53 FULLRUN p1 FULL4 FilesDeleteFile rc=0 succ=1.0 steps=11 calls=11 jump=0 probes=1 err=None 55s
+- 10-14 04:32:07 FULLRUN p1 FULL4 FilesMoveFile rc=0 succ=1.0 steps=19 calls=19 jump=0 probes=1 err=None 74s
+- 10-14 04:33:00 FULLRUN p1 FULL4 MarkorAddNoteHeader rc=0 succ=0.0 steps=12 calls=12 jump=0 probes=0 err=None 53s
+- 10-14 04:33:52 FULLRUN p1 FULL4 MarkorChangeNoteContent rc=0 succ=0.0 steps=12 calls=12 jump=0 probes=0 err=None 52s
+- 10-14 04:34:21 FULLRUN p1 FULL4 MarkorCreateFolder rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=0 err=None 29s
+- 10-14 04:34:58 FULLRUN p1 FULL4 MarkorCreateNote rc=0 succ=1.0 steps=7 calls=7 jump=0 probes=0 err=None 37s
+- 10-14 04:36:11 FULLRUN p1 FULL4 MarkorCreateNoteAndSms rc=0 succ=1.0 steps=13 calls=13 jump=0 probes=0 err=None 73s
+- 10-14 04:37:25 FULLRUN p1 FULL4 MarkorCreateNoteFromClipboard rc=0 succ=0.0 steps=14 calls=14 jump=0 probes=0 err=None 75s
+- 10-14 04:38:25 FULLRUN p1 FULL4 MarkorDeleteAllNotes rc=0 succ=1.0 steps=14 calls=15 jump=0 probes=1 err=None 59s
+- 10-14 04:38:52 FULLRUN p1 FULL4 MarkorDeleteNewestNote rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=0 err=None 27s
+- 10-14 04:39:22 FULLRUN p1 FULL4 MarkorDeleteNote rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=0 err=None 30s
+- 10-14 04:40:49 FULLRUN p1 FULL4 MarkorEditNote rc=0 succ=0.0 steps=12 calls=12 jump=0 probes=0 err=None 87s
+- 10-14 04:42:16 FULLRUN p1 FULL4 MarkorMergeNotes rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 88s
+- 10-14 04:43:08 FULLRUN p1 FULL4 MarkorMoveNote rc=0 succ=1.0 steps=11 calls=11 jump=0 probes=1 err=None 52s
+- 10-14 04:43:56 FULLRUN p1 FULL4 MarkorTranscribeReceipt rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=1 err=None 47s
+- 10-14 04:44:56 FULLRUN p1 FULL4 MarkorTranscribeVideo rc=0 succ=0.0 steps=13 calls=13 jump=0 probes=0 err=None 60s
+- 10-14 04:45:30 FULLRUN p1 FULL4 NotesIsTodo rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=0 err=None 34s
+- 10-14 04:45:53 FULLRUN p1 FULL4 NotesMeetingAttendeeCount rc=0 succ=1.0 steps=3 calls=3 jump=0 probes=0 err=None 23s
+- 10-14 04:46:28 FULLRUN p1 FULL4 NotesRecipeIngredientCount rc=0 succ=0.0 steps=6 calls=6 jump=0 probes=0 err=None 35s
+- 10-14 04:46:48 FULLRUN p1 FULL4 NotesTodoItemCount rc=0 succ=1.0 steps=2 calls=2 jump=0 probes=0 err=None 20s
+- 10-14 04:47:03 FULLRUN p1 FULL4 OpenAppTaskEval rc=0 succ=1.0 steps=2 calls=2 jump=0 probes=0 err=None 15s
+- 10-14 04:47:44 FULLRUN p1 FULL4 OsmAndFavorite rc=0 succ=1.0 steps=8 calls=8 jump=0 probes=1 err=None 42s
+- 10-14 04:48:24 FULLRUN p1 FULL4 OsmAndMarker rc=0 succ=1.0 steps=7 calls=8 jump=0 probes=2 err=None 40s
+- 10-14 04:49:54 FULLRUN p1 FULL4 OsmAndTrack rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=1 err=None 89s
+- 10-14 04:51:18 FULLRUN p1 FULL4 RecipeAddMultipleRecipes rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=2 err=None 84s
+- 10-14 04:52:43 FULLRUN p1 FULL4 RecipeAddMultipleRecipesFromImage rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=3 err=None 85s
+- 10-14 04:54:10 FULLRUN p1 FULL4 RecipeAddMultipleRecipesFromMarkor rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 87s
+- 10-14 04:55:38 FULLRUN p1 FULL4 RecipeAddMultipleRecipesFromMarkor2 rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=1 err=None 88s
+- 10-14 04:56:47 FULLRUN p1 FULL4 RecipeAddSingleRecipe rc=0 succ=1.0 steps=14 calls=14 jump=0 probes=1 err=None 68s
+- 10-14 04:57:34 FULLRUN p1 FULL4 RecipeDeleteDuplicateRecipes rc=0 succ=1.0 steps=10 calls=9 jump=1 probes=4 err=None 47s
+- 10-14 04:58:55 FULLRUN p1 FULL4 RecipeDeleteDuplicateRecipes2 rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=7 err=None 82s
+- 10-14 04:59:27 FULLRUN p1 FULL4 RecipeDeleteDuplicateRecipes3 rc=0 succ=0.0 steps=6 calls=6 jump=0 probes=3 err=None 32s
+- 10-14 05:00:36 FULLRUN p1 FULL4 RecipeDeleteMultipleRecipes rc=0 succ=1.0 steps=16 calls=12 jump=4 probes=4 err=None 68s
+- 10-14 05:01:00 FULLRUN p1 FULL4 RecipeDeleteMultipleRecipesWithConstraint rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=1 err=None 25s
+- 10-14 05:02:26 FULLRUN p1 FULL4 RecipeDeleteMultipleRecipesWithNoise rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=6 err=None 85s
+- 10-14 05:02:58 FULLRUN p1 FULL4 RecipeDeleteSingleRecipe rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=2 err=None 32s
+- 10-14 05:04:19 FULLRUN p1 FULL4 RecipeDeleteSingleWithRecipeWithNoise rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=6 err=None 82s
+- 10-14 05:05:23 FULLRUN p1 FULL4 RetroCreatePlaylist rc=0 succ=0.0 steps=15 calls=15 jump=0 probes=0 err=None 63s
+- 10-14 05:06:44 FULLRUN p1 FULL4 RetroPlayingQueue rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 81s
+- 10-14 05:08:03 FULLRUN p1 FULL4 RetroPlaylistDuration rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 79s
+- 10-14 05:09:21 FULLRUN p1 FULL4 RetroSavePlaylist rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 78s
+- 10-14 05:10:02 FULLRUN p1 FULL4 SaveCopyOfReceiptTaskEval rc=0 succ=1.0 steps=8 calls=8 jump=0 probes=2 err=None 41s
+- 10-14 05:11:02 FULLRUN p1 FULL4 SimpleCalendarAddOneEvent rc=0 succ=0.0 steps=15 calls=15 jump=0 probes=1 err=None 60s
+- 10-14 05:12:19 FULLRUN p1 FULL4 SimpleCalendarAddOneEventInTwoWeeks rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=4 err=None 76s
+- 10-14 05:13:40 FULLRUN p1 FULL4 SimpleCalendarAddOneEventRelativeDay rc=0 succ=1.0 steps=20 calls=20 jump=0 probes=3 err=None 81s
+- 10-14 05:14:51 FULLRUN p1 FULL4 SimpleCalendarAddOneEventTomorrow rc=0 succ=0.0 steps=17 calls=18 jump=0 probes=2 err=None 72s
+- 10-14 05:16:12 FULLRUN p1 FULL4 SimpleCalendarAddRepeatingEvent rc=0 succ=0.0 steps=20 calls=21 jump=0 probes=2 err=None 81s
+- 10-14 05:16:32 FULLRUN p1 FULL4 SimpleCalendarAnyEventsOnDate rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=1 err=None 19s
+- 10-14 05:17:28 FULLRUN p1 FULL4 SimpleCalendarDeleteEvents rc=0 succ=1.0 steps=13 calls=13 jump=0 probes=1 err=None 57s
+- 10-14 05:18:12 FULLRUN p1 FULL4 SimpleCalendarDeleteEventsOnRelativeDay rc=0 succ=1.0 steps=10 calls=8 jump=2 probes=1 err=None 44s
+- 10-14 05:18:46 FULLRUN p1 FULL4 SimpleCalendarDeleteOneEvent rc=0 succ=1.0 steps=7 calls=7 jump=0 probes=2 err=None 34s
+- 10-14 05:19:08 FULLRUN p1 FULL4 SimpleCalendarEventOnDateAtTime rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=2 err=None 22s
+- 10-14 05:19:27 FULLRUN p1 FULL4 SimpleCalendarEventsInNextWeek rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=1 err=None 19s
+- 10-14 05:19:48 FULLRUN p1 FULL4 SimpleCalendarEventsInTimeRange rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=1 err=None 21s
+- 10-14 05:20:06 FULLRUN p1 FULL4 SimpleCalendarEventsOnDate rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=1 err=None 18s
+- 10-14 05:20:29 FULLRUN p1 FULL4 SimpleCalendarFirstEventAfterStartTime rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=2 err=None 23s
+- 10-14 05:20:56 FULLRUN p1 FULL4 SimpleCalendarLocationOfEvent rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=1 err=None 27s
+- 10-14 05:21:15 FULLRUN p1 FULL4 SimpleCalendarNextEvent rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=1 err=None 19s
+- 10-14 05:21:40 FULLRUN p1 FULL4 SimpleCalendarNextMeetingWithPerson rc=0 succ=0.0 steps=5 calls=5 jump=0 probes=1 err=None 24s
+- 10-14 05:22:32 FULLRUN p1 FULL4 SimpleDrawProCreateDrawing rc=0 succ=1.0 steps=9 calls=9 jump=0 probes=1 err=None 52s
+- 10-14 05:23:35 FULLRUN p1 FULL4 SimpleSmsReply rc=0 succ=0.0 steps=12 calls=12 jump=0 probes=1 err=None 64s
+- 10-14 05:24:28 FULLRUN p1 FULL4 SimpleSmsReplyMostRecent rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=1 err=None 53s
+- 10-14 05:25:50 FULLRUN p1 FULL4 SimpleSmsResend rc=0 succ=0.0 steps=12 calls=12 jump=0 probes=1 err=None 82s
+- 10-14 05:26:37 FULLRUN p1 FULL4 SimpleSmsSend rc=0 succ=1.0 steps=7 calls=7 jump=0 probes=0 err=None 47s
+- 10-14 05:27:26 FULLRUN p1 FULL4 SimpleSmsSendClipboardContent rc=0 succ=0.0 steps=8 calls=8 jump=0 probes=0 err=None 49s
+- 10-14 05:28:58 FULLRUN p1 FULL4 SimpleSmsSendReceivedAddress rc=0 succ=0.0 steps=18 calls=18 jump=0 probes=1 err=None 92s
+- 10-14 05:29:12 FULLRUN p1 FULL4 SportsTrackerActivitiesCountForWeek rc=0 succ=0.0 steps=2 calls=2 jump=0 probes=0 err=None 14s
+- 10-14 05:29:26 FULLRUN p1 FULL4 SportsTrackerActivitiesOnDate rc=0 succ=0.0 steps=2 calls=2 jump=0 probes=0 err=None 14s
+- 10-14 05:29:52 FULLRUN p1 FULL4 SportsTrackerActivityDuration rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=0 err=None 26s
+- 10-14 05:30:11 FULLRUN p1 FULL4 SportsTrackerLongestDistanceActivity rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=0 err=None 19s
+- 10-14 05:30:27 FULLRUN p1 FULL4 SportsTrackerTotalDistanceForCategoryOverInterval rc=0 succ=0.0 steps=2 calls=2 jump=0 probes=0 err=None 16s
+- 10-14 05:30:43 FULLRUN p1 FULL4 SportsTrackerTotalDurationForCategoryThisWeek rc=0 succ=0.0 steps=2 calls=2 jump=0 probes=0 err=None 16s
+- 10-14 05:31:18 FULLRUN p1 FULL4 SystemBluetoothTurnOff rc=0 succ=1.0 steps=7 calls=8 jump=0 probes=2 err=None 35s
+- 10-14 05:32:00 FULLRUN p1 FULL4 SystemBluetoothTurnOffVerify rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=0 err=None 42s
+- 10-14 05:32:20 FULLRUN p1 FULL4 SystemBluetoothTurnOn rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=1 err=None 20s
+- 10-14 05:32:45 FULLRUN p1 FULL4 SystemBluetoothTurnOnVerify rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=2 err=None 25s
+- 10-14 05:33:14 FULLRUN p1 FULL4 SystemBrightnessMax rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=1 err=None 29s
+- 10-14 05:33:36 FULLRUN p1 FULL4 SystemBrightnessMaxVerify rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=2 err=None 21s
+- 10-14 05:34:08 FULLRUN p1 FULL4 SystemBrightnessMin rc=0 succ=1.0 steps=7 calls=7 jump=0 probes=2 err=None 32s
+- 10-14 05:34:29 FULLRUN p1 FULL4 SystemBrightnessMinVerify rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=2 err=None 22s
+- 10-14 05:35:15 FULLRUN p1 FULL4 SystemCopyToClipboard rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 46s
+- 10-14 05:35:40 FULLRUN p1 FULL4 SystemWifiTurnOff rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=1 err=None 24s
+- 10-14 05:36:07 FULLRUN p1 FULL4 SystemWifiTurnOffVerify rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=1 err=None 27s
+- 10-14 05:36:31 FULLRUN p1 FULL4 SystemWifiTurnOn rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=1 err=None 23s
+- 10-14 05:36:50 FULLRUN p1 FULL4 SystemWifiTurnOnVerify rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=2 err=None 19s
+- 10-14 05:37:27 FULLRUN p1 FULL4 TasksCompletedTasksForDate rc=0 succ=0.0 steps=7 calls=7 jump=0 probes=0 err=None 37s
+- 10-14 05:37:50 FULLRUN p1 FULL4 TasksDueNextWeek rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=0 err=None 23s
+- 10-14 05:38:39 FULLRUN p1 FULL4 TasksDueOnDate rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 49s
+- 10-14 05:38:54 FULLRUN p1 FULL4 TasksHighPriorityTasks rc=0 succ=0.0 steps=2 calls=2 jump=0 probes=0 err=None 15s
+- 10-14 05:39:17 FULLRUN p1 FULL4 TasksHighPriorityTasksDueOnDate rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=0 err=None 23s
+- 10-14 05:39:31 FULLRUN p1 FULL4 TasksIncompleteTasksOnDate rc=0 succ=1.0 steps=2 calls=2 jump=0 probes=0 err=None 14s
+- 10-14 05:40:14 FULLRUN p1 FULL4 TurnOffWifiAndTurnOnBluetooth rc=0 succ=1.0 steps=9 calls=9 jump=0 probes=3 err=None 43s
+- 10-14 05:40:56 FULLRUN p1 FULL4 TurnOnWifiAndOpenApp rc=0 succ=0.5 steps=9 calls=9 jump=0 probes=3 err=None 41s
+- 10-14 05:42:10 FULLRUN p1 FULL4 VlcCreatePlaylist rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 75s
+- 10-14 05:43:27 FULLRUN p1 FULL4 VlcCreateTwoPlaylists rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 76s
+- 10-14 05:43:27 FULLRUN PASS 1 DONE
+- 10-14 05:43:27 FULLRUN DRIVER DONE FULL4
+- 10-14 05:50 FULL4 完成：112/232 vs BASE 117；第 2 轮跳步 9 步，且跳步 episode 无损失；结论写入 full_results_zh.md §7–8。
+- 10-14 09:37 FULL5 启动：R3 episode 内实体流程复用 + 模型提交后的确认 + 同任务跳步；冒烟 Recipe 14→10、Expense 11→9 次调用。
+- 10-14 09:38:21 FULLRUN p0 FULL5 AudioRecorderRecordAudio rc=0 succ=1.0 steps=9 calls=9 jump=0 probes=0 err=None 39s
+- 10-14 09:39:21 FULLRUN p0 FULL5 AudioRecorderRecordAudioWithFileName rc=0 succ=1.0 steps=12 calls=13 jump=0 probes=1 err=None 60s
+- 10-14 09:40:30 FULLRUN p0 FULL5 BrowserDraw rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 69s
+- 10-14 09:41:40 FULLRUN p0 FULL5 BrowserMaze rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 69s
+- 10-14 09:42:44 FULLRUN p0 FULL5 BrowserMultiply rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 64s
+- 10-14 09:43:32 FULLRUN p0 FULL5 CameraTakePhoto rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 48s
+- 10-14 09:44:03 FULLRUN p0 FULL5 CameraTakeVideo rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=0 err=None 31s
+- 10-14 09:44:17 FULLRUN p0 FULL5 ClockStopWatchPausedVerify rc=0 succ=1.0 steps=2 calls=2 jump=0 probes=0 err=None 14s
+- 10-14 09:44:36 FULLRUN p0 FULL5 ClockStopWatchRunning rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=0 err=None 19s
+- 10-14 09:45:26 FULLRUN p0 FULL5 ClockTimerEntry rc=0 succ=0.0 steps=10 calls=11 jump=0 probes=1 err=None 49s
+- 10-14 09:46:10 FULLRUN p0 FULL5 ContactsAddContact rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=0 err=None 45s
+- 10-14 09:46:58 FULLRUN p0 FULL5 ContactsNewContactDraft rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=0 err=None 48s
+- 10-14 09:48:18 FULLRUN p0 FULL5 ExpenseAddMultiple rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 80s
+- 10-14 09:49:38 FULLRUN p0 FULL5 ExpenseAddMultipleFromGallery rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 80s
+- 10-14 09:51:01 FULLRUN p0 FULL5 ExpenseAddMultipleFromMarkor rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 83s
+- 10-14 09:51:50 FULLRUN p0 FULL5 ExpenseAddSingle rc=0 succ=0.0 steps=9 calls=9 jump=0 probes=0 err=None 49s
+- 10-14 09:52:25 FULLRUN p0 FULL5 ExpenseDeleteDuplicates rc=0 succ=1.0 steps=7 calls=7 jump=0 probes=0 err=None 35s
+- 10-14 09:53:10 FULLRUN p0 FULL5 ExpenseDeleteDuplicates2 rc=0 succ=0.0 steps=8 calls=9 jump=0 probes=2 err=None 44s
+- 10-14 09:53:57 FULLRUN p0 FULL5 ExpenseDeleteMultiple rc=0 succ=1.0 steps=11 calls=9 jump=0 probes=1 err=None 48s
+- 10-14 09:55:20 FULLRUN p0 FULL5 ExpenseDeleteMultiple2 rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=1 err=None 82s
+- 10-14 09:55:46 FULLRUN p0 FULL5 ExpenseDeleteSingle rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=0 err=None 26s
+- 10-14 09:56:33 FULLRUN p0 FULL5 FilesDeleteFile rc=0 succ=1.0 steps=9 calls=9 jump=0 probes=0 err=None 47s
+- 10-14 09:57:30 FULLRUN p0 FULL5 FilesMoveFile rc=0 succ=0.0 steps=12 calls=13 jump=0 probes=2 err=None 57s
+- 10-14 09:58:26 FULLRUN p0 FULL5 MarkorAddNoteHeader rc=0 succ=0.0 steps=12 calls=12 jump=0 probes=0 err=None 56s
+- 10-14 09:59:23 FULLRUN p0 FULL5 MarkorChangeNoteContent rc=0 succ=0.0 steps=12 calls=12 jump=0 probes=0 err=None 57s
+- 10-14 09:59:54 FULLRUN p0 FULL5 MarkorCreateFolder rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=0 err=None 31s
+- 10-14 10:00:57 FULLRUN p0 FULL5 MarkorCreateNote rc=0 succ=0.0 steps=13 calls=13 jump=0 probes=1 err=None 63s
+- 10-14 10:02:31 FULLRUN p0 FULL5 MarkorCreateNoteAndSms rc=0 succ=0.0 steps=18 calls=18 jump=0 probes=1 err=None 94s
+- 10-14 10:03:24 FULLRUN p0 FULL5 MarkorCreateNoteFromClipboard rc=0 succ=1.0 steps=8 calls=8 jump=0 probes=1 err=None 53s
+- 10-14 10:04:08 FULLRUN p0 FULL5 MarkorDeleteAllNotes rc=0 succ=1.0 steps=8 calls=8 jump=0 probes=3 err=None 43s
+- 10-14 10:04:36 FULLRUN p0 FULL5 MarkorDeleteNewestNote rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=1 err=None 29s
+- 10-14 10:05:12 FULLRUN p0 FULL5 MarkorDeleteNote rc=0 succ=1.0 steps=5 calls=6 jump=0 probes=1 err=None 35s
+- 10-14 10:05:35 FULLRUN p0 FULL5 MarkorEditNote rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=0 err=None 23s
+- 10-14 10:07:01 FULLRUN p0 FULL5 MarkorMergeNotes rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 87s
+- 10-14 10:08:06 FULLRUN p0 FULL5 MarkorMoveNote rc=0 succ=1.0 steps=12 calls=12 jump=0 probes=1 err=None 64s
+- 10-14 10:09:09 FULLRUN p0 FULL5 MarkorTranscribeReceipt rc=0 succ=0.0 steps=14 calls=14 jump=0 probes=0 err=None 63s
+- 10-14 10:09:42 FULLRUN p0 FULL5 MarkorTranscribeVideo rc=0 succ=0.0 steps=5 calls=5 jump=0 probes=0 err=None 33s
+- 10-14 10:10:16 FULLRUN p0 FULL5 NotesIsTodo rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=0 err=None 34s
+- 10-14 10:10:48 FULLRUN p0 FULL5 NotesMeetingAttendeeCount rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=0 err=None 32s
+- 10-14 10:11:26 FULLRUN p0 FULL5 NotesRecipeIngredientCount rc=0 succ=0.0 steps=7 calls=7 jump=0 probes=0 err=None 38s
+- 10-14 10:11:56 FULLRUN p0 FULL5 NotesTodoItemCount rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=0 err=None 30s
+- 10-14 10:12:17 FULLRUN p0 FULL5 OpenAppTaskEval rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=0 err=None 21s
+- 10-14 10:13:18 FULLRUN p0 FULL5 OsmAndFavorite rc=0 succ=1.0 steps=12 calls=12 jump=0 probes=0 err=None 60s
+- 10-14 10:14:45 FULLRUN p0 FULL5 OsmAndMarker rc=0 succ=0.0 steps=20 calls=21 jump=0 probes=1 err=None 87s
+- 10-14 10:16:05 FULLRUN p0 FULL5 OsmAndTrack rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 80s
+- 10-14 10:17:30 FULLRUN p0 FULL5 RecipeAddMultipleRecipes rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 85s
+- 10-14 10:18:54 FULLRUN p0 FULL5 RecipeAddMultipleRecipesFromImage rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 84s
+- 10-14 10:20:35 FULLRUN p0 FULL5 RecipeAddMultipleRecipesFromMarkor rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 101s
+- 10-14 10:22:07 FULLRUN p0 FULL5 RecipeAddMultipleRecipesFromMarkor2 rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 91s
+- 10-14 10:23:18 FULLRUN p0 FULL5 RecipeAddSingleRecipe rc=0 succ=1.0 steps=14 calls=14 jump=0 probes=0 err=None 71s
+- 10-14 10:23:51 FULLRUN p0 FULL5 RecipeDeleteDuplicateRecipes rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=1 err=None 33s
+- 10-14 10:25:12 FULLRUN p0 FULL5 RecipeDeleteDuplicateRecipes2 rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=2 err=None 80s
+- 10-14 10:26:34 FULLRUN p0 FULL5 RecipeDeleteDuplicateRecipes3 rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=2 err=None 82s
+- 10-14 10:27:26 FULLRUN p0 FULL5 RecipeDeleteMultipleRecipes rc=0 succ=1.0 steps=14 calls=10 jump=0 probes=0 err=None 52s
+- 10-14 10:27:51 FULLRUN p0 FULL5 RecipeDeleteMultipleRecipesWithConstraint rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=1 err=None 24s
+- 10-14 10:29:17 FULLRUN p0 FULL5 RecipeDeleteMultipleRecipesWithNoise rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=1 err=None 86s
+- 10-14 10:29:48 FULLRUN p0 FULL5 RecipeDeleteSingleRecipe rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=2 err=None 31s
+- 10-14 10:31:17 FULLRUN p0 FULL5 RecipeDeleteSingleWithRecipeWithNoise rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=1 err=None 89s
+- 10-14 10:32:43 FULLRUN p0 FULL5 RetroCreatePlaylist rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 86s
+- 10-14 10:33:39 FULLRUN p0 FULL5 RetroPlayingQueue rc=0 succ=0.0 steps=11 calls=11 jump=0 probes=0 err=None 56s
+- 10-14 10:35:06 FULLRUN p0 FULL5 RetroPlaylistDuration rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 86s
+- 10-14 10:36:30 FULLRUN p0 FULL5 RetroSavePlaylist rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 84s
+- 10-14 10:37:12 FULLRUN p0 FULL5 SaveCopyOfReceiptTaskEval rc=0 succ=1.0 steps=8 calls=8 jump=0 probes=0 err=None 42s
+- 10-14 10:38:32 FULLRUN p0 FULL5 SimpleCalendarAddOneEvent rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 79s
+- 10-14 10:39:49 FULLRUN p0 FULL5 SimpleCalendarAddOneEventInTwoWeeks rc=0 succ=0.0 steps=19 calls=19 jump=0 probes=0 err=None 77s
+- 10-14 10:41:05 FULLRUN p0 FULL5 SimpleCalendarAddOneEventRelativeDay rc=0 succ=0.0 steps=19 calls=19 jump=0 probes=0 err=None 76s
+- 10-14 10:49:52 FULLRUN p0 FULL5 SimpleCalendarAddOneEventTomorrow rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 527s
+- 10-14 10:49:52 tunnel down
+- 10-14 10:50:22 tunnel down
+- 10-14 10:52:09 FULLRUN p0 FULL5 SimpleCalendarAddRepeatingEvent rc=0 succ=1.0 steps=20 calls=20 jump=0 probes=0 err=None 77s
+- 10-14 10:52:33 FULLRUN p0 FULL5 SimpleCalendarAnyEventsOnDate rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=2 err=None 24s
+- 10-14 10:53:20 FULLRUN p0 FULL5 SimpleCalendarDeleteEvents rc=0 succ=1.0 steps=9 calls=9 jump=0 probes=2 err=None 48s
+- 10-14 10:54:10 FULLRUN p0 FULL5 SimpleCalendarDeleteEventsOnRelativeDay rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=2 err=None 49s
+- 10-14 10:54:46 FULLRUN p0 FULL5 SimpleCalendarDeleteOneEvent rc=0 succ=1.0 steps=7 calls=7 jump=0 probes=2 err=None 36s
+- 10-14 10:55:10 FULLRUN p0 FULL5 SimpleCalendarEventOnDateAtTime rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=2 err=None 24s
+- 10-14 10:55:54 FULLRUN p0 FULL5 SimpleCalendarEventsInNextWeek rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=1 err=None 44s
+- 10-14 10:56:17 FULLRUN p0 FULL5 SimpleCalendarEventsInTimeRange rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=1 err=None 23s
+- 10-14 10:56:39 FULLRUN p0 FULL5 SimpleCalendarEventsOnDate rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=1 err=None 23s
+- 10-14 10:57:24 FULLRUN p0 FULL5 SimpleCalendarFirstEventAfterStartTime rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=1 err=None 44s
+- 10-14 10:57:52 FULLRUN p0 FULL5 SimpleCalendarLocationOfEvent rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=1 err=None 28s
+- 10-14 10:58:12 FULLRUN p0 FULL5 SimpleCalendarNextEvent rc=0 succ=1.0 steps=3 calls=3 jump=0 probes=1 err=None 20s
+- 10-14 10:58:37 FULLRUN p0 FULL5 SimpleCalendarNextMeetingWithPerson rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=1 err=None 25s
+- 10-14 10:59:57 FULLRUN p0 FULL5 SimpleDrawProCreateDrawing rc=0 succ=0.0 steps=18 calls=18 jump=0 probes=0 err=None 80s
+- 10-14 11:00:50 FULLRUN p0 FULL5 SimpleSmsReply rc=0 succ=1.0 steps=7 calls=7 jump=0 probes=0 err=None 53s
+- 10-14 11:01:45 FULLRUN p0 FULL5 SimpleSmsReplyMostRecent rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=0 err=None 54s
+- 10-14 11:02:31 FULLRUN p0 FULL5 SimpleSmsResend rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=1 err=None 46s
+- 10-14 11:03:18 FULLRUN p0 FULL5 SimpleSmsSend rc=0 succ=1.0 steps=7 calls=7 jump=0 probes=0 err=None 47s
+- 10-14 11:04:12 FULLRUN p0 FULL5 SimpleSmsSendClipboardContent rc=0 succ=0.0 steps=8 calls=8 jump=0 probes=0 err=None 54s
+- 10-14 11:05:44 FULLRUN p0 FULL5 SimpleSmsSendReceivedAddress rc=0 succ=0.0 steps=16 calls=16 jump=0 probes=1 err=None 92s
+- 10-14 11:05:58 FULLRUN p0 FULL5 SportsTrackerActivitiesCountForWeek rc=0 succ=0.0 steps=2 calls=2 jump=0 probes=0 err=None 15s
+- 10-14 11:06:23 FULLRUN p0 FULL5 SportsTrackerActivitiesOnDate rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=0 err=None 24s
+- 10-14 11:06:37 FULLRUN p0 FULL5 SportsTrackerActivityDuration rc=0 succ=1.0 steps=2 calls=2 jump=0 probes=0 err=None 14s
+- 10-14 11:07:19 FULLRUN p0 FULL5 SportsTrackerLongestDistanceActivity rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 42s
+- 10-14 11:07:43 FULLRUN p0 FULL5 SportsTrackerTotalDistanceForCategoryOverInterval rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=0 err=None 24s
+- 10-14 11:07:58 FULLRUN p0 FULL5 SportsTrackerTotalDurationForCategoryThisWeek rc=0 succ=0.0 steps=2 calls=2 jump=0 probes=0 err=None 15s
+- 10-14 11:08:27 FULLRUN p0 FULL5 SystemBluetoothTurnOff rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=0 err=None 28s
+- 10-14 11:09:11 FULLRUN p0 FULL5 SystemBluetoothTurnOffVerify rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=0 err=None 44s
+- 10-14 11:09:44 FULLRUN p0 FULL5 SystemBluetoothTurnOn rc=0 succ=1.0 steps=6 calls=7 jump=0 probes=2 err=None 33s
+- 10-14 11:10:12 FULLRUN p0 FULL5 SystemBluetoothTurnOnVerify rc=0 succ=1.0 steps=5 calls=6 jump=0 probes=2 err=None 29s
+- 10-14 11:10:43 FULLRUN p0 FULL5 SystemBrightnessMax rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=1 err=None 30s
+- 10-14 11:11:05 FULLRUN p0 FULL5 SystemBrightnessMaxVerify rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=2 err=None 22s
+- 10-14 11:11:51 FULLRUN p0 FULL5 SystemBrightnessMin rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=2 err=None 46s
+- 10-14 11:12:15 FULLRUN p0 FULL5 SystemBrightnessMinVerify rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=2 err=None 24s
+- 10-14 11:13:00 FULLRUN p0 FULL5 SystemCopyToClipboard rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 43s
+- 10-14 11:13:27 FULLRUN p0 FULL5 SystemWifiTurnOff rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=1 err=None 27s
+- 10-14 11:13:55 FULLRUN p0 FULL5 SystemWifiTurnOffVerify rc=0 succ=1.0 steps=5 calls=6 jump=0 probes=2 err=None 28s
+- 10-14 11:14:20 FULLRUN p0 FULL5 SystemWifiTurnOn rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=2 err=None 25s
+- 10-14 11:14:45 FULLRUN p0 FULL5 SystemWifiTurnOnVerify rc=0 succ=1.0 steps=4 calls=5 jump=0 probes=2 err=None 25s
+- 10-14 11:15:26 FULLRUN p0 FULL5 TasksCompletedTasksForDate rc=0 succ=0.0 steps=8 calls=8 jump=0 probes=0 err=None 41s
+- 10-14 11:15:50 FULLRUN p0 FULL5 TasksDueNextWeek rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=0 err=None 24s
+- 10-14 11:16:05 FULLRUN p0 FULL5 TasksDueOnDate rc=0 succ=1.0 steps=2 calls=2 jump=0 probes=0 err=None 14s
+- 10-14 11:16:20 FULLRUN p0 FULL5 TasksHighPriorityTasks rc=0 succ=1.0 steps=2 calls=2 jump=0 probes=0 err=None 15s
+- 10-14 11:16:45 FULLRUN p0 FULL5 TasksHighPriorityTasksDueOnDate rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=0 err=None 25s
+- 10-14 11:17:12 FULLRUN p0 FULL5 TasksIncompleteTasksOnDate rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=0 err=None 27s
+- 10-14 11:17:54 FULLRUN p0 FULL5 TurnOffWifiAndTurnOnBluetooth rc=0 succ=1.0 steps=9 calls=9 jump=0 probes=2 err=None 41s
+- 10-14 11:18:44 FULLRUN p0 FULL5 TurnOnWifiAndOpenApp rc=0 succ=1.0 steps=9 calls=9 jump=0 probes=1 err=None 50s
+- 10-14 11:20:03 FULLRUN p0 FULL5 VlcCreatePlaylist rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 79s
+- 10-14 11:20:58 FULLRUN p0 FULL5 VlcCreateTwoPlaylists rc=0 succ=0.0 steps=11 calls=11 jump=0 probes=0 err=None 55s
+- 10-14 11:20:58 FULLRUN PASS 0 DONE
+- 10-14 11:21:43 FULLRUN p1 FULL5 AudioRecorderRecordAudio rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=0 err=None 44s
+- 10-14 11:22:38 FULLRUN p1 FULL5 AudioRecorderRecordAudioWithFileName rc=0 succ=1.0 steps=11 calls=11 jump=0 probes=0 err=None 55s
+- 10-14 11:23:48 FULLRUN p1 FULL5 BrowserDraw rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=1 err=None 70s
+- 10-14 11:25:04 FULLRUN p1 FULL5 BrowserMaze rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=1 err=None 76s
+- 10-14 11:26:23 FULLRUN p1 FULL5 BrowserMultiply rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=1 err=None 79s
+- 10-14 11:27:15 FULLRUN p1 FULL5 CameraTakePhoto rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 52s
+- 10-14 11:28:07 FULLRUN p1 FULL5 CameraTakeVideo rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 52s
+- 10-14 11:28:53 FULLRUN p1 FULL5 ClockStopWatchPausedVerify rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=0 err=None 46s
+- 10-14 11:29:14 FULLRUN p1 FULL5 ClockStopWatchRunning rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=0 err=None 21s
+- 10-14 11:30:00 FULLRUN p1 FULL5 ClockTimerEntry rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 46s
+- 10-14 11:30:47 FULLRUN p1 FULL5 ContactsAddContact rc=0 succ=1.0 steps=9 calls=9 jump=0 probes=1 err=None 47s
+- 10-14 11:31:37 FULLRUN p1 FULL5 ContactsNewContactDraft rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=1 err=None 49s
+- 10-14 11:32:56 FULLRUN p1 FULL5 ExpenseAddMultiple rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=1 err=None 79s
+- 10-14 11:34:18 FULLRUN p1 FULL5 ExpenseAddMultipleFromGallery rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=2 err=None 81s
+- 10-14 11:34:39 FULLRUN p1 FULL5 ExpenseAddMultipleFromMarkor rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=0 err=None 21s
+- 10-14 11:35:21 FULLRUN p1 FULL5 ExpenseAddSingle rc=0 succ=1.0 steps=9 calls=9 jump=0 probes=1 err=None 42s
+- 10-14 11:35:59 FULLRUN p1 FULL5 ExpenseDeleteDuplicates rc=0 succ=1.0 steps=7 calls=7 jump=0 probes=2 err=None 37s
+- 10-14 11:36:37 FULLRUN p1 FULL5 ExpenseDeleteDuplicates2 rc=0 succ=1.0 steps=7 calls=7 jump=0 probes=1 err=None 38s
+- 10-14 11:37:34 FULLRUN p1 FULL5 ExpenseDeleteMultiple rc=0 succ=1.0 steps=13 calls=9 jump=2 probes=1 err=None 58s
+- 10-14 11:39:04 FULLRUN p1 FULL5 ExpenseDeleteMultiple2 rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=1 err=None 90s
+- 10-14 11:39:34 FULLRUN p1 FULL5 ExpenseDeleteSingle rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=0 err=None 29s
+- 10-14 11:40:30 FULLRUN p1 FULL5 FilesDeleteFile rc=0 succ=1.0 steps=11 calls=11 jump=0 probes=1 err=None 57s
+- 10-14 11:41:53 FULLRUN p1 FULL5 FilesMoveFile rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=1 err=None 83s
+- 10-14 11:42:50 FULLRUN p1 FULL5 MarkorAddNoteHeader rc=0 succ=0.0 steps=12 calls=12 jump=0 probes=0 err=None 56s
+- 10-14 11:43:44 FULLRUN p1 FULL5 MarkorChangeNoteContent rc=0 succ=0.0 steps=12 calls=12 jump=0 probes=0 err=None 54s
+- 10-14 11:44:14 FULLRUN p1 FULL5 MarkorCreateFolder rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=0 err=None 29s
+- 10-14 11:44:51 FULLRUN p1 FULL5 MarkorCreateNote rc=0 succ=1.0 steps=7 calls=7 jump=0 probes=0 err=None 37s
+- 10-14 11:46:13 FULLRUN p1 FULL5 MarkorCreateNoteAndSms rc=0 succ=1.0 steps=15 calls=15 jump=0 probes=0 err=None 82s
+- 10-14 11:47:26 FULLRUN p1 FULL5 MarkorCreateNoteFromClipboard rc=0 succ=0.0 steps=14 calls=14 jump=0 probes=0 err=None 73s
+- 10-14 11:48:04 FULLRUN p1 FULL5 MarkorDeleteAllNotes rc=0 succ=1.0 steps=7 calls=8 jump=0 probes=1 err=None 38s
+- 10-14 11:48:31 FULLRUN p1 FULL5 MarkorDeleteNewestNote rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=0 err=None 27s
+- 10-14 11:49:01 FULLRUN p1 FULL5 MarkorDeleteNote rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=0 err=None 30s
+- 10-14 11:49:42 FULLRUN p1 FULL5 MarkorEditNote rc=0 succ=1.0 steps=7 calls=7 jump=0 probes=0 err=None 41s
+- 10-14 11:51:02 FULLRUN p1 FULL5 MarkorMergeNotes rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 80s
+- 10-14 11:52:01 FULLRUN p1 FULL5 MarkorMoveNote rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=2 err=None 59s
+- 10-14 11:53:21 FULLRUN p1 FULL5 MarkorTranscribeReceipt rc=0 succ=0.0 steps=18 calls=18 jump=0 probes=1 err=None 80s
+- 10-14 11:53:51 FULLRUN p1 FULL5 MarkorTranscribeVideo rc=0 succ=0.0 steps=5 calls=5 jump=0 probes=0 err=None 30s
+- 10-14 11:54:25 FULLRUN p1 FULL5 NotesIsTodo rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=0 err=None 34s
+- 10-14 11:54:48 FULLRUN p1 FULL5 NotesMeetingAttendeeCount rc=0 succ=1.0 steps=3 calls=3 jump=0 probes=0 err=None 24s
+- 10-14 11:55:42 FULLRUN p1 FULL5 NotesRecipeIngredientCount rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 53s
+- 10-14 11:56:02 FULLRUN p1 FULL5 NotesTodoItemCount rc=0 succ=1.0 steps=2 calls=2 jump=0 probes=0 err=None 20s
+- 10-14 11:56:16 FULLRUN p1 FULL5 OpenAppTaskEval rc=0 succ=1.0 steps=2 calls=2 jump=0 probes=0 err=None 14s
+- 10-14 11:56:57 FULLRUN p1 FULL5 OsmAndFavorite rc=0 succ=1.0 steps=8 calls=8 jump=0 probes=0 err=None 41s
+- 10-14 11:57:41 FULLRUN p1 FULL5 OsmAndMarker rc=0 succ=1.0 steps=7 calls=8 jump=0 probes=1 err=None 43s
+- 10-14 11:59:07 FULLRUN p1 FULL5 OsmAndTrack rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 86s
+- 10-14 12:00:32 FULLRUN p1 FULL5 RecipeAddMultipleRecipes rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=1 err=None 85s
+- 10-14 12:02:05 FULLRUN p1 FULL5 RecipeAddMultipleRecipesFromImage rc=0 succ=0.0 steps=20 calls=21 jump=0 probes=3 err=None 93s
+- 10-14 12:03:35 FULLRUN p1 FULL5 RecipeAddMultipleRecipesFromMarkor rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 90s
+- 10-14 12:04:15 FULLRUN p1 FULL5 RecipeAddMultipleRecipesFromMarkor2 rc=0 succ=0.0 steps=7 calls=7 jump=0 probes=0 err=None 39s
+- 10-14 12:05:30 FULLRUN p1 FULL5 RecipeAddSingleRecipe rc=0 succ=1.0 steps=15 calls=15 jump=0 probes=1 err=None 75s
+- 10-14 12:06:09 FULLRUN p1 FULL5 RecipeDeleteDuplicateRecipes rc=0 succ=1.0 steps=7 calls=7 jump=0 probes=2 err=None 39s
+- 10-14 12:06:40 FULLRUN p1 FULL5 RecipeDeleteDuplicateRecipes2 rc=0 succ=0.0 steps=6 calls=6 jump=0 probes=2 err=None 31s
+- 10-14 12:07:12 FULLRUN p1 FULL5 RecipeDeleteDuplicateRecipes3 rc=0 succ=0.0 steps=6 calls=6 jump=0 probes=2 err=None 32s
+- 10-14 12:08:20 FULLRUN p1 FULL5 RecipeDeleteMultipleRecipes rc=0 succ=1.0 steps=16 calls=10 jump=4 probes=2 err=None 68s
+- 10-14 12:08:46 FULLRUN p1 FULL5 RecipeDeleteMultipleRecipesWithConstraint rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=1 err=None 25s
+- 10-14 12:09:58 FULLRUN p1 FULL5 RecipeDeleteMultipleRecipesWithNoise rc=0 succ=1.0 steps=20 calls=16 jump=0 probes=2 err=None 72s
+- 10-14 12:10:29 FULLRUN p1 FULL5 RecipeDeleteSingleRecipe rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=2 err=None 31s
+- 10-14 12:11:58 FULLRUN p1 FULL5 RecipeDeleteSingleWithRecipeWithNoise rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=1 err=None 89s
+- 10-14 12:13:00 FULLRUN p1 FULL5 RetroCreatePlaylist rc=0 succ=0.0 steps=14 calls=14 jump=0 probes=0 err=None 62s
+- 10-14 12:14:36 FULLRUN p1 FULL5 RetroPlayingQueue rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 96s
+- 10-14 12:15:59 FULLRUN p1 FULL5 RetroPlaylistDuration rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 83s
+- 10-14 12:17:22 FULLRUN p1 FULL5 RetroSavePlaylist rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 83s
+- 10-14 12:18:00 FULLRUN p1 FULL5 SaveCopyOfReceiptTaskEval rc=0 succ=1.0 steps=8 calls=7 jump=1 probes=2 err=None 38s
+- 10-14 12:19:15 FULLRUN p1 FULL5 SimpleCalendarAddOneEvent rc=0 succ=1.0 steps=17 calls=18 jump=0 probes=2 err=None 75s
+- 10-14 12:20:34 FULLRUN p1 FULL5 SimpleCalendarAddOneEventInTwoWeeks rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=5 err=None 79s
+- 10-14 12:21:45 FULLRUN p1 FULL5 SimpleCalendarAddOneEventRelativeDay rc=0 succ=1.0 steps=17 calls=17 jump=0 probes=4 err=None 71s
+- 10-14 12:22:56 FULLRUN p1 FULL5 SimpleCalendarAddOneEventTomorrow rc=0 succ=1.0 steps=17 calls=17 jump=0 probes=5 err=None 71s
+- 10-14 12:24:15 FULLRUN p1 FULL5 SimpleCalendarAddRepeatingEvent rc=0 succ=1.0 steps=19 calls=20 jump=0 probes=2 err=None 79s
+- 10-14 12:24:34 FULLRUN p1 FULL5 SimpleCalendarAnyEventsOnDate rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=1 err=None 19s
+- 10-14 12:25:34 FULLRUN p1 FULL5 SimpleCalendarDeleteEvents rc=0 succ=1.0 steps=13 calls=13 jump=0 probes=2 err=None 59s
+- 10-14 12:26:19 FULLRUN p1 FULL5 SimpleCalendarDeleteEventsOnRelativeDay rc=0 succ=1.0 steps=10 calls=8 jump=2 probes=2 err=None 45s
+- 10-14 12:26:56 FULLRUN p1 FULL5 SimpleCalendarDeleteOneEvent rc=0 succ=1.0 steps=7 calls=7 jump=0 probes=2 err=None 37s
+- 10-14 12:27:19 FULLRUN p1 FULL5 SimpleCalendarEventOnDateAtTime rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=2 err=None 23s
+- 10-14 12:27:38 FULLRUN p1 FULL5 SimpleCalendarEventsInNextWeek rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=1 err=None 19s
+- 10-14 12:27:59 FULLRUN p1 FULL5 SimpleCalendarEventsInTimeRange rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=2 err=None 21s
+- 10-14 12:28:22 FULLRUN p1 FULL5 SimpleCalendarEventsOnDate rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=2 err=None 22s
+- 10-14 12:28:45 FULLRUN p1 FULL5 SimpleCalendarFirstEventAfterStartTime rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=2 err=None 23s
+- 10-14 12:29:14 FULLRUN p1 FULL5 SimpleCalendarLocationOfEvent rc=0 succ=0.0 steps=5 calls=5 jump=0 probes=2 err=None 29s
+- 10-14 12:29:33 FULLRUN p1 FULL5 SimpleCalendarNextEvent rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=1 err=None 19s
+- 10-14 12:29:58 FULLRUN p1 FULL5 SimpleCalendarNextMeetingWithPerson rc=0 succ=0.0 steps=5 calls=5 jump=0 probes=1 err=None 25s
+- 10-14 12:30:50 FULLRUN p1 FULL5 SimpleDrawProCreateDrawing rc=0 succ=1.0 steps=9 calls=9 jump=0 probes=0 err=None 52s
+- 10-14 12:31:45 FULLRUN p1 FULL5 SimpleSmsReply rc=0 succ=1.0 steps=8 calls=8 jump=0 probes=1 err=None 56s
+- 10-14 12:32:40 FULLRUN p1 FULL5 SimpleSmsReplyMostRecent rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=1 err=None 54s
+- 10-14 12:33:54 FULLRUN p1 FULL5 SimpleSmsResend rc=0 succ=1.0 steps=12 calls=12 jump=0 probes=1 err=None 75s
+- 10-14 12:34:40 FULLRUN p1 FULL5 SimpleSmsSend rc=0 succ=1.0 steps=7 calls=7 jump=0 probes=0 err=None 45s
+- 10-14 12:35:29 FULLRUN p1 FULL5 SimpleSmsSendClipboardContent rc=0 succ=0.0 steps=8 calls=8 jump=0 probes=1 err=None 50s
+- 10-14 12:37:00 FULLRUN p1 FULL5 SimpleSmsSendReceivedAddress rc=0 succ=0.0 steps=18 calls=18 jump=0 probes=1 err=None 90s
+- 10-14 12:37:14 FULLRUN p1 FULL5 SportsTrackerActivitiesCountForWeek rc=0 succ=0.0 steps=2 calls=2 jump=0 probes=0 err=None 14s
+- 10-14 12:37:28 FULLRUN p1 FULL5 SportsTrackerActivitiesOnDate rc=0 succ=0.0 steps=2 calls=2 jump=0 probes=0 err=None 14s
+- 10-14 12:37:51 FULLRUN p1 FULL5 SportsTrackerActivityDuration rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=0 err=None 23s
+- 10-14 12:38:10 FULLRUN p1 FULL5 SportsTrackerLongestDistanceActivity rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=0 err=None 19s
+- 10-14 12:39:23 FULLRUN p1 FULL5 SportsTrackerTotalDistanceForCategoryOverInterval rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 73s
+- 10-14 12:39:38 FULLRUN p1 FULL5 SportsTrackerTotalDurationForCategoryThisWeek rc=0 succ=0.0 steps=2 calls=2 jump=0 probes=0 err=None 15s
+- 10-14 12:40:23 FULLRUN p1 FULL5 SystemBluetoothTurnOff rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=0 err=None 44s
+- 10-14 12:41:07 FULLRUN p1 FULL5 SystemBluetoothTurnOffVerify rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=0 err=None 44s
+- 10-14 12:41:34 FULLRUN p1 FULL5 SystemBluetoothTurnOn rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=0 err=None 26s
+- 10-14 12:41:53 FULLRUN p1 FULL5 SystemBluetoothTurnOnVerify rc=0 succ=1.0 steps=3 calls=3 jump=0 probes=0 err=None 19s
+- 10-14 12:42:41 FULLRUN p1 FULL5 SystemBrightnessMax rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 48s
+- 10-14 12:43:16 FULLRUN p1 FULL5 SystemBrightnessMaxVerify rc=0 succ=1.0 steps=7 calls=7 jump=0 probes=0 err=None 36s
+- 10-14 12:43:50 FULLRUN p1 FULL5 SystemBrightnessMin rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=0 err=None 33s
+- 10-14 12:44:39 FULLRUN p1 FULL5 SystemBrightnessMinVerify rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=0 err=None 49s
+- 10-14 12:45:22 FULLRUN p1 FULL5 SystemCopyToClipboard rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 44s
+- 10-14 12:45:54 FULLRUN p1 FULL5 SystemWifiTurnOff rc=0 succ=1.0 steps=7 calls=7 jump=0 probes=2 err=None 32s
+- 10-14 12:46:18 FULLRUN p1 FULL5 SystemWifiTurnOffVerify rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=0 err=None 24s
+- 10-14 12:46:51 FULLRUN p1 FULL5 SystemWifiTurnOn rc=0 succ=1.0 steps=7 calls=7 jump=0 probes=2 err=None 33s
+- 10-14 12:47:18 FULLRUN p1 FULL5 SystemWifiTurnOnVerify rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=0 err=None 27s
+- 10-14 12:47:58 FULLRUN p1 FULL5 TasksCompletedTasksForDate rc=0 succ=0.0 steps=8 calls=8 jump=0 probes=0 err=None 40s
+- 10-14 12:48:23 FULLRUN p1 FULL5 TasksDueNextWeek rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=0 err=None 25s
+- 10-14 12:49:07 FULLRUN p1 FULL5 TasksDueOnDate rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 44s
+- 10-14 12:49:21 FULLRUN p1 FULL5 TasksHighPriorityTasks rc=0 succ=1.0 steps=2 calls=2 jump=0 probes=0 err=None 15s
+- 10-14 12:49:45 FULLRUN p1 FULL5 TasksHighPriorityTasksDueOnDate rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=0 err=None 24s
+- 10-14 12:49:59 FULLRUN p1 FULL5 TasksIncompleteTasksOnDate rc=0 succ=1.0 steps=2 calls=2 jump=0 probes=0 err=None 14s
+- 10-14 12:50:29 FULLRUN p1 FULL5 TurnOffWifiAndTurnOnBluetooth rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=0 err=None 30s
+- 10-14 12:51:06 FULLRUN p1 FULL5 TurnOnWifiAndOpenApp rc=0 succ=0.5 steps=7 calls=7 jump=0 probes=0 err=None 37s
+- 10-14 12:52:19 FULLRUN p1 FULL5 VlcCreatePlaylist rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 72s
+- 10-14 12:53:34 FULLRUN p1 FULL5 VlcCreateTwoPlaylists rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 75s
+- 10-14 12:53:34 FULLRUN PASS 1 DONE
+- 10-14 12:53:34 FULLRUN DRIVER DONE FULL5
+- 10-14 12:54 FULL5 完成：119/232 vs BASE 117；触发的 9 个 episode 全成功，调用 91 vs 113；结果写入 full_results_zh.md §9–10。

@@ -43,7 +43,7 @@ def main():
   pre = set((C.ROOT / "configs" / "full_p1_prefix_tasks.txt").read_text().split()) if (C.ROOT / "configs" / "full_p1_prefix_tasks.txt").exists() else set()
   S = {}
   mech_keys = sorted({k for e in eps for k in e if k.startswith("m_")})
-  for arm in ("BASE", "FULL", "FULLNE", "FULL2", "FULL3"):
+  for arm in ("BASE", "FULL", "FULLNE", "FULL2", "FULL3", "FULL4", "FULL5"):
     for label, f in (("all", lambda e: True), ("pass0", lambda e: e["pass"] == 0), ("pass1", lambda e: e["pass"] == 1),
                      ("pass1_postfix", lambda e: e["pass"] == 1 and e["task"] not in pre)):
       E = [e for e in eps if e["arm"] == arm and f(e)]
@@ -59,7 +59,7 @@ def main():
   by = defaultdict(dict)
   for e in eps:
     by[(e["task"], e["pass"])][e["arm"]] = e
-  for other in ("FULL", "FULL2", "FULL3"):
+  for other in ("FULL", "FULL2", "FULL3", "FULL4", "FULL5"):
     key = "paired" if other == "FULL" else f"paired_{other}"
     for label, f in (("all", lambda t, p: True), ("pass0", lambda t, p: p == 0), ("pass1", lambda t, p: p == 1),
                      ("pass1_postfix", lambda t, p: p == 1 and t not in pre)):
