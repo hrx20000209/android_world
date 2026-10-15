@@ -22,6 +22,7 @@ R2  : pre-observation reuse - if the model picks the slot probed in this
 
 from __future__ import annotations
 
+import json
 import os
 import sys
 import threading
@@ -36,6 +37,9 @@ import seq_run as S  # noqa: E402  (patches rgs_run.Episode; we override below)
 import common as C  # noqa: E402
 import rgs_run as R  # noqa: E402
 import proc_replay as P  # noqa: E402
+import full7  # noqa: E402
+import full9  # noqa: E402
+import explore_value as EV  # noqa: E402
 from android_world.env import adb_utils  # noqa: E402
 from android_world.env import json_action  # noqa: E402
 
@@ -51,9 +55,39 @@ class FullEpisode(S.SeqEpisode):
     gdir.mkdir(parents=True, exist_ok=True)
     full = ARM.startswith("FULL")
     store = S.Store(gdir / "store.json") if full else None
-    self._same = S.Store(gdir / "store.json", only_task=self.args.task) if (full and ARM not in ("FULL2", "FULL3", "FULL4", "FULL5")) else None
+    self._same = S.Store(gdir / "store.json", only_task=self.args.task) if (full and ARM not in ("FULL2", "FULL3", "FULL4", "FULL5", "FULL7", "FULL8", "FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16")) else None
     self._last_model_commit = False
-    pr = P.ProcReplay(goal) if ARM == "FULL5" else None
+    # FULL9: the function graph subsumes episode-local replay (its own segments become functions)
+    pr = P.ProcReplay(goal, enum_only=(ARM in ("FULL7", "FULL8"))) if ARM in ("FULL5", "FULL7", "FULL8") else None
+    fx = full7.StuckExplorer(self, goal, gdir, hard=(ARM in ("FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16"))) if ARM in ("FULL7", "FULL8", "FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16") else None
+    fn = full9.FuncExec(self, goal) if ARM in ("FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16") else None
+    self._exec_log = []           # FULL11: actions executed since the last app launch (replayable path)
+    self._agent = agent
+    self._probe_states = {}       # FULL11: (layout key, slot family) first observed by exploration -> step
+    if fn is not None:
+      fn.exec_log = self._exec_log
+    self._fn_ops = fn.P["ops"] if fn is not None else []
+    self._fn = fn
+    self._gvec = EV.goal_vector(goal, fn) if ARM == "FULL16" else {}
+    self._eff_path = gdir / "effectful.jsonl"
+    self._learned_eff = set()
+    if ARM in ("FULL15", "FULL16") and self._eff_path.exists():
+      self._learned_eff = {tuple(json.loads(l)["key"]) for l in self._eff_path.open() if l.strip()}
+    self._grp_path = gdir / "unrestorable_groups.jsonl"
+    self._bad_groups = set()
+    if ARM in ("FULL15", "FULL16") and self._grp_path.exists():
+      self._bad_groups = {tuple(json.loads(l)["key"]) for l in self._grp_path.open() if l.strip()}
+    self._d2_path = gdir / "d2_unsafe.jsonl"
+    self._d2_bad = set()
+    if ARM in ("FULL15", "FULL16") and self._d2_path.exists():
+      self._d2_bad = {tuple(json.loads(l)["key"]) for l in self._d2_path.open() if l.strip()}
+    if fn is not None and ARM in ("FULL14", "FULL15", "FULL16"):
+      fn.strict_done = True
+    self._rb_fail = 0
+    if ARM in ("FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16"):     # known environment drift: the SMS role must belong to the benchmark's SMS app
+      import subprocess as _sp
+      _sp.run([R.ADB, "-s", "emulator-5554", "shell", "cmd", "role", "add-role-holder", "android.app.role.SMS",
+               "com.simplemobiletools.smsmessenger"], capture_output=True, timeout=30)
     graph = R.Graph(gdir / "graph.jsonl", gdir / "unrestorable.jsonl") if full else R.Graph(None)
     instance = f"{self.args.task}/{self.args.variant}"
     cfg = R.ExploreCfg(enabled=full, budget_s=6.0, max_probes=3, max_depth=1)
@@ -61,6 +95,7 @@ class FullEpisode(S.SeqEpisode):
     own, steps, used = [], [], Counter()
     m = Counter()
     done, prev, k = False, None, 0
+    booted = False
     reuse_next = None
     while k < self.max_steps():
       if reuse_next is not None:
@@ -75,9 +110,78 @@ class FullEpisode(S.SeqEpisode):
       else:
         pre = self.dev.capture(f"s{k}_pre", settle=True, pause=1.0, full_res=True)
       ui = pre["ui"]
+      if fx is not None and prev is not None:
+        fx.observe_model(prev, ui)
       if prev is not None:
         self.ingest_agent(graph, instance, prev, pre)
         prev = None
+      if ARM in ("FULL8", "FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16") and k == 0 and not booted:
+        booted = True
+        app = full7.resolve_app(goal, ui)
+        if app:
+          # graph reuse before inference: the instruction names an app whose launch transition the graph has
+          # observed; launch it without a model call and without a counted step (the model's first decision
+          # is made on the app's first screen within the same counted step)
+          full7.launch(self.env, app)
+          self._exec_log[:] = [{"action": {"action_type": "open_app", "app_name": app}, "commit": False}]
+          summ = f"[system] Opened the app \"{app}\"."
+          agent._actions.append({"summary": summ})  # pylint: disable=protected-access
+          agent._summaries.append(summ)  # pylint: disable=protected-access
+          row0 = {"step": k, "kind": "bootstrap", "tok": f"OPEN_APP:{app}", "summary": summ, "pre": R.strip(pre)}
+          steps.append(row0)
+          self.log("steps", row0)
+          m["bootstrap"] += 1
+          m["env_actions_extra"] += 1
+          pre = full7.capture_stable(self.dev, f"s{k}_pre_boot")
+          ui = pre["ui"]
+      if ARM in ("FULL8", "FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16") and self._last_model_commit:
+        # the model itself just chose a commit; the dialog that follows is confirmed with its positive button
+        n_c = full7.confirm_own_commit(self, ui, agent, steps, k, own, pure=(ARM in ("FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16")))
+        self._last_model_commit = False
+        if n_c:
+          self._exec_log.append({"action": None, "commit": True})
+          m["jump_steps"] += 1
+          m["jump_commit_steps"] += 1
+          k += 1
+          continue
+      if fx is not None and ARM in ("FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16") and fx.needs_back(ui):
+        # hard rule: the same navigation control tapped 3 times without any effect -> one Back
+        self.dev.back()
+        summ = "[system] Pressed Back: the last control was tapped 3 times without any effect."
+        agent._actions.append({"summary": summ})  # pylint: disable=protected-access
+        agent._summaries.append(summ)  # pylint: disable=protected-access
+        steps.append({"step": k, "kind": "unstick", "tok": "NAVIGATE_BACK", "summary": summ})
+        self.log("steps", steps[-1])
+        m["unstick_back"] += 1
+        self._exec_log.append({"action": {"action_type": "navigate_back"}, "commit": False})
+        k += 1
+        continue
+      if fn is not None:      # FULL9: function graph (parameterized sub-trajectories), before inference
+        if ARM == "FULL14":
+          self.log("fn_gate", {"step": k, "rec": fn.next_rec, "tried": sorted(fn.tried), "form_tried": sorted(getattr(fn, "form_tried", set())),
+                               "applied": fn.applied_rec, "model_rec": fn.model_rec, "done": sorted(fn.done), "act": ui.activity})
+        n_f = fn.try_apply(pre, agent, steps, k, own)
+        if not n_f and ARM == "FULL11":
+          n_f = fn.try_apply_via_edge(self, graph, pre, agent, steps, k, own, m)
+        elif not n_f and ARM in ("FULL12", "FULL13", "FULL14", "FULL15", "FULL16"):
+          n_f = fn.try_apply_via_edge2(self, graph, pre, agent, steps, k, own, m)
+        if not n_f and ARM == "FULL14":
+          # schema-level form function: on this screen, else one observed edge away (agent or exploration)
+          n_f = fn.try_form(pre, agent, steps, k, own, m, via="here") or fn.try_form_via_edge(self, graph, pre, agent, steps, k, own, m)
+        if n_f:
+          m["func_apps"] += 1
+          m["func_steps"] += n_f
+          m["env_actions_extra"] += n_f - 1
+          self._last_model_commit = False
+          k += 1
+          continue
+      if fx is not None:      # first-run screens: handled by a separate module, outside the main algorithm
+        n_ob = fx.onboarding(ui, agent, steps, k)
+        if n_ob:
+          m["onboarding_steps"] += n_ob
+          k += 1 if ARM in ("FULL8", "FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16") else n_ob
+          m["env_actions_extra"] += (n_ob - 1) if ARM in ("FULL8", "FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16") else 0
+          continue
       if pr is not None:      # R3: episode-local entity procedure replay
         pr.set_post(ui)
         plan = pr.plan(ui)
@@ -87,7 +191,8 @@ class FullEpisode(S.SeqEpisode):
           m["replay_steps"] += ok
           m["replay_full"] += ok == len(plan["template"])
           if ok:
-            k += ok
+            k += 1 if ARM in ("FULL8", "FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16") else ok      # FULL8: a multi-hop graph execution is one counted step
+            m["env_actions_extra"] += (ok - 1) if ARM in ("FULL8", "FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16") else 0
             continue
       if store is not None:   # R1
         path = self.plan_jump(store, graph, own, ui, used)
@@ -96,35 +201,62 @@ class FullEpisode(S.SeqEpisode):
           ok = self.exec_jump(path, own, agent, steps, k, ex, graph, instance)
           m["jump_steps"] += ok
           m["jump_commit_steps"] += sum(1 for h in path[:ok] if h.get("commit_ok"))
+          if ok:
+            self._exec_log.append({"action": None, "commit": True})   # untracked taps: no replay restoration
           if ok < len(path):
             m["jump_rejected"] += 1
           self._last_model_commit = False
           if ok:
-            k += ok
+            k += 1 if ARM in ("FULL8", "FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16") else ok
+            m["env_actions_extra"] += (ok - 1) if ARM in ("FULL8", "FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16") else 0
             continue
           pre = self.dev.capture(f"s{k}_pre_after_jump", settle=True, full_res=True)
           ui = pre["ui"]
+      stuck_text = fx.hint(ui) if fx is not None else ""
+      full7.EXTRA["text"] = stuck_text
+      if stuck_text:
+        m["stuck_hints"] += 1
       box = {}
       th = threading.Thread(target=lambda: box.update(d=self.decide(agent, goal, pre["pixels"])), daemon=True)
       th.start()
-      xrec = self.window(ex, store, own, pre, k, instance) if full else None
+      if fx is not None and fx.is_stuck(ui) and not ex.disabled_reason:
+        xrec = fx.window(ex, pre, k)          # stuck: probe an untried control instead of E1
+        m["probes_stuck"] += len(xrec["probes"])
+      else:
+        xrec = self.window(ex, store, own, pre, k, instance) if full else None
       if xrec is not None:
         self.log("windows", xrec)
         m["probes_e1"] += sum(p["why"] == "E1" for p in xrec["probes"])
         m["probes_e2"] += sum(p["why"] == "E2" for p in xrec["probes"])
+        m["probes_fx"] += sum(p["why"] == "FX" for p in xrec["probes"])
+        m["probes_d2"] += sum(p["why"] == "D2" for p in xrec["probes"])
+        m["learned_effectful"] += bool(xrec.get("learned_effectful"))
+        m["learned_group"] += bool(xrec.get("learned_group"))
+        m["p_rev_dropped"] += xrec.get("p_rev_dropped", 0)
+        if xrec.get("value"):
+          m["fx_" + xrec["value"]["level"]] += 1
+          m["fx_rel_pos"] += xrec["value"]["rel"] > 0
+        m["fx_entry_need"] += bool(xrec.get("entry_need"))
       th.join()
       d = box["d"]
       m["calls"] += 1
       requery = False
       if xrec and xrec["probes"]:
         v = self.dev.capture(f"s{k}_verify", settle=True)
-        if not R.same_state(v["ui"], ui):
+        if ARM in ("FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16") and not R.same_state(v["ui"], ui) and full9.decision_still_valid(ui, v["ui"], d["action"]):
+          # the screen differs only in ways that do not affect THIS decision (same page, same target at the
+          # same place): execute it without asking the model again
+          m["verify_relaxed"] += 1
+        elif not R.same_state(v["ui"], ui):
           requery = True
           m["requery"] += 1
           pre = self.dev.capture(f"s{k}_pre_requery", settle=True, full_res=True)
           ui = pre["ui"]
+          if fx is not None:
+            full7.EXTRA["text"] = fx.hint(ui)
           d = self.decide(agent, goal, pre["pixels"])
           m["calls"] += 1
+      full7.EXTRA["text"] = ""
       a = d["action"]
       tok, fam, sel = C.action_token(ui, a.__dict__)
       if xrec and fam:
@@ -132,26 +264,43 @@ class FullEpisode(S.SeqEpisode):
         if hit:
           m["e1_hit" if hit[0]["why"] == "E1" else "e2_hit"] += 1
           reuse_next = hit[0]["dst_ui"]
+      if ARM in ("FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16"):
+        self._note_model_action(ui, a, m)
       summary, exec_s = self.commit(agent, d, goal)
       own.append(S.own_entry(ui, tok, fam))
       self._last_model_commit = bool(fam) and is_commit_token(ui, fam)
+      if a.action_type == json_action.OPEN_APP:
+        self._exec_log[:] = []
+      self._exec_log.append({"action": {kk: vv for kk, vv in a.__dict__.items() if vv is not None},
+                             "commit": self._last_model_commit})
       if pr is not None:
         pr.record(ui, a.__dict__, tok, sel, self._last_model_commit)
+      if fn is not None:
+        fn.observe_model_action(ui, a.__dict__)
+        if self._last_model_commit:
+          fn.on_model_commit()
       row = {"step": k, "kind": "model", "pre": R.strip(pre), "action": a.__dict__, "tok": tok, "summary": summary,
              "model_latency_s": d["model_latency_s"], "requery": requery,
              "probes": [{k2: v2 for k2, v2 in p.items() if k2 != "dst_ui"} for p in xrec["probes"]] if xrec else []}
+      if stuck_text:
+        row["stuck_hint"] = stuck_text[:300]
       steps.append(row)
       self.log("steps", row)
-      prev = {"pre": pre, "slot_id": tok, "sel": sel, "action": a.__dict__, "step": k}
+      prev = {"pre": pre, "slot_id": tok, "sel": sel, "action": a.__dict__, "step": k, "fam": fam,
+              "label": (U.label_of(ui, U.element_at(ui, int(a.x), int(a.y))) if a.x is not None and
+                        U.element_at(ui, int(a.x), int(a.y)) is not None else "")}
       k += 1
       if a.action_type in (json_action.STATUS, json_action.ANSWER):
         done = True
         break
     final = self.dev.capture("final", settle=True, pause=1.0, full_res=True)
+    if fx is not None:
+      fx.finish()
     if prev is not None:
       self.ingest_agent(graph, instance, prev, final)
     self._own_seq = own
-    res = {"steps": len(steps), "agent_steps": len(steps), "done": done, "model_calls": m["calls"],
+    res = {"steps": (k if ARM in ("FULL8", "FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16") else len(steps)), "env_actions": len(steps), "agent_steps": len(steps),
+           "done": done, "model_calls": m["calls"],
            "final_cid": final["cid"], "n_probes": ex.n_probes, "explore_disabled": ex.disabled_reason,
            "store_eps": len(store.data) if store else 0}
     m["jump_absent"] = getattr(self, "_jump_absent", 0)
@@ -160,7 +309,7 @@ class FullEpisode(S.SeqEpisode):
     return res
 
   def plan_jump(self, store, graph, own, ui, used):
-    if ARM in ("FULL3", "FULL4", "FULL5"):
+    if ARM in ("FULL3", "FULL4", "FULL5", "FULL7", "FULL8", "FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16"):
       return self.plan_jump_invariant(store, graph, own, ui, used)
     path = S.SeqEpisode.plan_jump(self, store, graph, own, ui, used)
     if ARM == "FULL2":
@@ -184,18 +333,19 @@ class FullEpisode(S.SeqEpisode):
         break
       doms = store.task_dominants(sim_own, cur, key)
       same = doms.get(me)
-      same_ok = same is not None and same[0] == top and same[1] >= S.GATE_N and same[1] / same[2] >= S.GATE_D
+      gate_n = 1 if ARM in ("FULL8", "FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16") else S.GATE_N
+      same_ok = same is not None and same[0] == top and same[1] >= gate_n and same[1] / same[2] >= S.GATE_D
       # cross-task: unanimous across >= 2 templates AND the agent has already
       # revealed its branch by an own (non open-app) action in the matched
       # context; at the task entry, templates diverge (0% cross-task top-1).
       agent_acted = any(not x["tok"].startswith(("OPEN_APP", "STATUS", "WAIT")) for x in own)
       cross_ok = (len(doms) >= 2 and all(d[0] == top for d in doms.values())
                   and info.get("order", 0) >= 1 and agent_acted)
-      if ARM in ("FULL4", "FULL5"):
+      if ARM in ("FULL4", "FULL5", "FULL7", "FULL8", "FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16"):
         cross_ok = False   # cross-task evidence is survivor-biased: only orders E1 probes
       # FULL5: confirming the model's OWN just-chosen commit needs no history
       # evidence beyond which dialog button follows (intent is the model's).
-      confirm_ok = (ARM == "FULL5" and i == 0 and self._last_model_commit and is_dialog_button(ui, top))
+      confirm_ok = (ARM in ("FULL5", "FULL7", "FULL8", "FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16") and i == 0 and self._last_model_commit and is_dialog_button(ui, top))
       if not (same_ok or cross_ok or confirm_ok):
         break
       nxt = {k2: store.successor(k2, cur[k2], top) for k2 in ("struct", "layout")}
@@ -255,6 +405,17 @@ class FullEpisode(S.SeqEpisode):
     pr.open = plan["entity"]      # closed only by the model's own commit
     return ok
 
+  def _note_model_action(self, ui, a, m):
+    """Exploration's contribution to the graph: did the model take an edge exploration observed first?"""
+    if a.action_type not in ("click", "long_press") or a.x is None:
+      return
+    n = U.element_at(ui, int(a.x), int(a.y))
+    if n is None:
+      return
+    fam = C.family_of_sel(U.selector(ui, n))
+    if (ui.layout_sig, fam) in self._probe_states:
+      m["model_used_explored_edge"] += 1
+
   def window(self, ex, store, own, pre, step, instance):
     """E1 then E2; nothing else."""
     t0 = time.time()
@@ -262,6 +423,13 @@ class FullEpisode(S.SeqEpisode):
     if ex.disabled_reason:
       return dict(rec, stop="disabled", window_s=0.0)
     ui = pre["ui"]
+    if ARM in ("FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16") and full9.transient(ui):
+      # temporary states (popup menu / dialog / keyboard / selection mode / open drawer) are not on the back
+      # stack: any probe destroys them and Back cannot bring them back
+      return dict(rec, stop="transient_state", window_s=0.0)
+    if ARM == "FULL13" and not full9.replayable(self._exec_log):
+      # restorability guarantee: probe only while a failed Back can be repaired by relaunch + replay of the path
+      return dict(rec, stop="not_restorable", window_s=0.0)
     plan, _ = ex.plan(ui)
     safe = {s.slot_id: s for _, s in plan}
     by_fam = {}
@@ -274,31 +442,197 @@ class FullEpisode(S.SeqEpisode):
     if top and top in by_fam:
       s = by_fam[top]
       seen_here = any(o["instance"] == instance for o in graph_obs(ex.graph, ui.struct_sig, s.slot_id))
-      if not seen_here:
+      if not seen_here and not (((ARM in ("FULL12", "FULL13", "FULL15", "FULL16") and full9.effectful(s.sel)) or (ARM == "FULL14" and full9.effectful_v2(s.sel)))):
         targets.append(("E1", s))
-    elif info.get("order", -1) < 0 and ARM not in ("FULLNE", "FULL2", "FULL3", "FULL4", "FULL5"):   # gap page (E2 off in FULLNE/FULL2/FULL3)
+    if not targets and ARM in ("FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16"):
+      # graph expansion: an unknown safe out-edge of this screen, ordered by similarity to the goal's operation
+      # terms, then by cross-app generality (app-specific controls first), then screen order
+      unknown = [s for p0, s in plan if p0 == 0 and not s.sel.get("in_list")
+                 and Graph_app_key(ui, s) not in getattr(self, "_bad_fams", set())
+                 and not (((ARM in ("FULL12", "FULL13", "FULL15", "FULL16") and full9.effectful(s.sel)) or (ARM == "FULL14" and full9.effectful_v2(s.sel))))]
+      if ARM in ("FULL15", "FULL16"):
+        # graph-aware: a control whose transition from this page is already in the graph (seen by the agent or
+        # by exploration in any task) carries no new information; nor does one learned to change app data
+        known, reversible = full9.page_family_index(ex.graph)
+        unknown = [s for s in unknown if (ui.package, ui.activity, C.family_of_sel(s.sel)) not in known
+                   and (ui.package, C.family_of_sel(s.sel)) not in self._learned_eff
+                   and full9.container_key(ui.package, ui.activity, s.sel) not in self._bad_groups]
+        # predicted reversibility: probe only controls Back is expected to undo; when only risky controls are
+        # left unexplored, do not explore at all (deduplication must not push probes onto them)
+        evid = full9.container_evidence(ex.graph)
+        prev = {s.slot_id: full9.p_reversible(ui, s.sel, evid) for s in unknown}
+        rec["p_rev_dropped"] = sum(1 for v in prev.values() if v < P_REV_MIN)
+        unknown = [s for s in unknown if prev[s.slot_id] >= P_REV_MIN]
+        rec["known_index"] = len(known)
+      if unknown and ARM == "FULL16":
+        # unified graph-based exploration value: TF-IDF relevance of the best text evidence the graph holds for
+        # each control (known edge > graph neighbours > the control's own text), global x graph-local IDF
+        gv = EV.GraphValue(ex.graph, self.out.parents[1], self._gvec, ui.package)
+        scored = sorted(((gv.score(ui, sl), i, sl) for i, sl in enumerate(unknown)), key=lambda x: (-x[0][0], x[1]))
+        (sc0, val0, lvl0), _, best = scored[0]
+        rec["value"] = {"score": round(sc0, 3), "rel": round(val0, 3), "level": lvl0, "local_pages": gv.local_n}
+        targets.append(("FX", best))
+      elif unknown:
+        order = full9.frontier_order(ui, unknown, self._fn_ops, ELEMENT_APPS)
+        if ARM in ("FULL15", "FULL16"):
+          need = full9.entry_tokens(self._fn, ui)
+          if need:
+            # information need = the entry screen of a pending function that does not ground here
+            order = sorted(order, key=lambda sl: -len(need & set(full9._toks(sl.sel.get("label") or sl.sel.get("desc") or sl.sel.get("rid") or ""))))
+            rec["entry_need"] = sorted(need)[:8]
+        if ARM == "FULL14" and self._fn is not None and self._fn.form_pending():
+          # information need = the entry screen of the pending form function: editor-opening controls first
+          order = sorted(order, key=lambda sl: not full9.opens_editor(sl.sel))
+        targets.append(("FX", order[0]))
+      elif ARM in ("FULL15", "FULL16"):
+        d2 = self.depth2_target(ex, ui, known, reversible)
+        if d2 is not None:
+          targets.append(("D2", d2))
+    elif not targets and info.get("order", -1) < 0 and ARM not in ("FULLNE", "FULL2", "FULL3", "FULL4", "FULL5", "FULL7", "FULL8", "FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16"):   # gap page (E2 off in FULLNE/FULL2/FULL3)
       for p, s in plan:
         if p == 0 and len(targets) < 3:      # unknown out-edges only
           targets.append(("E2", s))
-    rec["mode"] = "E1" if targets and targets[0][0] == "E1" else ("E2" if targets else "none")
+    rec["mode"] = targets[0][0] if targets else "none"
     for why, s in targets:
       if time.time() - t0 >= ex.cfg.budget_s:
         rec["stop"] = "budget"
         break
-      p = ex.probe(pre, s, 0, step, depth=1)
+      if why == "D2":
+        p = self.probe_depth2(ex, pre, s, step)
+        if p is None:
+          rec["stop"] = "d2_not_landed"
+          break
+      else:
+        p = ex.probe(pre, s, 0, step, depth=1)
       dst_ui = None
       try:
         dst_ui = R.load_ui(self.out, p["dst_cid"])
       except Exception:  # pylint: disable=broad-except
         pass
+      fam_p = C.family_of_sel(s.sel)
+      kp = (ui.layout_sig, fam_p)
+      if kp not in self._probe_states and not any(o.get("origin") != "explore" for o in graph_obs(ex.graph, ui.struct_sig, s.slot_id)
+                                                     + graph_obs(ex.graph, ui.struct_sig, fam_p)):
+        self._probe_states[kp] = step
       rec["probes"].append({"why": why, "slot": s.slot_id, "family": C.family_of_sel(s.sel), "outcome": p["outcome"],
-                            "rollback_ok": p["rollback_ok"], "t": p["t_total_s"], "dst_ui": dst_ui})
+                            "rollback_ok": p["rollback_ok"], "t": p["t_total_s"], "dst_ui": dst_ui if why != "D2" else None})
+      if not p["rollback_ok"] and ARM in ("FULL15", "FULL16") and why != "D2":
+        # Back could not undo it: the whole container (its siblings) is learned non-reversible, across tasks
+        gk = full9.container_key(ui.package, ui.activity, s.sel)
+        if gk not in self._bad_groups:
+          self._bad_groups.add(gk)
+          with self._grp_path.open("a") as f:
+            f.write(json.dumps({"key": list(gk), "family": C.family_of_sel(s.sel), "instance": instance, "step": step}) + "\n")
+          rec["learned_group"] = list(gk)
+      if not p["rollback_ok"] and why == "D2":
+        # the two-level detour through this edge could not be undone by Back: never go deeper through it again
+        key = (ui.package, ui.activity, C.family_of_sel(s.sel))
+        self._d2_bad.add(key)
+        with self._d2_path.open("a") as f:
+          f.write(json.dumps({"key": list(key), "instance": instance, "step": step}) + "\n")
+      if not p["rollback_ok"] and ARM in ("FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16"):
+        ok_r = full9.relaunch_restore(self, ui, step)
+        rec["relaunch_restore"] = ok_r
+        if ok_r:
+          p["rollback_ok"] = True
+          if ARM in ("FULL15", "FULL16") and not getattr(self, "_relaunch_content_same", True):
+            # the screen is back but its data is not: the probed control changes app data. Remember it in the
+            # graph so no later task explores it again
+            key = (ui.package, C.family_of_sel(s.sel) if why != "D2" else p.get("family", ""))
+            self._learned_eff.add(key)
+            with self._eff_path.open("a") as f:
+              f.write(json.dumps({"key": list(key), "instance": instance, "step": step}) + "\n")
+            rec["learned_effectful"] = list(key)
       if not p["rollback_ok"]:
-        ex.disabled_reason = f"rollback_failed@{step}"
         rec["stop"] = "rollback_failed"
+        if ARM in ("FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16"):
+          # reversibility gating by control family, not by episode: never probe this family again; stop
+          # exploring only after a second failure
+          self._bad_fams = getattr(self, "_bad_fams", set()) | {Graph_app_key(ui, s)}
+          self._rb_fail += 1
+          if self._rb_fail >= 2:
+            ex.disabled_reason = f"rollback_failed_x2@{step}"
+        else:
+          ex.disabled_reason = f"rollback_failed@{step}"
         break
     rec["window_s"] = round(time.time() - t0, 3)
     return rec
+
+
+def _depth2_target(self, ex, ui, known, reversible):
+  """No unknown control left on this page: go one level deeper along a known edge that exploration has seen
+  reversed by Back, to a page that still has unknown (non-effectful) controls."""
+  raw = self.out.parents[1]
+  cands = []
+  for sl in U.enumerate_slots(ui):
+    if not sl.safe or sl.sel.get("in_list") or full9.effectful(sl.sel):
+      continue
+    fam = C.family_of_sel(sl.sel)
+    if (ui.package, ui.activity, fam) not in reversible or (ui.package, ui.activity, fam) in self._d2_bad:
+      continue
+    for o in reversed(getattr(ex.graph, "_by_page", {}).get((ui.package, ui.activity, fam), [])):   # newest first
+      dd = o.get("dst")
+      # the intermediate page must be on the back stack: an activity transition (popup menus and dialogs stay in
+      # the same activity and are not)
+      if not dd or dd.get("package") != ui.package or dd.get("activity") == ui.activity or not o.get("dst_cid"):
+        continue
+      task, var = o["instance"].split("/")
+      try:
+        dui = R.load_ui(raw / task / var.split("_")[0], o["dst_cid"])
+      except Exception:  # pylint: disable=broad-except
+        continue
+      if full9.transient(dui):
+        continue
+      evid = full9.container_evidence(ex.graph)
+      fresh = [t for t in U.enumerate_slots(dui) if t.safe and not t.sel.get("in_list") and not full9.effectful(t.sel)
+               and full9.p_reversible(dui, t.sel, evid) >= P_REV_MIN
+               and (dui.package, dui.activity, C.family_of_sel(t.sel)) not in known
+               and (dui.package, C.family_of_sel(t.sel)) not in self._learned_eff
+               and full9.container_key(dui.package, dui.activity, t.sel) not in self._bad_groups]
+      if fresh and ARM == "FULL16":
+        cands.append((sl, dd, dui, fresh, (o["instance"], o["dst_cid"], dd.get("layout_sig"))))
+        break
+      if fresh:
+        sl.d2 = {"via_dst": dd, "inner": full9.frontier_order(dui, fresh, self._fn_ops, ELEMENT_APPS)[0].sel}
+        return sl
+  if cands:
+    # value backup decides where to go deeper: V(destination page) + novelty of the best control behind it
+    gv = EV.GraphValue(ex.graph, raw, self._gvec, ui.package)
+    best = None
+    for sl, dd, dui, fresh, ent in cands:
+      inner = max(fresh, key=lambda t: gv.score(dui, t)[0])
+      v = gv.V(ent) + gv.score(dui, inner)[0] + EV.BETA_D2 * gv.novelty(inner.sel)
+      if best is None or v > best[0]:
+        best = (v, sl, dd, inner)
+    _, sl, dd, inner = best
+    sl.d2 = {"via_dst": dd, "inner": inner.sel}
+    return sl
+  return None
+
+
+def _probe_depth2(self, ex, pre, sl, step):
+  """Tap the known edge, probe the unknown control on the page behind it (the probe restores that page), then
+  Back to the origin page. The origin check (and relaunch-replay repair) is done by the caller."""
+  ui0 = pre["ui"]
+  x, y = ui0.nodes[sl.node_idx].center
+  self.dev.tap(x, y)
+  mid = self.dev.capture(f"s{step}_d2_mid", settle=True, pause=0.8)
+  inner_fam = C.family_of_sel(sl.d2["inner"])
+  target = next((t for t in U.enumerate_slots(mid["ui"]) if C.family_of_sel(t.sel) == inner_fam and t.safe), None)
+  if mid["ui"].activity != sl.d2["via_dst"]["activity"] or target is None or full9.transient(mid["ui"]):
+    self.dev.back()
+    chk = self.dev.capture(f"s{step}_d2_back", settle=True)
+    return None if R.same_state(chk["ui"], ui0) else {"rollback_ok": False, "outcome": "d2_not_landed", "t_total_s": 0.0,
+                                                       "dst_cid": mid["cid"], "family": inner_fam}
+  p = ex.probe(mid, target, 0, step, depth=2)
+  self.dev.back()
+  chk = self.dev.capture(f"s{step}_d2_back", settle=True)
+  ok = p["rollback_ok"] and R.same_state(chk["ui"], ui0)
+  return dict(p, rollback_ok=ok, family=inner_fam)
+
+
+FullEpisode.depth2_target = _depth2_target
+FullEpisode.probe_depth2 = _probe_depth2
 
 
 def is_commit_token(ui, fam):
@@ -307,6 +641,18 @@ def is_commit_token(ui, fam):
     if C.family_of_sel(sl.sel) == fam:
       return sl.unsafe_reason in ("unsafe_label", "dialog_action_button")
   return False
+
+
+P_REV_MIN = 0.7
+ELEMENT_APPS = {}
+try:
+  ELEMENT_APPS = json.load(open(HERE.parent.parent / "runtime_graph_exploration" / "graph" / "element_idf_base.json"))["apps"]
+except Exception:  # pylint: disable=broad-except
+  pass
+
+
+def Graph_app_key(ui, slot):
+  return (ui.package, C.family_of_sel(slot.sel))
 
 
 def is_dialog_button(ui, fam):

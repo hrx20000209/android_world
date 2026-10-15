@@ -1,0 +1,23 @@
+{"_note": "Pre-registered before any pilot inference (2026-10-14). ORACLE upper-bound states: selected with future trajectories of same-instance successful runs. accept = correct next actions judged from goal + screen + successful trajectory; tok = substring of the live action token; within = text that must lie inside the tapped node's bounds. kind: F = failure point (BASE action judged wrong), C = control (BASE action judged correct). probe = safe depth-1 candidates (family substrings) chosen with the oracle.",
+"states": [
+ {"i":0,"kind":"F","accept":[{"tok":"STATUS"},{"tok":"btn_records_list"}],"probe":["btn_records_list","btn_settings"]},
+ {"i":1,"kind":"C","accept":[{"tok":"Switch to Video Camera"},{"tok":"accessibility_mode_toggle_button"}],"probe":["accessibility_mode_toggle_button","mode_options_toggle"]},
+ {"i":2,"kind":"C","accept":[{"tok":"dest_expense_logs"},{"tok":"dest_home"},{"tok":"E|ImageButton|||"}],"probe":["dest_expense_logs","dest_home","dest_statistics"]},
+ {"i":3,"kind":"F","accept":[{"tok":"SWIPE"},{"tok":"filter"}],"probe":["TextView|filter","View|view_bg"]},
+ {"i":4,"kind":"F","accept":[{"tok":"imv_delete_icon","within":"reimbursements"},{"tok":"view_bg","within":"reimbursements"},{"tok":"SWIPE"}],"probe":["TextView|filter","View|view_bg"]},
+ {"i":5,"kind":"F","accept":[{"tok":"NAVIGATE_BACK"},{"tok":"Show roots"}],"probe":["Show roots","More options"]},
+ {"i":6,"kind":"F","accept":[{"tok":"sdk_gphone64_arm64"}],"probe":["sdk_gphone64_arm64","LinearLayout|||Downloads"]},
+ {"i":7,"kind":"C","accept":[{"tok":"TYPE:document"},{"tok":"TYPE:"}],"probe":["More options","action_preview"]},
+ {"i":8,"kind":"C","accept":[{"tok":"map_search_button"}],"probe":["map_search_button","map_layers_button","map_my_location_button"]},
+ {"i":9,"kind":"F","accept":[{"tok":"Save"}],"probe":["group_list_button"]},
+ {"i":10,"kind":"F","accept":[{"tok":"CardView"},{"tok":"SWIPE"},{"tok":"action_search"}],"probe":["action_search","Spinner|spinner"]},
+ {"i":11,"kind":"C","accept":[{"tok":"action_search"},{"tok":"SWIPE"}],"probe":["action_search","Spinner|spinner"]},
+ {"i":12,"kind":"F","accept":[{"tok":"calendar_fab"},{"tok":"month_view_background","within":"29"}],"probe":["calendar_fab","change_view"]},
+ {"i":13,"kind":"C","accept":[{"tok":"calendar_fab"},{"tok":"month_view_background","within":"16"}],"probe":["calendar_fab","change_view"]},
+ {"i":14,"kind":"F","accept":[{"tok":"top_left_arrow"},{"tok":"change_view"}],"probe":["change_view","More options"]},
+ {"i":15,"kind":"F","accept":[{"tok":"month_view_background","within":"27"},{"tok":"change_view"}],"probe":["change_view","More options"]},
+ {"i":16,"kind":"C","accept":[{"tok":"LONG_PRESS:E|TextView|thread_message_body"},{"tok":"TYPE:thread_type_message"}],"probe":["More options","manage_people"]},
+ {"i":17,"kind":"F","accept":[{"tok":"STATUS"}],"probe":[]},
+ {"i":18,"kind":"C","accept":[{"tok":"Brightness level"}],"probe":["Brightness level","Colors"]},
+ {"i":19,"kind":"F","accept":[{"tok":"OPEN_APP"},{"tok":"NAVIGATE_HOME"},{"tok":"NAVIGATE_BACK"},{"tok":"SWIPE:up"}],"probe":[]}
+]}

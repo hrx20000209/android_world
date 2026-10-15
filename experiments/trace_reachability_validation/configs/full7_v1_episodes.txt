@@ -1,0 +1,6 @@
+raw/full/FULL7/BrowserDraw/p0
+raw/full/FULL7/BrowserMaze/p0
+raw/full/FULL7/BrowserMultiply/p0
+raw/full/FULL7/ClockTimerEntry/p0
+raw/full/FULL7/MarkorAddNoteHeader/p0
+raw/full/FULL7/MarkorCreateNoteFromClipboard/p0

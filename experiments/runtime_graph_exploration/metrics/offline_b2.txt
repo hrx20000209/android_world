@@ -1,0 +1,63 @@
+{
+ "blocked_by_unknown_fail_match": 8,
+ "blocked_by_unknown_fail_mismatch": 18,
+ "blocked_by_unknown_succ_match": 6,
+ "blocked_by_unknown_succ_mismatch": 5,
+ "direct_fail_mismatch": 2,
+ "direct_succ_match": 2,
+ "model_cls:ANCHOR1": 34,
+ "model_cls:ANCHOR2": 46,
+ "model_cls:DIRECT": 2,
+ "model_cls:ENVIRONMENT_UNCERTAIN": 10,
+ "model_cls:INAPPLICABLE": 100,
+ "model_cls:PARAMETERIZED": 439,
+ "model_cls:UNKNOWN": 121,
+ "model_cls:UNSAFE": 576,
+ "model_cls:nonclick": 938,
+ "model_cls:unslotted": 54,
+ "no_anchor_evidence_unknown_exists": 436,
+ "ret_abstain": 0,
+ "steps": 2320
+}
+classify latency ms p50 0.4 p95 4.1
+('DIRECT', True, True, 'AudioRecorderRecordAudioWithFileName', 1, 'Get started', ['m4a'], 'E|Button|btn_action||Get started')
+('DIRECT', True, True, 'AudioRecorderRecordAudioWithFileName', 1, 'Get started', ['m4a'], 'E|Button|btn_action||Get started')
+('BLOCKED', False, False, 'CameraTakeVideo', 3, 'MODE LIST', ['video'], 'E|ImageView|shutter_button|Shutter|Shutter')
+('BLOCKED', False, False, 'CameraTakeVideo', 5, 'MODE LIST', ['video'], 'E|ImageView|shutter_button|Shutter|Shutter')
+('BLOCKED', True, False, 'CameraTakeVideo', 4, 'MODE LIST', ['video'], 'E|ImageView|shutter_button|Shutter|Shutter')
+('BLOCKED', False, True, 'ExpenseDeleteMultiple2', 2, 'Expense Logs', ['dinner party', 'reimbursements', 'tuition fees'], 'E|LinearLayoutCompat|dest_expense_logs||Expen')
+('BLOCKED', True, True, 'ExpenseDeleteMultiple2', 2, 'Expense Logs', ['capital gains', 'restaurant meal', 'side business'], 'E|LinearLayoutCompat|dest_expense_logs||Expen')
+('BLOCKED', True, True, 'FilesDeleteFile', 5, 'sdk_gphone64_arm64', ['alarms'], 'E|LinearLayout|||sdk_gphone64_arm64')
+('BLOCKED', False, True, 'FilesMoveFile', 2, 'sdk_gphone64_arm64', ['download'], 'E|LinearLayout|||sdk_gphone64_arm64')
+('BLOCKED', False, True, 'FilesMoveFile', 2, 'sdk_gphone64_arm64', ['alarms'], 'E|LinearLayout|||sdk_gphone64_arm64')
+('BLOCKED', True, True, 'MarkorCreateFolder', 1, 'Create a new file or folder', ['folder'], 'E|ImageButton|fab_add_new_item|Create a new f')
+('BLOCKED', True, True, 'MarkorCreateFolder', 1, 'Create a new file or folder', ['folder'], 'E|ImageButton|fab_add_new_item|Create a new f')
+('DIRECT', False, False, 'MarkorTranscribeReceipt', 6, 'Markdown', ['csv'], 'TYPE:new_file_dialog__name')
+('DIRECT', False, False, 'MarkorTranscribeReceipt', 2, 'Markdown', ['csv'], 'TYPE:new_file_dialog__name')
+('BLOCKED', True, False, 'RetroCreatePlaylist', 2, 'Add to playing queue', ['endless summer'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', True, False, 'RetroCreatePlaylist', 8, 'Add to playing queue', ['endless summer'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', True, False, 'RetroCreatePlaylist', 12, 'Add to playing queue', ['endless summer'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', False, False, 'RetroCreatePlaylist', 2, 'Add to playing queue', ['bright lights'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', False, False, 'RetroCreatePlaylist', 8, 'Add to playing queue', ['bright lights'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', False, False, 'RetroCreatePlaylist', 11, 'Add to playing queue', ['bright lights'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', False, False, 'RetroCreatePlaylist', 14, 'Add to playing queue', ['bright lights'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', False, False, 'RetroCreatePlaylist', 17, 'Add to playing queue', ['bright lights'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', False, False, 'RetroSavePlaylist', 4, 'Add to playing queue', ['endless summer'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', False, False, 'RetroSavePlaylist', 10, 'Add to playing queue', ['endless summer'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', False, False, 'RetroSavePlaylist', 13, 'Add to playing queue', ['endless summer'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', False, False, 'RetroSavePlaylist', 16, 'Add to playing queue', ['endless summer'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', False, False, 'RetroSavePlaylist', 19, 'Add to playing queue', ['endless summer'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', False, False, 'RetroSavePlaylist', 4, 'Add to playing queue', ['bright lights'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', False, False, 'RetroSavePlaylist', 10, 'Add to playing queue', ['bright lights'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', False, False, 'RetroSavePlaylist', 13, 'Add to playing queue', ['bright lights'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', False, False, 'RetroSavePlaylist', 16, 'Add to playing queue', ['bright lights'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', False, False, 'RetroSavePlaylist', 19, 'Add to playing queue', ['bright lights'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', True, True, 'SimpleCalendarAddOneEvent', 3, 'New Event', ['event'], 'E|ImageButton|calendar_fab|New Event|New Even')
+('BLOCKED', False, True, 'SimpleCalendarAddOneEventInTwoWeeks', 5, 'New Event', ['appointment for annual report', 'event', 'we will discuss annual budget.'], 'E|ImageButton|calendar_fab|New Event|New Even')
+('BLOCKED', True, True, 'SimpleCalendarAddOneEventRelativeDay', 5, 'New Event', ['appointment for annual report', 'event', 'we will discuss annual budget.'], 'E|ImageButton|calendar_fab|New Event|New Even')
+('BLOCKED', False, True, 'SimpleCalendarAddOneEventTomorrow', 3, 'New Event', ['appointment for annual report', 'event', 'we will discuss annual budget.'], 'E|ImageButton|calendar_fab|New Event|New Even')
+('BLOCKED', True, False, 'SimpleCalendarDeleteOneEvent', 6, 'New Event', ['event'], 'STATUS')
+('BLOCKED', False, False, 'SportsTrackerTotalDistanceForCategoryOverInterval', 1, '', ['climbing'], 'E|ImageView|search_button|Search|Search')
+('BLOCKED', False, True, 'TasksCompletedTasksForDate', 3, 'By due date', ['completed'], 'E|View|||By due date')
+('BLOCKED', False, True, 'TasksCompletedTasksForDate', 5, 'By due date', ['completed'], 'E|View|||By due date')
+('BLOCKED', False, True, 'TasksCompletedTasksForDate', 7, 'By due date', ['completed'], 'E|View|||By due date')

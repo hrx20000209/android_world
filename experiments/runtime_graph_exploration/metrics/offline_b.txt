@@ -1,0 +1,88 @@
+{
+ "blocked_by_unknown_fail_match": 13,
+ "blocked_by_unknown_fail_mismatch": 23,
+ "blocked_by_unknown_succ_match": 12,
+ "blocked_by_unknown_succ_mismatch": 7,
+ "direct_fail_match": 4,
+ "direct_fail_mismatch": 3,
+ "direct_succ_match": 3,
+ "model_cls:ANCHOR1": 63,
+ "model_cls:ANCHOR2": 39,
+ "model_cls:DIRECT": 7,
+ "model_cls:ENVIRONMENT_UNCERTAIN": 34,
+ "model_cls:INAPPLICABLE": 49,
+ "model_cls:PARAMETERIZED": 439,
+ "model_cls:UNKNOWN": 121,
+ "model_cls:UNSAFE": 576,
+ "model_cls:nonclick": 938,
+ "model_cls:unslotted": 54,
+ "no_anchor_evidence_unknown_exists": 415,
+ "ret_abstain": 0,
+ "steps": 2320
+}
+classify latency ms p50 0.3 p95 1.8
+('DIRECT', True, True, 'AudioRecorderRecordAudioWithFileName', 1, 'Get started', ['m4a'], 'E|Button|btn_action||Get started')
+('DIRECT', True, True, 'AudioRecorderRecordAudioWithFileName', 1, 'Get started', ['m4a'], 'E|Button|btn_action||Get started')
+('BLOCKED', False, False, 'CameraTakeVideo', 3, 'MODE LIST', ['video'], 'E|ImageView|shutter_button|Shutter|Shutter')
+('BLOCKED', False, False, 'CameraTakeVideo', 5, 'MODE LIST', ['video'], 'E|ImageView|shutter_button|Shutter|Shutter')
+('BLOCKED', True, False, 'CameraTakeVideo', 4, 'MODE LIST', ['video'], 'E|ImageView|shutter_button|Shutter|Shutter')
+('BLOCKED', True, True, 'ExpenseDeleteDuplicates', 2, 'Expense Logs', ['delete'], 'E|LinearLayoutCompat|dest_expense_logs||Expen')
+('BLOCKED', True, True, 'ExpenseDeleteDuplicates', 5, 'Expense Logs', ['delete'], 'E|LinearLayoutCompat|dest_expense_logs||Expen')
+('BLOCKED', False, True, 'ExpenseDeleteDuplicates2', 2, 'Expense Logs', ['delete'], 'E|LinearLayoutCompat|dest_expense_logs||Expen')
+('BLOCKED', False, True, 'ExpenseDeleteMultiple2', 2, 'Expense Logs', ['delete', 'dinner party', 'reimbursements'], 'E|LinearLayoutCompat|dest_expense_logs||Expen')
+('BLOCKED', True, True, 'ExpenseDeleteMultiple2', 2, 'Expense Logs', ['capital gains', 'delete', 'restaurant meal'], 'E|LinearLayoutCompat|dest_expense_logs||Expen')
+('BLOCKED', True, True, 'FilesDeleteFile', 2, 'sdk_gphone64_arm64', ['android'], 'E|LinearLayout|||sdk_gphone64_arm64')
+('BLOCKED', True, True, 'FilesDeleteFile', 5, 'sdk_gphone64_arm64', ['alarms', 'android'], 'E|LinearLayout|||sdk_gphone64_arm64')
+('BLOCKED', False, True, 'FilesMoveFile', 2, 'sdk_gphone64_arm64', ['android', 'download'], 'E|LinearLayout|||sdk_gphone64_arm64')
+('BLOCKED', False, True, 'FilesMoveFile', 2, 'sdk_gphone64_arm64', ['alarms', 'android'], 'E|LinearLayout|||sdk_gphone64_arm64')
+('BLOCKED', False, False, 'MarkorChangeNoteContent', 6, 'Info', ['name'], 'E|LinearLayout|||File settings')
+('BLOCKED', False, False, 'MarkorChangeNoteContent', 10, 'Info', ['name'], 'E|LinearLayout|||Tools')
+('BLOCKED', False, False, 'MarkorChangeNoteContent', 6, 'Info', ['name', 'quick_eagle_2023_03_14.md'], 'E|LinearLayout|||File settings')
+('BLOCKED', False, False, 'MarkorChangeNoteContent', 10, 'Info', ['name', 'quick_eagle_2023_03_14.md'], 'E|LinearLayout|||File settings')
+('BLOCKED', True, True, 'MarkorCreateFolder', 1, 'Create a new file or folder', ['folder'], 'E|ImageButton|fab_add_new_item|Create a new f')
+('BLOCKED', True, True, 'MarkorCreateFolder', 1, 'Create a new file or folder', ['folder'], 'E|ImageButton|fab_add_new_item|Create a new f')
+('BLOCKED', True, True, 'MarkorCreateNote', 1, 'Create a new file or folder', ['copy_cool_snake'], 'E|ImageButton|fab_add_new_item|Create a new f')
+('BLOCKED', True, True, 'MarkorCreateNote', 1, 'Create a new file or folder', ['quick_eagle_2023_03_14.md'], 'E|ImageButton|fab_add_new_item|Create a new f')
+('BLOCKED', False, True, 'MarkorCreateNoteAndSms', 1, 'Create a new file or folder', ['copy_cool_snake'], 'E|ImageButton|fab_add_new_item|Create a new f')
+('BLOCKED', True, True, 'MarkorCreateNoteAndSms', 1, 'Create a new file or folder', ['quick_eagle_2023_03_14.md'], 'E|ImageButton|fab_add_new_item|Create a new f')
+('DIRECT', False, False, 'MarkorTranscribeReceipt', 6, 'Markdown', ['csv'], 'TYPE:new_file_dialog__name')
+('DIRECT', False, False, 'MarkorTranscribeReceipt', 2, 'Markdown', ['csv'], 'TYPE:new_file_dialog__name')
+('BLOCKED', False, True, 'OsmAndMarker', 1, 'Search', ['liechtenstein'], 'E|ImageButton|map_search_button|Search|Search')
+('BLOCKED', False, True, 'OsmAndTrack', 1, 'Search', ['liechtenstein'], 'E|ImageButton|map_search_button|Search|Search')
+('BLOCKED', False, True, 'OsmAndTrack', 1, 'Search', ['liechtenstein'], 'E|ImageButton|map_search_button|Search|Search')
+('BLOCKED', True, False, 'RetroCreatePlaylist', 2, 'Add to playing queue', ['endless summer', 'moonlight sonata', 'songs'], 'E|LinearLayout|||Add to playlist')
+('DIRECT', True, True, 'RetroCreatePlaylist', 3, 'New playlist', ['create'], 'E|TextView|text1||New playlist')
+('BLOCKED', True, False, 'RetroCreatePlaylist', 8, 'Add to playing queue', ['endless summer', 'moonlight sonata', 'songs'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', True, False, 'RetroCreatePlaylist', 12, 'Add to playing queue', ['endless summer', 'moonlight sonata', 'songs'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', False, False, 'RetroCreatePlaylist', 2, 'Add to playing queue', ['bright lights', 'forever young', 'songs'], 'E|LinearLayout|||Add to playlist')
+('DIRECT', False, True, 'RetroCreatePlaylist', 3, 'New playlist', ['create'], 'E|TextView|text1||New playlist')
+('BLOCKED', False, False, 'RetroCreatePlaylist', 8, 'Add to playing queue', ['bright lights', 'forever young', 'songs'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', False, False, 'RetroCreatePlaylist', 11, 'Add to playing queue', ['bright lights', 'forever young', 'songs'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', False, False, 'RetroCreatePlaylist', 14, 'Add to playing queue', ['bright lights', 'forever young', 'songs'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', False, False, 'RetroCreatePlaylist', 17, 'Add to playing queue', ['bright lights', 'forever young', 'songs'], 'E|LinearLayout|||Add to playlist')
+('DIRECT', False, True, 'RetroPlaylistDuration', 18, 'New playlist', ['create'], 'E|TextView|text1||New playlist')
+('BLOCKED', False, False, 'RetroSavePlaylist', 4, 'Add to playing queue', ['endless summer', 'moonlight sonata', 'songs'], 'E|LinearLayout|||Add to playlist')
+('DIRECT', False, True, 'RetroSavePlaylist', 5, 'New playlist', ['create'], 'E|TextView|text1||New playlist')
+('BLOCKED', False, False, 'RetroSavePlaylist', 10, 'Add to playing queue', ['endless summer', 'moonlight sonata', 'songs'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', False, False, 'RetroSavePlaylist', 13, 'Add to playing queue', ['endless summer', 'moonlight sonata', 'songs'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', False, False, 'RetroSavePlaylist', 16, 'Add to playing queue', ['endless summer', 'moonlight sonata', 'songs'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', False, False, 'RetroSavePlaylist', 19, 'Add to playing queue', ['endless summer', 'moonlight sonata', 'songs'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', False, False, 'RetroSavePlaylist', 4, 'Add to playing queue', ['bright lights', 'forever young', 'songs'], 'E|LinearLayout|||Add to playlist')
+('DIRECT', False, True, 'RetroSavePlaylist', 5, 'New playlist', ['create'], 'E|TextView|text1||New playlist')
+('BLOCKED', False, False, 'RetroSavePlaylist', 10, 'Add to playing queue', ['bright lights', 'forever young', 'songs'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', False, False, 'RetroSavePlaylist', 13, 'Add to playing queue', ['bright lights', 'forever young', 'songs'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', False, False, 'RetroSavePlaylist', 16, 'Add to playing queue', ['bright lights', 'forever young', 'songs'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', False, False, 'RetroSavePlaylist', 19, 'Add to playing queue', ['bright lights', 'forever young', 'songs'], 'E|LinearLayout|||Add to playlist')
+('BLOCKED', True, True, 'SimpleCalendarAddOneEvent', 3, 'New Event', ['catch up on annual report', 'event'], 'E|ImageButton|calendar_fab|New Event|New Even')
+('BLOCKED', False, True, 'SimpleCalendarAddOneEventInTwoWeeks', 5, 'New Event', ['appointment for annual report', 'event', 'we will discuss annual budget.'], 'E|ImageButton|calendar_fab|New Event|New Even')
+('BLOCKED', True, True, 'SimpleCalendarAddOneEventRelativeDay', 5, 'New Event', ['appointment for annual report', 'event', 'we will discuss annual budget.'], 'E|ImageButton|calendar_fab|New Event|New Even')
+('BLOCKED', False, True, 'SimpleCalendarAddOneEventTomorrow', 3, 'New Event', ['appointment for annual report', 'event', 'we will discuss annual budget.'], 'E|ImageButton|calendar_fab|New Event|New Even')
+('DIRECT', False, False, 'SimpleCalendarAddRepeatingEvent', 18, '', ['catch up on annual report'], 'L|TextView|event_repetition')
+('BLOCKED', True, False, 'SimpleCalendarDeleteOneEvent', 6, 'New Event', ['event'], 'STATUS')
+('BLOCKED', True, False, 'SimpleCalendarDeleteOneEvent', 6, 'New Event', ['event'], 'STATUS')
+('BLOCKED', True, False, 'SportsTrackerActivityDuration', 1, '', ['mountain biking'], 'STATUS')
+('BLOCKED', False, False, 'SportsTrackerTotalDistanceForCategoryOverInterval', 1, '', ['climbing'], 'E|ImageView|search_button|Search|Search')
+('BLOCKED', False, False, 'SportsTrackerTotalDurationForCategoryThisWeek', 1, '', ['mountain biking'], 'STATUS')
+('BLOCKED', False, True, 'TasksCompletedTasksForDate', 3, 'By due date', ['completed'], 'E|View|||By due date')
+('BLOCKED', False, True, 'TasksCompletedTasksForDate', 5, 'By due date', ['completed'], 'E|View|||By due date')
+('BLOCKED', False, True, 'TasksCompletedTasksForDate', 7, 'By due date', ['completed'], 'E|View|||By due date')

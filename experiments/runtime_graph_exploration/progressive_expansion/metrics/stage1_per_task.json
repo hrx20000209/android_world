@@ -1,0 +1,1100 @@
+{
+ "AudioRecorderRecordAudio": {
+  "A": 0,
+  "B": 17,
+  "C": 0,
+  "D": 2,
+  "states": 23,
+  "F_first_known": 2,
+  "F_any": 19,
+  "E_budget0": 6
+ },
+ "AudioRecorderRecordAudioWithFileName": {
+  "A": 2,
+  "B": 14,
+  "C": 14,
+  "D": 2,
+  "states": 24,
+  "F_first_known": 2,
+  "F_any": 16,
+  "E_budget0": 4
+ },
+ "BrowserDraw": {
+  "A": 0,
+  "B": 0,
+  "C": 0,
+  "D": 0,
+  "states": 40
+ },
+ "BrowserMaze": {
+  "A": 0,
+  "B": 20,
+  "C": 0,
+  "D": 0,
+  "states": 40,
+  "E_budget0": 20,
+  "F_first_known": 0,
+  "F_any": 20
+ },
+ "BrowserMultiply": {
+  "A": 0,
+  "B": 20,
+  "C": 0,
+  "D": 0,
+  "states": 40,
+  "E_budget0": 20,
+  "F_first_known": 0,
+  "F_any": 20
+ },
+ "CameraTakePhoto": {
+  "A": 0,
+  "B": 18,
+  "C": 0,
+  "D": 1,
+  "states": 20,
+  "E_no_target": 18,
+  "F_first_known": 1,
+  "F_any": 18,
+  "E_budget0": 1
+ },
+ "CameraTakeVideo": {
+  "A": 0,
+  "B": 11,
+  "C": 8,
+  "D": 4,
+  "states": 13,
+  "F_first_known": 3,
+  "F_any": 11
+ },
+ "ClockStopWatchPausedVerify": {
+  "A": 0,
+  "B": 0,
+  "C": 0,
+  "D": 0,
+  "states": 2
+ },
+ "ClockStopWatchRunning": {
+  "A": 0,
+  "B": 6,
+  "C": 2,
+  "D": 2,
+  "states": 8,
+  "F_first_known": 0,
+  "F_any": 6
+ },
+ "ClockTimerEntry": {
+  "A": 0,
+  "B": 15,
+  "C": 2,
+  "D": 2,
+  "states": 17,
+  "F_first_known": 0,
+  "F_any": 15,
+  "E_budget0": 6
+ },
+ "ContactsAddContact": {
+  "A": 0,
+  "B": 14,
+  "C": 10,
+  "D": 0,
+  "states": 18,
+  "F_first_known": 0,
+  "F_any": 14
+ },
+ "ContactsNewContactDraft": {
+  "A": 0,
+  "B": 19,
+  "C": 15,
+  "D": 0,
+  "states": 21,
+  "F_first_known": 0,
+  "F_any": 19,
+  "E_budget0": 3
+ },
+ "ExpenseAddMultiple": {
+  "A": 0,
+  "B": 31,
+  "C": 31,
+  "D": 7,
+  "states": 40,
+  "F_first_known": 7,
+  "F_any": 38,
+  "E_budget0": 22
+ },
+ "ExpenseAddMultipleFromGallery": {
+  "A": 0,
+  "B": 20,
+  "C": 0,
+  "D": 5,
+  "states": 40,
+  "F_first_known": 5,
+  "F_any": 25,
+  "E_budget0": 20
+ },
+ "ExpenseAddMultipleFromMarkor": {
+  "A": 0,
+  "B": 18,
+  "C": 0,
+  "D": 6,
+  "states": 23,
+  "E_no_target": 18,
+  "E_budget0": 13,
+  "F_first_known": 3,
+  "F_any": 21
+ },
+ "ExpenseAddSingle": {
+  "A": 0,
+  "B": 12,
+  "C": 12,
+  "D": 4,
+  "states": 18,
+  "F_first_known": 4,
+  "F_any": 16
+ },
+ "ExpenseDeleteDuplicates": {
+  "A": 0,
+  "B": 7,
+  "C": 0,
+  "D": 5,
+  "states": 14,
+  "F_first_known": 3,
+  "F_any": 10,
+  "E_budget0": 2
+ },
+ "ExpenseDeleteDuplicates2": {
+  "A": 0,
+  "B": 9,
+  "C": 0,
+  "D": 5,
+  "states": 17,
+  "F_first_known": 4,
+  "F_any": 13,
+  "E_budget0": 5
+ },
+ "ExpenseDeleteMultiple": {
+  "A": 0,
+  "B": 12,
+  "C": 6,
+  "D": 2,
+  "states": 22,
+  "F_first_known": 2,
+  "F_any": 14,
+  "E_budget0": 2
+ },
+ "ExpenseDeleteMultiple2": {
+  "A": 0,
+  "B": 28,
+  "C": 28,
+  "D": 25,
+  "states": 37,
+  "F_first_known": 2,
+  "F_any": 30,
+  "E_budget0": 15
+ },
+ "ExpenseDeleteSingle": {
+  "A": 0,
+  "B": 6,
+  "C": 2,
+  "D": 2,
+  "states": 10,
+  "F_first_known": 2,
+  "F_any": 6,
+  "E_budget0": 1
+ },
+ "FilesDeleteFile": {
+  "A": 0,
+  "B": 2,
+  "C": 2,
+  "D": 2,
+  "states": 20,
+  "E_budget0": 1,
+  "F_first_known": 0,
+  "F_any": 2
+ },
+ "FilesMoveFile": {
+  "A": 0,
+  "B": 8,
+  "C": 2,
+  "D": 2,
+  "states": 30,
+  "E_budget0": 6,
+  "F_first_known": 0,
+  "F_any": 8
+ },
+ "MarkorAddNoteHeader": {
+  "A": 0,
+  "B": 21,
+  "C": 7,
+  "D": 15,
+  "states": 24,
+  "F_first_known": 2,
+  "F_any": 21,
+  "E_budget0": 8
+ },
+ "MarkorChangeNoteContent": {
+  "A": 0,
+  "B": 20,
+  "C": 8,
+  "D": 15,
+  "states": 24,
+  "F_first_known": 4,
+  "F_any": 20,
+  "E_budget0": 4
+ },
+ "MarkorCreateFolder": {
+  "A": 0,
+  "B": 4,
+  "C": 4,
+  "D": 8,
+  "states": 10,
+  "F_first_known": 4,
+  "F_any": 8
+ },
+ "MarkorCreateNote": {
+  "A": 0,
+  "B": 9,
+  "C": 0,
+  "D": 12,
+  "states": 16,
+  "F_first_known": 4,
+  "F_any": 13
+ },
+ "MarkorCreateNoteAndSms": {
+  "A": 0,
+  "B": 23,
+  "C": 23,
+  "D": 25,
+  "states": 32,
+  "F_first_known": 7,
+  "F_any": 28,
+  "E_budget0": 14
+ },
+ "MarkorCreateNoteFromClipboard": {
+  "A": 0,
+  "B": 17,
+  "C": 14,
+  "D": 17,
+  "states": 23,
+  "F_first_known": 4,
+  "F_any": 21
+ },
+ "MarkorDeleteAllNotes": {
+  "A": 0,
+  "B": 18,
+  "C": 15,
+  "D": 15,
+  "states": 22,
+  "F_first_known": 0,
+  "F_any": 18,
+  "E_budget0": 5
+ },
+ "MarkorDeleteNewestNote": {
+  "A": 0,
+  "B": 6,
+  "C": 6,
+  "D": 6,
+  "states": 10,
+  "F_first_known": 0,
+  "F_any": 6,
+  "E_budget0": 1
+ },
+ "MarkorDeleteNote": {
+  "A": 0,
+  "B": 6,
+  "C": 6,
+  "D": 6,
+  "states": 10,
+  "F_first_known": 0,
+  "F_any": 6
+ },
+ "MarkorEditNote": {
+  "A": 0,
+  "B": 12,
+  "C": 7,
+  "D": 10,
+  "states": 14,
+  "F_first_known": 1,
+  "F_any": 12
+ },
+ "MarkorMergeNotes": {
+  "A": 0,
+  "B": 35,
+  "C": 27,
+  "D": 15,
+  "states": 40,
+  "F_first_known": 0,
+  "F_any": 35,
+  "E_budget0": 24
+ },
+ "MarkorMoveNote": {
+  "A": 0,
+  "B": 20,
+  "C": 2,
+  "D": 6,
+  "states": 22,
+  "F_first_known": 0,
+  "F_any": 20,
+  "E_budget0": 4
+ },
+ "MarkorTranscribeReceipt": {
+  "A": 2,
+  "B": 16,
+  "C": 8,
+  "D": 20,
+  "states": 32,
+  "F_first_known": 4,
+  "F_any": 20,
+  "E_budget0": 8
+ },
+ "MarkorTranscribeVideo": {
+  "A": 0,
+  "B": 11,
+  "C": 2,
+  "D": 9,
+  "states": 25,
+  "F_first_known": 0,
+  "F_any": 11,
+  "E_budget0": 6
+ },
+ "NotesIsTodo": {
+  "A": 0,
+  "B": 8,
+  "C": 1,
+  "D": 2,
+  "states": 10,
+  "F_first_known": 0,
+  "F_any": 8,
+  "E_budget0": 2
+ },
+ "NotesMeetingAttendeeCount": {
+  "A": 0,
+  "B": 6,
+  "C": 0,
+  "D": 2,
+  "states": 8,
+  "F_first_known": 0,
+  "F_any": 6,
+  "E_budget0": 1
+ },
+ "NotesRecipeIngredientCount": {
+  "A": 0,
+  "B": 11,
+  "C": 0,
+  "D": 0,
+  "states": 13,
+  "E_budget0": 6,
+  "F_first_known": 0,
+  "F_any": 11
+ },
+ "NotesTodoItemCount": {
+  "A": 0,
+  "B": 4,
+  "C": 3,
+  "D": 3,
+  "states": 6,
+  "F_first_known": 0,
+  "F_any": 4
+ },
+ "OpenAppTaskEval": {
+  "A": 0,
+  "B": 5,
+  "C": 0,
+  "D": 1,
+  "states": 7,
+  "F_first_known": 1,
+  "F_any": 5,
+  "E_budget0": 2
+ },
+ "OsmAndFavorite": {
+  "A": 0,
+  "B": 19,
+  "C": 4,
+  "D": 6,
+  "states": 21,
+  "F_first_known": 4,
+  "F_any": 19,
+  "E_budget0": 6
+ },
+ "OsmAndMarker": {
+  "A": 0,
+  "B": 24,
+  "C": 4,
+  "D": 4,
+  "states": 26,
+  "F_first_known": 1,
+  "F_any": 24,
+  "E_budget0": 14
+ },
+ "OsmAndTrack": {
+  "A": 0,
+  "B": 38,
+  "C": 15,
+  "D": 16,
+  "states": 40,
+  "F_first_known": 13,
+  "F_any": 38,
+  "E_budget0": 24
+ },
+ "RecipeAddMultipleRecipes": {
+  "A": 0,
+  "B": 4,
+  "C": 4,
+  "D": 4,
+  "states": 40,
+  "F_first_known": 0,
+  "F_any": 4,
+  "E_budget0": 2
+ },
+ "RecipeAddMultipleRecipesFromImage": {
+  "A": 0,
+  "B": 17,
+  "C": 0,
+  "D": 4,
+  "states": 40,
+  "F_first_known": 0,
+  "F_any": 17,
+  "E_budget0": 12
+ },
+ "RecipeAddMultipleRecipesFromMarkor": {
+  "A": 0,
+  "B": 15,
+  "C": 0,
+  "D": 9,
+  "states": 30,
+  "E_budget0": 8,
+  "F_first_known": 0,
+  "F_any": 15
+ },
+ "RecipeAddMultipleRecipesFromMarkor2": {
+  "A": 0,
+  "B": 24,
+  "C": 2,
+  "D": 4,
+  "states": 34,
+  "E_budget0": 11,
+  "F_first_known": 0,
+  "F_any": 24
+ },
+ "RecipeAddSingleRecipe": {
+  "A": 0,
+  "B": 2,
+  "C": 2,
+  "D": 2,
+  "states": 29,
+  "F_first_known": 0,
+  "F_any": 2
+ },
+ "RecipeDeleteDuplicateRecipes": {
+  "A": 0,
+  "B": 9,
+  "C": 0,
+  "D": 5,
+  "states": 17,
+  "F_first_known": 0,
+  "F_any": 9,
+  "E_budget0": 1
+ },
+ "RecipeDeleteDuplicateRecipes2": {
+  "A": 0,
+  "B": 13,
+  "C": 0,
+  "D": 8,
+  "states": 26,
+  "F_first_known": 0,
+  "F_any": 13,
+  "E_budget0": 6
+ },
+ "RecipeDeleteDuplicateRecipes3": {
+  "A": 0,
+  "B": 6,
+  "C": 0,
+  "D": 4,
+  "states": 12,
+  "F_first_known": 0,
+  "F_any": 6
+ },
+ "RecipeDeleteMultipleRecipes": {
+  "A": 0,
+  "B": 16,
+  "C": 8,
+  "D": 2,
+  "states": 30,
+  "F_first_known": 0,
+  "F_any": 16,
+  "E_budget0": 5
+ },
+ "RecipeDeleteMultipleRecipesWithConstraint": {
+  "A": 0,
+  "B": 6,
+  "C": 2,
+  "D": 2,
+  "states": 8,
+  "F_first_known": 0,
+  "F_any": 6
+ },
+ "RecipeDeleteMultipleRecipesWithNoise": {
+  "A": 0,
+  "B": 32,
+  "C": 31,
+  "D": 27,
+  "states": 40,
+  "F_first_known": 0,
+  "F_any": 32,
+  "E_budget0": 21
+ },
+ "RecipeDeleteSingleRecipe": {
+  "A": 0,
+  "B": 6,
+  "C": 4,
+  "D": 2,
+  "states": 12,
+  "F_first_known": 0,
+  "F_any": 6
+ },
+ "RecipeDeleteSingleWithRecipeWithNoise": {
+  "A": 0,
+  "B": 24,
+  "C": 24,
+  "D": 23,
+  "states": 28,
+  "F_first_known": 0,
+  "F_any": 24,
+  "E_budget0": 10
+ },
+ "RetroCreatePlaylist": {
+  "A": 0,
+  "B": 25,
+  "C": 25,
+  "D": 21,
+  "states": 35,
+  "F_first_known": 10,
+  "F_any": 27,
+  "E_budget0": 16
+ },
+ "RetroPlayingQueue": {
+  "A": 0,
+  "B": 26,
+  "C": 23,
+  "D": 23,
+  "states": 36,
+  "F_first_known": 0,
+  "F_any": 26,
+  "E_budget0": 5
+ },
+ "RetroPlaylistDuration": {
+  "A": 0,
+  "B": 32,
+  "C": 0,
+  "D": 4,
+  "states": 40,
+  "F_first_known": 4,
+  "F_any": 33,
+  "E_budget0": 14
+ },
+ "RetroSavePlaylist": {
+  "A": 0,
+  "B": 30,
+  "C": 30,
+  "D": 26,
+  "states": 40,
+  "F_first_known": 12,
+  "F_any": 32,
+  "E_budget0": 18
+ },
+ "SaveCopyOfReceiptTaskEval": {
+  "A": 0,
+  "B": 10,
+  "C": 10,
+  "D": 6,
+  "states": 16,
+  "F_first_known": 0,
+  "F_any": 10
+ },
+ "SimpleCalendarAddOneEvent": {
+  "A": 0,
+  "B": 21,
+  "C": 20,
+  "D": 21,
+  "states": 33,
+  "E_budget0": 15,
+  "F_first_known": 8,
+  "F_any": 29
+ },
+ "SimpleCalendarAddOneEventInTwoWeeks": {
+  "A": 0,
+  "B": 26,
+  "C": 26,
+  "D": 24,
+  "states": 36,
+  "E_budget0": 17,
+  "F_first_known": 6,
+  "F_any": 32
+ },
+ "SimpleCalendarAddOneEventRelativeDay": {
+  "A": 0,
+  "B": 26,
+  "C": 26,
+  "D": 23,
+  "states": 38,
+  "E_budget0": 18,
+  "F_first_known": 8,
+  "F_any": 34
+ },
+ "SimpleCalendarAddOneEventTomorrow": {
+  "A": 0,
+  "B": 29,
+  "C": 29,
+  "D": 25,
+  "states": 39,
+  "E_budget0": 23,
+  "F_first_known": 6,
+  "F_any": 35
+ },
+ "SimpleCalendarAddRepeatingEvent": {
+  "A": 0,
+  "B": 23,
+  "C": 22,
+  "D": 20,
+  "states": 38,
+  "E_budget0": 10,
+  "F_first_known": 9,
+  "F_any": 32
+ },
+ "SimpleCalendarAnyEventsOnDate": {
+  "A": 0,
+  "B": 2,
+  "C": 2,
+  "D": 2,
+  "states": 6,
+  "F_first_known": 0,
+  "F_any": 2
+ },
+ "SimpleCalendarDeleteEvents": {
+  "A": 0,
+  "B": 12,
+  "C": 9,
+  "D": 6,
+  "states": 18,
+  "F_first_known": 0,
+  "F_any": 12,
+  "E_budget0": 1
+ },
+ "SimpleCalendarDeleteEventsOnRelativeDay": {
+  "A": 0,
+  "B": 14,
+  "C": 11,
+  "D": 9,
+  "states": 21,
+  "E_budget0": 2,
+  "F_first_known": 0,
+  "F_any": 14
+ },
+ "SimpleCalendarDeleteOneEvent": {
+  "A": 0,
+  "B": 8,
+  "C": 8,
+  "D": 6,
+  "states": 14,
+  "E_budget0": 2,
+  "F_first_known": 0,
+  "F_any": 8
+ },
+ "SimpleCalendarEventOnDateAtTime": {
+  "A": 0,
+  "B": 10,
+  "C": 10,
+  "D": 10,
+  "states": 14,
+  "F_first_known": 0,
+  "F_any": 10,
+  "E_budget0": 6
+ },
+ "SimpleCalendarEventsInNextWeek": {
+  "A": 0,
+  "B": 2,
+  "C": 0,
+  "D": 2,
+  "states": 6,
+  "F_first_known": 0,
+  "F_any": 2
+ },
+ "SimpleCalendarEventsInTimeRange": {
+  "A": 0,
+  "B": 4,
+  "C": 4,
+  "D": 4,
+  "states": 8,
+  "E_budget0": 3,
+  "F_first_known": 0,
+  "F_any": 4
+ },
+ "SimpleCalendarEventsOnDate": {
+  "A": 0,
+  "B": 3,
+  "C": 3,
+  "D": 3,
+  "states": 7,
+  "F_first_known": 0,
+  "F_any": 3,
+  "E_budget0": 2
+ },
+ "SimpleCalendarFirstEventAfterStartTime": {
+  "A": 0,
+  "B": 4,
+  "C": 4,
+  "D": 4,
+  "states": 8,
+  "E_budget0": 2,
+  "F_first_known": 0,
+  "F_any": 4
+ },
+ "SimpleCalendarLocationOfEvent": {
+  "A": 0,
+  "B": 6,
+  "C": 6,
+  "D": 4,
+  "states": 10,
+  "F_first_known": 0,
+  "F_any": 6
+ },
+ "SimpleCalendarNextEvent": {
+  "A": 0,
+  "B": 2,
+  "C": 2,
+  "D": 2,
+  "states": 6,
+  "F_first_known": 0,
+  "F_any": 2
+ },
+ "SimpleCalendarNextMeetingWithPerson": {
+  "A": 0,
+  "B": 7,
+  "C": 3,
+  "D": 3,
+  "states": 11,
+  "E_budget0": 4,
+  "F_first_known": 0,
+  "F_any": 7
+ },
+ "SimpleDrawProCreateDrawing": {
+  "A": 0,
+  "B": 6,
+  "C": 0,
+  "D": 0,
+  "states": 17,
+  "F_first_known": 0,
+  "F_any": 6
+ },
+ "SimpleSmsReply": {
+  "A": 0,
+  "B": 10,
+  "C": 2,
+  "D": 0,
+  "E_budget0": 4,
+  "F_first_known": 0,
+  "F_any": 10,
+  "states": 12
+ },
+ "SimpleSmsReplyMostRecent": {
+  "A": 0,
+  "B": 8,
+  "C": 2,
+  "D": 0,
+  "states": 12,
+  "F_first_known": 0,
+  "F_any": 8
+ },
+ "SimpleSmsResend": {
+  "A": 0,
+  "B": 10,
+  "C": 0,
+  "D": 0,
+  "states": 21,
+  "F_first_known": 0,
+  "F_any": 10
+ },
+ "SimpleSmsSend": {
+  "A": 0,
+  "B": 8,
+  "C": 8,
+  "D": 2,
+  "states": 14,
+  "E_budget0": 2,
+  "F_first_known": 2,
+  "F_any": 10
+ },
+ "SimpleSmsSendClipboardContent": {
+  "A": 0,
+  "B": 10,
+  "C": 0,
+  "D": 2,
+  "states": 16,
+  "E_budget0": 2,
+  "F_first_known": 2,
+  "F_any": 12
+ },
+ "SimpleSmsSendReceivedAddress": {
+  "A": 0,
+  "B": 24,
+  "C": 4,
+  "D": 0,
+  "states": 30,
+  "F_first_known": 0,
+  "F_any": 24,
+  "E_budget0": 12
+ },
+ "SportsTrackerActivitiesCountForWeek": {
+  "A": 0,
+  "B": 2,
+  "C": 2,
+  "D": 2,
+  "states": 4,
+  "F_first_known": 2,
+  "F_any": 2
+ },
+ "SportsTrackerActivitiesOnDate": {
+  "A": 0,
+  "B": 3,
+  "C": 0,
+  "D": 3,
+  "states": 5,
+  "F_first_known": 3,
+  "F_any": 3
+ },
+ "SportsTrackerActivityDuration": {
+  "A": 0,
+  "B": 5,
+  "C": 1,
+  "D": 3,
+  "states": 7,
+  "F_first_known": 3,
+  "F_any": 5,
+  "E_budget0": 1
+ },
+ "SportsTrackerLongestDistanceActivity": {
+  "A": 0,
+  "B": 6,
+  "C": 4,
+  "D": 4,
+  "states": 8,
+  "F_first_known": 4,
+  "F_any": 6
+ },
+ "SportsTrackerTotalDistanceForCategoryOverInterval": {
+  "A": 0,
+  "B": 8,
+  "C": 3,
+  "D": 2,
+  "states": 10,
+  "F_first_known": 2,
+  "F_any": 8,
+  "E_budget0": 3
+ },
+ "SportsTrackerTotalDurationForCategoryThisWeek": {
+  "A": 0,
+  "B": 2,
+  "C": 2,
+  "D": 2,
+  "states": 4,
+  "F_first_known": 2,
+  "F_any": 2
+ },
+ "SystemBluetoothTurnOff": {
+  "A": 0,
+  "B": 1,
+  "C": 1,
+  "D": 0,
+  "states": 20,
+  "F_first_known": 0,
+  "F_any": 1
+ },
+ "SystemBluetoothTurnOffVerify": {
+  "A": 0,
+  "B": 0,
+  "C": 0,
+  "D": 0,
+  "states": 10
+ },
+ "SystemBluetoothTurnOn": {
+  "A": 0,
+  "B": 0,
+  "C": 0,
+  "D": 0,
+  "states": 8
+ },
+ "SystemBluetoothTurnOnVerify": {
+  "A": 0,
+  "B": 0,
+  "C": 0,
+  "D": 0,
+  "states": 10
+ },
+ "SystemBrightnessMax": {
+  "A": 0,
+  "B": 2,
+  "C": 0,
+  "D": 0,
+  "states": 13,
+  "E_no_target": 2,
+  "F_first_known": 0,
+  "F_any": 2
+ },
+ "SystemBrightnessMaxVerify": {
+  "A": 0,
+  "B": 2,
+  "C": 0,
+  "D": 0,
+  "states": 8,
+  "E_no_target": 2,
+  "F_first_known": 0,
+  "F_any": 2
+ },
+ "SystemBrightnessMin": {
+  "A": 0,
+  "B": 2,
+  "C": 0,
+  "D": 0,
+  "states": 20,
+  "E_no_target": 2,
+  "F_first_known": 0,
+  "F_any": 2
+ },
+ "SystemBrightnessMinVerify": {
+  "A": 0,
+  "B": 2,
+  "C": 0,
+  "D": 0,
+  "states": 8,
+  "E_no_target": 2,
+  "F_first_known": 0,
+  "F_any": 2
+ },
+ "SystemCopyToClipboard": {
+  "A": 0,
+  "B": 7,
+  "C": 0,
+  "D": 0,
+  "states": 20,
+  "E_budget0": 2,
+  "F_first_known": 0,
+  "F_any": 7
+ },
+ "SystemWifiTurnOff": {
+  "A": 0,
+  "B": 0,
+  "C": 0,
+  "D": 0,
+  "states": 10
+ },
+ "SystemWifiTurnOffVerify": {
+  "A": 0,
+  "B": 0,
+  "C": 0,
+  "D": 0,
+  "states": 12
+ },
+ "SystemWifiTurnOn": {
+  "A": 0,
+  "B": 0,
+  "C": 0,
+  "D": 0,
+  "states": 10
+ },
+ "SystemWifiTurnOnVerify": {
+  "A": 0,
+  "B": 0,
+  "C": 0,
+  "D": 0,
+  "states": 8
+ },
+ "TasksCompletedTasksForDate": {
+  "A": 0,
+  "B": 8,
+  "C": 7,
+  "D": 7,
+  "states": 16,
+  "F_first_known": 4,
+  "F_any": 8
+ },
+ "TasksDueNextWeek": {
+  "A": 0,
+  "B": 0,
+  "C": 0,
+  "D": 0,
+  "states": 5
+ },
+ "TasksDueOnDate": {
+  "A": 0,
+  "B": 7,
+  "C": 0,
+  "D": 1,
+  "states": 14,
+  "F_first_known": 1,
+  "F_any": 7,
+  "E_budget0": 2
+ },
+ "TasksHighPriorityTasks": {
+  "A": 0,
+  "B": 4,
+  "C": 0,
+  "D": 0,
+  "states": 10,
+  "F_first_known": 0,
+  "F_any": 4,
+  "E_budget0": 1
+ },
+ "TasksHighPriorityTasksDueOnDate": {
+  "A": 0,
+  "B": 3,
+  "C": 0,
+  "D": 3,
+  "states": 12,
+  "F_first_known": 0,
+  "F_any": 3
+ },
+ "TasksIncompleteTasksOnDate": {
+  "A": 0,
+  "B": 0,
+  "C": 0,
+  "D": 0,
+  "states": 6
+ },
+ "TurnOffWifiAndTurnOnBluetooth": {
+  "A": 0,
+  "B": 0,
+  "C": 0,
+  "D": 0,
+  "states": 22
+ },
+ "TurnOnWifiAndOpenApp": {
+  "A": 0,
+  "B": 13,
+  "C": 0,
+  "D": 12,
+  "states": 40,
+  "E_no_target": 13,
+  "F_first_known": 1,
+  "F_any": 13,
+  "E_budget0": 1
+ },
+ "VlcCreatePlaylist": {
+  "A": 0,
+  "B": 14,
+  "C": 5,
+  "D": 5,
+  "states": 40,
+  "F_first_known": 0,
+  "F_any": 14,
+  "E_budget0": 4
+ },
+ "VlcCreateTwoPlaylists": {
+  "A": 0,
+  "B": 10,
+  "C": 5,
+  "D": 5,
+  "states": 40,
+  "F_first_known": 0,
+  "F_any": 10,
+  "E_budget0": 3
+ }
+}

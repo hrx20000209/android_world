@@ -50,7 +50,8 @@ def row_fam(node):
 
 
 class ProcReplay:
-  def __init__(self, goal: str):
+  def __init__(self, goal: str, enum_only: bool = False):
+    self.enum_only = enum_only   # FULL7: the next entity must be listed next to a processed one in the goal
     self.goal = goal
     self.gl = goal.lower()
     self.hops = []          # model + replay hops, in order
@@ -112,6 +113,20 @@ class ProcReplay:
       self.hops[-1]["post_act"] = ui.activity
       self.hops[-1]["post_layout"] = ui.layout_sig
 
+  def _enumerated(self, ent):
+    """True if `ent` appears in a goal enumeration next to an already processed entity:
+    only separators (commas, semicolons, 'and', quotes, whitespace) lie between them."""
+    pos = self.goal_pos(ent)
+    for e in self.done | self.tried:
+      p0 = self.goal_pos(e)
+      if p0 is None or pos is None:
+        continue
+      a, b = (p0 + len(e), pos) if p0 < pos else (pos + len(ent), p0)
+      gap = self.gl[a:b]
+      if re.fullmatch(r"[\s,;'\"]*(and\s+)?[\s'\"]*", gap):
+        return True
+    return False
+
   # ------------------------------------------------------------ template
   def template(self):
     """Latest model-demonstrated entity procedure that ended in a model commit."""
@@ -149,6 +164,9 @@ class ProcReplay:
       self.why = "no_pending"
       return None
     nxt = pending[0][1]
+    if self.enum_only and not self._enumerated(nxt):
+      self.why = "not_enumerated"
+      return None
     if nxt not in vis:
       self.why = "not_visible"
       return None             # next entity in goal order is not on screen: do not skip ahead

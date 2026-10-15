@@ -1,0 +1,15 @@
+{
+ "states": 2320,
+ "A": 4,
+ "B": 1313,
+ "C": 686,
+ "D": 688,
+ "E_budget0": 547,
+ "E_no_target": 57,
+ "F_any": 1414,
+ "F_first_known": 178,
+ "U_oracle": 56,
+ "U_oracle_in_successful_eps": 12,
+ "U_fair": 33,
+ "U_fair_in_successful_eps": 2
+}
