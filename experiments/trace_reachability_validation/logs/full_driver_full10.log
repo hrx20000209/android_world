@@ -1,0 +1,7 @@
+- 10-15 02:32:10 FULLRUN p0 FULL10 AudioRecorderRecordAudio rc=0 succ=0.0 steps=12 calls=14 jump=0 probes=5 err=None 63s
+- 10-15 02:33:05 FULLRUN p0 FULL10 AudioRecorderRecordAudioWithFileName rc=0 succ=1.0 steps=11 calls=12 jump=0 probes=3 err=None 55s
+- 10-15 02:34:14 FULLRUN p0 FULL10 BrowserDraw rc=0 succ=0.0 steps=20 calls=18 jump=0 probes=3 err=None 69s
+- 10-15 02:35:27 FULLRUN p0 FULL10 BrowserMaze rc=0 succ=0.0 steps=20 calls=17 jump=0 probes=3 err=None 72s
+- 10-15 02:36:44 FULLRUN p0 FULL10 BrowserMultiply rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=3 err=None 77s
+- 10-15 02:37:47 FULLRUN p0 FULL10 CameraTakePhoto rc=0 succ=0.0 steps=10 calls=13 jump=0 probes=8 err=None 63s
+- 10-15 02:38:27 FULLRUN p0 FULL10 CameraTakeVideo rc=0 succ=1.0 steps=6 calls=8 jump=0 probes=5 err=None 39s

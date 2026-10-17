@@ -1,0 +1,24 @@
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.flauschcode.broccoli.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791990980.388822 81598694 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791990981.740240 81598694 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791990989.163988 81598694 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791990994.152107 81598694 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791990998.084576 81598694 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791990999.457225 81598694 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791991003.062661 81598694 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791991004.459125 81598694 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791991006.914251 81598694 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791991009.720337 81598694 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791991013.226422 81598694 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.flauschcode.broccoli.
+RESULT {"task": "RecipeDeleteMultipleRecipes", "variant": "smk2", "mode": "agent", "steps": 11, "env_actions": 14, "agent_steps": 14, "done": true, "model_calls": 6, "final_cid": "0018_final", "n_probes": 0, "explore_disabled": "", "store_eps": 1, "m_bootstrap": 1, "m_env_actions_extra": 3, "m_probes_e1": 0, "m_probes_e2": 0, "m_calls": 6, "m_jump_steps": 3, "m_jump_commit_steps": 3, "m_replays": 2, "m_replay_steps": 4, "m_replay_full": 2, "m_jump_absent": 0, "m_jump_mismatch": 0, "is_successful": 1.0, "wall_s": 43.23}

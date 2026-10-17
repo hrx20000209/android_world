@@ -1,0 +1,38 @@
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1792000024.392569 82331561 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000027.015018 82331561 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000034.146403 82331561 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000036.544564 82331561 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000038.887340 82331561 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000042.053639 82331561 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000043.897423 82331561 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000045.452353 82331561 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000047.178936 82331561 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000051.332792 82331561 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000053.970395 82331561 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000055.788481 82331561 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000059.072205 82331561 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000062.011940 82331561 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000071.200946 82331561 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000073.614507 82331561 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000075.882968 82331561 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000078.383393 82331561 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000081.831129 82331561 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000089.242081 82331561 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000090.375395 82331561 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000096.884566 82331561 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000099.617402 82331561 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000102.578802 82331561 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Expected row Expense(name='Tuition Fees', amount=41755, category=10, note='Remember to transfer funds', created_date=1696842000000, modified_date=1696842000000, expense_id=-1) not found in the 'after' state.
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseAddMultiple", "variant": "smk2", "mode": "agent", "steps": 19, "env_actions": 31, "agent_steps": 31, "done": true, "model_calls": 18, "final_cid": "0056_final", "n_probes": 6, "explore_disabled": "rollback_failed_x2@6", "store_eps": 0, "m_bootstrap": 1, "m_env_actions_extra": 12, "m_func_apps": 3, "m_func_steps": 14, "m_probes_e1": 0, "m_probes_e2": 0, "m_probes_fx": 6, "m_calls": 18, "m_requery": 2, "m_e2_hit": 1, "m_reuse_hits": 1, "m_jump_absent": 0, "m_jump_mismatch": 0, "is_successful": 0.0, "wall_s": 95.32}

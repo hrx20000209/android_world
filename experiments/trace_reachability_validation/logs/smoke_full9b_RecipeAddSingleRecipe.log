@@ -1,0 +1,24 @@
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.flauschcode.broccoli.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1792000163.156681 82348505 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000165.665769 82348505 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000168.016983 82348505 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000173.565074 82348505 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000174.806564 82348505 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000177.780563 82348505 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000186.207495 82348505 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000190.726970 82348505 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000194.004992 82348505 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000196.579395 82348505 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000212.357362 82348505 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.flauschcode.broccoli.
+RESULT {"task": "RecipeAddSingleRecipe", "variant": "smk2", "mode": "agent", "steps": 13, "env_actions": 14, "agent_steps": 14, "done": true, "model_calls": 13, "final_cid": "0019_final", "n_probes": 1, "explore_disabled": "", "store_eps": 0, "m_bootstrap": 1, "m_env_actions_extra": 1, "m_probes_e1": 0, "m_probes_e2": 0, "m_probes_fx": 1, "m_calls": 13, "m_e2_hit": 1, "m_reuse_hits": 1, "m_jump_absent": 0, "m_jump_mismatch": 0, "is_successful": 1.0, "wall_s": 62.96}

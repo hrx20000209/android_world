@@ -1,0 +1,756 @@
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791852671.742764 68893223 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852674.053119 68893223 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852675.057084 68893223 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852676.469567 68893223 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852678.133186 68893223 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852679.136971 68893223 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1011_TG", "mode": "agent", "steps": 3, "agent_steps": 3, "done": true, "model_calls": 3, "final_cid": "0012_final", "explore_disabled": "rollback_failed@step2", "n_probes": 2, "is_successful": 0.0, "wall_s": 22.57}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791852690.985180 68898364 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852692.376506 68898364 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852693.917233 68898364 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852696.367234 68898364 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852697.802122 68898364 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852700.208080 68898364 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1011_RR", "mode": "agent", "steps": 3, "agent_steps": 3, "done": true, "model_calls": 3, "final_cid": "0008_final", "explore_disabled": "rollback_failed@step2", "n_probes": 1, "is_successful": 0.0, "wall_s": 17.55}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791852713.181709 68902821 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852717.234210 68902821 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852719.446244 68902821 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852721.221024 68902821 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852728.820349 68902821 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852732.917714 68902821 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852736.519387 68902821 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1012_RR", "mode": "agent", "steps": 6, "agent_steps": 6, "done": true, "model_calls": 7, "final_cid": "0012_final", "explore_disabled": "rollback_failed@step2", "n_probes": 1, "is_successful": 0.0, "wall_s": 31.25}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791852749.177099 68908281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852751.802248 68908281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852753.244615 68908281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852755.000568 68908281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852756.498056 68908281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852757.534788 68908281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852759.795287 68908281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852761.228983 68908281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852765.122327 68908281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852767.723181 68908281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852769.118265 68908281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1012_TG", "mode": "agent", "steps": 6, "agent_steps": 6, "done": true, "model_calls": 7, "final_cid": "0015_final", "explore_disabled": "rollback_failed@step2", "n_probes": 2, "is_successful": 1.0, "wall_s": 31.66}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791852788.655006 68913838 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852791.363844 68913838 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852792.832499 68913838 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852794.386352 68913838 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852795.693102 68913838 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852799.149863 68913838 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852800.330643 68913838 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852804.594041 68913838 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852807.627199 68913838 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1016_TG", "mode": "agent", "steps": 5, "agent_steps": 5, "done": true, "model_calls": 6, "final_cid": "0022_final", "explore_disabled": "rollback_failed@step3", "n_probes": 4, "is_successful": 1.0, "wall_s": 32.58}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791852818.435544 68920186 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852822.592025 68920186 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852824.955843 68920186 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852826.424076 68920186 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852827.707880 68920186 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852834.870072 68920186 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852836.808019 68920186 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791852840.421441 68920186 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1016_RR", "mode": "agent", "steps": 4, "agent_steps": 4, "done": true, "model_calls": 5, "final_cid": "0021_final", "explore_disabled": "rollback_failed@step3", "n_probes": 4, "is_successful": 1.0, "wall_s": 29.7}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791853897.043329 69120338 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853900.016795 69120338 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853904.718107 69120338 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853906.215486 69120338 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853908.861405 69120338 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853910.325216 69120338 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853912.169278 69120338 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1011_TG1", "mode": "agent", "steps": 3, "agent_steps": 3, "done": true, "model_calls": 3, "final_cid": "0013_final", "explore_disabled": "", "n_probes": 4, "is_successful": 0.0, "wall_s": 21.01}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791853922.505784 69124932 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853930.539317 69124932 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853932.627425 69124932 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853934.185107 69124932 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853935.273451 69124932 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853936.689666 69124932 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1012_TG1", "mode": "agent", "steps": 3, "agent_steps": 3, "done": true, "model_calls": 3, "final_cid": "0013_final", "explore_disabled": "", "n_probes": 4, "is_successful": 0.0, "wall_s": 21.74}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791853947.323833 69129654 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853953.654398 69129654 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853955.464570 69129654 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853957.219919 69129654 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853958.738052 69129654 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853961.100132 69129654 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853962.117145 69129654 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853963.931413 69129654 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853966.013765 69129654 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853968.049680 69129654 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853970.585962 69129654 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1016_TG1", "mode": "agent", "steps": 4, "agent_steps": 4, "done": true, "model_calls": 4, "final_cid": "0025_final", "explore_disabled": "", "n_probes": 10, "is_successful": 1.0, "wall_s": 30.55}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791854633.520236 69252620 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854635.950283 69252620 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854638.118612 69252620 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854640.717773 69252620 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854642.559221 69252620 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854644.063266 69252620 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854645.855542 69252620 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1011_RR1", "mode": "agent", "steps": 3, "agent_steps": 3, "done": true, "model_calls": 3, "final_cid": "0013_final", "explore_disabled": "", "n_probes": 4, "is_successful": 0.0, "wall_s": 21.41}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791854658.442080 69257034 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854662.393515 69257034 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854664.127599 69257034 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854665.485184 69257034 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854667.059246 69257034 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854668.618437 69257034 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854669.651803 69257034 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854671.642059 69257034 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1012_RR1", "mode": "agent", "steps": 3, "agent_steps": 3, "done": true, "model_calls": 3, "final_cid": "0013_final", "explore_disabled": "", "n_probes": 4, "is_successful": 0.0, "wall_s": 22.73}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791854683.585628 69261454 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854687.783305 69261454 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854688.946762 69261454 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854690.399860 69261454 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854691.969043 69261454 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854693.016908 69261454 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854695.880532 69261454 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854697.600690 69261454 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854698.608316 69261454 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854701.172870 69261454 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854702.178910 69261454 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854703.311041 69261454 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854704.719388 69261454 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1016_RR1", "mode": "agent", "steps": 4, "agent_steps": 4, "done": true, "model_calls": 4, "final_cid": "0024_final", "explore_disabled": "", "n_probes": 9, "is_successful": 1.0, "wall_s": 30.08}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791859136.804918 69795206 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859139.360425 69795206 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859146.915950 69795206 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1032_BASE", "mode": "agent", "steps": 4, "agent_steps": 4, "done": true, "model_calls": 4, "prefills": 0, "prefill_rejected": 0, "final_cid": "0005_final", "store_episodes": 0, "is_successful": 1.0, "wall_s": 17.37}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791859157.013364 69798552 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859160.752258 69798552 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859161.832621 69798552 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859163.245475 69798552 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1032_PF", "mode": "agent", "steps": 4, "agent_steps": 4, "done": true, "model_calls": 4, "prefills": 0, "prefill_rejected": 0, "final_cid": "0005_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 16.74}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791859180.825570 69802000 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859187.470902 69802000 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1032_PFV", "mode": "agent", "steps": 4, "agent_steps": 4, "done": true, "model_calls": 4, "prefills": 0, "prefill_rejected": 0, "final_cid": "0005_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 18.02}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791859196.312951 69805427 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859201.893668 69805427 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859205.176370 69805427 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859208.525327 69805427 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1032_PFVS", "mode": "agent", "steps": 4, "agent_steps": 4, "done": true, "model_calls": 4, "prefills": 0, "prefill_rejected": 0, "final_cid": "0005_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 18.17}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791859226.569025 69809123 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1032_PFVL", "mode": "agent", "steps": 3, "agent_steps": 3, "done": true, "model_calls": 3, "prefills": 0, "prefill_rejected": 0, "final_cid": "0004_final", "store_episodes": 146, "is_successful": 0.0, "wall_s": 15.15}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791859233.665819 69812292 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859235.186436 69812292 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859240.738971 69812292 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859244.312524 69812292 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1037_PFVL", "mode": "agent", "steps": 3, "agent_steps": 3, "done": true, "model_calls": 3, "prefills": 0, "prefill_rejected": 0, "final_cid": "0004_final", "store_episodes": 146, "is_successful": 0.0, "wall_s": 14.98}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791859262.095518 69815451 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1037_PFVS", "mode": "agent", "steps": 3, "agent_steps": 3, "done": true, "model_calls": 3, "prefills": 0, "prefill_rejected": 0, "final_cid": "0004_final", "store_episodes": 157, "is_successful": 0.0, "wall_s": 15.23}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791859269.538415 69818613 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859275.462290 69818613 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859276.870560 69818613 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1037_PFV", "mode": "agent", "steps": 3, "agent_steps": 3, "done": true, "model_calls": 3, "prefills": 0, "prefill_rejected": 0, "final_cid": "0004_final", "store_episodes": 157, "is_successful": 0.0, "wall_s": 14.98}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791859286.128132 69821825 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859290.481619 69821825 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859297.503985 69821825 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1037_PF", "mode": "agent", "steps": 3, "agent_steps": 3, "done": true, "model_calls": 3, "prefills": 0, "prefill_rejected": 0, "final_cid": "0004_final", "store_episodes": 157, "is_successful": 0.0, "wall_s": 14.33}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791859304.763169 69824942 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859307.755072 69824942 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859310.098032 69824942 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859311.494269 69824942 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1037_BASE", "mode": "agent", "steps": 3, "agent_steps": 3, "done": true, "model_calls": 3, "prefills": 0, "prefill_rejected": 0, "final_cid": "0004_final", "store_episodes": 0, "is_successful": 0.0, "wall_s": 14.3}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791859321.175086 69828178 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859324.093851 69828178 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859325.935819 69828178 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859328.611187 69828178 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859330.029145 69828178 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859331.288729 69828178 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859336.090984 69828178 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1039_BASE", "mode": "agent", "steps": 4, "agent_steps": 4, "done": true, "model_calls": 4, "prefills": 0, "prefill_rejected": 0, "final_cid": "0005_final", "store_episodes": 0, "is_successful": 1.0, "wall_s": 18.19}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791859345.339493 69831843 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859350.993816 69831843 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859357.103377 69831843 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1039_PF", "mode": "agent", "steps": 4, "agent_steps": 4, "done": true, "model_calls": 4, "prefills": 0, "prefill_rejected": 0, "final_cid": "0005_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 17.79}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791859370.755008 69835627 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1039_PFV", "mode": "agent", "steps": 4, "agent_steps": 4, "done": true, "model_calls": 4, "prefills": 0, "prefill_rejected": 0, "final_cid": "0005_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 17.93}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791859389.094717 69839105 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859391.784307 69839105 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859393.233343 69839105 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859394.603486 69839105 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859396.009915 69839105 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859399.367302 69839105 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1039_PFVS", "mode": "agent", "steps": 4, "agent_steps": 4, "done": true, "model_calls": 4, "prefills": 0, "prefill_rejected": 0, "final_cid": "0005_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 18.13}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791859406.773430 69842639 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859408.308139 69842639 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1039_PFVL", "mode": "agent", "steps": 4, "agent_steps": 4, "done": true, "model_calls": 4, "prefills": 0, "prefill_rejected": 0, "final_cid": "0005_final", "store_episodes": 146, "is_successful": 1.0, "wall_s": 18.18}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791861209.726433 70070393 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861211.261589 70070393 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861213.848335 70070393 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861218.013457 70070393 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861221.439809 70070393 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1032_PFVA", "mode": "agent", "steps": 4, "agent_steps": 4, "done": true, "model_calls": 4, "prefills": 0, "prefill_rejected": 0, "final_cid": "0005_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 19.0}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791861229.023882 70073678 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1037_PFVA", "mode": "agent", "steps": 3, "agent_steps": 3, "done": true, "model_calls": 3, "prefills": 0, "prefill_rejected": 0, "final_cid": "0004_final", "store_episodes": 157, "is_successful": 0.0, "wall_s": 15.49}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791861250.064000 70076866 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861253.993982 70076866 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861258.076337 70076866 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861261.886964 70076866 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1039_PFVA", "mode": "agent", "steps": 4, "agent_steps": 4, "done": true, "model_calls": 4, "prefills": 0, "prefill_rejected": 0, "final_cid": "0005_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 19.14}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791862077.054938 70187613 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791862084.023410 70187613 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791862087.440099 70187613 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1032_BASE2", "mode": "agent", "steps": 4, "agent_steps": 4, "done": true, "model_calls": 4, "prefills": 0, "prefill_rejected": 0, "final_cid": "0005_final", "store_episodes": 0, "is_successful": 1.0, "wall_s": 19.34}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791862100.566577 70191322 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791862104.810518 70191322 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791862106.991679 70191322 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1037_BASE2", "mode": "agent", "steps": 4, "agent_steps": 4, "done": true, "model_calls": 4, "prefills": 0, "prefill_rejected": 0, "final_cid": "0005_final", "store_episodes": 0, "is_successful": 1.0, "wall_s": 16.64}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791862113.151386 70194806 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791862121.753672 70194806 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791862123.073942 70194806 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791862124.519702 70194806 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1039_BASE2", "mode": "agent", "steps": 4, "agent_steps": 4, "done": true, "model_calls": 4, "prefills": 0, "prefill_rejected": 0, "final_cid": "0005_final", "store_episodes": 0, "is_successful": 1.0, "wall_s": 18.35}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791863983.284020 70291891 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791863984.555061 70291891 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791863985.629661 70291891 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791863987.054757 70291891 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791863988.600994 70291891 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791863990.292628 70291891 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791863992.257776 70291891 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1011_TG1C", "mode": "agent", "steps": 3, "agent_steps": 3, "done": true, "model_calls": 3, "final_cid": "0015_final", "explore_disabled": "", "n_probes": 5, "is_successful": 0.0, "wall_s": 20.71}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791864002.893614 70296281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864007.999786 70296281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864010.065192 70296281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864011.767677 70296281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864013.336030 70296281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864014.493982 70296281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864015.921143 70296281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1012_TG1C", "mode": "agent", "steps": 3, "agent_steps": 3, "done": true, "model_calls": 3, "final_cid": "0013_final", "explore_disabled": "", "n_probes": 4, "is_successful": 0.0, "wall_s": 20.77}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791864023.326071 70300564 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864026.451731 70300564 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864031.925527 70300564 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864035.788287 70300564 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864037.079840 70300564 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864038.194631 70300564 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864040.863276 70300564 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864042.527963 70300564 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864044.853378 70300564 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864046.367684 70300564 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864048.905192 70300564 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1016_TG1C", "mode": "agent", "steps": 4, "agent_steps": 4, "done": true, "model_calls": 4, "final_cid": "0024_final", "explore_disabled": "", "n_probes": 9, "is_successful": 1.0, "wall_s": 29.99}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791865608.963199 70546869 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865616.094302 70546869 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865617.530024 70546869 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865620.405057 70546869 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1032_BASE3", "mode": "agent", "steps": 4, "agent_steps": 4, "done": true, "model_calls": 4, "prefills": 0, "prefill_rejected": 0, "final_cid": "0005_final", "store_episodes": 0, "is_successful": 1.0, "wall_s": 17.99}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791865633.165452 70550417 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865634.715053 70550417 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865637.269573 70550417 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865640.072014 70550417 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865641.487807 70550417 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865644.663779 70550417 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1032_PFVA2", "mode": "agent", "steps": 4, "agent_steps": 4, "done": true, "model_calls": 4, "prefills": 0, "prefill_rejected": 0, "final_cid": "0005_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 18.03}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791865655.936512 70554029 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1037_PFVA2", "mode": "agent", "steps": 3, "agent_steps": 3, "done": true, "model_calls": 3, "prefills": 0, "prefill_rejected": 0, "final_cid": "0004_final", "store_episodes": 157, "is_successful": 0.0, "wall_s": 15.65}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791865674.577967 70557534 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865678.536296 70557534 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865679.898913 70557534 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1037_BASE3", "mode": "agent", "steps": 4, "agent_steps": 4, "done": true, "model_calls": 4, "prefills": 0, "prefill_rejected": 0, "final_cid": "0005_final", "store_episodes": 0, "is_successful": 1.0, "wall_s": 17.8}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791865696.123016 70561287 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865699.141370 70561287 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865701.964441 70561287 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865703.479325 70561287 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865706.825943 70561287 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+RESULT {"task": "SimpleCalendarEventsOnDate", "variant": "s1039_BASE3", "mode": "agent", "steps": 4, "agent_steps": 4, "done": true, "model_calls": 4, "prefills": 0, "prefill_rejected": 0, "final_cid": "0005_final", "store_episodes": 0, "is_successful": 1.0, "wall_s": 19.36}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.simplemobiletools.calendar.pro.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791865715.378063 70564881 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long

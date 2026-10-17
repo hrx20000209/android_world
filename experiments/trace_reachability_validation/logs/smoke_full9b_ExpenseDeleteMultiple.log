@@ -1,0 +1,22 @@
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1792000121.930211 82342843 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000123.659659 82342843 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000126.883611 82342843 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000131.932788 82342843 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000133.175496 82342843 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000135.123961 82342843 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000136.298981 82342843 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000138.071538 82342843 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792000139.579860 82342843 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseDeleteMultiple", "variant": "smk2", "mode": "agent", "steps": 8, "env_actions": 9, "agent_steps": 9, "done": true, "model_calls": 8, "final_cid": "0021_final", "n_probes": 3, "explore_disabled": "", "store_eps": 0, "m_bootstrap": 1, "m_env_actions_extra": 1, "m_func_apps": 1, "m_func_steps": 1, "m_probes_e1": 0, "m_probes_e2": 0, "m_probes_fx": 3, "m_calls": 8, "m_requery": 1, "m_jump_absent": 0, "m_jump_mismatch": 0, "is_successful": 0.0, "wall_s": 39.41}

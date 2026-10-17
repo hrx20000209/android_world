@@ -38,6 +38,7 @@ CONF_L1, CONF_L2, GAMMA = 0.8, 0.5, 0.7
 # FX candidates are already unknown (page-level dedup), so novelty adds only noise there (offline: beta 0 ->
 # 16 vs 7 controls later clicked by the model; 0.1-0.3 -> 15); novelty is used to choose where to go deeper.
 BETA, BETA_D2 = 0.0, 0.3
+PARAM_W = 1.0     # FULL17: list rows are entity instances; the goal's parameter values are their relevance
 
 _STOP = {"the", "a", "an", "to", "of", "in", "on", "at", "for", "and", "or", "with", "from", "into", "by", "is", "are",
          "be", "it", "this", "that", "my", "me", "i", "you", "your", "all", "following", "app", "please", "using",
@@ -275,9 +276,24 @@ class GraphValue:
 
   def score(self, ui, sl, known_edge_ents=()):
     v, lvl = self.value(ui, sl, known_edge_ents)
+    if sl.sel.get("in_list") and getattr(self, "pvec", None):
+      v += PARAM_W * rel(self.pvec, own_tokens(ui, sl.sel), self.w)
     return v + BETA * self.novelty(sl.sel), v, lvl
 
 
 if __name__ == "__main__":
   out = build_ui_idf()
   print("screens", out["n"], "terms", len(out["df"]))
+
+
+def param_vector(fx):
+  """Parameter side of the goal: the parsed field values (entity names, titles, file names)."""
+  vec = {}
+  if fx is None:
+    return vec
+  for vs in fx.recs.values():
+    for v in vs:
+      for t in tokens(v or ""):
+        if t not in _STOP and t not in _MONTHS:
+          vec[t] = 1.0
+  return vec

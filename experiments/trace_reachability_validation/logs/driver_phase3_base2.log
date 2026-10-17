@@ -1,0 +1,27 @@
+- 10-13 11:19:00 ExpenseDeleteSingle s1031 BASE2 rc=0 succ=1.0 steps=5 probes=None err=None 27s
+- 10-13 11:19:26 ExpenseDeleteSingle s1033 BASE2 rc=0 succ=1.0 steps=5 probes=None err=None 26s
+- 10-13 11:19:52 ExpenseDeleteSingle s1034 BASE2 rc=0 succ=1.0 steps=5 probes=None err=None 26s
+- 10-13 11:20:37 ExpenseAddSingle s1031 BASE2 rc=0 succ=1.0 steps=10 probes=None err=None 44s
+- 10-13 11:21:21 ExpenseAddSingle s1032 BASE2 rc=0 succ=1.0 steps=9 probes=None err=None 44s
+- 10-13 11:22:02 ExpenseAddSingle s1033 BASE2 rc=0 succ=1.0 steps=8 probes=None err=None 41s
+- 10-13 11:22:33 RecipeDeleteSingleRecipe s1031 BASE2 rc=0 succ=1.0 steps=6 probes=None err=None 31s
+- 10-13 11:23:02 RecipeDeleteSingleRecipe s1032 BASE2 rc=0 succ=1.0 steps=6 probes=None err=None 29s
+- 10-13 11:23:32 RecipeDeleteSingleRecipe s1033 BASE2 rc=0 succ=1.0 steps=6 probes=None err=None 30s
+- 10-13 11:24:17 ContactsAddContact s1031 BASE2 rc=0 succ=1.0 steps=9 probes=None err=None 45s
+- 10-13 11:25:03 ContactsAddContact s1032 BASE2 rc=0 succ=1.0 steps=9 probes=None err=None 46s
+- 10-13 11:25:46 ContactsAddContact s1033 BASE2 rc=0 succ=1.0 steps=9 probes=None err=None 43s
+- 10-13 11:26:06 SystemBluetoothTurnOn s1031 BASE2 rc=0 succ=1.0 steps=4 probes=None err=None 20s
+- 10-13 11:26:39 SystemBluetoothTurnOn s1032 BASE2 rc=0 succ=1.0 steps=7 probes=None err=None 32s
+- 10-13 11:26:59 SystemBluetoothTurnOn s1033 BASE2 rc=0 succ=1.0 steps=4 probes=None err=None 20s
+- 10-13 11:27:27 NotesTodoItemCount s1031 BASE2 rc=0 succ=1.0 steps=4 probes=None err=None 28s
+- 10-13 11:27:47 NotesTodoItemCount s1040 BASE2 rc=0 succ=1.0 steps=2 probes=None err=None 20s
+- 10-13 11:28:09 SimpleCalendarEventsOnDate s1032 BASE2 rc=0 succ=1.0 steps=4 probes=None err=None 22s
+- 10-13 11:28:29 SimpleCalendarEventsOnDate s1037 BASE2 rc=0 succ=1.0 steps=4 probes=None err=None 20s
+- 10-13 11:28:50 SimpleCalendarEventsOnDate s1039 BASE2 rc=0 succ=1.0 steps=4 probes=None err=None 21s
+- 10-13 11:29:23 SimpleCalendarDeleteOneEvent s1031 BASE2 rc=0 succ=1.0 steps=7 probes=None err=None 33s
+- 10-13 11:29:57 SimpleCalendarDeleteOneEvent s1032 BASE2 rc=0 succ=1.0 steps=7 probes=None err=None 34s
+- 10-13 11:30:30 SimpleCalendarDeleteOneEvent s1033 BASE2 rc=0 succ=1.0 steps=7 probes=None err=None 33s
+- 10-13 11:31:15 MarkorCreateNote s1031 BASE2 rc=0 succ=0.0 steps=9 probes=None err=None 45s
+- 10-13 11:31:54 MarkorCreateNote s1032 BASE2 rc=0 succ=1.0 steps=7 probes=None err=None 39s
+- 10-13 11:32:40 MarkorCreateNote s1033 BASE2 rc=0 succ=1.0 steps=9 probes=None err=None 45s
+- 10-13 11:32:40 phase3 driver finished

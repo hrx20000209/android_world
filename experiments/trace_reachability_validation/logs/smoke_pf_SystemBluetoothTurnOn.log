@@ -1,0 +1,18 @@
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.android.settings.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791856358.661420 69371442 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856360.042102 69371442 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856361.158974 69371442 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856362.544104 69371442 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856369.809714 69371442 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.android.settings.
+RESULT {"task": "SystemBluetoothTurnOn", "variant": "smokePFV", "mode": "agent", "steps": 4, "agent_steps": 4, "done": true, "model_calls": 3, "prefills": 1, "prefill_rejected": 0, "final_cid": "0006_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 16.12}

@@ -1,0 +1,19 @@
+- 10-13 09:20:33 ExpenseDeleteSingle s1011 RR1 rc=0 succ=1.0 steps=5 probes=7 err=None 40s
+- 10-13 09:21:08 ExpenseDeleteSingle s1012 RR1 rc=0 succ=1.0 steps=5 probes=7 err=None 35s
+- 10-13 09:21:46 ExpenseDeleteSingle s1013 RR1 rc=0 succ=1.0 steps=5 probes=7 err=None 38s
+- 10-13 09:22:24 RecipeDeleteSingleRecipe s1011 RR1 rc=0 succ=1.0 steps=6 probes=9 err=None 39s
+- 10-13 09:23:04 RecipeDeleteSingleRecipe s1012 RR1 rc=0 succ=1.0 steps=6 probes=9 err=None 39s
+- 10-13 09:23:43 RecipeDeleteSingleRecipe s1014 RR1 rc=0 succ=1.0 steps=6 probes=9 err=None 40s
+- 10-13 09:24:08 SimpleCalendarEventsOnDate s1011 RR1 rc=0 succ=0.0 steps=3 probes=4 err=None 24s
+- 10-13 09:24:34 SimpleCalendarEventsOnDate s1012 RR1 rc=0 succ=0.0 steps=3 probes=4 err=None 26s
+- 10-13 09:25:07 SimpleCalendarEventsOnDate s1016 RR1 rc=0 succ=1.0 steps=4 probes=9 err=None 33s
+- 10-13 09:25:36 SystemBluetoothTurnOn s1011 RR1 rc=0 succ=1.0 steps=4 probes=5 err=None 29s
+- 10-13 09:26:05 SystemBluetoothTurnOn s1012 RR1 rc=0 succ=1.0 steps=4 probes=5 err=None 29s
+- 10-13 09:26:34 SystemBluetoothTurnOn s1013 RR1 rc=0 succ=1.0 steps=4 probes=5 err=None 29s
+- 10-13 09:27:02 NotesTodoItemCount s1015 RR1 rc=0 succ=1.0 steps=2 probes=2 err=None 28s
+- 10-13 09:27:39 NotesTodoItemCount s1022 RR1 rc=0 succ=1.0 steps=4 probes=3 err=None 37s
+- 10-13 09:28:15 NotesTodoItemCount s1025 RR1 rc=0 succ=1.0 steps=4 probes=2 err=None 37s
+- 10-13 09:29:18 ContactsAddContact s1011 RR1 rc=0 succ=1.0 steps=9 probes=14 err=None 63s
+- 10-13 09:30:23 ContactsAddContact s1012 RR1 rc=0 succ=1.0 steps=9 probes=14 err=None 65s
+- 10-13 09:31:30 ContactsAddContact s1013 RR1 rc=0 succ=1.0 steps=9 probes=14 err=None 67s
+- 10-13 09:31:30 phase2 driver finished

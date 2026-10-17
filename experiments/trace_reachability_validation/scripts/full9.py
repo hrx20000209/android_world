@@ -328,8 +328,10 @@ class FuncExec:
           cur = set(_toks(n.text))
           if FG.norm(n.text) == FG.norm(val):
             break                     # already filled with this value
-          if n.text and not cur <= lab:
-            break                     # holds other content (typed by the model): never overwrite
+          # the field's text is a hint only if the field's other name evidence (rid, description, caption)
+          # explains it; anything else is content (typed by the model or by a function): never overwrite
+          if n.text and not cur <= edit_label_tokens(ui, n, with_text=False):
+            break
           plan.append((fd, val, n))
           break
     return plan
@@ -342,13 +344,28 @@ class FuncExec:
   def try_form(self, pre, agent, steps, k, own, m, via=None):
     rec = self.next_rec
     self.form_tried = getattr(self, "form_tried", set())
-    if rec >= self._n_recs() or rec in self.form_tried or self.applied_rec is not None or self.model_rec is not None:
-      return 0
-    ui = pre["ui"]
-    plan = self._form_plan(ui, rec)
-    if len(plan) < 2:
-      return 0
-    self.form_tried.add(rec)
+    if getattr(self, "form_retrigger", False):
+      # FULL18: the record's form is filled wherever its empty fields appear (after a library function, after the
+      # model started, after scrolling), once per (record, fields still empty on this screen)
+      if rec >= self._n_recs() or (self.applied_rec is not None and self.applied_rec != rec) or \
+         (self.model_rec is not None and self.model_rec != rec):
+        return 0
+      if sum(1 for fd in self.recs if field_tokens(fd) and self._value(fd, rec) is not None) < 2:
+        return 0
+      plan = self._form_plan(pre["ui"], rec)
+      key = (rec, frozenset(fd for fd, _, _ in plan))
+      if not plan or key in self.form_tried:
+        return 0
+      self.form_tried.add(key)
+      ui = pre["ui"]
+    else:
+      if rec >= self._n_recs() or rec in self.form_tried or self.applied_rec is not None or self.model_rec is not None:
+        return 0
+      ui = pre["ui"]
+      plan = self._form_plan(ui, rec)
+      if len(plan) < 2:
+        return 0
+      self.form_tried.add(rec)
     self.tried.add(rec)
     n, cap = 0, pre
     for j, (fd, val, _) in enumerate(plan):
@@ -565,9 +582,9 @@ def field_tokens(fd):
   return t
 
 
-def edit_label_tokens(ui, n):
+def edit_label_tokens(ui, n, with_text=True):
   """Name of a text field: its hint/text, description, resource-id and the closest caption right above it."""
-  labs = [n.text, n.desc, n.short_rid.replace("_", " ")]
+  labs = ([n.text] if with_text else []) + [n.desc, n.short_rid.replace("_", " ")]
   best = None
   for m in ui.app_nodes():
     if m.editable or not m.visible or not m.text or m is n:
@@ -613,6 +630,8 @@ def field_matches(fd, ui, n, head=None):
   ft, lab = field_tokens(fd), edit_label_tokens(ui, n)
   if not ft:
     return False
+  if fd == head and not ({"title"} <= lab or {"name"} <= lab or ft <= set(_toks(n.short_rid)) | set(_toks(n.desc))):
+    return False          # the record's head is the entity itself: only its own title/name field names it
   if ft <= lab:
     return True
   compact = "".join(_toks(fd))
@@ -722,3 +741,36 @@ def p_reversible(ui, sel, evidence, strength=5.0):
         break
   ok, fail = evidence.get(container_key(ui.package, ui.activity, sel), (0, 0))
   return (strength * p0 + ok) / (strength + ok + fail)
+
+
+
+def edits_changed(ui0, ui1):
+  """Did the text content of the page's editable fields change (same page, a field's text differs)?"""
+  if ui1.activity != ui0.activity:
+    return False
+  e0 = sorted((n.short_rid, n.text or "") for n in ui0.app_nodes() if n.editable)
+  e1 = sorted((n.short_rid, n.text or "") for n in ui1.app_nodes() if n.editable)
+  if not e0 or not e1:
+    return False
+  rid0 = {r for r, _ in e0}
+  return any(r in rid0 and t != dict(e0).get(r) for r, t in e1)
+
+
+
+def relocate_decision(ui_pre, ui_now, action):
+  """FULL21: the model's targeted decision survives a changed screen if the same activity still shows the same
+  control (family + label, unique on the screen); the action is moved to that control's current centre in place."""
+  if ui_now.activity != ui_pre.activity or action.x is None:
+    return False
+  if action.action_type not in ("click", "long_press", "double_tap", "input_text"):
+    return False
+  n0 = U.element_at(ui_pre, int(action.x), int(action.y))
+  if n0 is None:
+    return False
+  fam, lab = C.family_of_sel(U.selector(ui_pre, n0)), U.label_of(ui_pre, n0)
+  same = [n for n in ui_now.app_nodes() if n.visible and C.family_of_sel(U.selector(ui_now, n)) == fam
+          and U.label_of(ui_now, n) == lab]
+  if len(same) != 1:
+    return False
+  action.x, action.y = same[0].center
+  return True

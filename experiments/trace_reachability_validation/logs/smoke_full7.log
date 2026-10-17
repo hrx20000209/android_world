@@ -1,0 +1,32 @@
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.flauschcode.broccoli.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791983754.069543 80899642 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791983756.161458 80899642 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791983760.649105 80899642 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791983762.033146 80899642 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791983768.571001 80899642 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791983769.918666 80899642 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791983771.290396 80899642 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791983772.670021 80899642 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791983774.092296 80899642 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791983776.198060 80899642 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791983778.612664 80899642 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791983779.988110 80899642 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791983782.682869 80899642 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791983784.132247 80899642 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791983786.247166 80899642 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791983788.570452 80899642 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791983789.937275 80899642 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791983791.336053 80899642 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791983792.714971 80899642 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.flauschcode.broccoli.
+RESULT {"task": "RecipeDeleteMultipleRecipes", "variant": "smk", "mode": "agent", "steps": 14, "agent_steps": 14, "done": true, "model_calls": 10, "final_cid": "0017_final", "n_probes": 0, "explore_disabled": "", "store_eps": 0, "m_probes_e1": 0, "m_probes_e2": 0, "m_calls": 10, "m_replays": 2, "m_replay_steps": 4, "m_replay_full": 2, "m_jump_absent": 0, "m_jump_mismatch": 0, "is_successful": 1.0, "wall_s": 48.65}

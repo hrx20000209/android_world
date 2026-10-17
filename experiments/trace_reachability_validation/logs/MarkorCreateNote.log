@@ -1,0 +1,424 @@
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791859959.022337 69926182 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859961.371962 69926182 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859962.802066 69926182 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859965.548417 69926182 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859968.401728 69926182 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859971.133743 69926182 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859972.561932 69926182 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859980.998908 69926182 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859982.362104 69926182 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859985.263259 69926182 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791859990.842808 69926182 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860000.471977 69926182 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+RESULT {"task": "MarkorCreateNote", "variant": "s1031_BASE", "mode": "agent", "steps": 11, "agent_steps": 11, "done": true, "model_calls": 11, "prefills": 0, "prefill_rejected": 0, "final_cid": "0012_final", "store_episodes": 0, "is_successful": 0.0, "wall_s": 50.4}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791860009.356745 69930812 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860011.441814 69930812 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860016.653487 69930812 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860022.426313 69930812 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860033.373309 69930812 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860034.788517 69930812 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860039.010701 69930812 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+RESULT {"task": "MarkorCreateNote", "variant": "s1031_PF", "mode": "agent", "steps": 7, "agent_steps": 7, "done": true, "model_calls": 7, "prefills": 0, "prefill_rejected": 0, "final_cid": "0008_final", "store_episodes": 157, "is_successful": 0.0, "wall_s": 35.18}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791860046.107384 69934282 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860047.469036 69934282 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860059.686126 69934282 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860063.740758 69934282 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860070.572981 69934282 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860071.960271 69934282 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860075.422699 69934282 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+RESULT {"task": "MarkorCreateNote", "variant": "s1031_PFV", "mode": "agent", "steps": 7, "agent_steps": 7, "done": true, "model_calls": 7, "prefills": 0, "prefill_rejected": 0, "final_cid": "0008_final", "store_episodes": 157, "is_successful": 0.0, "wall_s": 33.44}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791860087.215175 69937947 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860093.812676 69937947 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860096.687903 69937947 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860099.482536 69937947 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860100.846915 69937947 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860104.655076 69937947 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860106.052210 69937947 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860109.108098 69937947 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860112.822572 69937947 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+RESULT {"task": "MarkorCreateNote", "variant": "s1031_PFVS", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "prefills": 0, "prefill_rejected": 0, "final_cid": "0010_final", "store_episodes": 157, "is_successful": 0.0, "wall_s": 45.06}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791860134.051592 69942392 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860139.395704 69942392 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860153.382860 69942392 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860157.248757 69942392 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860165.261956 69942392 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+RESULT {"task": "MarkorCreateNote", "variant": "s1031_PFVL", "mode": "agent", "steps": 10, "agent_steps": 10, "done": true, "model_calls": 10, "prefills": 0, "prefill_rejected": 0, "final_cid": "0011_final", "store_episodes": 152, "is_successful": 0.0, "wall_s": 45.39}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791860193.072190 69946630 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860201.487391 69946630 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860205.769288 69946630 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860220.835939 69946630 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+RESULT {"task": "MarkorCreateNote", "variant": "s1032_PFVL", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "prefills": 0, "prefill_rejected": 0, "final_cid": "0010_final", "store_episodes": 152, "is_successful": 0.0, "wall_s": 45.19}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791860234.841781 69951426 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860238.616307 69951426 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860244.465488 69951426 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860254.422139 69951426 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860257.650033 69951426 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860262.607317 69951426 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860263.979280 69951426 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860267.743388 69951426 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+RESULT {"task": "MarkorCreateNote", "variant": "s1032_PFVS", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "prefills": 0, "prefill_rejected": 0, "final_cid": "0010_final", "store_episodes": 157, "is_successful": 0.0, "wall_s": 44.04}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791860278.456603 69956125 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860280.221038 69956125 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860295.638463 69956125 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860299.627182 69956125 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860303.398171 69956125 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860306.033910 69956125 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860308.644727 69956125 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860309.989720 69956125 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+RESULT {"task": "MarkorCreateNote", "variant": "s1032_PFV", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "prefills": 0, "prefill_rejected": 0, "final_cid": "0010_final", "store_episodes": 157, "is_successful": 0.0, "wall_s": 42.59}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791860329.465161 69960587 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860332.542011 69960587 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860335.299850 69960587 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860346.146468 69960587 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860355.002714 69960587 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860356.375206 69960587 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860360.069439 69960587 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+RESULT {"task": "MarkorCreateNote", "variant": "s1032_PF", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "prefills": 0, "prefill_rejected": 0, "final_cid": "0010_final", "store_episodes": 157, "is_successful": 0.0, "wall_s": 43.13}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791860371.065198 69964990 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860372.850698 69964990 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860394.322708 69964990 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860400.768594 69964990 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860403.138048 69964990 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860404.502609 69964990 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860408.144851 69964990 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+RESULT {"task": "MarkorCreateNote", "variant": "s1032_BASE", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "prefills": 0, "prefill_rejected": 0, "final_cid": "0010_final", "store_episodes": 0, "is_successful": 0.0, "wall_s": 44.83}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791860417.225723 69968814 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860418.829156 69968814 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860420.593302 69968814 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860424.077318 69968814 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860426.725947 69968814 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860438.360287 69968814 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860451.308248 69968814 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+RESULT {"task": "MarkorCreateNote", "variant": "s1033_BASE", "mode": "agent", "steps": 8, "agent_steps": 8, "done": true, "model_calls": 8, "prefills": 0, "prefill_rejected": 0, "final_cid": "0009_final", "store_episodes": 0, "is_successful": 0.0, "wall_s": 39.73}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791860472.469677 69972933 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860475.359304 69972933 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860476.768248 69972933 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+RESULT {"task": "MarkorCreateNote", "variant": "s1033_PF", "mode": "agent", "steps": 7, "agent_steps": 7, "done": true, "model_calls": 7, "prefills": 0, "prefill_rejected": 0, "final_cid": "0008_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 34.17}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791860503.140793 69976927 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860507.261948 69976927 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860512.931640 69976927 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860514.354233 69976927 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+RESULT {"task": "MarkorCreateNote", "variant": "s1033_PFV", "mode": "agent", "steps": 6, "agent_steps": 6, "done": true, "model_calls": 6, "prefills": 0, "prefill_rejected": 0, "final_cid": "0007_final", "store_episodes": 157, "is_successful": 0.0, "wall_s": 31.24}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791860533.893734 69980508 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860535.589502 69980508 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860539.376690 69980508 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860541.893659 69980508 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860544.664122 69980508 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860548.924373 69980508 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+RESULT {"task": "MarkorCreateNote", "variant": "s1033_PFVS", "mode": "agent", "steps": 6, "agent_steps": 6, "done": true, "model_calls": 6, "prefills": 0, "prefill_rejected": 0, "final_cid": "0007_final", "store_episodes": 157, "is_successful": 0.0, "wall_s": 30.64}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791860567.152018 69983926 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860577.883483 69983926 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860584.579259 69983926 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860586.980622 69983926 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860594.525911 69983926 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+RESULT {"task": "MarkorCreateNote", "variant": "s1033_PFVL", "mode": "agent", "steps": 7, "agent_steps": 7, "done": true, "model_calls": 7, "prefills": 0, "prefill_rejected": 0, "final_cid": "0008_final", "store_episodes": 152, "is_successful": 1.0, "wall_s": 34.38}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791861372.403599 70095281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861374.044804 70095281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861376.801862 70095281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861380.884137 70095281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861383.694126 70095281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861386.547879 70095281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861387.930609 70095281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861394.732889 70095281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861396.131163 70095281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861399.929988 70095281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861404.498574 70095281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861411.897073 70095281 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+RESULT {"task": "MarkorCreateNote", "variant": "s1031_PFVA", "mode": "agent", "steps": 10, "agent_steps": 10, "done": true, "model_calls": 10, "prefills": 0, "prefill_rejected": 0, "final_cid": "0011_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 46.63}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791861419.244555 70099056 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861422.136057 70099056 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861428.195736 70099056 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861433.679969 70099056 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861436.133367 70099056 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861437.554672 70099056 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861440.960411 70099056 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861443.608157 70099056 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+RESULT {"task": "MarkorCreateNote", "variant": "s1032_PFVA", "mode": "agent", "steps": 7, "agent_steps": 7, "done": true, "model_calls": 7, "prefills": 0, "prefill_rejected": 0, "final_cid": "0008_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 36.6}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791861465.321550 70102479 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861466.766430 70102479 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861469.900865 70102479 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861472.655105 70102479 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861475.253868 70102479 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861479.400741 70102479 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861488.796562 70102479 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861493.644660 70102479 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861497.472733 70102479 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+RESULT {"task": "MarkorCreateNote", "variant": "s1033_PFVA", "mode": "agent", "steps": 10, "agent_steps": 10, "done": true, "model_calls": 10, "prefills": 0, "prefill_rejected": 0, "final_cid": "0011_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 46.25}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791862251.658266 70213352 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791862257.050865 70213352 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791862259.650020 70213352 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791862264.829649 70213352 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791862269.325176 70213352 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791862272.830095 70213352 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+RESULT {"task": "MarkorCreateNote", "variant": "s1031_BASE2", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "prefills": 0, "prefill_rejected": 0, "final_cid": "0010_final", "store_episodes": 0, "is_successful": 0.0, "wall_s": 42.24}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791862288.973538 70216940 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791862291.594528 70216940 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791862294.408062 70216940 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791862298.260485 70216940 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791862300.709781 70216940 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791862303.439832 70216940 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791862311.568695 70216940 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+RESULT {"task": "MarkorCreateNote", "variant": "s1032_BASE2", "mode": "agent", "steps": 7, "agent_steps": 7, "done": true, "model_calls": 7, "prefills": 0, "prefill_rejected": 0, "final_cid": "0008_final", "store_episodes": 0, "is_successful": 1.0, "wall_s": 35.51}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791862325.801471 70220704 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791862331.636699 70220704 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791862338.874973 70220704 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791862342.952774 70220704 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791862344.301124 70220704 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791862346.624391 70220704 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791862349.095917 70220704 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791862352.467956 70220704 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791862353.824146 70220704 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791862357.188421 70220704 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/net.gsantner.markor.
+RESULT {"task": "MarkorCreateNote", "variant": "s1033_BASE2", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "prefills": 0, "prefill_rejected": 0, "final_cid": "0010_final", "store_episodes": 0, "is_successful": 1.0, "wall_s": 42.4}

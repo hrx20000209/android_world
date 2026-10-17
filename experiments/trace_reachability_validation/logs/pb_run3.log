@@ -1,0 +1,56 @@
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+pb0 M0b L|ImageView|top_right_arrow 1.16s 3295
+pb1 M0b L|ImageView|top_right_arrow 1.24s 3489
+pb2 M0b L|ImageView|top_left_arrow 1.13s 3309
+pb3 M0b LONG_PRESS:L|LinearLayout|opoc_filesystem_item__root 3.25s 3085
+pb4 M0b L|ImageView|top_right_arrow 1.23s 3318
+pb5 M0b E|EditText|top_toolbar_search||Search 0.98s 3242
+pb6 M0b L|ImageView|top_right_arrow 1.19s 3290
+pb7 M0b L|ImageView|top_right_arrow 1.29s 3417
+pb8 M0b L|ImageView|top_right_arrow 1.19s 3372
+pb9 M0b STATUS 2.24s 3119
+pb10 M0b E|Spinner|new_file_dialog__type||Plain Text 2.37s 3170
+pb11 M0b E|CardView|||Recipe photo 2.15s 3093
+pb12 M0b E|ImageButton|floating_action_button|Create contact|Create c 1.92s 3092
+pb13 M0b L|View|month_view_background 1.18s 3152
+pb14 M0b TYPE:edt_amount 2.39s 3199
+pb15 M0b E|LinearLayout|||Delete 1.28s 3396
+pb16 M0b TYPE: 1.00s 3224
+pb17 M0b TYPE: 1.01s 3173
+pb18 M0b E|ImageView|btn_delete|| 2.02s 3127
+pb19 M0b E|ImageView||More options|More options 1.24s 3420
+pb20 M0b SWIPE:left 1.15s 3303
+pb21 M0b E|ImageButton||Navigate up|Navigate up 2.38s 3111
+pb22 M0b E|LinearLayout|||Delete 1.03s 3173
+pb23 M0b E|CardView|||Recipe photo 2.08s 3158
+pb24 M0b SWIPE:left 2.28s 3241
+pb25 M0b L|View|month_view_background 1.19s 3148
+pb26 M0b L|View|month_view_background 1.14s 3148
+pb27 M0b L|View|month_view_background 1.25s 3150
+pb28 M0b L|View|month_view_background 1.02s 3147
+pb29 M0b E|Button|button1||OK 0.89s 3141
+pb30 M0b E|LinearLayout|||Connected devices 1.83s 3077
+pb31 M0b E|CardView|||Recipe photo 2.34s 3162
+pb32 M0b E|ViewGroup||| 2.13s 3100
+pb33 M0b TYPE:new_file_dialog__name 2.49s 3114
+pb34 M0b E|ImageButton|fab_add_new_item|Create a new file or folder|C 1.71s 3094
+pb35 M0b E|ImageButton||Navigate up|Navigate up 1.09s 3111
+pb36 M0b E|RelativeLayout|cd_expense||Gym Membership 2.14s 3092
+pb37 M0b L|View|month_view_background 1.08s 3142
+pb38 M0b E|RelativeLayout|cd_expense||ProDev 2.18s 3090
+pb39 M0b LONG_PRESS:L|LinearLayout|opoc_filesystem_item__root 2.74s 3077
+pb40 M0b LONG_PRESS:L|LinearLayout|opoc_filesystem_item__root 2.80s 3085
+pb41 M0b E|TextView|action_delete_selected_items|Delete|Delete 2.26s 3185
+pb42 M0b E|ViewGroup||| 1.13s 3144
+pb43 M0b E|ViewGroup||| 2.16s 3101
+div0 M0b L|View|month_view_background 1.10s 3139
+div1 M0b L|View|month_view_background 1.20s 3251
+div4 M0b L|ImageView|top_right_arrow 2.44s 3236

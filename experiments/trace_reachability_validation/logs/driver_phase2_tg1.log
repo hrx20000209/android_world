@@ -1,0 +1,19 @@
+- 10-13 09:08:24 ExpenseDeleteSingle s1011 TG1 rc=0 succ=1.0 steps=5 probes=7 err=None 38s
+- 10-13 09:08:59 ExpenseDeleteSingle s1012 TG1 rc=0 succ=1.0 steps=5 probes=7 err=None 35s
+- 10-13 09:09:35 ExpenseDeleteSingle s1013 TG1 rc=0 succ=1.0 steps=5 probes=7 err=None 35s
+- 10-13 09:10:13 RecipeDeleteSingleRecipe s1011 TG1 rc=0 succ=1.0 steps=6 probes=9 err=None 38s
+- 10-13 09:10:51 RecipeDeleteSingleRecipe s1012 TG1 rc=0 succ=1.0 steps=6 probes=9 err=None 39s
+- 10-13 09:11:30 RecipeDeleteSingleRecipe s1014 TG1 rc=0 succ=1.0 steps=6 probes=9 err=None 39s
+- 10-13 09:11:54 SimpleCalendarEventsOnDate s1011 TG1 rc=0 succ=0.0 steps=3 probes=4 err=None 24s
+- 10-13 09:12:19 SimpleCalendarEventsOnDate s1012 TG1 rc=0 succ=0.0 steps=3 probes=4 err=None 25s
+- 10-13 09:12:52 SimpleCalendarEventsOnDate s1016 TG1 rc=0 succ=1.0 steps=4 probes=10 err=None 33s
+- 10-13 09:13:20 SystemBluetoothTurnOn s1011 TG1 rc=0 succ=1.0 steps=4 probes=5 err=None 28s
+- 10-13 09:13:48 SystemBluetoothTurnOn s1012 TG1 rc=0 succ=1.0 steps=4 probes=5 err=None 28s
+- 10-13 09:14:16 SystemBluetoothTurnOn s1013 TG1 rc=0 succ=1.0 steps=4 probes=5 err=None 28s
+- 10-13 09:14:44 NotesTodoItemCount s1015 TG1 rc=0 succ=1.0 steps=2 probes=2 err=None 28s
+- 10-13 09:15:30 NotesTodoItemCount s1022 TG1 rc=0 succ=1.0 steps=5 probes=3 err=None 46s
+- 10-13 09:16:09 NotesTodoItemCount s1025 TG1 rc=0 succ=1.0 steps=4 probes=2 err=None 39s
+- 10-13 09:17:12 ContactsAddContact s1011 TG1 rc=0 succ=1.0 steps=9 probes=13 err=None 63s
+- 10-13 09:18:17 ContactsAddContact s1012 TG1 rc=0 succ=1.0 steps=9 probes=14 err=None 65s
+- 10-13 09:19:22 ContactsAddContact s1013 TG1 rc=0 succ=1.0 steps=9 probes=14 err=None 65s
+- 10-13 09:19:22 phase2 driver finished

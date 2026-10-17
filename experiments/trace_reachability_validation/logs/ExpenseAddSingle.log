@@ -1,0 +1,587 @@
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791856830.672282 69451448 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856833.997952 69451448 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856836.082728 69451448 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856837.438809 69451448 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856840.135656 69451448 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856849.083897 69451448 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856853.607830 69451448 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856860.324777 69451448 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Expected row Expense(name='Doctor Visits', amount=3275, category=9, note='I may repeat this', created_date=1697133600000, modified_date=1697133600000, expense_id=-1) not found in the 'after' state.
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseAddSingle", "variant": "s1031_BASE", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "prefills": 0, "prefill_rejected": 0, "final_cid": "0010_final", "store_episodes": 0, "is_successful": 0.0, "wall_s": 39.52}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791856872.294057 69457639 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856875.190445 69457639 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856877.076154 69457639 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856878.528319 69457639 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856893.918348 69457639 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856897.551048 69457639 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856899.962157 69457639 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856901.816007 69457639 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856904.219786 69457639 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856908.230574 69457639 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseAddSingle", "variant": "s1031_PF", "mode": "agent", "steps": 12, "agent_steps": 12, "done": false, "model_calls": 10, "prefills": 2, "prefill_rejected": 0, "final_cid": "0013_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 44.55}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791856922.902336 69463913 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856924.536219 69463913 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856926.778082 69463913 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856928.547673 69463913 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856930.651683 69463913 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856932.696512 69463913 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856934.152261 69463913 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856943.295561 69463913 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856945.869861 69463913 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856951.013413 69463913 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856953.587432 69463913 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856956.336078 69463913 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856957.352281 69463913 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856958.860888 69463913 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856959.903259 69463913 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856961.803457 69463913 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseAddSingle", "variant": "s1031_PFV", "mode": "agent", "steps": 12, "agent_steps": 12, "done": false, "model_calls": 10, "prefills": 2, "prefill_rejected": 0, "final_cid": "0015_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 46.02}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791856973.977563 69471094 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856990.009935 69471094 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856991.418028 69471094 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856994.475956 69471094 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857001.162083 69471094 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857002.554941 69471094 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857006.400860 69471094 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857007.942060 69471094 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857009.980608 69471094 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857011.819251 69471094 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseAddSingle", "variant": "s1031_PFVS", "mode": "agent", "steps": 12, "agent_steps": 12, "done": false, "model_calls": 10, "prefills": 2, "prefill_rejected": 0, "final_cid": "0015_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 46.47}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791857023.826487 69477818 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857029.295848 69477818 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857032.982074 69477818 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857034.653886 69477818 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857046.058268 69477818 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseAddSingle", "variant": "s1031_PFVL", "mode": "agent", "steps": 10, "agent_steps": 10, "done": true, "model_calls": 10, "prefills": 0, "prefill_rejected": 0, "final_cid": "0011_final", "store_episodes": 149, "is_successful": 1.0, "wall_s": 43.23}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791857066.393909 69483863 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857072.167086 69483863 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857073.563686 69483863 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857075.846023 69483863 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857083.653925 69483863 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857095.620660 69483863 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857100.253165 69483863 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseAddSingle", "variant": "s1032_PFVL", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "prefills": 0, "prefill_rejected": 0, "final_cid": "0010_final", "store_episodes": 149, "is_successful": 1.0, "wall_s": 41.48}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791857114.787806 69490002 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857117.598765 69490002 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857119.753928 69490002 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857124.240679 69490002 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857131.647712 69490002 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857135.673941 69490002 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857140.930960 69490002 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857142.583393 69490002 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857146.641450 69490002 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857148.201634 69490002 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857153.500406 69490002 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Expected row Expense(name='Gym Membership', amount=11447, category=9, note='Monthly recurring', created_date=1696708800000, modified_date=1696708800000, expense_id=-1) not found in the 'after' state.
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseAddSingle", "variant": "s1032_PFVS", "mode": "agent", "steps": 12, "agent_steps": 12, "done": false, "model_calls": 10, "prefills": 2, "prefill_rejected": 0, "final_cid": "0015_final", "store_episodes": 157, "is_successful": 0.0, "wall_s": 50.4}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791857169.251962 69496209 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857170.631272 69496209 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857175.220909 69496209 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857180.331317 69496209 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857188.189447 69496209 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857197.272974 69496209 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857199.774424 69496209 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857201.500206 69496209 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857202.684084 69496209 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseAddSingle", "variant": "s1032_PFV", "mode": "agent", "steps": 12, "agent_steps": 12, "done": false, "model_calls": 10, "prefills": 2, "prefill_rejected": 0, "final_cid": "0015_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 49.42}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791857217.525458 69502379 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857220.712747 69502379 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857222.137250 69502379 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857224.971493 69502379 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857226.339534 69502379 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857228.482647 69502379 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857230.289616 69502379 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857239.878936 69502379 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857243.494360 69502379 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857254.430460 69502379 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857256.175638 69502379 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857259.110080 69502379 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseAddSingle", "variant": "s1032_PF", "mode": "agent", "steps": 12, "agent_steps": 12, "done": false, "model_calls": 10, "prefills": 2, "prefill_rejected": 0, "final_cid": "0013_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 46.77}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791857267.220590 69508288 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857268.847896 69508288 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857270.584783 69508288 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857274.115591 69508288 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857278.991078 69508288 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857284.202920 69508288 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857286.402512 69508288 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857288.760757 69508288 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857293.326417 69508288 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857296.056866 69508288 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857297.490851 69508288 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857300.053982 69508288 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857303.618258 69508288 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseAddSingle", "variant": "s1032_BASE", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "prefills": 0, "prefill_rejected": 0, "final_cid": "0010_final", "store_episodes": 0, "is_successful": 1.0, "wall_s": 41.6}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791857310.679812 69514605 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857312.028077 69514605 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857314.153209 69514605 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857319.463425 69514605 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857324.371596 69514605 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseAddSingle", "variant": "s1033_BASE", "mode": "agent", "steps": 8, "agent_steps": 8, "done": true, "model_calls": 8, "prefills": 0, "prefill_rejected": 0, "final_cid": "0009_final", "store_episodes": 0, "is_successful": 1.0, "wall_s": 38.96}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791857357.319449 69520165 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857361.552392 69520165 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857364.345749 69520165 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857369.435593 69520165 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857372.916554 69520165 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857374.595926 69520165 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857380.552426 69520165 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857382.469169 69520165 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857387.463181 69520165 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857388.709905 69520165 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857390.274069 69520165 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857395.231204 69520165 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857399.068949 69520165 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:The length of after 12 is not equal to the length of before 10 + length of added rows 1
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseAddSingle", "variant": "s1033_PF", "mode": "agent", "steps": 12, "agent_steps": 12, "done": false, "model_calls": 10, "prefills": 2, "prefill_rejected": 0, "final_cid": "0013_final", "store_episodes": 157, "is_successful": 0.0, "wall_s": 50.48}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791857410.521147 69526565 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857411.650586 69526565 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857417.986467 69526565 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857421.392700 69526565 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857424.016535 69526565 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857427.599226 69526565 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857430.922183 69526565 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857434.902978 69526565 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857442.629519 69526565 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857452.223384 69526565 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:The length of after 12 is not equal to the length of before 10 + length of added rows 1
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseAddSingle", "variant": "s1033_PFV", "mode": "agent", "steps": 12, "agent_steps": 12, "done": false, "model_calls": 10, "prefills": 2, "prefill_rejected": 0, "final_cid": "0015_final", "store_episodes": 157, "is_successful": 0.0, "wall_s": 51.42}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791857467.781740 69532769 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857472.636354 69532769 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857480.745773 69532769 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857488.674847 69532769 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857490.083341 69532769 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857495.026277 69532769 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857497.535932 69532769 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857499.624796 69532769 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857501.641776 69532769 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:The length of after 12 is not equal to the length of before 10 + length of added rows 1
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseAddSingle", "variant": "s1033_PFVS", "mode": "agent", "steps": 12, "agent_steps": 12, "done": false, "model_calls": 10, "prefills": 2, "prefill_rejected": 0, "final_cid": "0015_final", "store_episodes": 157, "is_successful": 0.0, "wall_s": 48.6}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791857520.271866 69539054 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857525.149851 69539054 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857529.874987 69539054 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857533.763965 69539054 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857538.174865 69539054 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857542.036270 69539054 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseAddSingle", "variant": "s1033_PFVL", "mode": "agent", "steps": 8, "agent_steps": 8, "done": true, "model_calls": 8, "prefills": 0, "prefill_rejected": 0, "final_cid": "0009_final", "store_episodes": 149, "is_successful": 1.0, "wall_s": 36.98}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791860748.654973 70003450 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860750.698669 70003450 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860752.075093 70003450 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860755.133734 70003450 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860758.976842 70003450 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860764.399813 70003450 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860768.817376 70003450 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860780.056242 70003450 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseAddSingle", "variant": "s1031_PFVA", "mode": "agent", "steps": 10, "agent_steps": 10, "done": true, "model_calls": 10, "prefills": 0, "prefill_rejected": 0, "final_cid": "0011_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 42.35}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791860791.139535 70009206 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860798.231515 70009206 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860800.398531 70009206 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860803.270120 70009206 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860808.581728 70009206 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860820.243928 70009206 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860821.638686 70009206 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860823.845385 70009206 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Expected row Expense(name='Gym Membership', amount=11447, category=9, note='Monthly recurring', created_date=1696708800000, modified_date=1696708800000, expense_id=-1) not found in the 'after' state.
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseAddSingle", "variant": "s1032_PFVA", "mode": "agent", "steps": 8, "agent_steps": 8, "done": true, "model_calls": 8, "prefills": 0, "prefill_rejected": 0, "final_cid": "0009_final", "store_episodes": 157, "is_successful": 0.0, "wall_s": 37.89}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791860840.769832 70014558 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860843.583158 70014558 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860848.644204 70014558 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860852.323553 70014558 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860857.089094 70014558 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860862.397864 70014558 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860866.687874 70014558 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseAddSingle", "variant": "s1033_PFVA", "mode": "agent", "steps": 8, "agent_steps": 8, "done": true, "model_calls": 8, "prefills": 0, "prefill_rejected": 0, "final_cid": "0009_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 39.82}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791861598.401983 70120526 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861616.493925 70120526 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861628.375134 70120526 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861630.802166 70120526 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861632.245648 70120526 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861634.862365 70120526 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseAddSingle", "variant": "s1031_BASE2", "mode": "agent", "steps": 10, "agent_steps": 10, "done": true, "model_calls": 10, "prefills": 0, "prefill_rejected": 0, "final_cid": "0011_final", "store_episodes": 0, "is_successful": 1.0, "wall_s": 41.48}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791861643.376229 70126107 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861669.827533 70126107 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861673.879392 70126107 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861678.813822 70126107 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseAddSingle", "variant": "s1032_BASE2", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "prefills": 0, "prefill_rejected": 0, "final_cid": "0010_final", "store_episodes": 0, "is_successful": 1.0, "wall_s": 40.7}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791861687.193145 70131505 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861694.183878 70131505 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861704.092427 70131505 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861707.777858 70131505 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861714.952813 70131505 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861720.080609 70131505 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseAddSingle", "variant": "s1033_BASE2", "mode": "agent", "steps": 8, "agent_steps": 8, "done": true, "model_calls": 8, "prefills": 0, "prefill_rejected": 0, "final_cid": "0009_final", "store_episodes": 0, "is_successful": 1.0, "wall_s": 38.13}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791864583.031418 70402012 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864586.217373 70402012 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864588.274802 70402012 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864589.701099 70402012 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864590.883872 70402012 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864592.349511 70402012 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864594.800204 70402012 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864596.540181 70402012 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864598.938813 70402012 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864605.980277 70402012 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864608.175703 70402012 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864609.613527 70402012 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864616.316250 70402012 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseAddSingle", "variant": "s1031_BASE3", "mode": "agent", "steps": 10, "agent_steps": 10, "done": true, "model_calls": 10, "prefills": 0, "prefill_rejected": 0, "final_cid": "0011_final", "store_episodes": 0, "is_successful": 1.0, "wall_s": 42.46}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791864632.197543 70407679 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864634.676180 70407679 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864636.041368 70407679 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864642.743371 70407679 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864645.321334 70407679 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864647.922788 70407679 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864658.422935 70407679 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864661.778889 70407679 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864663.178981 70407679 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864665.777199 70407679 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseAddSingle", "variant": "s1031_PFVA2", "mode": "agent", "steps": 10, "agent_steps": 10, "done": true, "model_calls": 10, "prefills": 0, "prefill_rejected": 0, "final_cid": "0011_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 42.51}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791864686.271215 70413636 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864705.863226 70413636 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864709.899132 70413636 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Expected row Expense(name='Gym Membership', amount=11447, category=9, note='Monthly recurring', created_date=1696708800000, modified_date=1696708800000, expense_id=-1) not found in the 'after' state.
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseAddSingle", "variant": "s1032_PFVA2", "mode": "agent", "steps": 8, "agent_steps": 8, "done": true, "model_calls": 8, "prefills": 0, "prefill_rejected": 0, "final_cid": "0009_final", "store_episodes": 157, "is_successful": 0.0, "wall_s": 40.78}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791864721.833631 70419109 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864723.872773 70419109 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864725.276102 70419109 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864727.843567 70419109 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864730.646491 70419109 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864747.106711 70419109 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864748.496429 70419109 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Expected row Expense(name='Gym Membership', amount=11447, category=9, note='Monthly recurring', created_date=1696708800000, modified_date=1696708800000, expense_id=-1) not found in the 'after' state.
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseAddSingle", "variant": "s1032_BASE3", "mode": "agent", "steps": 8, "agent_steps": 8, "done": true, "model_calls": 8, "prefills": 0, "prefill_rejected": 0, "final_cid": "0009_final", "store_episodes": 0, "is_successful": 0.0, "wall_s": 39.22}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791864759.923931 70424443 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864768.196185 70424443 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864773.134375 70424443 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864775.977626 70424443 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864778.583144 70424443 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864782.244493 70424443 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864786.620834 70424443 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864791.204689 70424443 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864794.862257 70424443 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseAddSingle", "variant": "s1033_BASE3", "mode": "agent", "steps": 8, "agent_steps": 8, "done": true, "model_calls": 8, "prefills": 0, "prefill_rejected": 0, "final_cid": "0009_final", "store_episodes": 0, "is_successful": 1.0, "wall_s": 38.93}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791864807.001853 70429976 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864815.892416 70429976 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864822.101728 70429976 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseAddSingle", "variant": "s1033_PFVA2", "mode": "agent", "steps": 8, "agent_steps": 8, "done": true, "model_calls": 8, "prefills": 0, "prefill_rejected": 0, "final_cid": "0009_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 40.79}

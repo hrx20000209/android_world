@@ -1,0 +1,20 @@
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791899986.734739 74500176 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791899988.121275 74500176 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791899989.841245 74500176 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791899993.480006 74500176 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791899997.457085 74500176 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791899999.620228 74500176 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791900003.045202 74500176 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseDeleteSingle", "variant": "smk32", "mode": "agent", "steps": 5, "agent_steps": 5, "done": true, "model_calls": 4, "final_cid": "0010_final", "n_probes": 0, "explore_disabled": "", "store_eps": 2, "m_probes_e1": 0, "m_probes_e2": 0, "m_calls": 4, "m_jumps": 2, "m_jump_steps": 1, "m_jump_commit_steps": 1, "m_jump_rejected": 1, "m_jump_absent": 1, "m_jump_mismatch": 1, "is_successful": 1.0, "wall_s": 22.16}

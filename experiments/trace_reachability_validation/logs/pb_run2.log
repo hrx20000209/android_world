@@ -1,0 +1,49 @@
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+pb0 M2pre L|ImageView|top_right_arrow 1.27s 3760
+pb1 M2pre L|ImageView|top_right_arrow 1.31s 3946
+pb2 M2pre L|ImageView|top_right_arrow 1.24s 3774
+pb3 M2pre E|TextView|action_sort|Sort by|Sort by 0.98s 3664
+pb4 M2pre L|ImageView|top_right_arrow 1.24s 3775
+pb5 M2pre L|ImageView|top_right_arrow 1.01s 3707
+pb6 M2pre L|ImageView|top_right_arrow 1.23s 3747
+pb7 M2pre L|ImageView|top_right_arrow 1.23s 3882
+pb8 M2pre L|ImageView|top_right_arrow 1.23s 3807
+pb9 M2pre E|Button|aggregated_stats_button|| 1.08s 3323
+pb10 M2pre E|Spinner|new_file_dialog__type||Plain Text 1.23s 3319
+pb12 M2pre E|ImageButton|floating_action_button|Create contact|Create c 0.97s 3428
+pb13 M2pre L|View|month_view_background 1.23s 3591
+pb14 M2pre TYPE: 0.92s 3387
+pb15 M2pre E|LinearLayout|||Delete 1.20s 3540
+pb16 M2pre TYPE: 1.05s 3568
+pb17 M2pre TYPE: 1.02s 3439
+pb19 M2pre E|ImageView||More options|More options 1.25s 3541
+pb20 M2pre SWIPE:left 1.13s 3465
+pb21 M2pre E|ImageButton||Navigate up|Navigate up 1.19s 3186
+pb22 M2pre E|LinearLayout|||Delete 1.14s 3317
+pb23 M2pre E|CardView|||Recipe photo 1.07s 3239
+pb24 M2pre E|EditText|edt_note||Note 1.14s 3431
+pb25 M2pre L|View|month_view_background 1.21s 3619
+pb26 M2pre L|View|month_view_background 0.68s 3651
+pb27 M2pre L|View|month_view_background 1.26s 3621
+pb28 M2pre L|View|month_view_background 1.21s 3588
+pb29 M2pre E|Button|button1||OK 1.21s 3290
+pb30 M2pre E|LinearLayout|||Connected devices 0.94s 3481
+pb33 M2pre TYPE: 1.06s 3255
+pb34 M2pre E|ImageButton|fab_add_new_item|Create a new file or folder|C 1.01s 3680
+pb35 M2pre E|ImageButton||Navigate up|Navigate up 1.04s 3186
+pb37 M2pre L|View|month_view_background 0.73s 3613
+pb39 M2pre E|TextView|action_sort|Sort by|Sort by 1.28s 3663
+pb40 M2pre E|TextView|action_sort|Sort by|Sort by 1.15s 3671
+pb41 M2pre E|TextView|action_delete_selected_items|Delete|Delete 1.15s 3366
+pb43 M2pre E|ViewGroup||| 1.14s 3242
+div0 M2pre L|View|month_view_background 1.28s 3589
+div1 M2pre L|View|month_view_background 1.25s 3722
+div4 M2pre L|ImageView|top_right_arrow 1.23s 3693

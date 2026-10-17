@@ -1,0 +1,27 @@
+- 10-13 11:04:47 ExpenseDeleteSingle s1031 PFVA rc=0 succ=1.0 steps=5 probes=None err=None 26s
+- 10-13 11:05:14 ExpenseDeleteSingle s1033 PFVA rc=0 succ=1.0 steps=5 probes=None err=None 27s
+- 10-13 11:05:40 ExpenseDeleteSingle s1034 PFVA rc=0 succ=1.0 steps=5 probes=None err=None 26s
+- 10-13 11:06:25 ExpenseAddSingle s1031 PFVA rc=0 succ=1.0 steps=10 probes=None err=None 45s
+- 10-13 11:07:06 ExpenseAddSingle s1032 PFVA rc=0 succ=0.0 steps=8 probes=None err=None 41s
+- 10-13 11:07:48 ExpenseAddSingle s1033 PFVA rc=0 succ=1.0 steps=8 probes=None err=None 43s
+- 10-13 11:08:16 RecipeDeleteSingleRecipe s1031 PFVA rc=0 succ=1.0 steps=6 probes=None err=None 28s
+- 10-13 11:08:43 RecipeDeleteSingleRecipe s1032 PFVA rc=0 succ=1.0 steps=6 probes=None err=None 27s
+- 10-13 11:09:11 RecipeDeleteSingleRecipe s1033 PFVA rc=0 succ=1.0 steps=6 probes=None err=None 27s
+- 10-13 11:09:53 ContactsAddContact s1031 PFVA rc=0 succ=1.0 steps=9 probes=None err=None 42s
+- 10-13 11:10:34 ContactsAddContact s1032 PFVA rc=0 succ=1.0 steps=9 probes=None err=None 41s
+- 10-13 11:11:15 ContactsAddContact s1033 PFVA rc=0 succ=1.0 steps=9 probes=None err=None 41s
+- 10-13 11:11:36 SystemBluetoothTurnOn s1031 PFVA rc=0 succ=1.0 steps=4 probes=None err=None 21s
+- 10-13 11:11:58 SystemBluetoothTurnOn s1032 PFVA rc=0 succ=1.0 steps=4 probes=None err=None 22s
+- 10-13 11:12:30 SystemBluetoothTurnOn s1033 PFVA rc=0 succ=1.0 steps=7 probes=None err=None 32s
+- 10-13 11:12:59 NotesTodoItemCount s1031 PFVA rc=0 succ=1.0 steps=4 probes=None err=None 29s
+- 10-13 11:13:21 NotesTodoItemCount s1040 PFVA rc=0 succ=1.0 steps=2 probes=None err=None 21s
+- 10-13 11:13:43 SimpleCalendarEventsOnDate s1032 PFVA rc=0 succ=1.0 steps=4 probes=None err=None 22s
+- 10-13 11:14:02 SimpleCalendarEventsOnDate s1037 PFVA rc=0 succ=0.0 steps=3 probes=None err=None 18s
+- 10-13 11:14:24 SimpleCalendarEventsOnDate s1039 PFVA rc=0 succ=1.0 steps=4 probes=None err=None 22s
+- 10-13 11:14:58 SimpleCalendarDeleteOneEvent s1031 PFVA rc=0 succ=1.0 steps=7 probes=None err=None 34s
+- 10-13 11:15:32 SimpleCalendarDeleteOneEvent s1032 PFVA rc=0 succ=1.0 steps=7 probes=None err=None 34s
+- 10-13 11:16:05 SimpleCalendarDeleteOneEvent s1033 PFVA rc=0 succ=1.0 steps=7 probes=None err=None 32s
+- 10-13 11:16:54 MarkorCreateNote s1031 PFVA rc=0 succ=1.0 steps=10 probes=None err=None 50s
+- 10-13 11:17:34 MarkorCreateNote s1032 PFVA rc=0 succ=1.0 steps=7 probes=None err=None 40s
+- 10-13 11:18:23 MarkorCreateNote s1033 PFVA rc=0 succ=1.0 steps=10 probes=None err=None 49s
+- 10-13 11:18:23 phase3 driver finished

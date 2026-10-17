@@ -1,0 +1,5 @@
+- 10-14 21:18:36 FULLRUN p0 BASE7 AudioRecorderRecordAudio rc=0 succ=0.0 steps=12 calls=12 jump=0 probes=0 err=None 48s
+- 10-14 21:19:14 FULLRUN p0 FULL7 AudioRecorderRecordAudio rc=0 succ=1.0 steps=8 calls=8 jump=0 probes=0 err=None 38s
+- 10-14 21:20:12 FULLRUN p0 FULL7 AudioRecorderRecordAudioWithFileName rc=0 succ=1.0 steps=12 calls=13 jump=0 probes=1 err=None 58s
+- 10-14 21:21:44 FULLRUN p0 BASE7 AudioRecorderRecordAudioWithFileName rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 92s
+- 10-14 21:22:47 FULLRUN p0 BASE7 BrowserDraw rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 63s

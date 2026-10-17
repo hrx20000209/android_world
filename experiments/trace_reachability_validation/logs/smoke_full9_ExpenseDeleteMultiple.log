@@ -1,0 +1,23 @@
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791999862.729419 82320960 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791999866.197886 82320960 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791999867.493421 82320960 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791999871.466703 82320960 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791999872.695565 82320960 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791999873.736656 82320960 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791999878.179686 82320960 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791999884.267909 82320960 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791999886.201532 82320960 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791999892.339232 82320960 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseDeleteMultiple", "variant": "smk", "mode": "agent", "steps": 13, "env_actions": 15, "agent_steps": 15, "done": true, "model_calls": 12, "final_cid": "0026_final", "n_probes": 2, "explore_disabled": "rollback_failed_x2@2", "store_eps": 0, "m_bootstrap": 1, "m_env_actions_extra": 2, "m_func_apps": 2, "m_func_steps": 3, "m_probes_e1": 0, "m_probes_e2": 0, "m_probes_fx": 2, "m_calls": 12, "m_requery": 2, "m_replays": 1, "m_replay_steps": 1, "m_replay_full": 1, "m_jump_absent": 0, "m_jump_mismatch": 0, "is_successful": 0.0, "wall_s": 55.51}

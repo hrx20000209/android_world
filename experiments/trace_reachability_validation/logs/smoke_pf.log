@@ -1,0 +1,18 @@
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791856298.348549 69365104 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856304.407933 69365104 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856308.510277 69365104 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856312.329583 69365104 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791856317.090892 69365104 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.arduia.expense.
+RESULT {"task": "ExpenseDeleteSingle", "variant": "smokePFV", "mode": "agent", "steps": 5, "agent_steps": 5, "done": true, "model_calls": 5, "prefills": 0, "prefill_rejected": 0, "final_cid": "0006_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 24.7}

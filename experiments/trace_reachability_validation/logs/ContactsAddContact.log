@@ -1,0 +1,1123 @@
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791853290.687050 69034330 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853292.284592 69034330 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853293.858328 69034330 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853295.119891 69034330 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853296.519516 69034330 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853297.839634 69034330 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853301.444184 69034330 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853302.525508 69034330 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853305.032064 69034330 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853306.280569 69034330 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853307.364405 69034330 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853308.937075 69034330 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853310.973174 69034330 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853312.360928 69034330 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853313.796217 69034330 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853314.881117 69034330 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853315.967416 69034330 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853318.768010 69034330 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853320.321206 69034330 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853322.495148 69034330 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853329.758911 69034330 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853334.790427 69034330 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853339.519557 69034330 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853342.239985 69034330 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853346.564443 69034330 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853347.918624 69034330 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853349.336718 69034330 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853351.825553 69034330 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1011_TG", "mode": "agent", "steps": 12, "agent_steps": 12, "done": true, "model_calls": 13, "final_cid": "0049_final", "explore_disabled": "rollback_failed@step4", "n_probes": 8, "is_successful": 1.0, "wall_s": 70.76}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791853364.428622 69043114 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853368.572952 69043114 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853370.056882 69043114 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853372.425428 69043114 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+ERROR:absl:Failed to tap the screen
+E0000 00:00:1791853373.497777 69043114 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853375.377140 69043114 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853377.307036 69043114 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853378.706092 69043114 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853380.959226 69043114 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853388.333977 69043114 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853393.088765 69043114 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853395.437422 69043114 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853396.859154 69043114 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853399.554413 69043114 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853405.430229 69043114 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853411.081998 69043114 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1011_RR", "mode": "agent", "steps": 10, "agent_steps": 10, "done": true, "model_calls": 10, "final_cid": "0019_final", "explore_disabled": "rollback_failed@step1", "n_probes": 2, "is_successful": 1.0, "wall_s": 55.57}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791853423.493602 69048712 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853424.606691 69048712 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853426.647552 69048712 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853430.892554 69048712 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853433.178837 69048712 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853434.568573 69048712 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853441.638248 69048712 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853450.206664 69048712 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853454.708217 69048712 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853458.418317 69048712 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853461.135015 69048712 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853462.740913 69048712 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1012_RR", "mode": "agent", "steps": 11, "agent_steps": 11, "done": true, "model_calls": 12, "final_cid": "0017_final", "explore_disabled": "rollback_failed@step1", "n_probes": 1, "is_successful": 0.0, "wall_s": 52.69}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791853477.764543 69054558 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853481.411124 69054558 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853482.800444 69054558 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853483.806963 69054558 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853484.869894 69054558 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853486.187223 69054558 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853488.593190 69054558 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853489.939683 69054558 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853492.634329 69054558 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853493.997348 69054558 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853496.106319 69054558 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853501.105019 69054558 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853503.369559 69054558 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853505.939413 69054558 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853518.598423 69054558 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1012_TG", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 10, "final_cid": "0019_final", "explore_disabled": "rollback_failed@step1", "n_probes": 2, "is_successful": 0.0, "wall_s": 48.05}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791853530.069330 69059852 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853532.060560 69059852 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853534.141880 69059852 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853535.514446 69059852 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853537.777761 69059852 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853538.998294 69059852 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853542.045785 69059852 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853543.396471 69059852 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853544.763444 69059852 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853546.163070 69059852 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853550.244929 69059852 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853556.716164 69059852 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853558.078706 69059852 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853560.796362 69059852 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853564.912129 69059852 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853566.269712 69059852 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853570.202975 69059852 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853571.484404 69059852 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853575.681175 69059852 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853578.988689 69059852 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1013_TG", "mode": "agent", "steps": 12, "agent_steps": 12, "done": false, "model_calls": 13, "final_cid": "0023_final", "explore_disabled": "rollback_failed@step1", "n_probes": 2, "is_successful": 0.0, "wall_s": 57.29}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791853589.970809 69067535 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853594.070663 69067535 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853595.467310 69067535 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853597.216097 69067535 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853598.512795 69067535 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853599.613830 69067535 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853603.513791 69067535 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853606.243658 69067535 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853608.661554 69067535 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853610.015977 69067535 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853611.795062 69067535 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853613.191639 69067535 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853616.686961 69067535 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853619.478879 69067535 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853624.374774 69067535 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853625.777974 69067535 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853627.244765 69067535 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853628.599281 69067535 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853631.372644 69067535 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853632.747169 69067535 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791853634.155837 69067535 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1013_RR", "mode": "agent", "steps": 12, "agent_steps": 12, "done": false, "model_calls": 13, "final_cid": "0023_final", "explore_disabled": "rollback_failed@step1", "n_probes": 2, "is_successful": 0.0, "wall_s": 51.77}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791854181.004618 69184247 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854182.298631 69184247 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854184.555671 69184247 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854185.617898 69184247 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854187.858413 69184247 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854189.238233 69184247 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854190.620847 69184247 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854191.701336 69184247 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854193.250526 69184247 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854194.704490 69184247 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854195.803037 69184247 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854197.276001 69184247 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854199.077614 69184247 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854200.198263 69184247 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854202.884462 69184247 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854207.806814 69184247 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854215.930273 69184247 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854219.500249 69184247 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854220.869386 69184247 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854222.181870 69184247 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854223.658222 69184247 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854224.790560 69184247 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854226.651213 69184247 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854227.817150 69184247 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1011_TG1", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "final_cid": "0043_final", "explore_disabled": "", "n_probes": 13, "is_successful": 1.0, "wall_s": 59.81}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791854238.641064 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854240.065524 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854243.618761 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854244.640351 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854245.724508 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854247.207333 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854248.417892 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854249.798326 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854253.100523 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854254.158935 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854255.548735 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854256.602351 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854258.100163 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854259.578933 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854260.688916 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854261.940791 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854263.719519 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854264.840019 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854266.509789 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854273.740538 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854275.201099 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854280.620024 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854284.435109 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854285.840653 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854287.000275 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854288.473389 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854289.824447 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854291.649267 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854292.804530 69192003 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1012_TG1", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "final_cid": "0045_final", "explore_disabled": "", "n_probes": 14, "is_successful": 1.0, "wall_s": 61.67}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791854305.233007 69200123 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854306.739972 69200123 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854308.188368 69200123 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854309.536034 69200123 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854310.636055 69200123 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854312.100905 69200123 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854313.141332 69200123 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854314.175937 69200123 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854316.057583 69200123 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854317.501100 69200123 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854319.616759 69200123 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854320.687210 69200123 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854322.175561 69200123 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854323.666436 69200123 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854324.667805 69200123 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854326.116630 69200123 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854328.616367 69200123 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854331.691506 69200123 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854350.651582 69200123 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854351.658790 69200123 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854353.353240 69200123 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854355.539822 69200123 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854356.649284 69200123 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854357.824636 69200123 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854359.609524 69200123 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1013_TG1", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "final_cid": "0045_final", "explore_disabled": "", "n_probes": 14, "is_successful": 1.0, "wall_s": 61.82}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791854898.661603 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854904.746524 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854905.869367 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854907.518921 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854909.168949 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854911.917707 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854913.820576 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854915.286567 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854916.344908 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854917.555033 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854918.658679 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854920.169655 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854921.635273 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854923.348301 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854925.072605 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854926.836413 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854930.278384 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854932.594060 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854935.196359 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854937.462666 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854941.506429 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854945.675645 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854947.101187 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854948.460340 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854949.693927 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854950.873343 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854952.620630 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854953.741153 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854955.515449 69313289 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1011_RR1", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "final_cid": "0045_final", "explore_disabled": "", "n_probes": 14, "is_successful": 1.0, "wall_s": 59.6}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791854964.550892 69320001 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854970.627269 69320001 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854972.584316 69320001 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854974.334066 69320001 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854975.425710 69320001 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854978.505212 69320001 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854980.516013 69320001 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854981.935113 69320001 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854984.490549 69320001 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854985.971334 69320001 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854986.988698 69320001 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854988.459955 69320001 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854990.153650 69320001 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854991.310613 69320001 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854994.067008 69320001 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854996.256472 69320001 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791854998.830431 69320001 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855007.950906 69320001 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855010.810696 69320001 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855012.168745 69320001 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855015.286271 69320001 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855016.670539 69320001 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855017.843191 69320001 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855019.157548 69320001 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1012_RR1", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "final_cid": "0045_final", "explore_disabled": "", "n_probes": 14, "is_successful": 1.0, "wall_s": 62.13}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791855030.093695 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855033.438704 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855034.541757 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855035.622865 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855037.036768 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855038.686382 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855039.719713 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855040.762333 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855042.758138 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855044.183538 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855045.237920 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855046.617480 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855047.721171 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855049.339351 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855050.817964 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855052.666381 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855054.296883 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855055.506425 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855056.704964 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855064.526552 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855067.638241 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855074.557865 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855079.400441 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855080.431716 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855081.596629 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855082.849577 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855084.580812 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855085.674281 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791855087.443421 69327476 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1013_RR1", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "final_cid": "0045_final", "explore_disabled": "", "n_probes": 14, "is_successful": 1.0, "wall_s": 63.58}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791857965.415242 69610998 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857967.570086 69610998 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857972.941385 69610998 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857975.474749 69610998 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857980.510481 69610998 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791857983.100984 69610998 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858001.105228 69610998 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1031_BASE", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "prefills": 0, "prefill_rejected": 0, "final_cid": "0010_final", "store_episodes": 0, "is_successful": 1.0, "wall_s": 43.29}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791858008.230784 69614104 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858011.671974 69614104 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858013.110616 69614104 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858016.006574 69614104 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858017.403088 69614104 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858022.484223 69614104 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858027.450197 69614104 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858031.181941 69614104 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1031_PF", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 8, "prefills": 1, "prefill_rejected": 0, "final_cid": "0010_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 40.63}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791858051.892021 69617131 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858056.463091 69617131 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858061.367108 69617131 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858071.372778 69617131 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858080.415563 69617131 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858088.431914 69617131 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1031_PFV", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 8, "prefills": 1, "prefill_rejected": 0, "final_cid": "0011_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 40.61}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791858095.541702 69620280 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858098.692059 69620280 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858100.251388 69620280 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858105.083010 69620280 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858110.225557 69620280 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858128.847220 69620280 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1031_PFVS", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 8, "prefills": 1, "prefill_rejected": 0, "final_cid": "0011_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 41.52}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791858140.150146 69623197 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858145.947945 69623197 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858147.724362 69623197 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858151.320818 69623197 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858156.930272 69623197 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858165.627499 69623197 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858168.263660 69623197 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858171.023752 69623197 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858177.915866 69623197 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1031_PFVL", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "prefills": 0, "prefill_rejected": 0, "final_cid": "0010_final", "store_episodes": 139, "is_successful": 1.0, "wall_s": 41.82}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791858186.755468 69626280 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858195.326837 69626280 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858199.140503 69626280 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858216.473004 69626280 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1032_PFVL", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "prefills": 0, "prefill_rejected": 0, "final_cid": "0010_final", "store_episodes": 139, "is_successful": 1.0, "wall_s": 41.39}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791858229.618670 69629353 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858232.982955 69629353 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858234.243393 69629353 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858239.075143 69629353 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858241.576718 69629353 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858244.187194 69629353 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858246.492628 69629353 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858249.240400 69629353 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858251.501889 69629353 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858262.854375 69629353 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858266.970856 69629353 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1032_PFVS", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 8, "prefills": 1, "prefill_rejected": 0, "final_cid": "0011_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 41.39}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791858280.547084 69632719 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858284.700800 69632719 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858286.895721 69632719 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858288.437593 69632719 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858295.970622 69632719 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858297.399229 69632719 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858300.108280 69632719 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858301.763623 69632719 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858305.926333 69632719 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858310.442745 69632719 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1032_PFV", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 8, "prefills": 1, "prefill_rejected": 0, "final_cid": "0011_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 41.0}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791858319.415289 69635972 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858322.848294 69635972 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858326.617301 69635972 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858328.068473 69635972 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858332.803449 69635972 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858334.018135 69635972 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858335.592124 69635972 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858344.813842 69635972 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858348.576482 69635972 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1032_PF", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 8, "prefills": 1, "prefill_rejected": 0, "final_cid": "0010_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 37.13}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791858364.917041 69639500 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858368.707673 69639500 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858370.112804 69639500 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858373.822121 69639500 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858378.635639 69639500 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858385.705924 69639500 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858395.857941 69639500 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1032_BASE", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "prefills": 0, "prefill_rejected": 0, "final_cid": "0010_final", "store_episodes": 0, "is_successful": 1.0, "wall_s": 40.51}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791858402.996194 69642846 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858406.200962 69642846 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858409.759174 69642846 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858413.161358 69642846 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858414.642649 69642846 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858416.808991 69642846 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858418.313155 69642846 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858423.884537 69642846 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858426.303493 69642846 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858430.597362 69642846 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858433.311748 69642846 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858436.365882 69642846 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858442.006679 69642846 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1033_BASE", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "prefills": 0, "prefill_rejected": 0, "final_cid": "0010_final", "store_episodes": 0, "is_successful": 1.0, "wall_s": 43.04}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791858452.977734 69646487 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858454.461868 69646487 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858456.704524 69646487 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858458.104084 69646487 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858460.104919 69646487 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858461.606082 69646487 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858466.569363 69646487 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858470.358688 69646487 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858475.782832 69646487 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858477.282115 69646487 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858478.656627 69646487 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1033_PF", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 8, "prefills": 1, "prefill_rejected": 0, "final_cid": "0010_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 37.47}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791858495.049705 69649648 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858496.707732 69649648 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858498.767441 69649648 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858500.156613 69649648 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858507.951132 69649648 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858510.387350 69649648 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858511.800874 69649648 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858514.545469 69649648 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858521.228746 69649648 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1033_PFV", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 8, "prefills": 1, "prefill_rejected": 0, "final_cid": "0011_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 39.04}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791858532.195560 69652761 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858533.859791 69652761 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858535.332900 69652761 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858541.164251 69652761 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858546.987422 69652761 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858549.651079 69652761 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858552.063992 69652761 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858553.487271 69652761 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858566.139983 69652761 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1033_PFVS", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 8, "prefills": 1, "prefill_rejected": 0, "final_cid": "0011_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 37.96}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791858575.057135 69655675 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858576.718700 69655675 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858582.899316 69655675 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858584.285569 69655675 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858592.798961 69655675 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858595.794769 69655675 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858597.221823 69655675 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858604.303812 69655675 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858605.651425 69655675 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791858609.838626 69655675 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1033_PFVL", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "prefills": 0, "prefill_rejected": 0, "final_cid": "0010_final", "store_episodes": 139, "is_successful": 1.0, "wall_s": 41.46}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791860959.981189 70034446 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860961.390028 70034446 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860965.253102 70034446 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860970.140053 70034446 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860973.162499 70034446 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791860990.885485 70034446 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1031_PFVA", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 8, "prefills": 1, "prefill_rejected": 0, "final_cid": "0011_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 39.13}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791861005.755806 70038018 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861007.159294 70038018 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861013.231643 70038018 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861014.798950 70038018 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861028.264254 70038018 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1032_PFVA", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 8, "prefills": 1, "prefill_rejected": 0, "final_cid": "0011_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 37.81}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791861044.085257 70040874 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861047.457044 70040874 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861062.359410 70040874 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861065.084481 70040874 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1033_PFVA", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 8, "prefills": 1, "prefill_rejected": 0, "final_cid": "0011_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 37.98}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791861817.306636 70150389 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861824.449665 70150389 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861826.801888 70150389 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861828.199645 70150389 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861830.597953 70150389 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861833.274811 70150389 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861838.293573 70150389 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861849.073234 70150389 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861850.474192 70150389 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861854.881984 70150389 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1031_BASE2", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "prefills": 0, "prefill_rejected": 0, "final_cid": "0010_final", "store_episodes": 0, "is_successful": 1.0, "wall_s": 41.83}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791861868.740822 70153466 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861870.594996 70153466 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861872.609844 70153466 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861874.022535 70153466 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861877.785406 70153466 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861880.151393 70153466 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861882.717192 70153466 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861884.970065 70153466 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861886.393843 70153466 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861896.867497 70153466 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861900.994395 70153466 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1032_BASE2", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "prefills": 0, "prefill_rejected": 0, "final_cid": "0010_final", "store_episodes": 0, "is_successful": 1.0, "wall_s": 42.89}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791861913.436840 70156579 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861914.863375 70156579 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861918.633574 70156579 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861922.317172 70156579 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861924.665330 70156579 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791861944.300159 70156579 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1033_BASE2", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "prefills": 0, "prefill_rejected": 0, "final_cid": "0010_final", "store_episodes": 0, "is_successful": 1.0, "wall_s": 40.22}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791864237.937917 70352041 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864240.100162 70352041 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864241.496597 70352041 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864242.876273 70352041 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864243.929973 70352041 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864244.942908 70352041 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864246.825307 70352041 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864248.275489 70352041 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864249.397303 70352041 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864250.805540 70352041 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864252.674818 70352041 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864254.147197 70352041 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864255.630238 70352041 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864257.066106 70352041 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864258.148470 70352041 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864259.549141 70352041 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864262.186358 70352041 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864276.587377 70352041 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864280.337173 70352041 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864283.071234 70352041 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864284.274119 70352041 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864285.481578 70352041 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864287.283314 70352041 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864288.436037 70352041 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1011_TG1C", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "final_cid": "0045_final", "explore_disabled": "", "n_probes": 14, "is_successful": 1.0, "wall_s": 59.68}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791864299.250750 70359042 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864304.161478 70359042 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864305.495280 70359042 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864307.251264 70359042 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864308.278796 70359042 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864310.439367 70359042 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864311.888010 70359042 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864312.968871 70359042 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864314.364707 70359042 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864315.700456 70359042 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864317.202092 70359042 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864318.692266 70359042 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864319.815595 70359042 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864321.277938 70359042 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864323.084329 70359042 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864324.506101 70359042 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864326.101431 70359042 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864337.379327 70359042 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864343.018950 70359042 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864344.411106 70359042 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864348.336009 70359042 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864350.139672 70359042 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864351.657066 70359042 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864353.431102 70359042 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1012_TG1C", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "final_cid": "0045_final", "explore_disabled": "", "n_probes": 14, "is_successful": 1.0, "wall_s": 60.08}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791864364.276063 70366272 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864365.387513 70366272 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864367.210390 70366272 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864368.562090 70366272 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864370.290728 70366272 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864371.320370 70366272 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864373.171205 70366272 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864374.644191 70366272 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864375.997829 70366272 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864377.465276 70366272 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864379.441632 70366272 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864381.016942 70366272 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864382.143300 70366272 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864383.326905 70366272 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864385.040928 70366272 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864386.175383 70366272 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864397.700948 70366272 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864400.585163 70366272 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864403.315587 70366272 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864406.346121 70366272 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864407.748205 70366272 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864409.490676 70366272 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864411.213832 70366272 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864413.254295 70366272 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864414.369629 70366272 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791864416.135014 70366272 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1013_TG1C", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "final_cid": "0045_final", "explore_disabled": "", "n_probes": 14, "is_successful": 1.0, "wall_s": 59.32}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791865022.414028 70464167 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865023.916329 70464167 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865026.000653 70464167 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865031.174612 70464167 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865034.824415 70464167 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865037.447950 70464167 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865039.815306 70464167 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865042.411208 70464167 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865049.106000 70464167 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865051.837035 70464167 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865053.389812 70464167 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865058.869150 70464167 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1031_BASE3", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "prefills": 0, "prefill_rejected": 0, "final_cid": "0010_final", "store_episodes": 0, "is_successful": 1.0, "wall_s": 42.68}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791865069.955406 70467488 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865072.176365 70467488 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865074.272217 70467488 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865075.671984 70467488 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865080.895377 70467488 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865085.712262 70467488 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865089.424618 70467488 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865104.823563 70467488 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1031_PFVA2", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 8, "prefills": 1, "prefill_rejected": 0, "final_cid": "0011_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 42.85}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791865114.245688 70471118 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865118.628998 70471118 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865122.774105 70471118 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865128.263948 70471118 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865130.936925 70471118 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865132.445558 70471118 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865143.392974 70471118 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865149.287445 70471118 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1032_PFVA2", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 8, "prefills": 1, "prefill_rejected": 0, "final_cid": "0011_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 41.64}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791865157.379573 70474483 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865158.747084 70474483 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865160.926105 70474483 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865164.621242 70474483 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865168.105102 70474483 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865170.172450 70474483 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865172.700052 70474483 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865174.891387 70474483 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865176.400641 70474483 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865179.998467 70474483 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865182.650399 70474483 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865185.366671 70474483 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1032_BASE3", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "prefills": 0, "prefill_rejected": 0, "final_cid": "0010_final", "store_episodes": 0, "is_successful": 1.0, "wall_s": 39.68}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791865200.094166 70477834 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865207.199406 70477834 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865211.034192 70477834 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865213.175038 70477834 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865214.708093 70477834 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865223.833630 70477834 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865227.028177 70477834 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865232.441997 70477834 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865233.833062 70477834 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1033_BASE3", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 9, "prefills": 0, "prefill_rejected": 0, "final_cid": "0010_final", "store_episodes": 0, "is_successful": 1.0, "wall_s": 42.09}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1791865248.461663 70481166 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865252.771334 70481166 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865256.823599 70481166 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865259.728117 70481166 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865270.293812 70481166 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865272.985334 70481166 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865275.745693 70481166 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865278.338422 70481166 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865279.724842 70481166 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1791865283.378917 70481166 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.google.android.contacts.
+RESULT {"task": "ContactsAddContact", "variant": "s1033_PFVA2", "mode": "agent", "steps": 9, "agent_steps": 9, "done": true, "model_calls": 8, "prefills": 1, "prefill_rejected": 0, "final_cid": "0011_final", "store_episodes": 157, "is_successful": 1.0, "wall_s": 41.73}
