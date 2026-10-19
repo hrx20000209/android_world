@@ -106,7 +106,9 @@ def model_steps(arm, raw):
 def run(arm, variant):
   raw, goals, ev = events(arm)
   steps = model_steps(arm, raw)
-  use = {"infer": variant in ("infer", "mixed"), "explore": variant in ("explore", "mixed")}
+  use = {"infer": variant in ("infer", "mixed", "unified", "unified2"), "explore": variant in ("explore", "mixed", "unified", "unified2")}
+  intent_from = {"infer": variant != "explore", "explore": variant in ("explore", "mixed")}
+  depth = 2 if variant == "unified2" else 1
   # incremental state per task-exclusion is expensive; keep per-task contributions and subtract at query time
   content = {}                                    # node -> content vector (latest capture)
   ctx = defaultdict(lambda: defaultdict(Counter))  # node -> task -> context vector (weighted goal terms)
@@ -126,9 +128,10 @@ def run(arm, variant):
         ui = EV.load_cap(raw, ent[0], ent[1])
         if ui is not None:
           content[dst] = content_vec(ui)
-      w = W_INFER if org == "infer" else W_EXPLORE
-      for term, x in goals.get(tk, {}).items():
-        ctx[dst][tk][term] += w * x
+      if intent_from[org]:
+        w = W_INFER if org == "infer" else W_EXPLORE
+        for term, x in goals.get(tk, {}).items():
+          ctx[dst][tk][term] += w * x
     stats["nav"] += 1
     g = goals.get(task, {})
     cands = {fam: dsts for fam, dsts in out_edges.get(P, {}).items() if edge_tasks[(P, fam)] - {task}}
@@ -154,12 +157,20 @@ def run(arm, variant):
     def rel(n):
       return cos(g, node_vec(n))
 
-    def backed(n):
+    memo = {}
+
+    def backed(n, dleft=None, seen=None):
+      dleft = depth if dleft is None else dleft
+      if (n, dleft) in memo:
+        return memo[(n, dleft)]
+      seen = (seen or set()) | {n}
       best = rel(n)
-      for f2, ds in out_edges.get(n, {}).items():
-        for n2 in ds:
-          if n2 != n:
-            best = max(best, GAMMA * rel(n2))
+      if dleft > 0:
+        for f2, ds in out_edges.get(n, {}).items():
+          for n2 in ds:
+            if n2 not in seen:
+              best = max(best, GAMMA * backed(n2, dleft - 1, seen))
+      memo[(n, dleft)] = best
       return best
 
     scored = sorted(((max(backed(n) for n in ds), f) for f, ds in cands.items()), reverse=True)
@@ -205,5 +216,5 @@ def run(arm, variant):
 
 if __name__ == "__main__":
   for arm in sys.argv[1:]:
-    for variant in ("infer", "explore", "mixed"):
+    for variant in ("infer", "mixed", "unified", "unified2"):
       run(arm, variant)

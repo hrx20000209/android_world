@@ -8,5 +8,5 @@
 
 ## full_results（2026-10-17 追加）
 
-- `full_results/<ARM>_p0.json`：各实验臂单轮（seed 30）的每题结果摘要，`{task: {goal, result}}`，`result` 即 `raw/full/<ARM>/<task>/p0/result.json`（含 `is_successful`、`model_calls`、`steps`、各机制计数 `m_*`）。覆盖 BASE、FULL7–FULL21R；FULL22 运行中未包含。
+- `full_results/<ARM>_p0.json`：各实验臂单轮（seed 30）的每题结果摘要，`{task: {goal, result}}`，`result` 即 `raw/full/<ARM>/<task>/p0/result.json`（含 `is_successful`、`model_calls`、`steps`、各机制计数 `m_*`）。覆盖 BASE、FULL7–FULL29X（2026-10-19 更新）；FULL30 运行中未包含。
 - 完整逐步记录（steps/windows/probes 等，各臂约 10–40MB）与全局图快照未提交，仍在本机 `raw/full/` 与 `graph_snapshots/full/`。

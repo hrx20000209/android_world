@@ -312,6 +312,8 @@ class FuncExec:
   # named by those fields: type(field_1) ... type(field_n), stop before the commit. The entry screen of this
   # function is grounded from the screen itself (live, or a destination capture in the graph), not from history.
   def _form_plan(self, ui, rec):
+    if getattr(self, "form_v2", False):
+      return self._form_plan_v2(ui, rec)
     edits = [n for n in ui.app_nodes() if n.editable and n.visible]
     plan, used = [], set()
     head = next(iter(self.recs), None)
@@ -336,6 +338,28 @@ class FuncExec:
           break
     return plan
 
+  def _form_plan_v2(self, ui, rec):
+    """FULL28: hint-aware emptiness, field synonyms, file-name fields; a field is filled only when exactly one
+    empty text field on the screen is named by it."""
+    edits = [n for n in ui.app_nodes() if n.editable and n.visible]
+    head = next(iter(self.recs), None)
+    plan, used = [], set()
+    v3 = getattr(self, "form_v3", False)
+    filled = getattr(self, "form_filled", set())
+    for fd in self.recs:
+      val = self._value(fd, rec)
+      if val is None or (v3 and (rec, fd) in filled):
+        continue                           # FULL29: each field of a record is typed at most once
+      cands = [n for n in edits if n.idx not in used and field_matches_v2(fd, ui, n, head, self.P.get("verb"), v3)]
+      if len(cands) != 1:
+        continue
+      n = cands[0]
+      used.add(n.idx)
+      if FG.norm(n.text) == FG.norm(val) or not edit_is_empty(n):
+        continue
+      plan.append((fd, val, n))
+    return plan
+
   def form_pending(self):
     rec = self.next_rec
     return (rec < self._n_recs() and rec not in getattr(self, "form_tried", set()) and self.applied_rec is None
@@ -350,13 +374,15 @@ class FuncExec:
       if rec >= self._n_recs() or (self.applied_rec is not None and self.applied_rec != rec) or \
          (self.model_rec is not None and self.model_rec != rec):
         return 0
-      if sum(1 for fd in self.recs if field_tokens(fd) and self._value(fd, rec) is not None) < 2:
+      min_fields = 1 if getattr(self, "form_v2", False) else 2
+      if sum(1 for fd in self.recs if (field_tokens(fd) or fd.startswith("file:")) and self._value(fd, rec) is not None) < min_fields:
         return 0
       plan = self._form_plan(pre["ui"], rec)
       key = (rec, frozenset(fd for fd, _, _ in plan))
       if not plan or key in self.form_tried:
         return 0
       self.form_tried.add(key)
+      self.form_filled = getattr(self, "form_filled", set()) | {(rec, fd) for fd, _, _ in plan}
       ui = pre["ui"]
     else:
       if rec >= self._n_recs() or rec in self.form_tried or self.applied_rec is not None or self.model_rec is not None:
@@ -372,12 +398,16 @@ class FuncExec:
       if j > 0:
         cap = self.ep.dev.capture(f"s{k}_form{j}", settle=True, pause=0.6, full_res=True)
       live = cap["ui"]
-      node = next((x for x in live.app_nodes() if x.editable and x.visible and field_matches(fd, live, x, next(iter(self.recs), None))), None)
+      node = next((x for x in live.app_nodes() if x.editable and x.visible and
+                   ((lambda a1, a2, a3, a4: field_matches_v2(a1, a2, a3, a4, self.P.get("verb"))) if getattr(self, "form_v2", False)
+                    else field_matches)(fd, live, x, next(iter(self.recs), None))), None)
       if node is None and live.ime_visible():
         agent._execute_action(json_action.JSONAction(action_type="navigate_back"), {})  # pylint: disable=protected-access
         cap = self.ep.dev.capture(f"s{k}_form{j}_noime", settle=True, pause=0.6, full_res=True)
         live = cap["ui"]
-        node = next((x for x in live.app_nodes() if x.editable and x.visible and field_matches(fd, live, x, next(iter(self.recs), None))), None)
+        node = next((x for x in live.app_nodes() if x.editable and x.visible and
+                   ((lambda a1, a2, a3, a4: field_matches_v2(a1, a2, a3, a4, self.P.get("verb"))) if getattr(self, "form_v2", False)
+                    else field_matches)(fd, live, x, next(iter(self.recs), None))), None)
       if node is None:
         break
       x, y = node.center
@@ -774,3 +804,35 @@ def relocate_decision(ui_pre, ui_now, action):
     return False
   action.x, action.y = same[0].center
   return True
+
+
+
+FIELD_SYNONYMS = {"number": {"phone", "number", "tel"}, "phone": {"phone", "number"}, "last": {"surname", "last"},
+                  "message": {"message", "body", "text", "editor", "compose", "content"},
+                  "content": {"content", "editor", "body", "text", "message"},
+                  "text": {"text", "editor", "body", "content"}, "txt": {"editor", "body", "content"},
+                  "titled": {"name", "title"}}
+
+
+def edit_is_empty(n):
+  """A text field is empty when it has no text or shows only its hint."""
+  return (not n.text) or bool(n.hint and FG.norm(n.text) == FG.norm(n.hint))
+
+
+def field_matches_v2(fd, ui, n, head=None, verb=None, strict_head=False):
+  lab = edit_label_tokens(ui, n) | set(_toks(getattr(n, "hint", "")))
+  if fd == "number":
+    # a bare number parsed from a date or a name is a parameter only where the field asks for a number
+    return bool(lab & {"phone", "tel", "number"})
+  if fd.startswith("file:"):
+    # a file named in the goal is the thing to create only for creating verbs; otherwise it is a source file
+    return verb in ("add", "create", "record", "save") and "name" in lab
+  if field_matches(fd, ui, n, head):
+    return True
+  ft = field_tokens(fd)
+  if not ft:
+    return False
+  if fd == head and not ({"title"} <= lab or {"name"} <= lab):
+    # FULL29: the record's head is its title; a field that merely mentions the head word ("Recipe source") is not it
+    return False if strict_head else bool(ft <= lab)
+  return all(lab & FIELD_SYNONYMS.get(x, {x}) for x in ft)

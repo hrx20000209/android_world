@@ -49,8 +49,8 @@ class _Ep:
 
 
 class TermMatrix:
-  def __init__(self, graph_path: Path, raw: Path, task: str):
-    self.path, self.raw, self.task = graph_path, raw, task
+  def __init__(self, graph_path: Path, raw: Path, task: str, w_explore: float = W_EXPLORE):
+    self.path, self.raw, self.task, self.w_explore = graph_path, raw, task, w_explore
     self.offset = 0
     self.goals = {}
     self.content = {}
@@ -109,7 +109,7 @@ class TermMatrix:
               v[t] += EV.w_ui(t)
             self.content[dst] = _unit(v)
         if task != self.task:
-          w = W_EXPLORE if o.get("origin") == "explore" else W_INFER
+          w = self.w_explore if o.get("origin") == "explore" else W_INFER
           for t, x in self._goal(task).items():
             self.ctx[dst][t] += w * x
 
@@ -191,3 +191,31 @@ def traffic(tm, ui):
   """How many tasks' trajectories passed through this page (soft-matched)."""
   P, _ = soft_page(tm, ui)
   return len(tm.page_tasks.get(P, ()))
+
+
+
+def draft(tm, ui, g, margin=0.2):
+  """FULL27 speculation draft: the navigation control the model is most likely to choose on this page, from
+  inference-validated intent over the joint transition graph. Returns (slot, fam, predicted activity) or None."""
+  tm.update()
+  P, _ = soft_page(tm, ui)
+  slots = U.enumerate_slots(ui)
+  fams = Counter(C.family_of_sel(t.sel) for t in slots)
+  cands = {f: ds for f, ds in tm.out.get(P, {}).items() if fams.get(f, 0) and (tm.edge_tasks[(P, f)] - {tm.task})}
+  if not cands:
+    return None
+  scored = sorted(((max(tm.backed(n, g) for n in ds), f) for f, ds in cands.items()), reverse=True)
+  top, fam = scored[0]
+  second = scored[1][0] if len(scored) > 1 else 0.0
+  if top <= 0 or top - second < margin or fams[fam] != 1:
+    return None
+  acts = Counter()
+  for d, c in cands[fam].items():
+    acts[d[1]] += c
+  act, n_act = acts.most_common(1)[0]
+  if n_act / sum(acts.values()) < 0.9:
+    return None
+  sl = next(t for t in slots if C.family_of_sel(t.sel) == fam)
+  if not sl.safe or sl.sel.get("in_list") or full9.effectful(sl.sel) or sl.unsafe_reason in ("unsafe_label", "dialog_action_button"):
+    return None
+  return sl, fam, act, round(top - second, 3)

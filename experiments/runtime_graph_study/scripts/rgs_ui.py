@@ -92,6 +92,7 @@ class Node:
   in_list: bool = False  # has a scrollable ancestor
   system: bool = False
   ime: bool = False
+  hint: str = ""  # EditText hint (accessibility hintText); empty fields often expose it as their text
 
   @property
   def short_cls(self) -> str:
@@ -222,6 +223,7 @@ def parse_flat(payload: dict[str, Any], activity: str = "", screen=(1080, 2400))
         idx=i, parent=parent, depth=d, window=w, cls=str(r.get("class") or ""), pkg=pkg,
         rid=str(r.get("resourceId") or ""), text=_norm_text(r.get("text")),
         desc=_norm_text(r.get("contentDescription")), bounds=tuple(int(x) for x in b),
+        hint=_norm_text(r.get("hint")),
         clickable=bool(r.get("clickable")), long_clickable=bool(r.get("longClickable")),
         scrollable=bool(r.get("scrollable")), editable=bool(r.get("editable")),
         enabled=bool(r.get("enabled", True)), visible=bool(r.get("visible", True)),

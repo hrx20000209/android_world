@@ -1,0 +1,814 @@
+- 10-18 23:28:23 FULLRUN p0 FULL28 AudioRecorderRecordAudio rc=0 succ=0.0 steps=5 calls=6 jump=0 probes=2 err=None 82s
+- 10-18 23:32:26 FULLRUN p0 FULL28 AudioRecorderRecordAudioWithFileName rc=0 succ=None steps=None calls=None jump=0 probes=None err=KeyError('d') 239s
+- 10-18 23:33:42 FULLRUN p0 FULL28 BrowserDraw rc=0 succ=None steps=None calls=None jump=0 probes=None err=AdbControllerError("Error executing adb command: [adb -P 503 75s
+- 10-18 23:36:55 FULLRUN p0 FULL28 BrowserMaze rc=0 succ=0.0 steps=20 calls=19 jump=0 probes=5 err=None 190s
+- 10-18 23:41:11 FULLRUN p0 FULL28 BrowserMultiply rc=0 succ=1.0 steps=17 calls=19 jump=0 probes=3 err=None 255s
+- 10-18 23:47:42 FULLRUN p0 FULL28 CameraTakePhoto rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 389s
+- 10-18 23:47:42 tunnel down
+- 10-19 00:02:18 FULLRUN p0 FULL28 CameraTakeVideo rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 840s
+- 10-19 00:06:16 FULLRUN p0 FULL28 ClockStopWatchPausedVerify rc=0 succ=1.0 steps=3 calls=3 jump=0 probes=0 err=None 237s
+- 10-19 00:09:15 FULLRUN p0 FULL28 ClockStopWatchRunning rc=0 succ=1.0 steps=3 calls=4 jump=0 probes=1 err=None 175s
+- 10-19 00:12:01 FULLRUN p0 FULL28 ClockTimerEntry rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=1 err=None 165s
+- 10-19 00:18:54 FULLRUN p0 FULL28 ContactsAddContact rc=0 succ=0.0 steps=12 calls=12 jump=0 probes=0 err=None 409s
+- 10-19 00:20:47 FULLRUN p0 FULL28 ContactsNewContactDraft rc=0 succ=0.0 steps=5 calls=4 jump=0 probes=5 err=None 112s
+- 10-19 00:24:44 FULLRUN p0 FULL28 ExpenseAddMultiple rc=0 succ=1.0 steps=12 calls=8 jump=0 probes=1 err=None 236s
+- 10-19 00:37:58 FULLRUN p0 FULL28 ExpenseAddMultipleFromGallery rc=0 succ=0.0 steps=20 calls=21 jump=0 probes=2 err=None 793s
+- 10-19 00:47:25 FULLRUN p0 FULL28 ExpenseAddMultipleFromMarkor rc=0 succ=0.0 steps=16 calls=16 jump=0 probes=2 err=None 565s
+- 10-19 00:49:22 FULLRUN p0 FULL28 ExpenseAddSingle rc=0 succ=0.0 steps=8 calls=7 jump=0 probes=2 err=None 115s
+- 10-19 00:50:26 FULLRUN p0 FULL28 ExpenseDeleteDuplicates rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=2 err=None 63s
+- 10-19 00:51:53 FULLRUN p0 FULL28 ExpenseDeleteDuplicates2 rc=0 succ=0.0 steps=12 calls=9 jump=0 probes=3 err=None 86s
+- 10-19 00:52:58 FULLRUN p0 FULL28 ExpenseDeleteMultiple rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=4 err=None 64s
+- 10-19 00:55:08 FULLRUN p0 FULL28 ExpenseDeleteMultiple2 rc=0 succ=0.0 steps=20 calls=16 jump=0 probes=8 err=None 129s
+- 10-19 00:55:48 FULLRUN p0 FULL28 ExpenseDeleteSingle rc=0 succ=1.0 steps=4 calls=3 jump=0 probes=1 err=None 38s
+- 10-19 00:56:56 FULLRUN p0 FULL28 FilesDeleteFile rc=0 succ=1.0 steps=9 calls=9 jump=0 probes=0 err=None 67s
+- 10-19 00:58:29 FULLRUN p0 FULL28 FilesMoveFile rc=0 succ=0.0 steps=10 calls=11 jump=0 probes=1 err=None 92s
+- 10-19 00:59:51 FULLRUN p0 FULL28 MarkorAddNoteHeader rc=0 succ=0.0 steps=12 calls=12 jump=0 probes=3 err=None 80s
+- 10-19 01:01:18 FULLRUN p0 FULL28 MarkorChangeNoteContent rc=0 succ=0.0 steps=12 calls=12 jump=0 probes=3 err=None 86s
+- 10-19 01:01:54 FULLRUN p0 FULL28 MarkorCreateFolder rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=1 err=None 34s
+- 10-19 01:03:10 FULLRUN p0 FULL28 MarkorCreateNote rc=0 succ=0.0 steps=8 calls=7 jump=0 probes=3 err=None 75s
+- 10-19 01:05:41 FULLRUN p0 FULL28 MarkorCreateNoteAndSms rc=0 succ=0.0 steps=18 calls=17 jump=0 probes=4 err=None 149s
+- 10-19 01:06:33 FULLRUN p0 FULL28 MarkorCreateNoteFromClipboard rc=0 succ=0.0 steps=7 calls=6 jump=0 probes=1 err=None 51s
+- 10-19 01:07:16 FULLRUN p0 FULL28 MarkorDeleteAllNotes rc=0 succ=1.0 steps=4 calls=3 jump=1 probes=3 err=None 42s
+- 10-19 01:08:08 FULLRUN p0 FULL28 MarkorDeleteNewestNote rc=0 succ=1.0 steps=4 calls=3 jump=1 probes=0 err=None 51s
+- 10-19 01:08:41 FULLRUN p0 FULL28 MarkorDeleteNote rc=0 succ=1.0 steps=4 calls=3 jump=1 probes=2 err=None 32s
+- 10-19 01:09:15 FULLRUN p0 FULL28 MarkorEditNote rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=4 err=None 32s
+- 10-19 01:12:08 FULLRUN p0 FULL28 MarkorMergeNotes rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=7 err=None 171s
+- 10-19 01:13:36 FULLRUN p0 FULL28 MarkorMoveNote rc=0 succ=1.0 steps=11 calls=11 jump=0 probes=7 err=None 87s
+- 10-19 01:16:05 FULLRUN p0 FULL28 MarkorTranscribeReceipt rc=0 succ=0.0 steps=18 calls=18 jump=0 probes=7 err=None 148s
+- 10-19 01:17:00 FULLRUN p0 FULL28 MarkorTranscribeVideo rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=1 err=None 54s
+- 10-19 01:17:49 FULLRUN p0 FULL28 NotesIsTodo rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=2 err=None 47s
+- 10-19 01:18:36 FULLRUN p0 FULL28 NotesMeetingAttendeeCount rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=7 err=None 46s
+- 10-19 01:19:39 FULLRUN p0 FULL28 NotesRecipeIngredientCount rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=8 err=None 61s
+- 10-19 01:21:11 FULLRUN p0 FULL28 NotesTodoItemCount rc=0 succ=1.0 steps=3 calls=3 jump=0 probes=9 err=None 91s
+- 10-19 01:21:32 FULLRUN p0 FULL28 OpenAppTaskEval rc=0 succ=1.0 steps=2 calls=2 jump=0 probes=0 err=None 19s
+- 10-19 01:24:01 FULLRUN p0 FULL28 OsmAndFavorite rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=0 err=None 147s
+- 10-19 01:26:08 FULLRUN p0 FULL28 OsmAndMarker rc=0 succ=0.0 steps=13 calls=13 jump=0 probes=0 err=None 126s
+- 10-19 01:28:59 FULLRUN p0 FULL28 OsmAndTrack rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=2 err=None 170s
+- 10-19 01:31:52 FULLRUN p0 FULL28 RecipeAddMultipleRecipes rc=0 succ=0.0 steps=20 calls=11 jump=0 probes=7 err=None 172s
+- 10-19 01:34:20 FULLRUN p0 FULL28 RecipeAddMultipleRecipesFromImage rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=4 err=None 146s
+- 10-19 01:37:26 FULLRUN p0 FULL28 RecipeAddMultipleRecipesFromMarkor rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=4 err=None 185s
+- 10-19 01:40:48 FULLRUN p0 FULL28 RecipeAddMultipleRecipesFromMarkor2 rc=0 succ=0.0 steps=20 calls=17 jump=0 probes=5 err=None 200s
+- 10-19 01:41:47 FULLRUN p0 FULL28 RecipeAddSingleRecipe rc=0 succ=0.0 steps=5 calls=3 jump=0 probes=2 err=None 58s
+- 10-19 01:42:21 FULLRUN p0 FULL28 RecipeDeleteDuplicateRecipes rc=0 succ=0.0 steps=5 calls=4 jump=1 probes=2 err=None 33s
+- 10-19 01:44:01 FULLRUN p0 FULL28 RecipeDeleteDuplicateRecipes2 rc=0 succ=0.0 steps=20 calls=16 jump=4 probes=10 err=None 99s
+- 10-19 01:44:36 FULLRUN p0 FULL28 RecipeDeleteDuplicateRecipes3 rc=0 succ=0.0 steps=5 calls=4 jump=1 probes=2 err=None 34s
+- 10-19 01:46:25 FULLRUN p0 FULL28 RecipeDeleteMultipleRecipes rc=0 succ=1.0 steps=16 calls=12 jump=3 probes=4 err=None 108s
+- 10-19 01:47:02 FULLRUN p0 FULL28 RecipeDeleteMultipleRecipesWithConstraint rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=0 err=None 36s
+- 10-19 01:49:45 FULLRUN p0 FULL28 RecipeDeleteMultipleRecipesWithNoise rc=0 succ=0.0 steps=20 calls=16 jump=1 probes=2 err=None 162s
+- 10-19 01:50:15 FULLRUN p0 FULL28 RecipeDeleteSingleRecipe rc=0 succ=1.0 steps=4 calls=2 jump=1 probes=0 err=None 28s
+- 10-19 01:51:24 FULLRUN p0 FULL28 RecipeDeleteSingleWithRecipeWithNoise rc=0 succ=1.0 steps=6 calls=3 jump=1 probes=0 err=None 67s
+- 10-19 01:54:58 FULLRUN p0 FULL28 RetroCreatePlaylist rc=0 succ=0.0 steps=20 calls=21 jump=0 probes=5 err=None 214s
+- 10-19 01:56:55 FULLRUN p0 FULL28 RetroPlayingQueue rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=5 err=None 116s
+- 10-19 01:59:03 FULLRUN p0 FULL28 RetroPlaylistDuration rc=0 succ=0.0 steps=20 calls=16 jump=0 probes=4 err=None 127s
+- 10-19 02:00:52 FULLRUN p0 FULL28 RetroSavePlaylist rc=0 succ=0.0 steps=20 calls=15 jump=0 probes=4 err=None 108s
+- 10-19 02:01:46 FULLRUN p0 FULL28 SaveCopyOfReceiptTaskEval rc=0 succ=1.0 steps=7 calls=7 jump=0 probes=3 err=None 52s
+- 10-19 02:03:22 FULLRUN p0 FULL28 SimpleCalendarAddOneEvent rc=0 succ=1.0 steps=15 calls=14 jump=0 probes=5 err=None 95s
+- 10-19 02:05:20 FULLRUN p0 FULL28 SimpleCalendarAddOneEventInTwoWeeks rc=0 succ=0.0 steps=14 calls=14 jump=0 probes=6 err=None 116s
+- 10-19 02:08:13 FULLRUN p0 FULL28 SimpleCalendarAddOneEventRelativeDay rc=0 succ=0.0 steps=15 calls=13 jump=0 probes=5 err=None 171s
+- 10-19 02:10:06 FULLRUN p0 FULL28 SimpleCalendarAddOneEventTomorrow rc=0 succ=0.0 steps=13 calls=13 jump=0 probes=5 err=None 112s
+- 10-19 02:13:18 FULLRUN p0 FULL28 SimpleCalendarAddRepeatingEvent rc=0 succ=1.0 steps=20 calls=19 jump=0 probes=5 err=None 189s
+- 10-19 02:13:52 FULLRUN p0 FULL28 SimpleCalendarAnyEventsOnDate rc=0 succ=1.0 steps=3 calls=3 jump=0 probes=3 err=None 33s
+- 10-19 02:14:55 FULLRUN p0 FULL28 SimpleCalendarDeleteEvents rc=0 succ=1.0 steps=12 calls=9 jump=3 probes=8 err=None 62s
+- 10-19 02:16:08 FULLRUN p0 FULL28 SimpleCalendarDeleteEventsOnRelativeDay rc=0 succ=1.0 steps=8 calls=7 jump=1 probes=4 err=None 72s
+- 10-19 02:17:02 FULLRUN p0 FULL28 SimpleCalendarDeleteOneEvent rc=0 succ=1.0 steps=6 calls=5 jump=1 probes=8 err=None 52s
+- 10-19 02:18:32 FULLRUN p0 FULL28 SimpleCalendarEventOnDateAtTime rc=0 succ=1.0 steps=8 calls=8 jump=0 probes=18 err=None 84s
+- 10-19 02:19:33 FULLRUN p0 FULL28 SimpleCalendarEventsInNextWeek rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=5 err=None 55s
+- 10-19 02:20:48 FULLRUN p0 FULL28 SimpleCalendarEventsInTimeRange rc=0 succ=1.0 steps=3 calls=3 jump=0 probes=5 err=None 74s
+- 10-19 02:21:50 FULLRUN p0 FULL28 SimpleCalendarEventsOnDate rc=0 succ=1.0 steps=3 calls=3 jump=0 probes=5 err=None 60s
+- 10-19 02:23:42 FULLRUN p0 FULL28 SimpleCalendarFirstEventAfterStartTime rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=17 err=None 111s
+- 10-19 02:24:42 FULLRUN p0 FULL28 SimpleCalendarLocationOfEvent rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=5 err=None 58s
+- 10-19 02:25:06 FULLRUN p0 FULL28 SimpleCalendarNextEvent rc=0 succ=0.0 steps=2 calls=2 jump=0 probes=2 err=None 23s
+- 10-19 02:26:03 FULLRUN p0 FULL28 SimpleCalendarNextMeetingWithPerson rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=5 err=None 53s
+- 10-19 02:26:11 tunnel down
+- 10-19 02:29:03 FULLRUN p0 FULL28 SimpleDrawProCreateDrawing rc=0 succ=1.0 steps=16 calls=16 jump=0 probes=0 err=None 141s
+- 10-19 02:30:04 FULLRUN p0 FULL28 SimpleSmsReply rc=0 succ=1.0 steps=6 calls=5 jump=0 probes=2 err=None 60s
+- 10-19 02:30:57 FULLRUN p0 FULL28 SimpleSmsReplyMostRecent rc=0 succ=1.0 steps=4 calls=3 jump=0 probes=1 err=None 52s
+- 10-19 02:32:33 FULLRUN p0 FULL28 SimpleSmsResend rc=0 succ=1.0 steps=12 calls=12 jump=0 probes=4 err=None 95s
+- 10-19 02:33:12 FULLRUN p0 FULL28 SimpleSmsSend rc=0 succ=1.0 steps=4 calls=2 jump=0 probes=0 err=None 38s
+- 10-19 02:33:59 FULLRUN p0 FULL28 SimpleSmsSendClipboardContent rc=0 succ=0.0 steps=5 calls=4 jump=0 probes=0 err=None 45s
+- 10-19 02:36:27 FULLRUN p0 FULL28 SimpleSmsSendReceivedAddress rc=0 succ=0.0 steps=18 calls=18 jump=0 probes=3 err=None 147s
+- 10-19 02:36:50 FULLRUN p0 FULL28 SportsTrackerActivitiesCountForWeek rc=0 succ=0.0 steps=2 calls=2 jump=0 probes=0 err=None 22s
+- 10-19 02:37:24 FULLRUN p0 FULL28 SportsTrackerActivitiesOnDate rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=3 err=None 33s
+- 10-19 02:37:40 FULLRUN p0 FULL28 SportsTrackerActivityDuration rc=0 succ=1.0 steps=1 calls=1 jump=0 probes=1 err=None 14s
+- 10-19 02:38:44 FULLRUN p0 FULL28 SportsTrackerLongestDistanceActivity rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=2 err=None 63s
+- 10-19 02:39:18 FULLRUN p0 FULL28 SportsTrackerTotalDistanceForCategoryOverInterval rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=3 err=None 33s
+- 10-19 02:39:40 FULLRUN p0 FULL28 SportsTrackerTotalDurationForCategoryThisWeek rc=0 succ=0.0 steps=1 calls=1 jump=0 probes=2 err=None 21s
+- 10-19 02:40:48 FULLRUN p0 FULL28 SystemBluetoothTurnOff rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=0 err=None 66s
+- 10-19 02:42:21 FULLRUN p0 FULL28 SystemBluetoothTurnOffVerify rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 92s
+- 10-19 02:42:59 FULLRUN p0 FULL28 SystemBluetoothTurnOn rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=0 err=None 37s
+- 10-19 02:44:23 FULLRUN p0 FULL28 SystemBluetoothTurnOnVerify rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=2 err=None 82s
+- 10-19 02:45:07 FULLRUN p0 FULL28 SystemBrightnessMax rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=2 err=None 43s
+- 10-19 02:45:46 FULLRUN p0 FULL28 SystemBrightnessMaxVerify rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=2 err=None 37s
+- 10-19 02:46:30 FULLRUN p0 FULL28 SystemBrightnessMin rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=1 err=None 42s
+- 10-19 02:47:18 FULLRUN p0 FULL28 SystemBrightnessMinVerify rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=1 err=None 47s
+- 10-19 02:48:19 FULLRUN p0 FULL28 SystemCopyToClipboard rc=0 succ=0.0 steps=8 calls=9 jump=0 probes=3 err=None 59s
+- 10-19 02:49:22 FULLRUN p0 FULL28 SystemWifiTurnOff rc=0 succ=1.0 steps=6 calls=7 jump=0 probes=1 err=None 62s
+- 10-19 02:53:07 FULLRUN p0 FULL28 SystemWifiTurnOffVerify rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=0 err=None 224s
+- 10-19 02:53:07 tunnel down
+- 10-19 02:53:38 tunnel down
+- 10-19 02:54:08 tunnel down
+- 10-19 02:54:38 tunnel down
+- 10-19 02:55:08 tunnel down
+- 10-19 02:55:38 tunnel down
+- 10-19 02:56:08 tunnel down
+- 10-19 02:56:38 tunnel down
+- 10-19 02:57:08 tunnel down
+- 10-19 02:57:38 tunnel down
+- 10-19 02:58:08 tunnel down
+- 10-19 02:58:38 tunnel down
+- 10-19 02:59:08 tunnel down
+- 10-19 02:59:38 tunnel down
+- 10-19 03:00:08 tunnel down
+- 10-19 03:00:38 tunnel down
+- 10-19 03:01:08 tunnel down
+- 10-19 03:01:38 tunnel down
+- 10-19 03:02:08 tunnel down
+- 10-19 03:02:38 tunnel down
+- 10-19 03:03:08 tunnel down
+- 10-19 03:03:38 tunnel down
+- 10-19 03:04:08 tunnel down
+- 10-19 03:04:38 tunnel down
+- 10-19 03:05:08 tunnel down
+- 10-19 03:05:38 tunnel down
+- 10-19 03:06:09 tunnel down
+- 10-19 03:06:39 tunnel down
+- 10-19 03:07:09 tunnel down
+- 10-19 03:07:39 tunnel down
+- 10-19 03:08:09 tunnel down
+- 10-19 03:08:39 tunnel down
+- 10-19 03:09:09 tunnel down
+- 10-19 03:09:39 tunnel down
+- 10-19 03:10:09 tunnel down
+- 10-19 03:10:39 tunnel down
+- 10-19 03:11:09 tunnel down
+- 10-19 03:11:39 tunnel down
+- 10-19 03:12:09 tunnel down
+- 10-19 03:12:39 tunnel down
+- 10-19 03:13:09 tunnel down
+- 10-19 03:13:39 tunnel down
+- 10-19 03:14:09 tunnel down
+- 10-19 03:14:39 tunnel down
+- 10-19 03:15:09 tunnel down
+- 10-19 03:15:39 tunnel down
+- 10-19 03:16:09 tunnel down
+- 10-19 03:16:39 tunnel down
+- 10-19 03:17:10 tunnel down
+- 10-19 03:17:40 tunnel down
+- 10-19 03:18:10 tunnel down
+- 10-19 03:18:40 tunnel down
+- 10-19 03:19:10 tunnel down
+- 10-19 03:19:40 tunnel down
+- 10-19 03:20:10 tunnel down
+- 10-19 03:20:40 tunnel down
+- 10-19 03:21:10 tunnel down
+- 10-19 03:21:40 tunnel down
+- 10-19 03:22:10 tunnel down
+- 10-19 03:22:40 tunnel down
+- 10-19 03:23:10 tunnel down
+- 10-19 03:23:40 tunnel down
+- 10-19 03:24:10 tunnel down
+- 10-19 03:24:40 tunnel down
+- 10-19 03:25:10 tunnel down
+- 10-19 03:25:40 tunnel down
+- 10-19 03:26:10 tunnel down
+- 10-19 03:26:40 tunnel down
+- 10-19 03:27:10 tunnel down
+- 10-19 03:27:40 tunnel down
+- 10-19 03:28:10 tunnel down
+- 10-19 03:28:40 tunnel down
+- 10-19 03:29:11 tunnel down
+- 10-19 03:29:41 tunnel down
+- 10-19 03:30:11 tunnel down
+- 10-19 03:30:41 tunnel down
+- 10-19 03:31:11 tunnel down
+- 10-19 03:31:41 tunnel down
+- 10-19 03:32:11 tunnel down
+- 10-19 03:32:41 tunnel down
+- 10-19 03:33:11 tunnel down
+- 10-19 03:33:41 tunnel down
+- 10-19 03:34:11 tunnel down
+- 10-19 03:34:41 tunnel down
+- 10-19 03:35:11 tunnel down
+- 10-19 03:35:41 tunnel down
+- 10-19 03:36:11 tunnel down
+- 10-19 03:36:41 tunnel down
+- 10-19 03:37:11 tunnel down
+- 10-19 03:37:41 tunnel down
+- 10-19 03:38:11 tunnel down
+- 10-19 03:38:41 tunnel down
+- 10-19 03:39:12 tunnel down
+- 10-19 03:39:42 tunnel down
+- 10-19 03:40:12 tunnel down
+- 10-19 03:40:42 tunnel down
+- 10-19 03:41:12 tunnel down
+- 10-19 03:41:42 tunnel down
+- 10-19 03:42:12 tunnel down
+- 10-19 03:42:42 tunnel down
+- 10-19 03:43:12 tunnel down
+- 10-19 03:43:42 tunnel down
+- 10-19 03:44:12 tunnel down
+- 10-19 03:44:42 tunnel down
+- 10-19 03:45:12 tunnel down
+- 10-19 03:45:42 tunnel down
+- 10-19 03:46:12 tunnel down
+- 10-19 03:46:42 tunnel down
+- 10-19 03:47:12 tunnel down
+- 10-19 03:47:42 tunnel down
+- 10-19 03:48:12 tunnel down
+- 10-19 03:48:42 tunnel down
+- 10-19 03:49:12 tunnel down
+- 10-19 03:49:42 tunnel down
+- 10-19 03:50:12 tunnel down
+- 10-19 03:50:42 tunnel down
+- 10-19 03:51:13 tunnel down
+- 10-19 03:51:43 tunnel down
+- 10-19 03:52:13 tunnel down
+- 10-19 03:52:43 tunnel down
+- 10-19 03:53:13 tunnel down
+- 10-19 03:53:43 tunnel down
+- 10-19 03:54:13 tunnel down
+- 10-19 03:54:43 tunnel down
+- 10-19 03:55:13 tunnel down
+- 10-19 03:55:43 tunnel down
+- 10-19 03:56:13 tunnel down
+- 10-19 03:56:43 tunnel down
+- 10-19 03:57:13 tunnel down
+- 10-19 03:57:43 tunnel down
+- 10-19 03:58:13 tunnel down
+- 10-19 03:58:43 tunnel down
+- 10-19 03:59:13 tunnel down
+- 10-19 03:59:43 tunnel down
+- 10-19 04:00:13 tunnel down
+- 10-19 04:00:43 tunnel down
+- 10-19 04:01:13 tunnel down
+- 10-19 04:01:43 tunnel down
+- 10-19 04:02:13 tunnel down
+- 10-19 04:02:44 tunnel down
+- 10-19 04:03:14 tunnel down
+- 10-19 04:03:44 tunnel down
+- 10-19 04:04:14 tunnel down
+- 10-19 04:04:44 tunnel down
+- 10-19 04:05:14 tunnel down
+- 10-19 04:05:44 tunnel down
+- 10-19 04:06:14 tunnel down
+- 10-19 04:06:44 tunnel down
+- 10-19 04:07:14 tunnel down
+- 10-19 04:07:44 tunnel down
+- 10-19 04:08:14 tunnel down
+- 10-19 04:08:44 tunnel down
+- 10-19 04:09:14 tunnel down
+- 10-19 04:09:44 tunnel down
+- 10-19 04:10:14 tunnel down
+- 10-19 04:10:44 tunnel down
+- 10-19 04:11:14 tunnel down
+- 10-19 04:11:44 tunnel down
+- 10-19 04:12:14 tunnel down
+- 10-19 04:12:44 tunnel down
+- 10-19 04:13:15 tunnel down
+- 10-19 04:13:45 tunnel down
+- 10-19 04:14:15 tunnel down
+- 10-19 04:14:45 tunnel down
+- 10-19 04:15:15 tunnel down
+- 10-19 04:15:45 tunnel down
+- 10-19 04:16:15 tunnel down
+- 10-19 04:16:45 tunnel down
+- 10-19 04:17:15 tunnel down
+- 10-19 04:17:45 tunnel down
+- 10-19 04:18:15 tunnel down
+- 10-19 04:18:45 tunnel down
+- 10-19 04:19:15 tunnel down
+- 10-19 04:19:45 tunnel down
+- 10-19 04:20:15 tunnel down
+- 10-19 04:20:45 tunnel down
+- 10-19 04:21:15 tunnel down
+- 10-19 04:21:45 tunnel down
+- 10-19 04:22:15 tunnel down
+- 10-19 04:22:45 tunnel down
+- 10-19 04:23:15 tunnel down
+- 10-19 04:23:45 tunnel down
+- 10-19 04:24:15 tunnel down
+- 10-19 04:24:45 tunnel down
+- 10-19 04:25:16 tunnel down
+- 10-19 04:25:46 tunnel down
+- 10-19 04:26:16 tunnel down
+- 10-19 04:26:46 tunnel down
+- 10-19 04:27:16 tunnel down
+- 10-19 04:27:46 tunnel down
+- 10-19 04:28:16 tunnel down
+- 10-19 04:28:46 tunnel down
+- 10-19 04:29:16 tunnel down
+- 10-19 04:29:46 tunnel down
+- 10-19 04:30:16 tunnel down
+- 10-19 04:30:46 tunnel down
+- 10-19 04:31:16 tunnel down
+- 10-19 04:31:46 tunnel down
+- 10-19 04:32:16 tunnel down
+- 10-19 04:32:46 tunnel down
+- 10-19 04:33:16 tunnel down
+- 10-19 04:33:46 tunnel down
+- 10-19 04:34:16 tunnel down
+- 10-19 04:34:46 tunnel down
+- 10-19 04:35:16 tunnel down
+- 10-19 04:35:47 tunnel down
+- 10-19 04:36:17 tunnel down
+- 10-19 04:36:47 tunnel down
+- 10-19 04:37:17 tunnel down
+- 10-19 04:37:47 tunnel down
+- 10-19 04:38:17 tunnel down
+- 10-19 04:38:47 tunnel down
+- 10-19 04:39:17 tunnel down
+- 10-19 04:39:47 tunnel down
+- 10-19 04:40:17 tunnel down
+- 10-19 04:40:47 tunnel down
+- 10-19 04:41:17 tunnel down
+- 10-19 04:41:47 tunnel down
+- 10-19 04:42:17 tunnel down
+- 10-19 04:42:47 tunnel down
+- 10-19 04:43:17 tunnel down
+- 10-19 04:43:47 tunnel down
+- 10-19 04:44:17 tunnel down
+- 10-19 04:44:47 tunnel down
+- 10-19 04:45:17 tunnel down
+- 10-19 04:45:47 tunnel down
+- 10-19 04:46:17 tunnel down
+- 10-19 04:46:47 tunnel down
+- 10-19 04:47:18 tunnel down
+- 10-19 04:47:48 tunnel down
+- 10-19 04:48:18 tunnel down
+- 10-19 04:48:48 tunnel down
+- 10-19 04:49:18 tunnel down
+- 10-19 04:49:48 tunnel down
+- 10-19 04:50:18 tunnel down
+- 10-19 04:50:48 tunnel down
+- 10-19 04:51:18 tunnel down
+- 10-19 04:51:48 tunnel down
+- 10-19 04:52:18 tunnel down
+- 10-19 04:52:48 tunnel down
+- 10-19 04:53:18 tunnel down
+- 10-19 04:53:48 tunnel down
+- 10-19 04:54:18 tunnel down
+- 10-19 04:54:48 tunnel down
+- 10-19 04:55:18 tunnel down
+- 10-19 04:55:48 tunnel down
+- 10-19 04:56:18 tunnel down
+- 10-19 04:56:48 tunnel down
+- 10-19 04:57:18 tunnel down
+- 10-19 04:57:49 tunnel down
+- 10-19 04:58:19 tunnel down
+- 10-19 04:58:49 tunnel down
+- 10-19 04:59:19 tunnel down
+- 10-19 04:59:49 tunnel down
+- 10-19 05:00:19 tunnel down
+- 10-19 05:00:49 tunnel down
+- 10-19 05:01:19 tunnel down
+- 10-19 05:01:49 tunnel down
+- 10-19 05:02:19 tunnel down
+- 10-19 05:02:49 tunnel down
+- 10-19 05:03:19 tunnel down
+- 10-19 05:03:49 tunnel down
+- 10-19 05:04:19 tunnel down
+- 10-19 05:04:49 tunnel down
+- 10-19 05:05:19 tunnel down
+- 10-19 05:05:49 tunnel down
+- 10-19 05:06:19 tunnel down
+- 10-19 05:06:49 tunnel down
+- 10-19 05:07:19 tunnel down
+- 10-19 05:07:49 tunnel down
+- 10-19 05:08:20 tunnel down
+- 10-19 05:08:50 tunnel down
+- 10-19 05:09:20 tunnel down
+- 10-19 05:09:50 tunnel down
+- 10-19 05:10:20 tunnel down
+- 10-19 05:10:50 tunnel down
+- 10-19 05:11:20 tunnel down
+- 10-19 05:11:50 tunnel down
+- 10-19 05:12:20 tunnel down
+- 10-19 05:12:50 tunnel down
+- 10-19 05:13:20 tunnel down
+- 10-19 05:13:50 tunnel down
+- 10-19 05:14:20 tunnel down
+- 10-19 05:14:50 tunnel down
+- 10-19 05:15:20 tunnel down
+- 10-19 05:15:50 tunnel down
+- 10-19 05:16:20 tunnel down
+- 10-19 05:16:50 tunnel down
+- 10-19 05:17:20 tunnel down
+- 10-19 05:17:50 tunnel down
+- 10-19 05:18:21 tunnel down
+- 10-19 05:18:51 tunnel down
+- 10-19 05:19:21 tunnel down
+- 10-19 05:19:51 tunnel down
+- 10-19 05:20:21 tunnel down
+- 10-19 05:20:51 tunnel down
+- 10-19 05:21:21 tunnel down
+- 10-19 05:21:51 tunnel down
+- 10-19 05:22:21 tunnel down
+- 10-19 05:22:51 tunnel down
+- 10-19 05:23:21 tunnel down
+- 10-19 05:23:51 tunnel down
+- 10-19 05:24:21 tunnel down
+- 10-19 05:24:51 tunnel down
+- 10-19 05:25:21 tunnel down
+- 10-19 05:25:51 tunnel down
+- 10-19 05:26:21 tunnel down
+- 10-19 05:26:51 tunnel down
+- 10-19 05:27:21 tunnel down
+- 10-19 05:27:51 tunnel down
+- 10-19 05:28:21 tunnel down
+- 10-19 05:28:51 tunnel down
+- 10-19 05:29:21 tunnel down
+- 10-19 05:29:51 tunnel down
+- 10-19 05:30:22 tunnel down
+- 10-19 05:30:52 tunnel down
+- 10-19 05:31:22 tunnel down
+- 10-19 05:31:52 tunnel down
+- 10-19 05:32:22 tunnel down
+- 10-19 05:32:52 tunnel down
+- 10-19 05:33:22 tunnel down
+- 10-19 05:33:52 tunnel down
+- 10-19 05:34:22 tunnel down
+- 10-19 05:34:52 tunnel down
+- 10-19 05:35:22 tunnel down
+- 10-19 05:35:52 tunnel down
+- 10-19 05:36:22 tunnel down
+- 10-19 05:36:52 tunnel down
+- 10-19 05:37:22 tunnel down
+- 10-19 05:37:52 tunnel down
+- 10-19 05:38:22 tunnel down
+- 10-19 05:38:52 tunnel down
+- 10-19 05:39:22 tunnel down
+- 10-19 05:39:52 tunnel down
+- 10-19 05:40:22 tunnel down
+- 10-19 05:40:52 tunnel down
+- 10-19 05:41:23 tunnel down
+- 10-19 05:41:53 tunnel down
+- 10-19 05:42:23 tunnel down
+- 10-19 05:42:53 tunnel down
+- 10-19 05:43:23 tunnel down
+- 10-19 05:43:53 tunnel down
+- 10-19 05:44:23 tunnel down
+- 10-19 05:44:53 tunnel down
+- 10-19 05:45:23 tunnel down
+- 10-19 05:45:53 tunnel down
+- 10-19 05:46:23 tunnel down
+- 10-19 05:46:53 tunnel down
+- 10-19 05:47:23 tunnel down
+- 10-19 05:47:53 tunnel down
+- 10-19 05:48:23 tunnel down
+- 10-19 05:48:53 tunnel down
+- 10-19 05:49:23 tunnel down
+- 10-19 05:49:53 tunnel down
+- 10-19 05:50:23 tunnel down
+- 10-19 05:50:53 tunnel down
+- 10-19 05:51:23 tunnel down
+- 10-19 05:51:53 tunnel down
+- 10-19 05:52:23 tunnel down
+- 10-19 05:52:54 tunnel down
+- 10-19 05:53:24 tunnel down
+- 10-19 05:53:54 tunnel down
+- 10-19 05:54:24 tunnel down
+- 10-19 05:54:54 tunnel down
+- 10-19 05:55:24 tunnel down
+- 10-19 05:55:54 tunnel down
+- 10-19 05:56:24 tunnel down
+- 10-19 05:56:54 tunnel down
+- 10-19 05:57:24 tunnel down
+- 10-19 05:57:54 tunnel down
+- 10-19 05:58:24 tunnel down
+- 10-19 05:58:54 tunnel down
+- 10-19 05:59:24 tunnel down
+- 10-19 05:59:54 tunnel down
+- 10-19 06:00:24 tunnel down
+- 10-19 06:00:54 tunnel down
+- 10-19 06:01:24 tunnel down
+- 10-19 06:01:54 tunnel down
+- 10-19 06:02:24 tunnel down
+- 10-19 06:02:54 tunnel down
+- 10-19 06:03:24 tunnel down
+- 10-19 06:03:55 tunnel down
+- 10-19 06:04:25 tunnel down
+- 10-19 06:04:55 tunnel down
+- 10-19 06:05:25 tunnel down
+- 10-19 06:05:55 tunnel down
+- 10-19 06:06:25 tunnel down
+- 10-19 06:06:55 tunnel down
+- 10-19 06:07:25 tunnel down
+- 10-19 06:07:55 tunnel down
+- 10-19 06:08:25 tunnel down
+- 10-19 06:08:55 tunnel down
+- 10-19 06:09:25 tunnel down
+- 10-19 06:09:55 tunnel down
+- 10-19 06:10:25 tunnel down
+- 10-19 06:10:55 tunnel down
+- 10-19 06:11:25 tunnel down
+- 10-19 06:11:55 tunnel down
+- 10-19 06:12:25 tunnel down
+- 10-19 06:12:55 tunnel down
+- 10-19 06:13:25 tunnel down
+- 10-19 06:13:55 tunnel down
+- 10-19 06:14:25 tunnel down
+- 10-19 06:14:55 tunnel down
+- 10-19 06:15:26 tunnel down
+- 10-19 06:15:56 tunnel down
+- 10-19 06:16:26 tunnel down
+- 10-19 06:16:56 tunnel down
+- 10-19 06:17:26 tunnel down
+- 10-19 06:17:56 tunnel down
+- 10-19 06:18:26 tunnel down
+- 10-19 06:18:56 tunnel down
+- 10-19 06:19:26 tunnel down
+- 10-19 06:19:56 tunnel down
+- 10-19 06:20:26 tunnel down
+- 10-19 06:20:56 tunnel down
+- 10-19 06:21:26 tunnel down
+- 10-19 06:21:56 tunnel down
+- 10-19 06:22:26 tunnel down
+- 10-19 06:22:56 tunnel down
+- 10-19 06:23:26 tunnel down
+- 10-19 06:23:56 tunnel down
+- 10-19 06:24:26 tunnel down
+- 10-19 06:24:56 tunnel down
+- 10-19 06:25:26 tunnel down
+- 10-19 06:25:56 tunnel down
+- 10-19 06:26:26 tunnel down
+- 10-19 06:26:57 tunnel down
+- 10-19 06:27:27 tunnel down
+- 10-19 06:27:57 tunnel down
+- 10-19 06:28:27 tunnel down
+- 10-19 06:28:57 tunnel down
+- 10-19 06:29:27 tunnel down
+- 10-19 06:29:57 tunnel down
+- 10-19 06:30:27 tunnel down
+- 10-19 06:30:57 tunnel down
+- 10-19 06:31:27 tunnel down
+- 10-19 06:31:57 tunnel down
+- 10-19 06:32:27 tunnel down
+- 10-19 06:32:57 tunnel down
+- 10-19 06:33:27 tunnel down
+- 10-19 06:33:57 tunnel down
+- 10-19 06:34:27 tunnel down
+- 10-19 06:34:57 tunnel down
+- 10-19 06:35:27 tunnel down
+- 10-19 06:35:57 tunnel down
+- 10-19 06:36:27 tunnel down
+- 10-19 06:36:57 tunnel down
+- 10-19 06:37:27 tunnel down
+- 10-19 06:37:57 tunnel down
+- 10-19 06:38:27 tunnel down
+- 10-19 06:38:57 tunnel down
+- 10-19 06:39:28 tunnel down
+- 10-19 06:39:58 tunnel down
+- 10-19 06:40:28 tunnel down
+- 10-19 06:40:58 tunnel down
+- 10-19 06:41:28 tunnel down
+- 10-19 06:41:58 tunnel down
+- 10-19 06:42:28 tunnel down
+- 10-19 06:42:58 tunnel down
+- 10-19 06:43:28 tunnel down
+- 10-19 06:43:58 tunnel down
+- 10-19 06:44:28 tunnel down
+- 10-19 06:44:58 tunnel down
+- 10-19 06:45:28 tunnel down
+- 10-19 06:45:58 tunnel down
+- 10-19 06:46:28 tunnel down
+- 10-19 06:46:58 tunnel down
+- 10-19 06:47:28 tunnel down
+- 10-19 06:47:58 tunnel down
+- 10-19 06:48:28 tunnel down
+- 10-19 06:48:58 tunnel down
+- 10-19 06:49:28 tunnel down
+- 10-19 06:49:59 tunnel down
+- 10-19 06:50:29 tunnel down
+- 10-19 06:50:59 tunnel down
+- 10-19 06:51:29 tunnel down
+- 10-19 06:51:59 tunnel down
+- 10-19 06:52:29 tunnel down
+- 10-19 06:52:59 tunnel down
+- 10-19 06:53:29 tunnel down
+- 10-19 06:53:59 tunnel down
+- 10-19 06:54:29 tunnel down
+- 10-19 06:54:59 tunnel down
+- 10-19 06:55:29 tunnel down
+- 10-19 06:55:59 tunnel down
+- 10-19 06:56:29 tunnel down
+- 10-19 06:56:59 tunnel down
+- 10-19 06:57:29 tunnel down
+- 10-19 06:57:59 tunnel down
+- 10-19 06:58:29 tunnel down
+- 10-19 06:58:59 tunnel down
+- 10-19 06:59:29 tunnel down
+- 10-19 06:59:59 tunnel down
+- 10-19 07:00:29 tunnel down
+- 10-19 07:00:59 tunnel down
+- 10-19 07:01:30 tunnel down
+- 10-19 07:02:00 tunnel down
+- 10-19 07:02:30 tunnel down
+- 10-19 07:03:00 tunnel down
+- 10-19 07:03:30 tunnel down
+- 10-19 07:04:00 tunnel down
+- 10-19 07:04:30 tunnel down
+- 10-19 07:05:00 tunnel down
+- 10-19 07:05:30 tunnel down
+- 10-19 07:06:00 tunnel down
+- 10-19 07:06:30 tunnel down
+- 10-19 07:07:00 tunnel down
+- 10-19 07:07:30 tunnel down
+- 10-19 07:08:00 tunnel down
+- 10-19 07:08:30 tunnel down
+- 10-19 07:09:00 tunnel down
+- 10-19 07:09:30 tunnel down
+- 10-19 07:10:00 tunnel down
+- 10-19 07:10:30 tunnel down
+- 10-19 07:11:00 tunnel down
+- 10-19 07:11:30 tunnel down
+- 10-19 07:12:00 tunnel down
+- 10-19 07:12:31 tunnel down
+- 10-19 07:13:01 tunnel down
+- 10-19 07:13:31 tunnel down
+- 10-19 07:14:01 tunnel down
+- 10-19 07:14:31 tunnel down
+- 10-19 07:15:01 tunnel down
+- 10-19 07:15:31 tunnel down
+- 10-19 07:16:01 tunnel down
+- 10-19 07:16:31 tunnel down
+- 10-19 07:17:01 tunnel down
+- 10-19 07:17:31 tunnel down
+- 10-19 07:18:01 tunnel down
+- 10-19 07:18:31 tunnel down
+- 10-19 07:19:01 tunnel down
+- 10-19 07:19:31 tunnel down
+- 10-19 07:20:01 tunnel down
+- 10-19 07:20:31 tunnel down
+- 10-19 07:21:01 tunnel down
+- 10-19 07:21:31 tunnel down
+- 10-19 07:22:01 tunnel down
+- 10-19 07:22:31 tunnel down
+- 10-19 07:23:02 tunnel down
+- 10-19 07:23:32 tunnel down
+- 10-19 07:24:02 tunnel down
+- 10-19 07:24:32 tunnel down
+- 10-19 07:25:02 tunnel down
+- 10-19 07:25:32 tunnel down
+- 10-19 07:26:02 tunnel down
+- 10-19 07:26:32 tunnel down
+- 10-19 07:27:02 tunnel down
+- 10-19 07:27:32 tunnel down
+- 10-19 07:28:02 tunnel down
+- 10-19 07:28:32 tunnel down
+- 10-19 07:29:02 tunnel down
+- 10-19 07:29:32 tunnel down
+- 10-19 07:30:02 tunnel down
+- 10-19 07:30:32 tunnel down
+- 10-19 07:31:02 tunnel down
+- 10-19 07:31:32 tunnel down
+- 10-19 07:32:02 tunnel down
+- 10-19 07:32:32 tunnel down
+- 10-19 07:33:02 tunnel down
+- 10-19 07:33:32 tunnel down
+- 10-19 07:34:02 tunnel down
+- 10-19 07:34:33 tunnel down
+- 10-19 07:35:03 tunnel down
+- 10-19 07:35:33 tunnel down
+- 10-19 07:36:03 tunnel down
+- 10-19 07:36:33 tunnel down
+- 10-19 07:37:03 tunnel down
+- 10-19 07:37:33 tunnel down
+- 10-19 07:38:03 tunnel down
+- 10-19 07:38:33 tunnel down
+- 10-19 07:39:03 tunnel down
+- 10-19 07:39:33 tunnel down
+- 10-19 07:40:03 tunnel down
+- 10-19 07:40:33 tunnel down
+- 10-19 07:41:03 tunnel down
+- 10-19 07:41:33 tunnel down
+- 10-19 07:42:03 tunnel down
+- 10-19 07:42:33 tunnel down
+- 10-19 07:43:03 tunnel down
+- 10-19 07:43:33 tunnel down
+- 10-19 07:44:03 tunnel down
+- 10-19 07:44:33 tunnel down
+- 10-19 07:45:03 tunnel down
+- 10-19 07:45:33 tunnel down
+- 10-19 07:46:04 tunnel down
+- 10-19 07:46:34 tunnel down
+- 10-19 07:47:04 tunnel down
+- 10-19 07:47:34 tunnel down
+- 10-19 07:48:04 tunnel down
+- 10-19 07:48:34 tunnel down
+- 10-19 07:49:04 tunnel down
+- 10-19 07:49:34 tunnel down
+- 10-19 07:50:04 tunnel down
+- 10-19 07:50:34 tunnel down
+- 10-19 07:51:04 tunnel down
+- 10-19 07:51:34 tunnel down
+- 10-19 07:52:04 tunnel down
+- 10-19 07:52:34 tunnel down
+- 10-19 07:53:04 tunnel down
+- 10-19 07:53:34 tunnel down
+- 10-19 07:54:04 tunnel down
+- 10-19 07:54:34 tunnel down
+- 10-19 07:55:04 tunnel down
+- 10-19 07:55:34 tunnel down
+- 10-19 07:56:04 tunnel down
+- 10-19 07:56:34 tunnel down
+- 10-19 07:57:05 tunnel down
+- 10-19 07:57:35 tunnel down
+- 10-19 07:58:05 tunnel down
+- 10-19 07:58:35 tunnel down
+- 10-19 07:59:05 tunnel down
+- 10-19 07:59:35 tunnel down
+- 10-19 08:00:05 tunnel down
+- 10-19 08:00:35 tunnel down
+- 10-19 08:01:05 tunnel down
+- 10-19 08:01:35 tunnel down
+- 10-19 08:02:05 tunnel down
+- 10-19 08:02:35 tunnel down
+- 10-19 08:03:05 tunnel down
+- 10-19 08:03:35 tunnel down
+- 10-19 08:04:05 tunnel down
+- 10-19 08:04:35 tunnel down
+- 10-19 08:05:05 tunnel down
+- 10-19 08:05:35 tunnel down
+- 10-19 08:06:05 tunnel down
+- 10-19 08:06:35 tunnel down
+- 10-19 08:07:05 tunnel down
+- 10-19 08:07:35 tunnel down
+- 10-19 08:08:05 tunnel down
+- 10-19 08:08:36 tunnel down
+- 10-19 08:09:06 tunnel down
+- 10-19 08:09:36 tunnel down
+- 10-19 08:10:06 tunnel down
+- 10-19 08:10:36 tunnel down
+- 10-19 08:11:06 tunnel down
+- 10-19 08:11:36 tunnel down
+- 10-19 08:12:06 tunnel down
+- 10-19 08:12:36 tunnel down
+- 10-19 08:13:06 tunnel down
+- 10-19 08:13:36 tunnel down
+- 10-19 08:14:06 tunnel down
+- 10-19 08:14:36 tunnel down
+- 10-19 08:15:06 tunnel down
+- 10-19 08:15:36 tunnel down
+- 10-19 08:16:06 tunnel down
+- 10-19 08:16:36 tunnel down
+- 10-19 08:17:06 tunnel down
+- 10-19 08:17:36 tunnel down
+- 10-19 08:18:06 tunnel down
+- 10-19 08:18:36 tunnel down
+- 10-19 08:19:06 tunnel down
+- 10-19 08:19:36 tunnel down
+- 10-19 08:20:07 tunnel down
+- 10-19 08:20:37 tunnel down
+- 10-19 08:21:07 tunnel down
+- 10-19 08:21:37 tunnel down
+- 10-19 08:22:07 tunnel down
+- 10-19 08:22:37 tunnel down
+- 10-19 08:23:07 tunnel down
+- 10-19 08:23:37 tunnel down
+- 10-19 08:24:07 tunnel down
+- 10-19 08:24:37 tunnel down
+- 10-19 08:25:07 tunnel down
+- 10-19 08:25:37 tunnel down
+- 10-19 08:26:07 tunnel down
+- 10-19 08:26:37 tunnel down
+- 10-19 08:27:07 tunnel down
+- 10-19 08:27:37 tunnel down
+- 10-19 08:28:07 tunnel down
+- 10-19 08:28:37 tunnel down
+- 10-19 08:29:07 tunnel down
+- 10-19 08:29:37 tunnel down
+- 10-19 08:30:07 tunnel down
+- 10-19 08:30:37 tunnel down
+- 10-19 08:31:07 tunnel down
+- 10-19 08:31:37 tunnel down
+- 10-19 08:32:08 tunnel down
+- 10-19 08:32:38 tunnel down
+- 10-19 08:33:08 tunnel down
+- 10-19 08:33:38 tunnel down
+- 10-19 08:34:08 tunnel down
+- 10-19 08:34:38 tunnel down
+- 10-19 08:35:08 tunnel down
+- 10-19 08:35:38 tunnel down
+- 10-19 08:36:08 tunnel down
+- 10-19 08:36:38 tunnel down
+- 10-19 08:37:08 tunnel down
+- 10-19 08:37:38 tunnel down
+- 10-19 08:38:08 tunnel down
+- 10-19 08:38:38 tunnel down
+- 10-19 08:39:08 tunnel down
+- 10-19 08:39:38 tunnel down
+- 10-19 08:40:08 tunnel down
+- 10-19 08:41:37 FULLRUN p0 FULL28 SystemWifiTurnOn rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=1 err=None 57s
+- 10-19 08:42:21 FULLRUN p0 FULL28 SystemWifiTurnOnVerify rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=1 err=None 43s
+- 10-19 08:42:59 FULLRUN p0 FULL28 TasksCompletedTasksForDate rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=0 err=None 37s
+- 10-19 08:43:35 FULLRUN p0 FULL28 TasksDueNextWeek rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=0 err=None 33s
+- 10-19 08:44:03 FULLRUN p0 FULL28 TasksDueOnDate rc=0 succ=0.0 steps=2 calls=2 jump=0 probes=0 err=None 28s
+- 10-19 08:44:23 FULLRUN p0 FULL28 TasksHighPriorityTasks rc=0 succ=0.0 steps=1 calls=1 jump=0 probes=0 err=None 18s
+- 10-19 08:45:52 FULLRUN p0 FULL28 TasksHighPriorityTasksDueOnDate rc=0 succ=0.0 steps=9 calls=9 jump=0 probes=2 err=None 88s
+- 10-19 08:46:36 FULLRUN p0 FULL28 TasksIncompleteTasksOnDate rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=0 err=None 43s
+- 10-19 08:47:49 FULLRUN p0 FULL28 TurnOffWifiAndTurnOnBluetooth rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=2 err=None 72s
+- 10-19 08:48:05 FULLRUN p0 FULL28 TurnOnWifiAndOpenApp rc=0 succ=0.5 steps=1 calls=1 jump=0 probes=1 err=None 15s
+- 10-19 08:52:04 FULLRUN p0 FULL28 VlcCreatePlaylist rc=0 succ=0.0 steps=14 calls=14 jump=0 probes=7 err=None 238s
+- 10-19 08:53:50 FULLRUN p0 FULL28 VlcCreateTwoPlaylists rc=0 succ=0.0 steps=20 calls=13 jump=0 probes=4 err=None 105s
+- 10-19 08:53:50 FULLRUN PASS 0 DONE
+FULL28 SINGLE PASS DONE
