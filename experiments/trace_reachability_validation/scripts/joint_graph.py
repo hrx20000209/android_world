@@ -65,11 +65,11 @@ class JointGraph:
       return [k]
     return [p for p in self.out if p[0] == ui.package and p[1] == ui.activity]
 
-  def paths(self, ui, goal, max_hops=MAX_HOPS, safe=None):
+  def paths(self, ui, goal, max_hops=MAX_HOPS, safe=None, starts=None):
     """Breadth-first paths (lists of (family, selector, dst page, origins)) from the live page to pages
     satisfying goal(page) -> bool. Only edges whose control passes safe(selector)."""
     out = []
-    for s in self.starts(ui):
+    for s in (starts if starts is not None else self.starts(ui)):
       q, seen = deque([(s, [])]), {s}
       while q:
         p, path = q.popleft()
@@ -171,7 +171,15 @@ def try_route(fx, ep, graph, pre, agent, steps, k, own, m):
           break
     return memo[p]
 
-  paths = jg.paths(ui, grounds, safe=safe_control)
+  if getattr(fx, "route_soft", False):
+    # FULL39: same as form routing - every recorded layout of this activity is a start, creation entries may be
+    # crossed, and the first control must be on the live screen
+    live_fams = {C.family_of_sel(t.sel) for t in U.enumerate_slots(ui)}
+    starts = [p for p in jg.out if p[0] == ui.package and p[1] == ui.activity]
+    paths = [pa for pa in jg.paths(ui, grounds, safe=lambda sel: safe_control(sel) or entry_control(sel), starts=starts)
+             if pa and pa[0][0] in live_fams]
+  else:
+    paths = jg.paths(ui, grounds, safe=safe_control)
   m["route_lookups"] += 1
   if not paths:
     return 0
@@ -180,7 +188,8 @@ def try_route(fx, ep, graph, pre, agent, steps, k, own, m):
   cap, hops = pre, 0
   for fam, sel, dst, origins in path:
     live = cap["ui"]
-    sl = next((t for t in U.enumerate_slots(live) if C.family_of_sel(t.sel) == fam and t.safe), None)
+    sl = next((t for t in U.enumerate_slots(live) if C.family_of_sel(t.sel) == fam
+               and (t.safe or (getattr(fx, "route_soft", False) and entry_control(t.sel)))), None)
     if sl is None:
       break
     node = live.nodes[sl.node_idx]
@@ -207,4 +216,96 @@ def try_route(fx, ep, graph, pre, agent, steps, k, own, m):
   m["route_apps"] += 1
   n = fx.try_apply(cap, agent, steps, k, own)
   m["route_then_applied"] += bool(n)
+  return hops + n
+
+
+ENTRY_WORDS = {"new", "add", "create", "compose"}
+
+
+def entry_control(sel):
+  """A creation entry (New Event / New Recipe / "+"): opens an editor, changes no data until the editor's commit."""
+  if sel.get("in_list") or sel.get("cls") in ("Switch", "CheckBox", "ToggleButton", "RadioButton"):
+    return False
+  import re  # pylint: disable=import-outside-toplevel
+  lab = (sel.get("label") or sel.get("desc") or sel.get("text") or "").strip().lower()
+  first = re.split(r"[^a-z]+", lab)[0] if lab else ""
+  rid = set(re.split(r"[^a-z]+", (sel.get("rid") or "").lower()))
+  return first in ENTRY_WORDS or (not lab and bool(rid & (ENTRY_WORDS | {"fab"})))
+
+
+def try_form_route(fx, ep, graph, pre, agent, steps, k, own, m, min_fields=2):
+  """FULL38: form routing. When this record's fields are not on the live page but a page of the graph (from any
+  task's inference trajectory or from exploration) shows >= min_fields empty fields that this record fills, walk
+  there over <= MAX_HOPS safe or creation-entry edges and fill them (pattern edge). One counted step, no inference."""
+  import json_action_shim as JA  # pylint: disable=import-outside-toplevel
+  import explore_value as EV  # pylint: disable=import-outside-toplevel
+  import full7  # pylint: disable=import-outside-toplevel
+  rec = fx.next_rec
+  fx.form_route_tried = getattr(fx, "form_route_tried", set())
+  if (rec >= fx._n_recs() or rec in fx.form_route_tried or fx.applied_rec not in (None, rec)
+      or (fx.model_rec is not None and fx.model_rec != rec)):
+    return 0
+  if getattr(fx, "form_filled", None) and any(r == rec for r, _ in fx.form_filled):
+    return 0                                          # this record's editor was already reached
+  ui = pre["ui"]
+  if fx._form_plan(ui, rec):
+    return 0
+  jg = JointGraph(graph)
+  raw = ep.out.parents[1]
+  here = page_key(ui)
+  memo = {}
+
+  def grounds(p):
+    if p[0] != ui.package or p == here:
+      return False
+    if p not in memo:
+      memo[p] = False
+      for inst, cid, _ in jg.into.get(p, [])[-3:]:
+        dui = EV.load_cap(raw, inst, cid)
+        if dui is not None and len(fx._form_plan(dui, rec)) >= min_fields:
+          memo[p] = True
+          break
+    return memo[p]
+
+  # every recorded variant of this activity is a start (layouts drift with list content); a path is usable only if
+  # its first control is on the live screen
+  live_fams = {C.family_of_sel(t.sel) for t in U.enumerate_slots(ui)}
+  starts = [p for p in jg.out if p[0] == ui.package and p[1] == ui.activity]
+  paths = [pa for pa in jg.paths(ui, grounds, safe=lambda sel: safe_control(sel) or entry_control(sel), starts=starts)
+           if pa and pa[0][0] in live_fams]
+  m["form_route_lookups"] += 1
+  if not paths:
+    return 0
+  fx.form_route_tried.add(rec)
+  path = paths[0]
+  cap, hops = pre, 0
+  for fam, sel, dst, origins in path:
+    live = cap["ui"]
+    sl = next((t for t in U.enumerate_slots(live) if C.family_of_sel(t.sel) == fam and (t.safe or entry_control(t.sel))), None)
+    if sl is None:
+      break
+    node = live.nodes[sl.node_idx]
+    action = JA.click(*node.center)
+    agent._execute_action(action, {})  # pylint: disable=protected-access
+    if getattr(ep, "_exec_log", None) is not None:
+      ep._exec_log.append({"action": {kk: vv for kk, vv in action.__dict__.items() if vv is not None}, "commit": False})  # pylint: disable=protected-access
+    lab = U.label_of(live, node) or sel.get("desc") or sel.get("rid")
+    summ = f"[graph] Tapped \"{lab}\"."
+    agent._actions.append({"summary": summ})  # pylint: disable=protected-access
+    agent._summaries.append(summ)  # pylint: disable=protected-access
+    row = {"step": k, "kind": "form_route", "tok": fam, "summary": summ, "origins": sorted(origins), "hop": hops,
+           "pre": R.strip(cap)}
+    steps.append(row)
+    ep.log("steps", row)
+    hops += 1
+    m["form_route_hops"] += 1
+    m["form_route_hops_explore_only"] += origins == frozenset({"explore"})
+    cap = full7.capture_stable(ep.dev, f"s{k}_froute{hops}")
+    if cap["ui"].activity != dst[1]:
+      break
+  if not hops:
+    return 0
+  m["form_route_apps"] += 1
+  n = fx.try_form(cap, agent, steps, k, own, m, via="route")
+  m["form_route_then_filled"] += bool(n)
   return hops + n

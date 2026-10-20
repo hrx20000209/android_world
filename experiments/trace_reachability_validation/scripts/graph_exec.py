@@ -25,7 +25,7 @@ HERE = Path(__file__).resolve().parent
 PROFILING_OBS = HERE.parent.parent / "runtime_graph_exploration" / "graph" / "observations.jsonl"
 TYPES = ("LAUNCH", "CONFIRM", "PARAM", "PATTERN", "ACTION")
 KIND_TYPE = {"bootstrap": "LAUNCH", "confirm": "CONFIRM", "function": "PARAM", "function_route": "PARAM",
-             "function_entry": "PARAM", "form_function": "PATTERN", "graph_reuse": "ACTION", "graph_macro": "ACTION"}
+             "function_entry": "PARAM", "form_function": "PATTERN", "form_route": "PATTERN", "graph_reuse": "ACTION", "graph_macro": "ACTION"}
 
 
 def _pkg(s):

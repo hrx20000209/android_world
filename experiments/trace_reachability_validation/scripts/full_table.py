@@ -4,7 +4,7 @@ from collections import Counter
 
 ARMS = sys.argv[1:] or ["BASE", "FULL23", "FULL23R", "FULL23W", "FULL28", "FULL28R", "FULL29", "FULL29X", "FULL30", "FULL31"]
 G = {"bootstrap": "启动", "confirm": "确认", "function": "函数", "function_route": "函数", "function_entry": "函数",
-     "form_function": "表单", "graph_macro": "宏", "graph_reuse": "repeat"}
+     "form_function": "表单", "form_route": "表单", "graph_macro": "宏", "graph_reuse": "repeat"}
 
 
 def load(a):
