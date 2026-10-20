@@ -8501,3 +8501,6 @@
 - 10-20 14:34:23 FULLRUN p0 FULL37R TurnOffWifiAndTurnOnBluetooth rc=0 succ=1.0 steps=9 calls=9 jump=0 probes=2 err=None 50s
 - 10-20 14:34:44 FULLRUN p0 FULL37R TurnOnWifiAndOpenApp rc=0 succ=0.5 steps=1 calls=1 jump=0 probes=0 err=None 21s
 - 10-20 14:37:01 FULLRUN p0 FULL37R VlcCreatePlaylist rc=0 succ=0.0 steps=25 calls=20 jump=0 probes=1 err=None 138s
+- 10-20 14:41:20 FULLRUN p0 FULL37R VlcCreateTwoPlaylists rc=0 succ=0.0 steps=31 calls=20 jump=0 probes=2 err=None 259s
+- 10-20 14:41:20 FULLRUN PASS 0 DONE
+- 10-20 14:41 FULL37R 只跑一轮（seed 30），第 1 轮结束后停止。

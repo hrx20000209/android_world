@@ -136571,3 +136571,28 @@ E0000 00:00:1792478457.312173 111210701 tcp_posix.cc:595] recvmsg encountered un
 E0000 00:00:1792478458.858145 111210701 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
 E0000 00:00:1792478460.252217 111210701 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
 E0000 00:00:1792478461.786700 111210701 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792478464.876070 111210701 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/org.videolan.vlc.
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/org.videolan.vlc.
+RESULT {"task": "VlcCreateTwoPlaylists", "variant": "p0_FULL37R", "mode": "agent", "steps": 31, "env_actions": 32, "agent_steps": 32, "done": false, "model_calls": 20, "final_cid": "0051_final", "n_probes": 2, "explore_disabled": "", "store_eps": 49, "m_bootstrap": 1, "m_env_actions_extra": 1, "m_func_edge_no_func": 6, "m_probes_e1": 0, "m_probes_e2": 0, "m_probes_fx": 0, "m_probes_d2": 0, "m_probes_rv": 2, "m_learned_effectful": 0, "m_learned_group": 0, "m_p_rev_dropped": 90, "m_drift_stops": 0, "m_learned_edit_effect": 0, "m_probes_total": 2, "m_windows_explored": 2, "m_fx_entry_need": 0, "m_calls": 20, "m_macro_none": 19, "m_e2_hit": 1, "m_reuse_miss": 1, "m_form_apps": 6, "m_form_steps": 6, "m_func_apps": 6, "m_func_steps": 6, "m_reuse_skip": 5, "m_reuse_repeat": 5, "m_reuse_absent": 5, "m_jump_absent": 0, "m_jump_mismatch": 0, "is_successful": 0.0, "wall_s": 119.21}
+/Users/huangrunxi/Projects/android_world/android_world/agents/infer.py:24: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.dimowner.audiorecorder.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1792478490.707707 111229630 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792478495.242095 111229630 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792478497.905745 111229630 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792478499.565542 111229630 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792478503.372246 111229630 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792478505.969335 111229630 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792478507.355219 111229630 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+E0000 00:00:1792478510.030071 111229630 tcp_posix.cc:595] recvmsg encountered uncommon error: Message too long
+WARNING:absl:Skipping app snapshot loading : Snapshot not found in /data/data/android_world/snapshots/com.dimowner.audiorecorder.
+RESULT {"task": "AudioRecorderRecordAudio", "variant": "p1_FULL37R", "mode": "agent", "steps": 9, "env_actions": 10, "agent_steps": 10, "done": true, "model_calls": 8, "final_cid": "0017_final", "n_probes": 0, "explore_disabled": "", "store_eps": 49, "m_bootstrap": 1, "m_env_actions_extra": 1, "m_func_edge_no_func": 9, "m_macro_none": 9, "m_jumps": 2, "m_jump_steps": 1, "m_jump_commit_steps": 0, "m_jump_rejected": 2, "m_probes_e1": 0, "m_probes_e2": 0, "m_probes_fx": 0, "m_probes_d2": 0, "m_probes_rv": 0, "m_learned_effectful": 0, "m_learned_group": 0, "m_p_rev_dropped": 33, "m_drift_stops": 0, "m_learned_edit_effect": 0, "m_probes_total": 0, "m_windows_explored": 0, "m_fx_entry_need": 0, "m_calls": 8, "m_gx_confirm_no_edge": 7, "m_jump_absent": 2, "m_jump_mismatch": 0, "is_successful": 1.0, "wall_s": 34.52}
