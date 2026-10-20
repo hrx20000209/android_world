@@ -98,6 +98,34 @@ def w_ui(t):
   return idf.get(t, math.log(n + 1) + 1)
 
 
+# ---- FULL32: app-as-document global IDF ----------------------------------------------------------------------
+APP_TOKENS_PATH = HERE.parent.parent / "runtime_graph_exploration" / "graph" / "app_tokens.json"
+_APP_DOC = None
+
+
+def app_doc():
+  """Profiling corpus with one document per app: {package: set(terms)} and the per-term app frequency."""
+  global _APP_DOC
+  if _APP_DOC is None:
+    toks = {k: set(v) for k, v in json.loads(APP_TOKENS_PATH.read_text()).items()}
+    df = Counter()
+    for v in toks.values():
+      df.update(v)
+    _APP_DOC = (toks, df)
+  return _APP_DOC
+
+
+def w_app(pkg):
+  """Global IDF with apps as documents, the current app left out: a term every other app shows weighs little,
+  a term few other apps show weighs much."""
+  toks, df = app_doc()
+  own = toks.get(pkg, set())
+  n = len(toks) - (1 if pkg in toks else 0)
+  def w(t):
+    return math.log((n + 1) / (df.get(t, 0) - (1 if t in own else 0) + 1)) + 1
+  return w
+
+
 # ---- goal side ---------------------------------------------------------------------------------------------
 _APP_PATTERNS = None
 
@@ -193,8 +221,10 @@ def load_cap(raw, instance, cid):
 class GraphValue:
   """Graph-side evidence for one episode window (rebuilt when the graph grows)."""
 
-  def __init__(self, graph, raw, gvec, package=None):
+  def __init__(self, graph, raw, gvec, package=None, app_doc_idf=False, instance=None):
     self.raw, self.gvec, self.package = raw, gvec, package
+    self.wg = w_app(package) if app_doc_idf else w_ui        # FULL32: global IDF over apps (profiling corpus)
+    self.instance, self.ep_pages = instance, {}
     self.by_label, self.by_rid, self.children, self.page_rel, self.app_pages = {}, {}, {}, {}, {}
     self.seen = Counter()
     for (struct, sid), obs in graph.slots.items():
@@ -215,7 +245,20 @@ class GraphValue:
           self.children.setdefault(src, set()).add(ent)
         if package and d.get("package") == package:
           self.app_pages.setdefault(d.get("layout_sig"), ent)
+          if instance and o.get("instance") == instance:
+            self.ep_pages.setdefault(d.get("layout_sig"), ent)
     self._local_idf()
+
+  @staticmethod
+  def _df(raw, ents):
+    df, n = Counter(), 0
+    for ent in ents[:80]:
+      ui = load_cap(raw, ent[0], ent[1])
+      if ui is None:
+        continue
+      n += 1
+      df.update(set(page_tokens(ui)))
+    return n, df
 
   def _local_idf(self):
     """Graph-local IDF: the documents are the distinct pages of the current app held in this graph. Terms on
@@ -229,15 +272,27 @@ class GraphValue:
       n += 1
       df.update(set(page_tokens(ui)))
     self.local_n, self.local_df = n, df
+    # FULL32: task-local IDF over the pages of this app reached in the current episode (agent + probes)
+    self.ep_n, self.ep_df = self._df(self.raw, list(self.ep_pages.values())) if self.instance else (0, Counter())
 
   def w(self, t):
     """Term weight: geometric mean of the global (all apps' screens) and the graph-local (this app's pages)
     IDF; global only while the app has fewer than 3 pages in the graph."""
-    g = w_ui(t)
-    if self.local_n < 3:
+    g = self.wg(t)
+    ws = [g]
+    if self.local_n >= 3:
+      ws.append(math.log((self.local_n + 1) / (self.local_df.get(t, 0) + 1)) + 1)
+    if self.instance and self.ep_n >= 3:
+      ws.append(math.log((self.ep_n + 1) / (self.ep_df.get(t, 0) + 1)) + 1)
+    if len(ws) == 1:
       return g
-    loc = math.log((self.local_n + 1) / (self.local_df.get(t, 0) + 1)) + 1
-    return math.sqrt(g * loc)
+    if not self.instance and len(ws) == 2:
+      return math.sqrt(ws[0] * ws[1])
+    # FULL32: geometric mean of global (apps), graph-local (this app's pages) and task-local (this episode)
+    out = 1.0
+    for x in ws:
+      out *= x
+    return out ** (1.0 / len(ws))
 
   def _page_rel(self, ent):
     if ent not in self.page_rel:
@@ -278,7 +333,7 @@ class GraphValue:
     v, lvl = self.value(ui, sl, known_edge_ents)
     if sl.sel.get("in_list") and getattr(self, "pvec", None):
       v += PARAM_W * rel(self.pvec, own_tokens(ui, sl.sel), self.w)
-    return v + BETA * self.novelty(sl.sel), v, lvl
+    return v + getattr(self, "beta", BETA) * self.novelty(sl.sel), v, lvl
 
 
 if __name__ == "__main__":

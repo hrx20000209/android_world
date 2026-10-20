@@ -15,6 +15,7 @@ FuncExec
 from __future__ import annotations
 
 import json
+import os
 import math
 import re
 import sys
@@ -61,12 +62,54 @@ def op_similarity(label, ops):
   return num / den if den else 0.0
 
 
+def _base_arm():
+  """Arm behaviour name: replicate suffixes (R, R2, W, X) share the base arm's behaviour."""
+  a = os.environ.get("FULL_ARM", "")
+  return re.sub(r"(R\d*|W|X)$", "", a) if re.match(r"^FULL\d+(R\d*|W|X)$", a) else a
+
+
+def field_role(fd):
+  """FULL35: a field is an ENTITY slot (the thing the record is about) when the parser named it from the sentence
+  (enumeration items, file names, phrase keys); table / key-value columns keep their own name."""
+  return "ENTITY" if fd.startswith(("enum:", "file:")) or " " in fd else fd
+
+
+def _role_adapted(funcs, recs):
+  """FULL35: re-bind a function's single ENTITY slot to the current task's single ENTITY field, so a procedure
+  learned on "delete recipe X" applies to "delete recipes A, B, C" (slot names differ, the role is the same)."""
+  cur = [fd for fd in recs if field_role(fd) == "ENTITY"]
+  if len(cur) != 1:
+    return []
+  out = []
+  for f in funcs:
+    ent = [fd for fd in f["fields"] if field_role(fd) == "ENTITY"]
+    if len(ent) != 1 or ent[0] == cur[0]:
+      continue
+    g = json.loads(json.dumps(f))
+    g["fields"] = sorted(cur[0] if fd == ent[0] else fd for fd in g["fields"])
+    for st in g["steps"]:
+      if st.get("field") == ent[0]:
+        st["field"] = cur[0]
+    g["src"] = g.get("src", "") + "#role"
+    out.append(g)
+  return out
+
+
 class FuncExec:
   def __init__(self, episode, goal):
     self.ep, self.goal = episode, goal
     self.P = FG.parse_goal(goal)
     self.recs = FG.records(self.P)
-    self.lib = FG.Library(episode.args.task)
+    if _base_arm() in ("FULL33", "FULL34", "FULL35", "FULL36", "FULL37") and getattr(episode, "out", None) is not None:
+      # FULL33: online only - the library holds functions of this run's earlier self-completed episodes
+      cache = Path(os.environ.get("SEQ_APPDIR", "/tmp/full")) / os.environ["FULL_ARM"] / "function_cache_online.jsonl"
+      cache.parent.mkdir(parents=True, exist_ok=True)
+      FG.build_online(Path(episode.out).parents[1], cache)
+      self.lib = FG.Library(episode.args.task, cache=cache)
+      if _base_arm() in ("FULL35", "FULL36", "FULL37"):
+        self.lib.funcs = self.lib.funcs + _role_adapted(self.lib.funcs, self.recs)
+    else:
+      self.lib = FG.Library(episode.args.task)
     self.done = set()             # records finished (closed by a commit)
     self.tried = set()            # records already attempted by a function
     self.applied_rec = None       # record of the last function application, closed by the model's commit
@@ -754,6 +797,43 @@ def container_evidence(graph):
       e = ev.setdefault(k, [0, 0])
       e[0 if o.get("rollback_ok") else 1] += 1
   return ev
+
+
+def app_kind_evidence(graph, split_rows=False):
+  """FULL34: per (package, probe kind) - how often Back undid this run's depth-1 probes of that kind in the app
+  (kind: "discover" = a control never seen before, "revalidate" = re-observing a known edge)."""
+  ev = {}
+  for (struct, sid), obs in graph.slots.items():
+    for o in obs:
+      if o.get("origin") != "explore" or o.get("depth", 1) != 1 or not o.get("src"):
+        continue
+      kind = o.get("priority") or "discover"
+      if split_rows and (o.get("selector") or {}).get("in_list"):
+        kind += "_row"                   # FULL35: entity rows and controls are different populations
+      k = (o["src"].get("package"), kind)
+      e = ev.setdefault(k, [0, 0])
+      e[0 if o.get("rollback_ok") else 1] += 1
+  return ev
+
+
+def p_reversible_h(ui, sel, evidence, app_ev, kind, strength=5.0, app_strength=10.0):
+  """FULL34: hierarchical Beta posterior. Level 1: cross-app role x zone prior p0. Level 2: this app's probes of
+  the same kind in this run, mean mu = (s0 p0 + ok_app) / (s0 + n_app). Level 3: the control's container evidence
+  with prior mu. A new container in an app whose discoveries keep failing inherits that app's failure rate."""
+  import rev_prior as RP  # noqa: E402
+  ft = RP.features(ui, sel)
+  pri = rev_prior()
+  p0 = 0.75
+  if ft is not None:
+    for k in ("role_zone|" + ft["role"] + "/" + ft["zone"], "role|" + ft["role"]):
+      v = pri.get(k)
+      if v and v["n"] >= 10:
+        p0 = (v["ok"] + 1) / (v["n"] + 2)
+        break
+  ok_a, fail_a = app_ev.get((ui.package, kind), (0, 0))
+  mu = (app_strength * p0 + ok_a) / (app_strength + ok_a + fail_a)
+  ok, fail = evidence.get(container_key(ui.package, ui.activity, sel), (0, 0))
+  return (strength * mu + ok) / (strength + ok + fail)
 
 
 def p_reversible(ui, sel, evidence, strength=5.0):

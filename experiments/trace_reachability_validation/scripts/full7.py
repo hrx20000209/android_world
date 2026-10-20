@@ -253,7 +253,7 @@ def _known_pkgs():
   return _KNOWN_PKGS
 
 
-def resolve_app(goal, ui):
+def resolve_app(goal, ui, require_known=True):
   """App named in the instruction (earliest mention, longest alias) whose package the graph has observed.
   Only on the launcher: if the task starts inside an app nothing is launched."""
   from android_world.env import adb_utils
@@ -263,7 +263,7 @@ def resolve_app(goal, ui):
   best = None
   for pattern, activity in adb_utils._PATTERN_TO_ACTIVITY.items():  # pylint: disable=protected-access
     pkg = activity.split("/")[0]
-    if pkg not in _known_pkgs():
+    if require_known and pkg not in _known_pkgs():
       continue
     for alias in pattern.split("|"):
       mm = re.search(r"(?<![\w])" + re.escape(alias) + r"(?![\w])", g)

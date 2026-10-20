@@ -21,6 +21,9 @@ from __future__ import annotations
 import json
 import math
 import re
+import os as _os
+_m = re.match(r"FULL(\d+)", _os.environ.get("FULL_ARM", ""))
+_ARM_N = int(_m.group(1)) if _m else 0
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -83,10 +86,18 @@ def parse_goal(goal):
     v = m.group(1) or m.group(2)
     slots.append({"field": " ".join(_key(goal[max(0, m.start() - 40):m.start()]).split()[-1:]), "value": v, "rec": 0})
   # 5. enumeration after a colon: "...: A, B and C."
-  m = re.search(r":\s*([^:\n]+?)\.?\s*$", lines[0]) if not any(s["field"] for s in slots if not s["field"].startswith(("file:", "number"))) else None
+  # FULL33: a colon inside a time ("7:45am") does not start a list, and a question is not a list
+  _pat = r"(?<!\d):(?!\d)\s*([^:\n?]+?)\.?\s*$" if _ARM_N >= 33 else r":\s*([^:\n]+?)\.?\s*$"
+  m = re.search(_pat, lines[0]) if not any(s["field"] for s in slots if not s["field"].startswith(("file:", "number"))) else None
   if m:
     head = _key(lines[0][:m.start()])
-    items = [x.strip() for x in re.split(r",\s*|\s+and\s+", m.group(1)) if x.strip()]
+    if _ARM_N >= 33 and "," in m.group(1):
+      # FULL33: list items are comma-separated; " and " inside an item is part of a name ("Kale and Quinoa Salad")
+      items = [re.sub(r"^and\s+", "", x.strip()) for x in m.group(1).split(",") if x.strip()]
+    elif _ARM_N >= 33:
+      items = [m.group(1).strip()]
+    else:
+      items = [x.strip() for x in re.split(r",\s*|\s+and\s+", m.group(1)) if x.strip()]
     if 1 <= len(items) <= 8:
       for j, it in enumerate(items):
         slots.append({"field": "enum:" + head, "value": it, "rec": j})
@@ -217,6 +228,49 @@ def build_cache(roots, out=CACHE, extra=False):
         except Exception:  # pylint: disable=broad-except
           continue
   return n
+
+
+def self_reported_done(ep):
+  """The model itself ended the episode as complete (no benchmark evaluator involved)."""
+  last = None
+  for line in open(ep / "steps.jsonl"):
+    r = json.loads(line)
+    if r.get("kind") == "model":
+      last = r
+  if last is None:
+    return False
+  a = last.get("action") or {}
+  return (a.get("action_type") == "status" and a.get("goal_status") == "task_complete") or a.get("action_type") == "answer"
+
+
+def build_online(run_dir, out):
+  """FULL33 online function library: functions extracted from the episodes of THIS run that the model itself
+  completed, in run order; nothing from earlier runs. Appends episodes not yet processed."""
+  out = Path(out)
+  done_p = out.with_suffix(".done")
+  done = set(done_p.read_text().split()) if done_p.exists() else set()
+  out.touch()
+  new = []
+  for ep in sorted(Path(run_dir).glob("*/p0")):
+    key = ep.parent.name
+    if key in done or not (ep / "result.json").exists() or not (ep / "steps.jsonl").exists():
+      continue
+    done.add(key)
+    try:
+      if not self_reported_done(ep):
+        continue
+      goal = json.loads((ep / "meta.json").read_text())["goal"]
+      for f in extract(ep, goal):
+        f["src"] = f"online/{key}"
+        f["template"] = M.template_key(key)
+        new.append(f)
+    except Exception:  # pylint: disable=broad-except
+      continue
+  with out.open("a") as fo:
+    for f in new:
+      fo.write(json.dumps(f) + "\n")
+  done_p.write_text("\n".join(sorted(done)))
+  return len(new)
 
 
 class Library:
