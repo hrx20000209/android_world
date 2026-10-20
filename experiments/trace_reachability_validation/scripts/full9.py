@@ -100,13 +100,13 @@ class FuncExec:
     self.ep, self.goal = episode, goal
     self.P = FG.parse_goal(goal)
     self.recs = FG.records(self.P)
-    if _base_arm() in ("FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39") and getattr(episode, "out", None) is not None:
+    if _base_arm() in ("FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40") and getattr(episode, "out", None) is not None:
       # FULL33: online only - the library holds functions of this run's earlier self-completed episodes
       cache = Path(os.environ.get("SEQ_APPDIR", "/tmp/full")) / os.environ["FULL_ARM"] / "function_cache_online.jsonl"
       cache.parent.mkdir(parents=True, exist_ok=True)
       FG.build_online(Path(episode.out).parents[1], cache)
       self.lib = FG.Library(episode.args.task, cache=cache)
-      if _base_arm() in ("FULL35", "FULL36", "FULL37", "FULL38", "FULL39"):
+      if _base_arm() in ("FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40"):
         self.lib.funcs = self.lib.funcs + _role_adapted(self.lib.funcs, self.recs)
     else:
       self.lib = FG.Library(episode.args.task)
