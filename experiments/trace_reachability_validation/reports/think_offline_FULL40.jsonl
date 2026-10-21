@@ -1,0 +1,296 @@
+{"task": "MarkorDeleteNewestNote", "step": 1, "orig": "E|TextView|action_delete_selected_items|Delete|Delete", "A": "E|TextView|action_delete_selected_items|Delete|Delete", "B": "E|TextView|action_delete_selected_items|Delete|Delete", "think": true, "tokA": 144, "tokB": 44}
+{"task": "ExpenseDeleteDuplicates", "step": 5, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": true, "tokA": 201, "tokB": 7}
+{"task": "AudioRecorderRecordAudio", "step": 3, "orig": "E|ImageButton|btn_record|Recording: %s|Recording: %s", "A": "E|ImageButton|btn_record|Recording: %s|Recording: %s", "B": "E|ImageButton|btn_record|Recording: %s|Recording: %s", "think": false, "tokA": 52, "tokB": 50}
+{"task": "ContactsNewContactDraft", "step": 4, "orig": "E|EditText|||Ivan", "A": "E|EditText|||Ivan", "B": "E|EditText|||Ivan", "think": true, "tokA": 149, "tokB": 61}
+{"task": "TurnOffWifiAndTurnOnBluetooth", "step": 1, "orig": "E|LinearLayout|||Network & internet", "A": "E|LinearLayout|||Network & internet", "B": "E|LinearLayout|||Network & internet", "think": true, "tokA": 136, "tokB": 47}
+{"task": "SystemWifiTurnOn", "step": 5, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": true, "tokA": 104, "tokB": 12}
+{"task": "SaveCopyOfReceiptTaskEval", "step": 1, "orig": "E|ImageView||More options|More options", "A": "E|ImageView||More options|More options", "B": "E|ImageView||More options|More options", "think": true, "tokA": 180, "tokB": 55}
+{"task": "RecipeDeleteMultipleRecipes", "step": 0, "orig": "E|CardView|||Recipe photo", "A": "E|CardView|||Recipe photo", "B": "E|CardView|||Recipe photo", "think": true, "tokA": 122, "tokB": 48}
+{"task": "ExpenseDeleteMultiple", "step": 2, "orig": "E|Button|btn_confirm||CONFIRM", "A": "E|Button|btn_confirm||CONFIRM", "B": "E|Button|btn_confirm||CONFIRM", "think": false, "tokA": 45, "tokB": 43}
+{"task": "MarkorDeleteNote", "step": 0, "orig": "LONG_PRESS:L|LinearLayout|opoc_filesystem_item__root", "A": "LONG_PRESS:L|LinearLayout|opoc_filesystem_item__root", "B": "LONG_PRESS:L|LinearLayout|opoc_filesystem_item__root", "think": true, "tokA": 157, "tokB": 49}
+{"task": "MarkorDeleteAllNotes", "step": 9, "orig": "L|LinearLayout|opoc_filesystem_item__root", "A": "L|LinearLayout|opoc_filesystem_item__root", "B": "L|LinearLayout|opoc_filesystem_item__root", "think": false, "tokA": 66, "tokB": 64}
+{"task": "SaveCopyOfReceiptTaskEval", "step": 3, "orig": "E|Button|button3||Other folder", "A": "E|Button|button3||Other folder", "B": "E|Button|button3||Other folder", "think": true, "tokA": 177, "tokB": 12}
+{"task": "SystemWifiTurnOff", "step": 2, "orig": "E|LinearLayout|||Network & internet", "A": "E|LinearLayout|||Network & internet", "B": "E|LinearLayout|||Network & internet", "think": true, "tokA": 121, "tokB": 48}
+{"task": "SimpleSmsSend", "step": 4, "orig": "E|Button|thread_send_message|OK|SMS", "A": "E|Button|thread_send_message|OK|SMS", "B": "E|Button|thread_send_message|OK|SMS", "think": true, "tokA": 125, "tokB": 45}
+{"task": "SystemBluetoothTurnOn", "step": 4, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": true, "tokA": 86, "tokB": 11}
+{"task": "SystemBluetoothTurnOff", "step": 2, "orig": "SWIPE:down", "A": "SWIPE:up", "B": "SWIPE:up", "think": false, "tokA": 71, "tokB": 69}
+{"task": "SystemWifiTurnOff", "step": 5, "orig": "E|LinearLayout|||Wi-Fi", "A": "E|LinearLayout|||Wi-Fi", "B": "E|LinearLayout|||Wi-Fi", "think": true, "tokA": 121, "tokB": 40}
+{"task": "AudioRecorderRecordAudioWithFileName", "step": 4, "orig": "E|ImageButton|btn_record_stop||", "A": "E|ImageButton|btn_record_stop||", "B": "E|ImageButton|btn_record_stop||", "think": true, "tokA": 148, "tokB": 33}
+{"task": "SimpleSmsReply", "step": 0, "orig": "OPEN_APP:Simple SMS Messenger", "A": "OPEN_APP:Simple SMS Messenger", "B": "OPEN_APP:Simple SMS Messenger", "think": false, "tokA": 11, "tokB": 9}
+{"task": "SimpleSmsSend", "step": 0, "orig": "L|ImageButton|conversations_fab", "A": "L|ImageButton|conversations_fab", "B": "L|ImageButton|conversations_fab", "think": false, "tokA": 37, "tokB": 35}
+{"task": "SimpleCalendarDeleteOneEvent", "step": 2, "orig": "L|ImageView|top_right_arrow", "A": "L|ImageView|top_right_arrow", "B": "L|ImageView|top_right_arrow", "think": false, "tokA": 48, "tokB": 46}
+{"task": "MarkorCreateFolder", "step": 2, "orig": "E|Button|button3||FOLDER", "A": "E|Button|button3||FOLDER", "B": "E|Button|button3||FOLDER", "think": false, "tokA": 34, "tokB": 32}
+{"task": "SystemBluetoothTurnOn", "step": 2, "orig": "E|LinearLayout|||Connected devices", "A": "E|LinearLayout|||Connected devices", "B": "E|LinearLayout|||Connected devices", "think": true, "tokA": 125, "tokB": 37}
+{"task": "SystemBrightnessMaxVerify", "step": 2, "orig": "E|Button|expand_button|Collapse|Collapse", "A": "E|Button|expand_button|Collapse|Collapse", "B": "SWIPE:up", "think": true, "tokA": 135, "tokB": 53}
+{"task": "SimpleCalendarDeleteEventsOnRelativeDay", "step": 7, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": false, "tokA": 18, "tokB": 16}
+{"task": "ExpenseAddMultiple", "step": 13, "orig": "E|Button|btn_save||SAVE", "A": "E|Button|btn_save||SAVE", "B": "E|Button|btn_save||SAVE", "think": false, "tokA": 41, "tokB": 39}
+{"task": "MarkorCreateFolder", "step": 1, "orig": "TYPE:opoc_filesystem_item__root", "A": "TYPE:opoc_filesystem_item__root", "B": "E|ScrollView|buttonPanel||FOLDER", "think": true, "tokA": 187, "tokB": 40}
+{"task": "SimpleCalendarEventOnDateAtTime", "step": 4, "orig": "L|ImageView|top_right_arrow", "A": "L|ImageView|top_right_arrow", "B": "L|ImageView|top_right_arrow", "think": false, "tokA": 55, "tokB": 53}
+{"task": "SportsTrackerActivityDuration", "step": 0, "orig": "STATUS", "A": "E|ImageView|search_button|Search|Search", "B": "E|ImageView|search_button|Search|Search", "think": true, "tokA": 152, "tokB": 41}
+{"task": "SimpleCalendarDeleteOneEvent", "step": 1, "orig": "L|View|month_view_background", "A": "L|View|month_view_background", "B": "L|View|month_view_background", "think": false, "tokA": 44, "tokB": 42}
+{"task": "SystemWifiTurnOnVerify", "step": 2, "orig": "E|LinearLayout|||Network & internet", "A": "E|LinearLayout|||Network & internet", "B": "E|LinearLayout|||Network & internet", "think": true, "tokA": 138, "tokB": 48}
+{"task": "MarkorCreateFolder", "step": 0, "orig": "E|ImageButton|fab_add_new_item|Create a new file or folder|Create a new file or folder", "A": "E|ImageButton|fab_add_new_item|Create a new file or folder|Create a new file or folder", "B": "E|ImageButton|fab_add_new_item|Create a new file or folder|Create a new file or folder", "think": false, "tokA": 63, "tokB": 61}
+{"task": "ExpenseDeleteMultiple", "step": 8, "orig": "E|Button|btn_confirm||CONFIRM", "A": "E|Button|btn_confirm||CONFIRM", "B": "E|Button|btn_confirm||CONFIRM", "think": false, "tokA": 49, "tokB": 45}
+{"task": "RecipeAddMultipleRecipes", "step": 9, "orig": "E|Button|button_save_recipe||SAVE", "A": "E|Button|button_save_recipe||SAVE", "B": "E|Button|button_save_recipe||SAVE", "think": false, "tokA": 56, "tokB": 54}
+{"task": "SimpleCalendarDeleteOneEvent", "step": 0, "orig": "E|Button|button1||OK", "A": "E|Button|button1||OK", "B": "E|Button|button1||OK", "think": false, "tokA": 43, "tokB": 41}
+{"task": "ExpenseDeleteSingle", "step": 3, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": false, "tokA": 18, "tokB": 16}
+{"task": "SystemWifiTurnOff", "step": 6, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": true, "tokA": 109, "tokB": 7}
+{"task": "MarkorDeleteAllNotes", "step": 12, "orig": "E|ImageView||Delete lines|Delete lines", "A": "E|ImageView||Delete lines|Delete lines", "B": "E|ImageView||Delete lines|Delete lines", "think": false, "tokA": 67, "tokB": 65}
+{"task": "SimpleSmsReplyMostRecent", "step": 0, "orig": "L|FrameLayout|conversation_frame", "A": "L|FrameLayout|conversation_frame", "B": "L|FrameLayout|conversation_frame", "think": true, "tokA": 120, "tokB": 12}
+{"task": "RecipeAddMultipleRecipes", "step": 7, "orig": "E|ImageButton||Navigate up|Navigate up", "A": "?", "B": "E|ImageButton||Navigate up|Navigate up", "think": false, "tokA": 84, "tokB": 39}
+{"task": "OpenAppTaskEval", "step": 2, "orig": "STATUS", "A": "E|ImageButton|incall_end_call|End call|End call", "B": "E|ImageButton|incall_end_call|End call|End call", "think": false, "tokA": 36, "tokB": 34}
+{"task": "AudioRecorderRecordAudio", "step": 2, "orig": "E|Button|btn_apply||Apply", "A": "E|Button|btn_apply||Apply", "B": "E|Button|btn_apply||Apply", "think": false, "tokA": 58, "tokB": 56}
+{"task": "MarkorDeleteAllNotes", "step": 6, "orig": "CLICK:none", "A": "CLICK:none", "B": "CLICK:none", "think": false, "tokA": 67, "tokB": 65}
+{"task": "RecipeAddMultipleRecipes", "step": 19, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:", "think": false, "tokA": 65, "tokB": 62}
+{"task": "MarkorDeleteNewestNote", "step": 0, "orig": "LONG_PRESS:L|LinearLayout|opoc_filesystem_item__root", "A": "LONG_PRESS:L|LinearLayout|opoc_filesystem_item__root", "B": "E|ViewGroup|toolbar||Markor", "think": true, "tokA": 203, "tokB": 53}
+{"task": "MarkorDeleteAllNotes", "step": 3, "orig": "L|LinearLayout|opoc_filesystem_item__root", "A": "L|LinearLayout|opoc_filesystem_item__root", "B": "STATUS", "think": true, "tokA": 148, "tokB": 15}
+{"task": "SimpleCalendarDeleteEvents", "step": 8, "orig": "L|ViewGroup|event_item_holder", "A": "L|ViewGroup|event_item_holder", "B": "L|ViewGroup|event_item_holder", "think": false, "tokA": 50, "tokB": 48}
+{"task": "ContactsAddContact", "step": 5, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:", "think": true, "tokA": 127, "tokB": 31}
+{"task": "ExpenseAddMultiple", "step": 5, "orig": "SWIPE:left", "A": "SWIPE:left", "B": "SWIPE:left", "think": false, "tokA": 39, "tokB": 65}
+{"task": "AudioRecorderRecordAudioWithFileName", "step": 5, "orig": "E|TextView|txt_name||Record-432", "A": "E|TextView|txt_name||Record-432", "B": "E|TextView|txt_name||Record-432", "think": false, "tokA": 46, "tokB": 44}
+{"task": "SimpleCalendarAnyEventsOnDate", "step": 2, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": false, "tokA": 20, "tokB": 18}
+{"task": "SystemWifiTurnOn", "step": 0, "orig": "SWIPE:down", "A": "SWIPE:down", "B": "SWIPE:down", "think": false, "tokA": 57, "tokB": 55}
+{"task": "NotesIsTodo", "step": 3, "orig": "E|ViewGroup|||Budget Spreadsheet", "A": "E|ViewGroup|||Budget Spreadsheet", "B": "E|ViewGroup|||Budget Spreadsheet", "think": false, "tokA": 46, "tokB": 44}
+{"task": "RecipeAddMultipleRecipes", "step": 13, "orig": "L|EditText|new_title", "A": "L|EditText|new_title", "B": "L|EditText|new_title", "think": false, "tokA": 54, "tokB": 52}
+{"task": "SimpleCalendarEventOnDateAtTime", "step": 8, "orig": "L|ImageView|top_right_arrow", "A": "L|ImageView|top_right_arrow", "B": "L|ImageView|top_right_arrow", "think": false, "tokA": 55, "tokB": 56}
+{"task": "SystemBrightnessMinVerify", "step": 0, "orig": "SWIPE:down", "A": "SWIPE:up", "B": "SWIPE:up", "think": false, "tokA": 60, "tokB": 58}
+{"task": "SystemBrightnessMinVerify", "step": 2, "orig": "SWIPE:down", "A": "SWIPE:down", "B": "SWIPE:down", "think": false, "tokA": 57, "tokB": 55}
+{"task": "SportsTrackerLongestDistanceActivity", "step": 0, "orig": "STATUS", "A": "SWIPE:down", "B": "E|Button|aggregated_stats_button||", "think": true, "tokA": 170, "tokB": 34}
+{"task": "ExpenseAddMultiple", "step": 6, "orig": "L|CardView|cd_category", "A": "L|CardView|cd_category", "B": "L|CardView|cd_category", "think": false, "tokA": 57, "tokB": 55}
+{"task": "SimpleCalendarEventOnDateAtTime", "step": 3, "orig": "L|ImageView|top_right_arrow", "A": "L|ImageView|top_right_arrow", "B": "L|ImageView|top_right_arrow", "think": false, "tokA": 61, "tokB": 59}
+{"task": "NotesIsTodo", "step": 0, "orig": "OPEN_APP:Joplin", "A": "OPEN_APP:Joplin", "B": "OPEN_APP:Joplin", "think": false, "tokA": 47, "tokB": 45}
+{"task": "RecipeDeleteMultipleRecipes", "step": 2, "orig": "E|LinearLayout|||Delete", "A": "E|LinearLayout|||Delete", "B": "E|LinearLayout|||Delete", "think": false, "tokA": 46, "tokB": 44}
+{"task": "ContactsAddContact", "step": 0, "orig": "OPEN_APP:Contacts", "A": "E|TextView||Phone|Phone", "B": "E|TextView||Phone|Phone", "think": false, "tokA": 38, "tokB": 36}
+{"task": "SimpleCalendarDeleteOneEvent", "step": 8, "orig": "E|Button|button1||Yes", "A": "E|Button|button1||Yes", "B": "E|Button|button1||Yes", "think": false, "tokA": 42, "tokB": 40}
+{"task": "SystemWifiTurnOnVerify", "step": 1, "orig": "E|TextView|icon|Settings|Settings", "A": "E|TextView|icon|Settings|Settings", "B": "E|TextView|icon|Settings|Settings", "think": true, "tokA": 118, "tokB": 51}
+{"task": "SimpleCalendarDeleteEvents", "step": 2, "orig": "L|ViewGroup|event_item_holder", "A": "L|ViewGroup|event_item_holder", "B": "L|ViewGroup|event_item_holder", "think": false, "tokA": 63, "tokB": 39}
+{"task": "SystemBrightnessMax", "step": 3, "orig": "E|View|scrim_behind||", "A": "SWIPE:down", "B": "E|View|scrim_behind||", "think": true, "tokA": 141, "tokB": 43}
+{"task": "SystemBluetoothTurnOnVerify", "step": 0, "orig": "SWIPE:down", "A": "SWIPE:down", "B": "SWIPE:up", "think": false, "tokA": 56, "tokB": 44}
+{"task": "SimpleSmsReplyMostRecent", "step": 2, "orig": "E|Button|thread_send_message|OK|SMS", "A": "E|Button|thread_send_message|OK|SMS", "B": "E|Button|thread_send_message|OK|SMS", "think": false, "tokA": 54, "tokB": 52}
+{"task": "SystemBrightnessMaxVerify", "step": 1, "orig": "SWIPE:down", "A": "STATUS", "B": "STATUS", "think": false, "tokA": 9, "tokB": 7}
+{"task": "SystemWifiTurnOn", "step": 2, "orig": "E|LinearLayout|||Network & internet", "A": "E|LinearLayout|||Network & internet", "B": "E|LinearLayout|||Network & internet", "think": true, "tokA": 138, "tokB": 48}
+{"task": "ContactsNewContactDraft", "step": 5, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": true, "tokA": 188, "tokB": 7}
+{"task": "SimpleCalendarDeleteEvents", "step": 5, "orig": "L|ViewGroup|event_item_holder", "A": "L|ViewGroup|event_item_holder", "B": "L|ViewGroup|event_item_holder", "think": true, "tokA": 163, "tokB": 39}
+{"task": "RecipeAddMultipleRecipes", "step": 6, "orig": "E|Button|button_save_recipe||SAVE", "A": "E|Button|button_save_recipe||SAVE", "B": "E|Button|button_save_recipe||SAVE", "think": false, "tokA": 71, "tokB": 55}
+{"task": "ExpenseAddMultiple", "step": 7, "orig": "E|Button|btn_save||SAVE", "A": "E|Button|btn_save||SAVE", "B": "E|Button|btn_save||SAVE", "think": false, "tokA": 48, "tokB": 46}
+{"task": "AudioRecorderRecordAudioWithFileName", "step": 1, "orig": "E|Button|btn_apply||Apply", "A": "E|Button|btn_apply||Apply", "B": "E|Button|btn_apply||Apply", "think": false, "tokA": 40, "tokB": 38}
+{"task": "ExpenseDeleteMultiple", "step": 3, "orig": "E|RelativeLayout|cd_expense||Dinner Party", "A": "E|RelativeLayout|cd_expense||Dinner Party", "B": "E|RelativeLayout|cd_expense||Dinner Party", "think": false, "tokA": 41, "tokB": 39}
+{"task": "MarkorDeleteAllNotes", "step": 7, "orig": "L|LinearLayout|opoc_filesystem_item__root", "A": "L|LinearLayout|opoc_filesystem_item__root", "B": "L|LinearLayout|opoc_filesystem_item__root", "think": false, "tokA": 66, "tokB": 64}
+{"task": "SystemWifiTurnOn", "step": 4, "orig": "E|LinearLayout|||Wi-Fi", "A": "E|LinearLayout|||Wi-Fi", "B": "E|LinearLayout|||Wi-Fi", "think": true, "tokA": 123, "tokB": 38}
+{"task": "ClockStopWatchPausedVerify", "step": 1, "orig": "STATUS", "A": "E|Button|fab|Start|Start", "B": "E|Button|fab|Start|Start", "think": true, "tokA": 125, "tokB": 43}
+{"task": "RecipeDeleteMultipleRecipes", "step": 9, "orig": "L|Button|action_details_like", "A": "L|Button|action_details_like", "B": "L|Button|action_details_like", "think": false, "tokA": 50, "tokB": 48}
+{"task": "SimpleCalendarLocationOfEvent", "step": 0, "orig": "E|Button|button1||OK", "A": "E|Button|button1||OK", "B": "E|Button|button1||OK", "think": false, "tokA": 49, "tokB": 47}
+{"task": "OpenAppTaskEval", "step": 0, "orig": "OPEN_APP:Dialer", "A": "OPEN_APP:Dialer", "B": "E|TextView||Phone|Phone", "think": false, "tokA": 38, "tokB": 44}
+{"task": "ExpenseAddMultiple", "step": 4, "orig": "SWIPE:left", "A": "SWIPE:left", "B": "SWIPE:left", "think": true, "tokA": 200, "tokB": 67}
+{"task": "ExpenseDeleteSingle", "step": 0, "orig": "E|RelativeLayout|cd_expense||Tuition Fees", "A": "E|RelativeLayout|cd_expense||Tuition Fees", "B": "E|RelativeLayout|cd_expense||Tuition Fees", "think": false, "tokA": 56, "tokB": 54}
+{"task": "NotesIsTodo", "step": 4, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": false, "tokA": 7, "tokB": 5}
+{"task": "SystemBluetoothTurnOff", "step": 4, "orig": "E|Switch||Bluetooth.|On", "A": "E|Switch||Bluetooth.|On", "B": "E|Switch||Bluetooth.|On", "think": true, "tokA": 140, "tokB": 39}
+{"task": "RecipeAddMultipleRecipes", "step": 21, "orig": "L|EditText|new_directions", "A": "L|EditText|new_directions", "B": "L|EditText|new_directions", "think": false, "tokA": 67, "tokB": 72}
+{"task": "AudioRecorderRecordAudio", "step": 1, "orig": "E|Button|btn_action||Get started", "A": "E|Button|btn_action||Get started", "B": "E|Button|btn_action||Get started", "think": true, "tokA": 145, "tokB": 44}
+{"task": "SimpleCalendarLocationOfEvent", "step": 2, "orig": "L|ViewGroup|event_item_holder", "A": "L|ViewGroup|event_item_holder", "B": "L|ViewGroup|event_item_holder", "think": false, "tokA": 47, "tokB": 45}
+{"task": "SystemWifiTurnOffVerify", "step": 4, "orig": "STATUS", "A": "STATUS", "B": "CLICK:none", "think": true, "tokA": 100, "tokB": 41}
+{"task": "RecipeAddMultipleRecipes", "step": 17, "orig": "L|EditText|new_servings", "A": "L|EditText|new_servings", "B": "L|EditText|new_servings", "think": false, "tokA": 72, "tokB": 70}
+{"task": "RecipeAddMultipleRecipes", "step": 4, "orig": "E|ImageButton||Navigate up|Navigate up", "A": "E|ImageButton||Navigate up|Navigate up", "B": "E|ImageButton||Navigate up|Navigate up", "think": false, "tokA": 58, "tokB": 56}
+{"task": "SimpleCalendarEventOnDateAtTime", "step": 1, "orig": "L|View|month_view_background", "A": "L|View|month_view_background", "B": "L|View|month_view_background", "think": false, "tokA": 46, "tokB": 44}
+{"task": "ContactsNewContactDraft", "step": 0, "orig": "OPEN_APP:Contacts", "A": "OPEN_APP:Contacts", "B": "OPEN_APP:Contacts", "think": false, "tokA": 36, "tokB": 34}
+{"task": "ExpenseDeleteSingle", "step": 2, "orig": "E|Button|btn_confirm||CONFIRM", "A": "E|Button|btn_confirm||CONFIRM", "B": "E|Button|btn_confirm||CONFIRM", "think": false, "tokA": 45, "tokB": 43}
+{"task": "SimpleCalendarDeleteEvents", "step": 1, "orig": "L|View|month_view_background", "A": "L|View|month_view_background", "B": "L|View|month_view_background", "think": false, "tokA": 44, "tokB": 42}
+{"task": "MarkorDeleteNote", "step": 3, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": true, "tokA": 151, "tokB": 20}
+{"task": "SimpleCalendarEventOnDateAtTime", "step": 9, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": false, "tokA": 10, "tokB": 7}
+{"task": "NotesIsTodo", "step": 1, "orig": "E|Button||Search|Search", "A": "E|Button||Search|Search", "B": "E|Button||Search|Search", "think": true, "tokA": 197, "tokB": 52}
+{"task": "RecipeAddMultipleRecipes", "step": 10, "orig": "WAIT", "A": "?", "B": "E|ImageButton||Navigate up|Navigate up", "think": false, "tokA": 70, "tokB": 47}
+{"task": "TurnOffWifiAndTurnOnBluetooth", "step": 6, "orig": "E|LinearLayout|||Pair new device", "A": "E|LinearLayout|||Connection preferences", "B": "E|LinearLayout|||Pair new device", "think": true, "tokA": 136, "tokB": 37}
+{"task": "ContactsAddContact", "step": 2, "orig": "E|EditText|||First name", "A": "E|EditText|||First name", "B": "E|EditText|||First name", "think": true, "tokA": 129, "tokB": 49}
+{"task": "MarkorDeleteAllNotes", "step": 5, "orig": "E|ImageView||More options|More options", "A": "L|LinearLayout|opoc_filesystem_item__root", "B": "L|LinearLayout|opoc_filesystem_item__root", "think": false, "tokA": 68, "tokB": 69}
+{"task": "SystemBrightnessMax", "step": 0, "orig": "SWIPE:down", "A": "SWIPE:down", "B": "SWIPE:down", "think": false, "tokA": 67, "tokB": 65}
+{"task": "SimpleCalendarEventOnDateAtTime", "step": 6, "orig": "L|ImageView|top_right_arrow", "A": "L|ImageView|top_right_arrow", "B": "L|ImageView|top_right_arrow", "think": false, "tokA": 14, "tokB": 12}
+{"task": "FilesDeleteFile", "step": 3, "orig": "SWIPE:up", "A": "SWIPE:up", "B": "E|CompoundButton|||Images", "think": true, "tokA": 193, "tokB": 55}
+{"task": "SimpleCalendarDeleteOneEvent", "step": 6, "orig": "L|ViewGroup|event_item_holder", "A": "L|ViewGroup|event_item_holder", "B": "L|ViewGroup|event_item_holder", "think": false, "tokA": 70, "tokB": 68}
+{"task": "SimpleCalendarEventOnDateAtTime", "step": 0, "orig": "E|Button|button1||OK", "A": "E|Button|button1||OK", "B": "E|Button|button1||OK", "think": false, "tokA": 57, "tokB": 55}
+{"task": "MarkorDeleteAllNotes", "step": 13, "orig": "E|ImageView||Delete lines|Delete lines", "A": "E|ImageView||Delete lines|Delete lines", "B": "E|ImageView||Delete lines|Delete lines", "think": false, "tokA": 67, "tokB": 65}
+{"task": "ExpenseAddMultiple", "step": 12, "orig": "L|CardView|cd_category", "A": "L|CardView|cd_category", "B": "L|CardView|cd_category", "think": true, "tokA": 178, "tokB": 46}
+{"task": "SimpleCalendarEventsInTimeRange", "step": 2, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": false, "tokA": 10, "tokB": 8}
+{"task": "SystemBluetoothTurnOnVerify", "step": 1, "orig": "E|TextView|icon|Settings|Settings", "A": "E|TextView|icon|Settings|Settings", "B": "E|TextView|icon|Settings|Settings", "think": true, "tokA": 126, "tokB": 49}
+{"task": "SystemWifiTurnOffVerify", "step": 3, "orig": "E|LinearLayout|||SIMs", "A": "E|LinearLayout|||Internet", "B": "E|LinearLayout|||Internet", "think": true, "tokA": 140, "tokB": 45}
+{"task": "MarkorDeleteAllNotes", "step": 8, "orig": "L|LinearLayout|opoc_filesystem_item__root", "A": "L|LinearLayout|opoc_filesystem_item__root", "B": "L|LinearLayout|opoc_filesystem_item__root", "think": false, "tokA": 66, "tokB": 64}
+{"task": "AudioRecorderRecordAudioWithFileName", "step": 3, "orig": "E|ImageButton|btn_record|Recording: %s|Recording: %s", "A": "E|ImageButton|btn_record|Recording: %s|Recording: %s", "B": "E|ImageButton|btn_record|Recording: %s|Recording: %s", "think": false, "tokA": 35, "tokB": 34}
+{"task": "FilesDeleteFile", "step": 7, "orig": "E|Button|button1||OK", "A": "E|Button|button1||OK", "B": "E|Button|button1||OK", "think": true, "tokA": 158, "tokB": 55}
+{"task": "TurnOffWifiAndTurnOnBluetooth", "step": 4, "orig": "E|ImageButton||Navigate up|Navigate up", "A": "E|ImageButton||Navigate up|Navigate up", "B": "E|ImageButton||Navigate up|Navigate up", "think": true, "tokA": 132, "tokB": 47}
+{"task": "ExpenseDeleteMultiple", "step": 4, "orig": "E|ImageView|btn_delete||", "A": "E|ImageView|btn_delete||", "B": "E|ImageView|btn_delete||", "think": false, "tokA": 48, "tokB": 46}
+{"task": "ExpenseDeleteMultiple", "step": 9, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": false, "tokA": 28, "tokB": 26}
+{"task": "SystemBrightnessMinVerify", "step": 5, "orig": "SWIPE:left", "A": "SWIPE:down", "B": "SWIPE:down", "think": false, "tokA": 60, "tokB": 58}
+{"task": "RecipeDeleteMultipleRecipes", "step": 10, "orig": "E|LinearLayout|||Delete", "A": "E|LinearLayout|||Delete", "B": "E|LinearLayout|||Delete", "think": false, "tokA": 53, "tokB": 51}
+{"task": "SimpleCalendarDeleteOneEvent", "step": 10, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": false, "tokA": 37, "tokB": 35}
+{"task": "ExpenseAddMultiple", "step": 10, "orig": "E|Button|btn_save||SAVE", "A": "E|Button|btn_save||SAVE", "B": "E|Button|btn_save||SAVE", "think": false, "tokA": 48, "tokB": 46}
+{"task": "TurnOffWifiAndTurnOnBluetooth", "step": 7, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": true, "tokA": 112, "tokB": 7}
+{"task": "MarkorDeleteAllNotes", "step": 0, "orig": "LONG_PRESS:L|LinearLayout|opoc_filesystem_item__root", "A": "LONG_PRESS:L|LinearLayout|opoc_filesystem_item__root", "B": "LONG_PRESS:L|LinearLayout|opoc_filesystem_item__root", "think": true, "tokA": 174, "tokB": 42}
+{"task": "SystemBrightnessMaxVerify", "step": 5, "orig": "SWIPE:down", "A": "E|FrameLayout|settings_button_container||Open settings.", "B": "E|View|scrim_behind||", "think": true, "tokA": 161, "tokB": 41}
+{"task": "SaveCopyOfReceiptTaskEval", "step": 6, "orig": "E|Button|button1||OK", "A": "E|Button|button1||OK", "B": "E|Button|button1||OK", "think": false, "tokA": 69, "tokB": 67}
+{"task": "SimpleCalendarLocationOfEvent", "step": 3, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": false, "tokA": 9, "tokB": 7}
+{"task": "SimpleSmsSend", "step": 3, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:", "think": false, "tokA": 48, "tokB": 46}
+{"task": "TurnOffWifiAndTurnOnBluetooth", "step": 0, "orig": "E|TextView||Predicted app: Settings|Settings", "A": "E|TextView||Predicted app: Settings|Settings", "B": "E|TextView||Predicted app: Settings|Settings", "think": false, "tokA": 37, "tokB": 35}
+{"task": "NotesTodoItemCount", "step": 1, "orig": "E|ViewGroup|||Health", "A": "E|ViewGroup|||Health", "B": "E|ViewGroup|||Health", "think": false, "tokA": 41, "tokB": 38}
+{"task": "SystemBrightnessMax", "step": 1, "orig": "E|Button|expand_button|Collapse|Collapse", "A": "E|Button|expand_button|Collapse|Collapse", "B": "SWIPE:up", "think": true, "tokA": 139, "tokB": 65}
+{"task": "SimpleCalendarDeleteEventsOnRelativeDay", "step": 4, "orig": "L|ViewGroup|event_item_holder", "A": "L|ViewGroup|event_item_holder", "B": "E|Button|cab_delete|Delete|Delete", "think": true, "tokA": 153, "tokB": 35}
+{"task": "ExpenseDeleteDuplicates", "step": 4, "orig": "E|Button|btn_confirm||CONFIRM", "A": "E|Button|btn_confirm||CONFIRM", "B": "E|Button|btn_confirm||CONFIRM", "think": false, "tokA": 44, "tokB": 42}
+{"task": "RecipeAddMultipleRecipes", "step": 12, "orig": "E|ImageButton|fab_recipes|New Recipe|New Recipe", "A": "E|ImageButton|fab_recipes|New Recipe|New Recipe", "B": "E|ImageButton|fab_recipes|New Recipe|New Recipe", "think": false, "tokA": 48, "tokB": 46}
+{"task": "SimpleSmsReplyMostRecent", "step": 3, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": true, "tokA": 118, "tokB": 35}
+{"task": "SystemBluetoothTurnOff", "step": 6, "orig": "E|Switch||Bluetooth.|On", "A": "E|Switch||Bluetooth.|On", "B": "E|Switch||Bluetooth.|On", "think": true, "tokA": 118, "tokB": 39}
+{"task": "ExpenseDeleteDuplicates", "step": 0, "orig": "E|ImageButton|||", "A": "E|ImageButton|||", "B": "E|ImageButton|||", "think": false, "tokA": 41, "tokB": 39}
+{"task": "AudioRecorderRecordAudio", "step": 5, "orig": "E|ImageButton|btn_share||", "A": "E|ImageButton|btn_share||", "B": "E|ImageButton|btn_record|Recording: %s|Recording: %s", "think": true, "tokA": 174, "tokB": 49}
+{"task": "SimpleCalendarEventsInTimeRange", "step": 0, "orig": "E|Button|button1||OK", "A": "E|Button|button1||OK", "B": "E|Button|button1||OK", "think": false, "tokA": 57, "tokB": 55}
+{"task": "SimpleCalendarDeleteEvents", "step": 4, "orig": "E|Button|button1||Yes", "A": "E|Button|button1||Yes", "B": "E|Button|button1||Yes", "think": false, "tokA": 60, "tokB": 58}
+{"task": "MarkorDeleteAllNotes", "step": 14, "orig": "E|FrameLayout|nav_notebook|Files|Files", "A": "E|FrameLayout|nav_notebook|Files|Files", "B": "E|FrameLayout|nav_notebook|Files|Files", "think": false, "tokA": 67, "tokB": 65}
+{"task": "SimpleSmsSend", "step": 5, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": true, "tokA": 123, "tokB": 43}
+{"task": "SimpleCalendarEventOnDateAtTime", "step": 5, "orig": "L|ImageView|top_right_arrow", "A": "L|ImageView|top_right_arrow", "B": "L|ImageView|top_right_arrow", "think": false, "tokA": 54, "tokB": 52}
+{"task": "ContactsAddContact", "step": 7, "orig": "E|Button|toolbar_button||Save", "A": "E|Button|toolbar_button||Save", "B": "E|EditText|||Company", "think": true, "tokA": 191, "tokB": 55}
+{"task": "SystemBrightnessMaxVerify", "step": 7, "orig": "SWIPE:down", "A": "E|View|scrim_behind||", "B": "E|View|scrim_behind||", "think": false, "tokA": 47, "tokB": 45}
+{"task": "SystemBluetoothTurnOff", "step": 9, "orig": "E|Switch||Bluetooth.|On", "A": "E|Switch||Bluetooth.|On", "B": "E|Switch||Bluetooth.|On", "think": true, "tokA": 118, "tokB": 39}
+{"task": "AudioRecorderRecordAudio", "step": 6, "orig": "E|LinearLayout|||Save as\u2026", "A": "E|LinearLayout|||Save as\u2026", "B": "E|LinearLayout|||Save as\u2026", "think": true, "tokA": 131, "tokB": 50}
+{"task": "ClockStopWatchPausedVerify", "step": 0, "orig": "L|TextView|title_text", "A": "OPEN_APP:Clock", "B": "OPEN_APP:Clock", "think": false, "tokA": 28, "tokB": 26}
+{"task": "RecipeDeleteMultipleRecipes", "step": 1, "orig": "E|ImageView||More options|More options", "A": "E|ImageView||More options|More options", "B": "E|ImageView||More options|More options", "think": true, "tokA": 144, "tokB": 46}
+{"task": "RecipeDeleteSingleRecipe", "step": 1, "orig": "E|LinearLayout|||Delete", "A": "E|LinearLayout|||Delete", "B": "E|LinearLayout|||Delete", "think": true, "tokA": 141, "tokB": 56}
+{"task": "AudioRecorderRecordAudioWithFileName", "step": 2, "orig": "E|Button|dialog_ok_btn||Ok", "A": "E|Button|dialog_ok_btn||Ok", "B": "E|Button|dialog_ok_btn||Ok", "think": false, "tokA": 43, "tokB": 41}
+{"task": "SystemWifiTurnOff", "step": 1, "orig": "E|TextView|icon|Settings|Settings", "A": "E|TextView|icon|Settings|Settings", "B": "E|TextView|icon|Settings|Settings", "think": true, "tokA": 118, "tokB": 51}
+{"task": "SystemWifiTurnOffVerify", "step": 2, "orig": "E|LinearLayout|||Network & internet", "A": "E|LinearLayout|||Network & internet", "B": "E|LinearLayout|||Network & internet", "think": true, "tokA": 121, "tokB": 48}
+{"task": "ContactsAddContact", "step": 1, "orig": "E|ImageButton|floating_action_button|Create contact|Create contact", "A": "E|ImageButton|floating_action_button|Create contact|Create contact", "B": "E|ImageButton|floating_action_button|Create contact|Create contact", "think": true, "tokA": 132, "tokB": 45}
+{"task": "AudioRecorderRecordAudioWithFileName", "step": 6, "orig": "LONG_PRESS:E|SeekBar|play_progress||", "A": "LONG_PRESS:E|SeekBar|play_progress||", "B": "E|SeekBar|play_progress||", "think": true, "tokA": 170, "tokB": 51}
+{"task": "NotesTodoItemCount", "step": 2, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": true, "tokA": 119, "tokB": 37}
+{"task": "SimpleCalendarDeleteEvents", "step": 11, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": false, "tokA": 27, "tokB": 25}
+{"task": "ExpenseAddMultiple", "step": 9, "orig": "L|CardView|cd_category", "A": "L|CardView|cd_category", "B": "L|CardView|cd_category", "think": false, "tokA": 47, "tokB": 45}
+{"task": "MarkorDeleteAllNotes", "step": 15, "orig": "E|FrameLayout|nav_todo|To-Do|To-Do", "A": "L|LinearLayout|opoc_filesystem_item__root", "B": "L|LinearLayout|opoc_filesystem_item__root", "think": false, "tokA": 67, "tokB": 65}
+{"task": "TurnOffWifiAndTurnOnBluetooth", "step": 2, "orig": "E|LinearLayout|||Internet", "A": "E|LinearLayout|||Internet", "B": "E|LinearLayout|||Internet", "think": true, "tokA": 149, "tokB": 53}
+{"task": "SimpleCalendarDeleteEventsOnRelativeDay", "step": 3, "orig": "LONG_PRESS:L|ViewGroup|event_item_holder", "A": "LONG_PRESS:L|ViewGroup|event_item_holder", "B": "L|ViewGroup|event_item_holder", "think": true, "tokA": 194, "tokB": 46}
+{"task": "FilesDeleteFile", "step": 0, "orig": "OPEN_APP:\u6587\u4ef6\u7ba1\u7406", "A": "OPEN_APP:Files", "B": "OPEN_APP:Files", "think": false, "tokA": 32, "tokB": 30}
+{"task": "AudioRecorderRecordAudio", "step": 4, "orig": "E|ImageButton|btn_record_stop||", "A": "E|ImageButton|btn_record_stop||", "B": "E|ImageButton|btn_record_stop||", "think": false, "tokA": 53, "tokB": 51}
+{"task": "ExpenseDeleteMultiple", "step": 7, "orig": "E|ImageView|btn_delete||", "A": "E|ImageView|btn_delete||", "B": "E|ImageView|btn_delete||", "think": false, "tokA": 52, "tokB": 50}
+{"task": "SimpleSmsReply", "step": 7, "orig": "E|Button|thread_send_message|OK|SMS", "A": "E|Button|thread_send_message|OK|SMS", "B": "E|Button|thread_send_message|OK|SMS", "think": false, "tokA": 61, "tokB": 59}
+{"task": "SystemBluetoothTurnOff", "step": 7, "orig": "E|Switch||Bluetooth.|On", "A": "E|Switch||Bluetooth.|On", "B": "E|Switch||Bluetooth.|On", "think": true, "tokA": 118, "tokB": 39}
+{"task": "SystemWifiTurnOff", "step": 3, "orig": "E|LinearLayout|||Internet", "A": "E|LinearLayout|||Internet", "B": "E|LinearLayout|||Internet", "think": true, "tokA": 140, "tokB": 55}
+{"task": "SystemWifiTurnOnVerify", "step": 3, "orig": "E|LinearLayout|||Internet", "A": "E|LinearLayout|||Internet", "B": "E|LinearLayout|||Internet", "think": true, "tokA": 133, "tokB": 55}
+{"task": "SystemBrightnessMaxVerify", "step": 8, "orig": "SWIPE:down", "A": "SWIPE:up", "B": "SWIPE:up", "think": false, "tokA": 59, "tokB": 57}
+{"task": "ContactsAddContact", "step": 6, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:", "think": true, "tokA": 143, "tokB": 37}
+{"task": "SimpleSmsReply", "step": 4, "orig": "E|ImageView|new_conversation_confirm||", "A": "E|ImageView|new_conversation_confirm||", "B": "E|ImageView|new_conversation_confirm||", "think": false, "tokA": 55, "tokB": 53}
+{"task": "MarkorDeleteAllNotes", "step": 1, "orig": "E|TextView|action_delete_selected_items|Delete|Delete", "A": "E|TextView|action_delete_selected_items|Delete|Delete", "B": "E|TextView|action_delete_selected_items|Delete|Delete", "think": true, "tokA": 147, "tokB": 44}
+{"task": "ClockStopWatchRunning", "step": 1, "orig": "E|FrameLayout|tab_menu_stopwatch|Stopwatch|Stopwatch", "A": "E|FrameLayout|tab_menu_stopwatch|Stopwatch|Stopwatch", "B": "E|FrameLayout|tab_menu_stopwatch|Stopwatch|Stopwatch", "think": true, "tokA": 125, "tokB": 40}
+{"task": "MarkorDeleteAllNotes", "step": 11, "orig": "E|FrameLayout|nav_todo|To-Do|To-Do", "A": "L|LinearLayout|opoc_filesystem_item__root", "B": "L|LinearLayout|opoc_filesystem_item__root", "think": false, "tokA": 67, "tokB": 65}
+{"task": "SimpleCalendarDeleteEvents", "step": 6, "orig": "E|Button|delete|Delete|Delete", "A": "E|Button|delete|Delete|Delete", "B": "E|Button|delete|Delete|Delete", "think": true, "tokA": 196, "tokB": 53}
+{"task": "SystemWifiTurnOffVerify", "step": 1, "orig": "E|TextView|icon|Settings|Settings", "A": "E|TextView|icon|Settings|Settings", "B": "E|TextView|icon|Settings|Settings", "think": true, "tokA": 118, "tokB": 50}
+{"task": "RecipeAddMultipleRecipes", "step": 16, "orig": "SWIPE:up", "A": "SWIPE:up", "B": "SWIPE:up", "think": false, "tokA": 78, "tokB": 76}
+{"task": "RecipeAddMultipleRecipes", "step": 3, "orig": "E|Button|button_save_recipe||SAVE", "A": "E|Button|button_save_recipe||SAVE", "B": "E|Button|button_save_recipe||SAVE", "think": false, "tokA": 48, "tokB": 46}
+{"task": "SimpleCalendarEventOnDateAtTime", "step": 2, "orig": "L|ImageView|top_right_arrow", "A": "L|ImageView|top_right_arrow", "B": "L|ImageView|top_right_arrow", "think": false, "tokA": 48, "tokB": 46}
+{"task": "SaveCopyOfReceiptTaskEval", "step": 0, "orig": "LONG_PRESS:L|RelativeLayout|media_item_holder", "A": "LONG_PRESS:L|RelativeLayout|media_item_holder", "B": "L|RelativeLayout|media_item_holder", "think": true, "tokA": 158, "tokB": 59}
+{"task": "NotesTodoItemCount", "step": 0, "orig": "E|ViewGroup|||\uebab", "A": "E|ViewGroup|||\uebab", "B": "E|ViewGroup|||\uebab", "think": true, "tokA": 178, "tokB": 38}
+{"task": "SystemBluetoothTurnOff", "step": 0, "orig": "SWIPE:down", "A": "SWIPE:up", "B": "SWIPE:up", "think": false, "tokA": 46, "tokB": 44}
+{"task": "SimpleCalendarLocationOfEvent", "step": 1, "orig": "L|View|month_view_background", "A": "L|View|month_view_background", "B": "L|View|month_view_background", "think": true, "tokA": 168, "tokB": 40}
+{"task": "ExpenseDeleteMultiple", "step": 0, "orig": "LONG_PRESS:L|RelativeLayout|cd_expense", "A": "L|RelativeLayout|cd_expense", "B": "L|RelativeLayout|cd_expense", "think": true, "tokA": 162, "tokB": 54}
+{"task": "ExpenseDeleteMultiple", "step": 5, "orig": "E|Button|btn_confirm||CONFIRM", "A": "E|Button|btn_confirm||CONFIRM", "B": "E|Button|btn_confirm||CONFIRM", "think": false, "tokA": 58, "tokB": 56}
+{"task": "SystemBrightnessMinVerify", "step": 7, "orig": "STATUS", "A": "SWIPE:down", "B": "SWIPE:down", "think": false, "tokA": 60, "tokB": 23}
+{"task": "FilesDeleteFile", "step": 1, "orig": "E|ImageButton||Show roots|Show roots", "A": "E|ImageButton||Show roots|Show roots", "B": "E|ImageButton||Show roots|Show roots", "think": true, "tokA": 154, "tokB": 41}
+{"task": "RecipeAddSingleRecipe", "step": 2, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": false, "tokA": 9, "tokB": 7}
+{"task": "SystemBluetoothTurnOn", "step": 0, "orig": "SWIPE:down", "A": "SWIPE:up", "B": "SWIPE:down", "think": false, "tokA": 46, "tokB": 54}
+{"task": "MarkorDeleteNote", "step": 1, "orig": "E|TextView|action_delete_selected_items|Delete|Delete", "A": "E|TextView|action_delete_selected_items|Delete|Delete", "B": "E|TextView|action_delete_selected_items|Delete|Delete", "think": true, "tokA": 128, "tokB": 47}
+{"task": "SimpleCalendarDeleteEventsOnRelativeDay", "step": 6, "orig": "E|b|||October 19 (Thu)", "A": "E|b|||October 19 (Thu)", "B": "E|b|||October 19 (Thu)", "think": false, "tokA": 48, "tokB": 46}
+{"task": "SystemWifiTurnOff", "step": 0, "orig": "SWIPE:down", "A": "SWIPE:down", "B": "SWIPE:down", "think": false, "tokA": 57, "tokB": 55}
+{"task": "SimpleCalendarDeleteOneEvent", "step": 3, "orig": "L|ImageView|top_right_arrow", "A": "L|ImageView|top_right_arrow", "B": "L|ImageView|top_right_arrow", "think": false, "tokA": 57, "tokB": 55}
+{"task": "SystemBluetoothTurnOnVerify", "step": 4, "orig": "E|LinearLayout|||Bluetooth", "A": "E|LinearLayout|||Bluetooth", "B": "E|LinearLayout|||Bluetooth", "think": true, "tokA": 118, "tokB": 40}
+{"task": "AudioRecorderRecordAudioWithFileName", "step": 0, "orig": "E|Button|btn_action||Get started", "A": "E|Button|btn_action||Get started", "B": "E|Button|btn_action||Get started", "think": false, "tokA": 34, "tokB": 32}
+{"task": "ExpenseAddMultiple", "step": 2, "orig": "E|ImageButton|fb_main_add||", "A": "E|ImageButton|fb_main_add||", "B": "E|ImageButton|fb_main_add||", "think": false, "tokA": 51, "tokB": 49}
+{"task": "ContactsNewContactDraft", "step": 3, "orig": "L|ImageButton|text_input_end_icon", "A": "L|ImageButton|text_input_end_icon", "B": "L|ImageButton|text_input_end_icon", "think": true, "tokA": 155, "tokB": 56}
+{"task": "SimpleCalendarEventOnDateAtTime", "step": 7, "orig": "L|ImageView|top_right_arrow", "A": "L|ImageView|top_right_arrow", "B": "L|ImageView|top_right_arrow", "think": false, "tokA": 56, "tokB": 54}
+{"task": "SimpleCalendarDeleteEventsOnRelativeDay", "step": 5, "orig": "E|Button|cab_delete|Delete|Delete", "A": "E|Button|cab_delete|Delete|Delete", "B": "E|Button|cab_delete|Delete|Delete", "think": true, "tokA": 140, "tokB": 35}
+{"task": "ClockStopWatchRunning", "step": 2, "orig": "E|Button|fab|Start|Start", "A": "E|Button|fab|Start|Start", "B": "E|Button|fab|Start|Start", "think": true, "tokA": 121, "tokB": 45}
+{"task": "AudioRecorderRecordAudioWithFileName", "step": 9, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": false, "tokA": 33, "tokB": 31}
+{"task": "RecipeAddMultipleRecipes", "step": 11, "orig": "E|ImageButton||Navigate up|Navigate up", "A": "E|ImageButton||Navigate up|Navigate up", "B": "E|ImageButton||Navigate up|Navigate up", "think": false, "tokA": 56, "tokB": 54}
+{"task": "ExpenseDeleteSingle", "step": 1, "orig": "E|ImageView|btn_delete||", "A": "E|ImageView|btn_delete||", "B": "E|ImageView|btn_delete||", "think": true, "tokA": 128, "tokB": 47}
+{"task": "SimpleCalendarDeleteEventsOnRelativeDay", "step": 0, "orig": "E|Button|button1||OK", "A": "E|Button|button1||OK", "B": "E|Button|button1||OK", "think": false, "tokA": 50, "tokB": 44}
+{"task": "SimpleCalendarAnyEventsOnDate", "step": 1, "orig": "L|View|month_view_background", "A": "L|View|month_view_background", "B": "L|View|month_view_background", "think": false, "tokA": 41, "tokB": 39}
+{"task": "AudioRecorderRecordAudio", "step": 8, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": false, "tokA": 22, "tokB": 20}
+{"task": "SimpleSmsReply", "step": 8, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": false, "tokA": 40, "tokB": 7}
+{"task": "SystemBrightnessMaxVerify", "step": 3, "orig": "SWIPE:down", "A": "SWIPE:down", "B": "SWIPE:up", "think": true, "tokA": 180, "tokB": 55}
+{"task": "TurnOffWifiAndTurnOnBluetooth", "step": 3, "orig": "L|LinearLayout|loading_container", "A": "L|LinearLayout|loading_container", "B": "L|LinearLayout|loading_container", "think": false, "tokA": 43, "tokB": 41}
+{"task": "SystemBluetoothTurnOn", "step": 1, "orig": "E|TextView|icon|Settings|Settings", "A": "E|TextView|icon|Settings|Settings", "B": "E|TextView|icon|Settings|Settings", "think": true, "tokA": 126, "tokB": 49}
+{"task": "SystemBrightnessMax", "step": 5, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": true, "tokA": 97, "tokB": 7}
+{"task": "RecipeDeleteSingleRecipe", "step": 3, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": false, "tokA": 21, "tokB": 19}
+{"task": "SystemBluetoothTurnOnVerify", "step": 3, "orig": "E|LinearLayout|||Connection preferences", "A": "E|LinearLayout|||Connection preferences", "B": "E|LinearLayout|||Connection preferences", "think": false, "tokA": 52, "tokB": 50}
+{"task": "MarkorDeleteNewestNote", "step": 3, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": false, "tokA": 17, "tokB": 15}
+{"task": "SystemBluetoothTurnOnVerify", "step": 2, "orig": "E|LinearLayout|||Connected devices", "A": "E|LinearLayout|||Connected devices", "B": "E|LinearLayout|||Connected devices", "think": true, "tokA": 125, "tokB": 45}
+{"task": "SaveCopyOfReceiptTaskEval", "step": 5, "orig": "L|RelativeLayout|list_item_holder", "A": "L|RelativeLayout|list_item_holder", "B": "L|RelativeLayout|list_item_holder", "think": false, "tokA": 14, "tokB": 12}
+{"task": "SystemWifiTurnOn", "step": 1, "orig": "E|TextView|icon|Settings|Settings", "A": "E|TextView|icon|Settings|Settings", "B": "E|TextView|icon|Settings|Settings", "think": true, "tokA": 118, "tokB": 50}
+{"task": "RecipeAddMultipleRecipes", "step": 0, "orig": "OPEN_APP:Broccoli", "A": "OPEN_APP:Broccoli", "B": "OPEN_APP:Broccoli", "think": false, "tokA": 33, "tokB": 31}
+{"task": "FilesDeleteFile", "step": 4, "orig": "L|LinearLayout|item_root", "A": "L|LinearLayout|item_root", "B": "L|LinearLayout|item_root", "think": true, "tokA": 141, "tokB": 45}
+{"task": "SaveCopyOfReceiptTaskEval", "step": 2, "orig": "E|LinearLayout|||Copy to", "A": "E|LinearLayout|||Copy to", "B": "E|LinearLayout|||Copy to", "think": true, "tokA": 163, "tokB": 46}
+{"task": "SystemBluetoothTurnOff", "step": 8, "orig": "E|Switch||Bluetooth.|On", "A": "E|Switch||Bluetooth.|On", "B": "E|Switch||Bluetooth.|On", "think": true, "tokA": 118, "tokB": 39}
+{"task": "SaveCopyOfReceiptTaskEval", "step": 7, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": false, "tokA": 9, "tokB": 7}
+{"task": "SystemBrightnessMinVerify", "step": 3, "orig": "SWIPE:down", "A": "SWIPE:down", "B": "SWIPE:down", "think": true, "tokA": 195, "tokB": 56}
+{"task": "ExpenseDeleteDuplicates", "step": 3, "orig": "E|ImageView|btn_delete||", "A": "E|ImageView|btn_delete||", "B": "E|ImageView|btn_delete||", "think": false, "tokA": 43, "tokB": 41}
+{"task": "RecipeDeleteMultipleRecipes", "step": 4, "orig": "E|CardView|||Recipe photo", "A": "E|CardView|||Recipe photo", "B": "E|CardView|||Recipe photo", "think": true, "tokA": 162, "tokB": 48}
+{"task": "SimpleSmsReply", "step": 6, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:", "think": true, "tokA": 144, "tokB": 65}
+{"task": "MarkorDeleteAllNotes", "step": 4, "orig": "L|LinearLayout|opoc_filesystem_item__root", "A": "L|LinearLayout|opoc_filesystem_item__root", "B": "E|FrameLayout|nav_todo|To-Do|To-Do", "think": true, "tokA": 214, "tokB": 62}
+{"task": "RecipeDeleteMultipleRecipes", "step": 6, "orig": "E|LinearLayout|||Delete", "A": "E|LinearLayout|||Delete", "B": "E|LinearLayout|||Delete", "think": false, "tokA": 60, "tokB": 58}
+{"task": "SystemBrightnessMinVerify", "step": 6, "orig": "SWIPE:left", "A": "STATUS", "B": "STATUS", "think": false, "tokA": 48, "tokB": 46}
+{"task": "SystemBrightnessMaxVerify", "step": 6, "orig": "SWIPE:down", "A": "E|FrameLayout|settings_button_container||Open settings.", "B": "STATUS", "think": true, "tokA": 169, "tokB": 7}
+{"task": "FilesDeleteFile", "step": 5, "orig": "LONG_PRESS:L|LinearLayout|item_root", "A": "LONG_PRESS:L|LinearLayout|item_root", "B": "L|LinearLayout|item_root", "think": true, "tokA": 166, "tokB": 63}
+{"task": "RecipeDeleteMultipleRecipes", "step": 8, "orig": "E|CardView|||Recipe photo", "A": "E|CardView|||Recipe photo", "B": "E|CardView|||Recipe photo", "think": true, "tokA": 146, "tokB": 46}
+{"task": "FilesDeleteFile", "step": 8, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": true, "tokA": 132, "tokB": 27}
+{"task": "ContactsAddContact", "step": 4, "orig": "E|EditText|||First name", "A": "E|EditText|||First name", "B": "E|EditText|||First name", "think": true, "tokA": 120, "tokB": 37}
+{"task": "RecipeAddMultipleRecipes", "step": 15, "orig": "TYPE:new_description", "A": "TYPE:new_description", "B": "TYPE:new_description", "think": false, "tokA": 78, "tokB": 76}
+{"task": "RecipeAddMultipleRecipes", "step": 20, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:", "think": false, "tokA": 67, "tokB": 65}
+{"task": "SystemBluetoothTurnOff", "step": 3, "orig": "E|Switch||Bluetooth.|On", "A": "E|Switch||Bluetooth.|On", "B": "E|Switch||Bluetooth.|On", "think": true, "tokA": 143, "tokB": 43}
+{"task": "MarkorCreateFolder", "step": 3, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": true, "tokA": 158, "tokB": 36}
+{"task": "TurnOffWifiAndTurnOnBluetooth", "step": 5, "orig": "E|ImageButton||Navigate up|Navigate up", "A": "E|ImageButton||Navigate up|Navigate up", "B": "E|ImageButton||Navigate up|Navigate up", "think": true, "tokA": 150, "tokB": 35}
+{"task": "ClockStopWatchRunning", "step": 3, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": true, "tokA": 116, "tokB": 12}
+{"task": "RecipeAddMultipleRecipes", "step": 1, "orig": "E|ImageButton|fab_recipes|New Recipe|New Recipe", "A": "E|ImageButton|fab_recipes|New Recipe|New Recipe", "B": "E|ImageButton|fab_recipes|New Recipe|New Recipe", "think": false, "tokA": 42, "tokB": 40}
+{"task": "RecipeDeleteMultipleRecipes", "step": 5, "orig": "L|Button|action_details_like", "A": "L|Button|action_details_like", "B": "L|Button|action_details_like", "think": true, "tokA": 160, "tokB": 50}
+{"task": "SystemBrightnessMax", "step": 4, "orig": "SWIPE:right", "A": "E|View|scrim_notifications||", "B": "E|View|scrim_notifications||", "think": false, "tokA": 46, "tokB": 50}
+{"task": "ExpenseAddMultiple", "step": 0, "orig": "OPEN_APP:Pro Expense", "A": "OPEN_APP:Pro Expense", "B": "OPEN_APP:Pro Expense", "think": false, "tokA": 22, "tokB": 33}
+{"task": "SimpleSmsReply", "step": 2, "orig": "L|ImageButton|conversations_fab", "A": "L|ImageButton|conversations_fab", "B": "L|ImageButton|conversations_fab", "think": false, "tokA": 50, "tokB": 48}
+{"task": "ExpenseDeleteMultiple", "step": 6, "orig": "E|RelativeLayout|cd_expense||Reimbursements", "A": "E|RelativeLayout|cd_expense||Reimbursements", "B": "E|RelativeLayout|cd_expense||Reimbursements", "think": true, "tokA": 162, "tokB": 47}
+{"task": "ExpenseDeleteMultiple", "step": 1, "orig": "E|ImageView|btn_delete||", "A": "E|ImageView|btn_delete||", "B": "E|ImageView|btn_delete||", "think": true, "tokA": 126, "tokB": 39}
+{"task": "RecipeDeleteMultipleRecipes", "step": 13, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": false, "tokA": 36, "tokB": 34}
+{"task": "SystemBluetoothTurnOn", "step": 3, "orig": "E|LinearLayout|||Pair new device", "A": "E|LinearLayout|||Pair new device", "B": "E|LinearLayout|||Pair new device", "think": true, "tokA": 175, "tokB": 47}
+{"task": "SystemWifiTurnOn", "step": 3, "orig": "E|LinearLayout|||Internet", "A": "E|LinearLayout|||Internet", "B": "E|LinearLayout|||Internet", "think": true, "tokA": 133, "tokB": 55}
+{"task": "AudioRecorderRecordAudioWithFileName", "step": 8, "orig": "E|Button|dialog_positive_btn||Save", "A": "E|Button|dialog_positive_btn||Save", "B": "E|Button|dialog_positive_btn||Save", "think": false, "tokA": 14, "tokB": 36}
+{"task": "SystemWifiTurnOff", "step": 4, "orig": "WAIT", "A": "SWIPE:down", "B": "SWIPE:down", "think": false, "tokA": 65, "tokB": 63}
+{"task": "SimpleCalendarDeleteOneEvent", "step": 4, "orig": "L|ImageView|top_left_arrow", "A": "L|ImageView|top_left_arrow", "B": "L|ImageView|top_left_arrow", "think": false, "tokA": 58, "tokB": 56}
+{"task": "SimpleCalendarDeleteEvents", "step": 9, "orig": "E|Button|delete|Delete|Delete", "A": "E|Button|delete|Delete|Delete", "B": "E|Button|delete|Delete|Delete", "think": false, "tokA": 56, "tokB": 54}
+{"task": "RecipeAddMultipleRecipes", "step": 14, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:", "think": false, "tokA": 53, "tokB": 51}
+{"task": "SimpleCalendarDeleteEventsOnRelativeDay", "step": 2, "orig": "LONG_PRESS:L|ViewGroup|event_item_holder", "A": "L|ViewGroup|event_item_holder", "B": "L|ViewGroup|event_item_holder", "think": false, "tokA": 46, "tokB": 45}
+{"task": "SystemBrightnessMaxVerify", "step": 4, "orig": "SWIPE:down", "A": "E|FrameLayout|settings_button_container||Open settings.", "B": "E|View|scrim_behind||", "think": true, "tokA": 168, "tokB": 42}
+{"task": "AudioRecorderRecordAudio", "step": 0, "orig": "OPEN_APP:Audio Recorder", "A": "OPEN_APP:Audio Recorder", "B": "OPEN_APP:Audio Recorder", "think": false, "tokA": 10, "tokB": 8}
+{"task": "SimpleSmsReply", "step": 1, "orig": "SWIPE:down", "A": "SWIPE:down", "B": "L|ImageButton|conversations_fab", "think": true, "tokA": 180, "tokB": 48}
+{"task": "ExpenseAddMultiple", "step": 14, "orig": "WAIT", "A": "STATUS", "B": "STATUS", "think": false, "tokA": 9, "tokB": 7}
+{"task": "AudioRecorderRecordAudio", "step": 7, "orig": "E|Button|dialog_positive_btn||Yes", "A": "E|Button|dialog_positive_btn||Yes", "B": "E|Button|dialog_positive_btn||Yes", "think": false, "tokA": 57, "tokB": 55}
+{"task": "ContactsAddContact", "step": 8, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": false, "tokA": 34, "tokB": 32}
+{"task": "RecipeAddSingleRecipe", "step": 1, "orig": "E|Button|button_save_recipe||SAVE", "A": "E|Button|button_save_recipe||SAVE", "B": "E|Button|button_save_recipe||SAVE", "think": false, "tokA": 31, "tokB": 29}
+{"task": "SystemBluetoothTurnOff", "step": 5, "orig": "E|Switch||Bluetooth.|On", "A": "E|Switch||Bluetooth.|On", "B": "E|Switch||Bluetooth.|On", "think": true, "tokA": 140, "tokB": 39}
+{"task": "SystemWifiTurnOnVerify", "step": 4, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": true, "tokA": 102, "tokB": 12}
+{"task": "NotesIsTodo", "step": 2, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:", "think": false, "tokA": 54, "tokB": 52}
+{"task": "SimpleCalendarDeleteEvents", "step": 3, "orig": "E|Button|save|Save|Save", "A": "E|Button|save|Save|Save", "B": "E|Button|save|Save|Save", "think": false, "tokA": 40, "tokB": 38}
+{"task": "SystemBluetoothTurnOff", "step": 1, "orig": "SWIPE:down", "A": "SWIPE:down", "B": "SWIPE:up", "think": true, "tokA": 155, "tokB": 61}
+{"task": "SimpleCalendarDeleteOneEvent", "step": 5, "orig": "L|ImageView|top_left_arrow", "A": "L|ImageView|top_left_arrow", "B": "L|ImageView|top_left_arrow", "think": false, "tokA": 58, "tokB": 56}
+{"task": "ExpenseDeleteDuplicates", "step": 2, "orig": "E|View|view_bg||", "A": "E|View|view_bg||", "B": "E|View|view_bg||", "think": true, "tokA": 174, "tokB": 44}
+{"task": "SystemBluetoothTurnOnVerify", "step": 5, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": true, "tokA": 86, "tokB": 7}
+{"task": "SimpleCalendarDeleteEventsOnRelativeDay", "step": 1, "orig": "L|View|month_view_background", "A": "L|View|month_view_background", "B": "L|View|month_view_background", "think": false, "tokA": 49, "tokB": 47}
+{"task": "ExpenseAddMultiple", "step": 1, "orig": "WAIT", "A": "WAIT", "B": "WAIT", "think": false, "tokA": 26, "tokB": 45}
+{"task": "ExpenseDeleteDuplicates", "step": 1, "orig": "E|LinearLayoutCompat|dest_expense_logs||Expense Logs", "A": "E|LinearLayoutCompat|dest_expense_logs||Expense Logs", "B": "E|LinearLayoutCompat|dest_expense_logs||Expense Logs", "think": false, "tokA": 47, "tokB": 45}
+{"task": "SimpleCalendarDeleteEvents", "step": 0, "orig": "E|Button|button1||OK", "A": "E|Button|button1||OK", "B": "E|Button|button1||OK", "think": false, "tokA": 45, "tokB": 38}
+{"task": "FilesDeleteFile", "step": 6, "orig": "E|TextView|action_menu_delete|Delete|Delete", "A": "E|TextView|action_menu_delete|Delete|Delete", "B": "E|TextView|action_menu_delete|Delete|Delete", "think": true, "tokA": 161, "tokB": 59}
+{"task": "SystemWifiTurnOffVerify", "step": 0, "orig": "SWIPE:down", "A": "SWIPE:down", "B": "SWIPE:down", "think": false, "tokA": 57, "tokB": 55}
+{"task": "RecipeAddMultipleRecipes", "step": 18, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:", "think": false, "tokA": 60, "tokB": 58}
+{"task": "ExpenseAddMultiple", "step": 15, "orig": "STATUS", "A": "STATUS", "B": "STATUS", "think": false, "tokA": 9, "tokB": 7}
+{"task": "SystemWifiTurnOnVerify", "step": 0, "orig": "SWIPE:down", "A": "SWIPE:down", "B": "SWIPE:down", "think": false, "tokA": 57, "tokB": 55}
+{"task": "RecipeDeleteMultipleRecipes", "step": 12, "orig": "WAIT", "A": "?", "B": "STATUS", "think": false, "tokA": 67, "tokB": 34}
+{"task": "FilesDeleteFile", "step": 2, "orig": "E|LinearLayout|||sdk_gphone64_arm64", "A": "E|LinearLayout|||sdk_gphone64_arm64", "B": "E|LinearLayout|||sdk_gphone64_arm64", "think": false, "tokA": 54, "tokB": 52}
+{"task": "SystemBrightnessMinVerify", "step": 1, "orig": "SWIPE:down", "A": "E|Button|expand_button|Collapse|Collapse", "B": "SWIPE:up", "think": true, "tokA": 141, "tokB": 70}
+{"task": "OpenAppTaskEval", "step": 1, "orig": "E|TextView|primary_action||Call voicemail", "A": "E|ImageButton|dialpad_fab|key pad|key pad", "B": "E|ImageButton|dialpad_fab|key pad|key pad", "think": false, "tokA": 38, "tokB": 36}
+{"task": "SimpleCalendarDeleteOneEvent", "step": 7, "orig": "E|Button|save|Save|Save", "A": "E|Button|save|Save|Save", "B": "E|Button|save|Save|Save", "think": false, "tokA": 56, "tokB": 54}
+{"task": "SystemBrightnessMax", "step": 2, "orig": "SWIPE:down", "A": "OPEN_APP:Settings", "B": "SWIPE:down", "think": true, "tokA": 148, "tokB": 54}
+{"task": "SimpleCalendarAnyEventsOnDate", "step": 0, "orig": "E|Button|button1||OK", "A": "E|Button|button1||OK", "B": "E|Button|button1||OK", "think": false, "tokA": 56, "tokB": 55}
+{"task": "SimpleSmsReply", "step": 5, "orig": "E|EditText|thread_type_message||Type a message\u2026", "A": "E|EditText|thread_type_message||Type a message\u2026", "B": "E|EditText|thread_type_message||Type a message\u2026", "think": false, "tokA": 62, "tokB": 60}
+{"task": "SystemBrightnessMaxVerify", "step": 0, "orig": "SWIPE:down", "A": "SWIPE:down", "B": "SWIPE:down", "think": false, "tokA": 67, "tokB": 65}
+{"task": "SystemBrightnessMinVerify", "step": 4, "orig": "SWIPE:left", "A": "E|View|scrim_behind||", "B": "E|View|scrim_behind||", "think": false, "tokA": 49, "tokB": 47}
+{"task": "RecipeAddMultipleRecipes", "step": 22, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:", "think": false, "tokA": 98, "tokB": 96}
+{"task": "ClockStopWatchRunning", "step": 0, "orig": "OPEN_APP:Clock", "A": "OPEN_APP:Clock", "B": "OPEN_APP:Clock", "think": false, "tokA": 28, "tokB": 26}
+{"task": "SimpleSmsSend", "step": 2, "orig": "E|ImageView|new_conversation_confirm||", "A": "E|ImageView|new_conversation_confirm||", "B": "E|ImageView|new_conversation_confirm||", "think": false, "tokA": 40, "tokB": 38}
+{"task": "SimpleCalendarEventsInTimeRange", "step": 1, "orig": "L|View|month_view_background", "A": "L|View|month_view_background", "B": "L|View|month_view_background", "think": false, "tokA": 55, "tokB": 53}

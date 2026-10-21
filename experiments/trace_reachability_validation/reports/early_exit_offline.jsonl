@@ -1,0 +1,232 @@
+{"task": "SystemWifiTurnOnVerify", "step": 0, "orig": "OPEN_APP:Settings", "A": "SWIPE:down", "B": "SWIPE:down"}
+{"task": "SystemWifiTurnOnVerify", "step": 1, "orig": "E|LinearLayout|||Network & internet", "A": "E|LinearLayout|||Network & internet", "B": "E|LinearLayout|||Network & internet"}
+{"task": "SystemWifiTurnOnVerify", "step": 2, "orig": "E|LinearLayout|||Internet", "A": "E|LinearLayout|||Internet", "B": "E|LinearLayout|||Internet"}
+{"task": "SystemWifiTurnOnVerify", "step": 3, "orig": "STATUS", "A": "STATUS", "B": "STATUS"}
+{"task": "SystemCopyToClipboard", "step": 0, "orig": "OPEN_APP:Messages", "A": "OPEN_APP:Chrome", "B": "OPEN_APP:Chrome"}
+{"task": "SystemCopyToClipboard", "step": 1, "orig": "WAIT", "A": "L|Button|set_as_default_button", "B": "L|Button|set_as_default_button"}
+{"task": "SystemCopyToClipboard", "step": 2, "orig": "WAIT", "A": "L|Button|set_as_default_button", "B": "L|Button|set_as_default_button"}
+{"task": "SystemCopyToClipboard", "step": 3, "orig": "L|Button|set_as_default_button", "A": "L|Button|set_as_default_button", "B": "L|Button|set_as_default_button"}
+{"task": "SystemCopyToClipboard", "step": 4, "orig": "L|Button|set_as_default_button", "A": "L|Button|set_as_default_button", "B": "L|Button|set_as_default_button"}
+{"task": "SystemCopyToClipboard", "step": 5, "orig": "L|Button|set_as_default_button", "A": "L|Button|set_as_default_button", "B": "L|Button|set_as_default_button"}
+{"task": "SystemCopyToClipboard", "step": 6, "orig": "L|Button|set_as_default_button", "A": "L|Button|set_as_default_button", "B": "L|Button|set_as_default_button"}
+{"task": "SystemCopyToClipboard", "step": 7, "orig": "L|Button|set_as_default_button", "A": "L|Button|set_as_default_button", "B": "L|Button|set_as_default_button"}
+{"task": "SystemCopyToClipboard", "step": 8, "orig": "L|Button|set_as_default_button", "A": "L|Button|set_as_default_button", "B": "L|Button|set_as_default_button"}
+{"task": "SystemCopyToClipboard", "step": 9, "orig": "L|Button|set_as_default_button", "A": "L|Button|set_as_default_button", "B": "L|Button|set_as_default_button"}
+{"task": "TurnOnWifiAndOpenApp", "step": 0, "orig": "E|TextView||Predicted app: Settings|Settings", "A": "E|TextView||Predicted app: Settings|Settings", "B": "E|TextView||Predicted app: Settings|Settings"}
+{"task": "TurnOnWifiAndOpenApp", "step": 1, "orig": "E|LinearLayout|||Network & internet", "A": "E|LinearLayout|||Network & internet", "B": "E|LinearLayout|||Network & internet"}
+{"task": "TurnOnWifiAndOpenApp", "step": 2, "orig": "E|LinearLayout|||Internet", "A": "E|LinearLayout|||Internet", "B": "E|LinearLayout|||Internet"}
+{"task": "TurnOnWifiAndOpenApp", "step": 3, "orig": "E|LinearLayout|||Wi-Fi", "A": "E|LinearLayout|||Wi-Fi", "B": "E|LinearLayout|||Wi-Fi"}
+{"task": "TurnOnWifiAndOpenApp", "step": 4, "orig": "E|ImageButton||Navigate up|Navigate up", "A": "E|ImageButton||Navigate up|Navigate up", "B": "E|ImageButton||Navigate up|Navigate up"}
+{"task": "TurnOnWifiAndOpenApp", "step": 5, "orig": "WAIT", "A": "?", "B": "?"}
+{"task": "TurnOnWifiAndOpenApp", "step": 6, "orig": "WAIT", "A": "E|ImageButton||Navigate up|Navigate up", "B": "E|ImageButton||Navigate up|Navigate up"}
+{"task": "TurnOnWifiAndOpenApp", "step": 7, "orig": "WAIT", "A": "?", "B": "E|ImageButton||Navigate up|Navigate up"}
+{"task": "TurnOnWifiAndOpenApp", "step": 8, "orig": "E|LinearLayout|||Internet", "A": "?", "B": "?"}
+{"task": "TurnOnWifiAndOpenApp", "step": 9, "orig": "E|ImageButton||Navigate up|Navigate up", "A": "E|ImageButton||Navigate up|Navigate up", "B": "STATUS"}
+{"task": "TurnOnWifiAndOpenApp", "step": 10, "orig": "WAIT", "A": "?", "B": "E|LinearLayout|||Calls & SMS"}
+{"task": "TurnOnWifiAndOpenApp", "step": 11, "orig": "E|ImageButton||Navigate up|Navigate up", "A": "E|LinearLayout|||Calls & SMS", "B": "E|ImageButton||Navigate up|Navigate up"}
+{"task": "TurnOnWifiAndOpenApp", "step": 12, "orig": "E|LinearLayout|||Apps", "A": "E|LinearLayout|||Apps", "B": "E|LinearLayout|||Apps"}
+{"task": "TurnOnWifiAndOpenApp", "step": 13, "orig": "E|LinearLayout|||See all 55 apps", "A": "E|LinearLayout|||See all 55 apps", "B": "E|LinearLayout|||See all 55 apps"}
+{"task": "TurnOnWifiAndOpenApp", "step": 14, "orig": "SWIPE:down", "A": "SWIPE:down", "B": "SWIPE:up"}
+{"task": "TurnOnWifiAndOpenApp", "step": 15, "orig": "SWIPE:up", "A": "SWIPE:up", "B": "SWIPE:down"}
+{"task": "TurnOnWifiAndOpenApp", "step": 16, "orig": "SWIPE:down", "A": "SWIPE:down", "B": "SWIPE:down"}
+{"task": "TurnOnWifiAndOpenApp", "step": 17, "orig": "SWIPE:down", "A": "SWIPE:down", "B": "SWIPE:down"}
+{"task": "TurnOnWifiAndOpenApp", "step": 18, "orig": "SWIPE:down", "A": "SWIPE:down", "B": "SWIPE:down"}
+{"task": "TurnOnWifiAndOpenApp", "step": 19, "orig": "E|TextView||Phone|Phone", "A": "E|TextView||Phone|Phone", "B": "E|TextView||Phone|Phone"}
+{"task": "BrowserMaze", "step": 0, "orig": "WAIT", "A": "SWIPE:up", "B": "SWIPE:up"}
+{"task": "BrowserMaze", "step": 1, "orig": "OPEN_APP:File Manager", "A": "SWIPE:up", "B": "SWIPE:up"}
+{"task": "BrowserMaze", "step": 2, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserMaze", "step": 3, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserMaze", "step": 4, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserMaze", "step": 5, "orig": "WAIT", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserMaze", "step": 6, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserMaze", "step": 7, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserMaze", "step": 8, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserMaze", "step": 9, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserMaze", "step": 10, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserMaze", "step": 11, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserMaze", "step": 12, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserMaze", "step": 13, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserMaze", "step": 14, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserMaze", "step": 15, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserMaze", "step": 16, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserMaze", "step": 17, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserMaze", "step": 18, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserMaze", "step": 19, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "OsmAndTrack", "step": 0, "orig": "OPEN_APP:OsmAnd", "A": "OPEN_APP:OsmAnd", "B": "OPEN_APP:OsmAnd"}
+{"task": "OsmAndTrack", "step": 1, "orig": "E|ImageButton|map_search_button|Search|Search", "A": "E|ImageButton|map_search_button|Search|Search", "B": "E|ImageButton|map_search_button|Search|Search"}
+{"task": "OsmAndTrack", "step": 2, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:"}
+{"task": "OsmAndTrack", "step": 3, "orig": "E|TextView|title||Liechtenstein", "A": "E|TextView|title||Liechtenstein", "B": "E|TextView|title||Liechtenstein"}
+{"task": "OsmAndTrack", "step": 4, "orig": "E|View|MapLayersView|Map|Map", "A": "E|View|MapLayersView|Map|Map", "B": "E|View|MapLayersView|Map|Map"}
+{"task": "OsmAndTrack", "step": 5, "orig": "E|ImageButton|map_search_button|Search|Search", "A": "E|ImageButton|map_search_button|Search|Search", "B": "E|ImageButton|map_search_button|Search|Search"}
+{"task": "OsmAndTrack", "step": 6, "orig": "E|ImageButton||Navigate up|Navigate up", "A": "E|ImageButton||Navigate up|Navigate up", "B": "E|TextView|title||Liechtenstein"}
+{"task": "OsmAndTrack", "step": 7, "orig": "L|TextView|title", "A": "L|TextView|title", "B": "L|TextView|title"}
+{"task": "OsmAndTrack", "step": 8, "orig": "E|View|MapLayersView|Map|Map", "A": "E|View|MapLayersView|Map|Map", "B": "E|View|MapLayersView|Map|Map"}
+{"task": "OsmAndTrack", "step": 9, "orig": "E|ImageButton|map_layers_button|Configure map|Configure map", "A": "E|ImageButton|map_my_location_button|Position not yet known.|Position not yet known.", "B": "E|ImageButton|map_layers_button|Configure map|Configure map"}
+{"task": "OsmAndTrack", "step": 10, "orig": "E|LinearLayout|button_wrapper||Save", "A": "E|LinearLayout|button_wrapper||Save", "B": "?"}
+{"task": "OsmAndTrack", "step": 11, "orig": "E|ImageButton|map_search_button|Search|Search", "A": "E|ImageButton|map_search_button|Search|Search", "B": "E|View|MapLayersView|Map|Map"}
+{"task": "OsmAndTrack", "step": 12, "orig": "L|TextView|title", "A": "L|TextView|title", "B": "TYPE:"}
+{"task": "OsmAndTrack", "step": 13, "orig": "E|View|MapLayersView|Map|Map", "A": "E|View|MapLayersView|Map|Map", "B": "E|View|MapLayersView|Map|Map"}
+{"task": "OsmAndTrack", "step": 14, "orig": "E|ImageButton|map_my_location_button|Position not yet known.|Position not yet known.", "A": "E|ImageButton|map_my_location_button|Position not yet known.|Position not yet known.", "B": "E|ImageButton|map_my_location_button|Position not yet known.|Position not yet known."}
+{"task": "OsmAndTrack", "step": 15, "orig": "E|ImageButton|map_search_button|Search|Search", "A": "E|ImageButton|map_search_button|Search|Search", "B": "E|View|MapLayersView|Map|Map"}
+{"task": "OsmAndTrack", "step": 16, "orig": "L|TextView|title", "A": "TYPE:", "B": "L|TextView|title"}
+{"task": "OsmAndTrack", "step": 17, "orig": "E|View|MapLayersView|Map|Map", "A": "E|View|MapLayersView|Map|Map", "B": "E|View|MapLayersView|Map|Map"}
+{"task": "OsmAndTrack", "step": 18, "orig": "E|ImageButton|map_layers_button|Configure map|Configure map", "A": "E|ImageButton|map_my_location_button|Position not yet known.|Position not yet known.", "B": "E|ImageButton|map_my_location_button|Position not yet known.|Position not yet known."}
+{"task": "OsmAndTrack", "step": 19, "orig": "E|LinearLayout|button_wrapper||Save", "A": "E|LinearLayout|button_wrapper||Save", "B": "E|LinearLayout|button_wrapper||Save"}
+{"task": "RecipeDeleteSingleWithRecipeWithNoise", "step": 0, "orig": "OPEN_APP:Broccoli", "A": "OPEN_APP:Broccoli", "B": "OPEN_APP:Broccoli"}
+{"task": "RecipeDeleteSingleWithRecipeWithNoise", "step": 1, "orig": "SWIPE:up", "A": "SWIPE:up", "B": "SWIPE:up"}
+{"task": "RecipeDeleteSingleWithRecipeWithNoise", "step": 2, "orig": "SWIPE:up", "A": "SWIPE:up", "B": "SWIPE:up"}
+{"task": "RecipeDeleteSingleWithRecipeWithNoise", "step": 3, "orig": "SWIPE:up", "A": "SWIPE:up", "B": "SWIPE:up"}
+{"task": "RecipeDeleteSingleWithRecipeWithNoise", "step": 4, "orig": "SWIPE:up", "A": "SWIPE:up", "B": "SWIPE:up"}
+{"task": "RecipeDeleteSingleWithRecipeWithNoise", "step": 5, "orig": "SWIPE:up", "A": "SWIPE:up", "B": "E|Button|action_search|Search|Search"}
+{"task": "RecipeDeleteSingleWithRecipeWithNoise", "step": 6, "orig": "SWIPE:up", "A": "SWIPE:up", "B": "E|Button|action_search|Search|Search"}
+{"task": "RecipeDeleteSingleWithRecipeWithNoise", "step": 7, "orig": "SWIPE:up", "A": "E|Button|action_search|Search|Search", "B": "E|Button|action_search|Search|Search"}
+{"task": "RecipeDeleteSingleWithRecipeWithNoise", "step": 8, "orig": "E|Button|action_search|Search|Search", "A": "E|Button|action_search|Search|Search", "B": "E|Button|action_search|Search|Search"}
+{"task": "RecipeDeleteSingleWithRecipeWithNoise", "step": 9, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:"}
+{"task": "RecipeDeleteSingleWithRecipeWithNoise", "step": 10, "orig": "E|CardView|||Recipe photo", "A": "E|CardView|||Recipe photo", "B": "E|CardView|||Recipe photo"}
+{"task": "RecipeDeleteSingleWithRecipeWithNoise", "step": 11, "orig": "E|ImageView||More options|More options", "A": "E|ImageView||More options|More options", "B": "E|ImageView||More options|More options"}
+{"task": "RecipeDeleteSingleWithRecipeWithNoise", "step": 12, "orig": "E|LinearLayout|||Delete", "A": "E|LinearLayout|||Delete", "B": "E|LinearLayout|||Delete"}
+{"task": "RecipeDeleteSingleWithRecipeWithNoise", "step": 13, "orig": "E|Button|button1||DELETE", "A": "E|Button|button1||DELETE", "B": "E|Button|button1||DELETE"}
+{"task": "RecipeDeleteSingleWithRecipeWithNoise", "step": 14, "orig": "STATUS", "A": "STATUS", "B": "STATUS"}
+{"task": "SimpleCalendarEventOnDateAtTime", "step": 0, "orig": "WAIT", "A": "OPEN_APP:Simple Calendar Pro", "B": "OPEN_APP:Simple Calendar Pro"}
+{"task": "SimpleCalendarEventOnDateAtTime", "step": 1, "orig": "OPEN_APP:Simple Calendar Pro", "A": "OPEN_APP:Simple Calendar Pro", "B": "OPEN_APP:Simple Calendar Pro"}
+{"task": "SimpleCalendarEventOnDateAtTime", "step": 2, "orig": "E|Button|button1||OK", "A": "E|Button|button1||OK", "B": "E|Button|button1||OK"}
+{"task": "SimpleCalendarEventOnDateAtTime", "step": 3, "orig": "L|View|month_view_background", "A": "L|View|month_view_background", "B": "L|View|month_view_background"}
+{"task": "SimpleCalendarEventOnDateAtTime", "step": 4, "orig": "L|ImageView|top_right_arrow", "A": "STATUS", "B": "STATUS"}
+{"task": "SimpleCalendarEventOnDateAtTime", "step": 5, "orig": "L|ImageView|top_right_arrow", "A": "L|ImageView|top_right_arrow", "B": "L|ImageView|top_right_arrow"}
+{"task": "SimpleCalendarEventOnDateAtTime", "step": 6, "orig": "L|ImageView|top_right_arrow", "A": "L|ImageView|top_left_arrow", "B": "L|ImageView|top_left_arrow"}
+{"task": "SimpleCalendarEventOnDateAtTime", "step": 7, "orig": "L|ImageView|top_right_arrow", "A": "L|ImageView|top_left_arrow", "B": "L|ImageView|top_left_arrow"}
+{"task": "SimpleCalendarEventOnDateAtTime", "step": 8, "orig": "L|ImageView|top_right_arrow", "A": "L|ImageView|top_right_arrow", "B": "L|ImageView|top_right_arrow"}
+{"task": "SimpleCalendarEventOnDateAtTime", "step": 9, "orig": "L|ImageView|top_right_arrow", "A": "L|ImageView|top_right_arrow", "B": "L|ImageView|top_right_arrow"}
+{"task": "FilesMoveFile", "step": 0, "orig": "OPEN_APP:Files", "A": "OPEN_APP:Files", "B": "OPEN_APP:Files"}
+{"task": "FilesMoveFile", "step": 1, "orig": "E|ImageButton||Show roots|Show roots", "A": "E|ImageButton||Show roots|Show roots", "B": "E|ImageButton||Show roots|Show roots"}
+{"task": "FilesMoveFile", "step": 2, "orig": "E|LinearLayout|||sdk_gphone64_arm64", "A": "E|LinearLayout|||sdk_gphone64_arm64", "B": "E|LinearLayout|||sdk_gphone64_arm64"}
+{"task": "FilesMoveFile", "step": 3, "orig": "SWIPE:down", "A": "SWIPE:down", "B": "L|LinearLayout|item_root"}
+{"task": "FilesMoveFile", "step": 4, "orig": "L|LinearLayout|item_root", "A": "L|LinearLayout|item_root", "B": "L|LinearLayout|item_root"}
+{"task": "FilesMoveFile", "step": 5, "orig": "LONG_PRESS:L|LinearLayout|item_root", "A": "LONG_PRESS:L|LinearLayout|item_root", "B": "LONG_PRESS:L|LinearLayout|item_root"}
+{"task": "FilesMoveFile", "step": 6, "orig": "E|ImageView||More options|More options", "A": "E|ImageView||More options|More options", "B": "E|ImageView||More options|More options"}
+{"task": "FilesMoveFile", "step": 7, "orig": "E|LinearLayout|||Move to\u2026", "A": "E|LinearLayout|||Move to\u2026", "B": "E|LinearLayout|||Move to\u2026"}
+{"task": "FilesMoveFile", "step": 8, "orig": "L|Button|button1", "A": "L|Button|button1", "B": "L|Button|button1"}
+{"task": "FilesMoveFile", "step": 9, "orig": "STATUS", "A": "STATUS", "B": "STATUS"}
+{"task": "MarkorDeleteNewestNote", "step": 0, "orig": "OPEN_APP:Markor", "A": "OPEN_APP:Markor", "B": "OPEN_APP:Markor"}
+{"task": "MarkorDeleteNewestNote", "step": 1, "orig": "LONG_PRESS:L|LinearLayout|opoc_filesystem_item__root", "A": "LONG_PRESS:L|LinearLayout|opoc_filesystem_item__root", "B": "LONG_PRESS:L|LinearLayout|opoc_filesystem_item__root"}
+{"task": "MarkorDeleteNewestNote", "step": 2, "orig": "E|TextView|action_delete_selected_items|Delete|Delete", "A": "E|TextView|action_delete_selected_items|Delete|Delete", "B": "E|TextView|action_delete_selected_items|Delete|Delete"}
+{"task": "MarkorDeleteNewestNote", "step": 3, "orig": "E|Button|button1||OK", "A": "E|Button|button1||OK", "B": "E|Button|button1||OK"}
+{"task": "MarkorDeleteNewestNote", "step": 4, "orig": "STATUS", "A": "STATUS", "B": "?"}
+{"task": "MarkorCreateFolder", "step": 0, "orig": "OPEN_APP:Markor", "A": "OPEN_APP:Markor", "B": "OPEN_APP:Markor"}
+{"task": "MarkorCreateFolder", "step": 1, "orig": "E|ImageButton|fab_add_new_item|Create a new file or folder|Create a new file or folder", "A": "E|ImageButton|fab_add_new_item|Create a new file or folder|Create a new file or folder", "B": "E|ImageButton|fab_add_new_item|Create a new file or folder|Create a new file or folder"}
+{"task": "MarkorCreateFolder", "step": 2, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:"}
+{"task": "MarkorCreateFolder", "step": 3, "orig": "E|Button|button3||FOLDER", "A": "E|Button|button3||FOLDER", "B": "E|Button|button3||FOLDER"}
+{"task": "MarkorCreateFolder", "step": 4, "orig": "STATUS", "A": "STATUS", "B": "STATUS"}
+{"task": "VlcCreateTwoPlaylists", "step": 0, "orig": "OPEN_APP:VLC", "A": "OPEN_APP:VLC", "B": "OPEN_APP:VLC"}
+{"task": "VlcCreateTwoPlaylists", "step": 1, "orig": "E|ViewGroup|browser_container|Folder: Internal memory, 14 subfolders|Folder: Internal memory, 14 subfolders", "A": "E|ViewGroup|browser_container|Folder: Internal memory, 14 subfolders|Folder: Internal memory, 14 subfolders", "B": "E|ViewGroup|browser_container|Folder: Internal memory, 14 subfolders|Folder: Internal memory, 14 subfolders"}
+{"task": "VlcCreateTwoPlaylists", "step": 2, "orig": "E|ViewGroup|browser_container|Folder: VLCVideos, 10 media files|Folder: VLCVideos, 10 media files", "A": "E|ViewGroup|browser_container|Folder: VLCVideos, 10 media files|Folder: VLCVideos, 10 media files", "B": "E|ViewGroup|browser_container|Folder: VLCVideos, 10 media files|Folder: VLCVideos, 10 media files"}
+{"task": "VlcCreateTwoPlaylists", "step": 3, "orig": "E|ImageView|item_more|More Actions|More Actions", "A": "E|ImageView|item_more|More Actions|More Actions", "B": "E|ImageView|item_more|More Actions|More Actions"}
+{"task": "VlcCreateTwoPlaylists", "step": 4, "orig": "E|ViewGroup|||Add to playlist", "A": "E|ViewGroup|||Add to playlist", "B": "E|ViewGroup|||Add to playlist"}
+{"task": "VlcCreateTwoPlaylists", "step": 5, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:"}
+{"task": "VlcCreateTwoPlaylists", "step": 6, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:"}
+{"task": "VlcCreateTwoPlaylists", "step": 7, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:"}
+{"task": "VlcCreateTwoPlaylists", "step": 8, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:"}
+{"task": "VlcCreateTwoPlaylists", "step": 9, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:"}
+{"task": "VlcCreateTwoPlaylists", "step": 10, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:"}
+{"task": "VlcCreateTwoPlaylists", "step": 11, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:"}
+{"task": "VlcCreateTwoPlaylists", "step": 12, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:"}
+{"task": "VlcCreateTwoPlaylists", "step": 13, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:"}
+{"task": "VlcCreateTwoPlaylists", "step": 14, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:"}
+{"task": "VlcCreateTwoPlaylists", "step": 15, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:"}
+{"task": "VlcCreateTwoPlaylists", "step": 16, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:"}
+{"task": "VlcCreateTwoPlaylists", "step": 17, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:"}
+{"task": "VlcCreateTwoPlaylists", "step": 18, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:"}
+{"task": "VlcCreateTwoPlaylists", "step": 19, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:"}
+{"task": "SportsTrackerTotalDurationForCategoryThisWeek", "step": 0, "orig": "OPEN_APP:OpenTracks", "A": "OPEN_APP:OpenTracks", "B": "OPEN_APP:OpenTracks"}
+{"task": "SportsTrackerTotalDurationForCategoryThisWeek", "step": 1, "orig": "STATUS", "A": "STATUS", "B": "STATUS"}
+{"task": "MarkorAddNoteHeader", "step": 0, "orig": "OPEN_APP:Markor", "A": "OPEN_APP:Markor", "B": "OPEN_APP:Markor"}
+{"task": "MarkorAddNoteHeader", "step": 1, "orig": "WAIT", "A": "L|LinearLayout|opoc_filesystem_item__root", "B": "?"}
+{"task": "MarkorAddNoteHeader", "step": 2, "orig": "WAIT", "A": "?", "B": "?"}
+{"task": "MarkorAddNoteHeader", "step": 3, "orig": "WAIT", "A": "?", "B": "L|LinearLayout|opoc_filesystem_item__root"}
+{"task": "MarkorAddNoteHeader", "step": 4, "orig": "WAIT", "A": "?", "B": "L|LinearLayout|opoc_filesystem_item__root"}
+{"task": "MarkorAddNoteHeader", "step": 5, "orig": "WAIT", "A": "?", "B": "L|LinearLayout|opoc_filesystem_item__root"}
+{"task": "MarkorAddNoteHeader", "step": 6, "orig": "WAIT", "A": "L|LinearLayout|opoc_filesystem_item__root", "B": "L|LinearLayout|opoc_filesystem_item__root"}
+{"task": "MarkorAddNoteHeader", "step": 7, "orig": "L|LinearLayout|opoc_filesystem_item__root", "A": "L|LinearLayout|opoc_filesystem_item__root", "B": "L|LinearLayout|opoc_filesystem_item__root"}
+{"task": "MarkorAddNoteHeader", "step": 8, "orig": "E|EditText|document__fragment__edit__highlighting_editor||Inconceivable!", "A": "E|EditText|document__fragment__edit__highlighting_editor||Inconceivable!", "B": "E|EditText|document__fragment__edit__highlighting_editor||Inconceivable!"}
+{"task": "MarkorAddNoteHeader", "step": 9, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:"}
+{"task": "MarkorAddNoteHeader", "step": 10, "orig": "E|EditText|document__fragment__edit__highlighting_editor||I\\n9pej0L48OHebXPVJPN3g nconceivable!", "A": "E|EditText|document__fragment__edit__highlighting_editor||I\\n9pej0L48OHebXPVJPN3g nconceivable!", "B": "E|ImageView||More options|More options"}
+{"task": "MarkorAddNoteHeader", "step": 11, "orig": "TYPE:document__fragment__edit__highlighting_editor", "A": "E|EditText|document__fragment__edit__highlighting_editor||I\\n9pej0L48OHebXPVJPN3g nconceivable!", "B": "E|TextView|action_save|Save|Save"}
+{"task": "SimpleCalendarEventsInNextWeek", "step": 0, "orig": "OPEN_APP:Simple Calendar Pro", "A": "OPEN_APP:Simple Calendar Pro", "B": "OPEN_APP:Simple Calendar Pro"}
+{"task": "SimpleCalendarEventsInNextWeek", "step": 1, "orig": "E|Button|button1||OK", "A": "E|Button|button1||OK", "B": "E|Button|button1||OK"}
+{"task": "SimpleCalendarEventsInNextWeek", "step": 2, "orig": "STATUS", "A": "STATUS", "B": "L|View|month_view_background"}
+{"task": "RetroPlayingQueue", "step": 0, "orig": "OPEN_APP:Retro Music", "A": "OPEN_APP:Retro Music", "B": "OPEN_APP:Retro Music"}
+{"task": "RetroPlayingQueue", "step": 1, "orig": "L|ImageView|menu", "A": "L|ImageView|menu", "B": "L|ImageView|menu"}
+{"task": "RetroPlayingQueue", "step": 2, "orig": "E|LinearLayout|||Add to playing queue", "A": "E|LinearLayout|||Add to playing queue", "B": "E|LinearLayout|||Add to playing queue"}
+{"task": "RetroPlayingQueue", "step": 3, "orig": "L|ImageView|menu", "A": "L|ImageButton|shuffle_button", "B": "L|ImageView|menu"}
+{"task": "RetroPlayingQueue", "step": 4, "orig": "E|LinearLayout|||Add to playing queue", "A": "E|LinearLayout|||Add to playing queue", "B": "E|LinearLayout|||Add to playing queue"}
+{"task": "RetroPlayingQueue", "step": 5, "orig": "L|ImageView|menu", "A": "L|ImageView|menu", "B": "L|ImageView|menu"}
+{"task": "RetroPlayingQueue", "step": 6, "orig": "E|LinearLayout|||Add to playing queue", "A": "E|LinearLayout|||Add to playing queue", "B": "E|LinearLayout|||Add to playing queue"}
+{"task": "RetroPlayingQueue", "step": 7, "orig": "L|ImageView|menu", "A": "L|ImageView|menu", "B": "L|ImageView|menu"}
+{"task": "RetroPlayingQueue", "step": 8, "orig": "E|LinearLayout|||Add to playing queue", "A": "E|LinearLayout|||Add to playing queue", "B": "E|LinearLayout|||Add to playing queue"}
+{"task": "RetroPlayingQueue", "step": 9, "orig": "L|ImageView|menu", "A": "L|ImageView|menu", "B": "L|ImageView|menu"}
+{"task": "RetroPlayingQueue", "step": 10, "orig": "E|LinearLayout|||Add to playing queue", "A": "E|LinearLayout|||Add to playing queue", "B": "E|LinearLayout|||Add to playing queue"}
+{"task": "RetroPlayingQueue", "step": 11, "orig": "L|ImageView|menu", "A": "L|ImageView|menu", "B": "L|ImageView|menu"}
+{"task": "RetroPlayingQueue", "step": 12, "orig": "E|LinearLayout|||Add to playing queue", "A": "E|LinearLayout|||Add to playing queue", "B": "E|LinearLayout|||Add to playing queue"}
+{"task": "RetroPlayingQueue", "step": 13, "orig": "SWIPE:up", "A": "SWIPE:down", "B": "SWIPE:up"}
+{"task": "RetroPlayingQueue", "step": 14, "orig": "L|ImageView|menu", "A": "L|ImageView|menu", "B": "L|ImageView|menu"}
+{"task": "RetroPlayingQueue", "step": 15, "orig": "E|LinearLayout|||Add to playing queue", "A": "E|LinearLayout|||Add to playing queue", "B": "E|LinearLayout|||Add to playing queue"}
+{"task": "RetroPlayingQueue", "step": 16, "orig": "L|ImageView|menu", "A": "L|ImageView|menu", "B": "STATUS"}
+{"task": "RetroPlayingQueue", "step": 17, "orig": "E|LinearLayout|||Add to playing queue", "A": "E|LinearLayout|||Add to playing queue", "B": "E|LinearLayout|||Add to playing queue"}
+{"task": "RetroPlayingQueue", "step": 18, "orig": "L|ImageView|menu", "A": "L|ImageView|menu", "B": "L|ImageView|menu"}
+{"task": "RetroPlayingQueue", "step": 19, "orig": "E|LinearLayout|||Add to playing queue", "A": "E|LinearLayout|||Add to playing queue", "B": "E|LinearLayout|||Add to playing queue"}
+{"task": "ExpenseDeleteDuplicates", "step": 0, "orig": "OPEN_APP:Pro Expense", "A": "OPEN_APP:Pro Expense", "B": "OPEN_APP:Pro Expense"}
+{"task": "ExpenseDeleteDuplicates", "step": 1, "orig": "E|ImageButton|||", "A": "E|ImageButton|||", "B": "E|ImageButton|||"}
+{"task": "ExpenseDeleteDuplicates", "step": 2, "orig": "E|LinearLayoutCompat|dest_expense_logs||Expense Logs", "A": "E|LinearLayoutCompat|dest_expense_logs||Expense Logs", "B": "E|LinearLayoutCompat|dest_expense_logs||Expense Logs"}
+{"task": "ExpenseDeleteDuplicates", "step": 3, "orig": "E|View|view_bg||", "A": "LONG_PRESS:E|View|view_bg||", "B": "LONG_PRESS:E|View|view_bg||"}
+{"task": "ExpenseDeleteDuplicates", "step": 4, "orig": "E|ImageView|btn_delete||", "A": "E|ImageView|btn_delete||", "B": "E|ImageView|btn_delete||"}
+{"task": "ExpenseDeleteDuplicates", "step": 5, "orig": "E|Button|btn_confirm||CONFIRM", "A": "E|Button|btn_confirm||CONFIRM", "B": "E|Button|btn_confirm||CONFIRM"}
+{"task": "ExpenseDeleteDuplicates", "step": 6, "orig": "STATUS", "A": "STATUS", "B": "STATUS"}
+{"task": "RetroCreatePlaylist", "step": 0, "orig": "OPEN_APP:Retro Music", "A": "OPEN_APP:Retro Music", "B": "OPEN_APP:Retro Music"}
+{"task": "RetroCreatePlaylist", "step": 1, "orig": "L|ImageView|menu", "A": "L|ImageView|menu", "B": "L|ImageView|menu"}
+{"task": "RetroCreatePlaylist", "step": 2, "orig": "E|LinearLayout|||Add to playlist", "A": "E|LinearLayout|||Add to playlist", "B": "E|LinearLayout|||Add to playlist"}
+{"task": "RetroCreatePlaylist", "step": 3, "orig": "E|TextView|text1||New playlist", "A": "E|TextView|text1||New playlist", "B": "E|TextView|text1||New playlist"}
+{"task": "RetroCreatePlaylist", "step": 4, "orig": "E|EditText|actionNewPlaylist||Playlist name", "A": "TYPE:", "B": "TYPE:"}
+{"task": "RetroCreatePlaylist", "step": 5, "orig": "TYPE:", "A": "TYPE:", "B": "TYPE:"}
+{"task": "RetroCreatePlaylist", "step": 6, "orig": "E|Button|button1||Create", "A": "E|Button|button1||Create", "B": "E|Button|button1||Create"}
+{"task": "RetroCreatePlaylist", "step": 7, "orig": "L|ImageView|menu", "A": "L|ImageView|menu", "B": "L|ImageView|menu"}
+{"task": "RetroCreatePlaylist", "step": 8, "orig": "E|LinearLayout|||Add to playlist", "A": "E|LinearLayout|||Add to playlist", "B": "E|LinearLayout|||Add to playlist"}
+{"task": "RetroCreatePlaylist", "step": 9, "orig": "E|TextView|text1||Party Mix 553", "A": "E|TextView|text1||Party Mix 553", "B": "E|TextView|text1||Party Mix 553"}
+{"task": "RetroCreatePlaylist", "step": 10, "orig": "L|ImageView|menu", "A": "L|ImageView|menu", "B": "L|ImageView|menu"}
+{"task": "RetroCreatePlaylist", "step": 11, "orig": "E|LinearLayout|||Add to playlist", "A": "E|LinearLayout|||Add to playlist", "B": "E|LinearLayout|||Add to playlist"}
+{"task": "RetroCreatePlaylist", "step": 12, "orig": "E|TextView|text1||Party Mix 553", "A": "E|TextView|text1||Party Mix 553", "B": "E|TextView|text1||Party Mix 553"}
+{"task": "RetroCreatePlaylist", "step": 13, "orig": "L|ImageView|menu", "A": "SWIPE:down", "B": "SWIPE:down"}
+{"task": "RetroCreatePlaylist", "step": 14, "orig": "E|LinearLayout|||Add to playlist", "A": "E|LinearLayout|||Add to playlist", "B": "E|LinearLayout|||Add to playlist"}
+{"task": "RetroCreatePlaylist", "step": 15, "orig": "E|TextView|text1||Party Mix 553", "A": "E|TextView|text1||Party Mix 553", "B": "E|TextView|text1||Party Mix 553"}
+{"task": "RetroCreatePlaylist", "step": 16, "orig": "L|ImageView|menu", "A": "L|ImageView|menu", "B": "SWIPE:up"}
+{"task": "RetroCreatePlaylist", "step": 17, "orig": "E|LinearLayout|||Add to playlist", "A": "E|LinearLayout|||Add to playlist", "B": "E|LinearLayout|||Add to playlist"}
+{"task": "RetroCreatePlaylist", "step": 18, "orig": "E|TextView|text1||Party Mix 553", "A": "E|TextView|text1||Party Mix 553", "B": "E|TextView|text1||Party Mix 553"}
+{"task": "RetroCreatePlaylist", "step": 19, "orig": "STATUS", "A": "STATUS", "B": "L|ImageView|menu"}
+{"task": "MarkorDeleteAllNotes", "step": 0, "orig": "OPEN_APP:Markor", "A": "OPEN_APP:Markor", "B": "OPEN_APP:Markor"}
+{"task": "MarkorDeleteAllNotes", "step": 1, "orig": "LONG_PRESS:L|LinearLayout|opoc_filesystem_item__root", "A": "LONG_PRESS:L|LinearLayout|opoc_filesystem_item__root", "B": "LONG_PRESS:L|LinearLayout|opoc_filesystem_item__root"}
+{"task": "MarkorDeleteAllNotes", "step": 2, "orig": "E|TextView|action_delete_selected_items|Delete|Delete", "A": "E|TextView|action_delete_selected_items|Delete|Delete", "B": "E|TextView|action_delete_selected_items|Delete|Delete"}
+{"task": "MarkorDeleteAllNotes", "step": 3, "orig": "E|Button|button1||OK", "A": "E|Button|button1||OK", "B": "E|Button|button1||OK"}
+{"task": "MarkorDeleteAllNotes", "step": 4, "orig": "STATUS", "A": "STATUS", "B": "STATUS"}
+{"task": "BrowserDraw", "step": 0, "orig": "WAIT", "A": "SWIPE:up", "B": "SWIPE:up"}
+{"task": "BrowserDraw", "step": 1, "orig": "OPEN_APP:File Manager", "A": "SWIPE:up", "B": "SWIPE:up"}
+{"task": "BrowserDraw", "step": 2, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserDraw", "step": 3, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserDraw", "step": 4, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserDraw", "step": 5, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserDraw", "step": 6, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserDraw", "step": 7, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserDraw", "step": 8, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserDraw", "step": 9, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserDraw", "step": 10, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserDraw", "step": 11, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserDraw", "step": 12, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserDraw", "step": 13, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserDraw", "step": 14, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserDraw", "step": 15, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserDraw", "step": 16, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserDraw", "step": 17, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserDraw", "step": 18, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "BrowserDraw", "step": 19, "orig": "L|CardView|item_root", "A": "L|CardView|item_root", "B": "L|CardView|item_root"}
+{"task": "RecipeDeleteMultipleRecipesWithConstraint", "step": 0, "orig": "OPEN_APP:Broccoli", "A": "OPEN_APP:Broccoli", "B": "OPEN_APP:Broccoli"}
+{"task": "RecipeDeleteMultipleRecipesWithConstraint", "step": 1, "orig": "E|Button|action_search|Search|Search", "A": "E|Button|action_search|Search|Search", "B": "E|Button|action_search|Search|Search"}
+{"task": "RecipeDeleteMultipleRecipesWithConstraint", "step": 2, "orig": "TYPE:search_src_text", "A": "TYPE:", "B": "TYPE:"}
+{"task": "RecipeDeleteMultipleRecipesWithConstraint", "step": 3, "orig": "STATUS", "A": "STATUS", "B": "STATUS"}

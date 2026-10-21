@@ -8863,3 +8863,346 @@
 - 10-20 22:40:14 FULLRUN PASS 0 DONE
 - 10-20 22:40 BASE8 只跑一轮（seed 30），第 1 轮结束后停止。
 - 10-20 22:48:28 BASE8 完成：54/116（BASE 51），同题集推理 7.26。FULL40 single pass started（FULL39 + 系统侧自适应等待：动作后不再固定等 1s，检测到界面变化后两次读数一致即截图；无变化时按图上该边在线学到的稳定时间等待，默认 0.6s）
+- 10-20 22:49:02 FULLRUN p0 FULL40 AudioRecorderRecordAudio rc=0 succ=1.0 steps=9 calls=9 jump=0 probes=0 err=None 34s
+- 10-20 22:49:39 FULLRUN p0 FULL40 AudioRecorderRecordAudioWithFileName rc=0 succ=1.0 steps=10 calls=9 jump=0 probes=0 err=None 36s
+- 10-20 22:50:39 FULLRUN p0 FULL40 BrowserDraw rc=0 succ=0.0 steps=24 calls=20 jump=0 probes=0 err=None 60s
+- 10-20 22:51:26 FULLRUN p0 FULL40 BrowserMaze rc=0 succ=0.0 steps=15 calls=14 jump=0 probes=0 err=None 46s
+- 10-20 22:52:45 FULLRUN p0 FULL40 BrowserMultiply rc=0 succ=0.0 steps=17 calls=18 jump=0 probes=7 err=None 79s
+- 10-20 22:53:27 FULLRUN p0 FULL40 CameraTakePhoto rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 42s
+- 10-20 22:54:07 FULLRUN p0 FULL40 CameraTakeVideo rc=0 succ=0.0 steps=9 calls=9 jump=0 probes=0 err=None 40s
+- 10-20 22:54:20 FULLRUN p0 FULL40 ClockStopWatchPausedVerify rc=0 succ=1.0 steps=2 calls=2 jump=0 probes=0 err=None 13s
+- 10-20 22:54:39 FULLRUN p0 FULL40 ClockStopWatchRunning rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=0 err=None 19s
+- 10-20 22:55:14 FULLRUN p0 FULL40 ClockTimerEntry rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 35s
+- 10-20 22:55:50 FULLRUN p0 FULL40 ContactsAddContact rc=0 succ=1.0 steps=9 calls=8 jump=0 probes=0 err=None 37s
+- 10-20 22:56:25 FULLRUN p0 FULL40 ContactsNewContactDraft rc=0 succ=1.0 steps=6 calls=4 jump=0 probes=0 err=None 34s
+- 10-20 22:57:48 FULLRUN p0 FULL40 ExpenseAddMultiple rc=0 succ=1.0 steps=16 calls=13 jump=0 probes=2 err=None 83s
+- 10-20 22:58:32 FULLRUN p0 FULL40 ExpenseAddMultipleFromGallery rc=0 succ=0.0 steps=9 calls=9 jump=0 probes=5 err=None 44s
+- 10-20 22:59:30 FULLRUN p0 FULL40 ExpenseAddMultipleFromMarkor rc=0 succ=0.0 steps=12 calls=12 jump=0 probes=3 err=None 58s
+- 10-20 23:00:10 FULLRUN p0 FULL40 ExpenseAddSingle rc=0 succ=0.0 steps=6 calls=4 jump=0 probes=0 err=None 40s
+- 10-20 23:00:39 FULLRUN p0 FULL40 ExpenseDeleteDuplicates rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=1 err=None 29s
+- 10-20 23:01:26 FULLRUN p0 FULL40 ExpenseDeleteDuplicates2 rc=0 succ=0.0 steps=12 calls=9 jump=0 probes=3 err=None 47s
+- 10-20 23:02:07 FULLRUN p0 FULL40 ExpenseDeleteMultiple rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=0 err=None 41s
+- 10-20 23:03:54 FULLRUN p0 FULL40 ExpenseDeleteMultiple2 rc=0 succ=0.0 steps=33 calls=20 jump=0 probes=5 err=None 108s
+- 10-20 23:04:18 FULLRUN p0 FULL40 ExpenseDeleteSingle rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=1 err=None 24s
+- 10-20 23:05:00 FULLRUN p0 FULL40 FilesDeleteFile rc=0 succ=1.0 steps=9 calls=9 jump=0 probes=0 err=None 42s
+- 10-20 23:05:44 FULLRUN p0 FULL40 FilesMoveFile rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 43s
+- 10-20 23:06:39 FULLRUN p0 FULL40 MarkorAddNoteHeader rc=0 succ=0.0 steps=12 calls=12 jump=0 probes=3 err=None 55s
+- 10-20 23:07:27 FULLRUN p0 FULL40 MarkorChangeNoteContent rc=0 succ=0.0 steps=12 calls=12 jump=0 probes=2 err=None 48s
+- 10-20 23:08:01 FULLRUN p0 FULL40 MarkorCreateFolder rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=2 err=None 35s
+- 10-20 23:08:45 FULLRUN p0 FULL40 MarkorCreateNote rc=0 succ=0.0 steps=10 calls=9 jump=0 probes=1 err=None 44s
+- 10-20 23:09:58 FULLRUN p0 FULL40 MarkorCreateNoteAndSms rc=0 succ=0.0 steps=19 calls=18 jump=0 probes=1 err=None 72s
+- 10-20 23:10:41 FULLRUN p0 FULL40 MarkorCreateNoteFromClipboard rc=0 succ=0.0 steps=8 calls=7 jump=0 probes=0 err=None 43s
+- 10-20 23:11:28 FULLRUN p0 FULL40 MarkorDeleteAllNotes rc=0 succ=1.0 steps=16 calls=14 jump=1 probes=1 err=None 47s
+- 10-20 23:11:51 FULLRUN p0 FULL40 MarkorDeleteNewestNote rc=0 succ=1.0 steps=4 calls=3 jump=1 probes=3 err=None 24s
+- 10-20 23:12:27 FULLRUN p0 FULL40 MarkorDeleteNote rc=0 succ=1.0 steps=4 calls=3 jump=1 probes=5 err=None 35s
+- 10-20 23:12:49 FULLRUN p0 FULL40 MarkorEditNote rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=2 err=None 22s
+- 10-20 23:14:01 FULLRUN p0 FULL40 MarkorMergeNotes rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=6 err=None 72s
+- 10-20 23:14:48 FULLRUN p0 FULL40 MarkorMoveNote rc=0 succ=0.0 steps=8 calls=8 jump=0 probes=5 err=None 47s
+- 10-20 23:16:02 FULLRUN p0 FULL40 MarkorTranscribeReceipt rc=0 succ=0.0 steps=17 calls=18 jump=0 probes=6 err=None 74s
+- 10-20 23:17:09 FULLRUN p0 FULL40 MarkorTranscribeVideo rc=0 succ=0.0 steps=21 calls=20 jump=0 probes=1 err=None 66s
+- 10-20 23:17:46 FULLRUN p0 FULL40 NotesIsTodo rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=5 err=None 37s
+- 10-20 23:18:18 FULLRUN p0 FULL40 NotesMeetingAttendeeCount rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=5 err=None 31s
+- 10-20 23:18:47 FULLRUN p0 FULL40 NotesRecipeIngredientCount rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=5 err=None 29s
+- 10-20 23:19:33 FULLRUN p0 FULL40 NotesTodoItemCount rc=0 succ=1.0 steps=3 calls=3 jump=0 probes=6 err=None 47s
+- 10-20 23:19:55 FULLRUN p0 FULL40 OpenAppTaskEval rc=0 succ=1.0 steps=3 calls=3 jump=0 probes=1 err=None 22s
+- 10-20 23:20:44 FULLRUN p0 FULL40 OsmAndFavorite rc=0 succ=0.0 steps=11 calls=11 jump=0 probes=0 err=None 49s
+- 10-20 23:21:49 FULLRUN p0 FULL40 OsmAndMarker rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 65s
+- 10-20 23:22:44 FULLRUN p0 FULL40 OsmAndTrack rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=1 err=None 55s
+- 10-20 23:25:32 FULLRUN p0 FULL40 RecipeAddMultipleRecipes rc=0 succ=1.0 steps=23 calls=20 jump=0 probes=9 err=None 168s
+- 10-20 23:26:42 FULLRUN p0 FULL40 RecipeAddMultipleRecipesFromImage rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=3 err=None 70s
+- 10-20 23:27:51 FULLRUN p0 FULL40 RecipeAddMultipleRecipesFromMarkor rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=1 err=None 69s
+- 10-20 23:29:05 FULLRUN p0 FULL40 RecipeAddMultipleRecipesFromMarkor2 rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=2 err=None 73s
+- 10-20 23:29:58 FULLRUN p0 FULL40 RecipeAddSingleRecipe rc=0 succ=1.0 steps=3 calls=2 jump=0 probes=3 err=None 53s
+- 10-20 23:30:26 FULLRUN p0 FULL40 RecipeDeleteDuplicateRecipes rc=0 succ=0.0 steps=5 calls=5 jump=0 probes=2 err=None 27s
+- 10-20 23:31:39 FULLRUN p0 FULL40 RecipeDeleteDuplicateRecipes2 rc=0 succ=0.0 steps=25 calls=20 jump=5 probes=10 err=None 74s
+- 10-20 23:32:05 FULLRUN p0 FULL40 RecipeDeleteDuplicateRecipes3 rc=0 succ=0.0 steps=5 calls=4 jump=1 probes=2 err=None 25s
+- 10-20 23:32:53 FULLRUN p0 FULL40 RecipeDeleteMultipleRecipes rc=0 succ=1.0 steps=14 calls=11 jump=3 probes=6 err=None 48s
+- 10-20 23:33:13 FULLRUN p0 FULL40 RecipeDeleteMultipleRecipesWithConstraint rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=0 err=None 20s
+- 10-20 23:34:16 FULLRUN p0 FULL40 RecipeDeleteMultipleRecipesWithNoise rc=0 succ=0.0 steps=21 calls=20 jump=1 probes=4 err=None 63s
+- 10-20 23:34:37 FULLRUN p0 FULL40 RecipeDeleteSingleRecipe rc=0 succ=1.0 steps=4 calls=2 jump=1 probes=0 err=None 21s
+- 10-20 23:35:37 FULLRUN p0 FULL40 RecipeDeleteSingleWithRecipeWithNoise rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=0 err=None 61s
+- 10-20 23:36:40 FULLRUN p0 FULL40 RetroCreatePlaylist rc=0 succ=0.0 steps=19 calls=18 jump=0 probes=0 err=None 62s
+- 10-20 23:37:57 FULLRUN p0 FULL40 RetroPlayingQueue rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=4 err=None 77s
+- 10-20 23:39:09 FULLRUN p0 FULL40 RetroPlaylistDuration rc=0 succ=0.0 steps=21 calls=20 jump=0 probes=0 err=None 72s
+- 10-20 23:40:13 FULLRUN p0 FULL40 RetroSavePlaylist rc=0 succ=0.0 steps=21 calls=20 jump=0 probes=1 err=None 64s
+- 10-20 23:40:51 FULLRUN p0 FULL40 SaveCopyOfReceiptTaskEval rc=0 succ=1.0 steps=8 calls=7 jump=0 probes=2 err=None 38s
+- 10-20 23:42:08 FULLRUN p0 FULL40 SimpleCalendarAddOneEvent rc=0 succ=0.0 steps=21 calls=20 jump=0 probes=8 err=None 77s
+- 10-20 23:43:10 FULLRUN p0 FULL40 SimpleCalendarAddOneEventInTwoWeeks rc=0 succ=0.0 steps=21 calls=20 jump=0 probes=0 err=None 63s
+- 10-20 23:44:14 FULLRUN p0 FULL40 SimpleCalendarAddOneEventRelativeDay rc=0 succ=0.0 steps=14 calls=13 jump=0 probes=5 err=None 64s
+- 10-20 23:45:13 FULLRUN p0 FULL40 SimpleCalendarAddOneEventTomorrow rc=0 succ=0.0 steps=11 calls=11 jump=0 probes=3 err=None 59s
+- 10-20 23:46:04 FULLRUN p0 FULL40 SimpleCalendarAddRepeatingEvent rc=0 succ=0.0 steps=12 calls=12 jump=0 probes=5 err=None 51s
+- 10-20 23:46:30 FULLRUN p0 FULL40 SimpleCalendarAnyEventsOnDate rc=0 succ=1.0 steps=3 calls=3 jump=0 probes=4 err=None 26s
+- 10-20 23:47:25 FULLRUN p0 FULL40 SimpleCalendarDeleteEvents rc=0 succ=1.0 steps=12 calls=10 jump=2 probes=12 err=None 55s
+- 10-20 23:48:11 FULLRUN p0 FULL40 SimpleCalendarDeleteEventsOnRelativeDay rc=0 succ=1.0 steps=8 calls=8 jump=0 probes=7 err=None 46s
+- 10-20 23:49:06 FULLRUN p0 FULL40 SimpleCalendarDeleteOneEvent rc=0 succ=1.0 steps=11 calls=11 jump=0 probes=6 err=None 55s
+- 10-20 23:50:23 FULLRUN p0 FULL40 SimpleCalendarEventOnDateAtTime rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=26 err=None 77s
+- 10-20 23:51:01 FULLRUN p0 FULL40 SimpleCalendarEventsInNextWeek rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=4 err=None 37s
+- 10-20 23:51:25 FULLRUN p0 FULL40 SimpleCalendarEventsInTimeRange rc=0 succ=1.0 steps=3 calls=3 jump=0 probes=5 err=None 25s
+- 10-20 23:52:28 FULLRUN p0 FULL40 SimpleCalendarEventsOnDate rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=22 err=None 62s
+- 10-20 23:53:30 FULLRUN p0 FULL40 SimpleCalendarFirstEventAfterStartTime rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=17 err=None 62s
+- 10-20 23:54:00 FULLRUN p0 FULL40 SimpleCalendarLocationOfEvent rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=5 err=None 30s
+- 10-20 23:54:17 FULLRUN p0 FULL40 SimpleCalendarNextEvent rc=0 succ=0.0 steps=2 calls=2 jump=0 probes=2 err=None 17s
+- 10-20 23:54:46 FULLRUN p0 FULL40 SimpleCalendarNextMeetingWithPerson rc=0 succ=0.0 steps=5 calls=5 jump=0 probes=4 err=None 29s
+- 10-20 23:55:57 FULLRUN p0 FULL40 SimpleDrawProCreateDrawing rc=0 succ=0.0 steps=18 calls=18 jump=0 probes=0 err=None 71s
+- 10-20 23:56:47 FULLRUN p0 FULL40 SimpleSmsReply rc=0 succ=1.0 steps=9 calls=8 jump=0 probes=3 err=None 50s
+- 10-20 23:57:34 FULLRUN p0 FULL40 SimpleSmsReplyMostRecent rc=0 succ=1.0 steps=4 calls=3 jump=0 probes=1 err=None 47s
+- 10-20 23:58:24 FULLRUN p0 FULL40 SimpleSmsResend rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=2 err=None 49s
+- 10-20 23:59:05 FULLRUN p0 FULL40 SimpleSmsSend rc=0 succ=1.0 steps=6 calls=5 jump=0 probes=0 err=None 41s
+- 10-20 23:59:52 FULLRUN p0 FULL40 SimpleSmsSendClipboardContent rc=0 succ=0.0 steps=7 calls=6 jump=0 probes=2 err=None 47s
+- 10-21 00:01:13 FULLRUN p0 FULL40 SimpleSmsSendReceivedAddress rc=0 succ=0.0 steps=16 calls=16 jump=0 probes=2 err=None 80s
+- 10-21 00:01:27 FULLRUN p0 FULL40 SportsTrackerActivitiesCountForWeek rc=0 succ=0.0 steps=2 calls=2 jump=0 probes=0 err=None 14s
+- 10-21 00:01:52 FULLRUN p0 FULL40 SportsTrackerActivitiesOnDate rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=1 err=None 25s
+- 10-21 00:02:05 FULLRUN p0 FULL40 SportsTrackerActivityDuration rc=0 succ=1.0 steps=1 calls=1 jump=0 probes=0 err=None 13s
+- 10-21 00:02:19 FULLRUN p0 FULL40 SportsTrackerLongestDistanceActivity rc=0 succ=1.0 steps=1 calls=1 jump=0 probes=0 err=None 14s
+- 10-21 00:02:39 FULLRUN p0 FULL40 SportsTrackerTotalDistanceForCategoryOverInterval rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=0 err=None 20s
+- 10-21 00:02:52 FULLRUN p0 FULL40 SportsTrackerTotalDurationForCategoryThisWeek rc=0 succ=0.0 steps=1 calls=1 jump=0 probes=0 err=None 13s
+- 10-21 00:03:29 FULLRUN p0 FULL40 SystemBluetoothTurnOff rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=0 err=None 36s
+- 10-21 00:04:05 FULLRUN p0 FULL40 SystemBluetoothTurnOffVerify rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 36s
+- 10-21 00:04:27 FULLRUN p0 FULL40 SystemBluetoothTurnOn rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=0 err=None 22s
+- 10-21 00:04:53 FULLRUN p0 FULL40 SystemBluetoothTurnOnVerify rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=1 err=None 26s
+- 10-21 00:05:20 FULLRUN p0 FULL40 SystemBrightnessMax rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=0 err=None 27s
+- 10-21 00:06:04 FULLRUN p0 FULL40 SystemBrightnessMaxVerify rc=0 succ=1.0 steps=9 calls=10 jump=0 probes=1 err=None 44s
+- 10-21 00:06:52 FULLRUN p0 FULL40 SystemBrightnessMin rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 49s
+- 10-21 00:07:28 FULLRUN p0 FULL40 SystemBrightnessMinVerify rc=0 succ=1.0 steps=8 calls=8 jump=0 probes=0 err=None 35s
+- 10-21 00:08:10 FULLRUN p0 FULL40 SystemCopyToClipboard rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=2 err=None 42s
+- 10-21 00:08:41 FULLRUN p0 FULL40 SystemWifiTurnOff rc=0 succ=1.0 steps=7 calls=7 jump=0 probes=4 err=None 31s
+- 10-21 00:09:04 FULLRUN p0 FULL40 SystemWifiTurnOffVerify rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=2 err=None 24s
+- 10-21 00:09:30 FULLRUN p0 FULL40 SystemWifiTurnOn rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=1 err=None 25s
+- 10-21 00:09:53 FULLRUN p0 FULL40 SystemWifiTurnOnVerify rc=0 succ=1.0 steps=5 calls=5 jump=0 probes=1 err=None 23s
+- 10-21 00:10:30 FULLRUN p0 FULL40 TasksCompletedTasksForDate rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 37s
+- 10-21 00:10:43 FULLRUN p0 FULL40 TasksDueNextWeek rc=0 succ=0.0 steps=1 calls=1 jump=0 probes=0 err=None 13s
+- 10-21 00:11:04 FULLRUN p0 FULL40 TasksDueOnDate rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=0 err=None 21s
+- 10-21 00:11:24 FULLRUN p0 FULL40 TasksHighPriorityTasks rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=0 err=None 20s
+- 10-21 00:11:56 FULLRUN p0 FULL40 TasksHighPriorityTasksDueOnDate rc=0 succ=0.0 steps=7 calls=7 jump=0 probes=0 err=None 33s
+- 10-21 00:12:16 FULLRUN p0 FULL40 TasksIncompleteTasksOnDate rc=0 succ=0.0 steps=3 calls=3 jump=0 probes=0 err=None 20s
+- 10-21 00:12:54 FULLRUN p0 FULL40 TurnOffWifiAndTurnOnBluetooth rc=0 succ=1.0 steps=8 calls=9 jump=0 probes=2 err=None 38s
+- 10-21 00:13:06 FULLRUN p0 FULL40 TurnOnWifiAndOpenApp rc=0 succ=0.5 steps=1 calls=1 jump=0 probes=0 err=None 12s
+- 10-21 00:14:43 FULLRUN p0 FULL40 VlcCreatePlaylist rc=0 succ=0.0 steps=25 calls=20 jump=0 probes=1 err=None 97s
+- 10-21 00:16:21 FULLRUN p0 FULL40 VlcCreateTwoPlaylists rc=0 succ=0.0 steps=31 calls=20 jump=0 probes=2 err=None 98s
+- 10-21 00:16:21 FULLRUN PASS 0 DONE
+- 10-21 00:17 FULL40 只跑一轮（seed 30），第 1 轮结束后停止。
+- 10-21 11:38 FULL40 完成：46/116，墙钟 45.4s/episode（FULL39 52.7、BASE8 49.2），同题集推理 6.12。
+- 10-21 12:34:19 端侧负载实验：模拟器内常驻 Qwen2-VL-2B llama-server（Q4_K_M + mmproj Q8_0，4 线程，batch 64），每次决策期间向其发送约 1700 token 的请求、决策返回即中断（决策仍由远端 GELAB-4B 给出）。FULL40D single pass started
+- 10-21 12:35:14 FULLRUN p0 FULL40D AudioRecorderRecordAudio rc=0 succ=0.0 steps=12 calls=12 jump=0 probes=0 err=None 55s
+- 10-21 12:35:56 FULLRUN p0 FULL40D AudioRecorderRecordAudioWithFileName rc=0 succ=1.0 steps=11 calls=10 jump=0 probes=0 err=None 42s
+- 10-21 12:36:38 FULLRUN p0 FULL40D BrowserDraw rc=0 succ=0.0 steps=13 calls=12 jump=0 probes=0 err=None 42s
+- 10-21 12:37:45 FULLRUN p0 FULL40D BrowserMaze rc=0 succ=0.0 steps=22 calls=20 jump=0 probes=1 err=None 67s
+- 10-21 12:38:42 FULLRUN p0 FULL40D BrowserMultiply rc=0 succ=0.0 steps=20 calls=20 jump=0 probes=1 err=None 57s
+- 10-21 12:39:22 FULLRUN p0 FULL40D CameraTakePhoto rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 40s
+- 10-21 12:40:09 FULLRUN p0 FULL40D CameraTakeVideo rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 47s
+- 10-21 12:40:53 FULLRUN p0 FULL40D ClockStopWatchPausedVerify rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=0 err=None 44s
+- 10-21 12:41:18 FULLRUN p0 FULL40D ClockStopWatchRunning rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=0 err=None 25s
+- 10-21 12:41:50 FULLRUN p0 FULL40D ClockTimerEntry rc=0 succ=0.0 steps=10 calls=10 jump=0 probes=0 err=None 32s
+- 10-21 12:42:27 FULLRUN p0 FULL40D ContactsAddContact rc=0 succ=1.0 steps=9 calls=8 jump=0 probes=0 err=None 37s
+- 10-21 12:43:01 FULLRUN p0 FULL40D ContactsNewContactDraft rc=0 succ=1.0 steps=6 calls=4 jump=0 probes=0 err=None 34s
+- 10-21 12:44:24 FULLRUN p0 FULL40D ExpenseAddMultiple rc=0 succ=1.0 steps=16 calls=13 jump=0 probes=2 err=None 83s
+- 10-21 12:45:38 FULLRUN p0 FULL40D ExpenseAddMultipleFromGallery rc=0 succ=0.0 steps=19 calls=20 jump=0 probes=4 err=None 74s
+- 10-21 12:46:41 FULLRUN p0 FULL40D ExpenseAddMultipleFromMarkor rc=0 succ=0.0 steps=13 calls=13 jump=0 probes=3 err=None 63s
+- 10-21 12:47:22 FULLRUN p0 FULL40D ExpenseAddSingle rc=0 succ=0.0 steps=6 calls=4 jump=0 probes=0 err=None 41s
+- 10-21 12:47:50 FULLRUN p0 FULL40D ExpenseDeleteDuplicates rc=0 succ=1.0 steps=6 calls=6 jump=0 probes=1 err=None 28s
+- 10-21 12:48:49 FULLRUN p0 FULL40D ExpenseDeleteDuplicates2 rc=0 succ=1.0 steps=14 calls=11 jump=0 probes=5 err=None 59s
+- 10-21 12:49:32 FULLRUN p0 FULL40D ExpenseDeleteMultiple rc=0 succ=1.0 steps=10 calls=10 jump=0 probes=1 err=None 43s
+- 10-21 12:51:21 FULLRUN p0 FULL40D ExpenseDeleteMultiple2 rc=0 succ=0.0 steps=32 calls=20 jump=0 probes=6 err=None 109s
+- 10-21 12:51:47 FULLRUN p0 FULL40D ExpenseDeleteSingle rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=1 err=None 25s
+- 10-21 12:52:30 FULLRUN p0 FULL40D FilesDeleteFile rc=0 succ=1.0 steps=9 calls=9 jump=0 probes=0 err=None 43s
+- 10-21 12:53:24 FULLRUN p0 FULL40D FilesMoveFile rc=0 succ=0.0 steps=13 calls=13 jump=0 probes=0 err=None 54s
+- 10-21 12:54:23 FULLRUN p0 FULL40D MarkorAddNoteHeader rc=0 succ=0.0 steps=12 calls=12 jump=0 probes=5 err=None 59s
+- 10-21 12:55:14 FULLRUN p0 FULL40D MarkorChangeNoteContent rc=0 succ=0.0 steps=12 calls=12 jump=0 probes=3 err=None 51s
+- 10-21 12:55:44 FULLRUN p0 FULL40D MarkorCreateFolder rc=0 succ=1.0 steps=4 calls=4 jump=0 probes=1 err=None 30s
+- 10-21 12:56:27 FULLRUN p0 FULL40D MarkorCreateNote rc=0 succ=0.0 steps=9 calls=8 jump=0 probes=1 err=None 43s
+- 10-21 12:57:53 FULLRUN p0 FULL40D MarkorCreateNoteAndSms rc=0 succ=0.5 steps=18 calls=17 jump=0 probes=2 err=None 86s
+- 10-21 12:58:56 FULLRUN p0 FULL40D MarkorCreateNoteFromClipboard rc=0 succ=0.0 steps=14 calls=11 jump=0 probes=0 err=None 63s
+- 10-21 12:59:17 FULLRUN p0 FULL40D MarkorDeleteAllNotes rc=0 succ=1.0 steps=4 calls=3 jump=1 probes=0 err=None 20s
+- 10-21 12:59:38 FULLRUN p0 FULL40D MarkorDeleteNewestNote rc=0 succ=1.0 steps=4 calls=3 jump=1 probes=0 err=None 22s
+- 10-21 13:00:03 FULLRUN p0 FULL40D MarkorDeleteNote rc=0 succ=1.0 steps=4 calls=3 jump=1 probes=0 err=None 24s
+- 10-21 13:00:27 FULLRUN p0 FULL40D MarkorEditNote rc=0 succ=0.0 steps=4 calls=4 jump=0 probes=1 err=None 24s
+- 10-21 13:01 FULL40D 在 33 题处停止、BASED 取消：转向单任务端到端时延分析（Orin vLLM 后端）。
+- 10-21 20:18:37 E2E DRIVER start ['BASE', 'FULL41'] tag=e2e tasks=116 already paired=0
+- 10-21 20:19:49 E2E DRIVER start ['BASE', 'FULL41'] tag=e2e tasks=116 already paired=0
+- 10-21 20:23:22 E2E BASE AudioRecorderRecordAudio rc=0 succ=0.0 calls=12 probes=0 e2e=212.7s err=None
+- 10-21 20:27:12 E2E FULL41 AudioRecorderRecordAudio rc=0 succ=0.0 calls=12 probes=0 e2e=230.5s err=None
+- 10-21 20:33:12 E2E FULL41 AudioRecorderRecordAudioWithFileName rc=0 succ=0.0 calls=20 probes=0 e2e=359.4s err=None
+- 10-21 20:39:00 E2E BASE AudioRecorderRecordAudioWithFileName rc=0 succ=0.0 calls=20 probes=0 e2e=348.2s err=None
+- 10-21 20:43:28 E2E DRIVER start ['BASE', 'BASE+S', 'FULL41'] tag=e2e10 tasks=10 already paired=0
+- 10-21 20:46:25 E2E BASE ContactsAddContact rc=0 succ=1.0 calls=9 probes=0 e2e=176.8s err=None
+- 10-21 20:48:54 E2E BASE+S ContactsAddContact rc=0 succ=1.0 calls=9 probes=0 e2e=149.4s err=None
+- 10-21 20:50:58 E2E FULL41 ContactsAddContact rc=0 succ=1.0 calls=7 probes=1 e2e=123.5s err=None
+- 10-21 20:52:48 E2E FULL41 ContactsNewContactDraft rc=0 succ=1.0 calls=5 probes=0 e2e=109.8s err=None
+- 10-21 20:55:26 E2E BASE+S ContactsNewContactDraft rc=0 succ=1.0 calls=10 probes=0 e2e=158.0s err=None
+- 10-21 20:58:09 E2E BASE ContactsNewContactDraft rc=0 succ=1.0 calls=10 probes=0 e2e=163.2s err=None
+- 10-21 21:00:57 E2E BASE ExpenseDeleteMultiple rc=0 succ=1.0 calls=11 probes=0 e2e=168.0s err=None
+- 10-21 21:03:24 E2E BASE+S ExpenseDeleteMultiple rc=0 succ=1.0 calls=11 probes=0 e2e=146.4s err=None
+- 10-21 21:05:34 E2E FULL41 ExpenseDeleteMultiple rc=0 succ=1.0 calls=11 probes=4 e2e=130.7s err=None
+- 10-21 21:08:59 E2E FULL41 FilesDeleteFile rc=0 succ=1.0 calls=9 probes=0 e2e=204.7s err=None
+- 10-21 21:12:21 E2E BASE+S FilesDeleteFile rc=0 succ=1.0 calls=9 probes=0 e2e=201.5s err=None
+- 10-21 21:15:59 E2E BASE FilesDeleteFile rc=0 succ=0.0 calls=9 probes=0 e2e=217.4s err=None
+- 10-21 21:18:25 E2E BASE MarkorCreateFolder rc=0 succ=1.0 calls=5 probes=0 e2e=145.1s err=None
+- 10-21 21:21:17 E2E BASE+S MarkorCreateFolder rc=0 succ=1.0 calls=6 probes=0 e2e=172.3s err=None
+- 10-21 21:25:20 E2E FULL41 MarkorCreateFolder rc=0 succ=1.0 calls=6 probes=3 e2e=242.3s err=None
+- 10-21 21:25:20 E2E REPORT 5 paired
+- 10-21 21:25:47 E2E FULL41 RecipeAddSingleRecipe rc=0 succ=None calls=None probes=None e2e=27.7s err=RuntimeError('fast_a11y_socket_unavailable: fast a11y socket closed during response')
+- 10-21 21:31:57 E2E BASE+S RecipeAddSingleRecipe rc=0 succ=0.0 calls=20 probes=0 e2e=369.8s err=None
+- 10-21 21:37:20 E2E BASE RecipeAddSingleRecipe rc=0 succ=0.0 calls=20 probes=0 e2e=322.3s err=None
+- 10-21 21:38:24 E2E BASE RecipeDeleteSingleRecipe rc=0 succ=None calls=None probes=None e2e=63.7s err=RuntimeError('fast_a11y_socket_unavailable: fast a11y socket closed during response')
+- 10-21 21:41:03 E2E BASE+S RecipeDeleteSingleRecipe rc=0 succ=1.0 calls=7 probes=0 e2e=158.9s err=None
+- 10-21 21:44:00 E2E FULL41 RecipeDeleteSingleRecipe rc=0 succ=1.0 calls=6 probes=2 e2e=177.4s err=None
+- 10-21 21:51:31 E2E FULL41 SaveCopyOfReceiptTaskEval rc=0 succ=1.0 calls=14 probes=0 e2e=450.3s err=None
+- 10-21 21:53:20 E2E BASE+S SaveCopyOfReceiptTaskEval rc=0 succ=None calls=None probes=None e2e=108.7s err=RuntimeError('fast_a11y_socket_unavailable: fast a11y socket closed during response')
+- 10-21 21:53:48 E2E BASE SaveCopyOfReceiptTaskEval rc=0 succ=None calls=None probes=None e2e=28.0s err=RuntimeError('fast_a11y_socket_unavailable: fast a11y socket closed during response')
+- 10-21 21:59:34 E2E DRIVER start ['BASE', 'BASE+S', 'FULL41', 'FULL42'] tag=e2e10 tasks=10 already paired=0
+- 10-21 21:59:56 E2E DRIVER start ['BASE', 'BASE+S', 'FULL41', 'FULL42'] tag=e2e10 tasks=10 already paired=0
+- 10-21 22:03:13 E2E BASE ContactsAddContact rc=0 succ=0.0 calls=12 probes=0 e2e=196.5s err=None
+- 10-21 22:06:02 E2E BASE+S ContactsAddContact rc=0 succ=0.0 calls=12 probes=0 e2e=169.1s err=None
+- 10-21 22:09:29 E2E FULL41 ContactsAddContact rc=0 succ=0.0 calls=12 probes=0 e2e=207.4s err=None
+- 10-21 22:13:01 E2E FULL42 ContactsAddContact rc=0 succ=0.0 calls=12 probes=0 e2e=211.6s err=None
+- 10-21 22:15:56 E2E FULL42 ContactsNewContactDraft rc=0 succ=0.0 calls=11 probes=0 e2e=174.7s err=None
+- 10-21 22:18:31 E2E FULL41 ContactsNewContactDraft rc=0 succ=0.0 calls=10 probes=0 e2e=155.0s err=None
+- 10-21 22:21:42 E2E BASE+S ContactsNewContactDraft rc=0 succ=0.0 calls=11 probes=0 e2e=191.0s err=None
+- 10-21 22:24:55 E2E BASE ContactsNewContactDraft rc=0 succ=0.0 calls=11 probes=0 e2e=192.4s err=None
+- 10-21 22:27:55 E2E BASE ExpenseDeleteMultiple rc=0 succ=1.0 calls=11 probes=0 e2e=179.8s err=None
+- 10-21 22:30:57 E2E BASE+S ExpenseDeleteMultiple rc=0 succ=1.0 calls=13 probes=0 e2e=182.8s err=None
+- 10-21 22:33:20 E2E FULL41 ExpenseDeleteMultiple rc=0 succ=1.0 calls=11 probes=0 e2e=142.4s err=None
+- 10-21 22:35:46 E2E FULL42 ExpenseDeleteMultiple rc=0 succ=1.0 calls=11 probes=0 e2e=146.5s err=None
+- 10-21 22:39:10 E2E FULL42 FilesDeleteFile rc=0 succ=1.0 calls=9 probes=0 e2e=203.8s err=None
+- 10-21 22:41:19 E2E DRIVER start ['BASE', 'BASE+S', 'FULL41', 'FULL42'] tag=e2e10 tasks=10 already paired=0
+- 10-21 22:45:25 E2E BASE ContactsAddContact rc=0 succ=0.0 calls=11 probes=0 e2e=246.0s err=None
+- 10-21 22:48:58 E2E BASE+S ContactsAddContact rc=0 succ=0.0 calls=12 probes=0 e2e=213.1s err=None
+- 10-21 22:52:04 E2E FULL41 ContactsAddContact rc=0 succ=0.0 calls=12 probes=1 e2e=185.5s err=None
+- 10-21 22:54:17 E2E DRIVER start ['BASE', 'BASE+S', 'FULL42'] tag=e2e10 tasks=10 already paired=0
+- 10-21 22:57:04 E2E FULL42 ContactsAddContact rc=0 succ=0.0 calls=12 probes=3 e2e=166.2s err=None
+- 10-21 23:00:38 E2E FULL42 ContactsNewContactDraft rc=0 succ=1.0 calls=12 probes=2 e2e=214.0s err=None
+- 10-21 23:03:39 E2E BASE+S ContactsNewContactDraft rc=0 succ=1.0 calls=10 probes=0 e2e=180.9s err=None
+- 10-21 23:06:37 E2E BASE ContactsNewContactDraft rc=0 succ=1.0 calls=11 probes=0 e2e=178.3s err=None
+- 10-21 23:06:37 E2E REPORT 2 paired
+- 10-21 23:41:38 E2E DRIVER start ['BASE', 'BASE+S', 'FULL42'] tag=e2e10 tasks=10 already paired=2
+- 10-21 23:44:29 E2E BASE ExpenseDeleteMultiple rc=0 succ=1.0 calls=11 probes=0 e2e=170.7s err=None
+- 10-21 23:46:42 E2E BASE+S ExpenseDeleteMultiple rc=0 succ=1.0 calls=11 probes=0 e2e=132.3s err=None
+- 10-21 23:49:49 E2E FULL42 ExpenseDeleteMultiple rc=0 succ=1.0 calls=11 probes=0 e2e=186.7s err=empty a11y captures 100%
+- 10-21 23:49:56 a11y services were crashed; re-enabled (Crashed services:{{com.androidworld.fasta11y/com.androidworld.fasta11y.FastA11yService}})
+- 10-21 23:53:31 E2E FULL42 FilesDeleteFile rc=0 succ=1.0 calls=9 probes=0 e2e=214.9s err=empty a11y captures 100%
+- 10-21 23:53:37 a11y services were crashed; re-enabled (Crashed services:{{com.androidworld.fasta11y/com.androidworld.fasta11y.FastA11yService}})
+- 10-21 23:57:23 E2E BASE+S FilesDeleteFile rc=0 succ=0.0 calls=11 probes=0 e2e=226.0s err=empty a11y captures 100%
+- 10-21 23:57:29 a11y services were crashed; re-enabled (Crashed services:{{com.androidworld.fasta11y/com.androidworld.fasta11y.FastA11yService}, {com.google.androidenv.accessib)
+- 10-22 00:04:25 E2E BASE FilesDeleteFile rc=0 succ=0.0 calls=16 probes=0 e2e=415.7s err=empty a11y captures 94%
+- 10-22 00:04:25 E2E REPORT 4 paired
+- 10-22 00:04:32 a11y services were crashed; re-enabled (Crashed services:{{com.androidworld.fasta11y/com.androidworld.fasta11y.FastA11yService}, {com.google.androidenv.accessib)
+- 10-22 00:10:52 E2E DRIVER start ['BASE', 'BASE+S', 'FULL42'] tag=e2e10 tasks=10 already paired=0
+- 10-22 00:10:59 a11y services were crashed; re-enabled (Crashed services:{{com.androidworld.fasta11y/com.androidworld.fasta11y.FastA11yService}, {com.google.androidenv.accessib)
+- 10-22 00:10:59 service down: orin=True ondevice=False
+- 10-22 00:11:59 service down: orin=True ondevice=False
+- 10-22 00:12:59 service down: orin=True ondevice=False
+- 10-22 00:13:59 service down: orin=True ondevice=False
+- 10-22 00:14:59 service down: orin=True ondevice=False
+- 10-22 00:16:00 service down: orin=True ondevice=False
+- 10-22 00:17:00 service down: orin=True ondevice=False
+- 10-22 00:18:00 service down: orin=True ondevice=False
+- 10-22 00:19:00 service down: orin=True ondevice=False
+- 10-22 00:20:00 service down: orin=True ondevice=False
+- 10-22 00:21:00 service down: orin=True ondevice=False
+- 10-22 00:22:00 service down: orin=True ondevice=False
+- 10-22 00:23:00 service down: orin=True ondevice=False
+- 10-22 00:24:01 service down: orin=True ondevice=False
+- 10-22 00:25:01 service down: orin=True ondevice=False
+- 10-22 00:26:01 service down: orin=True ondevice=False
+- 10-22 00:27:01 service down: orin=True ondevice=False
+- 10-22 00:28:01 service down: orin=True ondevice=False
+- 10-22 00:29:01 service down: orin=True ondevice=False
+- 10-22 00:30:01 service down: orin=True ondevice=False
+- 10-22 00:31:01 service down: orin=True ondevice=False
+- 10-22 00:32:02 service down: orin=True ondevice=False
+- 10-22 00:33:02 service down: orin=True ondevice=False
+- 10-22 00:34:02 service down: orin=True ondevice=False
+- 10-22 00:35:02 service down: orin=True ondevice=False
+- 10-22 00:36:02 service down: orin=True ondevice=False
+- 10-22 00:37:02 service down: orin=True ondevice=False
+- 10-22 00:37:16 E2E DRIVER start ['BASE', 'BASE+S', 'FULL42'] tag=e2e10 tasks=10 already paired=0
+- 10-22 00:41:09 E2E BASE ContactsAddContact rc=0 succ=0.0 calls=12 probes=0 e2e=232.7s err=empty a11y captures 100%
+- 10-22 00:44:39 E2E BASE+S ContactsAddContact rc=0 succ=0.0 calls=12 probes=0 e2e=209.9s err=empty a11y captures 100%
+- 10-22 00:49:44 E2E FULL42 ContactsAddContact rc=0 succ=0.0 calls=11 probes=1 e2e=305.3s err=empty a11y captures 50%
+- 10-22 00:49:51 a11y services were crashed; re-enabled (Crashed services:{{com.androidworld.fasta11y/com.androidworld.fasta11y.FastA11yService}, {com.google.androidenv.accessib)
+- 10-22 00:50:45 E2E FULL42 ContactsNewContactDraft rc=0 succ=None calls=None probes=None e2e=54.0s err=RuntimeError('fast_a11y_socket_unavailable: fast a11y socket closed during response')
+- 10-22 00:50:52 a11y services were crashed; re-enabled (Crashed services:{{com.google.androidenv.accessibilityforwarder/com.google.androidenv.accessibilityforwarder.Accessibili)
+- 10-22 00:51:39 E2E BASE+S ContactsNewContactDraft rc=0 succ=None calls=None probes=None e2e=47.6s err=RuntimeError('fast_a11y_socket_unavailable: fast a11y socket closed during response')
+- 10-22 00:51:46 a11y services were crashed; re-enabled (Crashed services:{{com.google.androidenv.accessibilityforwarder/com.google.androidenv.accessibilityforwarder.Accessibili)
+- 10-22 01:02:37 E2E BASE ContactsNewContactDraft rc=0 succ=0.0 calls=12 probes=0 e2e=650.7s err=None
+- 10-22 01:07:58 E2E DRIVER start ['BASE', 'BASE+S', 'FULL42'] tag=e2e10 tasks=10 already paired=0
+- 10-22 01:11:44 E2E BASE ContactsAddContact rc=0 succ=0.0 calls=12 probes=0 e2e=226.0s err=None
+- 10-22 01:11:44 service down: orin=True ondevice=False
+- 10-22 01:12:45 service down: orin=True ondevice=False
+- 10-22 01:13:45 service down: orin=True ondevice=False
+- 10-22 01:14:45 service down: orin=True ondevice=False
+- 10-22 01:15:45 service down: orin=True ondevice=False
+- 10-22 01:16:45 service down: orin=True ondevice=False
+- 10-22 01:17:45 service down: orin=True ondevice=False
+- 10-22 01:18:45 service down: orin=True ondevice=False
+- 10-22 01:19:45 service down: orin=True ondevice=False
+- 10-22 01:20:45 service down: orin=True ondevice=False
+- 10-22 01:21:46 service down: orin=True ondevice=False
+- 10-22 01:22:46 service down: orin=True ondevice=False
+- 10-22 01:23:46 service down: orin=True ondevice=False
+- 10-22 01:24:46 service down: orin=True ondevice=False
+- 10-22 01:24:58 E2E DRIVER start ['BASE', 'BASE+S', 'FULL42'] tag=e2e10 tasks=10 already paired=0
+- 10-22 01:24:58 service down: orin=True ondevice=False
+- 10-22 01:24:58 on-device load server restarted
+- 10-22 01:28:21 E2E BASE ContactsAddContact rc=0 succ=1.0 calls=9 probes=0 e2e=187.4s err=None
+- 10-22 01:31:17 E2E BASE+S ContactsAddContact rc=0 succ=1.0 calls=9 probes=0 e2e=176.0s err=None
+- 10-22 01:31:17 LOW MEMORY before FULL42/ContactsAddContact: {'MemAvailable': 48, 'SwapFree': 0}
+- 10-22 01:37:07 E2E DRIVER start ['BASE', 'BASE+S', 'FULL42'] tag=e2e10 tasks=10 already paired=0
+- 10-22 01:37:13 a11y services were crashed; re-enabled (Crashed services:{{com.google.androidenv.accessibilityforwarder/com.google.androidenv.accessibilityforwarder.Accessibili)
+- 10-22 01:40:48 E2E BASE ContactsAddContact rc=0 succ=1.0 calls=9 probes=0 e2e=214.4s err=None
+- 10-22 01:43:43 E2E BASE+S ContactsAddContact rc=0 succ=1.0 calls=9 probes=0 e2e=175.2s err=None
+- 10-22 01:46:00 E2E FULL42 ContactsAddContact rc=0 succ=1.0 calls=7 probes=1 e2e=136.6s err=None
+- 10-22 01:46:00 E2E REPORT 1 paired
+- 10-22 01:47:36 E2E FULL42 ContactsNewContactDraft rc=0 succ=1.0 calls=4 probes=0 e2e=95.5s err=None
+- 10-22 01:50:50 E2E BASE+S ContactsNewContactDraft rc=0 succ=1.0 calls=10 probes=0 e2e=194.4s err=None
+- 10-22 01:54:39 E2E BASE ContactsNewContactDraft rc=0 succ=1.0 calls=11 probes=0 e2e=228.7s err=None
+- 10-22 01:54:39 E2E REPORT 2 paired
+- 10-22 01:58:04 E2E BASE ExpenseDeleteMultiple rc=0 succ=1.0 calls=11 probes=0 e2e=205.1s err=None
+- 10-22 02:00:57 E2E BASE+S ExpenseDeleteMultiple rc=0 succ=1.0 calls=11 probes=0 e2e=172.3s err=None
+- 10-22 02:03:52 E2E FULL42 ExpenseDeleteMultiple rc=0 succ=1.0 calls=11 probes=5 e2e=174.9s err=None
+- 10-22 02:03:52 E2E REPORT 3 paired
+- 10-22 02:07:24 E2E FULL42 FilesDeleteFile rc=0 succ=1.0 calls=9 probes=0 e2e=211.6s err=None
+- 10-22 02:10:43 E2E BASE+S FilesDeleteFile rc=0 succ=1.0 calls=9 probes=0 e2e=198.6s err=None
+- 10-22 02:14:23 E2E BASE FilesDeleteFile rc=0 succ=1.0 calls=9 probes=0 e2e=220.5s err=None
+- 10-22 02:14:23 E2E REPORT 4 paired
+- 10-22 02:18:03 E2E BASE MarkorCreateFolder rc=0 succ=1.0 calls=10 probes=0 e2e=219.5s err=None
+- 10-22 02:21:05 E2E BASE+S MarkorCreateFolder rc=0 succ=1.0 calls=9 probes=0 e2e=181.7s err=None
+- 10-22 02:22:57 E2E FULL42 MarkorCreateFolder rc=0 succ=1.0 calls=5 probes=1 e2e=111.8s err=None
+- 10-22 02:22:57 E2E REPORT 5 paired
+- 10-22 02:24:27 E2E FULL42 RecipeAddSingleRecipe rc=0 succ=1.0 calls=5 probes=2 e2e=89.6s err=None
+- 10-22 02:28:49 E2E BASE+S RecipeAddSingleRecipe rc=0 succ=1.0 calls=17 probes=0 e2e=262.7s err=None
+- 10-22 02:33:43 E2E BASE RecipeAddSingleRecipe rc=0 succ=1.0 calls=15 probes=0 e2e=293.0s err=None
+- 10-22 02:33:43 E2E REPORT 6 paired
+- 10-22 02:36:41 E2E BASE RecipeDeleteSingleRecipe rc=0 succ=1.0 calls=8 probes=0 e2e=178.7s err=None
+- 10-22 02:38:38 E2E BASE+S RecipeDeleteSingleRecipe rc=0 succ=1.0 calls=6 probes=0 e2e=116.7s err=None
+- 10-22 02:39:58 E2E FULL42 RecipeDeleteSingleRecipe rc=0 succ=1.0 calls=3 probes=0 e2e=79.7s err=None
+- 10-22 02:39:58 E2E REPORT 7 paired
+- 10-22 02:42:47 E2E FULL42 SaveCopyOfReceiptTaskEval rc=0 succ=1.0 calls=8 probes=2 e2e=168.9s err=None
+- 10-22 02:45:30 E2E BASE+S SaveCopyOfReceiptTaskEval rc=0 succ=1.0 calls=8 probes=0 e2e=162.3s err=None
+- 10-22 02:49:04 E2E BASE SaveCopyOfReceiptTaskEval rc=0 succ=1.0 calls=9 probes=0 e2e=214.4s err=None
+- 10-22 02:49:04 E2E REPORT 8 paired
+- 10-22 02:51:40 E2E BASE SimpleCalendarDeleteOneEvent rc=0 succ=1.0 calls=7 probes=0 e2e=155.5s err=None
+- 10-22 02:54:13 E2E BASE+S SimpleCalendarDeleteOneEvent rc=0 succ=1.0 calls=8 probes=0 e2e=152.4s err=None
+- 10-22 02:57:41 E2E FULL42 SimpleCalendarDeleteOneEvent rc=0 succ=1.0 calls=11 probes=2 e2e=208.4s err=None
+- 10-22 02:57:41 E2E REPORT 9 paired
+- 10-22 02:59:06 E2E FULL42 SystemWifiTurnOff rc=0 succ=1.0 calls=4 probes=0 e2e=84.8s err=None
+- 10-22 03:00:26 E2E BASE+S SystemWifiTurnOff rc=0 succ=1.0 calls=4 probes=0 e2e=79.7s err=None
+- 10-22 03:01:54 E2E BASE SystemWifiTurnOff rc=0 succ=1.0 calls=4 probes=0 e2e=87.6s err=None
+- 10-22 03:01:54 E2E REPORT 10 paired
+- 10-22 03:01:54 E2E REPORT 10 paired
+- 10-22 03:01:54 E2E DRIVER DONE
+- 10-22 03:07:58 E2E DRIVER start ['BASE', 'FULL42'] tag=e2e40 tasks=40 already paired=0
+- 10-22 03:10:39 E2E BASE ExpenseDeleteDuplicates2 rc=0 succ=0.0 calls=8 probes=0 e2e=160.9s err=None
+- 10-22 03:15:18 E2E FULL42 ExpenseDeleteDuplicates2 rc=0 succ=0.0 calls=18 probes=2 e2e=278.6s err=None
+- 10-22 03:15:18 E2E REPORT 1 paired
+- 10-22 03:18:20 E2E DRIVER start ['BASE', 'FULL42'] tag=e2e40 tasks=40 already paired=0
+- 10-22 03:20:07 E2E BASE ExpenseDeleteSingle rc=0 succ=1.0 calls=5 probes=0 e2e=106.7s err=None
+- 10-22 03:21:13 E2E FULL42 ExpenseDeleteSingle rc=0 succ=1.0 calls=3 probes=0 e2e=65.6s err=None
+- 10-22 03:21:13 E2E REPORT 1 paired
+- 10-22 03:24:53 E2E FULL42 ExpenseDeleteDuplicates2 rc=0 succ=0.0 calls=12 probes=2 e2e=219.5s err=None
+- 10-22 03:29:50 E2E BASE ExpenseDeleteDuplicates2 rc=0 succ=0.0 calls=18 probes=0 e2e=297.3s err=None
+- 10-22 03:29:50 E2E REPORT 2 paired
+- 10-22 03:33:09 E2E BASE ExpenseDeleteMultiple rc=0 succ=1.0 calls=11 probes=0 e2e=198.8s err=None
+- 10-22 03:36:24 E2E FULL42 ExpenseDeleteMultiple rc=0 succ=1.0 calls=12 probes=0 e2e=194.7s err=None
+- 10-22 03:36:24 E2E REPORT 3 paired
+- 10-22 03:39:48 E2E FULL42 ExpenseDeleteMultiple2 rc=0 succ=1.0 calls=14 probes=0 e2e=203.7s err=None

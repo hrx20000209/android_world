@@ -1,0 +1,67 @@
+{
+  "started_utc": "2026-10-21T08:51:18.089744+00:00",
+  "git_head": "6e6bcc58dfaee5efa533b43db49679d2206d9729",
+  "task_config": "/Users/huangrunxi/Projects/android_world/configs/two_system_scaleup_40tasks.json",
+  "configured_task_count": 40,
+  "task_limit": 20,
+  "tasks": [
+    "ExpenseDeleteDuplicates2",
+    "ExpenseDeleteMultiple",
+    "ExpenseDeleteMultiple2",
+    "ExpenseDeleteSingle",
+    "FilesDeleteFile",
+    "FilesMoveFile",
+    "MarkorAddNoteHeader",
+    "MarkorCreateFolder",
+    "MarkorDeleteNewestNote",
+    "MarkorMoveNote",
+    "NotesRecipeIngredientCount",
+    "OpenAppTaskEval",
+    "OsmAndFavorite",
+    "RecipeAddMultipleRecipes",
+    "RecipeAddMultipleRecipesFromImage",
+    "RecipeAddSingleRecipe",
+    "RetroPlaylistDuration",
+    "SaveCopyOfReceiptTaskEval",
+    "SimpleCalendarAddOneEvent",
+    "SimpleCalendarAddOneEventRelativeDay"
+  ],
+  "max_steps": {
+    "ExpenseDeleteDuplicates2": 17,
+    "ExpenseDeleteMultiple": 16,
+    "ExpenseDeleteMultiple2": 26,
+    "ExpenseDeleteSingle": 10,
+    "FilesDeleteFile": 14,
+    "FilesMoveFile": 25,
+    "MarkorAddNoteHeader": 17,
+    "MarkorCreateFolder": 10,
+    "MarkorDeleteNewestNote": 10,
+    "MarkorMoveNote": 19,
+    "NotesRecipeIngredientCount": 10,
+    "OpenAppTaskEval": 10,
+    "OsmAndFavorite": 13,
+    "RecipeAddMultipleRecipes": 26,
+    "RecipeAddMultipleRecipesFromImage": 26,
+    "RecipeAddSingleRecipe": 21,
+    "RetroPlaylistDuration": 26,
+    "SaveCopyOfReceiptTaskEval": 14,
+    "SimpleCalendarAddOneEvent": 21,
+    "SimpleCalendarAddOneEventRelativeDay": 26
+  },
+  "seed": 30,
+  "remote_api": "http://127.0.0.1:18097/v1/chat/completions",
+  "remote_models": [
+    "GELab-Zero-4B-preview"
+  ],
+  "on_device_models": [
+    "Qwen2-VL-2B-Instruct-Q4_K_M.gguf"
+  ],
+  "adb_serial": "emulator-5554",
+  "on_device_forward": "tcp:18096->tcp:8085",
+  "arms": [
+    "BASE",
+    "FULL40"
+  ],
+  "ondevice_load": true,
+  "mobileexplorer_graph_starts_empty": true
+}
