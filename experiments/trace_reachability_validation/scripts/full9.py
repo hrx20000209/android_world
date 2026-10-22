@@ -100,13 +100,13 @@ class FuncExec:
     self.ep, self.goal = episode, goal
     self.P = FG.parse_goal(goal)
     self.recs = FG.records(self.P)
-    if _base_arm() in ("FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41") and getattr(episode, "out", None) is not None:
+    if _base_arm() in ("FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44") and getattr(episode, "out", None) is not None:
       # FULL33: online only - the library holds functions of this run's earlier self-completed episodes
       cache = Path(os.environ.get("SEQ_APPDIR", "/tmp/full")) / os.environ["FULL_ARM"] / "function_cache_online.jsonl"
       cache.parent.mkdir(parents=True, exist_ok=True)
       FG.build_online(Path(episode.out).parents[1], cache)
       self.lib = FG.Library(episode.args.task, cache=cache)
-      if _base_arm() in ("FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41"):
+      if _base_arm() in ("FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44"):
         self.lib.funcs = self.lib.funcs + _role_adapted(self.lib.funcs, self.recs)
     else:
       self.lib = FG.Library(episode.args.task)
@@ -473,6 +473,17 @@ class FuncExec:
       self.applied_rec = rec
       m["form_apps"] += 1
       m["form_steps"] += n
+      if _base_arm() == "FULL44":
+        # tell the model what the graph did NOT fill (choices, pickers, fields off screen), so a partly filled form is
+        # never mistaken for a complete one
+        done = {fd for fd, _, _ in plan[:n]}
+        left = [(fd, self._value(fd, rec)) for fd in self.recs if fd not in done and self._value(fd, rec) is not None
+                and not fd.startswith("file:")]
+        if left:
+          summ = "[graph] Not filled yet: " + "; ".join(f"{fd} = {v}" for fd, v in left) + ". Set these before saving."
+          agent._actions.append({"summary": summ})  # pylint: disable=protected-access
+          agent._summaries.append(summ)  # pylint: disable=protected-access
+          m["form_left_fields"] += len(left)
     return n
 
   def try_form_via_edge(self, ep, graph, pre, agent, steps, k, own, m):
