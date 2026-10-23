@@ -100,13 +100,13 @@ class FuncExec:
     self.ep, self.goal = episode, goal
     self.P = FG.parse_goal(goal)
     self.recs = FG.records(self.P)
-    if _base_arm() in ("FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44") and getattr(episode, "out", None) is not None:
+    if _base_arm() in ("FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") and getattr(episode, "out", None) is not None:
       # FULL33: online only - the library holds functions of this run's earlier self-completed episodes
       cache = Path(os.environ.get("SEQ_APPDIR", "/tmp/full")) / os.environ["FULL_ARM"] / "function_cache_online.jsonl"
       cache.parent.mkdir(parents=True, exist_ok=True)
       FG.build_online(Path(episode.out).parents[1], cache)
       self.lib = FG.Library(episode.args.task, cache=cache)
-      if _base_arm() in ("FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44"):
+      if _base_arm() in ("FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45"):
         self.lib.funcs = self.lib.funcs + _role_adapted(self.lib.funcs, self.recs)
     else:
       self.lib = FG.Library(episode.args.task)
@@ -473,18 +473,59 @@ class FuncExec:
       self.applied_rec = rec
       m["form_apps"] += 1
       m["form_steps"] += n
-      if _base_arm() == "FULL44":
+      if _base_arm() in ("FULL44", "FULL45"):
         # tell the model what the graph did NOT fill (choices, pickers, fields off screen), so a partly filled form is
         # never mistaken for a complete one
         done = {fd for fd, _, _ in plan[:n]}
         left = [(fd, self._value(fd, rec)) for fd in self.recs if fd not in done and self._value(fd, rec) is not None
                 and not fd.startswith("file:")]
+        if _base_arm() == "FULL45" and left:
+          # FULL45: a value that is one of the screen's options (a category chip, a list entry) is selected by the
+          # graph too: tap it if visible, else scroll the option strip that holds the other options (<= 4 swipes)
+          picked = self._select_options(left, agent, steps, k, own, m)
+          left = [(fd, v) for fd, v in left if fd not in picked]
         if left:
           summ = "[graph] Not filled yet: " + "; ".join(f"{fd} = {v}" for fd, v in left) + ". Set these before saving."
           agent._actions.append({"summary": summ})  # pylint: disable=protected-access
           agent._summaries.append(summ)  # pylint: disable=protected-access
           m["form_left_fields"] += len(left)
     return n
+
+  def _select_options(self, left, agent, steps, k, own, m):
+    from android_world.env import adb_utils  # noqa: E402
+    picked = set()
+    for fd, val in left:
+      want = FG.norm(str(val))
+      if not want or len(want) > 40:
+        continue
+      for attempt in range(5):
+        cap = self.ep.dev.capture(f"s{k}_opt_{len(picked)}_{attempt}", settle=True, pause=0.3, full_res=True)
+        ui = cap["ui"]
+        hit = next((n for n in ui.app_nodes() if n.visible and not n.editable and FG.norm(n.text or n.desc or "") == want), None)
+        if hit is not None:
+          x, y = hit.center
+          agent._execute_action(json_action.JSONAction(action_type="click", x=x, y=y), {})  # pylint: disable=protected-access
+          summ = f"[graph] Selected \"{val}\" for {fd}."
+          agent._actions.append({"summary": summ})  # pylint: disable=protected-access
+          agent._summaries.append(summ)  # pylint: disable=protected-access
+          row = {"step": k, "kind": "form_function", "tok": f"SELECT:{fd}", "summary": summ, "field": fd, "pre": R.strip(cap)}
+          steps.append(row)
+          self.ep.log("steps", row)
+          m["form_options"] += 1
+          picked.add(fd)
+          break
+        # an option strip: a horizontally scrollable container whose children are short clickable labels
+        strip = next((n for n in ui.app_nodes() if n.scrollable and n.visible and n.bounds[2] - n.bounds[0] > 2 * (n.bounds[3] - n.bounds[1])), None)
+        if strip is None:
+          break
+        x1, y1, x2, y2 = strip.bounds
+        yc = (y1 + y2) // 2
+        w = x2 - x1
+        # swipe inside the strip, away from the screen edges (an edge swipe is the system Back gesture: FULL45 run 1
+        # closed the expense editor this way)
+        adb_utils.issue_generic_request(["shell", "input", "swipe", str(x1 + int(0.75 * w)), str(yc), str(x1 + int(0.25 * w)),
+                                         str(yc), "400"], self.ep.env.controller)
+    return picked
 
   def try_form_via_edge(self, ep, graph, pre, agent, steps, k, own, m):
     """The form function's entry screen is one observed edge away: the edge's destination capture (recorded by

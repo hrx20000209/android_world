@@ -9416,3 +9416,659 @@
 - 10-22 12:56:18 E2E FULL44 ExpenseDeleteMultiple2 rc=0 succ=0.0 calls=17 probes=2 e2e=277.2s err=None
 - 10-22 12:56:18 E2E REPORT 19 paired
 - 10-22 13:00:55 E2E FULL44 ExpenseAddMultiple rc=0 succ=0.0 calls=18 probes=9 e2e=277.3s err=None
+- 10-22 13:06:30 E2E BASE ExpenseAddMultiple rc=0 succ=0.0 calls=20 probes=0 e2e=335.2s err=None
+- 10-22 13:06:30 E2E REPORT 20 paired
+- 10-22 13:08:57 E2E BASE ExpenseAddMultipleFromGallery rc=0 succ=0.0 calls=9 probes=0 e2e=146.1s err=None
+- 10-22 13:11:04 E2E FULL44 ExpenseAddMultipleFromGallery rc=0 succ=0.0 calls=7 probes=4 e2e=127.3s err=None
+- 10-22 13:11:04 E2E REPORT 21 paired
+- 10-22 13:14:23 E2E FULL44 FilesDeleteFile rc=0 succ=1.0 calls=9 probes=0 e2e=198.7s err=None
+- 10-22 13:18:05 E2E BASE FilesDeleteFile rc=0 succ=1.0 calls=9 probes=0 e2e=222.2s err=None
+- 10-22 13:18:06 E2E REPORT 22 paired
+- 10-22 13:21:36 E2E BASE FilesMoveFile rc=0 succ=0.0 calls=10 probes=0 e2e=210.6s err=None
+- 10-22 13:24:32 E2E FULL44 FilesMoveFile rc=0 succ=0.0 calls=10 probes=0 e2e=175.4s err=None
+- 10-22 13:24:32 E2E REPORT 23 paired
+- 10-22 13:26:10 E2E FULL44 MarkorCreateFolder rc=0 succ=1.0 calls=4 probes=1 e2e=98.0s err=None
+- 10-22 13:28:12 E2E BASE MarkorCreateFolder rc=0 succ=1.0 calls=5 probes=0 e2e=121.7s err=None
+- 10-22 13:28:12 E2E REPORT 24 paired
+- 10-22 13:30:41 E2E BASE MarkorDeleteAllNotes rc=0 succ=1.0 calls=7 probes=0 e2e=149.3s err=None
+- 10-22 13:32:09 E2E FULL44 MarkorDeleteAllNotes rc=0 succ=1.0 calls=4 probes=1 e2e=87.6s err=None
+- 10-22 13:32:09 E2E REPORT 25 paired
+- 10-22 13:33:25 E2E FULL44 MarkorDeleteNewestNote rc=0 succ=1.0 calls=3 probes=0 e2e=75.4s err=None
+- 10-22 13:35:20 E2E BASE MarkorDeleteNewestNote rc=0 succ=1.0 calls=5 probes=0 e2e=115.1s err=None
+- 10-22 13:35:20 E2E REPORT 26 paired
+- 10-22 13:37:07 E2E BASE MarkorDeleteNote rc=0 succ=1.0 calls=5 probes=0 e2e=107.0s err=None
+- 10-22 13:38:25 E2E FULL44 MarkorDeleteNote rc=0 succ=1.0 calls=3 probes=0 e2e=77.7s err=None
+- 10-22 13:38:25 E2E REPORT 27 paired
+- 10-22 13:39:29 E2E FULL44 MarkorEditNote rc=0 succ=0.0 calls=3 probes=2 e2e=64.2s err=None
+- 10-22 13:41:30 E2E BASE MarkorEditNote rc=0 succ=0.0 calls=6 probes=0 e2e=120.4s err=None
+- 10-22 13:41:30 E2E REPORT 28 paired
+- 10-22 13:45:21 E2E BASE MarkorCreateNote rc=0 succ=0.0 calls=10 probes=0 e2e=230.8s err=None
+- 10-22 13:50:13 E2E FULL44 MarkorCreateNote rc=0 succ=0.0 calls=16 probes=0 e2e=292.6s err=None
+- 10-22 13:50:13 E2E REPORT 29 paired
+- 10-22 13:53:44 E2E FULL44 MarkorTranscribeReceipt rc=0 succ=0.0 calls=13 probes=10 e2e=210.9s err=None
+- 10-22 13:59:42 E2E BASE MarkorTranscribeReceipt rc=0 succ=0.0 calls=18 probes=0 e2e=357.6s err=None
+- 10-22 13:59:42 E2E REPORT 30 paired
+- 10-22 14:03:43 E2E BASE MarkorMoveNote rc=0 succ=1.0 calls=12 probes=0 e2e=240.6s err=None
+- 10-22 14:07:23 E2E FULL44 MarkorMoveNote rc=0 succ=1.0 calls=11 probes=8 e2e=219.5s err=None
+- 10-22 14:07:23 E2E REPORT 31 paired
+- 10-22 14:10:04 E2E FULL44 MarkorTranscribeVideo rc=0 succ=0.0 calls=10 probes=1 e2e=161.5s err=None
+- 10-22 14:14:59 E2E BASE MarkorTranscribeVideo rc=0 succ=0.0 calls=20 probes=0 e2e=294.3s err=None
+- 10-22 14:14:59 E2E REPORT 32 paired
+- 10-22 14:19:12 E2E BASE MarkorCreateNoteFromClipboard rc=0 succ=0.0 calls=11 probes=0 e2e=253.2s err=None
+- 10-22 14:24:01 E2E FULL44 MarkorCreateNoteFromClipboard rc=0 succ=0.0 calls=14 probes=2 e2e=288.3s err=None
+- 10-22 14:24:01 E2E REPORT 33 paired
+- 10-22 14:28:00 E2E FULL44 MarkorAddNoteHeader rc=0 succ=0.0 calls=12 probes=0 e2e=238.9s err=None
+- 10-22 14:32:09 E2E BASE MarkorAddNoteHeader rc=0 succ=0.0 calls=12 probes=0 e2e=248.8s err=None
+- 10-22 14:32:09 E2E REPORT 34 paired
+- 10-22 14:36:31 E2E BASE MarkorChangeNoteContent rc=0 succ=0.0 calls=12 probes=0 e2e=261.7s err=None
+- 10-22 14:40:16 E2E FULL44 MarkorChangeNoteContent rc=0 succ=0.0 calls=12 probes=0 e2e=224.9s err=None
+- 10-22 14:40:16 E2E REPORT 35 paired
+- 10-22 14:43:49 E2E FULL44 MarkorCreateNoteAndSms rc=0 succ=0.0 calls=18 probes=0 e2e=213.6s err=None
+- 10-22 14:49:40 E2E BASE MarkorCreateNoteAndSms rc=0 succ=0.0 calls=18 probes=0 e2e=350.1s err=None
+- 10-22 14:49:40 E2E REPORT 36 paired
+- 10-22 14:55:36 E2E BASE MarkorMergeNotes rc=0 succ=0.0 calls=20 probes=0 e2e=356.4s err=None
+- 10-22 15:01:05 E2E FULL44 MarkorMergeNotes rc=0 succ=0.0 calls=20 probes=1 e2e=329.0s err=None
+- 10-22 15:01:05 E2E REPORT 37 paired
+- 10-22 15:03:30 E2E FULL44 NotesTodoItemCount rc=0 succ=1.0 calls=7 probes=5 e2e=144.5s err=None
+- 10-22 15:04:59 E2E BASE NotesTodoItemCount rc=0 succ=1.0 calls=4 probes=0 e2e=88.6s err=None
+- 10-22 15:04:59 E2E REPORT 38 paired
+- 10-22 15:06:38 E2E BASE NotesIsTodo rc=0 succ=1.0 calls=5 probes=0 e2e=99.5s err=None
+- 10-22 15:08:14 E2E FULL44 NotesIsTodo rc=0 succ=1.0 calls=4 probes=1 e2e=95.2s err=None
+- 10-22 15:08:14 E2E REPORT 39 paired
+- 10-22 15:09:32 E2E FULL44 NotesMeetingAttendeeCount rc=0 succ=1.0 calls=4 probes=0 e2e=78.3s err=None
+- 10-22 15:11:12 E2E BASE NotesMeetingAttendeeCount rc=0 succ=1.0 calls=5 probes=0 e2e=99.2s err=None
+- 10-22 15:11:12 E2E REPORT 40 paired
+- 10-22 15:12:54 E2E BASE NotesRecipeIngredientCount rc=0 succ=0.0 calls=5 probes=0 e2e=102.1s err=None
+- 10-22 15:14:22 E2E FULL44 NotesRecipeIngredientCount rc=0 succ=0.0 calls=4 probes=0 e2e=88.3s err=None
+- 10-22 15:14:22 E2E REPORT 41 paired
+- 10-22 15:15:24 E2E FULL44 OpenAppTaskEval rc=0 succ=1.0 calls=3 probes=1 e2e=61.7s err=None
+- 10-22 15:16:05 E2E BASE OpenAppTaskEval rc=0 succ=1.0 calls=2 probes=0 e2e=41.0s err=None
+- 10-22 15:16:05 E2E REPORT 42 paired
+- 10-22 15:19:50 E2E BASE OsmAndFavorite rc=0 succ=1.0 calls=10 probes=0 e2e=224.8s err=None
+- 10-22 15:23:25 E2E FULL44 OsmAndFavorite rc=0 succ=0.0 calls=13 probes=2 e2e=214.4s err=None
+- 10-22 15:23:25 E2E REPORT 43 paired
+- 10-22 15:29:44 E2E FULL44 OsmAndMarker rc=0 succ=0.0 calls=20 probes=0 e2e=378.2s err=None
+- 10-22 15:35:18 E2E BASE OsmAndMarker rc=0 succ=0.0 calls=20 probes=0 e2e=334.6s err=None
+- 10-22 15:35:18 E2E REPORT 44 paired
+- 10-22 15:41:12 E2E BASE OsmAndTrack rc=0 succ=0.0 calls=20 probes=0 e2e=353.1s err=None
+- 10-22 15:46:40 E2E FULL44 OsmAndTrack rc=0 succ=0.0 calls=20 probes=0 e2e=328.3s err=None
+- 10-22 15:46:40 E2E REPORT 45 paired
+- 10-22 15:47:49 E2E FULL44 RecipeDeleteMultipleRecipesWithConstraint rc=0 succ=0.0 calls=4 probes=0 e2e=68.7s err=None
+- 10-22 15:49:02 E2E BASE RecipeDeleteMultipleRecipesWithConstraint rc=0 succ=0.0 calls=4 probes=0 e2e=72.6s err=None
+- 10-22 15:49:02 E2E REPORT 46 paired
+- 10-22 15:51:40 E2E BASE RecipeDeleteDuplicateRecipes rc=0 succ=1.0 calls=7 probes=0 e2e=158.4s err=None
+- 10-22 15:54:10 E2E FULL44 RecipeDeleteDuplicateRecipes rc=0 succ=0.0 calls=8 probes=3 e2e=149.7s err=None
+- 10-22 15:54:10 E2E REPORT 47 paired
+- 10-22 15:57:10 E2E FULL44 RecipeDeleteDuplicateRecipes3 rc=0 succ=0.0 calls=10 probes=3 e2e=179.0s err=None
+- 10-22 16:02:37 E2E BASE RecipeDeleteDuplicateRecipes3 rc=0 succ=0.0 calls=20 probes=0 e2e=327.2s err=None
+- 10-22 16:02:37 E2E REPORT 48 paired
+- 10-22 16:04:42 E2E BASE RecipeDeleteSingleRecipe rc=0 succ=1.0 calls=6 probes=0 e2e=125.2s err=None
+- 10-22 16:06:14 E2E FULL44 RecipeDeleteSingleRecipe rc=0 succ=1.0 calls=4 probes=1 e2e=91.7s err=None
+- 10-22 16:06:14 E2E REPORT 49 paired
+- 10-22 16:07:33 E2E FULL44 RecipeAddSingleRecipe rc=0 succ=1.0 calls=3 probes=2 e2e=79.1s err=None
+- 10-22 16:11:32 E2E BASE RecipeAddSingleRecipe rc=0 succ=1.0 calls=15 probes=0 e2e=238.2s err=None
+- 10-22 16:11:32 E2E REPORT 50 paired
+- 10-22 16:15:24 E2E BASE RecipeDeleteMultipleRecipes rc=0 succ=1.0 calls=14 probes=0 e2e=232.0s err=None
+- 10-22 16:17:42 E2E FULL44 RecipeDeleteMultipleRecipes rc=0 succ=1.0 calls=7 probes=3 e2e=137.9s err=None
+- 10-22 16:17:42 E2E REPORT 51 paired
+- 10-22 16:19:12 E2E FULL44 RecipeDeleteSingleWithRecipeWithNoise rc=0 succ=1.0 calls=5 probes=2 e2e=90.1s err=None
+- 10-22 16:23:00 E2E BASE RecipeDeleteSingleWithRecipeWithNoise rc=0 succ=1.0 calls=12 probes=0 e2e=227.8s err=None
+- 10-22 16:23:00 E2E REPORT 52 paired
+- 10-22 16:27:16 E2E BASE RecipeAddMultipleRecipes rc=0 succ=0.0 calls=20 probes=0 e2e=255.3s err=None
+- 10-22 16:30:41 E2E FULL44 RecipeAddMultipleRecipes rc=0 succ=1.0 calls=10 probes=6 e2e=204.6s err=None
+- 10-22 16:30:41 E2E REPORT 53 paired
+- 10-22 16:33:16 E2E FULL44 RecipeAddMultipleRecipesFromImage rc=0 succ=0.0 calls=8 probes=4 e2e=155.7s err=None
+- 10-22 16:38:37 E2E BASE RecipeAddMultipleRecipesFromImage rc=0 succ=0.0 calls=20 probes=0 e2e=320.2s err=None
+- 10-22 16:38:37 E2E REPORT 54 paired
+- 10-22 16:43:46 E2E BASE RecipeAddMultipleRecipesFromMarkor rc=0 succ=0.0 calls=20 probes=0 e2e=308.6s err=None
+- 10-22 16:48:24 E2E FULL44 RecipeAddMultipleRecipesFromMarkor rc=0 succ=0.0 calls=20 probes=3 e2e=278.2s err=None
+- 10-22 16:48:24 E2E REPORT 55 paired
+- 10-22 16:52:42 E2E FULL44 RecipeAddMultipleRecipesFromMarkor2 rc=0 succ=0.0 calls=13 probes=1 e2e=257.8s err=None
+- 10-22 16:58:40 E2E BASE RecipeAddMultipleRecipesFromMarkor2 rc=0 succ=0.0 calls=20 probes=0 e2e=357.8s err=None
+- 10-22 16:58:40 E2E REPORT 56 paired
+- 10-22 17:04:35 E2E BASE RecipeDeleteDuplicateRecipes2 rc=0 succ=0.0 calls=20 probes=0 e2e=355.1s err=None
+- 10-22 17:09:39 E2E FULL44 RecipeDeleteDuplicateRecipes2 rc=0 succ=0.0 calls=20 probes=5 e2e=304.0s err=None
+- 10-22 17:09:39 E2E REPORT 57 paired
+- 10-22 17:12:48 E2E FULL44 RecipeDeleteMultipleRecipesWithNoise rc=0 succ=0.0 calls=11 probes=2 e2e=188.7s err=None
+- 10-22 17:16:57 E2E BASE RecipeDeleteMultipleRecipesWithNoise rc=0 succ=0.0 calls=17 probes=0 e2e=248.2s err=None
+- 10-22 17:16:57 E2E REPORT 58 paired
+- 10-22 17:21:54 E2E BASE RetroCreatePlaylist rc=0 succ=0.0 calls=17 probes=0 e2e=297.2s err=None
+- 10-22 17:28:01 E2E FULL44 RetroCreatePlaylist rc=0 succ=0.0 calls=20 probes=4 e2e=366.8s err=None
+- 10-22 17:28:01 E2E REPORT 59 paired
+- 10-22 17:31:31 E2E FULL44 RetroPlayingQueue rc=0 succ=0.0 calls=10 probes=0 e2e=210.1s err=None
+- 10-22 17:37:38 E2E BASE RetroPlayingQueue rc=0 succ=0.0 calls=19 probes=0 e2e=366.7s err=None
+- 10-22 17:37:38 E2E REPORT 60 paired
+- 10-22 17:43:16 E2E BASE RetroPlaylistDuration rc=0 succ=0.0 calls=20 probes=0 e2e=338.2s err=None
+- 10-22 17:49:18 E2E FULL44 RetroPlaylistDuration rc=0 succ=0.0 calls=20 probes=0 e2e=361.7s err=None
+- 10-22 17:49:18 E2E REPORT 61 paired
+- 10-22 17:53:59 E2E FULL44 RetroSavePlaylist rc=0 succ=0.0 calls=18 probes=0 e2e=280.5s err=None
+- 10-22 17:59:32 E2E BASE RetroSavePlaylist rc=0 succ=0.0 calls=20 probes=0 e2e=332.4s err=None
+- 10-22 17:59:32 E2E REPORT 62 paired
+- 10-22 18:02:15 E2E BASE SaveCopyOfReceiptTaskEval rc=0 succ=1.0 calls=7 probes=0 e2e=163.1s err=None
+- 10-22 18:04:42 E2E FULL44 SaveCopyOfReceiptTaskEval rc=0 succ=1.0 calls=7 probes=1 e2e=147.0s err=None
+- 10-22 18:04:42 E2E REPORT 63 paired
+- 10-22 18:07:28 E2E FULL44 SimpleCalendarEventsInNextWeek rc=0 succ=0.0 calls=10 probes=2 e2e=165.7s err=None
+- 10-22 18:11:08 E2E BASE SimpleCalendarEventsInNextWeek rc=0 succ=0.0 calls=10 probes=0 e2e=219.4s err=None
+- 10-22 18:11:08 E2E REPORT 64 paired
+- 10-22 18:12:01 E2E BASE SimpleCalendarAnyEventsOnDate rc=0 succ=0.0 calls=3 probes=0 e2e=53.2s err=None
+- 10-22 18:13:07 E2E FULL44 SimpleCalendarAnyEventsOnDate rc=0 succ=1.0 calls=3 probes=0 e2e=65.2s err=None
+- 10-22 18:13:07 E2E REPORT 65 paired
+- 10-22 18:13:53 E2E FULL44 SimpleCalendarEventsInTimeRange rc=0 succ=1.0 calls=3 probes=1 e2e=46.0s err=None
+- 10-22 18:16:31 E2E BASE SimpleCalendarEventsInTimeRange rc=0 succ=0.0 calls=10 probes=0 e2e=158.0s err=None
+- 10-22 18:16:31 E2E REPORT 66 paired
+- 10-22 18:17:53 E2E BASE SimpleCalendarEventsOnDate rc=0 succ=1.0 calls=4 probes=0 e2e=82.2s err=None
+- 10-22 18:19:02 E2E FULL44 SimpleCalendarEventsOnDate rc=0 succ=1.0 calls=3 probes=1 e2e=68.7s err=None
+- 10-22 18:19:02 E2E REPORT 67 paired
+- 10-22 18:19:57 E2E FULL44 SimpleCalendarNextEvent rc=0 succ=1.0 calls=2 probes=1 e2e=54.5s err=None
+- 10-22 18:21:01 E2E BASE SimpleCalendarNextEvent rc=0 succ=0.0 calls=3 probes=0 e2e=64.6s err=None
+- 10-22 18:21:01 E2E REPORT 68 paired
+- 10-22 18:22:38 E2E BASE SimpleCalendarLocationOfEvent rc=0 succ=1.0 calls=5 probes=0 e2e=95.9s err=None
+- 10-22 18:25:11 E2E FULL44 SimpleCalendarLocationOfEvent rc=0 succ=0.0 calls=10 probes=4 e2e=153.0s err=None
+- 10-22 18:25:11 E2E REPORT 69 paired
+- 10-22 18:27:21 E2E FULL44 SimpleCalendarDeleteOneEvent rc=0 succ=1.0 calls=6 probes=2 e2e=130.1s err=None
+- 10-22 18:29:35 E2E BASE SimpleCalendarDeleteOneEvent rc=0 succ=1.0 calls=7 probes=0 e2e=134.2s err=None
+- 10-22 18:29:35 E2E REPORT 70 paired
+- 10-22 18:31:35 E2E BASE SimpleCalendarNextMeetingWithPerson rc=0 succ=0.0 calls=7 probes=0 e2e=119.4s err=None
+- 10-22 18:32:34 E2E FULL44 SimpleCalendarNextMeetingWithPerson rc=0 succ=0.0 calls=4 probes=1 e2e=58.9s err=None
+- 10-22 18:32:34 E2E REPORT 71 paired
+- 10-22 18:35:40 E2E FULL44 SimpleCalendarDeleteEventsOnRelativeDay rc=0 succ=1.0 calls=8 probes=4 e2e=185.9s err=None
+- 10-22 18:38:33 E2E BASE SimpleCalendarDeleteEventsOnRelativeDay rc=0 succ=1.0 calls=8 probes=0 e2e=173.4s err=None
+- 10-22 18:38:34 E2E REPORT 72 paired
+- 10-22 18:41:51 E2E BASE SimpleCalendarDeleteEvents rc=0 succ=1.0 calls=9 probes=0 e2e=197.7s err=None
+- 10-22 18:45:36 E2E FULL44 SimpleCalendarDeleteEvents rc=0 succ=1.0 calls=12 probes=3 e2e=224.3s err=None
+- 10-22 18:45:36 E2E REPORT 73 paired
+- 10-22 18:47:42 E2E FULL44 SimpleCalendarEventOnDateAtTime rc=0 succ=0.0 calls=7 probes=1 e2e=125.8s err=None
+- 10-22 18:51:06 E2E BASE SimpleCalendarEventOnDateAtTime rc=0 succ=0.0 calls=10 probes=0 e2e=204.5s err=None
+- 10-22 18:51:07 E2E REPORT 74 paired
+- 10-22 18:52:23 E2E BASE SimpleCalendarFirstEventAfterStartTime rc=0 succ=1.0 calls=4 probes=0 e2e=76.4s err=None
+- 10-22 18:53:29 E2E FULL44 SimpleCalendarFirstEventAfterStartTime rc=0 succ=1.0 calls=3 probes=2 e2e=65.6s err=None
+- 10-22 18:53:29 E2E REPORT 75 paired
+- 10-22 18:56:53 E2E FULL44 SimpleCalendarAddOneEvent rc=0 succ=1.0 calls=13 probes=3 e2e=204.1s err=None
+- 10-22 19:01:43 E2E BASE SimpleCalendarAddOneEvent rc=0 succ=0.0 calls=17 probes=0 e2e=289.3s err=None
+- 10-22 19:01:43 E2E REPORT 76 paired
+- 10-22 19:07:29 E2E BASE SimpleCalendarAddOneEventRelativeDay rc=0 succ=0.0 calls=19 probes=0 e2e=346.6s err=None
+- 10-22 19:12:30 E2E FULL44 SimpleCalendarAddOneEventRelativeDay rc=0 succ=1.0 calls=19 probes=4 e2e=300.6s err=None
+- 10-22 19:12:30 E2E REPORT 77 paired
+- 10-22 19:15:32 E2E FULL44 SimpleCalendarAddOneEventInTwoWeeks rc=0 succ=0.0 calls=12 probes=4 e2e=181.4s err=None
+- 10-22 19:21:00 E2E BASE SimpleCalendarAddOneEventInTwoWeeks rc=0 succ=0.0 calls=20 probes=0 e2e=328.3s err=None
+- 10-22 19:21:00 E2E REPORT 78 paired
+- 10-22 19:25:45 E2E BASE SimpleCalendarAddOneEventTomorrow rc=0 succ=0.0 calls=16 probes=0 e2e=284.4s err=None
+- 10-22 19:29:08 E2E FULL44 SimpleCalendarAddOneEventTomorrow rc=0 succ=0.0 calls=15 probes=5 e2e=202.7s err=None
+- 10-22 19:29:08 E2E REPORT 79 paired
+- 10-22 19:33:25 E2E FULL44 SimpleCalendarAddRepeatingEvent rc=0 succ=0.0 calls=20 probes=6 e2e=256.9s err=None
+- 10-22 19:38:57 E2E BASE SimpleCalendarAddRepeatingEvent rc=0 succ=0.0 calls=20 probes=0 e2e=331.8s err=None
+- 10-22 19:38:57 E2E REPORT 80 paired
+- 10-22 19:45:00 E2E BASE SimpleDrawProCreateDrawing rc=0 succ=0.0 calls=18 probes=0 e2e=362.9s err=None
+- 10-22 19:51:29 E2E FULL44 SimpleDrawProCreateDrawing rc=0 succ=0.0 calls=18 probes=1 e2e=388.8s err=None
+- 10-22 19:51:29 E2E REPORT 81 paired
+- 10-22 19:54:54 E2E FULL44 SimpleSmsResend rc=0 succ=1.0 calls=10 probes=2 e2e=204.4s err=None
+- 10-22 19:57:19 E2E BASE SimpleSmsResend rc=0 succ=0.0 calls=6 probes=0 e2e=144.4s err=None
+- 10-22 19:57:19 E2E REPORT 82 paired
+- 10-22 19:59:52 E2E BASE SimpleSmsReplyMostRecent rc=0 succ=1.0 calls=6 probes=0 e2e=153.1s err=None
+- 10-22 20:01:18 E2E FULL44 SimpleSmsReplyMostRecent rc=0 succ=1.0 calls=3 probes=1 e2e=85.8s err=None
+- 10-22 20:01:18 E2E REPORT 83 paired
+- 10-22 20:03:18 E2E FULL44 SimpleSmsSend rc=0 succ=1.0 calls=5 probes=0 e2e=119.4s err=None
+- 10-22 20:05:44 E2E BASE SimpleSmsSend rc=0 succ=1.0 calls=7 probes=0 e2e=146.2s err=None
+- 10-22 20:05:44 E2E REPORT 84 paired
+- 10-22 20:08:45 E2E BASE SimpleSmsSendClipboardContent rc=0 succ=0.0 calls=8 probes=0 e2e=180.6s err=None
+- 10-22 20:10:29 E2E FULL44 SimpleSmsSendClipboardContent rc=0 succ=0.0 calls=4 probes=0 e2e=103.7s err=None
+- 10-22 20:10:29 E2E REPORT 85 paired
+- 10-22 20:13:40 E2E FULL44 SimpleSmsReply rc=0 succ=1.0 calls=9 probes=5 e2e=191.1s err=None
+- 10-22 20:16:54 E2E BASE SimpleSmsReply rc=0 succ=1.0 calls=11 probes=0 e2e=193.4s err=None
+- 10-22 20:16:54 E2E REPORT 86 paired
+- 10-22 20:22:18 E2E BASE SimpleSmsSendReceivedAddress rc=0 succ=0.0 calls=18 probes=0 e2e=323.5s err=None
+- 10-22 20:27:50 E2E FULL44 SimpleSmsSendReceivedAddress rc=0 succ=0.0 calls=18 probes=5 e2e=332.0s err=None
+- 10-22 20:27:50 E2E REPORT 87 paired
+- 10-22 20:28:52 E2E FULL44 SportsTrackerActivitiesCountForWeek rc=0 succ=0.0 calls=3 probes=1 e2e=61.3s err=None
+- 10-22 20:29:29 E2E BASE SportsTrackerActivitiesCountForWeek rc=0 succ=0.0 calls=2 probes=0 e2e=37.7s err=None
+- 10-22 20:29:30 E2E REPORT 88 paired
+- 10-22 20:30:12 E2E BASE SportsTrackerActivityDuration rc=0 succ=0.0 calls=2 probes=0 e2e=42.3s err=None
+- 10-22 20:30:43 E2E FULL44 SportsTrackerActivityDuration rc=0 succ=0.0 calls=1 probes=1 e2e=31.4s err=None
+- 10-22 20:30:44 E2E REPORT 89 paired
+- 10-22 20:31:15 E2E FULL44 SportsTrackerTotalDurationForCategoryThisWeek rc=0 succ=0.0 calls=1 probes=0 e2e=31.0s err=None
+- 10-22 20:31:55 E2E BASE SportsTrackerTotalDurationForCategoryThisWeek rc=0 succ=0.0 calls=2 probes=0 e2e=39.7s err=None
+- 10-22 20:31:55 E2E REPORT 90 paired
+- 10-22 20:33:11 E2E BASE SportsTrackerActivitiesOnDate rc=0 succ=0.0 calls=4 probes=0 e2e=76.3s err=None
+- 10-22 20:34:13 E2E FULL44 SportsTrackerActivitiesOnDate rc=0 succ=0.0 calls=3 probes=2 e2e=61.8s err=None
+- 10-22 20:34:13 E2E REPORT 91 paired
+- 10-22 20:35:11 E2E FULL44 SportsTrackerLongestDistanceActivity rc=0 succ=0.0 calls=2 probes=1 e2e=57.2s err=None
+- 10-22 20:36:34 E2E BASE SportsTrackerLongestDistanceActivity rc=0 succ=0.0 calls=3 probes=0 e2e=83.0s err=None
+- 10-22 20:36:34 E2E REPORT 92 paired
+- 10-22 20:37:52 E2E BASE SportsTrackerTotalDistanceForCategoryOverInterval rc=0 succ=0.0 calls=4 probes=0 e2e=78.0s err=None
+- 10-22 20:42:32 E2E FULL44 SportsTrackerTotalDistanceForCategoryOverInterval rc=0 succ=0.0 calls=20 probes=0 e2e=279.5s err=None
+- 10-22 20:42:32 E2E REPORT 93 paired
+- 10-22 20:44:09 E2E FULL44 SystemWifiTurnOnVerify rc=0 succ=1.0 calls=5 probes=1 e2e=96.6s err=None
+- 10-22 20:45:18 E2E BASE SystemWifiTurnOnVerify rc=0 succ=1.0 calls=3 probes=0 e2e=68.8s err=None
+- 10-22 20:45:18 E2E REPORT 94 paired
+- 10-22 20:46:36 E2E BASE SystemBluetoothTurnOn rc=0 succ=1.0 calls=4 probes=0 e2e=78.5s err=None
+- 10-22 20:47:44 E2E FULL44 SystemBluetoothTurnOn rc=0 succ=1.0 calls=4 probes=1 e2e=67.9s err=None
+- 10-22 20:47:44 E2E REPORT 95 paired
+- 10-22 20:49:13 E2E FULL44 SystemWifiTurnOn rc=0 succ=0.0 calls=5 probes=2 e2e=88.1s err=None
+- 10-22 20:50:56 E2E BASE SystemWifiTurnOn rc=0 succ=1.0 calls=5 probes=0 e2e=103.2s err=None
+- 10-22 20:50:56 E2E REPORT 96 paired
+- 10-22 20:52:48 E2E BASE SystemBluetoothTurnOff rc=0 succ=1.0 calls=6 probes=0 e2e=111.4s err=None
+- 10-22 20:54:30 E2E FULL44 SystemBluetoothTurnOff rc=0 succ=0.0 calls=6 probes=2 e2e=102.3s err=None
+- 10-22 20:54:30 E2E REPORT 97 paired
+- 10-22 20:55:53 E2E FULL44 SystemBluetoothTurnOnVerify rc=0 succ=1.0 calls=5 probes=1 e2e=82.5s err=None
+- 10-22 20:57:24 E2E BASE SystemBluetoothTurnOnVerify rc=0 succ=1.0 calls=5 probes=0 e2e=91.4s err=None
+- 10-22 20:57:24 E2E REPORT 98 paired
+- 10-22 20:59:47 E2E BASE SystemWifiTurnOff rc=0 succ=1.0 calls=7 probes=0 e2e=142.8s err=None
+- 10-22 21:01:17 E2E FULL44 SystemWifiTurnOff rc=0 succ=1.0 calls=5 probes=1 e2e=89.9s err=None
+- 10-22 21:01:17 E2E REPORT 99 paired
+- 10-22 21:02:47 E2E FULL44 SystemBrightnessMinVerify rc=0 succ=1.0 calls=5 probes=2 e2e=89.3s err=None
+- 10-22 21:04:28 E2E BASE SystemBrightnessMinVerify rc=0 succ=1.0 calls=5 probes=0 e2e=100.8s err=None
+- 10-22 21:04:28 E2E REPORT 100 paired
+- 10-22 21:05:46 E2E BASE SystemWifiTurnOffVerify rc=0 succ=1.0 calls=4 probes=0 e2e=77.6s err=None
+- 10-22 21:06:52 E2E FULL44 SystemWifiTurnOffVerify rc=0 succ=1.0 calls=4 probes=1 e2e=66.1s err=None
+- 10-22 21:06:52 E2E REPORT 101 paired
+- 10-22 21:10:05 E2E FULL44 SystemBrightnessMin rc=0 succ=0.0 calls=10 probes=2 e2e=192.8s err=None
+- 10-22 21:13:32 E2E BASE SystemBrightnessMin rc=0 succ=0.0 calls=10 probes=0 e2e=206.5s err=None
+- 10-22 21:13:32 E2E REPORT 102 paired
+- 10-22 21:15:40 E2E BASE SystemBrightnessMax rc=0 succ=1.0 calls=6 probes=0 e2e=127.5s err=None
+- 10-22 21:17:35 E2E FULL44 SystemBrightnessMax rc=0 succ=1.0 calls=6 probes=2 e2e=114.2s err=None
+- 10-22 21:17:35 E2E REPORT 103 paired
+- 10-22 21:19:44 E2E FULL44 SystemBluetoothTurnOffVerify rc=0 succ=1.0 calls=7 probes=1 e2e=129.4s err=None
+- 10-22 21:21:27 E2E BASE SystemBluetoothTurnOffVerify rc=0 succ=1.0 calls=5 probes=0 e2e=102.7s err=None
+- 10-22 21:21:27 E2E REPORT 104 paired
+- 10-22 21:22:46 E2E BASE SystemBrightnessMaxVerify rc=0 succ=1.0 calls=4 probes=0 e2e=78.0s err=None
+- 10-22 21:24:01 E2E FULL44 SystemBrightnessMaxVerify rc=0 succ=1.0 calls=4 probes=2 e2e=75.0s err=None
+- 10-22 21:24:01 E2E REPORT 105 paired
+- 10-22 21:27:22 E2E FULL44 SystemCopyToClipboard rc=0 succ=0.0 calls=10 probes=0 e2e=201.4s err=None
+- 10-22 21:30:44 E2E BASE SystemCopyToClipboard rc=0 succ=0.0 calls=10 probes=0 e2e=200.7s err=None
+- 10-22 21:30:44 E2E REPORT 106 paired
+- 10-22 21:31:21 E2E BASE TasksDueNextWeek rc=0 succ=0.0 calls=2 probes=0 e2e=36.7s err=None
+- 10-22 21:32:21 E2E FULL44 TasksDueNextWeek rc=0 succ=0.0 calls=3 probes=1 e2e=60.4s err=None
+- 10-22 21:32:21 E2E REPORT 107 paired
+- 10-22 21:33:29 E2E FULL44 TasksDueOnDate rc=0 succ=0.0 calls=3 probes=0 e2e=67.4s err=None
+- 10-22 21:35:01 E2E BASE TasksDueOnDate rc=0 succ=0.0 calls=4 probes=0 e2e=91.8s err=None
+- 10-22 21:35:01 E2E REPORT 108 paired
+- 10-22 21:36:26 E2E BASE TasksHighPriorityTasks rc=0 succ=0.0 calls=4 probes=0 e2e=85.0s err=None
+- 10-22 21:36:59 E2E FULL44 TasksHighPriorityTasks rc=0 succ=0.0 calls=1 probes=0 e2e=32.9s err=None
+- 10-22 21:36:59 E2E REPORT 109 paired
+- 10-22 21:38:20 E2E FULL44 TasksIncompleteTasksOnDate rc=0 succ=0.0 calls=3 probes=0 e2e=80.6s err=None
+- 10-22 21:39:04 E2E BASE TasksIncompleteTasksOnDate rc=0 succ=0.0 calls=2 probes=0 e2e=43.8s err=None
+- 10-22 21:39:04 E2E REPORT 110 paired
+- 10-22 21:43:01 E2E BASE TasksCompletedTasksForDate rc=0 succ=0.0 calls=10 probes=0 e2e=237.3s err=None
+- 10-22 21:44:14 E2E FULL44 TasksCompletedTasksForDate rc=0 succ=0.0 calls=3 probes=0 e2e=72.5s err=None
+- 10-22 21:44:14 E2E REPORT 111 paired
+- 10-22 21:48:25 E2E FULL44 TasksHighPriorityTasksDueOnDate rc=0 succ=0.0 calls=10 probes=4 e2e=250.6s err=None
+- 10-22 21:50:24 E2E BASE TasksHighPriorityTasksDueOnDate rc=0 succ=0.0 calls=5 probes=0 e2e=118.6s err=None
+- 10-22 21:50:24 E2E REPORT 112 paired
+- 10-22 21:57:47 E2E BASE TurnOffWifiAndTurnOnBluetooth rc=0 succ=1.0 calls=20 probes=0 e2e=443.4s err=None
+- 10-22 22:01:53 E2E FULL44 TurnOffWifiAndTurnOnBluetooth rc=0 succ=1.0 calls=13 probes=0 e2e=245.8s err=None
+- 10-22 22:01:53 E2E REPORT 113 paired
+- 10-22 22:02:21 E2E FULL44 TurnOnWifiAndOpenApp rc=0 succ=0.5 calls=1 probes=0 e2e=28.0s err=None
+- 10-22 22:06:38 E2E BASE TurnOnWifiAndOpenApp rc=0 succ=1.0 calls=11 probes=0 e2e=255.9s err=None
+- 10-22 22:06:38 E2E REPORT 114 paired
+- 10-22 22:12:19 E2E BASE VlcCreatePlaylist rc=0 succ=0.0 calls=20 probes=0 e2e=341.5s err=None
+- 10-22 22:19:39 E2E FULL44 VlcCreatePlaylist rc=0 succ=0.0 calls=20 probes=1 e2e=439.4s err=None
+- 10-22 22:19:39 E2E REPORT 115 paired
+- 10-22 22:24:22 E2E FULL44 VlcCreateTwoPlaylists rc=0 succ=0.0 calls=20 probes=1 e2e=283.0s err=None
+- 10-22 22:29:00 E2E BASE VlcCreateTwoPlaylists rc=0 succ=0.0 calls=20 probes=0 e2e=277.4s err=None
+- 10-22 22:29:00 E2E REPORT 116 paired
+- 10-22 22:29:00 E2E REPORT 116 paired
+- 10-22 22:29:00 E2E DRIVER DONE
+- 10-22 22:29:18 E2E DRIVER start ['BASE', 'FULL44'] tag=e2e116 tasks=116 already paired=116
+- 10-22 22:29:18 E2E REPORT 116 paired
+- 10-22 22:29:18 E2E DRIVER DONE
+- 10-22 22:55:54 E2E DRIVER start ['BASE', 'FULL45'] tag=e2e116n tasks=116 already paired=0
+- 10-22 23:06:14 E2E DRIVER start ['BASE', 'FULL45'] tag=e2e116n tasks=116 already paired=0
+- 10-22 23:09:10 E2E BASE AudioRecorderRecordAudioWithFileName rc=0 succ=1.0 calls=12 probes=0 e2e=175.7s err=None
+- 10-22 23:14:21 E2E FULL45 AudioRecorderRecordAudioWithFileName rc=0 succ=0.0 calls=20 probes=0 e2e=311.2s err=None
+- 10-22 23:14:21 E2E REPORT 1 paired
+- 10-22 23:16:07 E2E DRIVER start ['BASE', 'FULL45'] tag=e2e116n tasks=116 already paired=0
+- 10-22 23:20:48 E2E FULL45 AudioRecorderRecordAudioWithFileName rc=0 succ=0.0 calls=20 probes=0 e2e=280.2s err=None
+- 10-22 23:20:48 E2E REPORT 1 paired
+- 10-22 23:23:07 E2E FULL45 AudioRecorderRecordAudio rc=0 succ=1.0 calls=9 probes=0 e2e=139.7s err=None
+- 10-22 23:26:26 E2E BASE AudioRecorderRecordAudio rc=0 succ=0.0 calls=12 probes=0 e2e=198.3s err=None
+- 10-22 23:26:26 E2E REPORT 2 paired
+- 10-22 23:29:27 E2E BASE BrowserDraw rc=0 succ=0.0 calls=20 probes=0 e2e=180.6s err=None
+- 10-22 23:31:02 E2E FULL45 BrowserDraw rc=0 succ=0.0 calls=10 probes=0 e2e=95.6s err=None
+- 10-22 23:31:02 E2E REPORT 3 paired
+- 10-22 23:33:54 E2E FULL45 BrowserMaze rc=0 succ=0.0 calls=14 probes=1 e2e=171.8s err=None
+- 10-22 23:36:48 E2E BASE BrowserMaze rc=0 succ=0.0 calls=20 probes=0 e2e=173.8s err=None
+- 10-22 23:36:48 E2E REPORT 4 paired
+- 10-22 23:39:45 E2E BASE BrowserMultiply rc=0 succ=0.0 calls=20 probes=0 e2e=176.5s err=None
+- 10-22 23:43:03 E2E FULL45 BrowserMultiply rc=0 succ=0.0 calls=18 probes=0 e2e=198.4s err=None
+- 10-22 23:43:03 E2E REPORT 5 paired
+- 10-22 23:45:49 E2E FULL45 CameraTakeVideo rc=0 succ=0.0 calls=10 probes=1 e2e=165.4s err=None
+- 10-22 23:48:50 E2E BASE CameraTakeVideo rc=0 succ=0.0 calls=10 probes=0 e2e=181.0s err=None
+- 10-22 23:48:50 E2E REPORT 6 paired
+- 10-22 23:51:38 E2E BASE CameraTakePhoto rc=0 succ=0.0 calls=10 probes=0 e2e=168.2s err=None
+- 10-22 23:54:13 E2E FULL45 CameraTakePhoto rc=0 succ=0.0 calls=10 probes=0 e2e=154.7s err=None
+- 10-22 23:54:13 E2E REPORT 7 paired
+- 10-22 23:56:47 E2E FULL45 ClockStopWatchPausedVerify rc=0 succ=1.0 calls=10 probes=1 e2e=154.0s err=None
+- 10-22 23:57:10 E2E BASE ClockStopWatchPausedVerify rc=0 succ=0.0 calls=1 probes=0 e2e=22.3s err=None
+- 10-22 23:57:10 E2E REPORT 8 paired
+- 10-22 23:58:15 E2E BASE ClockStopWatchRunning rc=0 succ=1.0 calls=4 probes=0 e2e=64.8s err=None
+- 10-22 23:59:26 E2E FULL45 ClockStopWatchRunning rc=0 succ=1.0 calls=5 probes=0 e2e=71.4s err=None
+- 10-22 23:59:26 E2E REPORT 9 paired
+- 10-23 00:01:46 E2E FULL45 ClockTimerEntry rc=0 succ=0.0 calls=10 probes=0 e2e=139.8s err=None
+- 10-23 00:04:10 E2E BASE ClockTimerEntry rc=0 succ=0.0 calls=10 probes=0 e2e=144.0s err=None
+- 10-23 00:04:10 E2E REPORT 10 paired
+- 10-23 00:06:51 E2E BASE ContactsAddContact rc=0 succ=1.0 calls=9 probes=0 e2e=160.6s err=None
+- 10-23 00:08:43 E2E FULL45 ContactsAddContact rc=0 succ=1.0 calls=7 probes=1 e2e=111.4s err=None
+- 10-23 00:08:43 E2E REPORT 11 paired
+- 10-23 00:10:13 E2E FULL45 ContactsNewContactDraft rc=0 succ=1.0 calls=5 probes=0 e2e=90.5s err=None
+- 10-23 00:13:05 E2E BASE ContactsNewContactDraft rc=0 succ=1.0 calls=11 probes=0 e2e=171.4s err=None
+- 10-23 00:13:05 E2E REPORT 12 paired
+- 10-23 00:14:35 E2E BASE ExpenseDeleteSingle rc=0 succ=1.0 calls=5 probes=0 e2e=90.3s err=None
+- 10-23 00:15:57 E2E FULL45 ExpenseDeleteSingle rc=0 succ=1.0 calls=5 probes=2 e2e=81.5s err=None
+- 10-23 00:15:57 E2E REPORT 13 paired
+- 10-23 00:17:27 E2E FULL45 ExpenseDeleteDuplicates rc=0 succ=1.0 calls=6 probes=0 e2e=90.2s err=None
+- 10-23 00:19:38 E2E BASE ExpenseDeleteDuplicates rc=0 succ=1.0 calls=7 probes=0 e2e=130.6s err=None
+- 10-23 00:19:38 E2E REPORT 14 paired
+- 10-23 00:22:43 E2E BASE ExpenseAddMultipleFromMarkor rc=0 succ=0.0 calls=12 probes=0 e2e=185.1s err=None
+- 10-23 00:26:23 E2E FULL45 ExpenseAddMultipleFromMarkor rc=0 succ=0.0 calls=16 probes=10 e2e=219.0s err=None
+- 10-23 00:26:23 E2E REPORT 15 paired
+- 10-23 00:29:08 E2E FULL45 ExpenseAddSingle rc=0 succ=0.0 calls=10 probes=1 e2e=164.6s err=None
+- 10-23 00:32:22 E2E BASE ExpenseAddSingle rc=0 succ=1.0 calls=12 probes=0 e2e=194.6s err=None
+- 10-23 00:32:22 E2E REPORT 16 paired
+- 10-23 00:33 FULL45: option-strip swipe moved off the screen edge (edge swipe = Back gesture closed the editor in ExpenseAddSingle); ExpenseAddSingle FULL45 queued for re-run
+- 10-23 00:34:32 E2E BASE ExpenseDeleteDuplicates2 rc=0 succ=0.0 calls=8 probes=0 e2e=130.0s err=None
+- 10-23 00:36:09 E2E FULL45 ExpenseDeleteDuplicates2 rc=0 succ=0.0 calls=6 probes=0 e2e=96.2s err=None
+- 10-23 00:36:09 E2E REPORT 17 paired
+- 10-23 00:38:30 E2E FULL45 ExpenseDeleteMultiple rc=0 succ=1.0 calls=10 probes=4 e2e=140.9s err=None
+- 10-23 00:41:11 E2E BASE ExpenseDeleteMultiple rc=0 succ=1.0 calls=11 probes=0 e2e=161.0s err=None
+- 10-23 00:41:11 E2E REPORT 18 paired
+- 10-23 00:45:55 E2E BASE ExpenseDeleteMultiple2 rc=0 succ=1.0 calls=20 probes=0 e2e=284.4s err=None
+- 10-23 00:49:37 E2E FULL45 ExpenseDeleteMultiple2 rc=0 succ=1.0 calls=15 probes=1 e2e=221.6s err=None
+- 10-23 00:49:37 E2E REPORT 19 paired
+- 10-23 00:52:02 E2E FULL45 ExpenseAddMultiple rc=0 succ=1.0 calls=7 probes=1 e2e=145.0s err=None
+- 10-23 00:56:23 E2E BASE ExpenseAddMultiple rc=0 succ=0.0 calls=20 probes=0 e2e=260.1s err=None
+- 10-23 00:56:23 E2E REPORT 20 paired
+- 10-23 00:58:57 E2E BASE ExpenseAddMultipleFromGallery rc=0 succ=0.0 calls=10 probes=0 e2e=154.3s err=None
+- 10-23 01:02:48 E2E FULL45 ExpenseAddMultipleFromGallery rc=0 succ=0.0 calls=20 probes=3 e2e=230.7s err=None
+- 10-23 01:02:48 E2E REPORT 21 paired
+- 10-23 01:05:22 E2E FULL45 FilesDeleteFile rc=0 succ=1.0 calls=9 probes=0 e2e=154.4s err=None
+- 10-23 01:08:14 E2E BASE FilesDeleteFile rc=0 succ=1.0 calls=9 probes=0 e2e=171.1s err=None
+- 10-23 01:08:14 E2E REPORT 22 paired
+- 10-23 01:11:04 E2E BASE FilesMoveFile rc=0 succ=0.0 calls=10 probes=0 e2e=170.7s err=None
+- 10-23 01:13:39 E2E FULL45 FilesMoveFile rc=0 succ=0.0 calls=10 probes=0 e2e=154.5s err=None
+- 10-23 01:13:39 E2E REPORT 23 paired
+- 10-23 01:14:53 E2E FULL45 MarkorCreateFolder rc=0 succ=1.0 calls=4 probes=1 e2e=73.8s err=None
+- 10-23 01:16:38 E2E BASE MarkorCreateFolder rc=0 succ=1.0 calls=6 probes=0 e2e=104.6s err=None
+- 10-23 01:16:38 E2E REPORT 24 paired
+- 10-23 01:18:45 E2E BASE MarkorDeleteAllNotes rc=0 succ=1.0 calls=7 probes=0 e2e=126.8s err=None
+- 10-23 01:20:02 E2E FULL45 MarkorDeleteAllNotes rc=0 succ=1.0 calls=4 probes=1 e2e=77.7s err=None
+- 10-23 01:20:03 E2E REPORT 25 paired
+- 10-23 01:21:20 E2E FULL45 MarkorDeleteNewestNote rc=0 succ=1.0 calls=4 probes=0 e2e=77.5s err=None
+- 10-23 01:22:50 E2E BASE MarkorDeleteNewestNote rc=0 succ=1.0 calls=5 probes=0 e2e=89.8s err=None
+- 10-23 01:22:50 E2E REPORT 26 paired
+- 10-23 01:24:13 E2E BASE MarkorDeleteNote rc=0 succ=1.0 calls=5 probes=0 e2e=82.6s err=None
+- 10-23 01:25:24 E2E FULL45 MarkorDeleteNote rc=0 succ=1.0 calls=4 probes=0 e2e=71.3s err=None
+- 10-23 01:25:24 E2E REPORT 27 paired
+- 10-23 01:26:48 E2E FULL45 MarkorEditNote rc=0 succ=0.0 calls=5 probes=2 e2e=83.2s err=None
+- 10-23 01:28:21 E2E BASE MarkorEditNote rc=0 succ=0.0 calls=6 probes=0 e2e=93.3s err=None
+- 10-23 01:28:21 E2E REPORT 28 paired
+- 10-23 01:32:18 E2E BASE MarkorCreateNote rc=0 succ=0.0 calls=16 probes=0 e2e=236.8s err=None
+- 10-23 01:36:06 E2E FULL45 MarkorCreateNote rc=0 succ=0.0 calls=16 probes=0 e2e=227.6s err=None
+- 10-23 01:36:06 E2E REPORT 29 paired
+- 10-23 01:39:35 E2E FULL45 MarkorTranscribeReceipt rc=0 succ=0.0 calls=17 probes=7 e2e=208.8s err=None
+- 10-23 01:42:41 E2E BASE MarkorTranscribeReceipt rc=0 succ=0.0 calls=12 probes=0 e2e=185.8s err=None
+- 10-23 01:42:41 E2E REPORT 30 paired
+- 10-23 01:45:53 E2E BASE MarkorMoveNote rc=0 succ=1.0 calls=11 probes=0 e2e=191.5s err=None
+- 10-23 01:48:53 E2E FULL45 MarkorMoveNote rc=0 succ=1.0 calls=11 probes=6 e2e=180.1s err=None
+- 10-23 01:48:53 E2E REPORT 31 paired
+- 10-23 01:51:10 E2E FULL45 MarkorTranscribeVideo rc=0 succ=0.0 calls=10 probes=1 e2e=137.4s err=None
+- 10-23 01:53:20 E2E BASE MarkorTranscribeVideo rc=0 succ=0.0 calls=9 probes=0 e2e=130.0s err=None
+- 10-23 01:53:21 E2E REPORT 32 paired
+- 10-23 01:57:28 E2E BASE MarkorCreateNoteFromClipboard rc=0 succ=0.0 calls=14 probes=0 e2e=247.1s err=None
+- 10-23 02:00:56 E2E FULL45 MarkorCreateNoteFromClipboard rc=0 succ=0.0 calls=12 probes=1 e2e=207.7s err=None
+- 10-23 02:00:56 E2E REPORT 33 paired
+- 10-23 02:03:37 E2E FULL45 MarkorAddNoteHeader rc=0 succ=0.0 calls=12 probes=0 e2e=161.6s err=None
+- 10-23 02:06:34 E2E BASE MarkorAddNoteHeader rc=0 succ=0.0 calls=12 probes=0 e2e=176.9s err=None
+- 10-23 02:06:34 E2E REPORT 34 paired
+- 10-23 02:10:14 E2E BASE MarkorChangeNoteContent rc=0 succ=0.0 calls=12 probes=0 e2e=219.5s err=None
+- 10-23 02:13:18 E2E FULL45 MarkorChangeNoteContent rc=0 succ=0.0 calls=12 probes=0 e2e=183.9s err=None
+- 10-23 02:13:18 E2E REPORT 35 paired
+- 10-23 02:17:43 E2E FULL45 MarkorCreateNoteAndSms rc=0 succ=0.0 calls=17 probes=0 e2e=264.6s err=None
+- 10-23 02:21:53 E2E BASE MarkorCreateNoteAndSms rc=0 succ=0.0 calls=18 probes=0 e2e=249.6s err=None
+- 10-23 02:21:53 E2E REPORT 36 paired
+- 10-23 02:25:56 E2E BASE MarkorMergeNotes rc=0 succ=0.0 calls=20 probes=0 e2e=242.9s err=None
+- 10-23 02:29:28 E2E FULL45 MarkorMergeNotes rc=0 succ=0.0 calls=20 probes=2 e2e=212.1s err=None
+- 10-23 02:29:28 E2E REPORT 37 paired
+- 10-23 02:30:47 E2E FULL45 NotesTodoItemCount rc=0 succ=1.0 calls=4 probes=5 e2e=78.4s err=None
+- 10-23 02:31:56 E2E BASE NotesTodoItemCount rc=0 succ=1.0 calls=4 probes=0 e2e=68.9s err=None
+- 10-23 02:31:56 E2E REPORT 38 paired
+- 10-23 02:33:20 E2E BASE NotesIsTodo rc=0 succ=1.0 calls=5 probes=0 e2e=84.2s err=None
+- 10-23 02:34:37 E2E FULL45 NotesIsTodo rc=0 succ=1.0 calls=4 probes=1 e2e=77.1s err=None
+- 10-23 02:34:37 E2E REPORT 39 paired
+- 10-23 02:35:49 E2E FULL45 NotesMeetingAttendeeCount rc=0 succ=1.0 calls=4 probes=0 e2e=71.5s err=None
+- 10-23 02:37:22 E2E BASE NotesMeetingAttendeeCount rc=0 succ=1.0 calls=5 probes=0 e2e=92.8s err=None
+- 10-23 02:37:22 E2E REPORT 40 paired
+- 10-23 02:38:45 E2E BASE NotesRecipeIngredientCount rc=0 succ=1.0 calls=5 probes=0 e2e=83.3s err=None
+- 10-23 02:39:59 E2E FULL45 NotesRecipeIngredientCount rc=0 succ=0.0 calls=4 probes=0 e2e=73.7s err=None
+- 10-23 02:39:59 E2E REPORT 41 paired
+- 10-23 02:40:55 E2E FULL45 OpenAppTaskEval rc=0 succ=1.0 calls=4 probes=2 e2e=56.2s err=None
+- 10-23 02:41:31 E2E BASE OpenAppTaskEval rc=0 succ=1.0 calls=2 probes=0 e2e=35.0s err=None
+- 10-23 02:41:31 E2E REPORT 42 paired
+- 10-23 02:45:29 E2E BASE OsmAndFavorite rc=0 succ=0.0 calls=13 probes=0 e2e=238.0s err=None
+- 10-23 02:48:18 E2E FULL45 OsmAndFavorite rc=0 succ=1.0 calls=12 probes=0 e2e=169.1s err=None
+- 10-23 02:48:18 E2E REPORT 43 paired
+- 10-23 02:51:44 E2E FULL45 OsmAndMarker rc=0 succ=0.0 calls=20 probes=0 e2e=205.7s err=None
+- 10-23 02:56:36 E2E BASE OsmAndMarker rc=0 succ=0.0 calls=20 probes=0 e2e=291.7s err=None
+- 10-23 02:56:36 E2E REPORT 44 paired
+- 10-23 03:00:31 E2E BASE OsmAndTrack rc=0 succ=0.0 calls=20 probes=0 e2e=235.6s err=None
+- 10-23 03:04:37 E2E FULL45 OsmAndTrack rc=0 succ=0.0 calls=20 probes=0 e2e=245.6s err=None
+- 10-23 03:04:37 E2E REPORT 45 paired
+- 10-23 03:05:37 E2E FULL45 RecipeDeleteMultipleRecipesWithConstraint rc=0 succ=0.0 calls=4 probes=0 e2e=59.3s err=None
+- 10-23 03:06:38 E2E BASE RecipeDeleteMultipleRecipesWithConstraint rc=0 succ=0.0 calls=4 probes=0 e2e=61.5s err=None
+- 10-23 03:06:38 E2E REPORT 46 paired
+- 10-23 03:08:28 E2E BASE RecipeDeleteDuplicateRecipes rc=0 succ=0.0 calls=6 probes=0 e2e=109.2s err=None
+- 10-23 03:10:27 E2E FULL45 RecipeDeleteDuplicateRecipes rc=0 succ=0.0 calls=8 probes=3 e2e=119.2s err=None
+- 10-23 03:10:27 E2E REPORT 47 paired
+- 10-23 03:13:47 E2E FULL45 RecipeDeleteDuplicateRecipes3 rc=0 succ=0.0 calls=16 probes=4 e2e=199.6s err=None
+- 10-23 03:15:32 E2E BASE RecipeDeleteDuplicateRecipes3 rc=0 succ=0.0 calls=6 probes=0 e2e=105.1s err=None
+- 10-23 03:15:32 E2E REPORT 48 paired
+- 10-23 03:17:14 E2E BASE RecipeDeleteSingleRecipe rc=0 succ=1.0 calls=6 probes=0 e2e=101.5s err=None
+- 10-23 03:18:42 E2E FULL45 RecipeDeleteSingleRecipe rc=0 succ=1.0 calls=5 probes=1 e2e=87.7s err=None
+- 10-23 03:18:42 E2E REPORT 49 paired
+- 10-23 03:19:58 E2E FULL45 RecipeAddSingleRecipe rc=0 succ=1.0 calls=3 probes=2 e2e=76.2s err=None
+- 10-23 03:23:50 E2E BASE RecipeAddSingleRecipe rc=0 succ=1.0 calls=15 probes=0 e2e=232.2s err=None
+- 10-23 03:23:50 E2E REPORT 50 paired
+- 10-23 03:27:05 E2E BASE RecipeDeleteMultipleRecipes rc=0 succ=1.0 calls=14 probes=0 e2e=194.1s err=None
+- 10-23 03:28:27 E2E FULL45 RecipeDeleteMultipleRecipes rc=0 succ=1.0 calls=5 probes=0 e2e=82.4s err=None
+- 10-23 03:28:27 E2E REPORT 51 paired
+- 10-23 03:29:50 E2E FULL45 RecipeDeleteSingleWithRecipeWithNoise rc=0 succ=1.0 calls=5 probes=0 e2e=83.1s err=None
+- 10-23 03:33:11 E2E BASE RecipeDeleteSingleWithRecipeWithNoise rc=0 succ=1.0 calls=14 probes=0 e2e=200.2s err=None
+- 10-23 03:33:11 E2E REPORT 52 paired
+- 10-23 03:36:44 E2E BASE RecipeAddMultipleRecipes rc=0 succ=0.0 calls=20 probes=0 e2e=212.6s err=None
+- 10-23 03:39:42 E2E FULL45 RecipeAddMultipleRecipes rc=0 succ=1.0 calls=9 probes=6 e2e=178.4s err=None
+- 10-23 03:39:42 E2E REPORT 53 paired
+- 10-23 03:43:23 E2E FULL45 RecipeAddMultipleRecipesFromImage rc=0 succ=0.0 calls=20 probes=2 e2e=220.4s err=None
+- 10-23 03:47:19 E2E BASE RecipeAddMultipleRecipesFromImage rc=0 succ=0.0 calls=20 probes=0 e2e=236.4s err=None
+- 10-23 03:47:19 E2E REPORT 54 paired
+- 10-23 03:52:09 E2E BASE RecipeAddMultipleRecipesFromMarkor rc=0 succ=0.0 calls=20 probes=0 e2e=289.3s err=None
+- 10-23 03:54:21 E2E FULL45 RecipeAddMultipleRecipesFromMarkor rc=0 succ=0.0 calls=8 probes=1 e2e=132.1s err=None
+- 10-23 03:54:21 E2E REPORT 55 paired
+- 10-23 03:58:46 E2E FULL45 RecipeAddMultipleRecipesFromMarkor2 rc=0 succ=0.0 calls=20 probes=1 e2e=265.0s err=None
+- 10-23 04:02:23 E2E BASE RecipeAddMultipleRecipesFromMarkor2 rc=0 succ=0.0 calls=13 probes=0 e2e=216.6s err=None
+- 10-23 04:02:23 E2E REPORT 56 paired
+- 10-23 04:06:39 E2E BASE RecipeDeleteDuplicateRecipes2 rc=0 succ=0.0 calls=20 probes=0 e2e=255.7s err=None
+- 10-23 04:10:13 E2E FULL45 RecipeDeleteDuplicateRecipes2 rc=0 succ=0.0 calls=20 probes=6 e2e=214.6s err=None
+- 10-23 04:10:13 E2E REPORT 57 paired
+- 10-23 04:12:14 E2E FULL45 RecipeDeleteMultipleRecipesWithNoise rc=0 succ=0.0 calls=7 probes=2 e2e=120.3s err=None
+- 10-23 04:16:05 E2E BASE RecipeDeleteMultipleRecipesWithNoise rc=0 succ=0.0 calls=19 probes=0 e2e=230.7s err=None
+- 10-23 04:16:05 E2E REPORT 58 paired
+- 10-23 04:19:46 E2E BASE RetroCreatePlaylist rc=0 succ=1.0 calls=15 probes=0 e2e=221.1s err=None
+- 10-23 04:22:25 E2E FULL45 RetroCreatePlaylist rc=0 succ=0.0 calls=12 probes=5 e2e=158.6s err=None
+- 10-23 04:22:25 E2E REPORT 59 paired
+- 10-23 04:27:13 E2E FULL45 RetroPlayingQueue rc=0 succ=0.0 calls=16 probes=1 e2e=287.6s err=None
+- 10-23 04:32:04 E2E BASE RetroPlayingQueue rc=0 succ=0.0 calls=20 probes=0 e2e=290.9s err=None
+- 10-23 04:32:04 E2E REPORT 60 paired
+- 10-23 04:37:06 E2E BASE RetroPlaylistDuration rc=0 succ=0.0 calls=20 probes=0 e2e=302.0s err=None
+- 10-23 04:41:25 E2E FULL45 RetroPlaylistDuration rc=0 succ=0.0 calls=9 probes=0 e2e=258.9s err=None
+- 10-23 04:41:25 E2E REPORT 61 paired
+- 10-23 04:46:21 E2E FULL45 RetroSavePlaylist rc=0 succ=0.5 calls=20 probes=0 e2e=295.8s err=None
+- 10-23 04:50:33 E2E BASE RetroSavePlaylist rc=0 succ=0.0 calls=20 probes=0 e2e=251.7s err=None
+- 10-23 04:50:33 E2E REPORT 62 paired
+- 10-23 04:52:42 E2E BASE SaveCopyOfReceiptTaskEval rc=0 succ=1.0 calls=7 probes=0 e2e=128.6s err=None
+- 10-23 04:54:39 E2E FULL45 SaveCopyOfReceiptTaskEval rc=0 succ=1.0 calls=6 probes=1 e2e=117.2s err=None
+- 10-23 04:54:39 E2E REPORT 63 paired
+- 10-23 04:57:03 E2E FULL45 SimpleCalendarEventsInNextWeek rc=0 succ=0.0 calls=10 probes=2 e2e=143.7s err=None
+- 10-23 04:59:29 E2E BASE SimpleCalendarEventsInNextWeek rc=0 succ=0.0 calls=10 probes=0 e2e=146.5s err=None
+- 10-23 04:59:29 E2E REPORT 64 paired
+- 10-23 05:00:17 E2E BASE SimpleCalendarAnyEventsOnDate rc=0 succ=0.0 calls=3 probes=0 e2e=47.7s err=None
+- 10-23 05:01:12 E2E FULL45 SimpleCalendarAnyEventsOnDate rc=0 succ=1.0 calls=3 probes=0 e2e=54.6s err=None
+- 10-23 05:01:12 E2E REPORT 65 paired
+- 10-23 05:02:04 E2E FULL45 SimpleCalendarEventsInTimeRange rc=0 succ=1.0 calls=3 probes=0 e2e=51.3s err=None
+- 10-23 05:03:15 E2E BASE SimpleCalendarEventsInTimeRange rc=0 succ=1.0 calls=4 probes=0 e2e=71.7s err=None
+- 10-23 05:03:15 E2E REPORT 66 paired
+- 10-23 05:04:26 E2E BASE SimpleCalendarEventsOnDate rc=0 succ=1.0 calls=4 probes=0 e2e=70.3s err=None
+- 10-23 05:05:26 E2E FULL45 SimpleCalendarEventsOnDate rc=0 succ=1.0 calls=3 probes=0 e2e=60.4s err=None
+- 10-23 05:05:27 E2E REPORT 67 paired
+- 10-23 05:06:14 E2E FULL45 SimpleCalendarNextEvent rc=0 succ=0.0 calls=2 probes=0 e2e=47.0s err=None
+- 10-23 05:07:10 E2E BASE SimpleCalendarNextEvent rc=0 succ=0.0 calls=3 probes=0 e2e=56.3s err=None
+- 10-23 05:07:10 E2E REPORT 68 paired
+- 10-23 05:08:25 E2E BASE SimpleCalendarLocationOfEvent rc=0 succ=1.0 calls=5 probes=0 e2e=75.2s err=None
+- 10-23 05:09:34 E2E FULL45 SimpleCalendarLocationOfEvent rc=0 succ=1.0 calls=4 probes=1 e2e=67.9s err=None
+- 10-23 05:09:34 E2E REPORT 69 paired
+- 10-23 05:11:23 E2E FULL45 SimpleCalendarDeleteOneEvent rc=0 succ=1.0 calls=6 probes=3 e2e=109.2s err=None
+- 10-23 05:13:15 E2E BASE SimpleCalendarDeleteOneEvent rc=0 succ=1.0 calls=7 probes=0 e2e=112.4s err=None
+- 10-23 05:13:15 E2E REPORT 70 paired
+- 10-23 05:15:18 E2E BASE SimpleCalendarNextMeetingWithPerson rc=0 succ=0.0 calls=8 probes=0 e2e=122.8s err=None
+- 10-23 05:16:22 E2E FULL45 SimpleCalendarNextMeetingWithPerson rc=0 succ=0.0 calls=4 probes=0 e2e=63.7s err=None
+- 10-23 05:16:22 E2E REPORT 71 paired
+- 10-23 05:18:39 E2E FULL45 SimpleCalendarDeleteEventsOnRelativeDay rc=0 succ=1.0 calls=7 probes=1 e2e=136.6s err=None
+- 10-23 05:21:06 E2E BASE SimpleCalendarDeleteEventsOnRelativeDay rc=0 succ=1.0 calls=8 probes=0 e2e=146.4s err=None
+- 10-23 05:21:06 E2E REPORT 72 paired
+- 10-23 05:23:53 E2E BASE SimpleCalendarDeleteEvents rc=0 succ=1.0 calls=9 probes=0 e2e=167.0s err=None
+- 10-23 05:25:51 E2E FULL45 SimpleCalendarDeleteEvents rc=0 succ=1.0 calls=7 probes=1 e2e=118.2s err=None
+- 10-23 05:25:51 E2E REPORT 73 paired
+- 10-23 05:27:59 E2E FULL45 SimpleCalendarEventOnDateAtTime rc=0 succ=0.0 calls=10 probes=7 e2e=127.6s err=None
+- 10-23 05:29:35 E2E BASE SimpleCalendarEventOnDateAtTime rc=0 succ=0.0 calls=5 probes=0 e2e=96.2s err=None
+- 10-23 05:29:36 E2E REPORT 74 paired
+- 10-23 05:30:48 E2E BASE SimpleCalendarFirstEventAfterStartTime rc=0 succ=1.0 calls=4 probes=0 e2e=72.6s err=None
+- 10-23 05:32:01 E2E FULL45 SimpleCalendarFirstEventAfterStartTime rc=0 succ=0.0 calls=4 probes=2 e2e=72.7s err=None
+- 10-23 05:32:01 E2E REPORT 75 paired
+- 10-23 05:35:19 E2E FULL45 SimpleCalendarAddOneEvent rc=0 succ=1.0 calls=16 probes=5 e2e=198.2s err=None
+- 10-23 05:39:12 E2E BASE SimpleCalendarAddOneEvent rc=0 succ=1.0 calls=17 probes=0 e2e=232.9s err=None
+- 10-23 05:39:13 E2E REPORT 76 paired
+- 10-23 05:43:23 E2E BASE SimpleCalendarAddOneEventRelativeDay rc=0 succ=1.0 calls=17 probes=0 e2e=250.7s err=None
+- 10-23 05:47:22 E2E FULL45 SimpleCalendarAddOneEventRelativeDay rc=0 succ=1.0 calls=19 probes=3 e2e=238.4s err=None
+- 10-23 05:47:22 E2E REPORT 77 paired
+- 10-23 05:49:39 E2E FULL45 SimpleCalendarAddOneEventInTwoWeeks rc=0 succ=0.0 calls=9 probes=2 e2e=137.3s err=None
+- 10-23 05:53:33 E2E BASE SimpleCalendarAddOneEventInTwoWeeks rc=0 succ=0.0 calls=20 probes=0 e2e=233.5s err=None
+- 10-23 05:53:33 E2E REPORT 78 paired
+- 10-23 05:57:20 E2E BASE SimpleCalendarAddOneEventTomorrow rc=0 succ=0.0 calls=16 probes=0 e2e=227.0s err=None
+- 10-23 06:00:56 E2E FULL45 SimpleCalendarAddOneEventTomorrow rc=0 succ=0.0 calls=15 probes=1 e2e=215.1s err=None
+- 10-23 06:00:56 E2E REPORT 79 paired
+- 10-23 06:04:18 E2E FULL45 SimpleCalendarAddRepeatingEvent rc=0 succ=1.0 calls=17 probes=4 e2e=202.3s err=None
+- 10-23 06:09:04 E2E BASE SimpleCalendarAddRepeatingEvent rc=0 succ=1.0 calls=20 probes=0 e2e=285.5s err=None
+- 10-23 06:09:04 E2E REPORT 80 paired
+- 10-23 06:12:51 E2E BASE SimpleDrawProCreateDrawing rc=0 succ=0.0 calls=18 probes=0 e2e=227.0s err=None
+- 10-23 06:15:51 E2E FULL45 SimpleDrawProCreateDrawing rc=0 succ=1.0 calls=13 probes=2 e2e=180.2s err=None
+- 10-23 06:15:51 E2E REPORT 81 paired
+- 10-23 06:18:26 E2E FULL45 SimpleSmsResend rc=0 succ=1.0 calls=8 probes=2 e2e=154.0s err=None
+- 10-23 06:21:24 E2E BASE SimpleSmsResend rc=0 succ=1.0 calls=10 probes=0 e2e=178.7s err=None
+- 10-23 06:21:24 E2E REPORT 82 paired
+- 10-23 06:23:24 E2E BASE SimpleSmsReplyMostRecent rc=0 succ=1.0 calls=6 probes=0 e2e=119.5s err=None
+- 10-23 06:24:43 E2E FULL45 SimpleSmsReplyMostRecent rc=0 succ=1.0 calls=3 probes=2 e2e=79.0s err=None
+- 10-23 06:24:43 E2E REPORT 83 paired
+- 10-23 06:26:24 E2E FULL45 SimpleSmsSend rc=0 succ=1.0 calls=5 probes=1 e2e=100.9s err=None
+- 10-23 06:28:25 E2E BASE SimpleSmsSend rc=0 succ=1.0 calls=7 probes=0 e2e=120.3s err=None
+- 10-23 06:28:25 E2E REPORT 84 paired
+- 10-23 06:30:17 E2E BASE SimpleSmsSendClipboardContent rc=0 succ=0.0 calls=6 probes=0 e2e=112.4s err=None
+- 10-23 06:32:18 E2E FULL45 SimpleSmsSendClipboardContent rc=0 succ=0.0 calls=6 probes=0 e2e=120.4s err=None
+- 10-23 06:32:18 E2E REPORT 85 paired
+- 10-23 06:34:55 E2E FULL45 SimpleSmsReply rc=0 succ=1.0 calls=10 probes=6 e2e=157.0s err=None
+- 10-23 06:37:44 E2E BASE SimpleSmsReply rc=0 succ=1.0 calls=11 probes=0 e2e=168.7s err=None
+- 10-23 06:37:44 E2E REPORT 86 paired
+- 10-23 06:43:02 E2E BASE SimpleSmsSendReceivedAddress rc=0 succ=0.0 calls=18 probes=0 e2e=317.7s err=None
+- 10-23 06:47:01 E2E FULL45 SimpleSmsSendReceivedAddress rc=0 succ=0.0 calls=18 probes=1 e2e=239.0s err=None
+- 10-23 06:47:01 E2E REPORT 87 paired
+- 10-23 06:47:33 E2E FULL45 SportsTrackerActivitiesCountForWeek rc=0 succ=0.0 calls=2 probes=1 e2e=32.3s err=None
+- 10-23 06:48:01 E2E BASE SportsTrackerActivitiesCountForWeek rc=0 succ=0.0 calls=2 probes=0 e2e=27.9s err=None
+- 10-23 06:48:02 E2E REPORT 88 paired
+- 10-23 06:48:39 E2E BASE SportsTrackerActivityDuration rc=0 succ=0.0 calls=2 probes=0 e2e=37.5s err=None
+- 10-23 06:49:06 E2E FULL45 SportsTrackerActivityDuration rc=0 succ=0.0 calls=1 probes=2 e2e=26.9s err=None
+- 10-23 06:49:06 E2E REPORT 89 paired
+- 10-23 06:49:52 E2E FULL45 SportsTrackerTotalDurationForCategoryThisWeek rc=0 succ=0.0 calls=2 probes=0 e2e=45.4s err=None
+- 10-23 06:50:26 E2E BASE SportsTrackerTotalDurationForCategoryThisWeek rc=0 succ=0.0 calls=2 probes=0 e2e=34.5s err=None
+- 10-23 06:50:27 E2E REPORT 90 paired
+- 10-23 06:51:32 E2E BASE SportsTrackerActivitiesOnDate rc=0 succ=0.0 calls=4 probes=0 e2e=65.5s err=None
+- 10-23 06:52:21 E2E FULL45 SportsTrackerActivitiesOnDate rc=0 succ=0.0 calls=3 probes=2 e2e=48.3s err=None
+- 10-23 06:52:21 E2E REPORT 91 paired
+- 10-23 06:53:09 E2E FULL45 SportsTrackerLongestDistanceActivity rc=0 succ=0.0 calls=2 probes=0 e2e=48.4s err=None
+- 10-23 06:54:14 E2E BASE SportsTrackerLongestDistanceActivity rc=0 succ=0.0 calls=3 probes=0 e2e=64.5s err=None
+- 10-23 06:54:14 E2E REPORT 92 paired
+- 10-23 06:55:34 E2E BASE SportsTrackerTotalDistanceForCategoryOverInterval rc=0 succ=0.0 calls=4 probes=0 e2e=80.1s err=None
+- 10-23 06:58:54 E2E FULL45 SportsTrackerTotalDistanceForCategoryOverInterval rc=0 succ=0.0 calls=20 probes=0 e2e=199.8s err=None
+- 10-23 06:58:54 E2E REPORT 93 paired
+- 10-23 06:59:56 E2E FULL45 SystemWifiTurnOnVerify rc=0 succ=1.0 calls=4 probes=1 e2e=62.0s err=None
+- 10-23 07:00:52 E2E BASE SystemWifiTurnOnVerify rc=0 succ=1.0 calls=3 probes=0 e2e=55.9s err=None
+- 10-23 07:00:52 E2E REPORT 94 paired
+- 10-23 07:03:32 E2E BASE SystemBluetoothTurnOn rc=0 succ=1.0 calls=10 probes=0 e2e=159.5s err=None
+- 10-23 07:04:35 E2E FULL45 SystemBluetoothTurnOn rc=0 succ=1.0 calls=4 probes=1 e2e=62.5s err=None
+- 10-23 07:04:35 E2E REPORT 95 paired
+- 10-23 07:06:10 E2E FULL45 SystemWifiTurnOn rc=0 succ=0.0 calls=6 probes=2 e2e=95.1s err=None
+- 10-23 07:08:43 E2E BASE SystemWifiTurnOn rc=0 succ=0.0 calls=10 probes=0 e2e=153.2s err=None
+- 10-23 07:08:43 E2E REPORT 96 paired
+- 10-23 07:10:17 E2E BASE SystemBluetoothTurnOff rc=0 succ=1.0 calls=6 probes=0 e2e=93.1s err=None
+- 10-23 07:12:43 E2E FULL45 SystemBluetoothTurnOff rc=0 succ=0.0 calls=10 probes=1 e2e=146.2s err=None
+- 10-23 07:12:43 E2E REPORT 97 paired
+- 10-23 07:13:54 E2E FULL45 SystemBluetoothTurnOnVerify rc=0 succ=1.0 calls=5 probes=0 e2e=70.9s err=None
+- 10-23 07:15:11 E2E BASE SystemBluetoothTurnOnVerify rc=0 succ=1.0 calls=5 probes=0 e2e=77.2s err=None
+- 10-23 07:15:12 E2E REPORT 98 paired
+- 10-23 07:16:33 E2E BASE SystemWifiTurnOff rc=0 succ=1.0 calls=5 probes=0 e2e=81.1s err=None
+- 10-23 07:17:49 E2E FULL45 SystemWifiTurnOff rc=0 succ=1.0 calls=5 probes=1 e2e=76.4s err=None
+- 10-23 07:17:49 E2E REPORT 99 paired
+- 10-23 07:18:49 E2E FULL45 SystemBrightnessMinVerify rc=0 succ=1.0 calls=4 probes=0 e2e=59.3s err=None
+- 10-23 07:19:56 E2E BASE SystemBrightnessMinVerify rc=0 succ=1.0 calls=4 probes=0 e2e=66.6s err=None
+- 10-23 07:19:56 E2E REPORT 100 paired
+- 10-23 07:21:00 E2E BASE SystemWifiTurnOffVerify rc=0 succ=1.0 calls=4 probes=0 e2e=63.7s err=None
+- 10-23 07:23:02 E2E FULL45 SystemWifiTurnOffVerify rc=0 succ=1.0 calls=10 probes=1 e2e=122.4s err=None
+- 10-23 07:23:02 E2E REPORT 101 paired
+- 10-23 07:24:40 E2E FULL45 SystemBrightnessMin rc=0 succ=1.0 calls=6 probes=1 e2e=97.3s err=None
+- 10-23 07:26:19 E2E BASE SystemBrightnessMin rc=0 succ=1.0 calls=6 probes=0 e2e=99.3s err=None
+- 10-23 07:26:19 E2E REPORT 102 paired
+- 10-23 07:28:01 E2E BASE SystemBrightnessMax rc=0 succ=1.0 calls=6 probes=0 e2e=101.8s err=None
+- 10-23 07:29:40 E2E FULL45 SystemBrightnessMax rc=0 succ=1.0 calls=6 probes=1 e2e=98.6s err=None
+- 10-23 07:29:40 E2E REPORT 103 paired
+- 10-23 07:31:48 E2E FULL45 SystemBluetoothTurnOffVerify rc=0 succ=1.0 calls=9 probes=1 e2e=127.9s err=None
+- 10-23 07:33:07 E2E BASE SystemBluetoothTurnOffVerify rc=0 succ=1.0 calls=5 probes=0 e2e=79.0s err=None
+- 10-23 07:33:07 E2E REPORT 104 paired
+- 10-23 07:34:12 E2E BASE SystemBrightnessMaxVerify rc=0 succ=1.0 calls=4 probes=0 e2e=64.2s err=None
+- 10-23 07:35:14 E2E FULL45 SystemBrightnessMaxVerify rc=0 succ=1.0 calls=4 probes=3 e2e=62.6s err=None
+- 10-23 07:35:14 E2E REPORT 105 paired
+- 10-23 07:36:20 E2E FULL45 SystemCopyToClipboard rc=0 succ=None calls=None probes=None e2e=65.4s err=AdbControllerError('Error executing adb command: [adb -P 5037 -s emulator-5554 shell monkey -p 剪贴板 1]\nCaused by: Command \'[\'/Users/huangrunxi/Library/Android/sdk/platform-tools/adb\', \'-P\', \'503
+- 10-23 07:39:34 E2E BASE SystemCopyToClipboard rc=0 succ=0.0 calls=10 probes=0 e2e=193.6s err=None
+- 10-23 07:39:34 E2E REPORT 106 paired
+- 10-23 07:40:10 E2E BASE TasksDueNextWeek rc=0 succ=0.0 calls=2 probes=0 e2e=35.8s err=None
+- 10-23 07:40:41 E2E FULL45 TasksDueNextWeek rc=0 succ=0.0 calls=2 probes=0 e2e=31.4s err=None
+- 10-23 07:40:41 E2E REPORT 107 paired
+- 10-23 07:41:26 E2E FULL45 TasksDueOnDate rc=0 succ=0.0 calls=2 probes=0 e2e=44.3s err=None
+- 10-23 07:42:20 E2E BASE TasksDueOnDate rc=0 succ=0.0 calls=3 probes=0 e2e=54.1s err=None
+- 10-23 07:42:20 E2E REPORT 108 paired
+- 10-23 07:43:30 E2E BASE TasksHighPriorityTasks rc=0 succ=1.0 calls=4 probes=0 e2e=70.0s err=None
+- 10-23 07:43:57 E2E FULL45 TasksHighPriorityTasks rc=0 succ=1.0 calls=1 probes=0 e2e=26.5s err=None
+- 10-23 07:43:57 E2E REPORT 109 paired
+- 10-23 07:44:30 E2E FULL45 TasksIncompleteTasksOnDate rc=0 succ=0.0 calls=1 probes=0 e2e=33.5s err=None
+- 10-23 07:45:54 E2E BASE TasksIncompleteTasksOnDate rc=0 succ=0.0 calls=4 probes=0 e2e=83.2s err=None
+- 10-23 07:45:54 E2E REPORT 110 paired
+- 10-23 07:48:41 E2E BASE TasksCompletedTasksForDate rc=0 succ=0.0 calls=10 probes=0 e2e=167.3s err=None
+- 10-23 07:51:35 E2E FULL45 TasksCompletedTasksForDate rc=0 succ=0.0 calls=10 probes=1 e2e=173.7s err=None
+- 10-23 07:51:35 E2E REPORT 111 paired
+- 10-23 07:54:34 E2E FULL45 TasksHighPriorityTasksDueOnDate rc=0 succ=0.0 calls=10 probes=5 e2e=178.9s err=None
+- 10-23 07:56:59 E2E BASE TasksHighPriorityTasksDueOnDate rc=0 succ=0.0 calls=9 probes=0 e2e=144.9s err=None
+- 10-23 07:56:59 E2E REPORT 112 paired
+- 10-23 07:59:53 E2E BASE TurnOffWifiAndTurnOnBluetooth rc=0 succ=1.0 calls=10 probes=0 e2e=173.4s err=None
+- 10-23 08:04:50 E2E FULL45 TurnOffWifiAndTurnOnBluetooth rc=0 succ=0.5 calls=20 probes=1 e2e=297.2s err=None
+- 10-23 08:04:50 E2E REPORT 113 paired
+- 10-23 08:08:21 E2E FULL45 TurnOnWifiAndOpenApp rc=0 succ=0.5 calls=13 probes=0 e2e=210.8s err=None
+- 10-23 08:12:39 E2E BASE TurnOnWifiAndOpenApp rc=0 succ=0.5 calls=14 probes=0 e2e=257.9s err=None
+- 10-23 08:12:40 E2E REPORT 114 paired
+- 10-23 08:17:03 E2E BASE VlcCreatePlaylist rc=0 succ=0.0 calls=20 probes=0 e2e=263.3s err=None
+- 10-23 08:22:03 E2E FULL45 VlcCreatePlaylist rc=0 succ=0.0 calls=20 probes=1 e2e=299.9s err=None
+- 10-23 08:22:03 E2E REPORT 115 paired
+- 10-23 08:25:40 E2E FULL45 VlcCreateTwoPlaylists rc=0 succ=0.0 calls=20 probes=2 e2e=216.7s err=None
+- 10-23 08:29:15 E2E BASE VlcCreateTwoPlaylists rc=0 succ=0.0 calls=20 probes=0 e2e=214.8s err=None
+- 10-23 08:29:15 E2E REPORT 116 paired
+- 10-23 08:29:15 E2E REPORT 116 paired
+- 10-23 08:29:15 E2E DRIVER DONE
+- 10-23 08:29:29 E2E DRIVER start ['BASE', 'FULL45'] tag=e2e116n tasks=116 already paired=114
+- 10-23 08:30:50 E2E FULL45 ExpenseAddSingle rc=0 succ=1.0 calls=3 probes=0 e2e=81.0s err=None
+- 10-23 08:32:49 E2E FULL45 SystemCopyToClipboard rc=0 succ=0.0 calls=10 probes=0 e2e=119.3s err=None
+- 10-23 08:32:50 E2E REPORT 116 paired
+- 10-23 08:32:50 E2E DRIVER DONE
