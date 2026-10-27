@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1220" viewBox="0 0 1800 1220" role="img">
+<title>M3: reuse before inference and coordinate shared UI execution</title><desc>A later task can use an observed category-page transition after checking current task and UI conditions. If no candidate applies, a lane-based timeline separates model output, live UI probing and recovery, runtime action checking, execution and observation. Summary output can overlap execution. Late recovery adds a wait and does not disappear from the critical path.</desc>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#202936"/></marker>
+<marker id="redarrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#9b4444"/></marker>
+</defs>
+<style>text {font-family: Arial, Helvetica, sans-serif; font-variant-numeric: tabular-nums;} .edge {fill:none;stroke-linecap:round;stroke-linejoin:round;}</style>
+<rect width="1800" height="1220" fill="white"/>
+<text x="40" y="45" fill="#202936" font-size="34" font-weight="bold" text-anchor="start">
+<tspan x="40" dy="0">M3  Checked reuse and pipelined execution</tspan>
+</text>
+<text x="40" y="90" fill="#566273" font-size="26" font-weight="normal" text-anchor="start">
+<tspan x="40" dy="0">Which model call is avoided, and when can the shared live UI be used?</tspan>
+</text>
+<text x="40" y="145" fill="#202936" font-size="29" font-weight="bold" text-anchor="start">
+<tspan x="40" dy="0">(a) Reuse occurs before a model request</tspan>
+</text>
+<rect x="40" y="180" width="315" height="160" rx="12" fill="#f4f5f7" stroke="#8793a1" stroke-width="2"/>
+<text x="197.5" y="217" fill="#202936" font-size="29" font-weight="bold" text-anchor="middle">
+<tspan x="197.5" dy="0">Task B + live list</tspan>
+</text>
+<text x="197.5" y="253" fill="#566273" font-size="25" font-weight="normal" text-anchor="middle">
+<tspan x="197.5" dy="0">“Open category list”</tspan>
+<tspan x="197.5" dy="33.0">L now contains Bob</tspan>
+</text>
+<rect x="425" y="180" width="325" height="160" rx="12" fill="#f5f0fa" stroke="#73568c" stroke-width="2"/>
+<text x="587.5" y="217" fill="#202936" font-size="29" font-weight="bold" text-anchor="middle">
+<tspan x="587.5" dy="0">Retrieve from M1</tspan>
+</text>
+<text x="587.5" y="253" fill="#566273" font-size="24" font-weight="normal" text-anchor="middle">
+<tspan x="587.5" dy="0">L — Categories → C</tspan>
+<tspan x="587.5" dy="31.68">observed by exploration</tspan>
+</text>
+<rect x="820" y="180" width="430" height="160" rx="12" fill="#eef4fc" stroke="#245c9c" stroke-width="2"/>
+<text x="1035.0" y="217" fill="#202936" font-size="29" font-weight="bold" text-anchor="middle">
+<tspan x="1035.0" dy="0">Check applicability</tspan>
+</text>
+<text x="1035.0" y="253" fill="#566273" font-size="23" font-weight="normal" text-anchor="middle">
+<tspan x="1035.0" dy="0">task / parameters · current controls</tspan>
+<tspan x="1035.0" dy="30.360000000000003">observed support · commit boundary</tspan>
+</text>
+<rect x="1320" y="180" width="440" height="160" rx="12" fill="#eef4fc" stroke="#245c9c" stroke-width="2"/>
+<text x="1540.0" y="217" fill="#202936" font-size="29" font-weight="bold" text-anchor="middle">
+<tspan x="1540.0" dy="0">Execute + observe C</tspan>
+</text>
+<text x="1540.0" y="253" fill="#566273" font-size="24" font-weight="normal" text-anchor="middle">
+<tspan x="1540.0" dy="0">this transition needs no VLM request</tspan>
+<tspan x="1540.0" dy="31.68">stop replay on a mismatch</tspan>
+</text>
+<path class="edge" d="M 355 260 L 425 260" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<path class="edge" d="M 750 260 L 820 260" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<path class="edge" d="M 1250 260 L 1320 260" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<text x="1285" y="242" fill="#202936" font-size="23" font-weight="normal" text-anchor="middle">
+<tspan x="1285" dy="0">yes</tspan>
+</text>
+<path class="edge" d="M 1035 340 L 1035 385 L 390 385 L 390 410" stroke="#9b4444" stroke-width="2.8" stroke-dasharray="7 5" marker-end="url(#redarrow)"/>
+<text x="700" y="375" fill="#9b4444" font-size="23" font-weight="normal" text-anchor="middle">
+<tspan x="700" dy="0">no applicable candidate → request a model action</tspan>
+</text>
+<text x="40" y="450" fill="#202936" font-size="29" font-weight="bold" text-anchor="start">
+<tspan x="40" dy="0">(b) On a miss: one model request, one shared UI</tspan>
+</text>
+<path class="edge" d="M 330 505 L 1760 505" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<text x="1740" y="487" fill="#566273" font-size="23" font-weight="normal" text-anchor="middle">
+<tspan x="1740" dy="0">time</tspan>
+</text>
+<text x="40" y="595" fill="#202936" font-size="27" font-weight="bold" text-anchor="start">
+<tspan x="40" dy="0">Model output</tspan>
+</text>
+<text x="40" y="745" fill="#202936" font-size="27" font-weight="bold" text-anchor="start">
+<tspan x="40" dy="0">Live UI</tspan>
+</text>
+<text x="40" y="895" fill="#202936" font-size="27" font-weight="bold" text-anchor="start">
+<tspan x="40" dy="0">Runtime</tspan>
+</text>
+<path class="edge" d="M 330 620 L 1760 620" stroke="#c7cdd4" stroke-width="1.2"/>
+<path class="edge" d="M 330 770 L 1760 770" stroke="#c7cdd4" stroke-width="1.2"/>
+<path class="edge" d="M 330 920 L 1760 920" stroke="#c7cdd4" stroke-width="1.2"/>
+<rect x="360" y="550" width="630" height="70" rx="12" fill="#fff8e9" stroke="#b98a37" stroke-width="2"/>
+<text x="675" y="594" fill="#202936" font-size="27" font-weight="normal" text-anchor="middle">
+<tspan x="675" dy="0">decode action fields</tspan>
+</text>
+<rect x="990" y="550" width="250" height="70" rx="12" fill="#fff8e9" stroke="#b98a37" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="1115" y="594" fill="#202936" font-size="25" font-weight="normal" text-anchor="middle">
+<tspan x="1115" dy="0">summary tail</tspan>
+</text>
+<rect x="1620" y="550" width="140" height="70" rx="12" fill="#fff8e9" stroke="#b98a37" stroke-width="2"/>
+<text x="1690" y="594" fill="#202936" font-size="24" font-weight="normal" text-anchor="middle">
+<tspan x="1690" dy="0">next call</tspan>
+</text>
+<rect x="360" y="700" width="240" height="70" rx="12" fill="#eef8f5" stroke="#177466" stroke-width="2"/>
+<text x="480" y="744" fill="#202936" font-size="27" font-weight="normal" text-anchor="middle">
+<tspan x="480" dy="0">probe</tspan>
+</text>
+<rect x="600" y="700" width="270" height="70" rx="12" fill="#eef8f5" stroke="#177466" stroke-width="2"/>
+<text x="735" y="744" fill="#202936" font-size="27" font-weight="normal" text-anchor="middle">
+<tspan x="735" dy="0">restore</tspan>
+</text>
+<rect x="1140" y="700" width="220" height="70" rx="12" fill="#eef4fc" stroke="#245c9c" stroke-width="2"/>
+<text x="1250" y="744" fill="#202936" font-size="27" font-weight="normal" text-anchor="middle">
+<tspan x="1250" dy="0">execute</tspan>
+</text>
+<rect x="1360" y="700" width="230" height="70" rx="12" fill="#f4f5f7" stroke="#8793a1" stroke-width="2"/>
+<text x="1475" y="744" fill="#202936" font-size="25" font-weight="normal" text-anchor="middle">
+<tspan x="1475" dy="0">observe UI</tspan>
+</text>
+<rect x="990" y="850" width="150" height="70" rx="12" fill="#eef4fc" stroke="#245c9c" stroke-width="2"/>
+<text x="1065" y="894" fill="#202936" font-size="27" font-weight="normal" text-anchor="middle">
+<tspan x="1065" dy="0">check</tspan>
+</text>
+<path class="edge" d="M 990 510 L 990 950" stroke="#b98a37" stroke-width="2" stroke-dasharray="6 5"/>
+<text x="980" y="665" fill="#90661f" font-size="23" font-weight="normal" text-anchor="end">
+<tspan x="980" dy="0">action ready</tspan>
+</text>
+<path class="edge" d="M 870 780 L 870 820 L 990 820 L 990 850" stroke="#202936" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="780" y="814" fill="#177466" font-size="22" font-weight="normal" text-anchor="middle">
+<tspan x="780" dy="0">restored</tspan>
+</text>
+<path class="edge" d="M 1140 885 L 1250 885 L 1250 770" stroke="#202936" stroke-width="2" marker-end="url(#arrow)"/>
+<path class="edge" d="M 1590 780 L 1605 780 L 1605 635 L 1690 635 L 1690 620" stroke="#202936" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1450" y="846" fill="#566273" font-size="22" font-weight="normal" text-anchor="middle">
+<tspan x="1450" dy="0">next prompt waits for</tspan>
+<tspan x="1450" dy="29.040000000000003">UI observation + required output</tspan>
+</text>
+<path class="edge" d="M 40 970 L 1760 970" stroke="#c7cdd4" stroke-width="1.5"/>
+<text x="40" y="1012" fill="#202936" font-size="28" font-weight="bold" text-anchor="start">
+<tspan x="40" dy="0">(c) Late recovery adds waiting</tspan>
+</text>
+<text x="40" y="1056" fill="#202936" font-size="26" font-weight="normal" text-anchor="start">
+<tspan x="40" dy="0">Action release ≥ max(action-ready, recovery end), followed by the live-UI check.</tspan>
+</text>
+<rect x="360" y="1100" width="760" height="55" rx="12" fill="#eef8f5" stroke="#177466" stroke-width="2"/>
+<text x="665" y="1136" fill="#202936" font-size="24" font-weight="normal" text-anchor="middle">
+<tspan x="665" dy="0">probe + delayed recovery</tspan>
+</text>
+<rect x="990" y="1100" width="130" height="55" rx="12" fill="#f7e8e8" stroke="#9b4444" stroke-width="2"/>
+<text x="1055" y="1136" fill="#9b4444" font-size="24" font-weight="normal" text-anchor="middle">
+<tspan x="1055" dy="0">wait</tspan>
+</text>
+<path class="edge" d="M 990 1080 L 990 1168" stroke="#b98a37" stroke-width="2" stroke-dasharray="6 5"/>
+<text x="990" y="1198" fill="#566273" font-size="22" font-weight="normal" text-anchor="middle">
+<tspan x="990" dy="0">action ready</tspan>
+</text>
+<text x="1260" y="1136" fill="#9b4444" font-size="25" font-weight="normal" text-anchor="start">
+<tspan x="1260" dy="0">Counts toward E2E latency</tspan>
+</text>
+</svg>

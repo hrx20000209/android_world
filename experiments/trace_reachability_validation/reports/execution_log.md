@@ -10072,3 +10072,1109 @@
 - 10-23 08:32:49 E2E FULL45 SystemCopyToClipboard rc=0 succ=0.0 calls=10 probes=0 e2e=119.3s err=None
 - 10-23 08:32:50 E2E REPORT 116 paired
 - 10-23 08:32:50 E2E DRIVER DONE
+- 10-25 10:14:48 E2E DRIVER start ['BASE', 'BASE+P', 'FULL45X', 'FULL45'] tag=smokeL tasks=2 already paired=0
+- 10-25 10:15:59 E2E BASE SystemWifiTurnOff rc=0 succ=1.0 calls=5 probes=0 e2e=68.8s err=None
+- 10-25 10:17:30 E2E BASE+P SystemWifiTurnOff rc=0 succ=0.0 calls=10 probes=0 e2e=89.7s err=None
+- 10-25 10:18:33 E2E FULL45X SystemWifiTurnOff rc=0 succ=1.0 calls=6 probes=0 e2e=61.8s err=None
+- 10-25 10:19:31 E2E FULL45 SystemWifiTurnOff rc=0 succ=0.0 calls=5 probes=1 e2e=57.1s err=None
+- 10-25 10:21:00 E2E FULL45 ContactsAddContact rc=0 succ=1.0 calls=9 probes=1 e2e=87.3s err=None
+- 10-25 10:22:38 E2E FULL45X ContactsAddContact rc=0 succ=1.0 calls=8 probes=0 e2e=97.0s err=None
+- 10-25 10:24:18 E2E BASE+P ContactsAddContact rc=0 succ=1.0 calls=10 probes=0 e2e=97.7s err=None
+- 10-25 10:25:55 E2E BASE ContactsAddContact rc=0 succ=1.0 calls=10 probes=0 e2e=95.0s err=None
+- 10-25 10:25:55 E2E REPORT 2 paired
+- 10-25 10:25:55 E2E DRIVER DONE
+- 10-25 10:27:31 E2E DRIVER start ['BASE+P'] tag=smokeL2 tasks=2 already paired=0
+- 10-25 10:28:42 E2E BASE+P SystemWifiTurnOff rc=0 succ=1.0 calls=5 probes=0 e2e=69.2s err=None
+- 10-25 10:30:08 E2E BASE+P ContactsAddContact rc=0 succ=1.0 calls=9 probes=0 e2e=84.6s err=None
+- 10-25 10:30:08 E2E REPORT 2 paired
+- 10-25 10:30:08 E2E DRIVER DONE
+- 10-25 10:30:22 E2E DRIVER start ['BASE', 'BASE+P', 'FULL45X', 'FULL45'] tag=e2e116L tasks=116 already paired=0
+- 10-25 10:32:22 E2E BASE AudioRecorderRecordAudioWithFileName rc=0 succ=1.0 calls=11 probes=0 e2e=119.2s err=None
+- 10-25 10:36:07 E2E BASE+P AudioRecorderRecordAudioWithFileName rc=0 succ=1.0 calls=17 probes=0 e2e=223.7s err=None
+- 10-25 10:37:44 E2E FULL45X AudioRecorderRecordAudioWithFileName rc=0 succ=1.0 calls=12 probes=0 e2e=95.7s err=None
+- 10-25 10:40:53 E2E FULL45 AudioRecorderRecordAudioWithFileName rc=0 succ=0.0 calls=20 probes=0 e2e=187.1s err=None
+- 10-25 10:40:53 E2E REPORT 1 paired
+- 10-25 10:42:07 E2E FULL45 AudioRecorderRecordAudio rc=0 succ=1.0 calls=8 probes=0 e2e=73.0s err=None
+- 10-25 10:44:38 E2E FULL45X AudioRecorderRecordAudio rc=0 succ=0.0 calls=12 probes=0 e2e=150.1s err=None
+- 10-25 10:46:08 E2E BASE+P AudioRecorderRecordAudio rc=0 succ=1.0 calls=8 probes=0 e2e=88.8s err=None
+- 10-25 10:48:15 E2E BASE AudioRecorderRecordAudio rc=0 succ=1.0 calls=9 probes=0 e2e=125.6s err=None
+- 10-25 10:48:15 E2E REPORT 2 paired
+- 10-25 10:51:11 E2E BASE BrowserDraw rc=0 succ=0.0 calls=20 probes=0 e2e=174.8s err=None
+- 10-25 10:53:27 E2E BASE+P BrowserDraw rc=0 succ=0.0 calls=20 probes=0 e2e=135.3s err=None
+- 10-25 10:56:46 E2E FULL45X BrowserDraw rc=0 succ=0.0 calls=20 probes=0 e2e=197.5s err=None
+- 10-25 10:59:34 E2E FULL45 BrowserDraw rc=0 succ=0.0 calls=20 probes=0 e2e=166.0s err=None
+- 10-25 10:59:34 E2E REPORT 3 paired
+- 10-25 11:06:42 E2E DRIVER start ['FULL45+RAND', 'FULL45+INJ', 'FULL45+NOSYS'] tag=smokeA tasks=2 already paired=0
+- 10-25 11:07:51 E2E FULL45+RAND ExpenseDeleteSingle rc=0 succ=1.0 calls=5 probes=2 e2e=67.8s err=None
+- 10-25 11:08:35 E2E FULL45+INJ ExpenseDeleteSingle rc=0 succ=1.0 calls=5 probes=2 e2e=42.4s err=None
+- 10-25 11:09:29 E2E FULL45+NOSYS ExpenseDeleteSingle rc=0 succ=1.0 calls=5 probes=2 e2e=53.3s err=None
+- 10-25 11:10:47 E2E FULL45+NOSYS ExpenseDeleteMultiple rc=0 succ=1.0 calls=10 probes=2 e2e=75.8s err=None
+- 10-25 11:12:10 E2E FULL45+INJ ExpenseDeleteMultiple rc=0 succ=1.0 calls=11 probes=2 e2e=82.1s err=None
+- 10-25 11:13:19 E2E FULL45+RAND ExpenseDeleteMultiple rc=0 succ=1.0 calls=10 probes=2 e2e=67.2s err=None
+- 10-25 11:13:19 E2E REPORT 2 paired
+- 10-25 11:13:19 E2E DRIVER DONE
+- 10-25 11:13:47 E2E DRIVER start ['BASE', 'FULL45', 'FULL45+RAND', 'FULL45+INJ', 'FULL45+NOSYS'] tag=e2e116A tasks=116 already paired=0
+- 10-25 11:15:50 E2E BASE AudioRecorderRecordAudioWithFileName rc=0 succ=1.0 calls=15 probes=0 e2e=121.9s err=None
+- 10-25 11:18:38 E2E FULL45 AudioRecorderRecordAudioWithFileName rc=0 succ=0.0 calls=20 probes=0 e2e=166.4s err=None
+- 10-25 11:20:52 E2E FULL45+RAND AudioRecorderRecordAudioWithFileName rc=0 succ=0.0 calls=20 probes=0 e2e=132.3s err=None
+- 10-25 11:23:01 E2E FULL45+INJ AudioRecorderRecordAudioWithFileName rc=0 succ=0.0 calls=20 probes=0 e2e=128.3s err=None
+- 10-25 11:25:28 E2E FULL45+NOSYS AudioRecorderRecordAudioWithFileName rc=0 succ=0.0 calls=20 probes=0 e2e=145.6s err=None
+- 10-25 11:25:28 E2E REPORT 1 paired
+- 10-25 11:26:28 E2E FULL45+NOSYS AudioRecorderRecordAudio rc=0 succ=1.0 calls=8 probes=0 e2e=58.5s err=None
+- 10-25 11:27:29 E2E FULL45+INJ AudioRecorderRecordAudio rc=0 succ=1.0 calls=9 probes=0 e2e=59.3s err=None
+- 10-25 11:28:58 E2E FULL45+RAND AudioRecorderRecordAudio rc=0 succ=0.0 calls=9 probes=0 e2e=88.9s err=None
+- 10-25 11:30:09 E2E FULL45 AudioRecorderRecordAudio rc=0 succ=0.0 calls=9 probes=0 e2e=69.5s err=None
+- 10-25 11:31:39 E2E BASE AudioRecorderRecordAudio rc=0 succ=1.0 calls=9 probes=0 e2e=89.3s err=None
+- 10-25 11:31:39 E2E REPORT 2 paired
+- 10-25 11:33:59 E2E BASE BrowserDraw rc=0 succ=0.0 calls=20 probes=0 e2e=138.3s err=None
+- 10-25 11:37:14 E2E FULL45 BrowserDraw rc=0 succ=0.0 calls=20 probes=0 e2e=193.2s err=None
+- 10-25 11:39:40 E2E FULL45+RAND BrowserDraw rc=0 succ=0.0 calls=20 probes=0 e2e=144.3s err=None
+- 10-25 11:42:19 E2E FULL45+INJ BrowserDraw rc=0 succ=0.0 calls=20 probes=0 e2e=158.0s err=None
+- 10-25 11:44:56 E2E FULL45+NOSYS BrowserDraw rc=0 succ=0.0 calls=20 probes=0 e2e=155.4s err=None
+- 10-25 11:44:56 E2E REPORT 3 paired
+- 10-25 11:47:27 E2E FULL45+NOSYS BrowserMaze rc=0 succ=0.0 calls=20 probes=0 e2e=149.5s err=None
+- 10-25 11:50:01 E2E FULL45+INJ BrowserMaze rc=0 succ=0.0 calls=13 probes=0 e2e=153.5s err=None
+- 10-25 11:52:45 E2E FULL45+RAND BrowserMaze rc=0 succ=0.0 calls=20 probes=0 e2e=162.9s err=None
+- 10-25 11:55:29 E2E FULL45 BrowserMaze rc=0 succ=0.0 calls=20 probes=0 e2e=162.4s err=None
+- 10-25 11:57:36 E2E BASE BrowserMaze rc=0 succ=0.0 calls=20 probes=0 e2e=126.2s err=None
+- 10-25 11:57:36 E2E REPORT 4 paired
+- 10-25 11:59:37 E2E BASE BrowserMultiply rc=0 succ=0.0 calls=20 probes=0 e2e=119.4s err=None
+- 10-25 12:02:24 E2E FULL45 BrowserMultiply rc=0 succ=0.0 calls=20 probes=0 e2e=165.0s err=None
+- 10-25 12:05:11 E2E FULL45+RAND BrowserMultiply rc=0 succ=0.0 calls=20 probes=0 e2e=165.4s err=None
+- 10-25 12:06:51 E2E FULL45+INJ BrowserMultiply rc=0 succ=0.0 calls=14 probes=0 e2e=98.7s err=None
+- 10-25 12:11:37 E2E FULL45+NOSYS BrowserMultiply rc=0 succ=0.0 calls=20 probes=0 e2e=284.7s err=None
+- 10-25 12:11:37 E2E REPORT 5 paired
+- 10-25 12:17:13 E2E FULL45+NOSYS CameraTakeVideo rc=0 succ=0.0 calls=7 probes=2 e2e=334.7s err=None
+- 10-25 12:27:24 E2E FULL45+INJ CameraTakeVideo rc=0 succ=0.0 calls=10 probes=2 e2e=610.2s err=None
+- 10-25 12:34:47 E2E FULL45+RAND CameraTakeVideo rc=0 succ=0.0 calls=7 probes=2 e2e=438.2s err=None
+- 10-25 12:42:52 E2E FULL45 CameraTakeVideo rc=0 succ=0.0 calls=10 probes=2 e2e=484.1s err=None
+- 10-25 12:48:54 E2E BASE CameraTakeVideo rc=0 succ=0.0 calls=10 probes=0 e2e=360.7s err=None
+- 10-25 12:48:54 E2E REPORT 6 paired
+- 10-25 12:56:35 e2e116A paused: home uplink to LabServer 45-220 KB/s (1.6 MB upload 7-35 s), request latency dominated by network
+- 10-25 19:29:19 E2E DRIVER start ['BASE', 'FULL45', 'FULL45+RAND', 'FULL45+INJ', 'FULL45+NOSYS'] tag=e2e116A tasks=116 already paired=2
+- 10-25 19:30:51 E2E FULL45 BrowserDraw rc=0 succ=0.0 calls=20 probes=0 e2e=91.1s err=None
+- 10-25 19:32:30 E2E FULL45+RAND BrowserDraw rc=0 succ=0.0 calls=20 probes=0 e2e=96.6s err=None
+- 10-25 19:32:30 E2E REPORT 3 paired
+- 10-25 19:34:31 E2E FULL45+INJ BrowserMaze rc=0 succ=0.0 calls=20 probes=4 e2e=119.5s err=None
+- 10-25 19:35:59 E2E FULL45+RAND BrowserMaze rc=0 succ=0.0 calls=20 probes=0 e2e=87.3s err=None
+- 10-25 19:37:30 E2E FULL45 BrowserMaze rc=0 succ=0.0 calls=20 probes=0 e2e=89.7s err=None
+- 10-25 19:37:30 E2E REPORT 4 paired
+- 10-25 19:39:41 E2E FULL45 BrowserMultiply rc=0 succ=0.0 calls=20 probes=0 e2e=130.1s err=None
+- 10-25 19:41:47 E2E FULL45+NOSYS BrowserMultiply rc=0 succ=0.0 calls=20 probes=0 e2e=124.8s err=None
+- 10-25 19:41:47 E2E REPORT 5 paired
+- 10-25 19:42:44 E2E FULL45+NOSYS CameraTakeVideo rc=0 succ=0.0 calls=7 probes=0 e2e=55.6s err=None
+- 10-25 19:43:32 E2E FULL45+INJ CameraTakeVideo rc=0 succ=1.0 calls=7 probes=0 e2e=46.9s err=None
+- 10-25 19:44:49 E2E FULL45+RAND CameraTakeVideo rc=0 succ=0.0 calls=10 probes=0 e2e=75.3s err=None
+- 10-25 19:45:18 E2E FULL45 CameraTakeVideo rc=0 succ=0.0 calls=4 probes=0 e2e=26.3s err=None
+- 10-25 19:46:27 E2E BASE CameraTakeVideo rc=0 succ=0.0 calls=10 probes=0 e2e=68.1s err=None
+- 10-25 19:46:27 E2E REPORT 6 paired
+- 10-25 19:47:45 E2E BASE CameraTakePhoto rc=0 succ=0.0 calls=10 probes=0 e2e=76.0s err=None
+- 10-25 19:48:14 E2E FULL45 CameraTakePhoto rc=0 succ=0.0 calls=4 probes=0 e2e=27.2s err=None
+- 10-25 19:49:14 E2E FULL45+RAND CameraTakePhoto rc=0 succ=0.0 calls=10 probes=0 e2e=59.1s err=None
+- 10-25 19:50:29 E2E FULL45+INJ CameraTakePhoto rc=0 succ=0.0 calls=10 probes=0 e2e=74.0s err=None
+- 10-25 19:51:49 E2E FULL45+NOSYS CameraTakePhoto rc=0 succ=0.0 calls=10 probes=0 e2e=79.1s err=None
+- 10-25 19:51:49 E2E REPORT 7 paired
+- 10-25 19:53:01 E2E FULL45+NOSYS ClockStopWatchPausedVerify rc=0 succ=1.0 calls=10 probes=1 e2e=70.7s err=None
+- 10-25 19:53:15 E2E FULL45+INJ ClockStopWatchPausedVerify rc=0 succ=0.0 calls=1 probes=0 e2e=12.9s err=None
+- 10-25 19:53:28 E2E FULL45+RAND ClockStopWatchPausedVerify rc=0 succ=0.0 calls=1 probes=0 e2e=11.3s err=None
+- 10-25 19:53:40 E2E FULL45 ClockStopWatchPausedVerify rc=0 succ=0.0 calls=1 probes=0 e2e=11.0s err=None
+- 10-25 19:53:51 E2E BASE ClockStopWatchPausedVerify rc=0 succ=0.0 calls=1 probes=0 e2e=10.2s err=None
+- 10-25 19:53:51 E2E REPORT 8 paired
+- 10-25 19:54:22 E2E BASE ClockStopWatchRunning rc=0 succ=1.0 calls=4 probes=0 e2e=28.7s err=None
+- 10-25 19:54:47 E2E FULL45 ClockStopWatchRunning rc=0 succ=1.0 calls=4 probes=1 e2e=24.0s err=None
+- 10-25 19:55:14 E2E FULL45+RAND ClockStopWatchRunning rc=0 succ=1.0 calls=4 probes=1 e2e=25.4s err=None
+- 10-25 19:55:41 E2E FULL45+INJ ClockStopWatchRunning rc=0 succ=1.0 calls=4 probes=1 e2e=25.5s err=None
+- 10-25 19:56:12 E2E FULL45+NOSYS ClockStopWatchRunning rc=0 succ=1.0 calls=4 probes=0 e2e=29.0s err=None
+- 10-25 19:56:12 E2E REPORT 9 paired
+- 10-25 19:57:12 E2E FULL45+NOSYS ClockTimerEntry rc=0 succ=0.0 calls=10 probes=0 e2e=58.9s err=None
+- 10-25 19:58:09 E2E FULL45+INJ ClockTimerEntry rc=0 succ=0.0 calls=10 probes=0 e2e=55.5s err=None
+- 10-25 19:58:58 E2E FULL45+RAND ClockTimerEntry rc=0 succ=0.0 calls=10 probes=0 e2e=48.5s err=None
+- 10-25 19:59:52 E2E FULL45 ClockTimerEntry rc=0 succ=0.0 calls=10 probes=0 e2e=51.4s err=None
+- 10-25 20:00:57 E2E BASE ClockTimerEntry rc=0 succ=0.0 calls=10 probes=0 e2e=64.7s err=None
+- 10-25 20:00:57 E2E REPORT 10 paired
+- 10-25 20:01:58 E2E BASE ContactsAddContact rc=0 succ=1.0 calls=9 probes=0 e2e=59.2s err=None
+- 10-25 20:02:54 E2E FULL45 ContactsAddContact rc=0 succ=1.0 calls=10 probes=1 e2e=55.5s err=None
+- 10-25 20:03:44 E2E FULL45+RAND ContactsAddContact rc=0 succ=1.0 calls=8 probes=1 e2e=48.8s err=None
+- 10-25 20:04:45 E2E FULL45+INJ ContactsAddContact rc=0 succ=1.0 calls=9 probes=1 e2e=59.6s err=None
+- 10-25 20:05:47 E2E FULL45+NOSYS ContactsAddContact rc=0 succ=1.0 calls=9 probes=1 e2e=61.2s err=None
+- 10-25 20:05:47 E2E REPORT 11 paired
+- 10-25 20:06:38 E2E FULL45+NOSYS ContactsNewContactDraft rc=0 succ=1.0 calls=5 probes=0 e2e=49.9s err=None
+- 10-25 20:07:40 E2E FULL45+INJ ContactsNewContactDraft rc=0 succ=1.0 calls=10 probes=0 e2e=59.6s err=None
+- 10-25 20:08:28 E2E FULL45+RAND ContactsNewContactDraft rc=0 succ=1.0 calls=5 probes=0 e2e=46.9s err=None
+- 10-25 20:09:18 E2E FULL45 ContactsNewContactDraft rc=0 succ=1.0 calls=5 probes=0 e2e=48.4s err=None
+- 10-25 20:10:24 E2E BASE ContactsNewContactDraft rc=0 succ=1.0 calls=10 probes=0 e2e=64.8s err=None
+- 10-25 20:10:24 E2E REPORT 12 paired
+- 10-25 20:11:00 E2E BASE ExpenseDeleteSingle rc=0 succ=1.0 calls=5 probes=0 e2e=34.5s err=None
+- 10-25 20:11:32 E2E FULL45 ExpenseDeleteSingle rc=0 succ=1.0 calls=5 probes=2 e2e=29.7s err=None
+- 10-25 20:12:09 E2E FULL45+RAND ExpenseDeleteSingle rc=0 succ=1.0 calls=5 probes=2 e2e=35.9s err=None
+- 10-25 20:12:42 E2E FULL45+INJ ExpenseDeleteSingle rc=0 succ=1.0 calls=5 probes=2 e2e=31.7s err=None
+- 10-25 20:13:20 E2E FULL45+NOSYS ExpenseDeleteSingle rc=0 succ=1.0 calls=5 probes=2 e2e=36.8s err=None
+- 10-25 20:13:20 E2E REPORT 13 paired
+- 10-25 20:14:13 E2E FULL45+NOSYS ExpenseDeleteDuplicates rc=0 succ=1.0 calls=6 probes=0 e2e=48.7s err=None
+- 10-25 20:14:58 E2E FULL45+INJ ExpenseDeleteDuplicates rc=0 succ=1.0 calls=7 probes=0 e2e=43.7s err=None
+- 10-25 20:15:42 E2E FULL45+RAND ExpenseDeleteDuplicates rc=0 succ=1.0 calls=6 probes=0 e2e=42.9s err=None
+- 10-25 20:16:23 E2E FULL45 ExpenseDeleteDuplicates rc=0 succ=1.0 calls=6 probes=0 e2e=40.0s err=None
+- 10-25 20:17:43 E2E BASE ExpenseDeleteDuplicates rc=0 succ=1.0 calls=7 probes=0 e2e=79.3s err=None
+- 10-25 20:17:43 E2E REPORT 14 paired
+- 10-25 20:21:28 E2E BASE ExpenseAddMultipleFromMarkor rc=0 succ=0.0 calls=20 probes=0 e2e=222.9s err=None
+- 10-25 20:23:42 E2E FULL45 ExpenseAddMultipleFromMarkor rc=0 succ=0.0 calls=20 probes=9 e2e=132.7s err=None
+- 10-25 20:24:34 E2E FULL45+RAND ExpenseAddMultipleFromMarkor rc=0 succ=0.0 calls=8 probes=4 e2e=50.8s err=None
+- 10-25 20:25:59 E2E FULL45+INJ ExpenseAddMultipleFromMarkor rc=0 succ=0.0 calls=12 probes=6 e2e=84.1s err=None
+- 10-25 20:27:24 E2E FULL45+NOSYS ExpenseAddMultipleFromMarkor rc=0 succ=0.0 calls=13 probes=5 e2e=84.2s err=None
+- 10-25 20:27:24 E2E REPORT 15 paired
+- 10-25 20:28:15 E2E FULL45+NOSYS ExpenseAddSingle rc=0 succ=1.0 calls=3 probes=1 e2e=48.7s err=None
+- 10-25 20:29:29 E2E FULL45+INJ ExpenseAddSingle rc=0 succ=0.0 calls=10 probes=2 e2e=72.7s err=None
+- 10-25 20:30:21 E2E FULL45+RAND ExpenseAddSingle rc=0 succ=1.0 calls=3 probes=0 e2e=49.3s err=None
+- 10-25 20:31:07 E2E FULL45 ExpenseAddSingle rc=0 succ=1.0 calls=3 probes=1 e2e=43.0s err=None
+- 10-25 20:32:25 E2E BASE ExpenseAddSingle rc=0 succ=1.0 calls=11 probes=0 e2e=76.8s err=None
+- 10-25 20:32:25 E2E REPORT 16 paired
+- 10-25 20:34:07 E2E BASE ExpenseDeleteDuplicates2 rc=0 succ=0.0 calls=18 probes=0 e2e=100.8s err=None
+- 10-25 20:35:01 E2E FULL45 ExpenseDeleteDuplicates2 rc=0 succ=1.0 calls=7 probes=0 e2e=51.1s err=None
+- 10-25 20:35:49 E2E FULL45+RAND ExpenseDeleteDuplicates2 rc=0 succ=1.0 calls=7 probes=0 e2e=46.7s err=None
+- 10-25 20:37:02 E2E FULL45+INJ ExpenseDeleteDuplicates2 rc=0 succ=1.0 calls=11 probes=2 e2e=72.6s err=None
+- 10-25 20:38:17 E2E FULL45+NOSYS ExpenseDeleteDuplicates2 rc=0 succ=1.0 calls=8 probes=0 e2e=72.7s err=None
+- 10-25 20:38:17 E2E REPORT 17 paired
+- 10-25 20:39:52 E2E FULL45+NOSYS ExpenseDeleteMultiple rc=0 succ=1.0 calls=10 probes=3 e2e=94.3s err=None
+- 10-25 20:41:04 E2E FULL45+INJ ExpenseDeleteMultiple rc=0 succ=1.0 calls=11 probes=3 e2e=70.5s err=None
+- 10-25 20:42:07 E2E FULL45+RAND ExpenseDeleteMultiple rc=0 succ=1.0 calls=10 probes=2 e2e=60.7s err=None
+- 10-25 20:43:18 E2E FULL45 ExpenseDeleteMultiple rc=0 succ=1.0 calls=10 probes=4 e2e=69.5s err=None
+- 10-25 20:44:43 E2E BASE ExpenseDeleteMultiple rc=0 succ=1.0 calls=11 probes=0 e2e=82.9s err=None
+- 10-25 20:44:43 E2E REPORT 18 paired
+- 10-25 20:46:16 E2E BASE ExpenseDeleteMultiple2 rc=0 succ=1.0 calls=14 probes=0 e2e=91.7s err=None
+- 10-25 20:48:08 E2E FULL45 ExpenseDeleteMultiple2 rc=0 succ=0.0 calls=20 probes=2 e2e=111.5s err=None
+- 10-25 20:50:03 E2E FULL45+RAND ExpenseDeleteMultiple2 rc=0 succ=0.0 calls=20 probes=0 e2e=113.7s err=None
+- 10-25 20:52:08 E2E FULL45+INJ ExpenseDeleteMultiple2 rc=0 succ=0.0 calls=20 probes=1 e2e=120.9s err=None
+- 10-25 20:54:37 E2E FULL45+NOSYS ExpenseDeleteMultiple2 rc=0 succ=0.0 calls=20 probes=2 e2e=147.8s err=None
+- 10-25 20:54:37 E2E REPORT 19 paired
+- 10-25 20:56:06 E2E FULL45+NOSYS ExpenseAddMultiple rc=0 succ=1.0 calls=7 probes=5 e2e=88.1s err=None
+- 10-25 20:58:18 E2E FULL45+INJ ExpenseAddMultiple rc=0 succ=0.0 calls=20 probes=3 e2e=130.4s err=None
+- 10-25 21:00:00 E2E FULL45+RAND ExpenseAddMultiple rc=0 succ=1.0 calls=7 probes=0 e2e=100.2s err=None
+- 10-25 21:01:26 E2E FULL45 ExpenseAddMultiple rc=0 succ=1.0 calls=7 probes=5 e2e=84.6s err=None
+- 10-25 21:03:37 E2E BASE ExpenseAddMultiple rc=0 succ=0.0 calls=20 probes=0 e2e=130.0s err=None
+- 10-25 21:03:37 E2E REPORT 20 paired
+- 10-25 21:06:07 E2E BASE ExpenseAddMultipleFromGallery rc=0 succ=0.0 calls=20 probes=0 e2e=148.7s err=None
+- 10-25 21:08:03 E2E FULL45 ExpenseAddMultipleFromGallery rc=0 succ=0.0 calls=18 probes=8 e2e=114.5s err=None
+- 10-25 21:10:12 E2E FULL45+RAND ExpenseAddMultipleFromGallery rc=0 succ=0.0 calls=20 probes=6 e2e=128.4s err=None
+- 10-25 21:12:10 E2E FULL45+INJ ExpenseAddMultipleFromGallery rc=0 succ=0.0 calls=20 probes=4 e2e=116.5s err=None
+- 10-25 21:13:32 E2E FULL45+NOSYS ExpenseAddMultipleFromGallery rc=0 succ=0.0 calls=11 probes=4 e2e=81.2s err=None
+- 10-25 21:13:32 E2E REPORT 21 paired
+- 10-25 21:14:44 E2E FULL45+NOSYS FilesDeleteFile rc=0 succ=1.0 calls=9 probes=0 e2e=70.1s err=None
+- 10-25 22:35:15 e2e116A paused: VPN dropped ~21:15, tunnel to LabServer down, FilesDeleteFile episode hung
+- 10-26 00:05:24 E2E DRIVER start ['BASE', 'FULL45', 'FULL45+RAND', 'FULL45+INJ', 'FULL45+NOSYS'] tag=e2e116A tasks=116 already paired=20
+- 10-26 00:07:07 E2E BASE ExpenseAddMultipleFromMarkor rc=0 succ=0.0 calls=10 probes=0 e2e=99.5s err=None
+- 10-26 00:07:07 E2E REPORT 21 paired
+- 10-26 00:08:54 E2E FULL45+INJ FilesDeleteFile rc=0 succ=1.0 calls=11 probes=0 e2e=104.5s err=None
+- 10-26 00:10:31 E2E FULL45+RAND FilesDeleteFile rc=0 succ=1.0 calls=9 probes=0 e2e=93.9s err=None
+- 10-26 00:11:56 E2E FULL45 FilesDeleteFile rc=0 succ=1.0 calls=9 probes=0 e2e=83.4s err=None
+- 10-26 00:13:14 E2E BASE FilesDeleteFile rc=0 succ=1.0 calls=9 probes=0 e2e=75.8s err=None
+- 10-26 00:13:14 E2E REPORT 22 paired
+- 10-26 00:15:52 E2E BASE FilesMoveFile rc=0 succ=0.0 calls=20 probes=0 e2e=156.5s err=None
+- 10-26 00:17:43 E2E FULL45 FilesMoveFile rc=0 succ=0.0 calls=10 probes=0 e2e=106.1s err=None
+- 10-26 00:19:26 E2E FULL45+RAND FilesMoveFile rc=0 succ=0.0 calls=10 probes=0 e2e=102.1s err=None
+- 10-26 00:21:49 E2E FULL45+INJ FilesMoveFile rc=0 succ=0.0 calls=20 probes=0 e2e=141.3s err=None
+- 10-26 00:23:45 E2E FULL45+NOSYS FilesMoveFile rc=0 succ=0.0 calls=11 probes=0 e2e=114.9s err=None
+- 10-26 00:23:45 E2E REPORT 23 paired
+- 10-26 00:24:43 E2E FULL45+NOSYS MarkorCreateFolder rc=0 succ=1.0 calls=4 probes=1 e2e=55.9s err=None
+- 10-26 00:25:51 E2E FULL45+INJ MarkorCreateFolder rc=0 succ=1.0 calls=5 probes=2 e2e=65.7s err=None
+- 10-26 00:26:42 E2E FULL45+RAND MarkorCreateFolder rc=0 succ=1.0 calls=4 probes=2 e2e=49.1s err=None
+- 10-26 00:27:41 E2E FULL45 MarkorCreateFolder rc=0 succ=1.0 calls=4 probes=1 e2e=57.6s err=None
+- 10-26 00:29:02 E2E BASE MarkorCreateFolder rc=0 succ=1.0 calls=6 probes=0 e2e=78.8s err=None
+- 10-26 00:29:02 E2E REPORT 24 paired
+- 10-26 00:30:07 E2E BASE MarkorDeleteAllNotes rc=0 succ=1.0 calls=7 probes=0 e2e=63.7s err=None
+- 10-26 00:30:57 E2E FULL45 MarkorDeleteAllNotes rc=0 succ=1.0 calls=4 probes=1 e2e=48.3s err=None
+- 10-26 00:31:06 service down: orin=False ondevice=True
+- 10-26 00:32:44 E2E FULL45+RAND MarkorDeleteAllNotes rc=0 succ=1.0 calls=4 probes=1 e2e=36.1s err=None
+- 10-26 00:33:56 E2E FULL45+INJ MarkorDeleteAllNotes rc=0 succ=1.0 calls=7 probes=3 e2e=70.2s err=None
+- 10-26 00:34:36 E2E FULL45+NOSYS MarkorDeleteAllNotes rc=0 succ=1.0 calls=4 probes=1 e2e=38.8s err=None
+- 10-26 00:34:36 E2E REPORT 25 paired
+- 10-26 00:35:25 E2E FULL45+NOSYS MarkorDeleteNewestNote rc=0 succ=1.0 calls=4 probes=0 e2e=47.7s err=None
+- 10-26 00:36:29 E2E FULL45+INJ MarkorDeleteNewestNote rc=0 succ=1.0 calls=5 probes=0 e2e=62.4s err=None
+- 10-26 00:37:12 E2E FULL45+RAND MarkorDeleteNewestNote rc=0 succ=1.0 calls=4 probes=0 e2e=41.6s err=None
+- 10-26 00:38:08 E2E FULL45 MarkorDeleteNewestNote rc=0 succ=1.0 calls=4 probes=0 e2e=54.3s err=None
+- 10-26 00:39:01 E2E BASE MarkorDeleteNewestNote rc=0 succ=1.0 calls=5 probes=0 e2e=50.2s err=None
+- 10-26 00:39:01 E2E REPORT 26 paired
+- 10-26 00:40:09 E2E BASE MarkorDeleteNote rc=0 succ=1.0 calls=5 probes=0 e2e=66.7s err=None
+- 10-26 00:40:57 E2E FULL45 MarkorDeleteNote rc=0 succ=1.0 calls=4 probes=0 e2e=45.9s err=None
+- 10-26 00:41:39 E2E FULL45+RAND MarkorDeleteNote rc=0 succ=1.0 calls=4 probes=0 e2e=40.6s err=None
+- 10-26 00:42:56 E2E FULL45+INJ MarkorDeleteNote rc=0 succ=1.0 calls=5 probes=0 e2e=75.4s err=None
+- 10-26 00:44:08 E2E FULL45+NOSYS MarkorDeleteNote rc=0 succ=1.0 calls=4 probes=0 e2e=70.3s err=None
+- 10-26 00:44:08 E2E REPORT 27 paired
+- 10-26 00:44:55 E2E FULL45+NOSYS MarkorEditNote rc=0 succ=0.0 calls=4 probes=4 e2e=45.4s err=None
+- 10-26 00:45:58 E2E FULL45+INJ MarkorEditNote rc=0 succ=0.0 calls=5 probes=2 e2e=59.4s err=None
+- 10-26 00:46:48 E2E FULL45+RAND MarkorEditNote rc=0 succ=0.0 calls=4 probes=2 e2e=48.8s err=None
+- 10-26 00:47:48 E2E FULL45 MarkorEditNote rc=0 succ=0.0 calls=5 probes=2 e2e=58.3s err=None
+- 10-26 00:50:02 E2E BASE MarkorEditNote rc=0 succ=0.0 calls=12 probes=0 e2e=132.1s err=None
+- 10-26 00:50:02 E2E REPORT 28 paired
+- 10-26 00:52:35 E2E BASE MarkorCreateNote rc=0 succ=0.0 calls=13 probes=0 e2e=150.8s err=None
+- 10-26 00:54:58 E2E FULL45 MarkorCreateNote rc=0 succ=0.0 calls=14 probes=0 e2e=141.5s err=None
+- 10-26 00:56:31 E2E FULL45+RAND MarkorCreateNote rc=0 succ=0.0 calls=7 probes=0 e2e=89.6s err=None
+- 10-26 00:59:21 E2E FULL45+INJ MarkorCreateNote rc=0 succ=0.0 calls=16 probes=2 e2e=168.9s err=None
+- 10-26 01:00:58 E2E FULL45+NOSYS MarkorCreateNote rc=0 succ=0.0 calls=8 probes=0 e2e=94.5s err=None
+- 10-26 01:00:58 E2E REPORT 29 paired
+- 10-26 01:03:18 E2E FULL45+NOSYS MarkorTranscribeReceipt rc=0 succ=0.0 calls=13 probes=9 e2e=138.8s err=None
+- 10-26 01:08:10 E2E FULL45+INJ MarkorTranscribeReceipt rc=0 succ=0.0 calls=17 probes=5 e2e=290.0s err=None
+- 10-26 01:09:32 E2E FULL45+RAND MarkorTranscribeReceipt rc=0 succ=0.0 calls=8 probes=0 e2e=81.1s err=None
+- 10-26 01:11:45 E2E FULL45 MarkorTranscribeReceipt rc=0 succ=0.0 calls=12 probes=6 e2e=131.9s err=None
+- 10-26 01:15:43 E2E BASE MarkorTranscribeReceipt rc=0 succ=0.0 calls=18 probes=0 e2e=235.3s err=None
+- 10-26 01:15:43 E2E REPORT 30 paired
+- 10-26 01:18:58 E2E BASE MarkorMoveNote rc=0 succ=0.0 calls=9 probes=0 e2e=193.6s err=None
+- 10-26 01:21:31 E2E FULL45 MarkorMoveNote rc=0 succ=1.0 calls=13 probes=6 e2e=151.2s err=None
+- 10-26 01:24:53 E2E FULL45+RAND MarkorMoveNote rc=0 succ=1.0 calls=14 probes=4 e2e=200.9s err=None
+- 10-26 01:28:03 E2E FULL45+INJ MarkorMoveNote rc=0 succ=0.0 calls=14 probes=6 e2e=188.9s err=None
+- 10-26 01:30:41 E2E FULL45+NOSYS MarkorMoveNote rc=0 succ=0.0 calls=12 probes=8 e2e=156.0s err=None
+- 10-26 01:30:41 E2E REPORT 31 paired
+- 10-26 01:33:07 e2e116A paused again: VPN uplink 40-55 KB/s, ttft median 5-9.5 s, spikes to 71 s
+- 10-26 01:35:33 E2E DRIVER start ['BASE', 'FULL45', 'FULL45+RAND', 'FULL45+INJ', 'FULL45+NOSYS'] tag=e2e116A tasks=116 already paired=29
+- 10-26 01:38:03 E2E FULL45+INJ MarkorTranscribeReceipt rc=0 succ=0.0 calls=13 probes=1 e2e=147.4s err=None
+- 10-26 01:38:03 E2E REPORT 30 paired
+- 10-26 01:41:48 E2E BASE MarkorMoveNote rc=0 succ=1.0 calls=14 probes=0 e2e=222.8s err=None
+- 10-26 01:41:48 E2E REPORT 31 paired
+- 10-26 01:47:33 E2E FULL45+NOSYS MarkorTranscribeVideo rc=0 succ=0.0 calls=20 probes=1 e2e=343.9s err=None
+- 10-26 01:51:41 E2E FULL45+INJ MarkorTranscribeVideo rc=0 succ=0.0 calls=11 probes=1 e2e=246.1s err=None
+- 10-26 01:56:27 E2E FULL45+RAND MarkorTranscribeVideo rc=0 succ=0.0 calls=14 probes=5 e2e=283.8s err=None
+- 10-26 01:59:11 E2E FULL45 MarkorTranscribeVideo rc=0 succ=0.0 calls=9 probes=1 e2e=162.4s err=None
+- 10-26 02:02:13 E2E BASE MarkorTranscribeVideo rc=0 succ=0.0 calls=8 probes=0 e2e=180.4s err=None
+- 10-26 02:02:14 E2E REPORT 32 paired
+- 10-26 02:03:00 e2e116A paused: MarkorTranscribeVideo all 5 arms contention-marked
+- 10-26 02:03:56 E2E DRIVER start ['BASE', 'FULL45', 'FULL45+RAND', 'FULL45+INJ', 'FULL45+NOSYS'] tag=e2e116A tasks=116 already paired=32
+- 10-26 02:04:08 e2e116A resumed: contention reruns disabled (markers removed, backup aborted/e2e116A_runs.before_unmark.jsonl); latency reported as network-adjusted e2e
+- 10-26 02:08:43 E2E BASE MarkorCreateNoteFromClipboard rc=0 succ=0.0 calls=12 probes=0 e2e=284.5s err=None
+- 10-26 02:11:41 E2E FULL45 MarkorCreateNoteFromClipboard rc=0 succ=0.0 calls=7 probes=0 e2e=176.6s err=None
+- 10-26 02:13:28 E2E FULL45+RAND MarkorCreateNoteFromClipboard rc=0 succ=0.0 calls=7 probes=0 e2e=105.4s err=None
+- 10-26 02:17:17 E2E FULL45+INJ MarkorCreateNoteFromClipboard rc=0 succ=0.0 calls=14 probes=0 e2e=227.5s err=None
+- 10-26 02:19:26 E2E FULL45+NOSYS MarkorCreateNoteFromClipboard rc=0 succ=0.0 calls=7 probes=0 e2e=128.3s err=None
+- 10-26 02:19:26 E2E REPORT 33 paired
+- 10-26 02:23:21 E2E FULL45+NOSYS MarkorAddNoteHeader rc=0 succ=0.0 calls=12 probes=1 e2e=233.4s err=None
+- 10-26 02:26:55 E2E FULL45+INJ MarkorAddNoteHeader rc=0 succ=0.0 calls=12 probes=0 e2e=212.7s err=None
+- 10-26 02:29:39 E2E FULL45+RAND MarkorAddNoteHeader rc=0 succ=0.0 calls=12 probes=1 e2e=162.7s err=None
+- 10-26 02:32:47 E2E FULL45 MarkorAddNoteHeader rc=0 succ=0.0 calls=12 probes=1 e2e=186.2s err=None
+- 10-26 02:35:32 E2E BASE MarkorAddNoteHeader rc=0 succ=0.0 calls=12 probes=0 e2e=164.2s err=None
+- 10-26 02:35:32 E2E REPORT 34 paired
+- 10-26 02:37:53 E2E BASE MarkorChangeNoteContent rc=0 succ=0.0 calls=12 probes=0 e2e=138.7s err=None
+- 10-26 02:40:15 E2E FULL45 MarkorChangeNoteContent rc=0 succ=0.0 calls=12 probes=2 e2e=139.7s err=None
+- 10-26 02:42:50 E2E FULL45+RAND MarkorChangeNoteContent rc=0 succ=0.0 calls=12 probes=2 e2e=154.3s err=None
+- 10-26 02:45:31 E2E FULL45+INJ MarkorChangeNoteContent rc=0 succ=0.0 calls=12 probes=0 e2e=160.1s err=None
+- 10-26 02:47:47 E2E FULL45+NOSYS MarkorChangeNoteContent rc=0 succ=0.0 calls=12 probes=1 e2e=134.6s err=None
+- 10-26 02:47:48 E2E REPORT 35 paired
+- 10-26 02:51:50 E2E FULL45+NOSYS MarkorCreateNoteAndSms rc=0 succ=0.0 calls=18 probes=2 e2e=241.2s err=None
+- 10-26 02:56:12 E2E FULL45+INJ MarkorCreateNoteAndSms rc=0 succ=0.0 calls=18 probes=1 e2e=260.9s err=None
+- 10-26 02:59:55 E2E FULL45+RAND MarkorCreateNoteAndSms rc=0 succ=0.0 calls=18 probes=5 e2e=222.1s err=None
+- 10-26 03:03:56 E2E FULL45 MarkorCreateNoteAndSms rc=0 succ=0.0 calls=15 probes=1 e2e=239.5s err=None
+- 10-26 03:09:21 E2E BASE MarkorCreateNoteAndSms rc=0 succ=0.0 calls=18 probes=0 e2e=320.5s err=None
+- 10-26 03:09:21 E2E REPORT 36 paired
+- 10-26 03:13:41 E2E BASE MarkorMergeNotes rc=0 succ=0.0 calls=20 probes=0 e2e=258.4s err=None
+- 10-26 03:18:17 E2E FULL45 MarkorMergeNotes rc=0 succ=0.0 calls=20 probes=1 e2e=274.7s err=None
+- 10-26 03:23:32 E2E FULL45+RAND MarkorMergeNotes rc=0 succ=0.0 calls=20 probes=0 e2e=313.6s err=None
+- 10-26 03:28:22 E2E FULL45+INJ MarkorMergeNotes rc=0 succ=0.0 calls=20 probes=1 e2e=288.4s err=None
+- 10-26 03:32:23 E2E FULL45+NOSYS MarkorMergeNotes rc=0 succ=0.0 calls=20 probes=0 e2e=238.8s err=None
+- 10-26 03:32:23 E2E REPORT 37 paired
+- 10-26 03:34:18 E2E FULL45+NOSYS NotesTodoItemCount rc=0 succ=1.0 calls=6 probes=5 e2e=113.8s err=None
+- 10-26 03:36:38 E2E FULL45+INJ NotesTodoItemCount rc=0 succ=1.0 calls=7 probes=5 e2e=138.6s err=None
+- 10-26 03:38:20 E2E FULL45+RAND NotesTodoItemCount rc=0 succ=1.0 calls=4 probes=4 e2e=101.2s err=None
+- 10-26 03:40:23 E2E FULL45 NotesTodoItemCount rc=0 succ=1.0 calls=4 probes=5 e2e=121.2s err=None
+- 10-26 03:41:59 E2E BASE NotesTodoItemCount rc=0 succ=1.0 calls=4 probes=0 e2e=93.7s err=None
+- 10-26 03:41:59 E2E REPORT 38 paired
+- 10-26 03:43:26 E2E BASE NotesIsTodo rc=0 succ=1.0 calls=5 probes=0 e2e=85.3s err=None
+- 10-26 03:44:24 E2E FULL45 NotesIsTodo rc=0 succ=1.0 calls=4 probes=1 e2e=57.0s err=None
+- 10-26 03:45:23 E2E FULL45+RAND NotesIsTodo rc=0 succ=1.0 calls=4 probes=0 e2e=57.4s err=None
+- 10-26 03:47:06 E2E FULL45+INJ NotesIsTodo rc=0 succ=1.0 calls=5 probes=1 e2e=102.4s err=None
+- 10-26 03:48:08 E2E FULL45+NOSYS NotesIsTodo rc=0 succ=1.0 calls=4 probes=1 e2e=60.7s err=None
+- 10-26 03:48:09 E2E REPORT 39 paired
+- 10-26 03:49:26 E2E FULL45+NOSYS NotesMeetingAttendeeCount rc=0 succ=1.0 calls=4 probes=0 e2e=76.2s err=None
+- 10-26 03:50:51 E2E FULL45+INJ NotesMeetingAttendeeCount rc=0 succ=1.0 calls=5 probes=0 e2e=83.3s err=None
+- 10-26 03:51:49 E2E FULL45+RAND NotesMeetingAttendeeCount rc=0 succ=1.0 calls=4 probes=0 e2e=57.0s err=None
+- 10-26 03:52:47 E2E FULL45 NotesMeetingAttendeeCount rc=0 succ=1.0 calls=4 probes=0 e2e=57.3s err=None
+- 10-26 03:55:34 E2E BASE NotesMeetingAttendeeCount rc=0 succ=1.0 calls=7 probes=0 e2e=165.2s err=None
+- 10-26 03:55:34 E2E REPORT 40 paired
+- 10-26 03:56:45 E2E BASE NotesRecipeIngredientCount rc=0 succ=0.0 calls=5 probes=0 e2e=69.1s err=None
+- 10-26 03:57:32 E2E FULL45 NotesRecipeIngredientCount rc=0 succ=1.0 calls=4 probes=0 e2e=46.0s err=None
+- 10-26 03:58:55 E2E FULL45+RAND NotesRecipeIngredientCount rc=0 succ=0.0 calls=4 probes=0 e2e=81.7s err=None
+- 10-26 04:01:18 E2E FULL45+INJ NotesRecipeIngredientCount rc=0 succ=0.0 calls=5 probes=0 e2e=142.3s err=None
+- 10-26 04:02:18 E2E FULL45+NOSYS NotesRecipeIngredientCount rc=0 succ=1.0 calls=4 probes=0 e2e=57.4s err=None
+- 10-26 04:02:18 E2E REPORT 41 paired
+- 10-26 04:06:49 E2E FULL45+NOSYS OpenAppTaskEval rc=0 succ=1.0 calls=10 probes=4 e2e=269.5s err=None
+- 10-26 04:06:49 service down: orin=False ondevice=True
+- 10-26 04:07:49 service down: orin=False ondevice=True
+- 10-26 04:08:50 service down: orin=False ondevice=True
+- 10-26 04:09:50 service down: orin=False ondevice=True
+- 10-26 04:10:50 service down: orin=False ondevice=True
+- 10-26 04:11:50 service down: orin=False ondevice=True
+- 10-26 04:12:50 service down: orin=False ondevice=True
+- 10-26 04:13:50 service down: orin=False ondevice=True
+- 10-26 04:14:50 service down: orin=False ondevice=True
+- 10-26 04:15:50 service down: orin=False ondevice=True
+- 10-26 04:16:50 service down: orin=False ondevice=True
+- 10-26 04:17:50 service down: orin=False ondevice=True
+- 10-26 04:18:50 service down: orin=False ondevice=True
+- 10-26 04:19:51 service down: orin=False ondevice=True
+- 10-26 04:20:51 service down: orin=False ondevice=True
+- 10-26 04:21:51 service down: orin=False ondevice=True
+- 10-26 04:22:51 service down: orin=False ondevice=True
+- 10-26 04:23:51 service down: orin=False ondevice=True
+- 10-26 04:24:51 service down: orin=False ondevice=True
+- 10-26 04:25:51 service down: orin=False ondevice=True
+- 10-26 04:26:51 service down: orin=False ondevice=True
+- 10-26 04:27:51 service down: orin=False ondevice=True
+- 10-26 04:28:51 service down: orin=False ondevice=True
+- 10-26 04:29:51 service down: orin=False ondevice=True
+- 10-26 04:30:51 service down: orin=False ondevice=True
+- 10-26 04:31:52 service down: orin=False ondevice=True
+- 10-26 04:32:52 service down: orin=False ondevice=True
+- 10-26 04:33:52 service down: orin=False ondevice=True
+- 10-26 04:34:52 service down: orin=False ondevice=True
+- 10-26 04:35:52 service down: orin=False ondevice=True
+- 10-26 04:36:52 service down: orin=False ondevice=True
+- 10-26 04:37:52 service down: orin=False ondevice=True
+- 10-26 04:38:52 service down: orin=False ondevice=True
+- 10-26 04:39:52 service down: orin=False ondevice=True
+- 10-26 04:40:52 service down: orin=False ondevice=True
+- 10-26 04:41:52 service down: orin=False ondevice=True
+- 10-26 04:42:52 service down: orin=False ondevice=True
+- 10-26 04:43:53 service down: orin=False ondevice=True
+- 10-26 04:44:53 service down: orin=False ondevice=True
+- 10-26 04:45:53 service down: orin=False ondevice=True
+- 10-26 04:46:53 service down: orin=False ondevice=True
+- 10-26 04:47:53 service down: orin=False ondevice=True
+- 10-26 04:48:53 service down: orin=False ondevice=True
+- 10-26 04:49:53 service down: orin=False ondevice=True
+- 10-26 04:50:53 service down: orin=False ondevice=True
+- 10-26 04:51:53 service down: orin=False ondevice=True
+- 10-26 04:52:53 service down: orin=False ondevice=True
+- 10-26 04:53:53 service down: orin=False ondevice=True
+- 10-26 04:54:53 service down: orin=False ondevice=True
+- 10-26 04:55:54 service down: orin=False ondevice=True
+- 10-26 04:56:54 service down: orin=False ondevice=True
+- 10-26 04:57:54 service down: orin=False ondevice=True
+- 10-26 04:58:54 service down: orin=False ondevice=True
+- 10-26 04:59:54 service down: orin=False ondevice=True
+- 10-26 05:00:54 service down: orin=False ondevice=True
+- 10-26 05:01:54 service down: orin=False ondevice=True
+- 10-26 05:02:54 service down: orin=False ondevice=True
+- 10-26 05:03:54 service down: orin=False ondevice=True
+- 10-26 05:04:54 service down: orin=False ondevice=True
+- 10-26 05:05:54 service down: orin=False ondevice=True
+- 10-26 05:06:54 service down: orin=False ondevice=True
+- 10-26 05:07:55 service down: orin=False ondevice=True
+- 10-26 05:08:55 service down: orin=False ondevice=True
+- 10-26 05:09:55 service down: orin=False ondevice=True
+- 10-26 05:10:55 service down: orin=False ondevice=True
+- 10-26 05:11:55 service down: orin=False ondevice=True
+- 10-26 05:12:55 service down: orin=False ondevice=True
+- 10-26 05:13:55 service down: orin=False ondevice=True
+- 10-26 05:14:55 service down: orin=False ondevice=True
+- 10-26 05:15:55 service down: orin=False ondevice=True
+- 10-26 05:16:55 service down: orin=False ondevice=True
+- 10-26 05:17:55 service down: orin=False ondevice=True
+- 10-26 05:18:55 service down: orin=False ondevice=True
+- 10-26 05:19:56 service down: orin=False ondevice=True
+- 10-26 05:20:56 service down: orin=False ondevice=True
+- 10-26 05:21:56 service down: orin=False ondevice=True
+- 10-26 05:22:56 service down: orin=False ondevice=True
+- 10-26 05:23:56 service down: orin=False ondevice=True
+- 10-26 05:24:56 service down: orin=False ondevice=True
+- 10-26 05:25:56 service down: orin=False ondevice=True
+- 10-26 05:26:56 service down: orin=False ondevice=True
+- 10-26 05:27:56 service down: orin=False ondevice=True
+- 10-26 05:28:56 service down: orin=False ondevice=True
+- 10-26 05:29:56 service down: orin=False ondevice=True
+- 10-26 05:30:56 service down: orin=False ondevice=True
+- 10-26 05:31:56 service down: orin=False ondevice=True
+- 10-26 05:32:57 service down: orin=False ondevice=True
+- 10-26 05:33:57 service down: orin=False ondevice=True
+- 10-26 05:34:57 service down: orin=False ondevice=True
+- 10-26 05:35:57 service down: orin=False ondevice=True
+- 10-26 05:36:57 service down: orin=False ondevice=True
+- 10-26 05:37:57 service down: orin=False ondevice=True
+- 10-26 05:38:57 service down: orin=False ondevice=True
+- 10-26 05:39:57 service down: orin=False ondevice=True
+- 10-26 05:40:57 service down: orin=False ondevice=True
+- 10-26 05:41:57 service down: orin=False ondevice=True
+- 10-26 05:42:57 service down: orin=False ondevice=True
+- 10-26 05:43:57 service down: orin=False ondevice=True
+- 10-26 05:44:58 service down: orin=False ondevice=True
+- 10-26 05:45:58 service down: orin=False ondevice=True
+- 10-26 05:46:58 service down: orin=False ondevice=True
+- 10-26 05:47:58 service down: orin=False ondevice=True
+- 10-26 05:48:58 service down: orin=False ondevice=True
+- 10-26 05:49:58 service down: orin=False ondevice=True
+- 10-26 05:50:58 service down: orin=False ondevice=True
+- 10-26 05:51:58 service down: orin=False ondevice=True
+- 10-26 05:52:58 service down: orin=False ondevice=True
+- 10-26 05:53:58 service down: orin=False ondevice=True
+- 10-26 05:54:58 service down: orin=False ondevice=True
+- 10-26 05:55:58 service down: orin=False ondevice=True
+- 10-26 05:56:59 service down: orin=False ondevice=True
+- 10-26 05:57:59 service down: orin=False ondevice=True
+- 10-26 05:58:59 service down: orin=False ondevice=True
+- 10-26 05:59:59 service down: orin=False ondevice=True
+- 10-26 06:00:59 service down: orin=False ondevice=True
+- 10-26 06:01:59 service down: orin=False ondevice=True
+- 10-26 06:02:59 service down: orin=False ondevice=True
+- 10-26 06:03:59 service down: orin=False ondevice=True
+- 10-26 06:04:59 service down: orin=False ondevice=True
+- 10-26 06:05:59 service down: orin=False ondevice=True
+- 10-26 06:06:59 service down: orin=False ondevice=True
+- 10-26 06:07:59 service down: orin=False ondevice=True
+- 10-26 06:08:59 service down: orin=False ondevice=True
+- 10-26 06:10:00 service down: orin=False ondevice=True
+- 10-26 06:11:00 service down: orin=False ondevice=True
+- 10-26 06:12:00 service down: orin=False ondevice=True
+- 10-26 06:13:00 service down: orin=False ondevice=True
+- 10-26 06:14:00 service down: orin=False ondevice=True
+- 10-26 06:15:00 service down: orin=False ondevice=True
+- 10-26 06:16:00 service down: orin=False ondevice=True
+- 10-26 06:17:00 service down: orin=False ondevice=True
+- 10-26 06:18:00 service down: orin=False ondevice=True
+- 10-26 06:19:00 service down: orin=False ondevice=True
+- 10-26 06:20:00 service down: orin=False ondevice=True
+- 10-26 06:21:01 service down: orin=False ondevice=True
+- 10-26 06:22:01 service down: orin=False ondevice=True
+- 10-26 06:23:01 service down: orin=False ondevice=True
+- 10-26 06:24:01 service down: orin=False ondevice=True
+- 10-26 06:25:01 service down: orin=False ondevice=True
+- 10-26 06:26:01 service down: orin=False ondevice=True
+- 10-26 06:27:01 service down: orin=False ondevice=True
+- 10-26 06:28:01 service down: orin=False ondevice=True
+- 10-26 06:29:01 service down: orin=False ondevice=True
+- 10-26 06:30:01 service down: orin=False ondevice=True
+- 10-26 06:31:01 service down: orin=False ondevice=True
+- 10-26 06:32:01 service down: orin=False ondevice=True
+- 10-26 06:33:01 service down: orin=False ondevice=True
+- 10-26 06:34:02 service down: orin=False ondevice=True
+- 10-26 06:35:02 service down: orin=False ondevice=True
+- 10-26 06:36:02 service down: orin=False ondevice=True
+- 10-26 06:37:02 service down: orin=False ondevice=True
+- 10-26 06:38:02 service down: orin=False ondevice=True
+- 10-26 06:39:02 service down: orin=False ondevice=True
+- 10-26 06:40:02 service down: orin=False ondevice=True
+- 10-26 06:41:02 service down: orin=False ondevice=True
+- 10-26 06:42:02 service down: orin=False ondevice=True
+- 10-26 06:43:02 service down: orin=False ondevice=True
+- 10-26 06:44:02 service down: orin=False ondevice=True
+- 10-26 06:45:03 service down: orin=False ondevice=True
+- 10-26 06:46:03 service down: orin=False ondevice=True
+- 10-26 06:47:03 service down: orin=False ondevice=True
+- 10-26 06:48:03 service down: orin=False ondevice=True
+- 10-26 06:49:03 service down: orin=False ondevice=True
+- 10-26 06:50:03 service down: orin=False ondevice=True
+- 10-26 06:51:03 service down: orin=False ondevice=True
+- 10-26 06:52:03 service down: orin=False ondevice=True
+- 10-26 06:53:03 service down: orin=False ondevice=True
+- 10-26 06:54:03 service down: orin=False ondevice=True
+- 10-26 06:55:03 service down: orin=False ondevice=True
+- 10-26 06:56:03 service down: orin=False ondevice=True
+- 10-26 06:57:03 service down: orin=False ondevice=True
+- 10-26 06:58:04 service down: orin=False ondevice=True
+- 10-26 06:59:04 service down: orin=False ondevice=True
+- 10-26 07:00:04 service down: orin=False ondevice=True
+- 10-26 07:01:04 service down: orin=False ondevice=True
+- 10-26 07:02:04 service down: orin=False ondevice=True
+- 10-26 07:03:04 service down: orin=False ondevice=True
+- 10-26 07:04:04 service down: orin=False ondevice=True
+- 10-26 07:05:04 service down: orin=False ondevice=True
+- 10-26 07:06:04 service down: orin=False ondevice=True
+- 10-26 07:07:04 service down: orin=False ondevice=True
+- 10-26 07:08:04 service down: orin=False ondevice=True
+- 10-26 07:09:05 service down: orin=False ondevice=True
+- 10-26 07:10:05 service down: orin=False ondevice=True
+- 10-26 07:11:05 service down: orin=False ondevice=True
+- 10-26 07:12:05 service down: orin=False ondevice=True
+- 10-26 07:13:05 service down: orin=False ondevice=True
+- 10-26 07:14:05 service down: orin=False ondevice=True
+- 10-26 07:15:05 service down: orin=False ondevice=True
+- 10-26 07:16:05 service down: orin=False ondevice=True
+- 10-26 07:17:05 service down: orin=False ondevice=True
+- 10-26 07:18:05 service down: orin=False ondevice=True
+- 10-26 07:19:05 service down: orin=False ondevice=True
+- 10-26 07:20:05 service down: orin=False ondevice=True
+- 10-26 07:21:06 service down: orin=False ondevice=True
+- 10-26 07:22:06 service down: orin=False ondevice=True
+- 10-26 07:23:06 service down: orin=False ondevice=True
+- 10-26 07:24:06 service down: orin=False ondevice=True
+- 10-26 07:25:06 service down: orin=False ondevice=True
+- 10-26 07:26:06 service down: orin=False ondevice=True
+- 10-26 07:27:06 service down: orin=False ondevice=True
+- 10-26 07:28:06 service down: orin=False ondevice=True
+- 10-26 07:29:06 service down: orin=False ondevice=True
+- 10-26 07:30:06 service down: orin=False ondevice=True
+- 10-26 07:31:06 service down: orin=False ondevice=True
+- 10-26 07:32:06 service down: orin=False ondevice=True
+- 10-26 07:33:06 service down: orin=False ondevice=True
+- 10-26 07:34:07 service down: orin=False ondevice=True
+- 10-26 07:35:07 service down: orin=False ondevice=True
+- 10-26 07:36:07 service down: orin=False ondevice=True
+- 10-26 07:37:07 service down: orin=False ondevice=True
+- 10-26 07:38:07 service down: orin=False ondevice=True
+- 10-26 07:39:07 service down: orin=False ondevice=True
+- 10-26 07:40:07 service down: orin=False ondevice=True
+- 10-26 07:41:07 service down: orin=False ondevice=True
+- 10-26 07:42:07 service down: orin=False ondevice=True
+- 10-26 07:43:07 service down: orin=False ondevice=True
+- 10-26 07:44:07 service down: orin=False ondevice=True
+- 10-26 07:45:07 service down: orin=False ondevice=True
+- 10-26 07:46:08 service down: orin=False ondevice=True
+- 10-26 07:47:08 service down: orin=False ondevice=True
+- 10-26 07:48:08 service down: orin=False ondevice=True
+- 10-26 07:49:08 service down: orin=False ondevice=True
+- 10-26 07:50:08 service down: orin=False ondevice=True
+- 10-26 07:51:08 service down: orin=False ondevice=True
+- 10-26 07:52:08 service down: orin=False ondevice=True
+- 10-26 07:53:08 service down: orin=False ondevice=True
+- 10-26 07:54:08 service down: orin=False ondevice=True
+- 10-26 07:55:08 service down: orin=False ondevice=True
+- 10-26 07:56:08 service down: orin=False ondevice=True
+- 10-26 07:57:08 service down: orin=False ondevice=True
+- 10-26 07:58:08 service down: orin=False ondevice=True
+- 10-26 07:59:09 service down: orin=False ondevice=True
+- 10-26 08:00:09 service down: orin=False ondevice=True
+- 10-26 08:01:09 service down: orin=False ondevice=True
+- 10-26 08:02:09 service down: orin=False ondevice=True
+- 10-26 08:03:09 service down: orin=False ondevice=True
+- 10-26 08:04:09 service down: orin=False ondevice=True
+- 10-26 08:05:09 service down: orin=False ondevice=True
+- 10-26 08:06:09 service down: orin=False ondevice=True
+- 10-26 08:07:09 service down: orin=False ondevice=True
+- 10-26 08:08:09 service down: orin=False ondevice=True
+- 10-26 08:09:09 service down: orin=False ondevice=True
+- 10-26 08:10:09 service down: orin=False ondevice=True
+- 10-26 08:11:10 service down: orin=False ondevice=True
+- 10-26 08:12:10 service down: orin=False ondevice=True
+- 10-26 08:13:10 service down: orin=False ondevice=True
+- 10-26 08:14:10 service down: orin=False ondevice=True
+- 10-26 08:15:10 service down: orin=False ondevice=True
+- 10-26 08:16:10 service down: orin=False ondevice=True
+- 10-26 08:17:10 service down: orin=False ondevice=True
+- 10-26 08:18:10 service down: orin=False ondevice=True
+- 10-26 08:19:10 service down: orin=False ondevice=True
+- 10-26 08:20:10 service down: orin=False ondevice=True
+- 10-26 08:21:10 service down: orin=False ondevice=True
+- 10-26 08:22:10 service down: orin=False ondevice=True
+- 10-26 08:23:11 service down: orin=False ondevice=True
+- 10-26 08:24:11 service down: orin=False ondevice=True
+- 10-26 08:25:11 service down: orin=False ondevice=True
+- 10-26 08:26:11 service down: orin=False ondevice=True
+- 10-26 08:27:11 service down: orin=False ondevice=True
+- 10-26 08:28:11 service down: orin=False ondevice=True
+- 10-26 08:29:11 service down: orin=False ondevice=True
+- 10-26 08:30:11 service down: orin=False ondevice=True
+- 10-26 08:31:11 service down: orin=False ondevice=True
+- 10-26 08:32:11 service down: orin=False ondevice=True
+- 10-26 08:33:11 service down: orin=False ondevice=True
+- 10-26 08:34:11 service down: orin=False ondevice=True
+- 10-26 08:35:11 service down: orin=False ondevice=True
+- 10-26 08:36:12 service down: orin=False ondevice=True
+- 10-26 08:37:12 service down: orin=False ondevice=True
+- 10-26 08:38:12 service down: orin=False ondevice=True
+- 10-26 08:39:12 service down: orin=False ondevice=True
+- 10-26 08:40:12 service down: orin=False ondevice=True
+- 10-26 08:41:12 service down: orin=False ondevice=True
+- 10-26 08:42:12 service down: orin=False ondevice=True
+- 10-26 08:43:12 service down: orin=False ondevice=True
+- 10-26 08:44:12 service down: orin=False ondevice=True
+- 10-26 08:45:12 service down: orin=False ondevice=True
+- 10-26 08:46:12 service down: orin=False ondevice=True
+- 10-26 08:47:12 service down: orin=False ondevice=True
+- 10-26 08:48:13 service down: orin=False ondevice=True
+- 10-26 08:49:13 service down: orin=False ondevice=True
+- 10-26 08:50:13 service down: orin=False ondevice=True
+- 10-26 08:51:13 service down: orin=False ondevice=True
+- 10-26 08:52:13 service down: orin=False ondevice=True
+- 10-26 09:09:02 service down: orin=False ondevice=True
+- 10-26 10:16:46 service down: orin=False ondevice=True
+- 10-26 10:53:55 service down: orin=False ondevice=True
+- 10-26 11:54:51 service down: orin=False ondevice=True
+- 10-26 12:55:49 service down: orin=False ondevice=True
+- 10-26 13:56:54 E2E FULL45+INJ OpenAppTaskEval rc=0 succ=1.0 calls=3 probes=1 e2e=144.4s err=None
+- 10-26 13:57:34 E2E FULL45+RAND OpenAppTaskEval rc=0 succ=1.0 calls=5 probes=2 e2e=39.7s err=None
+- 10-26 14:00:14 E2E FULL45 OpenAppTaskEval rc=0 succ=1.0 calls=10 probes=2 e2e=160.5s err=None
+- 10-26 14:02:36 E2E BASE OpenAppTaskEval rc=0 succ=1.0 calls=3 probes=0 e2e=140.7s err=None
+- 10-26 14:02:36 E2E REPORT 42 paired
+- 10-26 14:06:30 e2e116A stopped (user back on campus; ablation moves to Orin)
+- 10-26 14:09:01 E2E DRIVER start ['FULL45+RAND', 'FULL45+INJ', 'FULL45+NOSYS'] tag=e2e116nA tasks=116 already paired=0
+- 10-26 14:09:15 e2e116nA started: FULL45 ablations (RAND/INJ/NOSYS) on Orin ngram8+CUDA graph, same order as e2e116n; BASE/FULL45 reused from e2e116n
+- 10-26 14:11:23 E2E FULL45+RAND AudioRecorderRecordAudioWithFileName rc=0 succ=1.0 calls=11 probes=0 e2e=142.3s err=None
+- 10-26 14:16:10 E2E FULL45+INJ AudioRecorderRecordAudioWithFileName rc=0 succ=0.0 calls=20 probes=0 e2e=286.1s err=None
+- 10-26 14:21:59 E2E FULL45+NOSYS AudioRecorderRecordAudioWithFileName rc=0 succ=0.0 calls=20 probes=0 e2e=348.9s err=None
+- 10-26 14:21:59 E2E REPORT 1 paired
+- 10-26 14:24:08 E2E FULL45+NOSYS AudioRecorderRecordAudio rc=0 succ=1.0 calls=8 probes=0 e2e=129.3s err=None
+- 10-26 14:26:58 E2E FULL45+INJ AudioRecorderRecordAudio rc=0 succ=0.0 calls=12 probes=0 e2e=169.6s err=None
+- 10-26 14:29:01 E2E FULL45+RAND AudioRecorderRecordAudio rc=0 succ=1.0 calls=8 probes=0 e2e=122.3s err=None
+- 10-26 14:29:01 E2E REPORT 2 paired
+- 10-26 14:30:30 E2E FULL45+RAND BrowserDraw rc=0 succ=0.0 calls=8 probes=0 e2e=89.7s err=None
+- 10-26 14:32:06 E2E FULL45+INJ BrowserDraw rc=0 succ=0.0 calls=9 probes=0 e2e=95.6s err=None
+- 10-26 14:33:22 E2E FULL45+NOSYS BrowserDraw rc=0 succ=0.0 calls=6 probes=0 e2e=75.6s err=None
+- 10-26 14:33:22 E2E REPORT 3 paired
+- 10-26 14:38:07 E2E FULL45+NOSYS BrowserMaze rc=0 succ=0.0 calls=20 probes=4 e2e=284.1s err=None
+- 10-26 14:39:29 E2E FULL45+INJ BrowserMaze rc=0 succ=0.0 calls=9 probes=0 e2e=82.7s err=None
+- 10-26 14:43:09 E2E FULL45+RAND BrowserMaze rc=0 succ=0.0 calls=20 probes=1 e2e=219.7s err=None
+- 10-26 14:43:09 E2E REPORT 4 paired
+- 10-26 14:46:27 E2E FULL45+RAND BrowserMultiply rc=0 succ=0.0 calls=19 probes=0 e2e=197.7s err=None
+- 10-26 14:47:48 E2E FULL45+INJ BrowserMultiply rc=0 succ=0.0 calls=8 probes=0 e2e=80.6s err=None
+- 10-26 14:51:36 E2E FULL45+NOSYS BrowserMultiply rc=0 succ=0.0 calls=20 probes=3 e2e=227.2s err=None
+- 10-26 14:51:36 E2E REPORT 5 paired
+- 10-26 14:53:17 E2E FULL45+NOSYS CameraTakeVideo rc=0 succ=0.0 calls=6 probes=2 e2e=100.8s err=None
+- 10-26 14:56:18 E2E FULL45+INJ CameraTakeVideo rc=0 succ=0.0 calls=10 probes=2 e2e=181.5s err=None
+- 10-26 14:57:22 E2E FULL45+RAND CameraTakeVideo rc=0 succ=0.0 calls=4 probes=2 e2e=63.2s err=None
+- 10-26 14:57:22 E2E REPORT 6 paired
+- 10-26 15:00:10 E2E FULL45+RAND CameraTakePhoto rc=0 succ=0.0 calls=10 probes=0 e2e=168.7s err=None
+- 10-26 15:02:50 E2E FULL45+INJ CameraTakePhoto rc=0 succ=0.0 calls=10 probes=0 e2e=159.4s err=None
+- 10-26 15:05:50 E2E FULL45+NOSYS CameraTakePhoto rc=0 succ=0.0 calls=10 probes=0 e2e=179.6s err=None
+- 10-26 15:05:50 E2E REPORT 7 paired
+- 10-26 15:06:33 E2E FULL45+NOSYS ClockStopWatchPausedVerify rc=0 succ=1.0 calls=2 probes=0 e2e=42.4s err=None
+- 10-26 15:08:02 E2E FULL45+INJ ClockStopWatchPausedVerify rc=0 succ=1.0 calls=6 probes=1 e2e=89.5s err=None
+- 10-26 15:08:22 E2E FULL45+RAND ClockStopWatchPausedVerify rc=0 succ=0.0 calls=1 probes=0 e2e=19.8s err=None
+- 10-26 15:08:22 E2E REPORT 8 paired
+- 10-26 15:09:25 E2E FULL45+RAND ClockStopWatchRunning rc=0 succ=1.0 calls=4 probes=1 e2e=63.0s err=None
+- 10-26 15:10:36 E2E FULL45+INJ ClockStopWatchRunning rc=0 succ=1.0 calls=5 probes=1 e2e=71.0s err=None
+- 10-26 15:12:06 E2E FULL45+NOSYS ClockStopWatchRunning rc=0 succ=0.0 calls=5 probes=1 e2e=89.7s err=None
+- 10-26 15:12:06 E2E REPORT 9 paired
+- 10-26 15:14:41 E2E FULL45+NOSYS ClockTimerEntry rc=0 succ=0.0 calls=10 probes=1 e2e=154.6s err=None
+- 10-26 15:16:52 E2E FULL45+INJ ClockTimerEntry rc=0 succ=0.0 calls=10 probes=0 e2e=130.6s err=None
+- 10-26 15:19:00 E2E FULL45+RAND ClockTimerEntry rc=0 succ=0.0 calls=10 probes=0 e2e=128.2s err=None
+- 10-26 15:19:00 E2E REPORT 10 paired
+- 10-26 15:20:54 E2E FULL45+RAND ContactsAddContact rc=0 succ=1.0 calls=8 probes=1 e2e=113.9s err=None
+- 10-26 15:23:49 E2E FULL45+INJ ContactsAddContact rc=0 succ=0.0 calls=12 probes=2 e2e=174.5s err=None
+- 10-26 15:26:41 E2E FULL45+NOSYS ContactsAddContact rc=0 succ=0.0 calls=12 probes=2 e2e=171.6s err=None
+- 10-26 15:26:41 E2E REPORT 11 paired
+- 10-26 15:28:17 E2E FULL45+NOSYS ContactsNewContactDraft rc=0 succ=0.0 calls=4 probes=1 e2e=95.7s err=None
+- 10-26 15:31:00 E2E FULL45+INJ ContactsNewContactDraft rc=0 succ=1.0 calls=10 probes=1 e2e=163.2s err=None
+- 10-26 15:32:33 E2E FULL45+RAND ContactsNewContactDraft rc=0 succ=1.0 calls=5 probes=0 e2e=92.2s err=None
+- 10-26 15:32:33 E2E REPORT 12 paired
+- 10-26 15:33:52 E2E FULL45+RAND ExpenseDeleteSingle rc=0 succ=1.0 calls=5 probes=2 e2e=79.0s err=None
+- 10-26 15:35:55 E2E FULL45+INJ ExpenseDeleteSingle rc=0 succ=1.0 calls=10 probes=2 e2e=122.9s err=None
+- 10-26 15:37:11 E2E FULL45+NOSYS ExpenseDeleteSingle rc=0 succ=1.0 calls=5 probes=2 e2e=75.6s err=None
+- 10-26 15:37:11 E2E REPORT 13 paired
+- 10-26 15:38:57 E2E FULL45+NOSYS ExpenseDeleteDuplicates rc=0 succ=1.0 calls=6 probes=0 e2e=106.3s err=None
+- 10-26 15:40:51 E2E FULL45+INJ ExpenseDeleteDuplicates rc=0 succ=1.0 calls=9 probes=0 e2e=113.4s err=None
+- 10-26 15:42:31 E2E FULL45+RAND ExpenseDeleteDuplicates rc=0 succ=1.0 calls=6 probes=0 e2e=100.2s err=None
+- 10-26 15:42:31 E2E REPORT 14 paired
+- 10-26 15:46:19 E2E FULL45+RAND ExpenseAddMultipleFromMarkor rc=0 succ=0.0 calls=20 probes=7 e2e=227.8s err=None
+- 10-26 15:51:08 E2E FULL45+INJ ExpenseAddMultipleFromMarkor rc=0 succ=0.0 calls=19 probes=8 e2e=289.2s err=None
+- 10-26 15:54:40 E2E FULL45+NOSYS ExpenseAddMultipleFromMarkor rc=0 succ=0.0 calls=14 probes=9 e2e=211.8s err=None
+- 10-26 15:54:41 E2E REPORT 15 paired
+- 10-26 15:56:02 E2E FULL45+NOSYS ExpenseAddSingle rc=0 succ=1.0 calls=3 probes=1 e2e=80.8s err=None
+- 10-26 15:58:55 E2E FULL45+INJ ExpenseAddSingle rc=0 succ=0.0 calls=12 probes=3 e2e=173.1s err=None
+- 10-26 16:00:11 E2E FULL45+RAND ExpenseAddSingle rc=0 succ=1.0 calls=3 probes=0 e2e=75.9s err=None
+- 10-26 16:00:11 E2E REPORT 16 paired
+- 10-26 16:01:18 E2E FULL45+RAND ExpenseDeleteDuplicates2 rc=0 succ=0.0 calls=4 probes=1 e2e=66.7s err=None
+- 10-26 16:03:50 E2E FULL45+INJ ExpenseDeleteDuplicates2 rc=0 succ=1.0 calls=16 probes=2 e2e=152.2s err=None
+- 10-26 16:06:06 E2E FULL45+NOSYS ExpenseDeleteDuplicates2 rc=0 succ=0.0 calls=8 probes=1 e2e=136.2s err=None
+- 10-26 16:06:06 E2E REPORT 17 paired
+- 10-26 16:08:42 E2E FULL45+NOSYS ExpenseDeleteMultiple rc=0 succ=1.0 calls=10 probes=4 e2e=155.2s err=None
+- 10-26 16:11:02 E2E FULL45+INJ ExpenseDeleteMultiple rc=0 succ=1.0 calls=14 probes=3 e2e=140.3s err=None
+- 10-26 16:13:16 E2E FULL45+RAND ExpenseDeleteMultiple rc=0 succ=1.0 calls=10 probes=2 e2e=133.3s err=None
+- 10-26 16:13:16 E2E REPORT 18 paired
+- 10-26 16:16:43 E2E FULL45+RAND ExpenseDeleteMultiple2 rc=0 succ=1.0 calls=16 probes=0 e2e=207.2s err=None
+- 10-26 16:19:45 E2E FULL45+INJ ExpenseDeleteMultiple2 rc=0 succ=1.0 calls=17 probes=1 e2e=181.6s err=None
+- 10-26 16:24:06 E2E FULL45+NOSYS ExpenseDeleteMultiple2 rc=0 succ=0.0 calls=20 probes=2 e2e=260.9s err=None
+- 10-26 16:24:06 E2E REPORT 19 paired
+- 10-26 16:26:32 E2E FULL45+NOSYS ExpenseAddMultiple rc=0 succ=1.0 calls=7 probes=5 e2e=145.3s err=None
+- 10-26 16:30:11 E2E FULL45+INJ ExpenseAddMultiple rc=0 succ=0.0 calls=20 probes=3 e2e=219.0s err=None
+- 10-26 16:32:39 E2E FULL45+RAND ExpenseAddMultiple rc=0 succ=1.0 calls=7 probes=0 e2e=148.3s err=None
+- 10-26 16:32:39 E2E REPORT 20 paired
+- 10-26 16:34:45 E2E FULL45+RAND ExpenseAddMultipleFromGallery rc=0 succ=0.0 calls=9 probes=2 e2e=125.8s err=None
+- 10-26 16:39:04 E2E FULL45+INJ ExpenseAddMultipleFromGallery rc=0 succ=0.0 calls=20 probes=3 e2e=258.7s err=None
+- 10-26 16:43:16 E2E FULL45+NOSYS ExpenseAddMultipleFromGallery rc=0 succ=0.0 calls=20 probes=2 e2e=251.1s err=None
+- 10-26 16:43:16 E2E REPORT 21 paired
+- 10-26 16:46:10 E2E FULL45+NOSYS FilesDeleteFile rc=0 succ=1.0 calls=9 probes=0 e2e=174.2s err=None
+- 10-26 16:48:47 E2E FULL45+INJ FilesDeleteFile rc=0 succ=1.0 calls=10 probes=0 e2e=157.1s err=None
+- 10-26 16:51:15 E2E FULL45+RAND FilesDeleteFile rc=0 succ=1.0 calls=9 probes=0 e2e=147.2s err=None
+- 10-26 16:51:15 E2E REPORT 22 paired
+- 10-26 16:54:05 E2E FULL45+RAND FilesMoveFile rc=0 succ=0.0 calls=10 probes=0 e2e=170.4s err=None
+- 10-26 16:56:35 E2E FULL45+INJ FilesMoveFile rc=0 succ=0.0 calls=12 probes=0 e2e=149.3s err=None
+- 10-26 16:59:24 E2E FULL45+NOSYS FilesMoveFile rc=0 succ=0.0 calls=10 probes=0 e2e=169.3s err=None
+- 10-26 16:59:24 E2E REPORT 23 paired
+- 10-26 17:00:42 E2E FULL45+NOSYS MarkorCreateFolder rc=0 succ=1.0 calls=4 probes=1 e2e=77.7s err=None
+- 10-26 17:02:11 E2E FULL45+INJ MarkorCreateFolder rc=0 succ=1.0 calls=5 probes=0 e2e=88.5s err=None
+- 10-26 17:03:33 E2E FULL45+RAND MarkorCreateFolder rc=0 succ=1.0 calls=4 probes=0 e2e=82.3s err=None
+- 10-26 17:03:33 E2E REPORT 24 paired
+- 10-26 17:04:49 E2E FULL45+RAND MarkorDeleteAllNotes rc=0 succ=1.0 calls=4 probes=1 e2e=76.0s err=None
+- 10-26 17:06:08 E2E FULL45+INJ MarkorDeleteAllNotes rc=0 succ=1.0 calls=5 probes=1 e2e=78.5s err=None
+- 10-26 17:10:17 E2E FULL45+NOSYS MarkorDeleteAllNotes rc=0 succ=1.0 calls=13 probes=10 e2e=249.1s err=None
+- 10-26 17:10:17 E2E REPORT 25 paired
+- 10-26 17:11:33 E2E FULL45+NOSYS MarkorDeleteNewestNote rc=0 succ=1.0 calls=4 probes=4 e2e=75.8s err=None
+- 10-26 17:13:06 E2E FULL45+INJ MarkorDeleteNewestNote rc=0 succ=1.0 calls=6 probes=0 e2e=92.7s err=None
+- 10-26 17:14:15 E2E FULL45+RAND MarkorDeleteNewestNote rc=0 succ=1.0 calls=4 probes=0 e2e=68.3s err=None
+- 10-26 17:14:15 E2E REPORT 26 paired
+- 10-26 17:15:28 E2E FULL45+RAND MarkorDeleteNote rc=0 succ=1.0 calls=4 probes=0 e2e=73.5s err=None
+- 10-26 17:16:57 E2E FULL45+INJ MarkorDeleteNote rc=0 succ=1.0 calls=7 probes=1 e2e=88.7s err=None
+- 10-26 17:18:09 E2E FULL45+NOSYS MarkorDeleteNote rc=0 succ=1.0 calls=4 probes=0 e2e=71.5s err=None
+- 10-26 17:18:09 E2E REPORT 27 paired
+- 10-26 17:19:38 E2E FULL45+NOSYS MarkorEditNote rc=0 succ=0.0 calls=5 probes=2 e2e=88.3s err=None
+- 10-26 17:22:33 E2E FULL45+INJ MarkorEditNote rc=0 succ=0.0 calls=12 probes=4 e2e=175.6s err=None
+- 10-26 17:25:58 E2E FULL45+RAND MarkorEditNote rc=0 succ=0.0 calls=12 probes=2 e2e=204.2s err=None
+- 10-26 17:25:58 E2E REPORT 28 paired
+- 10-26 17:30:18 E2E FULL45+RAND MarkorCreateNote rc=0 succ=0.0 calls=16 probes=0 e2e=260.1s err=None
+- 10-26 17:34:14 E2E FULL45+INJ MarkorCreateNote rc=0 succ=0.0 calls=16 probes=1 e2e=236.0s err=None
+- 10-26 17:38:33 E2E FULL45+NOSYS MarkorCreateNote rc=0 succ=0.0 calls=16 probes=0 e2e=258.3s err=None
+- 10-26 17:38:33 E2E REPORT 29 paired
+- 10-26 17:41:01 E2E FULL45+NOSYS MarkorTranscribeReceipt rc=0 succ=0.0 calls=9 probes=3 e2e=148.3s err=None
+- 10-26 17:44:09 E2E FULL45+INJ MarkorTranscribeReceipt rc=0 succ=0.0 calls=13 probes=2 e2e=187.3s err=None
+- 10-26 17:47:32 E2E FULL45+RAND MarkorTranscribeReceipt rc=0 succ=0.0 calls=15 probes=4 e2e=203.0s err=None
+- 10-26 17:47:32 E2E REPORT 30 paired
+- 10-26 17:50:17 E2E FULL45+RAND MarkorMoveNote rc=0 succ=0.0 calls=10 probes=3 e2e=164.5s err=None
+- 10-26 17:53:22 E2E FULL45+INJ MarkorMoveNote rc=0 succ=1.0 calls=13 probes=7 e2e=185.3s err=None
+- 10-26 17:56:25 E2E FULL45+NOSYS MarkorMoveNote rc=0 succ=1.0 calls=11 probes=4 e2e=182.2s err=None
+- 10-26 17:56:25 E2E REPORT 31 paired
+- 10-26 17:59:15 E2E FULL45+NOSYS MarkorTranscribeVideo rc=0 succ=0.0 calls=13 probes=1 e2e=170.1s err=None
+- 10-26 18:01:22 E2E FULL45+INJ MarkorTranscribeVideo rc=0 succ=0.0 calls=9 probes=1 e2e=127.1s err=None
+- 10-26 18:04:30 E2E FULL45+RAND MarkorTranscribeVideo rc=0 succ=0.0 calls=20 probes=3 e2e=188.0s err=None
+- 10-26 18:04:30 E2E REPORT 32 paired
+- 10-26 18:07:21 E2E FULL45+RAND MarkorCreateNoteFromClipboard rc=0 succ=0.0 calls=10 probes=0 e2e=170.6s err=None
+- 10-26 18:10:19 E2E FULL45+INJ MarkorCreateNoteFromClipboard rc=0 succ=0.0 calls=14 probes=0 e2e=177.5s err=None
+- 10-26 18:14:06 E2E FULL45+NOSYS MarkorCreateNoteFromClipboard rc=0 succ=0.0 calls=14 probes=2 e2e=227.2s err=None
+- 10-26 18:14:06 E2E REPORT 33 paired
+- 10-26 18:17:20 E2E FULL45+NOSYS MarkorAddNoteHeader rc=0 succ=0.0 calls=12 probes=0 e2e=193.5s err=None
+- 10-26 18:20:21 E2E FULL45+INJ MarkorAddNoteHeader rc=0 succ=0.0 calls=12 probes=0 e2e=180.7s err=None
+- 10-26 18:23:04 E2E FULL45+RAND MarkorAddNoteHeader rc=0 succ=0.0 calls=12 probes=0 e2e=162.9s err=None
+- 10-26 18:23:04 E2E REPORT 34 paired
+- 10-26 18:25:55 E2E FULL45+RAND MarkorChangeNoteContent rc=0 succ=0.0 calls=12 probes=0 e2e=170.4s err=None
+- 10-26 18:28:38 E2E FULL45+INJ MarkorChangeNoteContent rc=0 succ=0.0 calls=12 probes=0 e2e=163.2s err=None
+- 10-26 18:31:44 E2E FULL45+NOSYS MarkorChangeNoteContent rc=0 succ=0.0 calls=12 probes=0 e2e=185.2s err=None
+- 10-26 18:31:44 E2E REPORT 35 paired
+- 10-26 18:36:30 E2E FULL45+NOSYS MarkorCreateNoteAndSms rc=0 succ=0.0 calls=18 probes=1 e2e=285.7s err=None
+- 10-26 18:40:22 E2E FULL45+INJ MarkorCreateNoteAndSms rc=0 succ=0.0 calls=18 probes=0 e2e=232.2s err=None
+- 10-26 18:44:25 E2E FULL45+RAND MarkorCreateNoteAndSms rc=0 succ=0.5 calls=17 probes=0 e2e=242.5s err=None
+- 10-26 18:44:25 E2E REPORT 36 paired
+- 10-26 18:47:53 E2E FULL45+RAND MarkorMergeNotes rc=0 succ=0.0 calls=20 probes=0 e2e=208.4s err=None
+- 10-26 18:51:23 E2E FULL45+INJ MarkorMergeNotes rc=0 succ=0.0 calls=20 probes=1 e2e=209.7s err=None
+- 10-26 18:55:43 E2E FULL45+NOSYS MarkorMergeNotes rc=0 succ=0.0 calls=20 probes=0 e2e=259.4s err=None
+- 10-26 18:55:43 E2E REPORT 37 paired
+- 10-26 18:57:57 E2E FULL45+NOSYS NotesTodoItemCount rc=0 succ=1.0 calls=8 probes=4 e2e=134.0s err=None
+- 10-26 18:59:34 E2E FULL45+INJ NotesTodoItemCount rc=0 succ=1.0 calls=6 probes=5 e2e=97.0s err=None
+- 10-26 19:00:45 E2E FULL45+RAND NotesTodoItemCount rc=0 succ=1.0 calls=4 probes=4 e2e=70.8s err=None
+- 10-26 19:00:45 E2E REPORT 38 paired
+- 10-26 19:02:11 E2E FULL45+RAND NotesIsTodo rc=0 succ=1.0 calls=4 probes=0 e2e=85.3s err=None
+- 10-26 19:03:53 E2E FULL45+INJ NotesIsTodo rc=0 succ=1.0 calls=7 probes=1 e2e=101.9s err=None
+- 10-26 19:05:14 E2E FULL45+NOSYS NotesIsTodo rc=0 succ=1.0 calls=4 probes=1 e2e=80.8s err=None
+- 10-26 19:05:14 E2E REPORT 39 paired
+- 10-26 19:06:38 E2E FULL45+NOSYS NotesMeetingAttendeeCount rc=0 succ=1.0 calls=4 probes=0 e2e=83.2s err=None
+- 10-26 19:08:13 E2E FULL45+INJ NotesMeetingAttendeeCount rc=0 succ=1.0 calls=7 probes=0 e2e=95.8s err=None
+- 10-26 19:09:26 E2E FULL45+RAND NotesMeetingAttendeeCount rc=0 succ=1.0 calls=4 probes=0 e2e=71.9s err=None
+- 10-26 19:09:26 E2E REPORT 40 paired
+- 10-26 19:10:43 E2E FULL45+RAND NotesRecipeIngredientCount rc=0 succ=1.0 calls=5 probes=0 e2e=77.3s err=None
+- 10-26 19:12:25 E2E FULL45+INJ NotesRecipeIngredientCount rc=0 succ=1.0 calls=7 probes=0 e2e=101.2s err=None
+- 10-26 19:13:31 E2E FULL45+NOSYS NotesRecipeIngredientCount rc=0 succ=1.0 calls=4 probes=0 e2e=65.7s err=None
+- 10-26 19:13:31 E2E REPORT 41 paired
+- 10-26 19:14:35 E2E FULL45+NOSYS OpenAppTaskEval rc=0 succ=1.0 calls=3 probes=0 e2e=63.8s err=None
+- 10-26 19:15:25 E2E FULL45+INJ OpenAppTaskEval rc=0 succ=1.0 calls=4 probes=0 e2e=49.8s err=None
+- 10-26 19:15:59 E2E FULL45+RAND OpenAppTaskEval rc=0 succ=1.0 calls=2 probes=1 e2e=33.7s err=None
+- 10-26 19:15:59 E2E REPORT 42 paired
+- 10-26 19:18:39 E2E FULL45+RAND OsmAndFavorite rc=0 succ=0.0 calls=13 probes=0 e2e=160.0s err=None
+- 10-26 19:20:55 E2E FULL45+INJ OsmAndFavorite rc=0 succ=0.0 calls=13 probes=0 e2e=136.4s err=None
+- 10-26 19:23:53 E2E FULL45+NOSYS OsmAndFavorite rc=0 succ=1.0 calls=11 probes=0 e2e=177.4s err=None
+- 10-26 19:23:53 E2E REPORT 43 paired
+- 10-26 19:25:30 E2E FULL45+NOSYS OsmAndMarker rc=0 succ=0.0 calls=5 probes=0 e2e=97.0s err=None
+- 10-26 19:27:39 E2E FULL45+INJ OsmAndMarker rc=0 succ=0.0 calls=10 probes=0 e2e=128.8s err=None
+- 10-26 19:31:32 E2E FULL45+RAND OsmAndMarker rc=0 succ=0.0 calls=20 probes=0 e2e=232.6s err=None
+- 10-26 19:31:32 E2E REPORT 44 paired
+- 10-26 19:35:35 E2E FULL45+RAND OsmAndTrack rc=0 succ=0.0 calls=20 probes=0 e2e=241.9s err=None
+- 10-26 19:39:27 E2E FULL45+INJ OsmAndTrack rc=0 succ=0.0 calls=20 probes=0 e2e=231.8s err=None
+- 10-26 19:43:38 E2E FULL45+NOSYS OsmAndTrack rc=0 succ=0.0 calls=20 probes=0 e2e=251.7s err=None
+- 10-26 19:43:38 E2E REPORT 45 paired
+- 10-26 19:44:48 E2E FULL45+NOSYS RecipeDeleteMultipleRecipesWithConstraint rc=0 succ=0.0 calls=4 probes=0 e2e=68.9s err=None
+- 10-26 19:46:07 E2E FULL45+INJ RecipeDeleteMultipleRecipesWithConstraint rc=0 succ=0.0 calls=6 probes=0 e2e=79.5s err=None
+- 10-26 19:47:11 E2E FULL45+RAND RecipeDeleteMultipleRecipesWithConstraint rc=0 succ=0.0 calls=4 probes=0 e2e=63.5s err=None
+- 10-26 19:47:11 E2E REPORT 46 paired
+- 10-26 19:48:34 E2E FULL45+RAND RecipeDeleteDuplicateRecipes rc=0 succ=0.0 calls=5 probes=2 e2e=83.2s err=None
+- 10-26 19:50:15 E2E FULL45+INJ RecipeDeleteDuplicateRecipes rc=0 succ=1.0 calls=8 probes=2 e2e=101.0s err=None
+- 10-26 19:51:36 E2E FULL45+NOSYS RecipeDeleteDuplicateRecipes rc=0 succ=0.0 calls=5 probes=2 e2e=80.5s err=None
+- 10-26 19:51:36 E2E REPORT 47 paired
+- 10-26 19:54:19 E2E FULL45+NOSYS RecipeDeleteDuplicateRecipes3 rc=0 succ=0.0 calls=11 probes=4 e2e=163.0s err=None
+- 10-26 19:57:50 E2E FULL45+INJ RecipeDeleteDuplicateRecipes3 rc=0 succ=0.0 calls=20 probes=5 e2e=210.7s err=None
+- 10-26 20:01:40 E2E FULL45+RAND RecipeDeleteDuplicateRecipes3 rc=0 succ=0.0 calls=20 probes=1 e2e=229.4s err=None
+- 10-26 20:01:40 E2E REPORT 48 paired
+- 10-26 20:03:08 E2E FULL45+RAND RecipeDeleteSingleRecipe rc=0 succ=1.0 calls=5 probes=0 e2e=88.2s err=None
+- 10-26 20:04:52 E2E FULL45+INJ RecipeDeleteSingleRecipe rc=0 succ=1.0 calls=7 probes=2 e2e=103.7s err=None
+- 10-26 20:06:21 E2E FULL45+NOSYS RecipeDeleteSingleRecipe rc=0 succ=1.0 calls=5 probes=1 e2e=88.7s err=None
+- 10-26 20:06:21 E2E REPORT 49 paired
+- 10-26 20:07:41 E2E FULL45+NOSYS RecipeAddSingleRecipe rc=0 succ=1.0 calls=3 probes=2 e2e=79.8s err=None
+- 10-26 20:10:45 E2E FULL45+INJ RecipeAddSingleRecipe rc=0 succ=1.0 calls=15 probes=3 e2e=183.3s err=None
+- 10-26 20:11:58 E2E FULL45+RAND RecipeAddSingleRecipe rc=0 succ=1.0 calls=3 probes=0 e2e=72.4s err=None
+- 10-26 20:11:58 E2E REPORT 50 paired
+- 10-26 20:13:27 E2E FULL45+RAND RecipeDeleteMultipleRecipes rc=0 succ=1.0 calls=5 probes=0 e2e=89.4s err=None
+- 10-26 20:16:50 E2E FULL45+INJ RecipeDeleteMultipleRecipes rc=0 succ=1.0 calls=16 probes=4 e2e=202.7s err=None
+- 10-26 20:18:18 E2E FULL45+NOSYS RecipeDeleteMultipleRecipes rc=0 succ=1.0 calls=5 probes=0 e2e=88.2s err=None
+- 10-26 20:18:18 E2E REPORT 51 paired
+- 10-26 20:19:49 E2E FULL45+NOSYS RecipeDeleteSingleWithRecipeWithNoise rc=0 succ=1.0 calls=5 probes=0 e2e=90.5s err=None
+- 10-26 20:22:01 E2E FULL45+INJ RecipeDeleteSingleWithRecipeWithNoise rc=0 succ=1.0 calls=10 probes=2 e2e=131.2s err=None
+- 10-26 20:23:24 E2E FULL45+RAND RecipeDeleteSingleWithRecipeWithNoise rc=0 succ=1.0 calls=5 probes=0 e2e=83.0s err=None
+- 10-26 20:23:24 E2E REPORT 52 paired
+- 10-26 20:26:31 E2E FULL45+RAND RecipeAddMultipleRecipes rc=0 succ=1.0 calls=9 probes=0 e2e=186.8s err=None
+- 10-26 20:29:40 E2E FULL45+INJ RecipeAddMultipleRecipes rc=0 succ=0.0 calls=20 probes=3 e2e=188.9s err=None
+- 10-26 20:32:32 E2E FULL45+NOSYS RecipeAddMultipleRecipes rc=0 succ=1.0 calls=9 probes=6 e2e=172.1s err=None
+- 10-26 20:32:32 E2E REPORT 53 paired
+- 10-26 20:35:58 E2E FULL45+NOSYS RecipeAddMultipleRecipesFromImage rc=0 succ=0.0 calls=20 probes=2 e2e=205.1s err=None
+- 10-26 20:39:39 E2E FULL45+INJ RecipeAddMultipleRecipesFromImage rc=0 succ=0.0 calls=20 probes=1 e2e=221.0s err=None
+- 10-26 20:43:39 E2E FULL45+RAND RecipeAddMultipleRecipesFromImage rc=0 succ=0.0 calls=20 probes=1 e2e=240.4s err=None
+- 10-26 20:43:39 E2E REPORT 54 paired
+- 10-26 20:47:47 E2E FULL45+RAND RecipeAddMultipleRecipesFromMarkor rc=0 succ=0.0 calls=20 probes=0 e2e=247.8s err=None
+- 10-26 20:51:51 E2E FULL45+INJ RecipeAddMultipleRecipesFromMarkor rc=0 succ=0.0 calls=20 probes=2 e2e=243.4s err=None
+- 10-26 20:56:06 E2E FULL45+NOSYS RecipeAddMultipleRecipesFromMarkor rc=0 succ=0.0 calls=20 probes=0 e2e=255.0s err=None
+- 10-26 20:56:06 E2E REPORT 55 paired
+- 10-26 21:00:45 E2E FULL45+NOSYS RecipeAddMultipleRecipesFromMarkor2 rc=0 succ=0.0 calls=20 probes=2 e2e=278.8s err=None
+- 10-26 21:04:41 E2E FULL45+INJ RecipeAddMultipleRecipesFromMarkor2 rc=0 succ=0.0 calls=20 probes=2 e2e=235.7s err=None
+- 10-26 21:06:47 E2E FULL45+RAND RecipeAddMultipleRecipesFromMarkor2 rc=0 succ=0.0 calls=9 probes=0 e2e=125.9s err=None
+- 10-26 21:06:48 E2E REPORT 56 paired
+- 10-26 21:10:20 E2E FULL45+RAND RecipeDeleteDuplicateRecipes2 rc=0 succ=0.0 calls=20 probes=0 e2e=212.6s err=None
+- 10-26 21:13:51 E2E FULL45+INJ RecipeDeleteDuplicateRecipes2 rc=0 succ=0.0 calls=20 probes=6 e2e=210.4s err=None
+- 10-26 21:17:54 E2E FULL45+NOSYS RecipeDeleteDuplicateRecipes2 rc=0 succ=0.0 calls=20 probes=6 e2e=243.0s err=None
+- 10-26 21:17:54 E2E REPORT 57 paired
+- 10-26 21:21:54 E2E FULL45+NOSYS RecipeDeleteMultipleRecipesWithNoise rc=0 succ=0.0 calls=20 probes=2 e2e=239.8s err=None
+- 10-26 21:25:30 E2E FULL45+INJ RecipeDeleteMultipleRecipesWithNoise rc=0 succ=0.0 calls=20 probes=3 e2e=215.9s err=None
+- 10-26 21:28:22 E2E FULL45+RAND RecipeDeleteMultipleRecipesWithNoise rc=0 succ=0.0 calls=14 probes=0 e2e=171.1s err=None
+- 10-26 21:28:22 E2E REPORT 58 paired
+- 10-26 21:32:45 E2E FULL45+RAND RetroCreatePlaylist rc=0 succ=0.0 calls=19 probes=7 e2e=262.7s err=None
+- 10-26 21:35:51 E2E FULL45+INJ RetroCreatePlaylist rc=0 succ=0.0 calls=16 probes=5 e2e=186.4s err=None
+- 10-26 21:40:14 E2E FULL45+NOSYS RetroCreatePlaylist rc=0 succ=0.0 calls=15 probes=5 e2e=262.1s err=None
+- 10-26 21:40:14 E2E REPORT 59 paired
+- 10-26 21:45:13 E2E FULL45+NOSYS RetroPlayingQueue rc=0 succ=0.0 calls=20 probes=0 e2e=299.3s err=None
+- 10-26 21:49:10 E2E FULL45+INJ RetroPlayingQueue rc=0 succ=0.0 calls=20 probes=1 e2e=236.4s err=None
+- 10-26 21:53:35 E2E FULL45+RAND RetroPlayingQueue rc=0 succ=0.0 calls=20 probes=0 e2e=264.5s err=None
+- 10-26 21:53:35 E2E REPORT 60 paired
+- 10-26 21:57:33 E2E FULL45+RAND RetroPlaylistDuration rc=0 succ=0.0 calls=6 probes=0 e2e=237.9s err=None
+- 10-26 22:01:04 E2E FULL45+INJ RetroPlaylistDuration rc=0 succ=0.0 calls=20 probes=0 e2e=210.8s err=None
+- 10-26 22:06:07 E2E FULL45+NOSYS RetroPlaylistDuration rc=0 succ=0.0 calls=20 probes=0 e2e=302.6s err=None
+- 10-26 22:06:07 E2E REPORT 61 paired
+- 10-26 22:11:25 E2E FULL45+NOSYS RetroSavePlaylist rc=0 succ=1.0 calls=20 probes=0 e2e=316.8s err=None
+- 10-26 22:15:05 E2E FULL45+INJ RetroSavePlaylist rc=0 succ=0.0 calls=20 probes=0 e2e=220.0s err=None
+- 10-26 22:18:36 E2E FULL45+RAND RetroSavePlaylist rc=0 succ=0.5 calls=15 probes=0 e2e=210.0s err=None
+- 10-26 22:18:36 E2E REPORT 62 paired
+- 10-26 22:20:40 E2E FULL45+RAND SaveCopyOfReceiptTaskEval rc=0 succ=1.0 calls=7 probes=0 e2e=123.5s err=None
+- 10-26 22:23:05 E2E FULL45+INJ SaveCopyOfReceiptTaskEval rc=0 succ=1.0 calls=9 probes=1 e2e=145.0s err=None
+- 10-26 22:26:37 E2E FULL45+NOSYS SaveCopyOfReceiptTaskEval rc=0 succ=1.0 calls=13 probes=2 e2e=211.2s err=None
+- 10-26 22:26:37 E2E REPORT 63 paired
+- 10-26 22:27:38 E2E FULL45+NOSYS SimpleCalendarEventsInNextWeek rc=0 succ=0.0 calls=3 probes=2 e2e=60.6s err=None
+- 10-26 22:29:57 E2E FULL45+INJ SimpleCalendarEventsInNextWeek rc=0 succ=0.0 calls=10 probes=2 e2e=139.1s err=None
+- 10-26 22:30:53 E2E FULL45+RAND SimpleCalendarEventsInNextWeek rc=0 succ=0.0 calls=3 probes=2 e2e=55.1s err=None
+- 10-26 22:30:53 E2E REPORT 64 paired
+- 10-26 22:31:29 E2E FULL45+RAND SimpleCalendarAnyEventsOnDate rc=0 succ=1.0 calls=3 probes=0 e2e=35.0s err=None
+- 10-26 22:37:40 E2E FULL45+INJ SimpleCalendarAnyEventsOnDate rc=0 succ=1.0 calls=6 probes=0 e2e=371.6s err=None
+- 10-26 23:10:49 E2E FULL45+NOSYS SimpleCalendarAnyEventsOnDate rc=0 succ=0.0 calls=10 probes=0 e2e=1987.4s err=None
+- 10-26 23:10:49 E2E REPORT 65 paired
+- 10-26 23:10:49 service down: orin=False ondevice=True
+- 10-26 23:13:21 service down: orin=False ondevice=True
+- 10-26 23:16:10 service down: orin=False ondevice=True
+- 10-26 23:17:56 e2e116nA: Orin host down (~22:40); 2 affected episodes marked for rerun; driver waiting
+- 10-26 23:18:00 service down: orin=False ondevice=True
+- 10-26 23:19:25 service down: orin=False ondevice=True
+- 10-26 23:20:25 service down: orin=False ondevice=True
+- 10-26 23:21:25 service down: orin=False ondevice=True
+- 10-26 23:22:25 service down: orin=False ondevice=True
+- 10-26 23:23:25 service down: orin=False ondevice=True
+- 10-26 23:24:25 service down: orin=False ondevice=True
+- 10-26 23:25:25 service down: orin=False ondevice=True
+- 10-26 23:26:25 service down: orin=False ondevice=True
+- 10-26 23:27:25 service down: orin=False ondevice=True
+- 10-26 23:31:11 E2E FULL45+NOSYS SimpleCalendarEventsInTimeRange rc=0 succ=1.0 calls=10 probes=0 e2e=165.3s err=None
+- 10-26 23:32:24 E2E FULL45+INJ SimpleCalendarEventsInTimeRange rc=0 succ=1.0 calls=5 probes=0 e2e=72.7s err=None
+- 10-26 23:34:38 E2E FULL45+RAND SimpleCalendarEventsInTimeRange rc=0 succ=1.0 calls=10 probes=0 e2e=134.1s err=None
+- 10-26 23:34:38 E2E REPORT 66 paired
+- 10-26 23:35:38 E2E FULL45+RAND SimpleCalendarEventsOnDate rc=0 succ=1.0 calls=3 probes=0 e2e=59.7s err=None
+- 10-26 23:37:09 E2E FULL45+INJ SimpleCalendarEventsOnDate rc=0 succ=1.0 calls=6 probes=0 e2e=90.3s err=None
+- 10-26 23:39:45 E2E FULL45+NOSYS SimpleCalendarEventsOnDate rc=0 succ=0.0 calls=10 probes=1 e2e=156.0s err=None
+- 10-26 23:39:45 E2E REPORT 67 paired
+- 10-26 23:40:34 E2E FULL45+NOSYS SimpleCalendarNextEvent rc=0 succ=0.0 calls=2 probes=0 e2e=49.0s err=None
+- 10-26 23:41:54 E2E FULL45+INJ SimpleCalendarNextEvent rc=0 succ=0.0 calls=6 probes=0 e2e=79.8s err=None
+- 10-26 23:42:42 E2E FULL45+RAND SimpleCalendarNextEvent rc=0 succ=0.0 calls=2 probes=0 e2e=47.2s err=None
+- 10-26 23:42:42 E2E REPORT 68 paired
+- 10-26 23:43:52 E2E FULL45+RAND SimpleCalendarLocationOfEvent rc=0 succ=0.0 calls=4 probes=1 e2e=70.3s err=None
+- 10-26 23:46:15 E2E FULL45+INJ SimpleCalendarLocationOfEvent rc=0 succ=0.0 calls=10 probes=1 e2e=142.2s err=None
+- 10-26 23:47:30 E2E FULL45+NOSYS SimpleCalendarLocationOfEvent rc=0 succ=0.0 calls=4 probes=1 e2e=75.3s err=None
+- 10-26 23:47:31 E2E REPORT 69 paired
+- 10-26 23:49:31 E2E FULL45+NOSYS SimpleCalendarDeleteOneEvent rc=0 succ=1.0 calls=6 probes=2 e2e=120.2s err=None
+- 10-26 23:51:52 E2E FULL45+INJ SimpleCalendarDeleteOneEvent rc=0 succ=1.0 calls=10 probes=1 e2e=140.8s err=None
+- 10-26 23:54:37 E2E FULL45+RAND SimpleCalendarDeleteOneEvent rc=0 succ=0.0 calls=12 probes=9 e2e=164.1s err=None
+- 10-26 23:54:37 E2E REPORT 70 paired
+- 10-26 23:55:41 E2E FULL45+RAND SimpleCalendarNextMeetingWithPerson rc=0 succ=0.0 calls=4 probes=0 e2e=63.4s err=None
+- 10-26 23:57:27 E2E FULL45+INJ SimpleCalendarNextMeetingWithPerson rc=0 succ=0.0 calls=8 probes=0 e2e=106.3s err=None
+- 10-26 23:58:34 E2E FULL45+NOSYS SimpleCalendarNextMeetingWithPerson rc=0 succ=0.0 calls=4 probes=0 e2e=66.2s err=None
+- 10-26 23:58:35 E2E REPORT 71 paired
+- 10-27 00:01:19 E2E FULL45+NOSYS SimpleCalendarDeleteEventsOnRelativeDay rc=0 succ=1.0 calls=8 probes=1 e2e=164.0s err=None
+- 10-27 00:03:50 E2E FULL45+INJ SimpleCalendarDeleteEventsOnRelativeDay rc=0 succ=1.0 calls=12 probes=1 e2e=151.2s err=None
+- 10-27 00:05:59 E2E FULL45+RAND SimpleCalendarDeleteEventsOnRelativeDay rc=0 succ=1.0 calls=7 probes=0 e2e=128.9s err=None
+- 10-27 00:05:59 E2E REPORT 72 paired
+- 10-27 00:07:59 E2E FULL45+RAND SimpleCalendarDeleteEvents rc=0 succ=1.0 calls=7 probes=0 e2e=119.1s err=None
+- 10-27 00:10:48 E2E FULL45+INJ SimpleCalendarDeleteEvents rc=0 succ=0.0 calls=14 probes=2 e2e=169.1s err=None
+- 10-27 00:12:54 E2E FULL45+NOSYS SimpleCalendarDeleteEvents rc=0 succ=1.0 calls=7 probes=1 e2e=126.1s err=None
+- 10-27 00:12:54 E2E REPORT 73 paired
+- 10-27 00:14:40 E2E FULL45+NOSYS SimpleCalendarEventOnDateAtTime rc=0 succ=0.0 calls=7 probes=4 e2e=105.0s err=None
+- 10-27 00:16:20 E2E FULL45+INJ SimpleCalendarEventOnDateAtTime rc=0 succ=0.0 calls=10 probes=0 e2e=99.6s err=None
+- 10-27 00:17:45 E2E FULL45+RAND SimpleCalendarEventOnDateAtTime rc=0 succ=0.0 calls=7 probes=4 e2e=85.0s err=None
+- 10-27 00:17:45 E2E REPORT 74 paired
+- 10-27 00:18:46 E2E FULL45+RAND SimpleCalendarFirstEventAfterStartTime rc=0 succ=1.0 calls=3 probes=0 e2e=61.1s err=None
+- 10-27 00:20:21 E2E FULL45+INJ SimpleCalendarFirstEventAfterStartTime rc=0 succ=1.0 calls=9 probes=3 e2e=94.2s err=None
+- 10-27 00:21:24 E2E FULL45+NOSYS SimpleCalendarFirstEventAfterStartTime rc=0 succ=1.0 calls=3 probes=1 e2e=63.2s err=None
+- 10-27 00:21:24 E2E REPORT 75 paired
+- 10-27 00:24:35 E2E FULL45+NOSYS SimpleCalendarAddOneEvent rc=0 succ=1.0 calls=13 probes=4 e2e=190.4s err=None
+- 10-27 00:28:34 E2E FULL45+INJ SimpleCalendarAddOneEvent rc=0 succ=1.0 calls=20 probes=2 e2e=238.4s err=None
+- 10-27 00:32:27 E2E FULL45+RAND SimpleCalendarAddOneEvent rc=0 succ=0.0 calls=20 probes=3 e2e=233.1s err=None
+- 10-27 00:32:27 E2E REPORT 76 paired
+- 10-27 00:34:59 E2E FULL45+RAND SimpleCalendarAddOneEventRelativeDay rc=0 succ=0.0 calls=11 probes=2 e2e=152.1s err=None
+- 10-27 00:38:41 E2E FULL45+INJ SimpleCalendarAddOneEventRelativeDay rc=0 succ=0.0 calls=20 probes=2 e2e=221.6s err=None
+- 10-27 00:43:08 E2E FULL45+NOSYS SimpleCalendarAddOneEventRelativeDay rc=0 succ=0.0 calls=20 probes=2 e2e=266.7s err=None
+- 10-27 00:43:08 E2E REPORT 77 paired
+- 10-27 00:46:57 E2E FULL45+NOSYS SimpleCalendarAddOneEventInTwoWeeks rc=0 succ=1.0 calls=15 probes=4 e2e=227.8s err=None
+- 10-27 00:50:33 E2E FULL45+INJ SimpleCalendarAddOneEventInTwoWeeks rc=0 succ=0.0 calls=20 probes=4 e2e=216.7s err=None
+- 10-27 00:54:35 E2E FULL45+RAND SimpleCalendarAddOneEventInTwoWeeks rc=0 succ=1.0 calls=19 probes=2 e2e=241.5s err=None
+- 10-27 00:54:35 E2E REPORT 78 paired
+- 10-27 00:58:30 E2E FULL45+RAND SimpleCalendarAddOneEventTomorrow rc=0 succ=1.0 calls=18 probes=0 e2e=233.9s err=None
+- 10-27 01:02:42 E2E FULL45+INJ SimpleCalendarAddOneEventTomorrow rc=0 succ=0.0 calls=20 probes=3 e2e=251.9s err=None
+- 10-27 01:07:05 E2E FULL45+NOSYS SimpleCalendarAddOneEventTomorrow rc=0 succ=0.0 calls=17 probes=4 e2e=261.3s err=None
+- 10-27 01:07:05 E2E REPORT 79 paired
+- 10-27 01:10:19 E2E FULL45+NOSYS SimpleCalendarAddRepeatingEvent rc=0 succ=0.0 calls=15 probes=3 e2e=193.8s err=None
+- 10-27 01:13:51 E2E FULL45+INJ SimpleCalendarAddRepeatingEvent rc=0 succ=0.0 calls=20 probes=5 e2e=212.3s err=None
+- 10-27 01:17:38 E2E FULL45+RAND SimpleCalendarAddRepeatingEvent rc=0 succ=0.0 calls=20 probes=0 e2e=226.3s err=None
+- 10-27 01:17:38 E2E REPORT 80 paired
+- 10-27 01:21:06 E2E FULL45+RAND SimpleDrawProCreateDrawing rc=0 succ=0.0 calls=18 probes=1 e2e=208.2s err=None
+- 10-27 01:23:58 E2E FULL45+INJ SimpleDrawProCreateDrawing rc=0 succ=1.0 calls=12 probes=1 e2e=171.2s err=None
+- 10-27 01:28:46 E2E FULL45+NOSYS SimpleDrawProCreateDrawing rc=0 succ=0.0 calls=18 probes=1 e2e=287.7s err=None
+- 10-27 01:28:46 E2E REPORT 81 paired
+- 10-27 01:32:13 E2E FULL45+NOSYS SimpleSmsResend rc=0 succ=1.0 calls=10 probes=2 e2e=207.0s err=None
+- 10-27 01:35:31 E2E FULL45+INJ SimpleSmsResend rc=0 succ=1.0 calls=12 probes=3 e2e=197.9s err=None
+- 10-27 01:38:07 E2E FULL45+RAND SimpleSmsResend rc=0 succ=1.0 calls=9 probes=2 e2e=155.8s err=None
+- 10-27 01:38:07 E2E REPORT 82 paired
+- 10-27 01:39:27 E2E FULL45+RAND SimpleSmsReplyMostRecent rc=0 succ=1.0 calls=3 probes=0 e2e=79.9s err=None
+- 10-27 01:41:49 E2E FULL45+INJ SimpleSmsReplyMostRecent rc=0 succ=1.0 calls=9 probes=4 e2e=141.4s err=None
+- 10-27 01:43:11 E2E FULL45+NOSYS SimpleSmsReplyMostRecent rc=0 succ=1.0 calls=3 probes=1 e2e=82.4s err=None
+- 10-27 01:43:11 E2E REPORT 83 paired
+- 10-27 01:44:57 E2E FULL45+NOSYS SimpleSmsSend rc=0 succ=1.0 calls=5 probes=0 e2e=105.7s err=None
+- 10-27 01:47:16 E2E FULL45+INJ SimpleSmsSend rc=0 succ=1.0 calls=10 probes=0 e2e=138.6s err=None
+- 10-27 01:48:52 E2E FULL45+RAND SimpleSmsSend rc=0 succ=1.0 calls=5 probes=0 e2e=95.9s err=None
+- 10-27 01:48:52 E2E REPORT 84 paired
+- 10-27 01:50:53 E2E FULL45+RAND SimpleSmsSendClipboardContent rc=0 succ=0.0 calls=6 probes=0 e2e=120.6s err=None
+- 10-27 01:52:56 E2E FULL45+INJ SimpleSmsSendClipboardContent rc=0 succ=1.0 calls=10 probes=0 e2e=122.3s err=None
+- 10-27 01:55:09 E2E FULL45+NOSYS SimpleSmsSendClipboardContent rc=0 succ=1.0 calls=6 probes=2 e2e=133.6s err=None
+- 10-27 01:55:09 E2E REPORT 85 paired
+- 10-27 01:56:14 E2E FULL45+NOSYS SimpleSmsReply rc=0 succ=0.0 calls=2 probes=0 e2e=64.6s err=None
+- 10-27 01:58:54 E2E FULL45+INJ SimpleSmsReply rc=0 succ=1.0 calls=12 probes=4 e2e=160.0s err=None
+- 10-27 01:59:58 E2E FULL45+RAND SimpleSmsReply rc=0 succ=0.0 calls=2 probes=0 e2e=63.0s err=None
+- 10-27 01:59:58 E2E REPORT 86 paired
+- 10-27 02:03:56 E2E FULL45+RAND SimpleSmsSendReceivedAddress rc=0 succ=0.0 calls=18 probes=2 e2e=238.2s err=None
+- 10-27 02:07:28 E2E FULL45+INJ SimpleSmsSendReceivedAddress rc=0 succ=0.0 calls=18 probes=4 e2e=211.3s err=None
+- 10-27 02:11:55 E2E FULL45+NOSYS SimpleSmsSendReceivedAddress rc=0 succ=0.0 calls=18 probes=4 e2e=266.6s err=None
+- 10-27 02:11:55 E2E REPORT 87 paired
+- 10-27 02:12:29 E2E FULL45+NOSYS SportsTrackerActivitiesCountForWeek rc=0 succ=0.0 calls=2 probes=1 e2e=33.6s err=None
+- 10-27 02:14:33 E2E FULL45+INJ SportsTrackerActivitiesCountForWeek rc=0 succ=0.0 calls=10 probes=4 e2e=123.9s err=None
+- 10-27 02:15:01 E2E FULL45+RAND SportsTrackerActivitiesCountForWeek rc=0 succ=0.0 calls=2 probes=1 e2e=28.4s err=None
+- 10-27 02:15:02 E2E REPORT 88 paired
+- 10-27 02:15:33 E2E FULL45+RAND SportsTrackerActivityDuration rc=0 succ=0.0 calls=1 probes=2 e2e=31.6s err=None
+- 10-27 02:16:37 E2E FULL45+INJ SportsTrackerActivityDuration rc=0 succ=0.0 calls=5 probes=0 e2e=63.9s err=None
+- 10-27 02:17:06 E2E FULL45+NOSYS SportsTrackerActivityDuration rc=0 succ=0.0 calls=1 probes=2 e2e=28.0s err=None
+- 10-27 02:17:06 E2E REPORT 89 paired
+- 10-27 02:17:34 E2E FULL45+NOSYS SportsTrackerTotalDurationForCategoryThisWeek rc=0 succ=0.0 calls=1 probes=0 e2e=28.5s err=None
+- 10-27 02:18:25 E2E FULL45+INJ SportsTrackerTotalDurationForCategoryThisWeek rc=0 succ=0.0 calls=4 probes=0 e2e=50.5s err=None
+- 10-27 02:18:53 E2E FULL45+RAND SportsTrackerTotalDurationForCategoryThisWeek rc=0 succ=0.0 calls=1 probes=0 e2e=27.2s err=None
+- 10-27 02:18:53 E2E REPORT 90 paired
+- 10-27 02:19:40 E2E FULL45+RAND SportsTrackerActivitiesOnDate rc=0 succ=0.0 calls=3 probes=0 e2e=47.5s err=None
+- 10-27 02:21:07 E2E FULL45+INJ SportsTrackerActivitiesOnDate rc=0 succ=0.0 calls=7 probes=2 e2e=86.8s err=None
+- 10-27 02:22:04 E2E FULL45+NOSYS SportsTrackerActivitiesOnDate rc=0 succ=0.0 calls=3 probes=2 e2e=56.0s err=None
+- 10-27 02:22:04 E2E REPORT 91 paired
+- 10-27 02:22:55 E2E FULL45+NOSYS SportsTrackerLongestDistanceActivity rc=0 succ=0.0 calls=2 probes=0 e2e=51.6s err=None
+- 10-27 02:25:01 E2E FULL45+INJ SportsTrackerLongestDistanceActivity rc=0 succ=0.0 calls=10 probes=0 e2e=125.7s err=None
+- 10-27 02:25:49 E2E FULL45+RAND SportsTrackerLongestDistanceActivity rc=0 succ=0.0 calls=2 probes=0 e2e=47.8s err=None
+- 10-27 02:25:49 E2E REPORT 92 paired
+- 10-27 02:26:41 E2E FULL45+RAND SportsTrackerTotalDistanceForCategoryOverInterval rc=0 succ=0.0 calls=2 probes=0 e2e=51.4s err=None
+- 10-27 02:30:09 E2E FULL45+INJ SportsTrackerTotalDistanceForCategoryOverInterval rc=0 succ=0.0 calls=20 probes=0 e2e=207.4s err=None
+- 10-27 02:31:05 E2E FULL45+NOSYS SportsTrackerTotalDistanceForCategoryOverInterval rc=0 succ=0.0 calls=2 probes=0 e2e=55.8s err=None
+- 10-27 02:31:05 E2E REPORT 93 paired
+- 10-27 02:32:03 E2E FULL45+NOSYS SystemWifiTurnOnVerify rc=0 succ=1.0 calls=3 probes=0 e2e=58.0s err=None
+- 10-27 02:32:54 E2E FULL45+INJ SystemWifiTurnOnVerify rc=0 succ=1.0 calls=3 probes=0 e2e=51.0s err=None
+- 10-27 02:33:50 E2E FULL45+RAND SystemWifiTurnOnVerify rc=0 succ=1.0 calls=3 probes=0 e2e=55.8s err=None
+- 10-27 02:33:50 E2E REPORT 94 paired
+- 10-27 02:34:42 E2E FULL45+RAND SystemBluetoothTurnOn rc=0 succ=1.0 calls=3 probes=0 e2e=51.6s err=None
+- 10-27 02:35:43 E2E FULL45+INJ SystemBluetoothTurnOn rc=0 succ=1.0 calls=4 probes=0 e2e=60.5s err=None
+- 10-27 02:38:21 E2E FULL45+NOSYS SystemBluetoothTurnOn rc=0 succ=1.0 calls=10 probes=0 e2e=157.6s err=None
+- 10-27 02:38:21 E2E REPORT 95 paired
+- 10-27 02:39:32 E2E FULL45+NOSYS SystemWifiTurnOn rc=0 succ=1.0 calls=4 probes=0 e2e=70.5s err=None
+- 10-27 02:40:35 E2E FULL45+INJ SystemWifiTurnOn rc=0 succ=1.0 calls=4 probes=0 e2e=63.3s err=None
+- 10-27 02:41:39 E2E FULL45+RAND SystemWifiTurnOn rc=0 succ=1.0 calls=4 probes=0 e2e=63.5s err=None
+- 10-27 02:41:39 E2E REPORT 96 paired
+- 10-27 02:43:53 E2E FULL45+RAND SystemBluetoothTurnOff rc=0 succ=1.0 calls=10 probes=0 e2e=133.8s err=None
+- 10-27 02:46:09 E2E FULL45+INJ SystemBluetoothTurnOff rc=0 succ=1.0 calls=10 probes=0 e2e=136.6s err=None
+- 10-27 02:48:42 E2E FULL45+NOSYS SystemBluetoothTurnOff rc=0 succ=1.0 calls=10 probes=0 e2e=152.7s err=None
+- 10-27 02:48:42 E2E REPORT 97 paired
+- 10-27 02:50:21 E2E FULL45+NOSYS SystemBluetoothTurnOnVerify rc=0 succ=1.0 calls=6 probes=0 e2e=98.4s err=None
+- 10-27 02:52:23 E2E FULL45+INJ SystemBluetoothTurnOnVerify rc=0 succ=0.0 calls=9 probes=0 e2e=122.1s err=None
+- 10-27 02:54:29 E2E FULL45+RAND SystemBluetoothTurnOnVerify rc=0 succ=0.0 calls=9 probes=0 e2e=125.5s err=None
+- 10-27 02:54:29 E2E REPORT 98 paired
+- 10-27 02:55:37 E2E FULL45+RAND SystemWifiTurnOff rc=0 succ=1.0 calls=4 probes=0 e2e=67.7s err=None
+- 10-27 02:56:45 E2E FULL45+INJ SystemWifiTurnOff rc=0 succ=1.0 calls=4 probes=0 e2e=67.7s err=None
+- 10-27 02:57:58 E2E FULL45+NOSYS SystemWifiTurnOff rc=0 succ=1.0 calls=4 probes=0 e2e=73.1s err=None
+- 10-27 02:57:58 E2E REPORT 99 paired
+- 10-27 03:00:34 E2E FULL45+NOSYS SystemBrightnessMinVerify rc=0 succ=1.0 calls=9 probes=1 e2e=155.2s err=None
+- 10-27 03:03:11 E2E FULL45+INJ SystemBrightnessMinVerify rc=0 succ=1.0 calls=10 probes=1 e2e=157.0s err=None
+- 10-27 03:05:56 E2E FULL45+RAND SystemBrightnessMinVerify rc=0 succ=1.0 calls=10 probes=1 e2e=165.3s err=None
+- 10-27 03:05:57 E2E REPORT 100 paired
+- 10-27 03:06:42 E2E FULL45+RAND SystemWifiTurnOffVerify rc=0 succ=1.0 calls=3 probes=0 e2e=45.3s err=None
+- 10-27 03:07:42 E2E FULL45+INJ SystemWifiTurnOffVerify rc=0 succ=1.0 calls=4 probes=0 e2e=60.0s err=None
+- 10-27 03:08:37 E2E FULL45+NOSYS SystemWifiTurnOffVerify rc=0 succ=1.0 calls=3 probes=0 e2e=54.0s err=None
+- 10-27 03:08:37 E2E REPORT 101 paired
+- 10-27 03:11:31 E2E FULL45+NOSYS SystemBrightnessMin rc=0 succ=0.0 calls=10 probes=0 e2e=173.9s err=None
+- 10-27 03:13:53 E2E FULL45+INJ SystemBrightnessMin rc=0 succ=0.0 calls=10 probes=0 e2e=141.9s err=None
+- 10-27 03:16:33 E2E FULL45+RAND SystemBrightnessMin rc=0 succ=0.0 calls=10 probes=0 e2e=159.8s err=None
+- 10-27 03:16:33 E2E REPORT 102 paired
+- 10-27 03:18:01 E2E FULL45+RAND SystemBrightnessMax rc=0 succ=1.0 calls=5 probes=0 e2e=87.6s err=None
+- 10-27 03:20:41 E2E FULL45+INJ SystemBrightnessMax rc=0 succ=1.0 calls=10 probes=0 e2e=160.1s err=None
+- 10-27 03:23:36 E2E FULL45+NOSYS SystemBrightnessMax rc=0 succ=0.0 calls=10 probes=0 e2e=174.6s err=None
+- 10-27 03:23:36 E2E REPORT 103 paired
+- 10-27 03:26:17 E2E FULL45+NOSYS SystemBluetoothTurnOffVerify rc=0 succ=0.0 calls=10 probes=0 e2e=160.8s err=None
+- 10-27 03:27:31 E2E FULL45+INJ SystemBluetoothTurnOffVerify rc=0 succ=1.0 calls=5 probes=0 e2e=73.9s err=None
+- 10-27 03:30:03 E2E FULL45+RAND SystemBluetoothTurnOffVerify rc=0 succ=1.0 calls=10 probes=0 e2e=150.9s err=None
+- 10-27 03:30:03 E2E REPORT 104 paired
+- 10-27 03:31:07 E2E FULL45+RAND SystemBrightnessMaxVerify rc=0 succ=1.0 calls=4 probes=0 e2e=63.5s err=None
+- 10-27 03:32:23 E2E FULL45+INJ SystemBrightnessMaxVerify rc=0 succ=1.0 calls=5 probes=1 e2e=76.3s err=None
+- 10-27 03:33:50 E2E FULL45+NOSYS SystemBrightnessMaxVerify rc=0 succ=1.0 calls=5 probes=0 e2e=86.2s err=None
+- 10-27 03:33:50 E2E REPORT 105 paired
+- 10-27 03:36:14 E2E FULL45+NOSYS SystemCopyToClipboard rc=0 succ=0.0 calls=10 probes=2 e2e=144.0s err=None
+- 10-27 03:38:25 E2E FULL45+INJ SystemCopyToClipboard rc=0 succ=0.0 calls=10 probes=2 e2e=131.3s err=None
+- 10-27 03:40:23 E2E FULL45+RAND SystemCopyToClipboard rc=0 succ=None calls=None probes=None e2e=117.3s err=AdbControllerError('Error executing adb command: [adb -P 5037 -s emulator-5554 shell monkey -p 剪贴板 1]\nCaused by: Command \'[\'/Users/huangrunxi/Library/Android/sdk/platform-tools/adb\', \'-P\', \'503
+- 10-27 03:40:23 E2E REPORT 106 paired
+- 10-27 03:41:01 E2E FULL45+RAND TasksDueNextWeek rc=0 succ=0.0 calls=2 probes=0 e2e=37.9s err=None
+- 10-27 03:41:55 E2E FULL45+INJ TasksDueNextWeek rc=0 succ=0.0 calls=4 probes=0 e2e=53.3s err=None
+- 10-27 03:42:32 E2E FULL45+NOSYS TasksDueNextWeek rc=0 succ=0.0 calls=2 probes=0 e2e=37.3s err=None
+- 10-27 03:42:32 E2E REPORT 107 paired
+- 10-27 03:43:00 E2E FULL45+NOSYS TasksDueOnDate rc=0 succ=0.0 calls=1 probes=0 e2e=27.5s err=None
+- 10-27 03:43:44 E2E FULL45+INJ TasksDueOnDate rc=0 succ=0.0 calls=3 probes=0 e2e=43.3s err=None
+- 10-27 03:44:11 E2E FULL45+RAND TasksDueOnDate rc=0 succ=0.0 calls=1 probes=0 e2e=26.8s err=None
+- 10-27 03:44:11 E2E REPORT 108 paired
+- 10-27 03:44:40 E2E FULL45+RAND TasksHighPriorityTasks rc=0 succ=0.0 calls=1 probes=0 e2e=28.5s err=None
+- 10-27 03:45:29 E2E FULL45+INJ TasksHighPriorityTasks rc=0 succ=0.0 calls=3 probes=0 e2e=48.8s err=None
+- 10-27 03:45:56 E2E FULL45+NOSYS TasksHighPriorityTasks rc=0 succ=0.0 calls=1 probes=0 e2e=26.5s err=None
+- 10-27 03:45:56 E2E REPORT 109 paired
+- 10-27 03:46:29 E2E FULL45+NOSYS TasksIncompleteTasksOnDate rc=0 succ=0.0 calls=1 probes=0 e2e=32.7s err=None
+- 10-27 03:48:07 E2E FULL45+INJ TasksIncompleteTasksOnDate rc=0 succ=0.0 calls=8 probes=0 e2e=98.0s err=None
+- 10-27 03:48:41 E2E FULL45+RAND TasksIncompleteTasksOnDate rc=0 succ=0.0 calls=1 probes=0 e2e=34.3s err=None
+- 10-27 03:48:41 E2E REPORT 110 paired
+- 10-27 03:51:29 E2E FULL45+RAND TasksCompletedTasksForDate rc=0 succ=0.0 calls=9 probes=1 e2e=166.9s err=None
+- 10-27 03:54:04 E2E FULL45+INJ TasksCompletedTasksForDate rc=0 succ=0.0 calls=10 probes=8 e2e=155.3s err=None
+- 10-27 03:54:39 E2E FULL45+NOSYS TasksCompletedTasksForDate rc=0 succ=0.0 calls=1 probes=0 e2e=34.2s err=None
+- 10-27 03:54:39 E2E REPORT 111 paired
+- 10-27 03:55:32 E2E FULL45+NOSYS TasksHighPriorityTasksDueOnDate rc=0 succ=0.0 calls=2 probes=0 e2e=52.7s err=None
+- 10-27 03:57:07 E2E FULL45+INJ TasksHighPriorityTasksDueOnDate rc=0 succ=0.0 calls=9 probes=0 e2e=95.0s err=None
+- 10-27 03:57:50 E2E FULL45+RAND TasksHighPriorityTasksDueOnDate rc=0 succ=0.0 calls=2 probes=0 e2e=43.1s err=None
+- 10-27 03:57:50 E2E REPORT 112 paired
+- 10-27 04:00:37 E2E FULL45+RAND TurnOffWifiAndTurnOnBluetooth rc=0 succ=1.0 calls=10 probes=1 e2e=166.5s err=None
+- 10-27 04:05:16 E2E FULL45+INJ TurnOffWifiAndTurnOnBluetooth rc=0 succ=1.0 calls=17 probes=1 e2e=278.3s err=None
+- 10-27 04:08:27 E2E FULL45+NOSYS TurnOffWifiAndTurnOnBluetooth rc=0 succ=0.5 calls=11 probes=0 e2e=191.6s err=None
+- 10-27 04:08:28 E2E REPORT 113 paired
+- 10-27 04:13:05 E2E FULL45+NOSYS TurnOnWifiAndOpenApp rc=0 succ=0.5 calls=16 probes=3 e2e=277.5s err=None
+- 10-27 04:16:56 E2E FULL45+INJ TurnOnWifiAndOpenApp rc=0 succ=1.0 calls=17 probes=0 e2e=230.7s err=None
+- 10-27 04:19:56 E2E FULL45+RAND TurnOnWifiAndOpenApp rc=0 succ=1.0 calls=10 probes=0 e2e=179.4s err=None
+- 10-27 04:19:56 E2E REPORT 114 paired
+- 10-27 04:25:28 E2E FULL45+RAND VlcCreatePlaylist rc=0 succ=0.0 calls=20 probes=0 e2e=331.6s err=None
+- 10-27 04:29:21 E2E FULL45+INJ VlcCreatePlaylist rc=0 succ=0.0 calls=20 probes=1 e2e=233.0s err=None
+- 10-27 04:34:19 E2E FULL45+NOSYS VlcCreatePlaylist rc=0 succ=0.0 calls=20 probes=0 e2e=297.8s err=None
+- 10-27 04:34:19 E2E REPORT 115 paired
+- 10-27 04:38:25 E2E FULL45+NOSYS VlcCreateTwoPlaylists rc=0 succ=0.0 calls=20 probes=0 e2e=245.9s err=None
+- 10-27 04:41:30 E2E FULL45+INJ VlcCreateTwoPlaylists rc=0 succ=0.0 calls=20 probes=2 e2e=184.9s err=None
+- 10-27 04:45:13 E2E FULL45+RAND VlcCreateTwoPlaylists rc=0 succ=0.0 calls=20 probes=1 e2e=222.3s err=None
+- 10-27 04:45:13 E2E REPORT 116 paired
+- 10-27 04:45:13 E2E REPORT 116 paired
+- 10-27 04:45:13 E2E DRIVER DONE
+- 10-27 04:45:14 E2E DRIVER start ['FULL45+RAND', 'FULL45+INJ', 'FULL45+NOSYS'] tag=e2e116nA tasks=116 already paired=114
+- 10-27 04:46:29 E2E FULL45+INJ SimpleCalendarAnyEventsOnDate rc=0 succ=1.0 calls=5 probes=1 e2e=75.0s err=None
+- 10-27 04:47:30 E2E FULL45+NOSYS SimpleCalendarAnyEventsOnDate rc=0 succ=1.0 calls=3 probes=1 e2e=61.0s err=None
+- 10-27 04:49:47 E2E FULL45+RAND SystemCopyToClipboard rc=0 succ=0.0 calls=10 probes=0 e2e=136.8s err=None
+- 10-27 04:49:47 E2E REPORT 116 paired
+- 10-27 04:49:47 E2E DRIVER DONE

@@ -21,7 +21,8 @@ TAG = sys.argv[2] if len(sys.argv) > 2 else "e2e"
 RAW, GDIR = ROOT / "raw" / TAG, ROOT / "graph_snapshots" / TAG
 LOG = ROOT / "reports" / f"{TAG}_runs.jsonl"
 REPORT = ROOT / "reports" / f"{TAG}_full_orin_zh.md"
-API, MODEL = "http://127.0.0.1:18097/v1/chat/completions", "GELab-Zero-4B-preview"
+API = os.environ.get("E2E_API", "http://127.0.0.1:18097/v1/chat/completions")   # default: Orin vLLM tunnel
+MODEL = os.environ.get("E2E_MODEL", "GELab-Zero-4B-preview")
 SEED = 30
 LOAD_MODEL = os.environ.get("LOAD_MODEL", "Qwen2-VL-2B-Instruct-Q4_K_M.gguf")
 
@@ -34,12 +35,12 @@ def note(m):
 
 
 def services_ok():
-  r = subprocess.run(["curl", "-s", "--noproxy", "*", "-m", "8", "http://127.0.0.1:18097/v1/models"],
+  r = subprocess.run(["curl", "-s", "--noproxy", "*", "-m", "8", API.replace("/chat/completions", "/models")],
                      capture_output=True, text=True)
   subprocess.run(["adb", "-s", "emulator-5554", "forward", "tcp:18096", "tcp:8085"], capture_output=True)
   l = subprocess.run(["curl", "-s", "--noproxy", "*", "-m", "8", "http://127.0.0.1:18096/v1/models"],
                      capture_output=True, text=True)
-  return "GELab" in r.stdout, ".gguf" in l.stdout
+  return "gelab" in r.stdout.lower(), ".gguf" in l.stdout
 
 
 def a11y_ok():
@@ -172,6 +173,13 @@ def main():
                  STREAM_IO="1")
       if arm.endswith("+S"):
         env["STREAM_ACT"] = "1"
+      if arm.endswith("+P"):
+        env["STREAM_ACT"], env["PIPE_ONLY"] = "1", "1"   # pipelined execution only (ablation)
+      # FULL45 ablations: one component replaced by a naive alternative; each keeps its own graph directory
+      flag = {"+RAND": "RAND_EXPLORE", "+INJ": "GRAPH_PROMPT", "+NOSYS": "NO_SYS"}.get(arm[len(arm.split("+")[0]):])
+      if flag:
+        env[flag] = "1"
+        env["SEQ_APPDIR"] = str(GDIR / arm.replace("+", "_"))
       cmd = [sys.executable, str(ROOT / "scripts" / "full_run.py"), "--task", task, "--seed", str(SEED),
              "--variant", f"{TAG}_{arm}", "--mode", "agent", "--out", str(out), "--api_url", API, "--model", MODEL]
       t0 = time.time()

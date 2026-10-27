@@ -1,0 +1,136 @@
+{
+  "date": "2026-10-26",
+  "scope": "read-only source audit; only this evidence file is newly written; no device tests",
+  "synthetic_counterexamples": {
+    "type": "function_level_synthetic_counterexample",
+    "strict_same_with_changed_checked": false,
+    "relaxed_same_with_changed_checked": true,
+    "date_suffix_match": true
+  },
+  "paired_log_recalculation": {
+    "e2e116n": {
+      "source_sha256": "acbfbe7a1071adf1ce5974ffc1f97ca4f4b99309748b8541bce66e0ec031697e",
+      "valid_paired_tasks": 116,
+      "arms": {
+        "BASE": {
+          "strict_success": 53,
+          "n": 116,
+          "mean_e2e_s": 151.87413793103448,
+          "mean_calls": 10.137931034482758
+        },
+        "FULL45": {
+          "strict_success": 54,
+          "n": 116,
+          "mean_e2e_s": 135.15603448275863,
+          "mean_calls": 9.155172413793103
+        }
+      },
+      "common_success_tasks": 47,
+      "common_success": {
+        "BASE": {
+          "mean_calls": 7.9787234042553195,
+          "mean_e2e_s": 129.34468085106383
+        },
+        "FULL45": {
+          "mean_calls": 6.340425531914893,
+          "mean_e2e_s": 101.97659574468085
+        }
+      }
+    },
+    "e2e116A": {
+      "source_sha256": "75014157e828ef1b9f1f6915995b3c7c5dadc5c3473c00aa7896b73672946685",
+      "valid_paired_tasks": 42,
+      "arms": {
+        "BASE": {
+          "strict_success": 20,
+          "n": 42,
+          "mean_e2e_s": 117.72380952380952,
+          "mean_calls": 11.166666666666666
+        },
+        "FULL45": {
+          "strict_success": 20,
+          "n": 42,
+          "mean_e2e_s": 94.44761904761904,
+          "mean_calls": 9.595238095238095
+        },
+        "FULL45+INJ": {
+          "strict_success": 18,
+          "n": 42,
+          "mean_e2e_s": 112.6595238095238,
+          "mean_calls": 11.023809523809524
+        },
+        "FULL45+NOSYS": {
+          "strict_success": 21,
+          "n": 42,
+          "mean_e2e_s": 106.45,
+          "mean_calls": 9.904761904761905
+        },
+        "FULL45+RAND": {
+          "strict_success": 19,
+          "n": 42,
+          "mean_e2e_s": 92.31190476190476,
+          "mean_calls": 9.404761904761905
+        }
+      }
+    },
+    "e2e116L": {
+      "source_sha256": "a15136ea764b3cbff0313c7ab23e9b3b54dc2a2101f767b13c249a952f6ecf79",
+      "valid_paired_tasks": 3,
+      "arms": {
+        "BASE": {
+          "strict_success": 2,
+          "n": 3,
+          "mean_e2e_s": 139.86666666666667,
+          "mean_calls": 13.333333333333334
+        },
+        "BASE+P": {
+          "strict_success": 2,
+          "n": 3,
+          "mean_e2e_s": 149.26666666666665,
+          "mean_calls": 15
+        },
+        "FULL45": {
+          "strict_success": 1,
+          "n": 3,
+          "mean_e2e_s": 142.03333333333333,
+          "mean_calls": 16
+        },
+        "FULL45X": {
+          "strict_success": 1,
+          "n": 3,
+          "mean_e2e_s": 147.76666666666665,
+          "mean_calls": 14.666666666666666
+        }
+      }
+    },
+    "e2e116nA": {
+      "source_sha256": "229b9546c65c59bf89396fcdb0358e12261a1409db30c683e31110a781983c81",
+      "valid_paired_tasks": 59,
+      "arms": {
+        "FULL45+INJ": {
+          "strict_success": 24,
+          "n": 59,
+          "mean_e2e_s": 157.97627118644067,
+          "mean_calls": 12.440677966101696
+        },
+        "FULL45+NOSYS": {
+          "strict_success": 24,
+          "n": 59,
+          "mean_e2e_s": 159.4508474576271,
+          "mean_calls": 10.35593220338983
+        },
+        "FULL45+RAND": {
+          "strict_success": 26,
+          "n": 59,
+          "mean_e2e_s": 140.79830508474578,
+          "mean_calls": 10.11864406779661
+        }
+      }
+    }
+  },
+  "source_hashes": {
+    "experiments/trace_reachability_validation/scripts/full_run.py": "04a46f6be794ec0d74fa2a6d711347fc86a75a343bbc72d9670ba1b0fbff588b",
+    "experiments/trace_reachability_validation/scripts/full9.py": "f723264f8eab5c8395cf1b5acf6deac4b5efb7fc71e7cad5bbc07f5467cbdae2",
+    "experiments/trace_reachability_validation/scripts/e2e_driver.py": "60a2b51ee5fcd9841bfe70864165e89fb0e3e2cf5a058c1c9da859a94c8e966a"
+  }
+}

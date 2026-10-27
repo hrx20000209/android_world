@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1020" viewBox="0 0 1800 1020" role="img">
+<title>M2: show the candidate evidence, selection and recovery</title><desc>An illustrative task asks for a record category. Known search and a risky sync control are excluded. Categories and Settings are compared using visible text evidence. The selected probe observes a category page, then returns and checks the starting UI before its outcome is recorded.</desc>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#202936"/></marker>
+<marker id="redarrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#9b4444"/></marker>
+</defs>
+<style>text {font-family: Arial, Helvetica, sans-serif; font-variant-numeric: tabular-nums;} .edge {fill:none;stroke-linecap:round;stroke-linejoin:round;}</style>
+<rect width="1800" height="1020" fill="white"/>
+<text x="40" y="45" fill="#202936" font-size="34" font-weight="bold" text-anchor="start">
+<tspan x="40" dy="0">M2  Task-relevant online exploration</tspan>
+</text>
+<text x="40" y="90" fill="#566273" font-size="26" font-weight="normal" text-anchor="start">
+<tspan x="40" dy="0">Why probe this control, what does it reveal, and how is control returned to the agent?</tspan>
+</text>
+<rect x="40" y="125" width="1720" height="95" rx="12" fill="#fff8e9" stroke="#b98a37" stroke-width="2"/>
+<text x="900.0" y="162" fill="#202936" font-size="29" font-weight="bold" text-anchor="middle">
+<tspan x="900.0" dy="0">Task A: find Alice’s category</tspan>
+</text>
+<text x="900.0" y="198" fill="#566273" font-size="25" font-weight="normal" text-anchor="middle">
+<tspan x="900.0" dy="0">Relevance terms: find · category     |     Alice is a task parameter</tspan>
+</text>
+<rect x="40" y="285" width="335" height="265" rx="12" fill="#f4f5f7" stroke="#8793a1" stroke-width="2"/>
+<text x="207.5" y="322" fill="#202936" font-size="29" font-weight="bold" text-anchor="middle">
+<tspan x="207.5" dy="0">1  Live controls</tspan>
+</text>
+<text x="207.5" y="358" fill="#566273" font-size="27" font-weight="normal" text-anchor="middle">
+<tspan x="207.5" dy="0">Search</tspan>
+<tspan x="207.5" dy="35.64">Categories</tspan>
+<tspan x="207.5" dy="35.64">Settings</tspan>
+<tspan x="207.5" dy="35.64">Sync [toggle]</tspan>
+</text>
+<rect x="475" y="285" width="405" height="265" rx="12" fill="#eef8f5" stroke="#177466" stroke-width="2"/>
+<text x="677.5" y="322" fill="#202936" font-size="28" font-weight="bold" text-anchor="middle">
+<tspan x="677.5" dy="0">2  Exclude / admit</tspan>
+</text>
+<text x="677.5" y="358" fill="#566273" font-size="24" font-weight="normal" text-anchor="middle">
+<tspan x="677.5" dy="0">Search: already observed</tspan>
+<tspan x="677.5" dy="31.68">Sync: risk filter rejects</tspan>
+<tspan x="677.5" dy="31.68">Keep: Categories, Settings</tspan>
+<tspan x="677.5" dy="31.68">Use recorded recovery history</tspan>
+</text>
+<rect x="980" y="285" width="375" height="265" rx="12" fill="#eef8f5" stroke="#177466" stroke-width="2"/>
+<text x="1167.5" y="322" fill="#202936" font-size="28" font-weight="bold" text-anchor="middle">
+<tspan x="1167.5" dy="0">3  Rank by evidence</tspan>
+</text>
+<text x="1167.5" y="358" fill="#566273" font-size="25" font-weight="normal" text-anchor="middle">
+<tspan x="1167.5" dy="0">Categories → “category”</tspan>
+<tspan x="1167.5" dy="33.0">Settings → “settings”</tspan>
+<tspan x="1167.5" dy="33.0">TF–IDF relevance proxy</tspan>
+<tspan x="1167.5" dy="33.0">Select Categories</tspan>
+</text>
+<rect x="1455" y="285" width="305" height="265" rx="12" fill="#eef8f5" stroke="#177466" stroke-width="2"/>
+<text x="1607.5" y="322" fill="#202936" font-size="29" font-weight="bold" text-anchor="middle">
+<tspan x="1607.5" dy="0">4  Probe</tspan>
+</text>
+<text x="1607.5" y="358" fill="#566273" font-size="25" font-weight="normal" text-anchor="middle">
+<tspan x="1607.5" dy="0">L — Categories → C</tspan>
+<tspan x="1607.5" dy="33.0">Newly observed:</tspan>
+<tspan x="1607.5" dy="33.0">Travel · Work</tspan>
+</text>
+<path class="edge" d="M 375 420 L 475 420" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<path class="edge" d="M 880 420 L 980 420" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<path class="edge" d="M 1355 420 L 1455 420" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<text x="675" y="259" fill="#73568c" font-size="23" font-weight="normal" text-anchor="middle">
+<tspan x="675" dy="0">M1: coverage + recovery</tspan>
+</text>
+<text x="1170" y="259" fill="#73568c" font-size="22" font-weight="normal" text-anchor="middle">
+<tspan x="1170" dy="0">task + available text evidence</tspan>
+</text>
+<rect x="1055" y="675" width="400" height="175" rx="12" fill="#eef8f5" stroke="#177466" stroke-width="2"/>
+<text x="1255.0" y="712" fill="#202936" font-size="28" font-weight="bold" text-anchor="middle">
+<tspan x="1255.0" dy="0">5  Restore starting UI</tspan>
+</text>
+<text x="1255.0" y="748" fill="#566273" font-size="24" font-weight="normal" text-anchor="middle">
+<tspan x="1255.0" dy="0">Back / recorded navigation</tspan>
+<tspan x="1255.0" dy="31.68">finish recovery before handoff</tspan>
+<tspan x="1255.0" dy="31.68">record method and outcome</tspan>
+</text>
+<rect x="600" y="675" width="355" height="175" rx="12" fill="#f5f0fa" stroke="#73568c" stroke-width="2"/>
+<text x="777.5" y="712" fill="#202936" font-size="28" font-weight="bold" text-anchor="middle">
+<tspan x="777.5" dy="0">6  Compare live UI</tspan>
+</text>
+<text x="777.5" y="748" fill="#566273" font-size="24" font-weight="normal" text-anchor="middle">
+<tspan x="777.5" dy="0">with the starting observation</tspan>
+<tspan x="777.5" dy="31.68">accepted: resume handoff</tspan>
+<tspan x="777.5" dy="31.68">mismatch: fresh observation</tspan>
+</text>
+<rect x="40" y="675" width="455" height="175" rx="12" fill="#f5f0fa" stroke="#73568c" stroke-width="2"/>
+<text x="267.5" y="712" fill="#202936" font-size="28" font-weight="bold" text-anchor="middle">
+<tspan x="267.5" dy="0">7  Write outcome to M1</tspan>
+</text>
+<text x="267.5" y="748" fill="#566273" font-size="25" font-weight="normal" text-anchor="middle">
+<tspan x="267.5" dy="0">L — Categories → C</tspan>
+<tspan x="267.5" dy="33.0">contents + source + recovery</tspan>
+<tspan x="267.5" dy="33.0">retain failures as failures</tspan>
+</text>
+<path class="edge" d="M 1607 550 L 1607 762 L 1455 762" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<path class="edge" d="M 1055 762 L 955 762" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<path class="edge" d="M 600 762 L 495 762" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<text x="40" y="935" fill="#566273" font-size="27" font-weight="normal" text-anchor="start">
+<tspan x="40" dy="0">Stop new probes when action fields are ready or recovery time is insufficient.</tspan>
+</text>
+<text x="40" y="980" fill="#566273" font-size="24" font-weight="normal" text-anchor="start">
+<tspan x="40" dy="0">An in-flight probe can still delay execution. Example labels illustrate the mechanism; they are not measured scores.</tspan>
+</text>
+</svg>

@@ -1,0 +1,2 @@
+{"task": "SystemWifiTurnOff", "arm": "BASE+P", "rc": 0, "success": true, "calls": 5, "steps": 5, "probes": 0, "e2e_s": 69.2, "wall_s": 65.94, "agent_s": 55.9, "error": null, "mem_mb_before": {"MemAvailable": 1927, "SwapFree": 2325}, "empty_a11y_share": 0.0}
+{"task": "ContactsAddContact", "arm": "BASE+P", "rc": 0, "success": true, "calls": 9, "steps": 9, "probes": 0, "e2e_s": 84.6, "wall_s": 81.7, "agent_s": 70.0, "error": null, "mem_mb_before": {"MemAvailable": 1929, "SwapFree": 2335}, "empty_a11y_share": 0.0}

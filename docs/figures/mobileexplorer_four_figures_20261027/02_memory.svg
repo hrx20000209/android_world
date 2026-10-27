@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1120" viewBox="0 0 1800 1120" role="img">
+<title>M1: align observations and preserve evidence</title><desc>Illustrative observations from agent execution and exploration share a structural page key. A small graph names the pages and labels the actions. Instance contents and transition provenance are preserved. Separate outputs serve probe selection and reuse.</desc>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#202936"/></marker>
+<marker id="redarrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#9b4444"/></marker>
+</defs>
+<style>text {font-family: Arial, Helvetica, sans-serif; font-variant-numeric: tabular-nums;} .edge {fill:none;stroke-linecap:round;stroke-linejoin:round;}</style>
+<rect width="1800" height="1120" fill="white"/>
+<text x="40" y="45" fill="#202936" font-size="34" font-weight="bold" text-anchor="start">
+<tspan x="40" dy="0">M1  Mix-Trajectory Graph</tspan>
+</text>
+<text x="40" y="90" fill="#566273" font-size="26" font-weight="normal" text-anchor="start">
+<tspan x="40" dy="0">What is shared across tasks, and what remains specific to each observation?</tspan>
+</text>
+<rect x="40" y="145" width="430" height="190" rx="12" fill="#eef4fc" stroke="#245c9c" stroke-width="2"/>
+<text x="255.0" y="182" fill="#202936" font-size="29" font-weight="bold" text-anchor="middle">
+<tspan x="255.0" dy="0">Agent observation</tspan>
+</text>
+<text x="255.0" y="218" fill="#566273" font-size="25" font-weight="normal" text-anchor="middle">
+<tspan x="255.0" dy="0">Task A: find Alice’s category</tspan>
+<tspan x="255.0" dy="33.0">L  — Search →  R</tspan>
+<tspan x="255.0" dy="33.0">List → search screen</tspan>
+</text>
+<rect x="40" y="400" width="430" height="190" rx="12" fill="#eef8f5" stroke="#177466" stroke-width="2"/>
+<text x="255.0" y="437" fill="#202936" font-size="29" font-weight="bold" text-anchor="middle">
+<tspan x="255.0" dy="0">Exploration observation</tspan>
+</text>
+<text x="255.0" y="473" fill="#566273" font-size="24" font-weight="normal" text-anchor="middle">
+<tspan x="255.0" dy="0">During the same model request</tspan>
+<tspan x="255.0" dy="31.68">L  — Categories →  C</tspan>
+<tspan x="255.0" dy="31.68">List → category page → return</tspan>
+</text>
+<rect x="565" y="260" width="395" height="255" rx="12" fill="#f5f0fa" stroke="#73568c" stroke-width="2"/>
+<text x="762" y="302" fill="#202936" font-size="28" font-weight="bold" text-anchor="middle">
+<tspan x="762" dy="0">Align by page + control</tspan>
+</text>
+<text x="762" y="351" fill="#202936" font-size="24" font-weight="normal" text-anchor="middle">
+<tspan x="762" dy="0">page: app · activity · layout</tspan>
+<tspan x="762" dy="39">control: family + selector</tspan>
+</text>
+<text x="762" y="445" fill="#566273" font-size="24" font-weight="normal" text-anchor="middle">
+<tspan x="762" dy="0">Keep source observations</tspan>
+<tspan x="762" dy="35">and their individual outcomes</tspan>
+</text>
+<path class="edge" d="M 470 240 L 520 240 L 520 330 L 565 330" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<path class="edge" d="M 470 495 L 520 495 L 520 445 L 565 445" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<path class="edge" d="M 960 385 L 1060 385" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<rect x="1060" y="145" width="700" height="470" rx="12" fill="#fafbfc" stroke="#a2acb7" stroke-width="2"/>
+<text x="1090" y="184" fill="#202936" font-size="27" font-weight="bold" text-anchor="start">
+<tspan x="1090" dy="0">Small graph with meaningful page names</tspan>
+</text>
+<circle cx="1160" cy="370" r="42" fill="white" stroke="#202936" stroke-width="3"/>
+<text x="1160" y="380" fill="#202936" font-size="30" font-weight="bold" text-anchor="middle">
+<tspan x="1160" dy="0">L</tspan>
+</text>
+<circle cx="1630" cy="270" r="42" fill="white" stroke="#245c9c" stroke-width="3"/>
+<text x="1630" y="280" fill="#245c9c" font-size="30" font-weight="bold" text-anchor="middle">
+<tspan x="1630" dy="0">R</tspan>
+</text>
+<circle cx="1630" cy="485" r="42" fill="white" stroke="#177466" stroke-width="3"/>
+<text x="1630" y="495" fill="#177466" font-size="30" font-weight="bold" text-anchor="middle">
+<tspan x="1630" dy="0">C</tspan>
+</text>
+<path class="edge" d="M 1202 358 L 1587 280" stroke="#245c9c" stroke-width="2.8" marker-end="url(#arrow)"/>
+<path class="edge" d="M 1202 382 L 1587 474" stroke="#177466" stroke-width="2.8" stroke-dasharray="9 6" marker-end="url(#arrow)"/>
+<text x="1380" y="287" fill="#245c9c" font-size="27" font-weight="normal" text-anchor="middle">
+<tspan x="1380" dy="0">Search</tspan>
+</text>
+<text x="1380" y="468" fill="#177466" font-size="27" font-weight="normal" text-anchor="middle">
+<tspan x="1380" dy="0">Categories</tspan>
+</text>
+<text x="1160" y="444" fill="#202936" font-size="25" font-weight="normal" text-anchor="middle">
+<tspan x="1160" dy="0">Record list</tspan>
+</text>
+<text x="1630" y="225" fill="#245c9c" font-size="25" font-weight="normal" text-anchor="middle">
+<tspan x="1630" dy="0">Search screen</tspan>
+</text>
+<text x="1630" y="565" fill="#177466" font-size="24" font-weight="normal" text-anchor="middle">
+<tspan x="1630" dy="0">Category page</tspan>
+<tspan x="1630" dy="30">Travel · Work</tspan>
+</text>
+<text x="1100" y="575" fill="#566273" font-size="22" font-weight="normal" text-anchor="start">
+<tspan x="1100" dy="0">blue: agent   green dashed: explore</tspan>
+</text>
+<rect x="40" y="660" width="860" height="170" rx="12" fill="#f5f0fa" stroke="#73568c" stroke-width="2"/>
+<text x="470.0" y="697" fill="#202936" font-size="29" font-weight="bold" text-anchor="middle">
+<tspan x="470.0" dy="0">Same page key; different contents</tspan>
+</text>
+<text x="470.0" y="733" fill="#566273" font-size="24" font-weight="normal" text-anchor="middle">
+<tspan x="470.0" dy="0">L at task A: Alice       L at task B: Bob</tspan>
+<tspan x="470.0" dy="31.68">Keep contents, control attributes and observation references.</tspan>
+<tspan x="470.0" dy="31.68">A shared index does not make the instances execution-equivalent.</tspan>
+</text>
+<rect x="1010" y="660" width="750" height="170" rx="12" fill="#eef8f5" stroke="#177466" stroke-width="2"/>
+<text x="1385.0" y="697" fill="#202936" font-size="29" font-weight="bold" text-anchor="middle">
+<tspan x="1385.0" dy="0">One explicit transition record</tspan>
+</text>
+<text x="1385.0" y="733" fill="#566273" font-size="24" font-weight="normal" text-anchor="middle">
+<tspan x="1385.0" dy="0">source=L   control=Categories   destination=C</tspan>
+<tspan x="1385.0" dy="31.68">origin=explore   recovery=accepted   observation=task A</tspan>
+<tspan x="1385.0" dy="31.68">Store conflicting outcomes; do not silently replace them.</tspan>
+</text>
+<path class="edge" d="M 1410 615 L 1410 660" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<rect x="40" y="915" width="535" height="135" rx="12" fill="#eef8f5" stroke="#177466" stroke-width="2"/>
+<text x="307.5" y="952" fill="#202936" font-size="29" font-weight="bold" text-anchor="middle">
+<tspan x="307.5" dy="0">Read by M2: exploration</tspan>
+</text>
+<text x="307.5" y="988" fill="#566273" font-size="24" font-weight="normal" text-anchor="middle">
+<tspan x="307.5" dy="0">known / unseen transitions</tspan>
+<tspan x="307.5" dy="31.68">relevance evidence + recovery history</tspan>
+</text>
+<rect x="630" y="915" width="535" height="135" rx="12" fill="#eef4fc" stroke="#245c9c" stroke-width="2"/>
+<text x="897.5" y="952" fill="#202936" font-size="29" font-weight="bold" text-anchor="middle">
+<tspan x="897.5" dy="0">Read by M3: reuse</tspan>
+</text>
+<text x="897.5" y="988" fill="#566273" font-size="23" font-weight="normal" text-anchor="middle">
+<tspan x="897.5" dy="0">navigation candidates + source evidence</tspan>
+<tspan x="897.5" dy="30.360000000000003">procedure entries + parameter slots</tspan>
+</text>
+<rect x="1220" y="915" width="540" height="135" rx="12" fill="#f5f0fa" stroke="#73568c" stroke-width="2"/>
+<text x="1490.0" y="952" fill="#202936" font-size="29" font-weight="bold" text-anchor="middle">
+<tspan x="1490.0" dy="0">Procedure index</tspan>
+</text>
+<text x="1490.0" y="988" fill="#566273" font-size="22" font-weight="normal" text-anchor="middle">
+<tspan x="1490.0" dy="0">extracted from model execution paths</tspan>
+<tspan x="1490.0" dy="29.040000000000003">probe observations do not create full procedures</tspan>
+</text>
+<text x="40" y="1092" fill="#566273" font-size="22" font-weight="normal" text-anchor="start">
+<tspan x="40" dy="0">Illustrative UI and logical schema; physical storage and acceptance checks are specified separately.</tspan>
+</text>
+</svg>

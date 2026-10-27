@@ -22,4 +22,4 @@ while :; do
   l=$(lines); if [ "$l" != "$l0" ]; then l0=$l; t0=$(date +%s); fi
   if [ $(( $(date +%s) - t0 )) -gt 720 ]; then echo "STALL: no episode finished for 12 min"; tail -3 logs/${TAG:-e2e10}_driver.log; break; fi
 done
-grep "E2E " logs/${TAG:-e2e10}_driver.log | tail -4 | cut -c1-200
+grep "E2E " logs/${TAG:-e2e10}_driver.log | tail -${TAILN:-4} | cut -c1-200

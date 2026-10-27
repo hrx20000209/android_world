@@ -57,6 +57,12 @@ ARM_NAME = os.environ.get("FULL_ARM", "BASE")
 # "FULL40D": FULL40 behaviour run under a simulated on-device inference load (ONDEVICE_LOAD=1)
 ARM = re.sub(r"(R\d*|W|X|D)$", "", ARM_NAME) if re.match(r"^FULL\d+(R\d*|W|X|D)$", ARM_NAME) else ARM_NAME
 NOEXP = bool(re.match(r"^FULL\d+X$", ARM_NAME))
+# ablation: pipelined execution only (streamed early action + adaptive observation + stale-frame check), no graph
+PIPE_ONLY = os.environ.get("PIPE_ONLY") == "1"
+# ablations of FULL45 (each replaces one component with a naive alternative, everything else unchanged)
+RAND_EXPLORE = os.environ.get("RAND_EXPLORE") == "1"    # exploration targets drawn uniformly from the same safe set
+GRAPH_PROMPT = os.environ.get("GRAPH_PROMPT") == "1"    # graph knowledge injected into the prompt, no graph execution
+NO_SYS = os.environ.get("NO_SYS") == "1"                # no pipelined execution: full decoding, fixed 1 s observation wait
 APPDIR = Path(os.environ.get("SEQ_APPDIR", "/tmp/full"))
 
 
@@ -165,7 +171,7 @@ class FullEpisode(S.SeqEpisode):
     # FULL37: the step budget is the INFERENCE budget (as for BASE: 20 model calls); graph executions do not use
     # it. A separate cap on all counted steps (2x) guards against graph loops.
     while ((m["calls"] < self.max_steps() and k < 2 * self.max_steps()) if ARM in ("FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") else k < self.max_steps()):
-      if reuse_next is not None:
+      if reuse_next is not None and not NO_SYS:
         # R2: model picked the probed slot; check the page without the fixed pause
         pre = self.dev.capture(f"s{k}_pre_reuse", settle=True, pause=None, full_res=True)
         if R.same_state(pre["ui"], reuse_next):
@@ -174,12 +180,12 @@ class FullEpisode(S.SeqEpisode):
           m["reuse_miss"] += 1
           pre = self.dev.capture(f"s{k}_pre", settle=True, pause=1.0, full_res=True)
         reuse_next = None
-      elif ARM in ("FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") and prev is not None:
+      elif (ARM in ("FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") or PIPE_ONLY) and prev is not None and not NO_SYS:
         # system side: no fixed pause - wait until the screen changed from the one the action was taken on and is
         # stable, or (no change) for the stabilisation time the graph learned for this edge
         t_w = self._adaptive_wait(prev, m)
         pre = self.dev.capture(f"s{k}_pre", settle=False, pause=None, full_res=True)
-        if ARM in ("FULL43", "FULL44", "FULL45"):
+        if ARM in ("FULL43", "FULL44", "FULL45") or PIPE_ONLY:
           pre = self._pixels_caught_up(prev, pre, k, m)
         pre["adaptive_wait_s"] = round(t_w, 3)
       else:
@@ -198,7 +204,7 @@ class FullEpisode(S.SeqEpisode):
         self._pend = None
       if ARM in ("FULL8", "FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16", "FULL17", "FULL18", "FULL19", "FULL20", "FULL21", "FULL22", "FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") and k == 0 and not booted:
         booted = True
-        app = full7.resolve_app(goal, ui, require_known=gx is None)
+        app = None if GRAPH_PROMPT else full7.resolve_app(goal, ui, require_known=gx is None)
         if app and ARM == "FULL45" and _app_not_first(goal, app):
           m["bootstrap_skipped_multistep"] += 1
           app = None                       # FULL45: "turn on X and open Y": the app is not the first step
@@ -224,7 +230,7 @@ class FullEpisode(S.SeqEpisode):
           if gx is not None:
             pk_ = GX.pkg_of_app(app)
             gx.record("LAUNCH", pk_, instance, k, ui.package == pk_, src=None, dst=ui.summary())
-      if ARM in ("FULL8", "FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16", "FULL17", "FULL18", "FULL19", "FULL20", "FULL21", "FULL22", "FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") and self._last_model_commit:
+      if ARM in ("FULL8", "FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16", "FULL17", "FULL18", "FULL19", "FULL20", "FULL21", "FULL22", "FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") and self._last_model_commit and not GRAPH_PROMPT:
         # the model itself just chose a commit; the dialog that follows is confirmed with its positive button
         ck_ = (ui.package, ui.activity)
         if gx is not None and not gx.can("CONFIRM", ck_):
@@ -256,7 +262,7 @@ class FullEpisode(S.SeqEpisode):
         self._exec_log.append({"action": {"action_type": "navigate_back"}, "commit": False})
         k += 1
         continue
-      if fn is not None:      # FULL9: function graph (parameterized sub-trajectories), before inference
+      if fn is not None and not GRAPH_PROMPT:      # FULL9: function graph (parameterized sub-trajectories), before inference
         if ARM == "FULL14":
           self.log("fn_gate", {"step": k, "rec": fn.next_rec, "tried": sorted(fn.tried), "form_tried": sorted(getattr(fn, "form_tried", set())),
                                "applied": fn.applied_rec, "model_rec": fn.model_rec, "done": sorted(fn.done), "act": ui.activity})
@@ -287,7 +293,7 @@ class FullEpisode(S.SeqEpisode):
           self._last_model_commit = False
           k += 1
           continue
-      if ARM in ("FULL18", "FULL19", "FULL20", "FULL21", "FULL22", "FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") and not self._reuse_brake and not full9.transient(ui):
+      if ARM in ("FULL18", "FULL19", "FULL20", "FULL21", "FULL22", "FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") and not self._reuse_brake and not full9.transient(ui) and not GRAPH_PROMPT:
         n_r = self.try_reuse(ui, pre, agent, steps, k, own, m, fn)
         if n_r and gx is not None:
           gx.record("ACTION", (ui.package, ui.activity, steps[-1].get("tok")), instance, k, True, src=ui.summary())
@@ -295,7 +301,7 @@ class FullEpisode(S.SeqEpisode):
           self._last_model_commit = False
           k += 1
           continue
-      if ARM in ("FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") and not self._macro_brake and not full9.transient(ui):
+      if ARM in ("FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") and not self._macro_brake and not full9.transient(ui) and not GRAPH_PROMPT:
         # goal-conditioned navigation macro over the unified graph (design review P0-2)
         n_m = IG.try_macro(self, ui, pre, agent, steps, k, own, m, graph,
                            picker=(TG.pick if ARM in ("FULL24", "FULL26") else _pick_once if ARM in ("FULL44", "FULL45") else None))
@@ -324,7 +330,7 @@ class FullEpisode(S.SeqEpisode):
             k += 1 if ARM in ("FULL8", "FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16", "FULL17", "FULL18", "FULL19", "FULL20", "FULL21", "FULL22", "FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") else ok      # FULL8: a multi-hop graph execution is one counted step
             m["env_actions_extra"] += (ok - 1) if ARM in ("FULL8", "FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16", "FULL17", "FULL18", "FULL19", "FULL20", "FULL21", "FULL22", "FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") else 0
             continue
-      if store is not None:   # R1
+      if store is not None and not GRAPH_PROMPT:   # R1
         path = self.plan_jump(store, graph, own, ui, used)
         if path:
           m["jumps"] += 1
@@ -344,6 +350,12 @@ class FullEpisode(S.SeqEpisode):
           ui = pre["ui"]
       stuck_text = fx.hint(ui) if fx is not None else ""
       full7.EXTRA["text"] = stuck_text
+      if GRAPH_PROMPT:
+        g_txt = _graph_prompt_text(self, graph, ui)
+        full7.EXTRA["text"] = (stuck_text + "\n\n" + g_txt).strip() if g_txt else stuck_text
+        m["graph_prompt_steps" if g_txt else "graph_prompt_empty"] += 1
+        if g_txt:
+          self.log("graph_prompt", {"step": k, "text": g_txt})
       if stuck_text:
         m["stuck_hints"] += 1
       box = {}
@@ -693,7 +705,7 @@ class FullEpisode(S.SeqEpisode):
     top = info.get("top")
     rec["gate"] = info
     targets = []
-    if top and top in by_fam:
+    if top and top in by_fam and not RAND_EXPLORE:
       s = by_fam[top]
       seen_here = any(o["instance"] == instance for o in graph_obs(ex.graph, ui.struct_sig, s.slot_id))
       if ARM == "FULL45" and _risky_slot(self, ui, s):
@@ -765,6 +777,10 @@ class FullEpisode(S.SeqEpisode):
             scored = [x for x in scored if x[0][0] > 0] + [x for x in scored if x[0][0] <= 0]
           else:
             scored = [x for x in scored if x[0][0] > 0] or []
+          if RAND_EXPLORE:
+            _rng = getattr(self, "_rand_rng", None) or __import__("random").Random(f"{self.args.task}/rand")
+            self._rand_rng = _rng
+            _rng.shuffle(scored)           # ablation: same candidates and safety filters, random order
         if not scored:
           scored = None
       if unknown and ARM in ("FULL16", "FULL17", "FULL18", "FULL19", "FULL20", "FULL21", "FULL22", "FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") and scored is None:
@@ -822,7 +838,7 @@ class FullEpisode(S.SeqEpisode):
           taken = {t[1].slot_id for t in targets}
           conts = {full9.container_key(ui.package, ui.activity, t[1].sel) for t in targets}
           rv = []
-          for sl in U.enumerate_slots(ui):
+          for sl in ([] if RAND_EXPLORE else U.enumerate_slots(ui)):
             fam = C.family_of_sel(sl.sel)
             key = (ui.package, ui.activity, fam)
             if not sl.safe or sl.slot_id in taken or full9.effectful(sl.sel) or key not in known:
@@ -1091,7 +1107,7 @@ def _adaptive_wait(self, prev, m):
       sig = None
     if sig is not None and sig != sig0 and not changed:
       changed, t_change = True, _t.time() - t0
-    if changed and sig is not None and sig == last and (ARM not in ("FULL41", "FULL42", "FULL43", "FULL44", "FULL45") or any((n.text or n.desc) for n in u.app_nodes())):
+    if changed and sig is not None and sig == last and ((ARM not in ("FULL41", "FULL42", "FULL43", "FULL44", "FULL45") and not PIPE_ONLY) or any((n.text or n.desc) for n in u.app_nodes())):
       break                                   # changed and now stable (FULL41: and not a blank transitional frame)
     if not changed and _t.time() - t0 >= no_change_wait:
       break                                   # this edge usually shows no change (or changes later than we wait)
@@ -1110,6 +1126,52 @@ def _adaptive_wait(self, prev, m):
 
 
 FullEpisode._adaptive_wait = _adaptive_wait
+
+
+def _graph_prompt_text(ep, graph, ui, max_edges=8, max_texts=6):
+  """Ablation GRAPH_PROMPT: the plain alternative to graph execution - the transitions the graph holds for the
+  current screen (model execution + exploration, this and earlier tasks), written into the prompt as text."""
+  import gzip  # noqa: E402
+  structs = [ui.struct_sig] if ui.struct_sig in graph.nodes else sorted(graph.layout.get(ui.layout_sig, set()))
+  edges = {}
+  for st_ in structs:
+    for (src, sid), obs in graph.slots.items():
+      if src != st_:
+        continue
+      for o in obs:
+        sel, d = o.get("selector") or {}, o.get("dst")
+        lab = (sel.get("label") or sel.get("desc") or (sel.get("rid") or "").split("/")[-1].replace("_", " ")).strip()
+        if not lab or not d or not o.get("dst_cid") or o.get("outcome") in ("no_change", None):
+          continue
+        e = edges.setdefault(lab.lower(), {"label": lab, "n": 0, "o": o})
+        e["n"] += 1
+        e["o"] = o
+  if not edges:
+    return ""
+  raw = ep.out.parents[1]
+  lines = []
+  for e in sorted(edges.values(), key=lambda x: -x["n"])[:max_edges]:
+    o = e["o"]
+    task = o["instance"].split("/")[0]
+    texts = []
+    try:
+      with gzip.open(raw / task / "p0" / "a11y" / f"{o['dst_cid']}.json.gz", "rt", encoding="utf-8") as f:
+        dj = json.load(f)
+      dui = U.parse_flat(dj["payload"], activity=dj["activity"])
+      for n in dui.app_nodes():
+        t = (n.text or n.desc or "").strip()
+        if n.visible and t and len(t) <= 40 and t not in texts:
+          texts.append(t)
+        if len(texts) >= max_texts:
+          break
+    except Exception:  # pylint: disable=broad-except
+      pass
+    act = (o["dst"].get("activity") or "").split(".")[-1]
+    how = "explored" if o.get("origin") == "explore" else "executed earlier"
+    shown = ", ".join(f'"{t}"' for t in texts) if texts else "(no text)"
+    lines.append(f'- tap "{e["label"]}" -> {act} screen showing {shown} ({how})')
+  return ("Graph memory: UI transitions previously recorded from this screen (may be outdated; use only if helpful):\n"
+          + "\n".join(lines))
 
 
 def _pixels_caught_up(self, prev, pre, k, m):
@@ -1240,7 +1302,7 @@ FullEpisode.decide = _decide_with_load
 # decision) is written into its slot before the next decision is built.
 # STREAM_IO: every decision is streamed and timed (time to first token, time the action fields complete, end, tokens);
 # STREAM: the action is executed as soon as its fields are complete (FULL41 by default; any arm with STREAM_ACT=1)
-STREAM = os.environ.get("STREAM_ACT", "1" if ARM in ("FULL41", "FULL42", "FULL43", "FULL44", "FULL45") else "0") == "1"
+STREAM = os.environ.get("STREAM_ACT", "1" if ARM in ("FULL41", "FULL42", "FULL43", "FULL44", "FULL45") else "0") == "1" and not NO_SYS
 STREAM_IO = STREAM or os.environ.get("STREAM_IO") == "1"
 _T_ACTION = []
 
@@ -1331,7 +1393,7 @@ def _stream_call(api_url, model, messages, on_prefix, gen=None):
   if key:
     headers["Authorization"] = f"Bearer {key}"
   txt, fired = "", False
-  with requests.post(api_url, headers=headers, json=payload, stream=True, timeout=3000) as resp:
+  with requests.post(api_url, headers=headers, json=payload, stream=True, timeout=(15, 120)) as resp:   # a dead link fails the episode quickly (rerun)
     resp.raise_for_status()
     for line in resp.iter_lines():
       if not line or not line.startswith(b"data: "):
@@ -1419,7 +1481,9 @@ def _decide_stream(self, agent, goal, pixels):
     _load_stop(conn)
   d = _parse_decision(self, response, time.time() - t0)
   d["gen"] = gen
-  if gen.get("t_action_s"):
+  if NO_SYS and gen.get("t_end_s"):
+    _T_ACTION.append(gen["t_end_s"])      # no early action: the action is available at the end of decoding
+  elif gen.get("t_action_s"):
     _T_ACTION.append(gen["t_action_s"])
   self.log("gen", dict(gen, early=STREAM))
   if early is not None:

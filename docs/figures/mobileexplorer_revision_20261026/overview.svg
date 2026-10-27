@@ -1,0 +1,184 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1140" viewBox="0 0 1800 1140" role="img">
+<title>MobileExplorer: revised system overview</title><desc>Control flow places reuse before inference. On a reuse miss, model inference and UI probing run concurrently, with recovery and action checking before execution. A separate panel shows two queries and two observation sources for logical memory.</desc>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#202936"/></marker>
+<marker id="redarrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#9b4444"/></marker>
+</defs>
+<style>text {font-family: Arial, Helvetica, sans-serif; font-variant-numeric: tabular-nums;} .edge {fill:none;stroke-linecap:round;stroke-linejoin:round;}</style>
+<rect width="1800" height="1140" fill="white"/>
+<text x="40" y="40" fill="#202936" font-size="33" font-weight="bold" text-anchor="start">
+<tspan x="40" dy="0">(a) Control flow</tspan>
+</text>
+<path class="edge" d="M 1625 115 L 1625 70 L 165 70 L 165 115" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<text x="880" y="58" fill="#566273" font-size="24" font-weight="normal" text-anchor="middle">
+<tspan x="880" dy="0">next decision boundary</tspan>
+</text>
+<rect x="40" y="115" width="250" height="110" rx="12" fill="#fff" stroke="#8793a1" stroke-width="2"/>
+<text x="165.0" y="152" fill="#202936" font-size="28" font-weight="bold" text-anchor="middle">
+<tspan x="165.0" dy="0">Task + live UI</tspan>
+</text>
+<text x="165.0" y="188" fill="#566273" font-size="21" font-weight="normal" text-anchor="middle">
+<tspan x="165.0" dy="0">pixels · a11y · history</tspan>
+</text>
+<rect x="355" y="115" width="340" height="110" rx="12" fill="#eef4fc" stroke="#245c9c" stroke-width="2"/>
+<text x="525.0" y="152" fill="#245c9c" font-size="29" font-weight="bold" text-anchor="middle">
+<tspan x="525.0" dy="0">Q1  Reuse lookup</tspan>
+</text>
+<text x="525.0" y="188" fill="#566273" font-size="25" font-weight="normal" text-anchor="middle">
+<tspan x="525.0" dy="0">task &amp; current UI</tspan>
+</text>
+<polygon points="815,100 920,170 815,240 710,170" fill="#fff8e9" stroke="#b98a37" stroke-width="2"/>
+<text x="815" y="164" fill="#202936" font-size="25" font-weight="bold" text-anchor="middle">
+<tspan x="815" dy="0">Applicable</tspan>
+<tspan x="815" dy="30">candidate?</tspan>
+</text>
+<rect x="1000" y="115" width="350" height="110" rx="12" fill="#eef4fc" stroke="#245c9c" stroke-width="2"/>
+<text x="1175.0" y="152" fill="#202936" font-size="28" font-weight="bold" text-anchor="middle">
+<tspan x="1175.0" dy="0">Ground &amp; replay</tspan>
+</text>
+<text x="1175.0" y="188" fill="#566273" font-size="21" font-weight="normal" text-anchor="middle">
+<tspan x="1175.0" dy="0">check each step; stop on mismatch</tspan>
+</text>
+<rect x="1490" y="115" width="270" height="110" rx="12" fill="#f4f5f7" stroke="#8793a1" stroke-width="2"/>
+<text x="1625.0" y="152" fill="#202936" font-size="28" font-weight="bold" text-anchor="middle">
+<tspan x="1625.0" dy="0">Observe UI</tspan>
+</text>
+<text x="1625.0" y="188" fill="#566273" font-size="25" font-weight="normal" text-anchor="middle">
+<tspan x="1625.0" dy="0">record outcome</tspan>
+</text>
+<path class="edge" d="M 290 170 L 355 170" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<path class="edge" d="M 695 170 L 710 170" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<path class="edge" d="M 920 170 L 1000 170" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<text x="958" y="156" fill="#202936" font-size="24" font-weight="normal" text-anchor="middle">
+<tspan x="958" dy="0">yes</tspan>
+</text>
+<path class="edge" d="M 1350 170 L 1490 170" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<rect x="350" y="300" width="1010" height="450" rx="16" fill="#fafbfc" stroke="#a2acb7" stroke-width="2" stroke-dasharray="9 7"/>
+<text x="372" y="330" fill="#566273" font-size="24" font-weight="normal" text-anchor="start">
+<tspan x="372" dy="0">On a reuse miss</tspan>
+</text>
+<path class="edge" d="M 815 240 L 815 350" stroke="#202936" stroke-width="2.8"/>
+<text x="840" y="268" fill="#202936" font-size="24" font-weight="normal" text-anchor="middle">
+<tspan x="840" dy="0">no</tspan>
+</text>
+<path class="edge" d="M 815 350 L 570 350 L 570 375" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<path class="edge" d="M 815 350 L 1095 350 L 1095 375" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<rect x="390" y="375" width="360" height="115" rx="12" fill="#fff8e9" stroke="#b98a37" stroke-width="2"/>
+<text x="570.0" y="412" fill="#202936" font-size="29" font-weight="bold" text-anchor="middle">
+<tspan x="570.0" dy="0">Model inference</tspan>
+</text>
+<text x="570.0" y="448" fill="#566273" font-size="24" font-weight="normal" text-anchor="middle">
+<tspan x="570.0" dy="0">frozen screenshot + task</tspan>
+<tspan x="570.0" dy="31.68">stream action fields</tspan>
+</text>
+<rect x="880" y="375" width="430" height="115" rx="12" fill="#eef8f5" stroke="#177466" stroke-width="2"/>
+<text x="1095.0" y="412" fill="#177466" font-size="29" font-weight="bold" text-anchor="middle">
+<tspan x="1095.0" dy="0">Q2  Select &amp; probe</tspan>
+</text>
+<text x="1095.0" y="448" fill="#566273" font-size="24" font-weight="normal" text-anchor="middle">
+<tspan x="1095.0" dy="0">unobserved UI transitions</tspan>
+<tspan x="1095.0" dy="31.68">operate on the live UI</tspan>
+</text>
+<path class="edge" d="M 750 455 L 880 455" stroke="#202936" stroke-width="2.8" stroke-dasharray="6 5" marker-end="url(#arrow)"/>
+<text x="815" y="408" fill="#566273" font-size="21" font-weight="normal" text-anchor="middle">
+<tspan x="815" dy="0">stop new</tspan>
+<tspan x="815" dy="27">probes</tspan>
+</text>
+<rect x="880" y="520" width="430" height="90" rx="12" fill="#eef8f5" stroke="#177466" stroke-width="2"/>
+<text x="1095.0" y="557" fill="#202936" font-size="29" font-weight="bold" text-anchor="middle">
+<tspan x="1095.0" dy="0">Restore &amp; check UI</tspan>
+</text>
+<text x="1095.0" y="593" fill="#566273" font-size="23" font-weight="normal" text-anchor="middle">
+<tspan x="1095.0" dy="0">record recovery outcome</tspan>
+</text>
+<path class="edge" d="M 1095 490 L 1095 520" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<path class="edge" d="M 570 490 L 570 625 L 720 625 L 720 650" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<text x="555" y="548" fill="#566273" font-size="23" font-weight="normal" text-anchor="end">
+<tspan x="555" dy="0">action</tspan>
+<tspan x="555" dy="30.360000000000003">available</tspan>
+</text>
+<path class="edge" d="M 1095 610 L 1095 630 L 1020 630 L 1020 650" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<rect x="590" y="650" width="560" height="80" rx="12" fill="#f5f0fa" stroke="#80669b" stroke-width="2"/>
+<text x="870.0" y="687" fill="#202936" font-size="28" font-weight="bold" text-anchor="middle">
+<tspan x="870.0" dy="0">Check action on live UI</tspan>
+</text>
+<text x="870.0" y="723" fill="#566273" font-size="22" font-weight="normal" text-anchor="middle">
+<tspan x="870.0" dy="0">execute, or obtain a fresh observation</tspan>
+</text>
+<path class="edge" d="M 590 690 L 315 690 L 315 260 L 165 260 L 165 225" stroke="#9b4444" stroke-width="2.8" stroke-dasharray="7 5" marker-end="url(#redarrow)"/>
+<text x="440" y="677" fill="#9b4444" font-size="22" font-weight="normal" text-anchor="middle">
+<tspan x="440" dy="0">invalid / uncertain</tspan>
+</text>
+<rect x="1470" y="640" width="290" height="110" rx="12" fill="#f4f5f7" stroke="#8793a1" stroke-width="2"/>
+<text x="1615.0" y="677" fill="#202936" font-size="28" font-weight="bold" text-anchor="middle">
+<tspan x="1615.0" dy="0">Execute action</tspan>
+</text>
+<text x="1615.0" y="713" fill="#566273" font-size="24" font-weight="normal" text-anchor="middle">
+<tspan x="1615.0" dy="0">wait &amp; observe UI</tspan>
+</text>
+<path class="edge" d="M 1150 690 L 1470 690" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<text x="1307" y="676" fill="#202936" font-size="23" font-weight="normal" text-anchor="middle">
+<tspan x="1307" dy="0">accepted</tspan>
+</text>
+<path class="edge" d="M 1625 640 L 1625 225" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<text x="350" y="788" fill="#566273" font-size="25" font-weight="normal" text-anchor="start">
+<tspan x="350" dy="0">Runtime support: streamed action fields · adaptive UI observation</tspan>
+</text>
+<path class="edge" d="M 40 815 L 1760 815" stroke="#c7cdd4" stroke-width="1.5"/>
+<text x="40" y="854" fill="#202936" font-size="33" font-weight="bold" text-anchor="start">
+<tspan x="40" dy="0">(b) One logical memory, two read interfaces</tspan>
+</text>
+<rect x="40" y="880" width="460" height="90" rx="12" fill="#eef4fc" stroke="#245c9c" stroke-width="2"/>
+<text x="270.0" y="917" fill="#245c9c" font-size="29" font-weight="bold" text-anchor="middle">
+<tspan x="270.0" dy="0">Q1  Reuse lookup</tspan>
+</text>
+<text x="270.0" y="953" fill="#566273" font-size="23" font-weight="normal" text-anchor="middle">
+<tspan x="270.0" dy="0">navigation · procedures · bindings</tspan>
+</text>
+<rect x="1300" y="880" width="460" height="90" rx="12" fill="#eef8f5" stroke="#177466" stroke-width="2"/>
+<text x="1530.0" y="917" fill="#177466" font-size="29" font-weight="bold" text-anchor="middle">
+<tspan x="1530.0" dy="0">Q2  Probe selection</tspan>
+</text>
+<text x="1530.0" y="953" fill="#566273" font-size="22" font-weight="normal" text-anchor="middle">
+<tspan x="1530.0" dy="0">unseen controls · evidence · history</tspan>
+</text>
+<rect x="650" y="880" width="500" height="215" rx="12" fill="#f4f5f7" stroke="#8793a1" stroke-width="2"/>
+<text x="900" y="919" fill="#202936" font-size="29" font-weight="bold" text-anchor="middle">
+<tspan x="900" dy="0">Cross-task logical memory</tspan>
+</text>
+<text x="900" y="958" fill="#202936" font-size="25" font-weight="normal" text-anchor="middle">
+<tspan x="900" dy="0">Shared page index</tspan>
+<tspan x="900" dy="37">Instance observations + outcomes</tspan>
+<tspan x="900" dy="37">Procedure index (from execution)</tspan>
+</text>
+<rect x="40" y="1010" width="460" height="85" rx="12" fill="#fff" stroke="#8793a1" stroke-width="2"/>
+<text x="270.0" y="1047" fill="#202936" font-size="28" font-weight="bold" text-anchor="middle">
+<tspan x="270.0" dy="0">Executed transitions</tspan>
+</text>
+<text x="270.0" y="1083" fill="#566273" font-size="23" font-weight="normal" text-anchor="middle">
+<tspan x="270.0" dy="0">source: agent / replay</tspan>
+</text>
+<rect x="1300" y="1010" width="460" height="85" rx="12" fill="#fff" stroke="#8793a1" stroke-width="2"/>
+<text x="1530.0" y="1047" fill="#202936" font-size="28" font-weight="bold" text-anchor="middle">
+<tspan x="1530.0" dy="0">Probed transitions</tspan>
+</text>
+<text x="1530.0" y="1083" fill="#566273" font-size="23" font-weight="normal" text-anchor="middle">
+<tspan x="1530.0" dy="0">source: exploration + recovery</tspan>
+</text>
+<path class="edge" d="M 650 929 L 500 929" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<text x="575" y="915" fill="#566273" font-size="23" font-weight="normal" text-anchor="middle">
+<tspan x="575" dy="0">read</tspan>
+</text>
+<path class="edge" d="M 1150 929 L 1300 929" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<text x="1225" y="915" fill="#566273" font-size="23" font-weight="normal" text-anchor="middle">
+<tspan x="1225" dy="0">read</tspan>
+</text>
+<path class="edge" d="M 500 1055 L 650 1055" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<text x="575" y="1041" fill="#566273" font-size="23" font-weight="normal" text-anchor="middle">
+<tspan x="575" dy="0">write</tspan>
+</text>
+<path class="edge" d="M 1300 1055 L 1150 1055" stroke="#202936" stroke-width="2.8" marker-end="url(#arrow)"/>
+<text x="1225" y="1041" fill="#566273" font-size="23" font-weight="normal" text-anchor="middle">
+<tspan x="1225" dy="0">write</tspan>
+</text>
+</svg>
