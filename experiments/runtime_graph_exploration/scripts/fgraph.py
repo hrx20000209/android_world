@@ -157,6 +157,7 @@ def extract(ep_dir, goal, pkg=None):
   rows = [json.loads(l) for l in open(ep_dir / "steps.jsonl")]
   rows = [r for r in rows if r.get("kind") == "model" and r.get("pre")]
   funcs, cur, entry = [], [], None
+  dropped = False
   for r in rows:
     try:
       ui = R.load_ui(ep_dir, r["pre"]["cid"])
@@ -169,6 +170,8 @@ def extract(ep_dir, goal, pkg=None):
     step = None
     if at == "input_text" and a.get("text"):
       s = vidx.get(norm(a["text"]))
+      if s is None:
+        dropped = True              # typed text that is not a goal value: the function does not reproduce it
       if s is not None:
         step = {"op": "type", "field": s["field"], "rec": s["rec"], "sel": _field_selector(ui, a.get("x") or 0, a.get("y") or 0)
                 if a.get("x") is not None else {"rid": "", "k": None}, "act": ui.activity}
@@ -188,8 +191,9 @@ def extract(ep_dir, goal, pkg=None):
       if commit and hit is None:
         if cur and any(s["op"] != "nav" for s in cur):
           funcs.append({"entry_act": entry[0], "entry_key": entry[1], "steps": cur, "commit": lab, "verb": P["verb"],
-                        "fields": sorted({s["field"] for s in cur if s["op"] != "nav"}), "pkg": ui.package})
-        cur, entry = [], None
+                        "fields": sorted({s["field"] for s in cur if s["op"] != "nav"}), "pkg": ui.package,
+                        "complete": not dropped})
+        cur, entry, dropped = [], None, False
         continue
       op = at if at == "long_press" else "click"
       step = ({"op": "slot_" + op, "field": hit["field"], "rec": hit["rec"], "row": f"{n.short_cls}|{n.short_rid}",
@@ -197,7 +201,7 @@ def extract(ep_dir, goal, pkg=None):
               {"op": "nav", "fam": fam, "label": lab, "act": ui.activity, "kind": op,
                "editable": bool(slot is None or slot.unsafe_reason == "text_field")})
     elif at in ("status", "answer", "open_app"):
-      cur, entry = [], None
+      cur, entry, dropped = [], None, False
       continue
     if step is not None:
       if not cur:
@@ -281,7 +285,7 @@ class Library:
     self.funcs, seen = [], set()
     for l in open(cache):
       f = json.loads(l)
-      if f["template"] == tk:
+      if f["template"] == tk and _os.environ.get("SAME_TPL") != "1":   # SAME_TPL: seen-task split, same template allowed
         continue
       sig = (f["entry_act"], tuple((s["op"], s.get("field") or s.get("fam")) for s in f["steps"]))
       if sig in seen:

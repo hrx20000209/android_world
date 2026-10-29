@@ -63,6 +63,11 @@ PIPE_ONLY = os.environ.get("PIPE_ONLY") == "1"
 RAND_EXPLORE = os.environ.get("RAND_EXPLORE") == "1"    # exploration targets drawn uniformly from the same safe set
 GRAPH_PROMPT = os.environ.get("GRAPH_PROMPT") == "1"    # graph knowledge injected into the prompt, no graph execution
 NO_SYS = os.environ.get("NO_SYS") == "1"                # no pipelined execution: full decoding, fixed 1 s observation wait
+NO_EXEC = os.environ.get("NO_EXEC") == "1"              # seen-task warm-up: build the graph, every action from the model
+EXEC_OFF = GRAPH_PROMPT or NO_EXEC
+TPL_REPLAY = os.environ.get("TPL_DEMOS", "")                # seen-task split: same-template trajectory replay (warm raw dir)
+EXPLORE_FIT = os.environ.get("EXPLORE_FIT") == "1"      # explore only if a probe fits before the action arrives
+WARM_EXPLORE = os.environ.get("WARM_EXPLORE") == "1"    # fixed exploration budget: the window is not cut by the decision
 APPDIR = Path(os.environ.get("SEQ_APPDIR", "/tmp/full"))
 
 
@@ -100,6 +105,11 @@ class FullEpisode(S.SeqEpisode):
     pr = P.ProcReplay(goal, enum_only=(ARM in ("FULL7", "FULL8"))) if ARM in ("FULL5", "FULL7", "FULL8") else None
     fx = full7.StuckExplorer(self, goal, gdir, hard=(ARM in ("FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16", "FULL17", "FULL18", "FULL19", "FULL20", "FULL21", "FULL22", "FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45"))) if ARM in ("FULL7", "FULL8", "FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16", "FULL17", "FULL18", "FULL19", "FULL20", "FULL21", "FULL22", "FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") else None
     fn = full9.FuncExec(self, goal) if ARM in ("FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16", "FULL17", "FULL18", "FULL19", "FULL20", "FULL21", "FULL22", "FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") else None
+    self._tpl = None
+    if TPL_REPLAY and not EXEC_OFF:
+      import tpl_replay as TR  # noqa: E402
+      dm = TR.load_demos(TPL_REPLAY, self.args.task)
+      self._tpl = TR.Replayer(dm, goal) if dm else None
     # FULL33: the task has record fields to fill -> creation entries ("New Event", "+") may be explored
     self._create_task = bool(fn is not None and ARM in ("FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") and fn.recs and fn.P.get("verb") in ENTRY_VERBS)
     if ARM in ("FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45"):
@@ -204,7 +214,7 @@ class FullEpisode(S.SeqEpisode):
         self._pend = None
       if ARM in ("FULL8", "FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16", "FULL17", "FULL18", "FULL19", "FULL20", "FULL21", "FULL22", "FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") and k == 0 and not booted:
         booted = True
-        app = None if GRAPH_PROMPT else full7.resolve_app(goal, ui, require_known=gx is None)
+        app = None if EXEC_OFF else full7.resolve_app(goal, ui, require_known=gx is None)
         if app and ARM == "FULL45" and _app_not_first(goal, app):
           m["bootstrap_skipped_multistep"] += 1
           app = None                       # FULL45: "turn on X and open Y": the app is not the first step
@@ -230,7 +240,7 @@ class FullEpisode(S.SeqEpisode):
           if gx is not None:
             pk_ = GX.pkg_of_app(app)
             gx.record("LAUNCH", pk_, instance, k, ui.package == pk_, src=None, dst=ui.summary())
-      if ARM in ("FULL8", "FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16", "FULL17", "FULL18", "FULL19", "FULL20", "FULL21", "FULL22", "FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") and self._last_model_commit and not GRAPH_PROMPT:
+      if ARM in ("FULL8", "FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16", "FULL17", "FULL18", "FULL19", "FULL20", "FULL21", "FULL22", "FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") and self._last_model_commit and not EXEC_OFF:
         # the model itself just chose a commit; the dialog that follows is confirmed with its positive button
         ck_ = (ui.package, ui.activity)
         if gx is not None and not gx.can("CONFIRM", ck_):
@@ -262,7 +272,7 @@ class FullEpisode(S.SeqEpisode):
         self._exec_log.append({"action": {"action_type": "navigate_back"}, "commit": False})
         k += 1
         continue
-      if fn is not None and not GRAPH_PROMPT:      # FULL9: function graph (parameterized sub-trajectories), before inference
+      if fn is not None and not EXEC_OFF:      # FULL9: function graph (parameterized sub-trajectories), before inference
         if ARM == "FULL14":
           self.log("fn_gate", {"step": k, "rec": fn.next_rec, "tried": sorted(fn.tried), "form_tried": sorted(getattr(fn, "form_tried", set())),
                                "applied": fn.applied_rec, "model_rec": fn.model_rec, "done": sorted(fn.done), "act": ui.activity})
@@ -291,9 +301,30 @@ class FullEpisode(S.SeqEpisode):
           m["func_steps"] += n_f
           m["env_actions_extra"] += n_f - 1
           self._last_model_commit = False
+          if getattr(fn, "graph_commit", False):
+            # AGGR_COMMIT: the function also committed the record; the dialog that may follow is confirmed as after
+            # a model commit, and the record is closed
+            fn.graph_commit = False
+            m["graph_commits"] += 1
+            self._last_model_commit = True
+            fn.on_model_commit()
+            if fn._n_recs() > 1 and len(fn.done) >= fn._n_recs():
+              # every record of the goal was entered and saved by the graph: say so (the model otherwise starts
+              # another record) and stop jumps / replay into creation entries
+              summ = f"[graph] All {fn._n_recs()} records of the task have been added and saved."
+              agent._actions.append({"summary": summ})  # pylint: disable=protected-access
+              agent._summaries.append(summ)  # pylint: disable=protected-access
+              self._all_recs_done = True
+              self._tpl = None
+              m["all_recs_done"] += 1
           k += 1
           continue
-      if ARM in ("FULL18", "FULL19", "FULL20", "FULL21", "FULL22", "FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") and not self._reuse_brake and not full9.transient(ui) and not GRAPH_PROMPT:
+      if self._tpl is not None:            # dialogs and the keyboard included: the demo shows what was done there
+        n_t = self.tpl_step(ui, pre, agent, steps, k, own, m, fn)
+        if n_t:
+          k += 1
+          continue
+      if ARM in ("FULL18", "FULL19", "FULL20", "FULL21", "FULL22", "FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") and not self._reuse_brake and not full9.transient(ui) and not EXEC_OFF:
         n_r = self.try_reuse(ui, pre, agent, steps, k, own, m, fn)
         if n_r and gx is not None:
           gx.record("ACTION", (ui.package, ui.activity, steps[-1].get("tok")), instance, k, True, src=ui.summary())
@@ -301,7 +332,7 @@ class FullEpisode(S.SeqEpisode):
           self._last_model_commit = False
           k += 1
           continue
-      if ARM in ("FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") and not self._macro_brake and not full9.transient(ui) and not GRAPH_PROMPT:
+      if ARM in ("FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") and not self._macro_brake and not full9.transient(ui) and not EXEC_OFF:
         # goal-conditioned navigation macro over the unified graph (design review P0-2)
         n_m = IG.try_macro(self, ui, pre, agent, steps, k, own, m, graph,
                            picker=(TG.pick if ARM in ("FULL24", "FULL26") else _pick_once if ARM in ("FULL44", "FULL45") else None))
@@ -330,7 +361,7 @@ class FullEpisode(S.SeqEpisode):
             k += 1 if ARM in ("FULL8", "FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16", "FULL17", "FULL18", "FULL19", "FULL20", "FULL21", "FULL22", "FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") else ok      # FULL8: a multi-hop graph execution is one counted step
             m["env_actions_extra"] += (ok - 1) if ARM in ("FULL8", "FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16", "FULL17", "FULL18", "FULL19", "FULL20", "FULL21", "FULL22", "FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") else 0
             continue
-      if store is not None and not GRAPH_PROMPT:   # R1
+      if store is not None and not EXEC_OFF and not getattr(self, "_all_recs_done", False):   # R1
         path = self.plan_jump(store, graph, own, ui, used)
         if path:
           m["jumps"] += 1
@@ -531,6 +562,8 @@ class FullEpisode(S.SeqEpisode):
                              "commit": self._last_model_commit})
       if pr is not None:
         pr.record(ui, a.__dict__, tok, sel, self._last_model_commit)
+      if self._tpl is not None:
+        self._tpl.observe(ui, a.__dict__)
       if fn is not None:
         fn.observe_model_action(ui, a.__dict__)
         if self._last_model_commit:
@@ -881,10 +914,18 @@ class FullEpisode(S.SeqEpisode):
       if time.time() - t0 >= ex.cfg.budget_s:
         rec["stop"] = "budget"
         break
-      if STREAM and getattr(self, "_early", None) is not None and self._early["ev"].is_set():
+      if STREAM and not WARM_EXPLORE and getattr(self, "_early", None) is not None and self._early["ev"].is_set():
         rec["stop"] = "decided"              # FULL41: the action is known; the window ends with the decision
         break
-      if ARM in ("FULL42", "FULL43", "FULL44", "FULL45") and i_t > 0:
+      if EXPLORE_FIT and not WARM_EXPLORE:
+        # a probe is started only if it can finish (probe + rollback, recent median) before the action usually
+        # arrives; on a fast server (decision < one probe) the step is not explored at all (seenE2: 59/138 overran)
+        ta = sorted(_T_ACTION[-15:]) or [10.0]
+        tp = sorted(_T_PROBE[-15:]) or [2.5]
+        if time.time() - getattr(self, "_t_req", t0) + tp[len(tp) // 2] > ta[len(ta) // 2]:
+          rec["stop"] = "no_fit"
+          break
+      if ARM in ("FULL42", "FULL43", "FULL44", "FULL45") and i_t > 0 and not WARM_EXPLORE:
         # deadline-aware: the window ends where the action usually arrives (median time-to-action of this run's
         # streamed decisions); a probe started later than ~2 s before it would overrun the decision
         ta = sorted(_T_ACTION[-15:]) or [10.0]
@@ -937,6 +978,7 @@ class FullEpisode(S.SeqEpisode):
             f.write(json.dumps({"key": list(key_e), "instance": instance, "step": step, "reason": "in_place_change"}) + "\n")
       rec["probes"].append({"why": why, "slot": s.slot_id, "family": C.family_of_sel(s.sel), "outcome": p["outcome"],
                             "rollback_ok": p["rollback_ok"], "t": p["t_total_s"], "dst_ui": dst_ui if why != "D2" else None})
+      _T_PROBE.append(p["t_total_s"])
       if not p["rollback_ok"] and ARM in ("FULL15", "FULL16", "FULL17", "FULL18", "FULL19", "FULL20", "FULL21", "FULL22", "FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") and why != "D2":
         # Back could not undo it: the whole container (its siblings) is learned non-reversible, across tasks
         gk = full9.container_key(ui.package, ui.activity, s.sel)
@@ -1128,6 +1170,49 @@ def _adaptive_wait(self, prev, m):
 FullEpisode._adaptive_wait = _adaptive_wait
 
 
+def _tpl_step(self, ui, pre, agent, steps, k, own, m, fn):
+  """TPL_REPLAY: execute the next step of a same-template seen demonstration when it grounds on this screen."""
+  done = set(fn.done) | ({fn.applied_rec} if fn is not None and fn.applied_rec is not None else set()) if fn is not None else set()
+  p = self._tpl.propose(ui, done=done)
+  if not p:
+    return 0
+  di, j, kind, obj = p
+  st = self._tpl.demos[di][j]
+  if kind == "back":
+    action, summ = json_action.JSONAction(action_type="navigate_back"), "[graph] Pressed Back."
+  elif kind == "type":
+    foc = next((x for x in ui.app_nodes() if x.editable and x.visible and x.focused), None)
+    if foc is None:
+      return 0
+    action = json_action.JSONAction(action_type="input_text", text=obj, x=foc.center[0], y=foc.center[1], clear_text=bool(foc.text))
+    summ = f"[graph] Typed \"{obj}\"."
+  else:
+    x, y = obj.center
+    action = json_action.JSONAction(action_type=kind, x=x, y=y)
+    summ = f"[graph] Tapped \"{U.label_of(ui, obj) or st.get('label') or ''}\"."
+  agent._execute_action(action, {})  # pylint: disable=protected-access
+  agent._actions.append({"summary": summ})  # pylint: disable=protected-access
+  agent._summaries.append(summ)  # pylint: disable=protected-access
+  tok = C.action_token(ui, action.__dict__)[0]
+  own.append(S.own_entry(ui, tok, tok))
+  commit = bool(st.get("commit"))
+  self._exec_log.append({"action": {kk: vv for kk, vv in action.__dict__.items() if vv is not None}, "commit": commit})
+  row = {"step": k, "kind": "tpl_replay", "tok": tok, "summary": summ, "demo": [di, j], "commit": commit, "pre": R.strip(pre)}
+  steps.append(row)
+  self.log("steps", row)
+  self._tpl.advance(di, j)
+  m["tpl_replay"] += 1
+  self._last_model_commit = commit
+  if commit:
+    m["tpl_replay_commits"] += 1
+    if fn is not None:
+      fn.on_model_commit()
+  return 1
+
+
+FullEpisode.tpl_step = _tpl_step
+
+
 def _graph_prompt_text(ep, graph, ui, max_edges=8, max_texts=6):
   """Ablation GRAPH_PROMPT: the plain alternative to graph execution - the transitions the graph holds for the
   current screen (model execution + exploration, this and earlier tasks), written into the prompt as text."""
@@ -1305,6 +1390,7 @@ FullEpisode.decide = _decide_with_load
 STREAM = os.environ.get("STREAM_ACT", "1" if ARM in ("FULL41", "FULL42", "FULL43", "FULL44", "FULL45") else "0") == "1" and not NO_SYS
 STREAM_IO = STREAM or os.environ.get("STREAM_IO") == "1"
 _T_ACTION = []
+_T_PROBE = []
 
 # ---- FULL42: restoration equivalence + Back that waits for the screen to change ----------------------------------
 # Restored = same app/activity, same dialog and keyboard state, and >= 90% of the app's visible controls (class,
@@ -1395,6 +1481,11 @@ def _stream_call(api_url, model, messages, on_prefix, gen=None):
   txt, fired = "", False
   with requests.post(api_url, headers=headers, json=payload, stream=True, timeout=(15, 120)) as resp:   # a dead link fails the episode quickly (rerun)
     resp.raise_for_status()
+    # a half-open tunnel can keep a stream alive without data for many minutes (seenW1: 1024 s): close it after a
+    # total deadline; the caller then retries without streaming
+    _wd = threading.Timer(float(os.environ.get("STREAM_DEADLINE", "180")), resp.close)
+    _wd.daemon = True
+    _wd.start()
     for line in resp.iter_lines():
       if not line or not line.startswith(b"data: "):
         continue
@@ -1422,6 +1513,9 @@ def _stream_call(api_url, model, messages, on_prefix, gen=None):
         gen["t_action_s"] = round(time.time() - t0, 3)
         gen["action_chars"] = mt.start()
         on_prefix(txt[:mt.start()])
+    _wd.cancel()
+  if '"' not in txt and not txt.strip():
+    raise TimeoutError("stream closed without output")
   gen["t_end_s"] = round(time.time() - t0, 3)
   gen["chars"] = len(txt)
   gen["think"] = "<think>" in txt.lower()
@@ -1720,6 +1814,10 @@ KAPPA = 0.3                # FULL23: expected re-inference cost of a probe Back 
 PROBES_PER_STEP = 5        # FULL17: fixed exploration effort per inference
 if ARM in ("FULL41", "FULL42", "FULL43", "FULL44", "FULL45"):
   PROBES_PER_STEP = 10      # FULL41: exploration runs until the decision's action is known (edge inference windows)
+if WARM_EXPLORE:
+  # seen-task warm-up: latency does not count and a failed rollback costs only a demonstration; probe controls
+  # with a lower predicted reversibility
+  P_REV_MIN = P_REV_MIN_RV = 0.6
 ELEMENT_APPS = {}
 try:
   ELEMENT_APPS = json.load(open(HERE.parent.parent / "runtime_graph_exploration" / "graph" / "element_idf_base.json"))["apps"]

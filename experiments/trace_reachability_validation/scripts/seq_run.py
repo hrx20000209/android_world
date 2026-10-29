@@ -278,6 +278,11 @@ class SeqEpisode(R.Episode):
         self._jump_absent = getattr(self, "_jump_absent", 0) + 1
         break
       node = ui.nodes[slot.node_idx]
+      if os.environ.get("NAV_UNAMBIG") == "1":
+        import full9  # noqa: E402
+        if full9.content_choice(ui, node, hop["tok"]):
+          self._jump_absent = getattr(self, "_jump_absent", 0) + 1
+          break
       self.dev.tap(*node.center)
       post = self.dev.capture(f"s{k + j}_jpost", settle=True)
       # Verify at layout level: struct signatures split the same page across

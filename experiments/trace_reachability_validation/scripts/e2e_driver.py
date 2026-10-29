@@ -180,6 +180,26 @@ def main():
       if flag:
         env[flag] = "1"
         env["SEQ_APPDIR"] = str(GDIR / arm.replace("+", "_"))
+      if arm.endswith("+SEENR"):
+        # latest design, seen-task setting: graph / store / function library of the seen-task warm-up (seenW1,
+        # model-only demos of the SEEN templates at seeds 31-34), same-template functions with their commit,
+        # same-template trajectory replay, exploration only when a probe fits before the action
+        g = GDIR / arm.replace("+", "_")
+        if not g.exists():
+          import shutil  # noqa: E402
+          shutil.copytree(ROOT / "graph_snapshots" / os.environ.get("SEEN_WARM", "seenW1"), g)
+        env.update(SEQ_APPDIR=str(g), SAME_TPL="1", AGGR_COMMIT="1", EXPLORE_FIT="1", NAV_UNAMBIG="1",
+                   TPL_DEMOS=str(ROOT / "raw" / os.environ.get("SEEN_WARM", "seenW1") / "FULL45+WARM"))
+      if arm.endswith("+SEENR0"):
+        # the LabServer seenE2 version of the seen-task design: no NAV_UNAMBIG (content-chosen steps may be
+        # replayed) and no EXPLORE_FIT
+        g = GDIR / arm.replace("+", "_")
+        if not g.exists():
+          import shutil  # noqa: E402
+          shutil.copytree(ROOT / "graph_snapshots" / os.environ.get("SEEN_WARM", "seenW1"), g)
+        env.update(SEQ_APPDIR=str(g), SAME_TPL="1", AGGR_COMMIT="1",
+                   TPL_DEMOS=str(ROOT / "raw" / os.environ.get("SEEN_WARM", "seenW1") / "FULL45+WARM"))
+      env["ANDROID_SERIAL"] = "emulator-5554"
       cmd = [sys.executable, str(ROOT / "scripts" / "full_run.py"), "--task", task, "--seed", str(SEED),
              "--variant", f"{TAG}_{arm}", "--mode", "agent", "--out", str(out), "--api_url", API, "--model", MODEL]
       t0 = time.time()

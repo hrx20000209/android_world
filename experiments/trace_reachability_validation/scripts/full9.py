@@ -95,6 +95,20 @@ def _role_adapted(funcs, recs):
   return out
 
 
+def content_choice(ui, node, fam):
+  """NAV_UNAMBIG: the control is picked by content, not by role - one of several same-family controls with no
+  label (day cells, list rows) or a label carrying digits (dates, times, counts). A recorded step on such a control
+  names the demo's content and must not be replayed on another task's screen."""
+  lab = FG.norm(U.label_of(ui, node) or "")
+  if re.search(r"\d", lab):
+    return True
+  same = sum(1 for s_ in U.enumerate_slots(ui) if C.family_of_sel(s_.sel) == fam)
+  return same > 1 and not lab
+
+
+COMMIT_WORDS = {"save", "done", "ok", "add", "create", "send", "apply", "update", "submit", "confirm", "set", "finish"}
+
+
 class FuncExec:
   def __init__(self, episode, goal):
     self.ep, self.goal = episode, goal
@@ -199,6 +213,8 @@ class FuncExec:
                    and s.unsafe_reason not in ("unsafe_label", "dialog_action_button")), None)
         if sl is None:
           break
+        if os.environ.get("NAV_UNAMBIG") == "1" and content_choice(ui, ui.nodes[sl.node_idx], st["fam"]):
+          break
         x, y = ui.nodes[sl.node_idx].center
         lab = U.label_of(ui, ui.nodes[sl.node_idx]) or st.get("label") or sl.sel.get("rid")
         action = json_action.JSONAction(action_type="long_press" if st.get("kind") == "long_press" else "click", x=x, y=y)
@@ -241,7 +257,49 @@ class FuncExec:
       steps.append(row)
       self.ep.log("steps", row)
       n += 1
+    else:
+      # AGGR_COMMIT (seen-task split): a function recorded on the SAME template also taps the commit the model
+      # tapped there, so the record is closed without an inference call
+      if n and f.get("complete") and f.get("template") == MEM.template_key(self.ep.args.task):
+        n += self._aggr_commit(f.get("commit"), f.get("src"), rec, k, agent, steps, own)
     return n
+
+  def _aggr_commit(self, label, src, rec, k, agent, steps, own):
+    if os.environ.get("AGGR_COMMIT") != "1" or not label or label.split()[0] not in COMMIT_WORDS:
+      return 0                    # only a real commit (a time / share / format control is not one)
+    cap = self.ep.dev.capture(f"s{k}_fnc", settle=True, pause=0.6, full_res=True)
+    ui = cap["ui"]
+    if ui.ime_visible():
+      agent._execute_action(json_action.JSONAction(action_type="navigate_back"), {})  # pylint: disable=protected-access
+      cap = self.ep.dev.capture(f"s{k}_fnc_noime", settle=True, pause=0.6, full_res=True)
+      ui = cap["ui"]
+    sl = next((s_ for s_ in U.enumerate_slots(ui) if s_.unsafe_reason in ("unsafe_label", "dialog_action_button")
+               and FG.norm(U.label_of(ui, ui.nodes[s_.node_idx])) == label), None)
+    if sl is None:
+      return 0
+    x, y = ui.nodes[sl.node_idx].center
+    action = json_action.JSONAction(action_type="click", x=x, y=y)
+    summ = f"[graph] Tapped \"{label}\"."
+    agent._execute_action(action, {})  # pylint: disable=protected-access
+    if getattr(self, "exec_log", None) is not None:
+      self.exec_log.append({"action": {kk: vv for kk, vv in action.__dict__.items() if vv is not None}, "commit": True})
+    agent._actions.append({"summary": summ})  # pylint: disable=protected-access
+    agent._summaries.append(summ)  # pylint: disable=protected-access
+    tok = C.action_token(ui, action.__dict__)[0]
+    import seq_run as S  # noqa: E402
+    own.append(S.own_entry(ui, tok, tok))
+    row = {"step": k, "kind": "function", "tok": tok, "summary": summ, "src": src, "rec": rec, "commit": True,
+           "pre": R.strip(cap)}
+    steps.append(row)
+    self.ep.log("steps", row)
+    self.graph_commit = True
+    return 1
+
+  def _same_template_commit(self, pkg):
+    """Commit label the model used on this template's seen episodes in this app (most frequent)."""
+    tk = MEM.template_key(self.ep.args.task)
+    c = Counter(f.get("commit") for f in self.lib.funcs if f.get("template") == tk and f.get("pkg") == pkg and f.get("commit") and f.get("complete"))
+    return c.most_common(1)[0][0] if c else None
 
   def try_apply_via_edge(self, ep, graph, pre, agent, steps, k, own, m):
     """A function whose entry screen is one observed edge away (an agent edge or an edge observed only by
@@ -489,6 +547,9 @@ class FuncExec:
           agent._actions.append({"summary": summ})  # pylint: disable=protected-access
           agent._summaries.append(summ)  # pylint: disable=protected-access
           m["form_left_fields"] += len(left)
+        elif os.environ.get("AGGR_COMMIT") == "1":
+          # AGGR_COMMIT: every field of the record is filled: tap the commit this template's seen episodes used
+          n += self._aggr_commit(self._same_template_commit(ui.package), "form", rec, k, agent, steps, own)
     return n
 
   def _select_options(self, left, agent, steps, k, own, m):

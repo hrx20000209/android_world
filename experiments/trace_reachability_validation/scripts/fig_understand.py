@@ -80,6 +80,34 @@ fig, ax = plt.subplots(figsize=(W, H))
 ax.barh([names_k.get(k, k) for k, _ in items], [v for _, v in items], color=C_ME, height=0.6)
 for i, (_, v) in enumerate(items): ax.text(v + 1.5, i, str(v), va="center", fontsize=7)
 ax.invert_yaxis(); ax.set_xlabel(f"Graph-executed steps (total {sum(kinds.values())})")
+fig.tight_layout(); fig.savefig(f"{OUT}/c_graph_types_detail.pdf", bbox_inches="tight"); fig.savefig(f"{OUT}/c_graph_types_detail.png", dpi=250, bbox_inches="tight")
+
+# (c) grouped by what is reused from the graph: a single transition edge, a page's field pattern, or a recorded path.
+# The rule-based Back (unstick) does not read the graph and is left out.
+groups_c = [
+  ("Transition-edge reuse", [("bootstrap", "app launch", C_ME), ("graph_reuse", "repeated edge", C3),
+                             ("confirm", "commit confirm", C4), ("graph_macro", "cross-task edge", C5)]),
+  ("Field-pattern reuse", [("form_function", "form fill", C_ME)]),
+  ("Procedure reuse", [("function", "parameterized procedure", C_ME)]),
+]
+summary["graph_kinds_grouped"] = {g: {k: kinds.get(k, 0) for k, _, _ in parts} for g, parts in groups_c}
+tot_c = sum(kinds.get(k, 0) for _, parts in groups_c for k, _, _ in parts)
+fig, ax = plt.subplots(figsize=(W, 2.0))
+for i, (g, parts) in enumerate(groups_c):
+  left = 0
+  for k, lab, col in parts:
+    v = kinds.get(k, 0)
+    ax.barh(i, v, left=left, color=col, height=0.6, edgecolor="white", linewidth=0.8,
+            label=f"{lab} ({v})" if len(parts) > 1 else None)
+    if len(parts) > 1 and v >= 10:
+      ax.text(left + v / 2, i, str(v), ha="center", va="center", fontsize=6, color="white" if col == C_ME else "black")
+    left += v
+  ax.text(left + 1.5, i, str(left), va="center", fontsize=7)
+ax.set_yticks(range(len(groups_c))); ax.set_yticklabels([g for g, _ in groups_c])
+ax.invert_yaxis(); ax.set_xlabel(f"Graph-reuse steps (total {tot_c})")
+ax.set_xlim(0, max(sum(kinds.get(k, 0) for k, _, _ in parts) for _, parts in groups_c) * 1.12)
+ax.legend(fontsize=6, frameon=False, loc="upper center", bbox_to_anchor=(0.35, -0.42), ncol=2, handlelength=1.2,
+          columnspacing=1.0)
 fig.tight_layout(); fig.savefig(f"{OUT}/c_graph_types.pdf", bbox_inches="tight"); fig.savefig(f"{OUT}/c_graph_types.png", dpi=250, bbox_inches="tight")
 
 # (d) exploration window vs decision time
