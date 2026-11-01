@@ -199,6 +199,57 @@ def main():
           shutil.copytree(ROOT / "graph_snapshots" / os.environ.get("SEEN_WARM", "seenW1"), g)
         env.update(SEQ_APPDIR=str(g), SAME_TPL="1", AGGR_COMMIT="1",
                    TPL_DEMOS=str(ROOT / "raw" / os.environ.get("SEEN_WARM", "seenW1") / "FULL45+WARM"))
+      if arm.endswith("+SEENR0J"):
+        g = GDIR / arm.replace("+", "_")
+        if not g.exists():
+          import shutil  # noqa: E402
+          shutil.copytree(ROOT / "graph_snapshots" / os.environ.get("SEEN_WARM", "seenW1"), g)
+        env.update(SEQ_APPDIR=str(g), SAME_TPL="1", AGGR_COMMIT="1", SCHED_MODE="joint",
+                   EXPLORE_FIT="0", WARM_EXPLORE="0",
+                   JOINT_PARAMS=os.environ.get("JOINT_PARAMS", str(ROOT / "reports/joint_sched_params.json")),
+                   TPL_DEMOS=str(ROOT / "raw" / os.environ.get("SEEN_WARM", "seenW1") / "FULL45+WARM"))
+      if arm == "BASE+TRAJ":
+        # classic trajectory-reuse baseline: BASE behaviour (no graph execution, no exploration, no pipelining) plus
+        # record-and-replay of the retrieved seen trajectory (same seenW1 demos as the seen-task design)
+        env.update(FULL_ARM="FULL45", SEQ_APPDIR=str(GDIR / "BASE_TRAJ"), NO_EXEC="1", NO_EXPLORE="1", NO_SYS="1",
+                   TRAJ_CLASSIC="1", TPL_DEMOS=str(ROOT / "raw" / os.environ.get("SEEN_WARM", "seenW1") / "FULL45+WARM"))
+      if arm.endswith("+SEENR0J"):
+        # the main seen-task version (e2e116B replay rules) + the joint exploration-reasoning module
+        g = GDIR / arm.replace("+", "_")
+        if not g.exists():
+          import shutil  # noqa: E402
+          shutil.copytree(ROOT / "graph_snapshots" / os.environ.get("SEEN_WARM", "seenW1"), g)
+        env.update(SEQ_APPDIR=str(g), SAME_TPL="1", AGGR_COMMIT="1", SCHED_MODE="jointev",
+                   JOINT_TABLE=str(ROOT / "reports" / "joint_table_frozen.json"),
+                   TPL_DEMOS=str(ROOT / "raw" / os.environ.get("SEEN_WARM", "seenW1") / "FULL45+WARM"))
+      if arm.endswith("+SEENR0R"):
+        # the main seen-task version (e2e116B replay rules) + the adaptive runtime optimizer (rto.py): graph-verified
+        # fast reasoning path, live exploration budget, request priority
+        g = GDIR / arm.replace("+", "_")
+        if not g.exists():
+          import shutil  # noqa: E402
+          shutil.copytree(ROOT / "graph_snapshots" / os.environ.get("SEEN_WARM", "seenW1"), g)
+        env.update(SEQ_APPDIR=str(g), SAME_TPL="1", AGGR_COMMIT="1", SCHED_MODE="rto",
+                   TPL_DEMOS=str(ROOT / "raw" / os.environ.get("SEEN_WARM", "seenW1") / "FULL45+WARM"))
+      if arm.endswith("+SEENR0L"):
+        # the seenE2 / e2e116B replay version (no NAV_UNAMBIG, no EXPLORE_FIT) + the weak time-fit system layer
+        g = GDIR / arm.replace("+", "_")
+        if not g.exists():
+          import shutil  # noqa: E402
+          shutil.copytree(ROOT / "graph_snapshots" / os.environ.get("SEEN_WARM", "seenW1"), g)
+        env.update(SEQ_APPDIR=str(g), SAME_TPL="1", AGGR_COMMIT="1", SCHED_MODE="heurlite",
+                   TPL_DEMOS=str(ROOT / "raw" / os.environ.get("SEEN_WARM", "seenW1") / "FULL45+WARM"))
+      if arm.endswith("+SEENRH"):
+        # latest seen/unseen design (SEENR + NAV_UNAMBIG) with the heuristic budget in place of EXPLORE_FIT
+        g = GDIR / arm.replace("+", "_")
+        if not g.exists():
+          import shutil  # noqa: E402
+          shutil.copytree(ROOT / "graph_snapshots" / os.environ.get("SEEN_WARM", "seenW1"), g)
+        env.update(SEQ_APPDIR=str(g), SAME_TPL="1", AGGR_COMMIT="1", NAV_UNAMBIG="1", SCHED_MODE="heur",
+                   TPL_DEMOS=str(ROOT / "raw" / os.environ.get("SEEN_WARM", "seenW1") / "FULL45+WARM"))
+      if arm.endswith("+HEUR"):
+        # FULL45 + one-step heuristic exploration budget (task relevance / graph novelty x live latency profile)
+        env.update(SCHED_MODE="heur", SEQ_APPDIR=str(GDIR / arm.replace("+", "_")))
       env["ANDROID_SERIAL"] = "emulator-5554"
       cmd = [sys.executable, str(ROOT / "scripts" / "full_run.py"), "--task", task, "--seed", str(SEED),
              "--variant", f"{TAG}_{arm}", "--mode", "agent", "--out", str(out), "--api_url", API, "--model", MODEL]

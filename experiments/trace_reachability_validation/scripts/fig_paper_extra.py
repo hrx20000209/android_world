@@ -6,6 +6,7 @@ k_prompt            prompt tokens and time to first token per call (no evidence 
 l_safety            candidate filtering and probe recovery
 m_graph_growth      Mix-Trajectory Graph size over the task sequence, saved calls vs graph size
 n_system_layers     streamed early action (e2e) and decoding configurations (decision latency)
+q_step_time         where one inference step's time goes, baseline vs MobileExplorer
 o_seen_split        seen-task split: calls per task and the graph executions behind them
 """
 import collections
@@ -86,31 +87,91 @@ ax.set_xlabel("Actions also taken by the baseline (%)")
 ax.set_title(f"Graph-executed actions: {tot_ok}/{tot_n} = {tot_ok / tot_n:.0%} match", fontsize=7.5)
 save(fig, "i_graph_precision")
 
+# ------------------------------------------------------------------ c: graph reuse by operation, with baseline match
+# One figure: how many steps each kind of graph reuse executed (all 116 tasks) and, on the tasks the baseline solved,
+# how many of those actions the baseline's own successful trajectory also contains. The rule-based Back (unstick)
+# does not read the graph and is left out.
+cnt = collections.Counter()
+for (t, a), r in rows.items():
+  if a == "FULL45":
+    cnt.update(s["kind"] for s in steps("e2e116n", "FULL45", t) if s["kind"] != "model")
+# Correctness = manual ground truth: for every reused action we looked at the pre/post screenshots, goal and recent
+# history, wrote down the action we would take, and compared (reports/reuse_manual_gt_e2e116n.json). Actions whose
+# effect cannot be judged from the screenshots (U) are counted as correct. The unit is a reuse decision: consecutive
+# reused actions of the same operation in one task with no model call in between form one decision, which is
+# correct only if every action in it is.
+GT = json.load(open(ROOT / "reports" / "reuse_manual_gt_e2e116n.json"))
+OPN = {"Form fill": "Form fill", "Form fill (procedure)": "Form fill", "Navigation": "Navigation",
+       "Navigation (cross-task)": "Navigation", "Confirm after commit": "Confirm after commit"}
+runs, prev = [], None
+for it in sorted(GT["items"], key=lambda x: (x["task"], x["step"], x["id"])):
+  cur = (it["task"], OPN[it["kind"]], it["step"])
+  if prev and prev[:2] == cur[:2] and cur[2] - prev[2] <= 1:
+    runs[-1].append(it)
+  else:
+    runs.append([it])
+  prev = cur
+gt = collections.Counter()
+for r in runs:
+  op = OPN[r[0]["kind"]]
+  gt[(op, "n")] += 1
+  gt[(op, "ok")] += all(x["gt"]["v"] != "W" for x in r)
+gt[("App launch", "n")], gt[("App launch", "ok")] = 76, 72  # one decision per launch, judged separately (GT["launches"])
+# Task view: tasks in which every reuse decision of this operation was correct.
+tk = collections.defaultdict(lambda: collections.defaultdict(bool))
+for r in runs:
+  op, t = OPN[r[0]["kind"]], r[0]["task"]
+  tk[op][t] = tk[op].get(t, True) and all(x["gt"]["v"] != "W" for x in r)
+tk["App launch"] = {i: i < 72 for i in range(76)}  # one launch per task
+ops = [("App launch", ["bootstrap"]), ("Form fill", ["form_function", "function"]),
+       ("Navigation", ["graph_reuse", "graph_macro"]), ("Confirm after commit", ["confirm"])]
+fig, ax = plt.subplots(figsize=(W, 1.9))
+tot, tot_ok, tot_n = 0, 0, 0
+for i, (lab, ks) in enumerate(ops):
+  left = sum(cnt.get(k, 0) for k in ks)
+  ax.barh(i, left, color=C_ME, height=0.6, linewidth=0)
+  n, ok = gt[(lab, "n")], gt[(lab, "ok")]
+  tot, tot_ok, tot_n = tot + left, tot_ok + ok, tot_n + n
+  tt = tk[lab]
+  ax.text(left + 1.5, i, f"{left} steps · {ok / n:.0%} of {n} decisions correct\n"
+          f"all correct in {sum(tt.values())}/{len(tt)} tasks", va="center", fontsize=6, color="#333", linespacing=1.1)
+ax.set_yticks(range(len(ops)))
+ax.set_yticklabels([o[0] for o in ops], fontsize=7)
+ax.invert_yaxis()
+ax.set_xlim(0, max(sum(cnt.get(k, 0) for k in ks) for _, ks in ops) * 2.0)
+ax.set_xlabel(f"Graph-reuse steps (total {tot})")
+ax.set_title(f"Reuse decisions correct vs. manual ground truth: {tot_ok}/{tot_n} = {tot_ok / tot_n:.0%}", fontsize=7)
+print("c_graph_reuse tasks:", {k: (sum(v.values()), len(v)) for k, v in tk.items()})
+save(fig, "c_graph_reuse")
+
 
 # ------------------------------------------------------------------ j: budget adaptation
 def ratios(tag):
-  R = []
+  R, EXP = [], [0.0, 0]
   for d in glob.glob(str(ROOT / "raw" / tag / "FULL45" / "*" / "p0")):
     S = {}
     for l in open(d + "/steps.jsonl"):
       s = json.loads(l)
       if s["kind"] == "model":
         S[s["step"]] = s
+        EXP[1] += 1
     for l in open(d + "/windows.jsonl"):
       w = json.loads(l)
       s = S.get(w["step"])
       if s and w.get("probes") and s.get("model_latency_s"):
         R.append(w.get("window_s", 0) / s["model_latency_s"])
-  return sorted(R)
+        EXP[0] += max(0.0, w.get("window_s", 0) - s["model_latency_s"])  # probe time left after the action was ready
+  return sorted(R), EXP[0] / max(1, EXP[1])
 
 
 fig, ax = plt.subplots(figsize=(W, H))
 for tag, lab, c, dec in (("e2e116n", "Jetson AGX Orin", C_ME, X["N2_budget"]["orin_e2e116n"]),
                          ("seenE2", "RTX 4090 server", C4, X["N2_budget"]["labserver_seenE2"])):
-  R = ratios(tag)
+  R, exp = ratios(tag)
   over = sum(r > 1 for r in R)
   ax.plot(R, [(i + 1) / len(R) for i in range(len(R))], color=c, lw=2,
-          label=f"{lab}: decision {dec['decision_s_mean']:.1f} s, window > decision {over}/{len(R)}")
+          label=f"{lab}: decision {dec['decision_s_mean']:.1f} s, window > decision {over}/{len(R)}, "
+                f"probe wait {exp:.2f} s/step")
 ax.axvline(1.0, color="#555", lw=0.8, ls=":")
 ax.text(1.03, 0.05, "window = decision", fontsize=6.5, color="#555")
 ax.set_xscale("log")
@@ -252,6 +313,76 @@ axs[1].set_xticklabels(labs, fontsize=7)
 axs[1].set_ylabel("Decision latency (s)")
 axs[1].set_ylim(0, max(sd[k][0] for k in labs) * 1.35)
 save(fig, "n_system_layers")
+
+# ------------------------------------------------------------------ q: where one inference step's time goes
+# Mean over consecutive model steps of e2e116n (both arms, all 116 tasks), from the next step's screenshot to this
+# one's. Baseline: fixed 1 s pause + stability check, waits for the whole output. MobileExplorer: adaptive wait,
+# acts when the action field is decoded and waits only for the part of the summary not yet decoded at the next
+# step (join_wait), and for probes still running when the action was ready. "Other" is the remainder (action
+# injection, graph lookup and bookkeeping).
+def step_time(arm):
+  C = collections.defaultdict(list)
+  for d in glob.glob(str(ROOT / "raw" / "e2e116n" / arm / "*" / "p0")):
+    S = [json.loads(l) for l in open(d + "/steps.jsonl")]
+    G = [json.loads(l) for l in open(d + "/gen.jsonl")]
+    M = [s for s in S if s["kind"] == "model"]
+    gen = {id(s): g for s, g in zip(M, G)} if len(M) == len(G) else {}
+    late, win = {}, {}
+    if Path(d + "/late_summary.jsonl").exists():
+      late = {x["step"]: x for x in map(json.loads, open(d + "/late_summary.jsonl"))}
+    if Path(d + "/windows.jsonl").exists():
+      win = {x["step"]: x for x in map(json.loads, open(d + "/windows.jsonl"))}
+    for s, n in zip(S, S[1:]):
+      if s["kind"] != "model" or n["kind"] != "model" or "t" not in s.get("pre", {}) or "t" not in n.get("pre", {}):
+        continue
+      loop = n["pre"]["t"] - s["pre"]["t"]
+      if not 0 < loop <= 60:
+        continue
+      p = s["pre"]
+      if arm == "BASE":
+        g = gen.get(id(s), {})
+        wait, inf = 1.0 + p.get("settle_s", 0), g.get("t_action_s", g.get("t_end_s", s["model_latency_s"]))
+        tail, expl, par, hid = s["model_latency_s"] - inf, 0.0, 0.0, 0.0
+      else:
+        w = win.get(s["step"]) or {}
+        wait, inf = p.get("adaptive_wait_s", 0) + p.get("settle_s", 0), s["model_latency_s"]
+        tail = late.get(s["step"], {}).get("join_wait_s", 0)
+        par = w.get("window_s", 0) if w.get("probes") else 0.0
+        expl, hid = max(0.0, par - inf), late.get(s["step"], {}).get("hidden_s", 0)
+      cap = p.get("capture_s", 0)
+      for k, v in (("Screen wait", wait), ("Screenshot", cap), ("Inference to action", inf), ("Rest of decoding", tail),
+                   ("Probes after action ready", expl), ("Other", loop - wait - cap - inf - tail - expl),
+                   ("loop", loop), ("par", par), ("hid", hid), ("probed", par > 0)):
+        C[k].append(v)
+  return {k: st.mean(v) for k, v in C.items()}, len(C["loop"])
+
+
+ST = {a: step_time(a) for a in ("BASE", "FULL45")}
+segs = [("Screen wait", C_ME), ("Screenshot", C3), ("Inference to action", C5), ("Rest of decoding", C4),
+        ("Probes after action ready", "#b5523b"), ("Other", "#5b6168")]
+fig, ax = plt.subplots(figsize=(W, 1.7))
+for i, (a, lab) in enumerate((("BASE", "Baseline"), ("FULL45", "Mobile-\nExplorer"))):
+  v, _ = ST[a]
+  left = 0
+  for k, c in segs:
+    ax.barh(i, v[k], left=left, color=c, height=0.55, edgecolor="white", linewidth=0.8, label=k if i == 0 else None)
+    left += v[k]
+  non = left - v["Inference to action"]
+  ax.text(left + 0.2, i, f"{left:.1f} s\n(non-inference {non:.1f} s)", va="center", fontsize=6.2, color="#333")
+v, n_me = ST["FULL45"]
+ax.set_title(f"Run in parallel with inference (MobileExplorer): probes {v['par'] / v['probed']:.1f} s on\n"
+             f"{v['probed']:.0%} of steps; summary decoding {v['hid']:.1f} s/step", fontsize=6.3, color="#333")
+ax.set_yticks([0, 1])
+ax.set_yticklabels(["Baseline", "Mobile-\nExplorer"], fontsize=7)
+ax.invert_yaxis()
+ax.set_xlim(0, max(sum(ST[a][0][k] for k, _ in segs) for a in ST) * 1.5)
+ax.set_xlabel("Time per inference step (s)")
+fig.tight_layout()
+fig.legend(*ax.get_legend_handles_labels(), fontsize=5.8, frameon=False, ncol=3, loc="upper center",
+           bbox_to_anchor=(0.5, 0.02), handlelength=1, columnspacing=0.8)
+X["Q_step_time"] = {a: {"n_steps": ST[a][1], **{k: round(x, 3) for k, x in ST[a][0].items()}} for a in ST}
+json.dump(X, open(OUT / "extra_summary.json", "w"), indent=1)
+save(fig, "q_step_time")
 
 # ------------------------------------------------------------------ o: seen-task split
 sp = json.load(open(ROOT / "reports" / "seenW1_split.json"))

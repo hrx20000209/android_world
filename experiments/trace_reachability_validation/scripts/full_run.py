@@ -27,6 +27,7 @@ import math
 import re
 import os
 import sys
+import subprocess
 import threading
 import time
 from collections import Counter
@@ -65,7 +66,11 @@ GRAPH_PROMPT = os.environ.get("GRAPH_PROMPT") == "1"    # graph knowledge inject
 NO_SYS = os.environ.get("NO_SYS") == "1"                # no pipelined execution: full decoding, fixed 1 s observation wait
 NO_EXEC = os.environ.get("NO_EXEC") == "1"              # seen-task warm-up: build the graph, every action from the model
 EXEC_OFF = GRAPH_PROMPT or NO_EXEC
+TRAJ_CLASSIC = os.environ.get("TRAJ_CLASSIC") == "1"   # classic trajectory-reuse baseline (record and replay)
+NO_EXPLORE = os.environ.get("NO_EXPLORE") == "1"        # no online exploration window
 TPL_REPLAY = os.environ.get("TPL_DEMOS", "")                # seen-task split: same-template trajectory replay (warm raw dir)
+SCHED_MODE = os.environ.get("SCHED_MODE", "")              # "" off | assign (calibration) | fixed (base parallel) | lookup (system)
+SCHED_DELTA = float(os.environ.get("SCHED_DELTA", "0.15"))
 EXPLORE_FIT = os.environ.get("EXPLORE_FIT") == "1"      # explore only if a probe fits before the action arrives
 WARM_EXPLORE = os.environ.get("WARM_EXPLORE") == "1"    # fixed exploration budget: the window is not cut by the decision
 APPDIR = Path(os.environ.get("SEQ_APPDIR", "/tmp/full"))
@@ -106,10 +111,12 @@ class FullEpisode(S.SeqEpisode):
     fx = full7.StuckExplorer(self, goal, gdir, hard=(ARM in ("FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16", "FULL17", "FULL18", "FULL19", "FULL20", "FULL21", "FULL22", "FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45"))) if ARM in ("FULL7", "FULL8", "FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16", "FULL17", "FULL18", "FULL19", "FULL20", "FULL21", "FULL22", "FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") else None
     fn = full9.FuncExec(self, goal) if ARM in ("FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16", "FULL17", "FULL18", "FULL19", "FULL20", "FULL21", "FULL22", "FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") else None
     self._tpl = None
-    if TPL_REPLAY and not EXEC_OFF:
+    if TPL_REPLAY and (not EXEC_OFF or TRAJ_CLASSIC):
       import tpl_replay as TR  # noqa: E402
       dm = TR.load_demos(TPL_REPLAY, self.args.task)
-      self._tpl = TR.Replayer(dm, goal) if dm else None
+      self._tpl = TR.Replayer(dm, goal, classic=TRAJ_CLASSIC) if dm else None
+    if TRAJ_CLASSIC:
+      fx = None                              # baseline: no FULL45 onboarding / unstick helpers, as BASE
     # FULL33: the task has record fields to fill -> creation entries ("New Event", "+") may be explored
     self._create_task = bool(fn is not None and ARM in ("FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") and fn.recs and fn.P.get("verb") in ENTRY_VERBS)
     if ARM in ("FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45"):
@@ -395,18 +402,32 @@ class FullEpisode(S.SeqEpisode):
           box["d"] = self.decide(agent, goal, pre["pixels"])
         except Exception as e:  # pylint: disable=broad-except
           box["err"] = e
-      self._early = {"ev": threading.Event()} if STREAM else None
+        finally:
+          if SCHED_MODE == "joint":
+            box["joint_done_epoch"] = time.time()
+            if self._early is not None:
+              self._early["ev"].set()
+      if SCHED_MODE == "joint":
+        import joint_sched as JS  # noqa: E402
+        self._joint_step, self._joint_app = k, ui.package
+        self._early = {"ev": JS.ReadyEvent()} if STREAM else None
+      else:
+        self._early = {"ev": threading.Event()} if STREAM else None
+      if SCHED_MODE == "rto":
+        self._rto_ctx = (ui, ex.graph if ex is not None else None, k)
+        if RTO_APRIORI:
+          _rto_choose(self, ui, ex, store, own, k)    # explore-more vs infer-faster, before the request
       self._t_req = time.time()
       th = threading.Thread(target=_decide, daemon=True)
       th.start()
       self._infer_thread, self._spec = th, None
       if NOEXP:
         xrec = None
-      elif fx is not None and fx.is_stuck(ui) and not ex.disabled_reason:
+      elif fx is not None and fx.is_stuck(ui) and not ex.disabled_reason and SCHED_MODE != "joint":
         xrec = fx.window(ex, pre, k)          # stuck: probe an untried control instead of E1
         m["probes_stuck"] += len(xrec["probes"])
       else:
-        xrec = self.window(ex, store, own, pre, k, instance) if full else None
+        xrec = self.window(ex, store, own, pre, k, instance) if full and not NO_EXPLORE else None
       if xrec is not None:
         self.log("windows", xrec)
         m["probes_e1"] += sum(p["why"] == "E1" for p in xrec["probes"])
@@ -440,6 +461,13 @@ class FullEpisode(S.SeqEpisode):
           box["d"] = self.decide(agent, goal, pre["pixels"])
         d = box["d"]
       t_decision = time.time()
+      if SCHED_MODE == "lookup":
+        self._sched_feedback(t_decision, xrec, k, ui.package)
+      elif SCHED_MODE == "joint":
+        import joint_runtime as JR  # noqa: E402
+        JR.feedback(self, t_decision, xrec, k, ui.package, box)
+      elif SCHED_MODE in ("heur", "heurlite", "jointev", "rto"):
+        _heur_feedback(self, t_decision, xrec, k, ui.package)
       m["calls"] += 1
       requery = False
       spec_hit = False
@@ -470,7 +498,12 @@ class FullEpisode(S.SeqEpisode):
                             [{"why": "PARK", "family": sp["fam"], "rollback_ok": False, "dst_ui": None}])
       if spec_hit:
         xrec = dict(xrec or {}, probes=[])     # nothing to verify: the screen moved on by the model's own choice
-      if xrec and xrec["probes"]:
+      verify_all = SCHED_MODE in ("assign", "fixed", "lookup") and not spec_hit   # heur keeps FULL45's verify-after-probe
+      if verify_all:
+        xrec = xrec or {"probes": []}
+      if xrec and (xrec["probes"] or verify_all):
+        # SCHED_MODE: both compared methods read the screen again and check its identity before the formal action,
+        # also when no probe ran (K = 0)
         v = self.dev.capture(f"s{k}_verify", settle=True)
         if ARM in ("FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16", "FULL17", "FULL18", "FULL19", "FULL20", "FULL21", "FULL22", "FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") and not R.same_state(v["ui"], ui) and full9.decision_still_valid(ui, v["ui"], d["action"]):
           # the screen differs only in ways that do not affect THIS decision (same page, same target at the
@@ -569,6 +602,7 @@ class FullEpisode(S.SeqEpisode):
         if self._last_model_commit:
           fn.on_model_commit()
       row = {"step": k, "kind": "model", "pre": R.strip(pre), "action": a.__dict__, "tok": tok, "summary": summary,
+             "t_req": getattr(self, "_t_req", None),
              "model_latency_s": d["model_latency_s"], "requery": requery, "t_decision": t_decision,
              "spec_hit": spec_hit,
              "probes": [{k2: v2 for k2, v2 in p.items() if k2 != "dst_ui"} for p in xrec["probes"]] if xrec else []}
@@ -726,6 +760,13 @@ class FullEpisode(S.SeqEpisode):
       if SA.mode(ui) == "dialog":
         # a single-window dialog is not on the back stack either (FULL29-33: 8 of 10 probes there failed Back)
         return dict(rec, stop="dialog_state", window_s=0.0)
+    if SCHED_MODE:
+      rec["t_req"], rec["t_start"] = getattr(self, "_t_req", t0), t0
+      alloc = self._sched_select(ui, t0)
+      rec["sched"] = alloc
+      if alloc["allocation"]["budget"] == 0:
+        # K = 0: no optional exploration observation at all (the formal pre-action read stays, see the decision)
+        return dict(rec, stop="budget0", window_s=0.0, t_end=time.time())
     if ARM == "FULL13" and not full9.replayable(self._exec_log):
       # restorability guarantee: probe only while a failed Back can be repaired by relaunch + replay of the path
       return dict(rec, stop="not_restorable", window_s=0.0)
@@ -909,14 +950,62 @@ class FullEpisode(S.SeqEpisode):
       for p, s in plan:
         if p == 0 and len(targets) < 3:      # unknown out-edges only
           targets.append(("E2", s))
+    if SCHED_MODE == "joint":
+      import joint_runtime as JR  # noqa: E402
+      targets = JR.targets(self, ui, rec, targets, ex, locals().get("gv"), full9, EV, C)
+    elif SCHED_MODE == "heur":
+      targets = _heur_targets(self, ui, rec, targets, locals().get("scored"))
+    elif SCHED_MODE == "rto":
+      rec["sched"]["allocation"]["budget"] = len(targets)
+      targets = _rto_plan(self, ui, rec, _heur_targets(self, ui, rec, targets, locals().get("scored")), ex, step)
+    elif SCHED_MODE == "jointev":
+      targets = _joint_targets(self, ui, rec, targets)
+    elif SCHED_MODE == "heurlite":
+      # weak system layer: FULL45's own candidates and order unchanged, cut only to the probes that fit before the
+      # action is expected (live latency profile)
+      rec["sched"]["n_candidates"] = len(targets)
+      targets = targets[:rec["sched"]["allocation"]["budget"]]
+    elif SCHED_MODE:
+      a_ = rec["sched"]["allocation"]
+      if a_["strategy"] == "screen_order":
+        # same admissible candidate set, ordered by screen position instead of FULL45 evidence/relevance
+        targets = sorted(targets, key=lambda t: ((t[1].sel.get("bounds") or [0, 0])[1], (t[1].sel.get("bounds") or [0, 0])[0]))
+      targets = targets[:a_["budget"]]
     rec["mode"] = targets[0][0] if targets else "none"
     for i_t, (why, s) in enumerate(targets):
-      if time.time() - t0 >= ex.cfg.budget_s:
+      if SCHED_MODE == "joint":
+        adm = JR.admit(self, rec)
+        rec.setdefault("admission", []).append(adm)
+        if not adm["admit"]:
+          rec["stop"] = "joint_complete_cycle_does_not_fit"
+          break
+        joint_began = time.time()
+        gap = rec["joint"].get("gap_s", 0.)
+        if gap:
+          time.sleep(gap)
+      if SCHED_MODE == "lookup":
+        adm = self._sched_admit(rec)
+        rec.setdefault("admission", []).append(adm)
+        if not adm["admit"]:
+          rec["stop"] = "complete_cycle_does_not_fit"
+          break
+      if SCHED_MODE != "joint" and time.time() - t0 >= ex.cfg.budget_s:
         rec["stop"] = "budget"
         break
       if STREAM and not WARM_EXPLORE and getattr(self, "_early", None) is not None and self._early["ev"].is_set():
-        rec["stop"] = "decided"              # FULL41: the action is known; the window ends with the decision
-        break
+        dl = _rto_delta(self, step)
+        if dl > 0:
+          # rto explore-more: the action waits up to delta for exploration; a probe starts only if its complete
+          # cycle ends within the delay
+          rec.setdefault("t_ready_seen", time.time())
+          if time.time() - rec["t_ready_seen"] + rec["sched"].get("probe_p75_s", 2.5) <= dl:
+            rec["delayed_for_exploration"] = True
+          else:
+            rec["stop"] = "decided_after_delay"
+            break
+        else:
+          rec["stop"] = "decided"              # FULL41: the action is known; the window ends with the decision
+          break
       if EXPLORE_FIT and not WARM_EXPLORE:
         # a probe is started only if it can finish (probe + rollback, recent median) before the action usually
         # arrives; on a fast server (decision < one probe) the step is not explored at all (seenE2: 59/138 overran)
@@ -925,11 +1014,11 @@ class FullEpisode(S.SeqEpisode):
         if time.time() - getattr(self, "_t_req", t0) + tp[len(tp) // 2] > ta[len(ta) // 2]:
           rec["stop"] = "no_fit"
           break
-      if ARM in ("FULL42", "FULL43", "FULL44", "FULL45") and i_t > 0 and not WARM_EXPLORE:
+      if ARM in ("FULL42", "FULL43", "FULL44", "FULL45") and i_t > 0 and not WARM_EXPLORE and SCHED_MODE != "joint":
         # deadline-aware: the window ends where the action usually arrives (median time-to-action of this run's
         # streamed decisions); a probe started later than ~2 s before it would overrun the decision
         ta = sorted(_T_ACTION[-15:]) or [10.0]
-        if time.time() - getattr(self, "_t_req", t0) > ta[len(ta) // 2] - 2.0:
+        if time.time() - getattr(self, "_t_req", t0) > ta[len(ta) // 2] - 2.0 + _rto_delta(self, step):
           rec["stop"] = "deadline"
           break
         if rec["probes"] and rec["probes"][-1]["outcome"] == "no_change":
@@ -943,6 +1032,9 @@ class FullEpisode(S.SeqEpisode):
           if not ok_j and not full9.relaunch_restore(self, ui, step):
             rec["drift_unrestored"] = True
           break
+      if SCHED_MODE == "joint" and ((getattr(self, "_early", None) is not None and self._early["ev"].is_set()) or not self._infer_thread.is_alive()):
+        rec["stop"] = "joint_action_ready_before_tap"
+        break
       if why == "D2":
         p = self.probe_depth2(ex, pre, s, step)
         if p is None:
@@ -976,7 +1068,7 @@ class FullEpisode(S.SeqEpisode):
           self._learned_eff.add(key_e)
           with self._eff_path.open("a") as f:
             f.write(json.dumps({"key": list(key_e), "instance": instance, "step": step, "reason": "in_place_change"}) + "\n")
-      rec["probes"].append({"why": why, "slot": s.slot_id, "family": C.family_of_sel(s.sel), "outcome": p["outcome"],
+      rec["probes"].append({"why": why, "cls": _probe_class(why, s.sel), "slot": s.slot_id, "family": C.family_of_sel(s.sel), "outcome": p["outcome"],
                             "rollback_ok": p["rollback_ok"], "t": p["t_total_s"], "dst_ui": dst_ui if why != "D2" else None})
       _T_PROBE.append(p["t_total_s"])
       if not p["rollback_ok"] and ARM in ("FULL15", "FULL16", "FULL17", "FULL18", "FULL19", "FULL20", "FULL21", "FULL22", "FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45") and why != "D2":
@@ -1012,6 +1104,8 @@ class FullEpisode(S.SeqEpisode):
             with self._eff_path.open("a") as f:
               f.write(json.dumps({"key": list(key), "instance": instance, "step": step}) + "\n")
             rec["learned_effectful"] = list(key)
+      if SCHED_MODE == "joint":
+        JR.cycle(self, rec, p, joint_began, s, ui, R.same_state)
       if not p["rollback_ok"]:
         rec["stop"] = "rollback_failed"
         if ARM in ("FULL9", "FULL10", "FULL11", "FULL12", "FULL13", "FULL14", "FULL15", "FULL16", "FULL17", "FULL18", "FULL19", "FULL20", "FULL21", "FULL22", "FULL23", "FULL24", "FULL26", "FULL27", "FULL28", "FULL29", "FULL30", "FULL31", "FULL32", "FULL33", "FULL34", "FULL35", "FULL36", "FULL37", "FULL38", "FULL39", "FULL40", "FULL41", "FULL42", "FULL43", "FULL44", "FULL45"):
@@ -1039,6 +1133,8 @@ class FullEpisode(S.SeqEpisode):
     if ARM in ("FULL41", "FULL42", "FULL43") and not rec.get("stop") and not rec.get("learned_edit_effect"):
       self._park(ex, pre, rec, step, instance)
     rec["window_s"] = round(time.time() - t0, 3)
+    if SCHED_MODE:
+      rec["t_end"] = time.time()
     return rec
 
 
@@ -1168,6 +1264,228 @@ def _adaptive_wait(self, prev, m):
 
 
 FullEpisode._adaptive_wait = _adaptive_wait
+
+
+# ------------------------------------------------------------------ SCHED_MODE: measured budget / strategy selection
+def _sched_ctrl(self):
+  if getattr(self, "_sched_c", None) is None:
+    import sched_lookup as SL  # noqa: E402
+    self._sched_SL = SL
+    self._sched_c = SL.LookupController(SL.load_frozen(os.environ["SCHED_TABLE"]), require_interval=os.environ.get("SCHED_INTERVAL", "1") == "1") \
+        if SCHED_MODE == "lookup" else None
+    self._sched_pause, self._sched_events = 0, []
+  return self._sched_c
+
+
+def _sched_mem_ok(self):
+  out = subprocess.run([ADB, "-s", os.environ.get("ANDROID_SERIAL", "emulator-5554"), "shell",
+                        "grep MemAvailable /proc/meminfo; head -1 /proc/pressure/memory"], capture_output=True, text=True, timeout=10).stdout
+  try:
+    avail_mb = int(out.split()[1]) // 1024
+    avg10 = float(out.split("avg10=")[1].split()[0])
+  except Exception:  # pylint: disable=broad-except
+    return False, {"raw": out[:120]}
+  return avail_mb >= 512 and avg10 < 10, {"mem_available_mb": avail_mb, "psi_some_avg10": avg10}
+
+
+def _sched_select(self, ui, t0):
+  """Per window: x = (r, K, s). assign: the calibration condition; fixed: base parallel (normal, 1, full45_value);
+  lookup: frozen L / P tables + reasoning bound + complete-cycle window + memory guard + latency feedback."""
+  if SCHED_MODE == "joint":
+    import joint_runtime as JR  # noqa: E402
+    return JR.prepare(self, ui, t0, _sched_mem_ok)
+  if SCHED_MODE == "assign":
+    return {"allocation": {"priority": "normal", "budget": int(os.environ["SCHED_K"]), "strategy": os.environ.get("SCHED_S", "full45_value")},
+            "reason": "assigned_calibration_condition"}
+  if SCHED_MODE == "fixed":
+    return {"allocation": {"priority": "normal", "budget": 1, "strategy": "full45_value"}, "reason": "fixed_base_parallel"}
+  if SCHED_MODE in ("heur", "heurlite", "jointev", "rto"):
+    return _heur_select(self, ui, t0)
+  c = _sched_ctrl(self)
+  model_key = self.args.model
+  self._sched_app = ui.package
+  i0 = c.i0(ui.package, model_key)
+  mem_ok, mem = _sched_mem_ok(self)
+  elapsed = time.time() - getattr(self, "_t_req", t0)
+  if self._sched_pause > 0:
+    self._sched_pause -= 1
+    out = {"allocation": {"priority": "normal", "budget": 0, "strategy": "full45_value"}, "reason": "latency_feedback_pause",
+           "pause_left": self._sched_pause, "i0_s": i0, "memory": mem}
+    return out
+  out = c.select(app=ui.package, task_kind=full9.MEM.template_key(self.args.task), model_key=model_key, i0_s=i0,
+                 delta=SCHED_DELTA, elapsed_s=elapsed, memory_ok=mem_ok,
+                 i0_upper_s=c.i0_upper(ui.package, model_key) if os.environ.get("SCHED_BOUND", "upper") == "upper" else None)
+  out["memory"] = mem
+  self._sched_cur = out
+  return out
+
+
+def _sched_admit(self, rec):
+  """Start a probe only if its complete cycle (probe + return + verification, table upper) plus the return guard fits
+  in the remaining reasoning window; a started probe is always allowed to finish its recovery (no preemption)."""
+  cur = rec["sched"]
+  i0 = cur.get("i0_s") or 0.0
+  a_ = cur["allocation"]
+  c = _sched_ctrl(self)
+  cost = c.cost(getattr(self, "_sched_app", ""), self._sched_SL.Allocation(**a_), self.args.model)
+  elapsed = time.time() - rec["t_req"]
+  remaining = self._sched_SL.WINDOW_FRACTION * i0 - elapsed
+  need = (cost.get("exploration_upper_s") or float("inf")) + self._sched_SL.RETURN_GUARD_S
+  return {"admit": bool(cost.get("known")) and need <= remaining, "elapsed_s": round(elapsed, 3),
+          "remaining_s": round(remaining, 3), "need_s": round(need, 3) if math.isfinite(need) else None}
+
+
+def _sched_feedback(self, t_decision, xrec, k, app):
+  """Live latency feedback (kept apart from the frozen success table): a decision slower than (1 + delta) * I0
+  pauses optional exploration for the next two windows."""
+  # the reference of the screen this decision was made on (sched1 used the last selection's I0, which stayed at the
+  # launcher's 6.3 s inside Calendar: 12 false exceedances / 9 extra pauses, outcome unchanged because every window was K = 0)
+  i0 = _sched_ctrl(self).i0(app, self.args.model)
+  inf = t_decision - getattr(self, "_t_req", t_decision)
+  if not i0:
+    return
+  over = inf > (1 + SCHED_DELTA) * i0
+  ev = {"step": k, "inference_s": round(inf, 3), "target_s": round((1 + SCHED_DELTA) * i0, 3), "exceeded": over,
+        "explored": bool(xrec and xrec.get("probes")), "pause_before": self._sched_pause}
+  if over:
+    self._sched_pause = 2
+    ev["action"] = "pause_optional_exploration_2_windows"
+  self.log("sched_feedback", ev)
+
+
+# ------------------------------------------------------------------ SCHED_MODE=heur: one-step heuristic budget
+HEUR_KMAX, HEUR_GUARD_S = 3, 0.75
+
+
+def _heur_profile(self):
+  """Live latency profile per app (time to action of the decisions, complete probe cycles), kept across tasks."""
+  if getattr(self, "_heur_prof", None) is None:
+    p = APPDIR / ARM_NAME / "latency_profile.json"
+    self._heur_prof_path = p
+    try:
+      self._heur_prof = json.loads(p.read_text())
+    except Exception:  # pylint: disable=broad-except
+      self._heur_prof = {}
+    self._heur_pause, self._heur_cap = 0, {}
+  return self._heur_prof
+
+
+def _q(xs, q, default):
+  xs = sorted(xs[-15:])
+  return xs[min(len(xs) - 1, int(q * len(xs)))] if xs else default
+
+
+def _heur_select(self, ui, t0):
+  prof = _heur_profile(self)
+  a = prof.get(ui.package, {})
+  all_act = [x for v in prof.values() for x in v.get("act", [])]
+  pred = _q(a.get("act", []), 0.5, _q(all_act, 0.5, 10.0))           # expected time to the action of this decision
+  probe = _q(a.get("probe", []), 0.75, 2.5)                            # complete probe cycle, p75
+  elapsed = time.time() - getattr(self, "_t_req", t0)
+  fit = int(max(0.0, pred - elapsed - HEUR_GUARD_S + (_rto_dmax(probe) if SCHED_MODE == "rto" else 0.0)) // probe)
+  cap = self._heur_cap.get(ui.package, HEUR_KMAX)
+  k = min(HEUR_KMAX, fit, cap) if SCHED_MODE in ("heur", "rto") else min(PROBES_PER_STEP, max(fit, 0))
+  reason = "fits_window"
+  if self._heur_pause > 0:
+    self._heur_pause -= 1
+    k, reason = 0, "latency_feedback_pause"
+  elif fit == 0:
+    reason = "probe_does_not_fit_before_action"
+  out = {"allocation": {"priority": "normal", "budget": k, "strategy": "full45_value"}, "reason": reason,
+         "pred_action_s": round(pred, 2), "probe_p75_s": round(probe, 2), "elapsed_s": round(elapsed, 2), "fit": fit, "app_cap": cap}
+  self._heur_cur = out
+  return out
+
+
+def _heur_targets(self, ui, rec, targets, scored):
+  """Benefit side: keep only probes expected to pay off for THIS task given the graph - the predicted next action
+  (E1), and unknown, labelled controls of positive task relevance (FX / E2); no zero-relevance filler, no
+  re-validation of known edges, no unlabelled icon whose effect cannot be told before tapping."""
+  prio = {sl.slot_id: sc[0] for sc, _, sl in (scored or [])}
+  lab = lambda sl: bool((sl.sel.get("label") or sl.sel.get("text") or sl.sel.get("desc") or "").strip())  # noqa: E731
+  useful = [t for t in targets if t[0] == "E1" or (t[0] in ("FX", "E2") and lab(t[1]) and prio.get(t[1].slot_id, 1 if t[0] == "E2" else 0) > 0)]
+  k = rec["sched"]["allocation"]["budget"]
+  rec["sched"]["n_candidates"], rec["sched"]["n_useful"] = len(targets), len(useful)
+  rec["sched"]["budget_final"] = min(k, len(useful))
+  return useful[:k]
+
+
+def _heur_feedback(self, t_decision, xrec, k, app):
+  prof = _heur_profile(self)
+  a = prof.setdefault(app, {"act": [], "probe": []})
+  inf = t_decision - getattr(self, "_t_req", t_decision)
+  pred = (getattr(self, "_heur_cur", None) or {}).get("pred_action_s")
+  probes = (xrec or {}).get("probes") or []
+  ev = {"step": k, "inference_s": round(inf, 3), "pred_s": pred, "n_probes": len(probes)}
+  for p_ in probes:                          # online per-app outcome counts per probe class (joint)
+    c_ = a.setdefault("cls", {}).setdefault(p_.get("cls") or "?", [0, 0])
+    c_[0] += 1
+    c_[1] += not p_.get("rollback_ok")
+  if probes and pred and inf > (1.15 if SCHED_MODE == "heur" else 1.30) * pred:
+    self._heur_pause = 1                     # the decision ran late while exploring: no exploration next window
+    ev["action"] = "pause_next_window"
+  if SCHED_MODE == "heur" and any(not p.get("rollback_ok") for p in probes):
+    self._heur_cap[app] = 1                  # a probe of this app could not be undone: at most one probe per window
+    ev["cap"] = 1
+  a["act"] = (a.get("act", []) + [round(inf, 3)])[-30:]
+  a["probe"] = (a.get("probe", []) + [round(p.get("t") or 0, 3) for p in probes if p.get("t")])[-30:]
+  try:
+    self._heur_prof_path.parent.mkdir(parents=True, exist_ok=True)
+    self._heur_prof_path.write_text(json.dumps(prof))
+  except Exception:  # pylint: disable=broad-except
+    pass
+  self.log("sched_feedback", ev)
+
+
+# ------------------------------------------------------------------ SCHED_MODE=joint: exploration x reasoning
+def _joint_table(self):
+  if getattr(self, "_jt", None) is None:
+    import sched_lookup as SL  # noqa: E402
+    self._jt = SL.load_frozen(os.environ["JOINT_TABLE"])
+  return self._jt
+
+
+def _probe_class(why, sel):
+  lab = bool((sel.get("label") or sel.get("text") or sel.get("desc") or "").strip())
+  return f"{why}|{'lab' if lab else 'nolab'}"
+
+
+def _joint_targets(self, ui, rec, targets):
+  """Joint exploration-reasoning value of each FULL45 candidate (frozen table x live latency profile):
+     EV = P_useful * gain - P_fail * (P_requery * T_decision + T_recovery)
+  P_fail is the table prior updated by this app's own outcomes (prior strength = table n, capped at 20). A failed
+  probe costs a re-inference, so the slower the reasoning the less risky exploration is worth. Candidates with
+  EV > 0 are kept in FULL45 order and then cut to the probes that fit before the action is expected."""
+  jt = _joint_table(self)
+  prof = _heur_profile(self).get(ui.package, {})
+  all_act = [x for v in _heur_profile(self).values() for x in v.get("act", [])]
+  t_dec = _q(prof.get("act", []), 0.5, _q(all_act, 0.5, jt["decision_latency_median_s"]))
+  cost_fail = jt["p_requery_given_fail"] * t_dec + jt["t_fail_recovery_s"]
+  gain = jt["gain_useful_s"] + jt.get("gain_future_s", 0.0)
+  keep, evs = [], []
+  for why, sl in targets:
+    c = _probe_class(why, sl.sel)
+    e = jt["classes"].get(c)
+    if e is None:
+      evs.append((c, None))
+      continue                                 # unknown class: no evidence, not explored
+    n0 = min(e["n"], 20)
+    tr, fl = prof.get("cls", {}).get(c, [0, 0])
+    p_fail = (n0 * e["p_fail"] + fl) / (n0 + tr)
+    ev = e["p_useful"] * gain - p_fail * cost_fail
+    evs.append((c, round(ev, 3)))
+    if ev > 0:
+      keep.append((why, sl))
+  rec["sched"].update(n_candidates=len(targets), n_positive=len(keep), t_dec_s=round(t_dec, 2),
+                      cost_fail_s=round(cost_fail, 2), ev=evs[:10])
+  out = keep[:rec["sched"]["allocation"]["budget"]]
+  rec["sched"]["budget_final"] = len(out)
+  return out
+
+
+FullEpisode._sched_select = _sched_select
+FullEpisode._sched_admit = _sched_admit
+FullEpisode._sched_feedback = _sched_feedback
 
 
 def _tpl_step(self, ui, pre, agent, steps, k, own, m, fn):
@@ -1466,10 +1784,12 @@ def _back_wait(dev, orig_back):
 _SUMMARY_KEY = re.compile(r"(?:^|[\t\n])\s*summary\s*[:\uff1a]", re.I)
 
 
-def _stream_call(api_url, model, messages, on_prefix, gen=None):
+def _stream_call(api_url, model, messages, on_prefix, gen=None, ctl=None):
   import requests  # noqa: E402
   payload = {"messages": messages, "temperature": 0.0, "top_p": 1.0, "max_tokens": 1024, "stream": True,
              "stream_options": {"include_usage": True}}
+  if ctl is not None and ctl.get("priority") is not None:
+    payload["priority"] = ctl["priority"]          # SCHED_MODE=rto: the thinking request yields to the fast one
   t0 = time.time()
   gen = {} if gen is None else gen
   if model:
@@ -1481,6 +1801,8 @@ def _stream_call(api_url, model, messages, on_prefix, gen=None):
   txt, fired = "", False
   with requests.post(api_url, headers=headers, json=payload, stream=True, timeout=(15, 120)) as resp:   # a dead link fails the episode quickly (rerun)
     resp.raise_for_status()
+    if ctl is not None:
+      ctl["resp"] = resp
     # a half-open tunnel can keep a stream alive without data for many minutes (seenW1: 1024 s): close it after a
     # total deadline; the caller then retries without streaming
     _wd = threading.Timer(float(os.environ.get("STREAM_DEADLINE", "180")), resp.close)
@@ -1501,6 +1823,9 @@ def _stream_call(api_url, model, messages, on_prefix, gen=None):
       if ch and "ttft_s" not in gen:
         gen["ttft_s"] = round(time.time() - t0, 3)
       txt += ch
+      if ctl is not None and "think_seen" not in ctl and "<think>" in txt.lower():
+        ctl["think_seen"] = round(time.time() - t0, 3)
+        ctl["on_think"]()
       if fired or not ch:
         continue
       low = txt.lower()
@@ -1548,11 +1873,17 @@ def _decide_stream(self, agent, goal, pixels):
     return _decide_plain(self, agent, goal, pixels)
   from PIL import Image as _Image  # noqa: E402
   early = getattr(self, "_early", None)
+  if SCHED_MODE == "joint":
+    joint_context = {"step": getattr(self, "_joint_step", None), "app": getattr(self, "_joint_app", None)}
   messages = R.gelab_agent.build_gelab_messages(goal, agent._history_text(), _Image.fromarray(pixels))  # pylint: disable=protected-access
   conn = _load_start() if ONDEVICE_LOAD else None
   t0 = time.time()
 
   gen = {}
+  # the parallel decision of a step consumes the step context; a serial re-query finds none and decodes as usual
+  rto_ctx = self.__dict__.pop("_rto_ctx", None) if SCHED_MODE == "rto" else None
+  rto_on = rto_ctx is not None and early is not None
+  ctl, rlock = ({"priority": 0, "done": threading.Event()} if rto_on else None), threading.Lock()
 
   def on_prefix(prefix):
     if early is None or not STREAM:
@@ -1563,8 +1894,22 @@ def _decide_stream(self, agent, goal, pixels):
       return
     if d0.get("parse_error"):
       return
-    early["d"] = d0
-    early["ev"].set()
+    with rlock:
+      if ctl is not None:
+        if ctl.get("accepted") is not None:
+          return                         # the verified fast action already stands
+        ctl["main_fired"] = True
+      early["d"] = d0
+      early["ev"].set()
+  if rto_on and os.environ.get("RTO_SERIAL") == "1":
+    ctl["priority"] = None
+    return _rto_decide_serial(self, agent, messages, early, t0, gen, on_prefix, ctl, rto_ctx)
+  if rto_on:
+    # same screenshot: the fast request, sent once the thinking request has streamed its first token, reuses its
+    # prefix cache. (vLLM 0.13 lost the engine input thread when an aborted request shared a multimodal processor
+    # cache item - LabServer 10-31 12:16; the server now runs with --mm-processor-cache-gb 0)
+    fast_messages = messages
+    return _rto_decide(self, agent, messages, early, t0, gen, on_prefix, rlock, ctl, rto_ctx, fast_messages)
   try:
     try:
       response = _stream_call(self.args.api_url, self.args.model, messages, on_prefix, gen)
@@ -1580,8 +1925,464 @@ def _decide_stream(self, agent, goal, pixels):
   elif gen.get("t_action_s"):
     _T_ACTION.append(gen["t_action_s"])
   self.log("gen", dict(gen, early=STREAM))
+  if SCHED_MODE == "joint":
+    parallel = threading.current_thread() is getattr(self, "_infer_thread", None)
+    ready = getattr(early["ev"], "ready_epoch", None) if parallel and early and early.get("d") is not None else None
+    self.log("joint_request", {"role": "parallel_window" if parallel else "serial_or_requery", "start_epoch": t0,
+                              **joint_context,
+                              "action_ready_epoch": ready or time.time(), "response_end_epoch": time.time(),
+                              "time_to_action_s": (ready - t0) if ready else time.time() - t0,
+                              "parse_error": d.get("parse_error"), "gen": gen})
   if early is not None:
     early["ev"].set()                    # wake the waiter also when no early action was found
+  return d
+
+
+# ------------------------------------------------------------------ SCHED_MODE=rto: adaptive runtime optimizer
+def _rto_table(self):
+  if getattr(self, "_rto_tbl", None) is None:
+    import rto as RT  # noqa: E402
+    self._rto_tbl = RT.Table(APPDIR / ARM_NAME / "rto_table.json")
+  return self._rto_tbl
+
+
+def _rto_decide(self, agent, messages, early, t0, gen, on_prefix, rlock, ctl, rto_ctx, fast_messages):
+  """Thinking request streamed in its own thread; once it opens <think>, a fast no-think request races it at higher
+  priority. A fast click whose destination exploration/graph already knows is executed (gate of rto.py) and the
+  thinking request is aborted, or kept as a background audit of the agreement table."""
+  import random  # noqa: E402
+  import rto as RT  # noqa: E402
+  tbl = _rto_table(self)
+  ui_r, graph_r, step = rto_ctx
+  app = ui_r.package
+  rec = {"step": step, "app": app}
+
+  def _fast():
+    try:
+      txt, _, ntok = RT.fast_request(self.args.api_url, self.args.model, fast_messages)
+      d_f = _parse_decision(self, txt, time.time() - t0)
+    except Exception as e:  # pylint: disable=broad-except
+      rec["fast_err"] = repr(e)[:200]
+      return
+    rec.update(fast_s=round(time.time() - t0, 3), fast_tok=ntok)
+    if d_f.get("parse_error"):
+      rec["fast_parse_error"] = True
+      return
+    g = RT.gate(tbl, app, ui_r, graph_r, d_f, is_commit_token)
+    rec["gate"] = g
+    rec["fast_d"] = d_f
+    _try_accept()
+
+  def _try_accept():
+    # the fast action replaces the decision only on a step the model reasons at length (it opened <think>)
+    g, d_f = rec.get("gate"), rec.get("fast_d")
+    if g is None or "think_seen" not in ctl:
+      return
+    with rlock:
+      if ctl.get("main_fired") or ctl.get("closed") or ctl.get("accepted") is not None:
+        rec["fast_late"] = ctl.get("accepted") is None
+        return
+      if not g["accept"]:
+        return
+      ctl["accepted"] = d_f
+      ctl["audit"] = random.random() < RT.AUDIT
+      early["d"] = d_f
+      early["ev"].set()
+    ctl["done"].set()
+    if not ctl["audit"]:
+      r = ctl.get("resp")
+      if r is not None:
+        try:
+          r.close()                          # client disconnect aborts the thinking request on the server
+        except Exception:  # pylint: disable=broad-except
+          pass
+
+  def _on_think():
+    if rec.get("launch") is None:
+      rec["launch"] = "think"
+      threading.Thread(target=_fast, daemon=True).start()
+    else:
+      _try_accept()
+  ctl["on_think"] = _on_think
+  x0 = tbl.app(app)
+  p_think = (x0["n_think"] + RT.P_THINK_PRIOR * 10) / (x0["n_steps"] + 10)
+  rec["p_think"] = round(p_think, 3)
+  if p_think >= RT.LAUNCH_AT_T0:
+    rec["launch"] = "t0"                   # this app usually reasons at length: race from the start
+    threading.Thread(target=_fast, daemon=True).start()
+  box = {}
+
+  def _main():
+    try:
+      box["txt"] = _stream_call(self.args.api_url, self.args.model, messages, on_prefix, gen, ctl)
+    except Exception as e:  # pylint: disable=broad-except
+      box["err"] = e
+    finally:
+      box["t_end"] = time.time()
+      ctl["done"].set()
+
+  conn = _load_start() if ONDEVICE_LOAD else None
+  tm = threading.Thread(target=_main, daemon=True)
+  tm.start()
+  try:
+    ctl["done"].wait()
+    with rlock:
+      ctl["closed"] = True
+    acc = ctl.get("accepted")
+    if acc is None:
+      tm.join()
+  finally:
+    _load_stop(conn)
+  x = tbl.app(app)
+  x["n_steps"] += 1
+  x["n_think"] += "think_seen" in ctl
+  rec["think_seen_s"] = ctl.get("think_seen")
+  if rec.get("fast_s"):
+    x["t_fast"] = (x["t_fast"] + [rec["fast_s"]])[-30:]
+
+  def _agree(d_t):
+    g = rec.get("gate")
+    if not g or g["cls"] == "other" or d_t is None:
+      return None
+    ok = RT.same_click(ui_r, g["fam"], d_t["action"])
+    a = x["agree"].setdefault(g["cls"], [0, 0])
+    a[0] += ok
+    a[1] += 1
+    return ok
+
+  if acc is not None:
+    x["fast_accept"] += 1
+    rec.update(path="fast_accepted", audit=ctl["audit"])
+    d = acc
+    d["gen"] = dict(gen, rto="fast", t_action_s=rec["fast_s"], t_end_s=rec["fast_s"])
+    _T_ACTION.append(rec["fast_s"])
+    rec.pop("fast_d", None)
+    self.log("gen", dict(d["gen"], early=STREAM))
+    if ctl["audit"]:
+      def _audit():
+        tm.join()
+        d_t = None
+        if box.get("txt"):
+          try:
+            d_t = _parse_decision(self, box["txt"], box["t_end"] - t0)
+          except Exception:  # pylint: disable=broad-except
+            d_t = None
+        ok = _agree(d_t)
+        if gen.get("t_action_s"):
+          x["t_think"] = (x["t_think"] + [gen["t_action_s"]])[-30:]
+        tbl.save()
+        self.log("rto_audit", {"step": step, "agree": ok, "think_t_action_s": gen.get("t_action_s"),
+                               "think_tok": gen.get("completion_tokens")})
+      threading.Thread(target=_audit, daemon=True).start()
+    else:
+      tbl.save()
+    self.log("rto", rec)
+    return d
+  # the thinking (or no-think) decision stands
+  if box.get("txt") is None:
+    self.log("stream_error", {"err": repr(box.get("err"))[:300]})
+    response, _, _ = agent.vllm.predict_mm("", [], messages=messages)
+  else:
+    response = box["txt"]
+  d = _parse_decision(self, response, time.time() - t0)
+  d["gen"] = gen
+  if "think_seen" in ctl:
+    if gen.get("t_action_s"):
+      x["t_think"] = (x["t_think"] + [gen["t_action_s"]])[-30:]
+    if rec.get("gate"):
+      x["fast_reject"] += 1
+      rec["agree_with_think"] = _agree(d)
+  rec["path"] = "think" if "think_seen" in ctl else "direct"
+  rec.pop("fast_d", None)
+  if gen.get("t_action_s"):
+    _T_ACTION.append(gen["t_action_s"])
+  tbl.save()
+  self.log("gen", dict(gen, early=STREAM))
+  self.log("rto", rec)
+  early["ev"].set()
+  return d
+
+
+RTO_APRIORI = os.environ.get("RTO_APRIORI") == "1"
+
+
+def _rto_choose(self, ui, ex, store, own, step):
+  """rto, a-priori mode (one request per decision): before the request, compare
+     infer-faster : a no-think decision (~T_fast), verifiable by the graph, + the probes that fit in that short window
+     explore-more : the thinking decision (~T_think) and the probes of this page that fit in it (+ delta)
+  with the values of rto.plan. The candidate probes are those the window would consider: unknown safe out-edges of
+  the page, the model's predicted next control marked E1."""
+  import rto as RT  # noqa: E402
+  tbl = _rto_table(self)
+  if getattr(self, "_rto_classes", None) is None:
+    self._rto_classes = RT.load_classes(os.environ.get("JOINT_TABLE", str(Path(__file__).resolve().parents[1] / "reports" / "joint_table_frozen.json")))
+  app = ui.package
+  x = tbl.app(app)
+  t_think, t_fast = tbl.med(x["t_think"], RT.DEF_T_THINK), tbl.med(x["t_fast"], RT.DEF_T_FAST)
+  p_think = (x["n_think"] + RT.P_THINK_PRIOR * 10) / (x["n_steps"] + 10)
+  A_known, _ = tbl.agreement(app, "click|known")
+  S = max(0.0, t_think - t_fast) * p_think * A_known
+  r = tbl.explore_ratio(app)
+  why = _rto_verifiable(tbl, ui)
+  prev = getattr(self, "_rto_prev", None)
+  if why is True and prev is not None and prev["commit"]:
+    why = "after_commit"
+  graph = ex.graph if ex is not None else None
+  page_known = why is True and bool(graph is not None and JG.JointGraph(graph).out.get(JG.page_key(ui)))
+  if why is True and not page_known:
+    why = "page_not_in_graph"
+  v_fast = tbl.try_ev(app)
+  cls = []
+  lab = lambda sel: bool((sel.get("label") or sel.get("text") or sel.get("desc") or "").strip())  # noqa: E731
+  try:
+    _, _, info = store.predict(own, {"struct": ui.struct_sig, "layout": ui.layout_sig})
+    top = info.get("top")
+    inst = getattr(ex, "instance", None)
+    # E1 as the window defines it: the model's predicted next control, safe, not yet probed in this episode
+    for sl in U.enumerate_slots(ui):
+      if top and C.family_of_sel(sl.sel) == top and sl.safe and not full9.effectful(sl.sel) \
+          and not any(o["instance"] == inst for o in graph_obs(ex.graph, ui.struct_sig, sl.slot_id)):
+        cls.append("E1|" + ("lab" if lab(sl.sel) else "nolab"))
+        break
+    plan_, _ = ex.plan(ui)
+    for p0, sl in plan_:
+      if p0 != 0 or C.family_of_sel(sl.sel) == top or (ui.package, C.family_of_sel(sl.sel)) in self._learned_eff:
+        continue
+      cls.append("FX|" + ("lab" if lab(sl.sel) else "nolab"))
+  except Exception as e:  # pylint: disable=broad-except
+    cls.append("err")
+    self.log("rto_choose_err", {"step": step, "err": repr(e)[:200]})
+  vals = [RT.probe_value(c, self._rto_classes, r, S, t_think) for c in cls]
+  probe_s = _q(_heur_profile(self).get(app, {}).get("probe", []), 0.75, 2.5)
+  p = RT.plan(vals, v_fast if page_known else None, page_known, t_think, t_fast, 0.0, probe_s, HEUR_GUARD_S)
+  self._rto_mode = dict(p, step=step, apriori=True, guard=why, page_known=page_known, v_fast=round(v_fast, 3),
+                        S=round(S, 3), ratio=round(r, 3), cand=cls[:12], vals=[round(v, 3) for v in vals[:12]])
+  self.log("rto_choose", self._rto_mode)
+  return self._rto_mode
+
+
+def _rto_page_outcome(tbl, ui, ok):
+  pg = tbl.app(ui.package).setdefault("pages", {}).setdefault(f"{ui.activity}|{ui.layout_sig}", [0, 0])
+  pg[0 if ok else 1] += 1
+
+
+def _rto_verifiable(tbl, ui):
+  try:
+    if ui.ime_visible():
+      return "keyboard_up"
+  except Exception:  # pylint: disable=broad-except
+    pass
+  acc, rej = tbl.app(ui.package).get("pages", {}).get(f"{ui.activity}|{ui.layout_sig}", [0, 0])
+  if rej and not acc:
+    return "page_rejected_before"
+  return True
+
+
+def _rto_dmax(probe):
+  import rto as RT  # noqa: E402
+  return min(RT.DELTA_MAX_S, RT.DELTA_MAX_PROBES * probe)
+
+
+def _rto_delta(self, step):
+  p = getattr(self, "_rto_mode", None)
+  return p["delta_s"] if SCHED_MODE == "rto" and p and p.get("step") == step and p["mode"] == "explore_more" else 0.0
+
+
+def _rto_plan(self, ui, rec, targets, ex, step):
+  """Adaptive runtime optimizer, explore-more vs infer-faster (rto.plan): value of each candidate probe from the
+  calibrated class table and the live fast-path saving; the chosen mode is read by the decision thread when the
+  model opens <think> (abort -> fast verified decision, or keep thinking and explore, possibly delaying the action)."""
+  import rto as RT  # noqa: E402
+  tbl = _rto_table(self)
+  if getattr(self, "_rto_classes", None) is None:
+    self._rto_classes = RT.load_classes(os.environ.get("JOINT_TABLE", str(Path(__file__).resolve().parents[1] / "reports" / "joint_table_frozen.json")))
+  app = ui.package
+  x = tbl.app(app)
+  t_think, t_fast = tbl.med(x["t_think"], RT.DEF_T_THINK), tbl.med(x["t_fast"], RT.DEF_T_FAST)
+  # a useful probe pays off only on a later step that would think AND whose fast decision the new edge verifies
+  p_think = (x["n_think"] + RT.P_THINK_PRIOR * 10) / (x["n_steps"] + 10)
+  A_known, _ = tbl.agreement(app, "click|known")
+  S = max(0.0, t_think - t_fast) * p_think * A_known
+  r = tbl.explore_ratio(app)
+  page_known = bool(JG.JointGraph(ex.graph).out.get(JG.page_key(ui))) and _rto_verifiable(tbl, ui) is True
+  v_fast = tbl.try_ev(app)
+  vals = [RT.probe_value(_probe_class(w, s_.sel), self._rto_classes, r, S, t_think) for w, s_ in targets]
+  sc = rec["sched"]
+  elapsed = time.time() - getattr(self, "_t_req", time.time())
+  pre_mode = getattr(self, "_rto_mode", None)
+  pre_mode = pre_mode if RTO_APRIORI and pre_mode and pre_mode.get("step") == step and pre_mode.get("apriori") else None
+  p = RT.plan(vals, v_fast if (pre_mode is None or pre_mode["mode"] == "infer_faster") else None,
+              page_known or (pre_mode is not None and pre_mode["mode"] == "infer_faster"), t_think, t_fast, elapsed,
+              sc.get("probe_p75_s", 2.5), HEUR_GUARD_S,
+              only=(pre_mode["mode"] if pre_mode is not None else None))
+  # keep the positive-value candidates in their value order, cut to the chosen K
+  order = sorted([i for i, v in enumerate(vals) if v > 0], key=lambda i: -vals[i])
+  out = [targets[i] for i in order[:p["k"]]]
+  self._rto_mode = dict(p, step=step, page_known=page_known, v_fast=round(v_fast, 3), S=round(S, 3), ratio=round(r, 3),
+                        vals=[round(v, 3) for v in vals], apriori=pre_mode is not None,
+                        prior_plan=(pre_mode or {}).get("options"))
+  sc.update(rto=self._rto_mode, budget_final=len(out))
+  x["explore_expected"] = x.get("explore_expected", 0.0) + sum(
+      (self._rto_classes.get(_probe_class(w, s_.sel)) or {"p_useful": 0.05})["p_useful"] for w, s_ in out)
+  return out
+
+
+def _rto_decide_serial(self, agent, messages, early, t0, gen, on_prefix, ctl, rto_ctx):
+  """rto on a one-sequence server (Orin vLLM --max-num-seqs 1): reasoning preemption. When this app's online
+  try-value is positive and the page has known out-edges, a request that opens <think> is aborted at its first token
+  and a fast no-think request follows (prefix cached). A graph-verified fast click (rto.gate) is executed; otherwise
+  the normal request is issued again and the thinking decision stands (its cost is charged to the try-value)."""
+  import rto as RT  # noqa: E402
+  tbl = _rto_table(self)
+  ui_r, graph_r, step = rto_ctx
+  app = ui_r.package
+  x = tbl.app(app)
+  page_known = bool(graph_r is not None and JG.JointGraph(graph_r).out.get(JG.page_key(ui_r)))
+  ev_try = tbl.try_ev(app)
+  rec = {"step": step, "app": app, "page_known": page_known, "ev_try_s": round(ev_try, 3)}
+
+  def _wants_fast():
+    # verifiability first: with the keyboard up the next action is usually typing (never graph-verified), and a page
+    # whose tries were all rejected is not tried again
+    v = _rto_verifiable(tbl, ui_r)
+    if v is not True:
+      rec["mode"] = v
+      return False
+    prev = getattr(self, "_rto_prev", None)
+    if prev is not None and prev["commit"]:
+      # after a commit the next decision is usually whether the task is done: never skip that reasoning
+      # (e2e40R v2: a no-think path pressed the camera shutter six times instead of completing)
+      rec["mode"] = "after_commit"
+      return False
+    # the window's plan (explore-more vs infer-faster) decides; with no plan (no window: transient / dialog / no
+    # probe fits) the fast path is tried when it can be verified and has paid off in this app
+    p = getattr(self, "_rto_mode", None)
+    if p is not None and p.get("step") == step:
+      rec["mode"] = p["mode"]
+      return p["mode"] == "infer_faster"
+    rec["mode"] = "no_window"
+    return page_known and ev_try > 0
+  last = getattr(self, "_rto_last_accept", None)
+
+  def _abort():
+    ctl["abort"] = True
+    r = ctl.get("resp")
+    if r is not None:
+      try:
+        r.close()                            # client disconnect aborts the request on the server
+      except Exception:  # pylint: disable=broad-except
+        pass
+  def _on_think():
+    rec["try"] = _wants_fast()
+    if rec["try"]:
+      _abort()
+  ctl["on_think"] = _on_think
+  conn = _load_start() if ONDEVICE_LOAD else None
+  d = None
+  pm = getattr(self, "_rto_mode", None)
+  apriori_fast = bool(RTO_APRIORI and pm and pm.get("step") == step and pm.get("apriori") and pm["mode"] == "infer_faster")
+  if RTO_APRIORI:
+    ctl["on_think"] = lambda: None             # a-priori mode never interrupts a request
+    rec["mode"] = pm["mode"] if pm and pm.get("step") == step else "no_plan"
+    rec["guard"] = (pm or {}).get("guard")
+    rec["try"] = apriori_fast
+  try:
+    txt, err = None, None
+    if apriori_fast:
+      ctl["abort"] = True                      # go straight to the single no-think request
+      rec["abort_s"] = 0.0
+    else:
+      try:
+        txt = _stream_call(self.args.api_url, self.args.model, messages, on_prefix, gen, ctl)
+      except Exception as e:  # pylint: disable=broad-except
+        err = e
+    rec["think_seen_s"] = ctl.get("think_seen")
+    if ctl.get("abort"):
+      rec["abort_s"] = round(time.time() - t0, 3)
+      try:
+        ftxt, _, ntok = RT.fast_request(self.args.api_url, self.args.model, messages, priority=None)
+        d_f = _parse_decision(self, ftxt, time.time() - t0)
+        rec.update(fast_s=round(time.time() - t0, 3), fast_tok=ntok)
+      except Exception as e:  # pylint: disable=broad-except
+        d_f = None
+        rec["fast_err"] = repr(e)[:200]
+      g = RT.gate(tbl, app, ui_r, graph_r, d_f, is_commit_token) if d_f is not None and not d_f.get("parse_error") else None
+      prev = getattr(self, "_rto_prev", None)
+      if g is not None and prev is not None and g["fam"] and g["fam"] == prev["fam"]:
+        g["reject"].append("repeat_of_previous")   # a repeated action is where a loop starts: reason about it
+        g["accept"] = False
+      rec["gate"] = g
+      t_think = tbl.med(x["t_think"], RT.DEF_T_THINK)
+      if g is not None and g["accept"]:
+        d = d_f
+        d["gen"] = dict(gen, rto="fast", t_action_s=rec["fast_s"], t_end_s=rec["fast_s"])
+        rec["path"] = "fast_accepted"
+        x["fast_accept"] += 1
+        x["t_fast"] = (x["t_fast"] + [rec["fast_s"]])[-30:]
+        _rto_page_outcome(tbl, ui_r, True)
+        tbl.add_try(app, max(0.0, t_think - rec["fast_s"]))   # an accepted fast decision never counts as a loss
+        if "explore" in (g.get("origins") or []):
+          x["explore_credit"] = x.get("explore_credit", 0) + 1
+          rec["explore_credit"] = True
+        self._rto_last_accept = (app, g["cls"], step)
+        with ctl.setdefault("_lk", threading.Lock()):
+          early["d"] = d
+          early["ev"].set()
+      else:
+        gen2 = {}
+        try:
+          txt = _stream_call(self.args.api_url, self.args.model, messages, on_prefix, gen2, None)
+          err = None
+        except Exception as e:  # pylint: disable=broad-except
+          txt, err = None, e
+        gen.update(gen2, rto="redo", t_first_attempt_s=rec["abort_s"])
+        rec["path"] = "fast_rejected_redo"
+        rec["redo_s"] = round(time.time() - t0, 3)
+        x["fast_reject"] += 1
+        _rto_page_outcome(tbl, ui_r, False)
+        if gen2.get("t_action_s") is not None:
+          gen["t_action_s"] = round(rec.get("fast_s", rec["abort_s"]) + gen2["t_action_s"], 3)
+          tbl.add_try(app, t_think - gen["t_action_s"])
+    if d is None:
+      if txt is None:
+        self.log("stream_error", {"err": repr(err)[:300]})
+        txt, _, _ = agent.vllm.predict_mm("", [], messages=messages)
+      d = _parse_decision(self, txt, time.time() - t0)
+      d["gen"] = gen
+      if rec.get("path") is None:
+        rec["path"] = "think" if "think_seen" in ctl else "direct"
+        if "think_seen" in ctl and gen.get("t_action_s"):
+          x["t_think"] = (x["t_think"] + [gen["t_action_s"]])[-30:]
+      if rec.get("gate") and rec["gate"]["cls"] != "other":
+        ok = RT.same_click(ui_r, rec["gate"]["fam"], d["action"])
+        rec["agree_with_think"] = ok
+        a = x["agree"].setdefault(rec["gate"]["cls"], [0, 0])
+        a[0] += ok
+        a[1] += 1
+  finally:
+    _load_stop(conn)
+  try:
+    _, fam_d, _, com_d = RT.classify(ui_r, None, d["action"], is_commit_token)
+  except Exception:  # pylint: disable=broad-except
+    fam_d, com_d = None, False
+  self._rto_prev = {"step": step, "fam": fam_d, "commit": bool(com_d)}
+  if last is not None and last[2] == step - 1 and last[0] == app:
+    # outcome audit of the previous accepted fast click: the agent's next decision undoes it (Back) -> disagreement
+    undo = d["action"].action_type == "navigate_back"
+    a = x["agree"].setdefault(last[1], [0, 0])
+    a[0] += not undo
+    a[1] += 1
+    rec["prev_accept_undone"] = undo
+  if last is not None and last[2] != step:
+    self._rto_last_accept = None if rec.get("path") != "fast_accepted" else self._rto_last_accept
+  x["n_steps"] += 1
+  x["n_think"] += "think_seen" in ctl
+  if d["gen"].get("t_action_s"):
+    _T_ACTION.append(d["gen"]["t_action_s"])
+  tbl.save()
+  self.log("gen", dict(d["gen"], early=STREAM))
+  self.log("rto", rec)
+  early["ev"].set()
   return d
 
 

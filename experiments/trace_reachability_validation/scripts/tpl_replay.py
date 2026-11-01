@@ -125,7 +125,13 @@ def load_demos(warm_raw, task):
 
 
 class Replayer:
-  def __init__(self, demos, goal):
+  def __init__(self, demos, goal, classic=False):
+    # classic = the trajectory-reuse baseline (MobileGPT / AutoDroid-V2 style record-and-replay): ONE retrieved
+    # trajectory replayed strictly in order from its first step, goal values substituted, the target checked only
+    # for presence on the live screen of the same activity; the first mismatch, an untransferable step or a model
+    # action ends the replay for good (no re-synchronisation, no lookahead)
+    self.classic, self.dead, self.started = classic, False, False
+    demos = demos[:1] if classic else demos
     self.demos = demos
     self.P = FG.parse_goal(goal)
     self.ptr = [0] * len(demos)
@@ -138,7 +144,39 @@ class Replayer:
         return s["value"]          # original case (it is typed); compared via FG.norm
     return None
 
+  def _propose_classic(self, ui):
+    d = self.demos[0]
+    j = self.ptr[0]
+    if self.dead or j >= len(d):
+      return None
+    st = d[j]
+    if not self.started and st["act"] != ui.activity:
+      return None                # the retrieved trajectory starts inside the app: wait until the app is open
+    if st.get("hole") or st["act"] != ui.activity:
+      self.dead = True
+      return None
+    if st["at"] == "navigate_back":
+      return 0, j, "back", None
+    want = self._value(st["slot"]) if st.get("slot") else None
+    if st.get("slot") and want is None:
+      self.dead = True
+      return None
+    if st["at"] == "input_text":
+      if any(m.editable and m.visible and m.focused for m in ui.app_nodes()):
+        return 0, j, "type", want
+      self.dead = True
+      return None
+    lab = FG.norm(want) if st.get("slot") else st.get("label")
+    for sl in U.enumerate_slots(ui):
+      n = ui.nodes[sl.node_idx]
+      if FG.norm(U.label_of(ui, n)) == lab and (st.get("slot") or C.family_of_sel(sl.sel) == st["fam"]):
+        return 0, j, st["at"], n
+    self.dead = True
+    return None
+
   def propose(self, ui, lookahead=3, done=()):
+    if self.classic:
+      return self._propose_classic(ui)
     """(demo index, step index, kind, node or text) for the live screen, or None. Steps of records already done
     (by a function, by the model) are skipped as a whole: the record must not be entered twice."""
     for di, d in enumerate(self.demos):
@@ -172,12 +210,17 @@ class Replayer:
     return None
 
   def advance(self, di, j):
+    self.started = True
     self.ptr[di] = j + 1
     self.acted[di] = False
 
   def observe(self, ui, action, lookahead=4):
     """The model acted itself: if its action is a later step of a demo, move that demo's pointer past it."""
     self.acted = [True] * len(self.demos)
+    if self.classic:
+      if self.started:
+        self.dead = True         # classic replay: once the model acts mid-replay, the stored trajectory is abandoned
+      return
     at = action.get("action_type")
     n = U.element_at(ui, int(action["x"]), int(action["y"])) if action.get("x") is not None else None
     lab = FG.norm(U.label_of(ui, n)) if n is not None else None

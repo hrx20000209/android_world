@@ -1,0 +1,49 @@
+{
+ "classes": {
+  "E1|lab": {
+   "n": 110,
+   "p_fail": 0.09,
+   "p_useful": 0.51,
+   "t_med": 2.44
+  },
+  "E1|nolab": {
+   "n": 25,
+   "p_fail": 0.04,
+   "p_useful": 0.2,
+   "t_med": 2.45
+  },
+  "FX|lab": {
+   "n": 353,
+   "p_fail": 0.17,
+   "p_useful": 0.05,
+   "t_med": 1.96
+  },
+  "FX|nolab": {
+   "n": 40,
+   "p_fail": 0.3,
+   "p_useful": 0.0,
+   "t_med": 2.61
+  },
+  "RV|lab": {
+   "n": 256,
+   "p_fail": 0.05,
+   "p_useful": 0.07,
+   "t_med": 2.03
+  },
+  "RV|nolab": {
+   "n": 2,
+   "p_fail": 0.0,
+   "p_useful": 1.0,
+   "t_med": 1.95
+  }
+ },
+ "decision_latency_median_s": 12.53,
+ "frozen_sha256": "080fb75f8f650b923eb284ec774eb5c91ff1a60415b36dc4cbea268fc762085b",
+ "gain_future_s": 0.0,
+ "gain_useful_s": 0.45,
+ "notes": "v2: gain = immediate reuse (post-action gap 1.17 -> 0.72 s) + future graph use (measured 0: none of 216 graph-executed steps in e2e116n FULL45 used an edge known only from exploration; all 67 form fills on the current page); failure cost = P(requery | fail) x T_decision + exposed recovery (measured 0 s in e2e116L0: the rollback is hidden by the reasoning window)",
+ "p_requery_given_fail": 0.56,
+ "source": "probe outcomes of e2e116n FULL45, e2e116B SEENR0, e2e116L0, e2e116S2, e2e116nA RAND/NOSYS (Orin)",
+ "t_fail_recovery_s": 0.0,
+ "version": "joint_v2"
+}
