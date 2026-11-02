@@ -98,9 +98,20 @@ def load_order(tag):
     return {"rows": rows, "tasks": tasks, "pos": pos, "new_nodes": new_nodes}
 
 
+def _cluster_ci(groups, rng):
+    """95% CI of sum(num) / sum(den), resampling whole tasks: groups = {task: (num, den)} summed over its instances.
+    A task pooled from several orders is one cluster, since its instances share the task's difficulty."""
+    num = np.array([v[0] for v in groups.values()], dtype=float)
+    den = np.array([v[1] for v in groups.values()], dtype=float)
+    idx = rng.integers(0, len(num), (BOOT, len(num)))
+    return np.percentile(num[idx].sum(1) / den[idx].sum(1), [2.5, 97.5])
+
+
 def position_stats(orders, buckets, bucket_of):
     e2e = {b: ([], []) for b in buckets}
     nodes = {b: [] for b in buckets}
+    e2e_by_task = {b: collections.defaultdict(lambda: [0.0, 0.0]) for b in buckets}    # task -> [sum BASE, sum ours]
+    nodes_by_task = {b: collections.defaultdict(lambda: [0.0, 0]) for b in buckets}    # task -> [sum nodes, count]
     for o in orders:
         for t in o["tasks"]:
             b = bucket_of(o["pos"][t])
@@ -108,20 +119,21 @@ def position_stats(orders, buckets, bucket_of):
             if base["success"] and ours["success"]:
                 e2e[b][0].append(base["e2e_s"])
                 e2e[b][1].append(ours["e2e_s"])
+                e2e_by_task[b][t][0] += base["e2e_s"]
+                e2e_by_task[b][t][1] += ours["e2e_s"]
             if o["new_nodes"] is not None:
                 nodes[b].append(o["new_nodes"].get(t, 0))
+                nodes_by_task[b][t][0] += o["new_nodes"].get(t, 0)
+                nodes_by_task[b][t][1] += 1
     speedup = np.array([st.mean(e2e[b][0]) / st.mean(e2e[b][1]) for b in buckets])
     new_states = np.array([st.mean(nodes[b]) if nodes[b] else np.nan for b in buckets])
     n_both = [len(e2e[b][0]) for b in buckets]
     rng = np.random.default_rng(SEED)
     sp_ci, ns_ci = [], []
     for b in buckets:
-        base, ours = np.array(e2e[b][0]), np.array(e2e[b][1])
-        idx = rng.integers(0, len(base), (BOOT, len(base)))
-        sp_ci.append(np.percentile(base[idx].mean(1) / ours[idx].mean(1), [2.5, 97.5]))
+        sp_ci.append(_cluster_ci(e2e_by_task[b], rng))                       # ratio of means, tasks resampled
         if nodes[b]:
-            v = np.array(nodes[b])
-            ns_ci.append(np.percentile(v[rng.integers(0, len(v), (BOOT, len(v)))].mean(1), [2.5, 97.5]))
+            ns_ci.append(_cluster_ci(nodes_by_task[b], rng))                 # mean new nodes, tasks resampled
         else:
             ns_ci.append([np.nan, np.nan])
     return new_states, speedup, n_both, np.array(ns_ci), np.array(sp_ci), [len(nodes[b]) for b in buckets]
