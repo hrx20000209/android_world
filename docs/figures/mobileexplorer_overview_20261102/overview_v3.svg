@@ -1,0 +1,387 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="410" viewBox="0 0 1000 410">
+<title>MobileExplorer system overview</title>
+<rect width="1000" height="410" fill="white"/>
+<defs><linearGradient id="reasonGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e3f3d8"/><stop offset="1" stop-color="#f1e6a2"/></linearGradient><linearGradient id="vlmGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8b7cf6"/><stop offset="1" stop-color="#5b4fd0"/></linearGradient></defs>
+<g id="input">
+<rect x="4" y="4" width="130" height="402" rx="6" fill="#fadcdd" stroke="#e9a8ad" stroke-width="1.2"/>
+<text x="69" y="24" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="13" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Input at Step </tspan><tspan font-style="italic" font-weight="bold">i</tspan></text>
+<rect x="30" y="34" width="78" height="138" rx="9.36" fill="white" stroke="#222" stroke-width="1.2"/>
+<rect x="32.6" y="36.6" width="72.8" height="132.8" rx="7.02" fill="#fbfbfc" stroke="none" stroke-width="1"/>
+<circle cx="69" cy="39" r="1.3" fill="#222" stroke="none" stroke-width="1"/>
+<rect x="35.6" y="43.6" width="48.048" height="8.97" rx="4.485" fill="#e7eefc" stroke="#9fb6ef" stroke-width="0.6"/>
+<circle cx="39" cy="48.085" r="1.4" fill="none" stroke="#4a63c8" stroke-width="0.6"/>
+<circle cx="100.4" cy="48.085" r="2.6" fill="#fff" stroke="#555" stroke-width="0.8"/>
+<circle cx="100.4" cy="48.085" r="0.9" fill="#555" stroke="none" stroke-width="1"/>
+<circle cx="37.6" cy="61.6115" r="2.4" fill="#f6a04d" stroke="none" stroke-width="1"/>
+<rect x="42.1" y="59.0907" width="36.4" height="1.4" rx="0.6" fill="#a6adb8" stroke="none" stroke-width="1"/>
+<rect x="42.1" y="61.6908" width="23.296" height="1.1" rx="0.5" fill="#cdd2d9" stroke="none" stroke-width="1"/>
+<circle cx="37.6" cy="74.2152" r="2.4" fill="#ef6c9a" stroke="none" stroke-width="1"/>
+<rect x="42.1" y="71.6945" width="36.4" height="1.4" rx="0.6" fill="#a6adb8" stroke="none" stroke-width="1"/>
+<rect x="42.1" y="74.2945" width="23.296" height="1.1" rx="0.5" fill="#cdd2d9" stroke="none" stroke-width="1"/>
+<circle cx="37.6" cy="86.819" r="2.4" fill="#b07ad8" stroke="none" stroke-width="1"/>
+<rect x="42.1" y="84.2983" width="36.4" height="1.4" rx="0.6" fill="#a6adb8" stroke="none" stroke-width="1"/>
+<rect x="42.1" y="86.8983" width="23.296" height="1.1" rx="0.5" fill="#cdd2d9" stroke="none" stroke-width="1"/>
+<circle cx="37.6" cy="99.4227" r="2.4" fill="#f6a04d" stroke="none" stroke-width="1"/>
+<rect x="42.1" y="96.902" width="36.4" height="1.4" rx="0.6" fill="#a6adb8" stroke="none" stroke-width="1"/>
+<rect x="42.1" y="99.502" width="23.296" height="1.1" rx="0.5" fill="#cdd2d9" stroke="none" stroke-width="1"/>
+<circle cx="37.6" cy="112.027" r="2.4" fill="#4db6ac" stroke="none" stroke-width="1"/>
+<rect x="42.1" y="109.506" width="36.4" height="1.4" rx="0.6" fill="#a6adb8" stroke="none" stroke-width="1"/>
+<rect x="42.1" y="112.106" width="23.296" height="1.1" rx="0.5" fill="#cdd2d9" stroke="none" stroke-width="1"/>
+<circle cx="37.6" cy="124.63" r="2.4" fill="#ef6c9a" stroke="none" stroke-width="1"/>
+<rect x="42.1" y="122.11" width="36.4" height="1.4" rx="0.6" fill="#a6adb8" stroke="none" stroke-width="1"/>
+<rect x="42.1" y="124.71" width="23.296" height="1.1" rx="0.5" fill="#cdd2d9" stroke="none" stroke-width="1"/>
+<circle cx="37.6" cy="137.234" r="2.4" fill="#b07ad8" stroke="none" stroke-width="1"/>
+<rect x="42.1" y="134.713" width="36.4" height="1.4" rx="0.6" fill="#a6adb8" stroke="none" stroke-width="1"/>
+<rect x="42.1" y="137.313" width="23.296" height="1.1" rx="0.5" fill="#cdd2d9" stroke="none" stroke-width="1"/>
+<circle cx="37.6" cy="149.838" r="2.4" fill="#f6a04d" stroke="none" stroke-width="1"/>
+<rect x="42.1" y="147.317" width="36.4" height="1.4" rx="0.6" fill="#a6adb8" stroke="none" stroke-width="1"/>
+<rect x="42.1" y="149.917" width="23.296" height="1.1" rx="0.5" fill="#cdd2d9" stroke="none" stroke-width="1"/>
+<rect x="88.4" y="159.4" width="15" height="7" rx="3.5" fill="#e7eefc" stroke="#4a63c8" stroke-width="0.7"/>
+<path d="M91.4,162.9 H94.8 M93.1,161.2 V164.6" fill="none" stroke="#4a63c8" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="96.4" y="162.3" width="5" height="1.2" rx="0.5" fill="#4a63c8" stroke="none" stroke-width="1"/>
+<text x="69" y="188" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11.5" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Screenshot</tspan></text>
+<rect x="12" y="196" width="114" height="92" rx="2" fill="none" stroke="#333" stroke-width="0.9" stroke-dasharray="3 2"/>
+<text x="18" y="210" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#111111" text-anchor="start">button 1: <tspan fill="#d62f2f">Search</tspan></text>
+<text x="18" y="223.2" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#111111" text-anchor="start">button 2: <tspan fill="#d62f2f">Setting</tspan></text>
+<text x="18" y="236.4" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#111111" text-anchor="start">button 3: <tspan fill="#d62f2f">Add</tspan></text>
+<text x="18" y="249.6" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#111111" text-anchor="start">list 4: <tspan fill="#d62f2f">Contact A</tspan></text>
+<text x="18" y="262.8" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#111111" text-anchor="start">list 5: <tspan fill="#d62f2f">Contact B</tspan></text>
+<text x="18" y="276" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#111111" text-anchor="start">text 6: <tspan fill="#d62f2f">Recent</tspan></text>
+<text x="69" y="304" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11.5" fill="#111111" text-anchor="middle"><tspan font-weight="bold">UI Elements</tspan></text>
+<rect x="49" y="318" width="40" height="46" rx="4" fill="white" stroke="#222" stroke-width="1.3"/>
+<rect x="61" y="313" width="16" height="8" rx="2" fill="#222" stroke="none" stroke-width="1"/>
+<rect x="55" y="330" width="6" height="6" rx="1" fill="white" stroke="#222" stroke-width="1"/>
+<rect x="65" y="332" width="18" height="2.2" rx="1" fill="#222" stroke="none" stroke-width="1"/>
+<rect x="55" y="340" width="6" height="6" rx="1" fill="white" stroke="#222" stroke-width="1"/>
+<rect x="65" y="342" width="18" height="2.2" rx="1" fill="#222" stroke="none" stroke-width="1"/>
+<rect x="55" y="350" width="6" height="6" rx="1" fill="white" stroke="#222" stroke-width="1"/>
+<rect x="65" y="352" width="18" height="2.2" rx="1" fill="#222" stroke="none" stroke-width="1"/>
+<text x="69" y="386" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11.5" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Task Description</tspan></text>
+</g>
+<polygon points="134,97.525 146,97.525 146,94.375 157,100 146,105.625 146,102.475 134,102.475" fill="#111111"/>
+<g id="optimizer">
+<rect x="158" y="4" width="208" height="208" rx="12" fill="#dee3f1" stroke="#c3cbe3" stroke-width="1"/>
+<text x="262" y="25" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="13" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Adaptive Runtime Optimizer</tspan></text>
+<rect x="171" y="37" width="19" height="33" rx="3" fill="#33373d" stroke="none" stroke-width="1"/>
+<rect x="172.6" y="40" width="15.8" height="27" rx="1" fill="#f3f5f8" stroke="none" stroke-width="1"/>
+<rect x="174.4" y="40.3" width="4.4" height="4.4" rx="1" fill="#f25c54" stroke="none" stroke-width="1"/>
+<rect x="182.2" y="40.3" width="4.4" height="4.4" rx="1" fill="#4a90e2" stroke="none" stroke-width="1"/>
+<rect x="174.4" y="46.6" width="4.4" height="4.4" rx="1" fill="#f7b32b" stroke="none" stroke-width="1"/>
+<rect x="182.2" y="46.6" width="4.4" height="4.4" rx="1" fill="#36b37e" stroke="none" stroke-width="1"/>
+<rect x="174.4" y="52.9" width="4.4" height="4.4" rx="1" fill="#9b6dd6" stroke="none" stroke-width="1"/>
+<rect x="182.2" y="52.9" width="4.4" height="4.4" rx="1" fill="#ff8a3d" stroke="none" stroke-width="1"/>
+<text x="180.5" y="84" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11.5" fill="#111111" text-anchor="middle"><tspan font-weight="bold">UI</tspan></text>
+<path d="M210.6,38 V41.96 M210.6,56.04 V60 M204,44.6 H207.96 M222.04,44.6 H226" fill="none" stroke="#2a2a2a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M215,38 V41.96 M215,56.04 V60 M204,49 H207.96 M222.04,49 H226" fill="none" stroke="#2a2a2a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M219.4,38 V41.96 M219.4,56.04 V60 M204,53.4 H207.96 M222.04,53.4 H226" fill="none" stroke="#2a2a2a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="207.96" y="41.96" width="14.08" height="14.08" rx="2" fill="white" stroke="#2a2a2a" stroke-width="1.4"/>
+<rect x="211.92" y="45.92" width="6.16" height="6.16" rx="1" fill="#2a2a2a" stroke="none" stroke-width="1"/>
+<rect x="234" y="44" width="60" height="10" rx="1.5" fill="white" stroke="#67a83c" stroke-width="1.2"/>
+<rect x="235" y="45" width="18" height="8" rx="1" fill="#cfe8bd" stroke="none" stroke-width="1"/>
+<polygon points="204,66 234,66 242,76 234,86 204,86 212,76" fill="#fde2cc"/>
+<polygon points="244,66 274,66 282,76 274,86 244,86 252,76" fill="#fde2cc"/>
+<polygon points="284,66 314,66 322,76 314,86 284,86 292,76" fill="#fde2cc"/>
+<text x="214" y="102" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11.5" fill="#111111" text-anchor="start"><tspan font-weight="bold">Exploration</tspan></text>
+<rect x="168" y="113" width="26" height="26" rx="6.24" fill="url(#vlmGrad)"/>
+<path d="M181,117.42 Q181,126 189.58,126 Q181,126 181,134.58 Q181,126 172.42,126 Q181,126 181,117.42 Z" fill="white"/>
+<path d="M187.76,116.38 Q187.76,119.5 190.88,119.5 Q187.76,119.5 187.76,122.62 Q187.76,119.5 184.64,119.5 Q187.76,119.5 187.76,116.38 Z" fill="white"/>
+<text x="181" y="152" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11.5" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Model</tspan></text>
+<path d="M210.6,113 V116.96 M210.6,131.04 V135 M204,119.6 H207.96 M222.04,119.6 H226" fill="none" stroke="#2a2a2a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M215,113 V116.96 M215,131.04 V135 M204,124 H207.96 M222.04,124 H226" fill="none" stroke="#2a2a2a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M219.4,113 V116.96 M219.4,131.04 V135 M204,128.4 H207.96 M222.04,128.4 H226" fill="none" stroke="#2a2a2a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="207.96" y="116.96" width="14.08" height="14.08" rx="2" fill="white" stroke="#2a2a2a" stroke-width="1.4"/>
+<rect x="211.92" y="120.92" width="6.16" height="6.16" rx="1" fill="#2a2a2a" stroke="none" stroke-width="1"/>
+<rect x="234" y="119" width="60" height="10" rx="1.5" fill="white" stroke="#67a83c" stroke-width="1.2"/>
+<rect x="235" y="120" width="54" height="8" rx="1" fill="#5a9632" stroke="none" stroke-width="1"/>
+<polygon points="204,141 324,141 334,151 324,161 204,161" fill="url(#reasonGrad)" stroke="none" stroke-width="1" stroke-linejoin="round"/>
+<text x="265" y="155.5" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11.5" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Reasoning</tspan></text>
+<polyline points="339,62 339,166" fill="none" stroke="#d62f2f" stroke-width="1.8" stroke-linecap="butt" stroke-linejoin="round" stroke-dasharray="4.5 3"/>
+<text x="262" y="192" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10.5" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Max </tspan><tspan font-weight="bold" fill="#d62f2f">Exploration</tspan><tspan font-weight="bold"> s.t. </tspan><tspan font-weight="bold" fill="#d62f2f">Reasoning Latency</tspan></text>
+</g>
+<polygon points="367,27.525 380,27.525 380,24.375 391,30 380,35.625 380,32.475 367,32.475" fill="#111111"/>
+<polygon points="367,135.525 380,135.525 380,132.375 391,138 380,143.625 380,140.475 367,140.475" fill="#111111"/>
+<g id="reasoning">
+<polygon points="392,4 780,4 806,29 780,54 392,54" fill="url(#reasonGrad)" stroke="none" stroke-width="1" stroke-linejoin="round"/>
+<rect x="402" y="14" width="30" height="30" rx="7.2" fill="url(#vlmGrad)"/>
+<path d="M417,19.1 Q417,29 426.9,29 Q417,29 417,38.9 Q417,29 407.1,29 Q417,29 417,19.1 Z" fill="white"/>
+<path d="M424.8,17.9 Q424.8,21.5 428.4,21.5 Q424.8,21.5 424.8,25.1 Q424.8,21.5 421.2,21.5 Q424.8,21.5 424.8,17.9 Z" fill="white"/>
+<text x="588" y="22" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="13.5" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Model Reasoning for Step </tspan><tspan font-style="italic" font-weight="bold">i</tspan></text>
+<rect x="442" y="29" width="300" height="19" rx="1" fill="white" stroke="#222" stroke-width="0.9"/>
+<text x="448" y="43" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="start"><tspan font-weight="bold">Action:</tspan> Click (90, 1800) ......</text>
+</g>
+<g id="exploration">
+<rect x="392" y="62" width="404" height="150" rx="12" fill="#dee3f1" stroke="#c3cbe3" stroke-width="1"/>
+<text x="594" y="80" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="13.5" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Novelty-Seeking Parallel Exploration</tspan></text>
+<rect x="428" y="95" width="56" height="101" rx="6.72" fill="white" stroke="#222" stroke-width="1.2"/>
+<rect x="430.6" y="97.6" width="50.8" height="95.8" rx="5.04" fill="#fbfbfc" stroke="none" stroke-width="1"/>
+<circle cx="456" cy="100" r="1.3" fill="#222" stroke="none" stroke-width="1"/>
+<rect x="433.6" y="104.6" width="33.528" height="6.565" rx="3.2825" fill="#e7eefc" stroke="#9fb6ef" stroke-width="0.6"/>
+<circle cx="437" cy="107.882" r="1.4" fill="none" stroke="#4a63c8" stroke-width="0.6"/>
+<circle cx="476.4" cy="107.882" r="2.6" fill="#fff" stroke="#555" stroke-width="0.8"/>
+<circle cx="476.4" cy="107.882" r="0.9" fill="#555" stroke="none" stroke-width="1"/>
+<circle cx="435.6" cy="118.477" r="2.4" fill="#f6a04d" stroke="none" stroke-width="1"/>
+<rect x="440.1" y="116.821" width="25.4" height="1.4" rx="0.6" fill="#a6adb8" stroke="none" stroke-width="1"/>
+<rect x="440.1" y="119.421" width="16.256" height="1.1" rx="0.5" fill="#cdd2d9" stroke="none" stroke-width="1"/>
+<circle cx="435.6" cy="126.756" r="2.4" fill="#ef6c9a" stroke="none" stroke-width="1"/>
+<rect x="440.1" y="125.1" width="25.4" height="1.4" rx="0.6" fill="#a6adb8" stroke="none" stroke-width="1"/>
+<rect x="440.1" y="127.7" width="16.256" height="1.1" rx="0.5" fill="#cdd2d9" stroke="none" stroke-width="1"/>
+<circle cx="435.6" cy="135.035" r="2.4" fill="#b07ad8" stroke="none" stroke-width="1"/>
+<rect x="440.1" y="133.38" width="25.4" height="1.4" rx="0.6" fill="#a6adb8" stroke="none" stroke-width="1"/>
+<rect x="440.1" y="135.98" width="16.256" height="1.1" rx="0.5" fill="#cdd2d9" stroke="none" stroke-width="1"/>
+<circle cx="435.6" cy="143.315" r="2.4" fill="#f6a04d" stroke="none" stroke-width="1"/>
+<rect x="440.1" y="141.659" width="25.4" height="1.4" rx="0.6" fill="#a6adb8" stroke="none" stroke-width="1"/>
+<rect x="440.1" y="144.259" width="16.256" height="1.1" rx="0.5" fill="#cdd2d9" stroke="none" stroke-width="1"/>
+<circle cx="435.6" cy="151.594" r="2.4" fill="#4db6ac" stroke="none" stroke-width="1"/>
+<rect x="440.1" y="149.938" width="25.4" height="1.4" rx="0.6" fill="#a6adb8" stroke="none" stroke-width="1"/>
+<rect x="440.1" y="152.538" width="16.256" height="1.1" rx="0.5" fill="#cdd2d9" stroke="none" stroke-width="1"/>
+<circle cx="435.6" cy="159.874" r="2.4" fill="#ef6c9a" stroke="none" stroke-width="1"/>
+<rect x="440.1" y="158.218" width="25.4" height="1.4" rx="0.6" fill="#a6adb8" stroke="none" stroke-width="1"/>
+<rect x="440.1" y="160.818" width="16.256" height="1.1" rx="0.5" fill="#cdd2d9" stroke="none" stroke-width="1"/>
+<circle cx="435.6" cy="168.153" r="2.4" fill="#b07ad8" stroke="none" stroke-width="1"/>
+<rect x="440.1" y="166.497" width="25.4" height="1.4" rx="0.6" fill="#a6adb8" stroke="none" stroke-width="1"/>
+<rect x="440.1" y="169.097" width="16.256" height="1.1" rx="0.5" fill="#cdd2d9" stroke="none" stroke-width="1"/>
+<circle cx="435.6" cy="176.432" r="2.4" fill="#f6a04d" stroke="none" stroke-width="1"/>
+<rect x="440.1" y="174.776" width="25.4" height="1.4" rx="0.6" fill="#a6adb8" stroke="none" stroke-width="1"/>
+<rect x="440.1" y="177.376" width="16.256" height="1.1" rx="0.5" fill="#cdd2d9" stroke="none" stroke-width="1"/>
+<rect x="464.4" y="183.4" width="15" height="7" rx="3.5" fill="#e7eefc" stroke="#4a63c8" stroke-width="0.7"/>
+<path d="M467.4,186.9 H470.8 M469.1,185.2 V188.6" fill="none" stroke="#4a63c8" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="472.4" y="186.3" width="5" height="1.2" rx="0.5" fill="#4a63c8" stroke="none" stroke-width="1"/>
+<polyline points="416.7,92 450.364,107.882" fill="none" stroke="#8a93a0" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="450.364" cy="107.882" r="1.8" fill="#8a93a0" stroke="none" stroke-width="1"/>
+<rect x="398" y="86" width="37.4" height="12" rx="4" fill="#8a93a0" stroke="none" stroke-width="1"/>
+<text x="416.7" y="94.6" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="8.5" fill="white" text-anchor="middle"><tspan font-weight="bold">Search</tspan></text>
+<polyline points="488.9,92 476.4,107.882" fill="none" stroke="#8a93a0" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="476.4" cy="107.882" r="1.8" fill="#8a93a0" stroke="none" stroke-width="1"/>
+<rect x="470" y="86" width="37.8" height="12" rx="4" fill="#8a93a0" stroke="none" stroke-width="1"/>
+<text x="488.9" y="94.6" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="8.5" fill="white" text-anchor="middle"><tspan font-weight="bold">Setting</tspan></text>
+<polyline points="460.75,188 471.9,186.9" fill="none" stroke="#ec6a1e" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="471.9" cy="186.9" r="1.8" fill="#ec6a1e" stroke="none" stroke-width="1"/>
+<rect x="448" y="182" width="25.5" height="12" rx="4" fill="#ec6a1e" stroke="none" stroke-width="1"/>
+<text x="460.75" y="190.6" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="8.5" fill="white" text-anchor="middle"><tspan font-weight="bold">Add</tspan></text>
+<polygon points="478.50,179.40 479.68,182.38 482.87,182.58 480.40,184.62 481.20,187.72 478.50,186.00 475.80,187.72 476.60,184.62 474.13,182.58 477.32,182.38" fill="#f7b500"/>
+<text x="447" y="207" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11.5" fill="#111111" text-anchor="middle"><tspan font-weight="bold">State </tspan><tspan font-style="italic" font-weight="bold">i</tspan></text>
+<polyline points="485,146 512,146" fill="none" stroke="#111111" stroke-width="1.6" stroke-linecap="butt" stroke-linejoin="round"/>
+<polyline points="512,110 512,182" fill="none" stroke="#111111" stroke-width="1.6" stroke-linecap="butt" stroke-linejoin="round"/>
+<polygon points="583.00,110.00 577.00,112.88 577.00,107.12" fill="#111111"/>
+<polyline points="512,110 577,110" fill="none" stroke="#111111" stroke-width="1.6" stroke-linecap="butt" stroke-linejoin="round"/>
+<text x="548" y="105" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="13" fill="#d62f2f" text-anchor="middle"><tspan font-weight="bold">0.95</tspan></text>
+<rect x="586.2" y="101.1" width="58" height="21" rx="4" fill="#b9bfca" stroke="none" stroke-width="1"/>
+<rect x="585" y="99.5" width="58" height="21" rx="4" fill="#ffd8b8" stroke="#ec6a1e" stroke-width="1"/>
+<text x="614" y="114" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11.5" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Add</tspan></text>
+<text x="651" y="114" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10.5" fill="#ec6a1e" text-anchor="start"><tspan font-style="italic" font-weight="bold">n</tspan><tspan font-weight="bold"> = 0</tspan></text>
+<polygon points="583.00,146.00 577.00,148.88 577.00,143.12" fill="#111111"/>
+<polyline points="512,146 577,146" fill="none" stroke="#111111" stroke-width="1.6" stroke-linecap="butt" stroke-linejoin="round"/>
+<text x="548" y="141" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="13" fill="#e0a100" text-anchor="middle"><tspan font-weight="bold">0.42</tspan></text>
+<rect x="586.2" y="137.1" width="58" height="21" rx="4" fill="#b9bfca" stroke="none" stroke-width="1"/>
+<rect x="585" y="135.5" width="58" height="21" rx="4" fill="white" stroke="#cfd3da" stroke-width="1"/>
+<text x="614" y="150" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11.5" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Search</tspan></text>
+<text x="651" y="150" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10.5" fill="#8a93a0" text-anchor="start"><tspan font-style="italic" font-weight="bold">n</tspan><tspan font-weight="bold"> = 1</tspan></text>
+<polygon points="583.00,182.00 577.00,184.88 577.00,179.12" fill="#111111"/>
+<polyline points="512,182 577,182" fill="none" stroke="#111111" stroke-width="1.6" stroke-linecap="butt" stroke-linejoin="round"/>
+<text x="548" y="177" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="13" fill="#7cb342" text-anchor="middle"><tspan font-weight="bold">0.17</tspan></text>
+<rect x="586.2" y="173.1" width="58" height="21" rx="4" fill="#b9bfca" stroke="none" stroke-width="1"/>
+<rect x="585" y="171.5" width="58" height="21" rx="4" fill="white" stroke="#cfd3da" stroke-width="1"/>
+<text x="614" y="186" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11.5" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Setting</tspan></text>
+<text x="651" y="186" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10.5" fill="#8a93a0" text-anchor="start"><tspan font-style="italic" font-weight="bold">n</tspan><tspan font-weight="bold"> = 3</tspan></text>
+<polygon points="744.00,123.00 741.12,117.00 746.88,117.00" fill="#111111"/>
+<polyline points="690,110 744,110 744,117" fill="none" stroke="#111111" stroke-width="1.6" stroke-linecap="butt" stroke-linejoin="round"/>
+<text x="716" y="104" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10" fill="#ec6a1e" text-anchor="middle"><tspan font-style="italic" font-weight="bold">probe</tspan></text>
+<path d="M752,141.2 V134 A8,8 0 0 0 736,134 V136.8" fill="none" stroke="#111111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="736.00,143.20 732.35,135.60 739.65,135.60" fill="#111111"/>
+<text x="757" y="157" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="12" fill="#d62f2f" text-anchor="middle"><tspan font-style="italic" font-weight="bold">Back</tspan></text>
+<text x="651" y="204" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10.5" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Score = </tspan><tspan font-weight="bold" fill="#d62f2f">Novelty</tspan><tspan font-weight="bold"> × Task Relevance,  </tspan><tspan font-weight="bold" fill="#d62f2f">Novelty</tspan><tspan font-weight="bold"> = 1 / (1 + </tspan><tspan font-style="italic" font-weight="bold">n</tspan><tspan font-weight="bold">)</tspan></text>
+</g>
+<polygon points="797,135.525 804,135.525 804,132.375 815,138 804,143.625 804,140.475 797,140.475" fill="#111111"/>
+<g id="reuse">
+<rect x="816" y="4" width="180" height="208" rx="12" fill="#dee3f1" stroke="#c3cbe3" stroke-width="1"/>
+<text x="906" y="25" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="13.5" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Mix-Trajectory Reuse</tspan></text>
+<rect x="830" y="34" width="152" height="30" rx="5" fill="#fbd9b8" stroke="none" stroke-width="1"/>
+<rect x="846" y="40" width="10" height="17" rx="2" fill="white" stroke="#222" stroke-width="1.1"/>
+<rect x="848.5" y="43" width="5" height="1.2" rx="0.5" fill="#9aa0a8" stroke="none" stroke-width="1"/>
+<text x="860" y="53.5" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="start"><tspan font-weight="bold">State </tspan><tspan font-style="italic" font-weight="bold">i</tspan><tspan font-weight="bold">+1</tspan></text>
+<text x="916" y="53.5" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="middle"><tspan font-weight="bold">+</tspan></text>
+<rect x="926" y="41" width="12" height="15" rx="2" fill="white" stroke="#222" stroke-width="1.1"/>
+<rect x="929" y="39.5" width="6" height="3" rx="1" fill="#222" stroke="none" stroke-width="1"/>
+<rect x="928.5" y="46" width="7" height="1.2" rx="0.5" fill="#222" stroke="none" stroke-width="1"/>
+<rect x="928.5" y="50" width="6" height="1.2" rx="0.5" fill="#222" stroke="none" stroke-width="1"/>
+<text x="942" y="53.5" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="start"><tspan font-weight="bold">Task</tspan></text>
+<polygon points="906.00,80.00 903.12,74.00 908.88,74.00" fill="#111111"/>
+<polyline points="906,64 906,74" fill="none" stroke="#111111" stroke-width="1.6" stroke-linecap="butt" stroke-linejoin="round"/>
+<text x="913" y="76" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#3a3a3a" text-anchor="start"><tspan font-style="italic">retrieve</tspan></text>
+<rect x="828" y="82" width="156" height="44" rx="4" fill="white" stroke="#222" stroke-width="1.1"/>
+<text x="906" y="95" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10.5" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Mixed Trajectory</tspan></text>
+<rect x="836" y="102" width="20" height="20" rx="3" fill="none" stroke="#7cc35a" stroke-width="1.4" stroke-dasharray="3 2"/>
+<circle cx="846" cy="112" r="6.4" fill="white" stroke="#4b5563" stroke-width="1.1"/>
+<rect x="843.696" y="108.48" width="4.608" height="7.04" rx="1" fill="white" stroke="#6b7280" stroke-width="0.7"/>
+<circle cx="880" cy="112" r="6.4" fill="white" stroke="#4b5563" stroke-width="1.1"/>
+<rect x="877.696" y="108.48" width="4.608" height="7.04" rx="1" fill="white" stroke="#6b7280" stroke-width="0.7"/>
+<circle cx="914" cy="112" r="6.4" fill="white" stroke="#4b5563" stroke-width="1.1"/>
+<rect x="911.696" y="108.48" width="4.608" height="7.04" rx="1" fill="white" stroke="#6b7280" stroke-width="0.7"/>
+<circle cx="948" cy="112" r="6.4" fill="white" stroke="#4b5563" stroke-width="1.1"/>
+<rect x="945.696" y="108.48" width="4.608" height="7.04" rx="1" fill="white" stroke="#6b7280" stroke-width="0.7"/>
+<polygon points="873.00,112.00 868.00,114.40 868.00,109.60" fill="#1f1f1f"/>
+<polyline points="853,112 868,112" fill="none" stroke="#1f1f1f" stroke-width="1.3" stroke-linecap="butt" stroke-linejoin="round"/>
+<polygon points="907.00,112.00 902.00,114.40 902.00,109.60" fill="#ec6a1e"/>
+<polyline points="887,112 902,112" fill="none" stroke="#ec6a1e" stroke-width="1.5" stroke-linecap="butt" stroke-linejoin="round" stroke-dasharray="3.5 2.5"/>
+<polygon points="941.00,112.00 936.00,114.40 936.00,109.60" fill="#1f1f1f"/>
+<polyline points="921,112 936,112" fill="none" stroke="#1f1f1f" stroke-width="1.3" stroke-linecap="butt" stroke-linejoin="round"/>
+<path d="M841.95,136 L845.1,139.15 L850.5,132.4" fill="none" stroke="#2e9a57" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="858" y="140" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#3a3a3a" text-anchor="start"><tspan font-weight="bold">verified</tspan> on live UI</text>
+<polygon points="906.00,158.00 903.12,152.00 908.88,152.00" fill="#111111"/>
+<polyline points="906,145 906,152" fill="none" stroke="#111111" stroke-width="1.6" stroke-linecap="butt" stroke-linejoin="round"/>
+<rect x="834" y="165" width="5.46" height="5.46" rx="1.2" fill="none" stroke="#111111" stroke-width="1"/>
+<rect x="841.54" y="165" width="5.46" height="5.46" rx="1.2" fill="none" stroke="#111111" stroke-width="1"/>
+<rect x="834" y="172.54" width="5.46" height="5.46" rx="1.2" fill="none" stroke="#111111" stroke-width="1"/>
+<circle cx="844.27" cy="175.27" r="2.73" fill="none" stroke="#111111" stroke-width="1"/>
+<polygon points="866.00,171.50 861.50,173.66 861.50,169.34" fill="#111111"/>
+<polyline points="851,171.5 861.5,171.5" fill="none" stroke="#111111" stroke-width="1.3" stroke-linecap="butt" stroke-linejoin="round"/>
+<polygon points="873.00,164.00 873.00,175.88 876.04,173.12 878.32,177.87 880.41,176.92 878.13,172.36 881.93,172.36" fill="white" stroke="#111111" stroke-width="1.1" stroke-linejoin="round"/>
+<path d="M871.575,162.575 L869.01,160.01" fill="none" stroke="#111111" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M875.09,161.72 L875.66,158.3" fill="none" stroke="#111111" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M870.72,166.09 L867.3,166.66" fill="none" stroke="#111111" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="903.00,171.50 898.50,173.66 898.50,169.34" fill="#111111"/>
+<polyline points="888,171.5 898.5,171.5" fill="none" stroke="#111111" stroke-width="1.3" stroke-linecap="butt" stroke-linejoin="round"/>
+<text x="907" y="176" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10" fill="#111111" text-anchor="start"><tspan font-weight="bold">Aa</tspan></text>
+<path d="M910,178.5 H920" fill="none" stroke="#111111" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="941.00,171.50 936.50,173.66 936.50,169.34" fill="#111111"/>
+<polyline points="926,171.5 936.5,171.5" fill="none" stroke="#111111" stroke-width="1.3" stroke-linecap="butt" stroke-linejoin="round"/>
+<circle cx="953" cy="171.5" r="7" fill="white" stroke="#4b5563" stroke-width="1.1"/>
+<rect x="950.48" y="167.65" width="5.04" height="7.7" rx="1" fill="white" stroke="#6b7280" stroke-width="0.7"/>
+<text x="906" y="194" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11.5" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Trajectory Reuse</tspan></text>
+<text x="906" y="207" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10" fill="#d62f2f" text-anchor="middle"><tspan font-weight="bold" fill="#d62f2f">skip reasoning for 3 steps</tspan></text>
+</g>
+<g id="graph">
+<rect x="158" y="236" width="838" height="170" rx="12" fill="#e3f3d9" stroke="#b8dca4" stroke-width="1"/>
+<text x="577" y="256" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="13.5" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Cross-task Mix-Trajectory Graph</tspan></text>
+<rect x="884" y="242" width="104" height="38" rx="3" fill="white" stroke="#29b6f6" stroke-width="1.6"/>
+<polygon points="921.00,255.00 916.00,257.40 916.00,252.60" fill="#111111"/>
+<polyline points="891,255 916,255" fill="none" stroke="#111111" stroke-width="1.3" stroke-linecap="butt" stroke-linejoin="round"/>
+<text x="926" y="259" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10.5" fill="#111111" text-anchor="start">Reasoning</text>
+<polygon points="921.00,271.00 916.00,273.40 916.00,268.60" fill="#111111"/>
+<polyline points="891,271 916,271" fill="none" stroke="#111111" stroke-width="1.3" stroke-linecap="butt" stroke-linejoin="round" stroke-dasharray="3.5 2.5"/>
+<text x="926" y="275" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10.5" fill="#111111" text-anchor="start">Exploration</text>
+<text x="176" y="290" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="start"><tspan font-weight="bold">Task 1</tspan></text>
+<text x="176" y="322" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="start"><tspan font-weight="bold">Task 2</tspan></text>
+<polygon points="267.70,286.00 262.70,288.40 262.70,283.60" fill="#1f1f1f"/>
+<polyline points="244.3,286 262.7,286" fill="none" stroke="#1f1f1f" stroke-width="1.3" stroke-linecap="butt" stroke-linejoin="round"/>
+<polygon points="307.70,286.00 302.70,288.40 302.70,283.60" fill="#1f1f1f"/>
+<polyline points="284.3,286 302.7,286" fill="none" stroke="#1f1f1f" stroke-width="1.3" stroke-linecap="butt" stroke-linejoin="round"/>
+<polygon points="347.70,286.00 342.70,288.40 342.70,283.60" fill="#1f1f1f"/>
+<polyline points="324.3,286 342.7,286" fill="none" stroke="#1f1f1f" stroke-width="1.3" stroke-linecap="butt" stroke-linejoin="round"/>
+<circle cx="236" cy="286" r="7.5" fill="white" stroke="#4b5563" stroke-width="1.1"/>
+<rect x="233.3" y="281.875" width="5.4" height="8.25" rx="1" fill="white" stroke="#6b7280" stroke-width="0.7"/>
+<circle cx="276" cy="286" r="7.5" fill="white" stroke="#4b5563" stroke-width="1.1"/>
+<rect x="273.3" y="281.875" width="5.4" height="8.25" rx="1" fill="white" stroke="#6b7280" stroke-width="0.7"/>
+<circle cx="316" cy="286" r="7.5" fill="white" stroke="#4b5563" stroke-width="1.1"/>
+<rect x="313.3" y="281.875" width="5.4" height="8.25" rx="1" fill="white" stroke="#6b7280" stroke-width="0.7"/>
+<circle cx="356" cy="286" r="7.5" fill="white" stroke="#4b5563" stroke-width="1.1"/>
+<rect x="353.3" y="281.875" width="5.4" height="8.25" rx="1" fill="white" stroke="#6b7280" stroke-width="0.7"/>
+<polygon points="267.70,318.00 262.70,320.40 262.70,315.60" fill="#1f1f1f"/>
+<polyline points="244.3,318 262.7,318" fill="none" stroke="#1f1f1f" stroke-width="1.3" stroke-linecap="butt" stroke-linejoin="round"/>
+<polygon points="307.70,318.00 302.70,320.40 302.70,315.60" fill="#1f1f1f"/>
+<polyline points="284.3,318 302.7,318" fill="none" stroke="#1f1f1f" stroke-width="1.3" stroke-linecap="butt" stroke-linejoin="round"/>
+<circle cx="236" cy="318" r="7.5" fill="white" stroke="#4b5563" stroke-width="1.1"/>
+<rect x="233.3" y="313.875" width="5.4" height="8.25" rx="1" fill="white" stroke="#6b7280" stroke-width="0.7"/>
+<circle cx="276" cy="318" r="7.5" fill="white" stroke="#4b5563" stroke-width="1.1"/>
+<rect x="273.3" y="313.875" width="5.4" height="8.25" rx="1" fill="white" stroke="#6b7280" stroke-width="0.7"/>
+<circle cx="316" cy="318" r="7.5" fill="white" stroke="#4b5563" stroke-width="1.1"/>
+<rect x="313.3" y="313.875" width="5.4" height="8.25" rx="1" fill="white" stroke="#6b7280" stroke-width="0.7"/>
+<text x="282" y="345" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11.5" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Task Execution Trajectory</tspan></text>
+<polygon points="227.70,370.00 222.70,372.40 222.70,367.60" fill="#1f1f1f"/>
+<polyline points="204.3,370 222.7,370" fill="none" stroke="#1f1f1f" stroke-width="1.3" stroke-linecap="butt" stroke-linejoin="round" stroke-dasharray="3.5 2.5"/>
+<polygon points="267.70,370.00 262.70,372.40 262.70,367.60" fill="#1f1f1f"/>
+<polyline points="244.3,370 262.7,370" fill="none" stroke="#1f1f1f" stroke-width="1.3" stroke-linecap="butt" stroke-linejoin="round" stroke-dasharray="3.5 2.5"/>
+<polygon points="307.70,370.00 302.70,372.40 302.70,367.60" fill="#1f1f1f"/>
+<polyline points="284.3,370 302.7,370" fill="none" stroke="#1f1f1f" stroke-width="1.3" stroke-linecap="butt" stroke-linejoin="round" stroke-dasharray="3.5 2.5"/>
+<polygon points="268.88,389.73 263.36,389.22 265.83,385.10" fill="#1f1f1f"/>
+<polyline points="243.117,374.27 264.595,387.157" fill="none" stroke="#1f1f1f" stroke-width="1.3" stroke-linecap="butt" stroke-linejoin="round" stroke-dasharray="3.5 2.5"/>
+<circle cx="196" cy="370" r="7.5" fill="white" stroke="#4b5563" stroke-width="1.1"/>
+<rect x="193.3" y="365.875" width="5.4" height="8.25" rx="1" fill="white" stroke="#6b7280" stroke-width="0.7"/>
+<circle cx="236" cy="370" r="7.5" fill="white" stroke="#4b5563" stroke-width="1.1"/>
+<rect x="233.3" y="365.875" width="5.4" height="8.25" rx="1" fill="white" stroke="#6b7280" stroke-width="0.7"/>
+<circle cx="276" cy="370" r="7.5" fill="white" stroke="#4b5563" stroke-width="1.1"/>
+<rect x="273.3" y="365.875" width="5.4" height="8.25" rx="1" fill="white" stroke="#6b7280" stroke-width="0.7"/>
+<circle cx="316" cy="370" r="7.5" fill="white" stroke="#4b5563" stroke-width="1.1"/>
+<rect x="313.3" y="365.875" width="5.4" height="8.25" rx="1" fill="white" stroke="#6b7280" stroke-width="0.7"/>
+<circle cx="276" cy="394" r="7.5" fill="white" stroke="#4b5563" stroke-width="1.1"/>
+<rect x="273.3" y="389.875" width="5.4" height="8.25" rx="1" fill="white" stroke="#6b7280" stroke-width="0.7"/>
+<text x="380" y="374" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11.5" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Exploration</tspan></text>
+<text x="380" y="388" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11.5" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Trajectory</tspan></text>
+<polygon points="420,299.525 459,299.525 459,296.375 470,302 459,307.625 459,304.475 420,304.475" fill="#111111"/>
+<polygon points="420,369.525 459,369.525 459,366.375 470,372 459,377.625 459,374.475 420,374.475" fill="#111111"/>
+<polyline points="474,290 490,290 490,384 474,384" fill="none" stroke="#111111" stroke-width="2.2" stroke-linecap="butt" stroke-linejoin="round"/>
+<polygon points="490,334.525 529,334.525 529,331.375 540,337 529,342.625 529,339.475 490,339.475" fill="#111111"/>
+<text x="515" y="360" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10.5" fill="#3a3a3a" text-anchor="middle"><tspan font-weight="bold">merge</tspan></text>
+<text x="515" y="373" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10.5" fill="#3a3a3a" text-anchor="middle"><tspan font-weight="bold">states</tspan></text>
+<rect x="548" y="266" width="326" height="134" rx="8" fill="#dfe5f3" stroke="#333" stroke-width="1"/>
+<rect x="566" y="322" width="18" height="18" rx="3" fill="white" stroke="#333" stroke-width="1"/>
+<rect x="566" y="322" width="18" height="5" rx="2" fill="#d62f2f" stroke="none" stroke-width="1"/>
+<rect x="568.5" y="329.5" width="3" height="3" rx="0.5" fill="#333" stroke="none" stroke-width="1"/>
+<rect x="573.3" y="329.5" width="3" height="3" rx="0.5" fill="#333" stroke="none" stroke-width="1"/>
+<rect x="578.1" y="329.5" width="3" height="3" rx="0.5" fill="#333" stroke="none" stroke-width="1"/>
+<rect x="568.5" y="334.1" width="3" height="3" rx="0.5" fill="#333" stroke="none" stroke-width="1"/>
+<rect x="573.3" y="334.1" width="3" height="3" rx="0.5" fill="#333" stroke="none" stroke-width="1"/>
+<rect x="578.1" y="334.1" width="3" height="3" rx="0.5" fill="#333" stroke="none" stroke-width="1"/>
+<text x="575" y="354" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10.5" fill="#111111" text-anchor="middle"><tspan font-weight="bold">App</tspan></text>
+<polyline points="616,331 664,296" fill="none" stroke="#b7e3a0" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="664,296 716,290" fill="none" stroke="#b7e3a0" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="716,290 770,290" fill="none" stroke="#b7e3a0" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="657.29,300.89 654.67,305.78 651.84,301.90" fill="#1f1f1f"/>
+<polyline points="622.706,326.11 653.253,303.836" fill="none" stroke="#1f1f1f" stroke-width="1.3" stroke-linecap="butt" stroke-linejoin="round"/>
+<polygon points="657.29,361.11 651.84,360.10 654.67,356.22" fill="#1f1f1f"/>
+<polyline points="622.706,335.89 653.253,358.164" fill="none" stroke="#1f1f1f" stroke-width="1.3" stroke-linecap="butt" stroke-linejoin="round"/>
+<polygon points="707.75,290.95 703.06,293.91 702.51,289.14" fill="#1f1f1f"/>
+<polyline points="672.245,295.049 702.788,291.525" fill="none" stroke="#1f1f1f" stroke-width="1.3" stroke-linecap="butt" stroke-linejoin="round"/>
+<polygon points="707.85,374.43 702.49,375.85 703.39,371.13" fill="#1f1f1f"/>
+<polyline points="672.151,367.567 702.939,373.488" fill="none" stroke="#1f1f1f" stroke-width="1.3" stroke-linecap="butt" stroke-linejoin="round"/>
+<polygon points="761.72,379.39 756.56,381.41 756.91,376.62" fill="#1f1f1f"/>
+<polyline points="724.277,376.613 756.736,379.018" fill="none" stroke="#1f1f1f" stroke-width="1.3" stroke-linecap="butt" stroke-linejoin="round"/>
+<polygon points="761.74,335.23 756.54,337.16 756.98,332.38" fill="#1f1f1f"/>
+<polyline points="724.265,331.765 756.757,334.774" fill="none" stroke="#1f1f1f" stroke-width="1.3" stroke-linecap="butt" stroke-linejoin="round"/>
+<polygon points="761.70,290.00 756.70,292.40 756.70,287.60" fill="#1f1f1f"/>
+<polyline points="724.3,290 756.7,290" fill="none" stroke="#1f1f1f" stroke-width="1.3" stroke-linecap="butt" stroke-linejoin="round" stroke-dasharray="3.5 2.5"/>
+<polygon points="709.11,326.37 703.63,325.56 706.31,321.58" fill="#1f1f1f"/>
+<polyline points="670.886,300.635 704.966,323.574" fill="none" stroke="#1f1f1f" stroke-width="1.3" stroke-linecap="butt" stroke-linejoin="round" stroke-dasharray="3.5 2.5"/>
+<polygon points="709.11,335.63 706.31,340.42 703.63,336.44" fill="#1f1f1f"/>
+<polyline points="670.886,361.365 704.966,338.426" fill="none" stroke="#1f1f1f" stroke-width="1.3" stroke-linecap="butt" stroke-linejoin="round" stroke-dasharray="3.5 2.5"/>
+<circle cx="616" cy="331" r="7.5" fill="white" stroke="#4b5563" stroke-width="1.1"/>
+<rect x="613.3" y="326.875" width="5.4" height="8.25" rx="1" fill="white" stroke="#6b7280" stroke-width="0.7"/>
+<circle cx="664" cy="296" r="7.5" fill="white" stroke="#4b5563" stroke-width="1.1"/>
+<rect x="661.3" y="291.875" width="5.4" height="8.25" rx="1" fill="white" stroke="#6b7280" stroke-width="0.7"/>
+<circle cx="664" cy="366" r="7.5" fill="white" stroke="#4b5563" stroke-width="1.1"/>
+<rect x="661.3" y="361.875" width="5.4" height="8.25" rx="1" fill="white" stroke="#6b7280" stroke-width="0.7"/>
+<circle cx="716" cy="290" r="7.5" fill="white" stroke="#4b5563" stroke-width="1.1"/>
+<rect x="713.3" y="285.875" width="5.4" height="8.25" rx="1" fill="white" stroke="#6b7280" stroke-width="0.7"/>
+<circle cx="716" cy="331" r="7.5" fill="white" stroke="#4b5563" stroke-width="1.1"/>
+<rect x="713.3" y="326.875" width="5.4" height="8.25" rx="1" fill="white" stroke="#6b7280" stroke-width="0.7"/>
+<circle cx="716" cy="376" r="7.5" fill="white" stroke="#4b5563" stroke-width="1.1"/>
+<rect x="713.3" y="371.875" width="5.4" height="8.25" rx="1" fill="white" stroke="#6b7280" stroke-width="0.7"/>
+<circle cx="770" cy="290" r="7.5" fill="white" stroke="#4b5563" stroke-width="1.1"/>
+<rect x="767.3" y="285.875" width="5.4" height="8.25" rx="1" fill="white" stroke="#6b7280" stroke-width="0.7"/>
+<circle cx="770" cy="336" r="7.5" fill="white" stroke="#4b5563" stroke-width="1.1"/>
+<rect x="767.3" y="331.875" width="5.4" height="8.25" rx="1" fill="white" stroke="#6b7280" stroke-width="0.7"/>
+<circle cx="770" cy="380" r="7.5" fill="white" stroke="#4b5563" stroke-width="1.1"/>
+<rect x="767.3" y="375.875" width="5.4" height="8.25" rx="1" fill="white" stroke="#6b7280" stroke-width="0.7"/>
+<text x="784" y="294" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10.5" fill="#111111" text-anchor="start"><tspan font-weight="bold">Task 1</tspan></text>
+<text x="784" y="340" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10.5" fill="#111111" text-anchor="start"><tspan font-weight="bold">Task 2</tspan></text>
+<text x="784" y="384" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10.5" fill="#111111" text-anchor="start"><tspan font-weight="bold">Task 3</tspan></text>
+<polyline points="716,331 748,311" fill="none" stroke="#f9cfae" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="740.96,315.40 737.99,320.08 735.45,316.01" fill="#ec6a1e"/>
+<polyline points="723.038,326.601 736.722,318.049" fill="none" stroke="#ec6a1e" stroke-width="1.6" stroke-linecap="butt" stroke-linejoin="round" stroke-dasharray="3.5 2.5"/>
+<circle cx="748" cy="311" r="8" fill="white" stroke="#ec6a1e" stroke-width="1.4" stroke-dasharray="2.5 2"/>
+<text x="748" y="315" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#ec6a1e" text-anchor="middle"><tspan font-weight="bold">?</tspan></text>
+<text x="761" y="315" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#ec6a1e" text-anchor="start"><tspan font-weight="bold">unseen</tspan></text>
+<text x="640" y="284" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#3f8f2a" text-anchor="middle"><tspan font-weight="bold">reused</tspan></text>
+</g>
+<g id="links">
+<polygon points="660.00,213.00 662.64,218.50 657.36,218.50" fill="#ec6a1e"/>
+<polyline points="660,236 660,218.5" fill="none" stroke="#ec6a1e" stroke-width="1.6" stroke-linecap="butt" stroke-linejoin="round"/>
+<text x="666" y="229" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#ec6a1e" text-anchor="start"><tspan font-style="italic" font-weight="bold">seen count n</tspan></text>
+<polygon points="766.00,236.00 763.36,230.50 768.64,230.50" fill="#111111"/>
+<polyline points="766,213 766,230.5" fill="none" stroke="#111111" stroke-width="1.4" stroke-linecap="butt" stroke-linejoin="round" stroke-dasharray="3.5 2.5"/>
+<text x="772" y="229" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#3a3a3a" text-anchor="start"><tspan font-style="italic">record</tspan></text>
+<polygon points="906.00,213.00 908.64,218.50 903.36,218.50" fill="#111111"/>
+<polyline points="906,236 906,218.5" fill="none" stroke="#111111" stroke-width="1.4" stroke-linecap="butt" stroke-linejoin="round"/>
+<text x="912" y="229" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#3a3a3a" text-anchor="start"><tspan font-style="italic">retrieve</tspan></text>
+</g>
+</svg>
