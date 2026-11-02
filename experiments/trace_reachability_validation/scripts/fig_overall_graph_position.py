@@ -125,16 +125,28 @@ def main():
 
   fig, (a, b) = plt.subplots(1, 2, figsize=(6.9, 2.15), gridspec_kw={"width_ratios": [1.05, 1]})
 
-  # (a) graph growth
-  a.plot(g["x"], g["edges"], color=C_ME, lw=1.6, ls=(0, (4, 2)))
-  a.plot(g["x"], g["states"], color=C_ME, lw=1.8)
-  a.plot(g["x"], g["explore"], color=C4, lw=1.8, ls=(0, (1, 1.4)))
+  # (a) graph growth: edges as a stack of agent-discovered and exploration-discovered edges, states as a line
+  agent_edges = [e - x for e, x in zip(g["edges"], g["explore"])]
+  a.stackplot(g["x"], agent_edges, g["explore"], colors=[C3, C4], alpha=0.85, linewidth=0)
+  a.plot(g["x"], g["edges"], color=C_ME, lw=0.8)
+  a.plot(g["x"], g["states"], color="#1f3f42", lw=1.6, ls=(0, (4, 2)))
   n = len(order)
-  for y, label in ((g["edges"][-1], "edges"), (g["states"][-1], "states"), (g["explore"][-1], "edges from\nexploration")):
-    a.text(n + 3, y, label, va="center", fontsize=7, color="#444")
-  a.set_xlim(0, n + 30)
+  ex_final, ag_final = g["explore"][-1], agent_edges[-1]
+  top = max(g["edges"]) * 1.3
+  a.text(n + 3, ag_final + ex_final / 2, f"exploration\nedges ({ex_final:.0f})", va="center", fontsize=7, color="#8a6417")
+  a.text(n + 3, g["states"][-1] * 0.93, f"states ({g['states'][-1]:.0f})", va="center", fontsize=7, color="#1f3f42")
+  a.text(n + 3, ag_final * 0.48, f"agent\nedges ({ag_final:.0f})", va="center", fontsize=7, color="#2c6f75")
+  # exploration's share of the edges vs. its share of the UI actions (probes vs. agent steps, FULL45)
+  F = [rows[(t, "FULL45")] for t in tasks]
+  probes, steps = sum(r["probes"] for r in F), sum(r["steps"] for r in F)
+  a.text(3, top * 0.98,
+         f"Exploration: {ex_final / g['edges'][-1]:.0%} of edges from {probes / (probes + steps):.0%} of UI actions\n"
+         f"new edges per action: {ex_final / probes:.2f} (probe) vs. {ag_final / steps:.2f} (agent step)",
+         fontsize=6.5, color="#444", va="top")
+  a.set_ylim(0, top)
+  a.set_xlim(0, n + 36)
   a.set_xticks([0, 29, 58, 87, 116])
-  a.set_ylim(bottom=0)
+
   a.set_xlabel("Tasks executed")
   a.set_ylabel("Graph size")
   a.set_title("(a) Graph growth", fontsize=8, loc="left")
