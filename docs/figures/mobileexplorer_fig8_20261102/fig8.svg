@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="400" viewBox="0 0 1000 400">
+<title>MobileExplorer system overview</title>
+<rect width="1000" height="400" fill="white"/>
+<text x="105" y="22" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="15" fill="#111111" text-anchor="middle"><tspan font-weight="bold">State </tspan><tspan font-style="italic" font-weight="bold">i</tspan><tspan font-weight="bold"> and task</tspan></text>
+<text x="370" y="22" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="15" fill="#111111" text-anchor="middle"><tspan font-weight="bold">① Retrieve</tspan></text>
+<text x="370" y="38" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10.5" fill="#3a3a3a" text-anchor="middle" font-style="italic">query: state key + task goal</text>
+<text x="648" y="22" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="15" fill="#111111" text-anchor="middle"><tspan font-weight="bold">② Bind &amp; ground</tspan></text>
+<text x="648" y="38" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10.5" fill="#3a3a3a" text-anchor="middle" font-style="italic">on the live UI</text>
+<text x="885" y="22" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="15" fill="#111111" text-anchor="middle"><tspan font-weight="bold">③ Execute &amp; verify</tspan></text>
+<text x="885" y="38" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10.5" fill="#3a3a3a" text-anchor="middle" font-style="italic">model calls saved</text>
+<rect x="10" y="48" width="192" height="46" rx="6" fill="#fff7e0" stroke="#e3c46b" stroke-width="1.1"/>
+<text x="18" y="64" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="start"><tspan font-weight="bold">Task B:</tspan> <tspan font-weight="bold" fill="#0f766e">Add</tspan> a <tspan font-weight="bold" fill="#0f766e">note</tspan> named</text>
+<text x="18" y="79" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="start">“groceries”</text>
+<text x="18" y="90" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="8.5" fill="#3a3a3a" text-anchor="start" font-style="italic">parameter title = groceries</text>
+<rect x="50" y="104" width="108" height="232" rx="14" fill="white" stroke="#222" stroke-width="1.6"/>
+<rect x="54" y="108" width="100" height="224" rx="11" fill="#fafbfc" stroke="none" stroke-width="1"/>
+<text x="62" y="120" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="6.5" fill="#3a3a3a" text-anchor="start">20:34</text>
+<circle cx="104" cy="117" r="2.6" fill="#222" stroke="none" stroke-width="1"/>
+<path d="M61,133 H69 M61,136 H69 M61,139 H69" fill="none" stroke="#222" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="75" y="139.5" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="8" fill="#111111" text-anchor="start"><tspan font-weight="bold">Notes</tspan></text>
+<circle cx="132" cy="136" r="4.4" fill="none" stroke="#222" stroke-width="1.1"/>
+<path d="M135,139 L137.5,141.5" fill="none" stroke="#222" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="146" cy="133" r="0.9" fill="#222" stroke="none" stroke-width="1"/>
+<circle cx="146" cy="136" r="0.9" fill="#222" stroke="none" stroke-width="1"/>
+<circle cx="146" cy="139" r="0.9" fill="#222" stroke="none" stroke-width="1"/>
+<rect x="59" y="146" width="90" height="11" rx="5.5" fill="#eef0f4" stroke="none" stroke-width="1"/>
+<text x="66" y="154" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="5.6" fill="#8a8f98" text-anchor="start">Search notes</text>
+<rect x="58" y="163" width="92" height="25" rx="3" fill="white" stroke="#e3e6eb" stroke-width="0.6"/>
+<rect x="62" y="168" width="13" height="15" rx="2.5" fill="#3b82f6" stroke="none" stroke-width="1"/>
+<text x="81" y="173" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="5.4" fill="#111111" text-anchor="start"><tspan font-weight="bold">Meeting Notes</tspan></text>
+<rect x="81" y="177" width="54" height="1.6" rx="0.8" fill="#c9ced6" stroke="none" stroke-width="1"/>
+<rect x="58" y="191" width="92" height="25" rx="3" fill="white" stroke="#e3e6eb" stroke-width="0.6"/>
+<rect x="62" y="196" width="13" height="15" rx="2.5" fill="#ef4444" stroke="none" stroke-width="1"/>
+<text x="81" y="201" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="5.4" fill="#111111" text-anchor="start"><tspan font-weight="bold">Shopping List</tspan></text>
+<rect x="81" y="205" width="54" height="1.6" rx="0.8" fill="#c9ced6" stroke="none" stroke-width="1"/>
+<rect x="58" y="219" width="92" height="25" rx="3" fill="white" stroke="#e3e6eb" stroke-width="0.6"/>
+<rect x="62" y="224" width="13" height="15" rx="2.5" fill="#f59e0b" stroke="none" stroke-width="1"/>
+<text x="81" y="229" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="5.4" fill="#111111" text-anchor="start"><tspan font-weight="bold">Travel Plan</tspan></text>
+<rect x="81" y="233" width="54" height="1.6" rx="0.8" fill="#c9ced6" stroke="none" stroke-width="1"/>
+<rect x="58" y="247" width="92" height="25" rx="3" fill="white" stroke="#e3e6eb" stroke-width="0.6"/>
+<rect x="58" y="247" width="92" height="25" rx="3" fill="none" stroke="#d9363e" stroke-width="1.2"/>
+<rect x="62" y="251" width="15" height="17" rx="2" fill="#7cc4e8" stroke="none" stroke-width="1"/>
+<rect x="62" y="261" width="15" height="7" rx="1" fill="#e6c27a" stroke="none" stroke-width="1"/>
+<rect x="81" y="261" width="7" height="5" rx="1" fill="#2e9a57" stroke="none" stroke-width="1"/>
+<text x="81" y="257" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="5.4" fill="#111111" text-anchor="start"><tspan font-weight="bold">Plan Your Next Vacation</tspan></text>
+<rect x="81" y="267" width="54" height="1.6" rx="0.8" fill="#c9ced6" stroke="none" stroke-width="1"/>
+<rect x="58" y="275" width="92" height="25" rx="3" fill="white" stroke="#e3e6eb" stroke-width="0.6"/>
+<rect x="62" y="280" width="13" height="15" rx="2.5" fill="#8b5cf6" stroke="none" stroke-width="1"/>
+<text x="81" y="285" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="5.4" fill="#111111" text-anchor="start"><tspan font-weight="bold">Old Notes</tspan></text>
+<rect x="81" y="289" width="54" height="1.6" rx="0.8" fill="#c9ced6" stroke="none" stroke-width="1"/>
+<rect x="130" y="279" width="17" height="17" rx="3" fill="#e5484d" stroke="none" stroke-width="1"/>
+<path d="M134.5,284.5 H142.5 M136,284.5 L136.8,292 H140.2 L141,284.5 M137.3,284.5 V283 H139.7 V284.5" fill="none" stroke="white" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="138" cy="290" r="10" fill="#2563eb" stroke="none" stroke-width="1"/>
+<path d="M133.5,290 H142.5 M138,285.5 V294.5" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="54,308 154,308" fill="none" stroke="#e3e6eb" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="74" y="312" width="9" height="8" rx="1.5" fill="#2563eb" stroke="none" stroke-width="1"/>
+<text x="78.5" y="327" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="5.4" fill="#2563eb" text-anchor="middle">Notes</text>
+<rect x="120" y="312" width="9" height="8" rx="1.5" fill="none" stroke="#8a8f98" stroke-width="1"/>
+<text x="124.5" y="327" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="5.4" fill="#8a8f98" text-anchor="middle">Calendar</text>
+<polyline points="143.4,309 148,290" fill="none" stroke="#2f7fe0" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="148" cy="290" r="2.2" fill="#2f7fe0" stroke="none" stroke-width="1"/>
+<rect x="112" y="300" width="62.8" height="18" rx="9" fill="#2f7fe0" stroke="none" stroke-width="1"/>
+<text x="143.4" y="312.6" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10" fill="white" text-anchor="middle"><tspan font-weight="bold">Add Note</tspan></text>
+<text x="102" y="356" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#3a3a3a" text-anchor="middle" font-style="italic">state key:</text>
+<text x="102" y="370" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#3a3a3a" text-anchor="middle"><tspan font-weight="bold">(Notes, NotesList, layout)</tspan></text>
+<polygon points="206,200 218,200 218,194 228,206 218,218 218,212 206,212" fill="#111"/>
+<rect x="232" y="52" width="278" height="250" rx="10" fill="#dee3f1" stroke="#aeb8d6" stroke-width="1.2"/>
+<text x="371" y="72" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="12.5" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Mix-Trajectory Graph</tspan></text>
+<text x="371" y="88" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#3a3a3a" text-anchor="middle" font-style="italic">route toward the goal from this state</text>
+<rect x="245" y="113" width="74" height="34" rx="7" fill="white" stroke="#5b6b8c" stroke-width="1.4"/>
+<text x="282" y="130" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11.5" fill="#111111" text-anchor="middle"><tspan font-weight="bold">List</tspan></text>
+<text x="282" y="142" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="8.5" fill="#3a3a3a" text-anchor="middle" font-style="italic">State i</text>
+<rect x="419" y="113" width="74" height="34" rx="7" fill="white" stroke="#5b6b8c" stroke-width="1.4"/>
+<text x="456" y="130" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11.5" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Editor</tspan></text>
+<text x="456" y="142" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="8.5" fill="#3a3a3a" text-anchor="middle" font-style="italic">empty</text>
+<polygon points="418.00,130.00 411.00,133.36 411.00,126.64" fill="#e8710f"/>
+<polyline points="320,130 411,130" fill="none" stroke="#e8710f" stroke-width="2" stroke-linecap="butt" stroke-linejoin="round" stroke-dasharray="5 3"/>
+<text x="369" y="121" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Add Note</tspan></text>
+<text x="369" y="147" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="8.8" fill="#e8710f" text-anchor="middle" font-style="italic">explored · Task A</text>
+<rect x="419" y="209" width="74" height="34" rx="7" fill="white" stroke="#5b6b8c" stroke-width="1.4"/>
+<text x="456" y="226" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11.5" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Editor</tspan></text>
+<text x="456" y="238" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="8.5" fill="#3a3a3a" text-anchor="middle" font-style="italic">title filled</text>
+<polygon points="456.00,207.00 452.64,200.00 459.36,200.00" fill="#222"/>
+<polyline points="456,148 456,200" fill="none" stroke="#222" stroke-width="2" stroke-linecap="butt" stroke-linejoin="round"/>
+<text x="448" y="176" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10" fill="#111111" text-anchor="end"><tspan font-weight="bold">Type [title]</tspan></text>
+<text x="448" y="190" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="8.8" fill="#222" text-anchor="end" font-style="italic">model · Task A</text>
+<rect x="245" y="209" width="74" height="34" rx="7" fill="white" stroke="#5b6b8c" stroke-width="1.4"/>
+<text x="282" y="226" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11.5" fill="#111111" text-anchor="middle"><tspan font-weight="bold">List</tspan></text>
+<text x="282" y="238" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="8.5" fill="#3a3a3a" text-anchor="middle" font-style="italic">+ new note</text>
+<polygon points="321.00,226.00 328.00,222.64 328.00,229.36" fill="#d9363e"/>
+<polyline points="418,226 328,226" fill="none" stroke="#d9363e" stroke-width="2" stroke-linecap="butt" stroke-linejoin="round"/>
+<text x="370" y="217" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10" fill="#d9363e" text-anchor="middle"><tspan font-weight="bold">Save</tspan></text>
+<text x="370" y="243" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="8.8" fill="#d9363e" text-anchor="middle" font-style="italic">commit</text>
+<polyline points="246,274 270,274" fill="none" stroke="#e8710f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 3"/>
+<text x="276" y="278" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#3a3a3a" text-anchor="start">from exploration</text>
+<polyline points="372,274 396,274" fill="none" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="402" y="278" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#3a3a3a" text-anchor="start">from model execution</text>
+<text x="371" y="294" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#111111" text-anchor="middle" font-style="italic">one route, two sources: a mixed trajectory</text>
+<polygon points="514,176 524,176 524,170 534,182 524,194 524,188 514,188" fill="#111"/>
+<rect x="540" y="64" width="216" height="46" rx="6" fill="white" stroke="#cfd5df" stroke-width="1"/>
+<path d="M551.05,87 L554.9,90.85 L561.5,82.6" fill="none" stroke="#2e9a57" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="570" y="84" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="start"><tspan font-weight="bold">[title] ← “groceries”</tspan></text>
+<text x="570" y="100" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#3a3a3a" text-anchor="start" font-style="italic">from the task</text>
+<rect x="540" y="122" width="216" height="46" rx="6" fill="white" stroke="#cfd5df" stroke-width="1"/>
+<path d="M551.05,145 L554.9,148.85 L561.5,140.6" fill="none" stroke="#2e9a57" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="570" y="142" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="start"><tspan font-weight="bold">“Add Note” found</tspan></text>
+<text x="570" y="158" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#3a3a3a" text-anchor="start" font-style="italic">on State i</text>
+<rect x="540" y="180" width="216" height="46" rx="6" fill="white" stroke="#cfd5df" stroke-width="1"/>
+<path d="M551.05,203 L554.9,206.85 L561.5,198.6" fill="none" stroke="#2e9a57" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="570" y="200" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="start"><tspan font-weight="bold">title field found</tspan></text>
+<text x="570" y="216" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#3a3a3a" text-anchor="start" font-style="italic">after landing on Editor</text>
+<rect x="540" y="238" width="216" height="46" rx="6" fill="white" stroke="#cfd5df" stroke-width="1"/>
+<path d="M551.5,256.5 L560.5,265.5 M560.5,256.5 L551.5,265.5" fill="none" stroke="#c8423a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="570" y="258" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="start"><tspan font-weight="bold">“Save” is a commit</tspan></text>
+<text x="570" y="274" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#d9363e" text-anchor="start" font-style="italic">left to the model</text>
+<polygon points="760,176 770,176 770,170 780,182 770,194 770,188 760,188" fill="#111"/>
+<text x="788" y="70" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10.5" fill="#111111" text-anchor="start"><tspan font-weight="bold">Model only</tspan></text>
+<rect x="788" y="78" width="62" height="22" rx="4" fill="#f6edb5" stroke="#d9b93c" stroke-width="1.2"/>
+<text x="819" y="93" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#111111" text-anchor="middle">reason</text>
+<rect x="853" y="78" width="62" height="22" rx="4" fill="#f6edb5" stroke="#d9b93c" stroke-width="1.2"/>
+<text x="884" y="93" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#111111" text-anchor="middle">reason</text>
+<rect x="918" y="78" width="62" height="22" rx="4" fill="#f6edb5" stroke="#d9b93c" stroke-width="1.2"/>
+<text x="949" y="93" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#111111" text-anchor="middle">reason</text>
+<text x="819" y="115" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9" fill="#3a3a3a" text-anchor="middle" font-style="italic">Add Note</text>
+<text x="884" y="115" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9" fill="#3a3a3a" text-anchor="middle" font-style="italic">type</text>
+<text x="949" y="115" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9" fill="#3a3a3a" text-anchor="middle" font-style="italic">Save</text>
+<text x="788" y="144" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10.5" fill="#111111" text-anchor="start"><tspan font-weight="bold">With reuse</tspan></text>
+<rect x="788" y="152" width="62" height="22" rx="4" fill="#d6ecfb" stroke="#3b8fd6" stroke-width="1.2"/>
+<text x="814" y="167" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#111111" text-anchor="middle">execute</text>
+<rect x="853" y="152" width="62" height="22" rx="4" fill="#d6ecfb" stroke="#3b8fd6" stroke-width="1.2"/>
+<text x="879" y="167" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#111111" text-anchor="middle">execute</text>
+<rect x="918" y="152" width="62" height="22" rx="4" fill="#f6edb5" stroke="#d9b93c" stroke-width="1.2"/>
+<text x="949" y="167" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#111111" text-anchor="middle">reason</text>
+<text x="819" y="189" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9" fill="#3a3a3a" text-anchor="middle" font-style="italic">Add Note</text>
+<text x="884" y="189" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9" fill="#3a3a3a" text-anchor="middle" font-style="italic">type</text>
+<text x="949" y="189" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9" fill="#3a3a3a" text-anchor="middle" font-style="italic">Save</text>
+<path d="M837.85,163 L840.3,165.45 L844.5,160.2" fill="none" stroke="#2e9a57" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M902.85,163 L905.3,165.45 L909.5,160.2" fill="none" stroke="#2e9a57" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="788" y="204" width="192" height="30" rx="6" fill="#e8f5e9" stroke="#9fd3a6" stroke-width="1"/>
+<text x="884" y="224" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="12.5" fill="#2e9a57" text-anchor="middle"><tspan font-weight="bold">3 → 1 model calls</tspan></text>
+<text x="788" y="256" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#3a3a3a" text-anchor="start"><tspan font-weight="bold">verify</tspan> each landing against the record</text>
+<text x="788" y="271" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#d9363e" text-anchor="start"><tspan font-weight="bold">mismatch</tspan> → stop, the model reasons</text>
+<text x="788" y="292" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#3a3a3a" text-anchor="start" font-style="italic">executed steps join the history;</text>
+<text x="788" y="305" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#3a3a3a" text-anchor="start" font-style="italic">the model continues from the new state</text>
+<rect x="232" y="318" width="758" height="70" rx="8" fill="#f7f8fb" stroke="#d5dae3" stroke-width="1"/>
+<text x="246" y="342" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="start"><tspan font-weight="bold" fill="#e8710f">Exploration → reuse:</tspan> the editor was first reached by a probe (Fig. 7), so a route to it exists</text>
+<text x="246" y="362" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="start"><tspan font-weight="bold" fill="#2f7fe0">Reuse → reasoning:</tspan> steps the graph already knows run without a model call;</text>
+<text x="246" y="378" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="start">the model keeps the decisions that need judgment (commits, unknown pages)</text>
+</svg>
