@@ -1,7 +1,7 @@
 """New graph states per task (bars) and E2E latency speedup (line) by task position within its app.
 
-Positions: 1st, 2nd, 3rd, 4th+ (the 3rd task has its own bar). Values are pooled over the three task orders of the
-order microbenchmark, with the same definitions as order_microbench_REPORT:
+Positions: 1st, 2nd-3rd, 4th+ (SPLIT_2ND_3RD = True gives the 3rd task its own bar). Values are pooled over the three
+task orders of the order microbenchmark, with the same definitions as order_microbench_REPORT:
   position  = number of earlier tasks of the same app in that order
   speedup   = mean(BASE e2e) / mean(FULL45 e2e) over the task instances both systems solved, pooled over orders
   new nodes = states first seen in the FULL45 graph during the task, averaged over all task instances, pooled
@@ -9,7 +9,9 @@ order microbenchmark, with the same definitions as order_microbench_REPORT:
 Inputs per order tag (ROOT = experiments/trace_reachability_validation):
   reports/<tag>_runs.jsonl, reports/<tag>_task_order.txt, graph_snapshots/<tag>/FULL45/graph.jsonl
 The script also prints the 3-bucket values (1st, 2nd-3rd, 4th+): they should reproduce 5.6 / 2.6 / 1.5 and
-1.11 / 1.19 / 1.24 from the report before the 4-bucket figure is used.
+1.11 / 1.19 / 1.24 from the report.
+Error bars: 95% bootstrap confidence intervals over task instances (pooled over orders); for the speedup the
+(BASE, FULL45) pairs are resampled together and the ratio of means is recomputed.
 """
 import collections
 import json
@@ -32,6 +34,9 @@ TAGS = ["e2e116n", "e2e116P", "e2e116V"]      # default, random, reversed within
 OUT = "./new_figure"
 os.makedirs(OUT, exist_ok=True)
 SHOW_N = False                                 # True: add the number of pooled tasks under each label
+SPLIT_2ND_3RD = False                          # True: 1st, 2nd, 3rd, 4th+
+ERROR_BARS = True                              # 95% bootstrap CIs over tasks
+BOOT, SEED = 5000, 0
 
 OUR_COLOR = "#66c2a5"
 BASE_COLOR = "black"
@@ -103,7 +108,18 @@ def position_stats(orders, buckets, bucket_of):
     speedup = np.array([st.mean(e2e[b][0]) / st.mean(e2e[b][1]) for b in buckets])
     new_states = np.array([st.mean(nodes[b]) if nodes[b] else np.nan for b in buckets])
     n_both = [len(e2e[b][0]) for b in buckets]
-    return new_states, speedup, n_both
+    rng = np.random.default_rng(SEED)
+    sp_ci, ns_ci = [], []
+    for b in buckets:
+        base, ours = np.array(e2e[b][0]), np.array(e2e[b][1])
+        idx = rng.integers(0, len(base), (BOOT, len(base)))
+        sp_ci.append(np.percentile(base[idx].mean(1) / ours[idx].mean(1), [2.5, 97.5]))
+        if nodes[b]:
+            v = np.array(nodes[b])
+            ns_ci.append(np.percentile(v[rng.integers(0, len(v), (BOOT, len(v)))].mean(1), [2.5, 97.5]))
+        else:
+            ns_ci.append([np.nan, np.nan])
+    return new_states, speedup, n_both, np.array(ns_ci), np.array(sp_ci), [len(nodes[b]) for b in buckets]
 
 
 orders = {tag: load_order(tag) for tag in TAGS}
@@ -117,10 +133,18 @@ if not orders:
 check = position_stats(orders, ["1st", "2nd-3rd", "4th+"], lambda p: "1st" if p == 0 else ("2nd-3rd" if p <= 2 else "4th+"))
 print("3-bucket check  new states", np.round(check[0], 1), " speedup", np.round(check[1], 2), " both-solved", check[2])
 
-categories = ["1st", "2nd", "3rd", "4th+"]
+if SPLIT_2ND_3RD:
+    categories = ["1st", "2nd", "3rd", "4th+"]
+    bucket_of = lambda p: categories[min(p, 3)]  # noqa: E731
+else:
+    categories = ["1st", "2nd–3rd", "4th+"]
+    bucket_of = lambda p: categories[0] if p == 0 else (categories[1] if p <= 2 else categories[2])  # noqa: E731
 x = np.arange(len(categories))
-new_states, speedup, n_both = position_stats(orders, categories, lambda p: categories[min(p, 3)])
-print("4-bucket        new states", np.round(new_states, 1), " speedup", np.round(speedup, 2), " both-solved", n_both)
+new_states, speedup, n_both, ns_ci, sp_ci, n_tasks = position_stats(orders, categories, bucket_of)
+for c, v, lo_hi, n in zip(categories, speedup, sp_ci, n_both):
+    print(f"  {c:8s} speedup {v:.2f}x  95% CI [{lo_hi[0]:.2f}, {lo_hi[1]:.2f}]  both-solved {n}")
+for c, v, lo_hi, n in zip(categories, new_states, ns_ci, n_tasks):
+    print(f"  {c:8s} new states {v:.2f}  95% CI [{lo_hi[0]:.2f}, {lo_hi[1]:.2f}]  tasks {n}")
 if np.isnan(new_states).any():
     raise SystemExit("graph_snapshots/<tag>/FULL45/graph.jsonl missing: cannot compute new states per task")
 
@@ -142,6 +166,9 @@ bars = ax1.bar(
     color=OUR_COLOR,
     edgecolor="none",
     label="New Nodes per Task",
+    yerr=np.abs(ns_ci.T - new_states) if ERROR_BARS else None,
+    capsize=8,
+    error_kw={"elinewidth": 1.8, "capthick": 1.8, "ecolor": "#333333", "zorder": 4},
     zorder=3
 )
 
@@ -188,13 +215,16 @@ line, = ax2.plot(
     label="End-to-End Latency Speedup",
     zorder=5
 )
+if ERROR_BARS:
+    ax2.errorbar(x, speedup, yerr=np.abs(sp_ci.T - speedup), fmt="none", ecolor=BASE_COLOR, elinewidth=1.8,
+                 capsize=8, capthick=1.8, zorder=6)
 
 ax2.set_ylabel(
     "Latency Speedup (×)",
     labelpad=12
 )
 
-top = max(1.5, np.ceil(speedup.max() * 5) / 5)   # keep 1.5 unless a value is higher
+top = max(1.5, np.ceil((sp_ci[:, 1].max() if ERROR_BARS else speedup.max()) * 5) / 5)   # keep 1.5 unless higher
 ax2.set_ylim(0, top)
 ax2.set_yticks(
     np.arange(0, top + 0.01, 0.2)
