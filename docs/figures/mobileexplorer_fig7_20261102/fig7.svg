@@ -1,0 +1,234 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="432" viewBox="0 0 1000 432">
+<title>MobileExplorer system overview</title>
+<rect width="1000" height="432" fill="white"/>
+<text x="122" y="22" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="15" fill="#111111" text-anchor="middle"><tspan font-weight="bold">State </tspan><tspan font-style="italic" font-weight="bold">i</tspan><tspan font-weight="bold"> and task</tspan></text>
+<text x="318" y="22" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="15" fill="#111111" text-anchor="middle"><tspan font-weight="bold">① Novelty</tspan></text>
+<text x="318" y="38" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10.5" fill="#3a3a3a" text-anchor="middle" font-style="italic">transition already in graph?</text>
+<text x="478" y="22" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="15" fill="#111111" text-anchor="middle"><tspan font-weight="bold">② Risk</tspan></text>
+<text x="478" y="38" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10.5" fill="#3a3a3a" text-anchor="middle" font-style="italic">can Back undo it?</text>
+<text x="680" y="22" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="15" fill="#111111" text-anchor="middle"><tspan font-weight="bold">③ Relevance</tspan></text>
+<text x="680" y="38" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10.5" fill="#3a3a3a" text-anchor="middle" font-style="italic">TF-IDF with the task</text>
+<text x="900" y="22" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="15" fill="#111111" text-anchor="middle"><tspan font-weight="bold">④ Probe &amp; record</tspan></text>
+<text x="900" y="38" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10.5" fill="#3a3a3a" text-anchor="middle" font-style="italic">during model reasoning</text>
+<rect x="14" y="48" width="216" height="34" rx="6" fill="#fff7e0" stroke="#e3c46b" stroke-width="1.1"/>
+<text x="22" y="62" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="start"><tspan font-weight="bold">Task:</tspan> <tspan font-weight="bold" fill="#0f766e">Add</tspan> a <tspan font-weight="bold" fill="#0f766e">note</tspan> named <tspan font-style="italic" fill="#8a8f98">“groceries”</tspan></text>
+<text x="22" y="76" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9" fill="#3a3a3a" text-anchor="start" font-style="italic">terms: add, note (parameters removed)</text>
+<rect x="70" y="92" width="108" height="248" rx="14" fill="white" stroke="#222" stroke-width="1.6"/>
+<rect x="74" y="96" width="100" height="240" rx="11" fill="#fafbfc" stroke="none" stroke-width="1"/>
+<text x="82" y="108" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="6.5" fill="#3a3a3a" text-anchor="start">20:34</text>
+<circle cx="124" cy="105" r="2.6" fill="#222" stroke="none" stroke-width="1"/>
+<path d="M81,121 H89 M81,124 H89 M81,127 H89" fill="none" stroke="#222" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="95" y="127.5" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="8" fill="#111111" text-anchor="start"><tspan font-weight="bold">Notes</tspan></text>
+<circle cx="152" cy="124" r="4.4" fill="none" stroke="#222" stroke-width="1.1"/>
+<path d="M155,127 L157.5,129.5" fill="none" stroke="#222" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="166" cy="121" r="0.9" fill="#222" stroke="none" stroke-width="1"/>
+<circle cx="166" cy="124" r="0.9" fill="#222" stroke="none" stroke-width="1"/>
+<circle cx="166" cy="127" r="0.9" fill="#222" stroke="none" stroke-width="1"/>
+<rect x="79" y="134" width="90" height="11" rx="5.5" fill="#eef0f4" stroke="none" stroke-width="1"/>
+<text x="86" y="142" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="5.6" fill="#8a8f98" text-anchor="start">Search notes</text>
+<rect x="78" y="151" width="92" height="25" rx="3" fill="white" stroke="#e3e6eb" stroke-width="0.6"/>
+<rect x="82" y="156" width="13" height="15" rx="2.5" fill="#3b82f6" stroke="none" stroke-width="1"/>
+<text x="101" y="161" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="5.4" fill="#111111" text-anchor="start"><tspan font-weight="bold">Meeting Notes</tspan></text>
+<rect x="101" y="165" width="54" height="1.6" rx="0.8" fill="#c9ced6" stroke="none" stroke-width="1"/>
+<rect x="78" y="179" width="92" height="25" rx="3" fill="white" stroke="#e3e6eb" stroke-width="0.6"/>
+<rect x="82" y="184" width="13" height="15" rx="2.5" fill="#ef4444" stroke="none" stroke-width="1"/>
+<text x="101" y="189" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="5.4" fill="#111111" text-anchor="start"><tspan font-weight="bold">Shopping List</tspan></text>
+<rect x="101" y="193" width="54" height="1.6" rx="0.8" fill="#c9ced6" stroke="none" stroke-width="1"/>
+<rect x="78" y="207" width="92" height="25" rx="3" fill="white" stroke="#e3e6eb" stroke-width="0.6"/>
+<rect x="82" y="212" width="13" height="15" rx="2.5" fill="#f59e0b" stroke="none" stroke-width="1"/>
+<text x="101" y="217" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="5.4" fill="#111111" text-anchor="start"><tspan font-weight="bold">Travel Plan</tspan></text>
+<rect x="101" y="221" width="54" height="1.6" rx="0.8" fill="#c9ced6" stroke="none" stroke-width="1"/>
+<rect x="78" y="235" width="92" height="25" rx="3" fill="white" stroke="#e3e6eb" stroke-width="0.6"/>
+<rect x="78" y="235" width="92" height="25" rx="3" fill="none" stroke="#d9363e" stroke-width="1.2"/>
+<rect x="82" y="239" width="15" height="17" rx="2" fill="#7cc4e8" stroke="none" stroke-width="1"/>
+<rect x="82" y="249" width="15" height="7" rx="1" fill="#e6c27a" stroke="none" stroke-width="1"/>
+<rect x="101" y="249" width="7" height="5" rx="1" fill="#2e9a57" stroke="none" stroke-width="1"/>
+<text x="101" y="245" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="5.4" fill="#111111" text-anchor="start"><tspan font-weight="bold">Plan Your Next Vacation</tspan></text>
+<rect x="101" y="255" width="54" height="1.6" rx="0.8" fill="#c9ced6" stroke="none" stroke-width="1"/>
+<rect x="78" y="263" width="92" height="25" rx="3" fill="white" stroke="#e3e6eb" stroke-width="0.6"/>
+<rect x="82" y="268" width="13" height="15" rx="2.5" fill="#8b5cf6" stroke="none" stroke-width="1"/>
+<text x="101" y="273" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="5.4" fill="#111111" text-anchor="start"><tspan font-weight="bold">Old Notes</tspan></text>
+<rect x="101" y="277" width="54" height="1.6" rx="0.8" fill="#c9ced6" stroke="none" stroke-width="1"/>
+<rect x="150" y="267" width="17" height="17" rx="3" fill="#e5484d" stroke="none" stroke-width="1"/>
+<path d="M154.5,272.5 H162.5 M156,272.5 L156.8,280 H160.2 L161,272.5 M157.3,272.5 V271 H159.7 V272.5" fill="none" stroke="white" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="158" cy="294" r="10" fill="#2563eb" stroke="none" stroke-width="1"/>
+<path d="M153.5,294 H162.5 M158,289.5 V298.5" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="74,312 174,312" fill="none" stroke="#e3e6eb" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="94" y="316" width="9" height="8" rx="1.5" fill="#2563eb" stroke="none" stroke-width="1"/>
+<text x="98.5" y="331" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="5.4" fill="#2563eb" text-anchor="middle">Notes</text>
+<rect x="140" y="316" width="9" height="8" rx="1.5" fill="none" stroke="#8a8f98" stroke-width="1"/>
+<text x="144.5" y="331" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="5.4" fill="#8a8f98" text-anchor="middle">Calendar</text>
+<polyline points="33.2,113 85,124" fill="none" stroke="#2f7fe0" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="85" cy="124" r="2.2" fill="#2f7fe0" stroke="none" stroke-width="1"/>
+<rect x="14" y="104" width="38.4" height="18" rx="9" fill="#2f7fe0" stroke="none" stroke-width="1"/>
+<text x="33.2" y="116.6" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10" fill="white" text-anchor="middle"><tspan font-weight="bold">Menu</tspan></text>
+<polyline points="145.3,99 152,124" fill="none" stroke="#2f7fe0" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="152" cy="124" r="2.2" fill="#2f7fe0" stroke="none" stroke-width="1"/>
+<rect x="120" y="90" width="50.6" height="18" rx="9" fill="#2f7fe0" stroke="none" stroke-width="1"/>
+<text x="145.3" y="102.6" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10" fill="white" text-anchor="middle"><tspan font-weight="bold">Search</tspan></text>
+<polyline points="212.35,117 166,124" fill="none" stroke="#2f7fe0" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="166" cy="124" r="2.2" fill="#2f7fe0" stroke="none" stroke-width="1"/>
+<rect x="184" y="108" width="56.7" height="18" rx="9" fill="#2f7fe0" stroke="none" stroke-width="1"/>
+<text x="212.35" y="120.6" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10" fill="white" text-anchor="middle"><tspan font-weight="bold">Setting</tspan></text>
+<polyline points="23.1,223 78,247.5" fill="none" stroke="#2f7fe0" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="78" cy="247.5" r="2.2" fill="#2f7fe0" stroke="none" stroke-width="1"/>
+<rect x="10" y="214" width="26.2" height="18" rx="9" fill="#2f7fe0" stroke="none" stroke-width="1"/>
+<text x="23.1" y="226.6" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10" fill="white" text-anchor="middle"><tspan font-weight="bold">Ad</tspan></text>
+<polyline points="211.3,245 167,275.5" fill="none" stroke="#2f7fe0" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="167" cy="275.5" r="2.2" fill="#2f7fe0" stroke="none" stroke-width="1"/>
+<rect x="186" y="236" width="50.6" height="18" rx="9" fill="#2f7fe0" stroke="none" stroke-width="1"/>
+<text x="211.3" y="248.6" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10" fill="white" text-anchor="middle"><tspan font-weight="bold">Delete</tspan></text>
+<polyline points="211.4,287 168,294" fill="none" stroke="#2f7fe0" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="168" cy="294" r="2.2" fill="#2f7fe0" stroke="none" stroke-width="1"/>
+<rect x="180" y="278" width="62.8" height="18" rx="9" fill="#2f7fe0" stroke="none" stroke-width="1"/>
+<text x="211.4" y="290.6" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10" fill="white" text-anchor="middle"><tspan font-weight="bold">Add Note</tspan></text>
+<polyline points="187.4,355 144.5,320" fill="none" stroke="#2f7fe0" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="144.5" cy="320" r="2.2" fill="#2f7fe0" stroke="none" stroke-width="1"/>
+<rect x="156" y="346" width="62.8" height="18" rx="9" fill="#2f7fe0" stroke="none" stroke-width="1"/>
+<text x="187.4" y="358.6" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10" fill="white" text-anchor="middle"><tspan font-weight="bold">Calendar</tspan></text>
+<polygon points="232,200 244,200 244,194 254,206 244,218 244,212 232,212" fill="#111"/>
+<rect x="262" y="58" width="92" height="19" rx="9.5" fill="#eceef1" stroke="#8a8f98" stroke-width="1.2"/>
+<text x="308" y="71.46" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#8a8f98" text-anchor="middle"><tspan font-weight="bold">Menu</tspan></text>
+<polyline points="270,67.5 346,67.5" fill="none" stroke="#8a8f98" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="359" y="71.5" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10" fill="#8a8f98" text-anchor="start"><tspan font-weight="bold">seen</tspan></text>
+<text x="308" y="89" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="8.5" fill="#8a8f98" text-anchor="middle" font-style="italic">Task A opened it here</text>
+<rect x="262" y="95" width="92" height="19" rx="9.5" fill="#dbeafb" stroke="#2f7fe0" stroke-width="1.2"/>
+<text x="308" y="108.46" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Search</tspan></text>
+<rect x="359" y="97" width="31" height="15" rx="7.5" fill="#ffe8d2" stroke="#e8710f" stroke-width="1"/>
+<text x="374.5" y="108" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#e8710f" text-anchor="middle"><tspan font-weight="bold">new</tspan></text>
+<rect x="262" y="132" width="92" height="19" rx="9.5" fill="#dbeafb" stroke="#2f7fe0" stroke-width="1.2"/>
+<text x="308" y="145.46" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Setting</tspan></text>
+<rect x="359" y="134" width="31" height="15" rx="7.5" fill="#ffe8d2" stroke="#e8710f" stroke-width="1"/>
+<text x="374.5" y="145" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#e8710f" text-anchor="middle"><tspan font-weight="bold">new</tspan></text>
+<rect x="262" y="169" width="92" height="19" rx="9.5" fill="#dbeafb" stroke="#2f7fe0" stroke-width="1.2"/>
+<text x="308" y="182.46" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Ad</tspan></text>
+<rect x="359" y="171" width="31" height="15" rx="7.5" fill="#ffe8d2" stroke="#e8710f" stroke-width="1"/>
+<text x="374.5" y="182" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#e8710f" text-anchor="middle"><tspan font-weight="bold">new</tspan></text>
+<rect x="262" y="206" width="92" height="19" rx="9.5" fill="#dbeafb" stroke="#2f7fe0" stroke-width="1.2"/>
+<text x="308" y="219.46" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Delete</tspan></text>
+<rect x="359" y="208" width="31" height="15" rx="7.5" fill="#ffe8d2" stroke="#e8710f" stroke-width="1"/>
+<text x="374.5" y="219" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#e8710f" text-anchor="middle"><tspan font-weight="bold">new</tspan></text>
+<rect x="262" y="243" width="92" height="19" rx="9.5" fill="#dbeafb" stroke="#2f7fe0" stroke-width="1.2"/>
+<text x="308" y="256.46" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Add Note</tspan></text>
+<rect x="359" y="245" width="31" height="15" rx="7.5" fill="#ffe8d2" stroke="#e8710f" stroke-width="1"/>
+<text x="374.5" y="256" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#e8710f" text-anchor="middle"><tspan font-weight="bold">new</tspan></text>
+<rect x="262" y="280" width="92" height="19" rx="9.5" fill="#dbeafb" stroke="#2f7fe0" stroke-width="1.2"/>
+<text x="308" y="293.46" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Calendar</tspan></text>
+<rect x="359" y="282" width="31" height="15" rx="7.5" fill="#ffe8d2" stroke="#e8710f" stroke-width="1"/>
+<text x="374.5" y="293" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#e8710f" text-anchor="middle"><tspan font-weight="bold">new</tspan></text>
+<polygon points="396,200 404,200 404,195 412,206 404,217 404,212 396,212" fill="#111"/>
+<rect x="424" y="95" width="92" height="19" rx="9.5" fill="#fde2e3" stroke="#d9363e" stroke-width="1.2"/>
+<text x="470" y="108.46" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#d9363e" text-anchor="middle"><tspan font-weight="bold">Search</tspan></text>
+<polyline points="432,104.5 508,104.5" fill="none" stroke="#d9363e" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M522.5,101 L529.5,108 M529.5,101 L522.5,108" fill="none" stroke="#c8423a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="470" y="126" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="8.5" fill="#d9363e" text-anchor="middle" font-style="italic">mode switch</text>
+<rect x="424" y="132" width="92" height="19" rx="9.5" fill="#fde2e3" stroke="#d9363e" stroke-width="1.2"/>
+<text x="470" y="145.46" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#d9363e" text-anchor="middle"><tspan font-weight="bold">Setting</tspan></text>
+<polyline points="432,141.5 508,141.5" fill="none" stroke="#d9363e" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M522.5,138 L529.5,145 M529.5,138 L522.5,145" fill="none" stroke="#c8423a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="470" y="163" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="8.5" fill="#d9363e" text-anchor="middle" font-style="italic">mode switch</text>
+<rect x="424" y="169" width="92" height="19" rx="9.5" fill="#fde2e3" stroke="#d9363e" stroke-width="1.2"/>
+<text x="470" y="182.46" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#d9363e" text-anchor="middle"><tspan font-weight="bold">Ad</tspan></text>
+<polyline points="432,178.5 508,178.5" fill="none" stroke="#d9363e" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M522.5,175 L529.5,182 M529.5,175 L522.5,182" fill="none" stroke="#c8423a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="470" y="200" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="8.5" fill="#d9363e" text-anchor="middle" font-style="italic">leaves the app</text>
+<rect x="424" y="206" width="92" height="19" rx="9.5" fill="#fde2e3" stroke="#d9363e" stroke-width="1.2"/>
+<text x="470" y="219.46" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#d9363e" text-anchor="middle"><tspan font-weight="bold">Delete</tspan></text>
+<polyline points="432,215.5 508,215.5" fill="none" stroke="#d9363e" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M522.5,212 L529.5,219 M529.5,212 L522.5,219" fill="none" stroke="#c8423a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="470" y="237" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="8.5" fill="#d9363e" text-anchor="middle" font-style="italic">destructive</text>
+<rect x="424" y="243" width="92" height="19" rx="9.5" fill="#dbeafb" stroke="#2f7fe0" stroke-width="1.2"/>
+<text x="470" y="256.46" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Add Note</tspan></text>
+<path d="M521.95,252.5 L525.1,255.65 L530.5,248.9" fill="none" stroke="#2e9a57" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="470" y="274" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="8.5" fill="#2e9a57" text-anchor="middle" font-style="italic">empty editor, Back undoes</text>
+<rect x="424" y="280" width="92" height="19" rx="9.5" fill="#dbeafb" stroke="#2f7fe0" stroke-width="1.2"/>
+<text x="470" y="293.46" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Calendar</tspan></text>
+<path d="M521.95,289.5 L525.1,292.65 L530.5,285.9" fill="none" stroke="#2e9a57" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="470" y="311" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="8.5" fill="#2e9a57" text-anchor="middle" font-style="italic">tab, Back undoes</text>
+<polygon points="548,206 556,206 556,201 564,212 556,223 556,218 548,218" fill="#111"/>
+<rect x="572" y="52" width="216" height="26" rx="6" fill="#fff7e0" stroke="#e3c46b" stroke-width="1"/>
+<text x="680" y="69" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="middle"><tspan font-weight="bold">query:</tspan> task terms  <tspan font-weight="bold" fill="#0f766e">add · note</tspan></text>
+<rect x="572" y="96" width="216" height="96" rx="6" fill="white" stroke="#cfd5df" stroke-width="1"/>
+<rect x="582" y="104" width="88" height="19" rx="9.5" fill="#dbeafb" stroke="#2f7fe0" stroke-width="1.2"/>
+<text x="626" y="117.46" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Add Note</tspan></text>
+<text x="582" y="138" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#3a3a3a" text-anchor="start">own text: <tspan font-weight="bold" fill="#0f766e">add · note</tspan></text>
+<text x="582" y="151" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#3a3a3a" text-anchor="start">graph: same label in App 3</text>
+<text x="582" y="164" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#3a3a3a" text-anchor="start">→ editor (title, body)</text>
+<rect x="680" y="107" width="66" height="13" rx="1.5" fill="white" stroke="#6cbf4f" stroke-width="1.6"/>
+<rect x="681.5" y="108.5" width="52.29" height="10" rx="1" fill="#6cbf4f" stroke="none" stroke-width="1"/>
+<text x="752" y="117.5" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="start"><tspan font-weight="bold">0.83</tspan></text>
+<rect x="572" y="206" width="216" height="96" rx="6" fill="white" stroke="#cfd5df" stroke-width="1"/>
+<rect x="582" y="214" width="88" height="19" rx="9.5" fill="#dbeafb" stroke="#2f7fe0" stroke-width="1.2"/>
+<text x="626" y="227.46" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="middle"><tspan font-weight="bold">Calendar</tspan></text>
+<text x="582" y="248" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#3a3a3a" text-anchor="start">own text: calendar</text>
+<text x="582" y="261" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#3a3a3a" text-anchor="start">graph: same label in App 5</text>
+<text x="582" y="274" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#3a3a3a" text-anchor="start">→ month view</text>
+<rect x="680" y="217" width="66" height="13" rx="1.5" fill="white" stroke="#6cbf4f" stroke-width="1.6"/>
+<rect x="681.5" y="218.5" width="3.15" height="10" rx="1" fill="#6cbf4f" stroke="none" stroke-width="1"/>
+<text x="752" y="227.5" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11" fill="#111111" text-anchor="start"><tspan font-weight="bold">0.05</tspan></text>
+<text x="680" y="322" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#3a3a3a" text-anchor="middle" font-style="italic">IDF over screens of all apps:</text>
+<text x="680" y="335" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#3a3a3a" text-anchor="middle" font-style="italic">menu / search / settings appear everywhere → low weight</text>
+<polygon points="792,138 800,138 800,133 808,144 800,155 800,150 792,150" fill="#111"/>
+<text x="850" y="66" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="11.5" fill="#e8710f" text-anchor="middle"><tspan font-weight="bold">probe</tspan></text>
+<polygon points="820,76 833,76 839,84 833,92 820,92 826,84" fill="#fde2cc"/>
+<polygon points="840,76 853,76 859,84 853,92 840,92 846,84" fill="#fde2cc"/>
+<polygon points="860,76 873,76 879,84 873,92 860,92 866,84" fill="#fde2cc"/>
+<rect x="886" y="54" width="70" height="120" rx="9" fill="white" stroke="#222" stroke-width="1.4"/>
+<rect x="889" y="57" width="64" height="114" rx="7" fill="#fafbfc" stroke="none" stroke-width="1"/>
+<text x="895" y="73" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="6.5" fill="#111111" text-anchor="start"><tspan font-weight="bold">New note</tspan></text>
+<rect x="894" y="81" width="54" height="12" rx="2" fill="white" stroke="#b8c0cb" stroke-width="0.7"/>
+<text x="898" y="89.5" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="5.6" fill="#8a8f98" text-anchor="start">Title</text>
+<rect x="894" y="99" width="54" height="12" rx="2" fill="white" stroke="#b8c0cb" stroke-width="0.7"/>
+<text x="898" y="107.5" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="5.6" fill="#8a8f98" text-anchor="start">Body</text>
+<rect x="889" y="131" width="64" height="40" rx="2" fill="#dfe3e8" stroke="none" stroke-width="1"/>
+<rect x="892" y="135" width="7.66667" height="8" rx="1" fill="white" stroke="none" stroke-width="1"/>
+<rect x="901.667" y="135" width="7.66667" height="8" rx="1" fill="white" stroke="none" stroke-width="1"/>
+<rect x="911.333" y="135" width="7.66667" height="8" rx="1" fill="white" stroke="none" stroke-width="1"/>
+<rect x="921" y="135" width="7.66667" height="8" rx="1" fill="white" stroke="none" stroke-width="1"/>
+<rect x="930.667" y="135" width="7.66667" height="8" rx="1" fill="white" stroke="none" stroke-width="1"/>
+<rect x="940.333" y="135" width="7.66667" height="8" rx="1" fill="white" stroke="none" stroke-width="1"/>
+<rect x="892" y="146" width="7.66667" height="8" rx="1" fill="white" stroke="none" stroke-width="1"/>
+<rect x="901.667" y="146" width="7.66667" height="8" rx="1" fill="white" stroke="none" stroke-width="1"/>
+<rect x="911.333" y="146" width="7.66667" height="8" rx="1" fill="white" stroke="none" stroke-width="1"/>
+<rect x="921" y="146" width="7.66667" height="8" rx="1" fill="white" stroke="none" stroke-width="1"/>
+<rect x="930.667" y="146" width="7.66667" height="8" rx="1" fill="white" stroke="none" stroke-width="1"/>
+<rect x="940.333" y="146" width="7.66667" height="8" rx="1" fill="white" stroke="none" stroke-width="1"/>
+<rect x="892" y="157" width="7.66667" height="8" rx="1" fill="white" stroke="none" stroke-width="1"/>
+<rect x="901.667" y="157" width="7.66667" height="8" rx="1" fill="white" stroke="none" stroke-width="1"/>
+<rect x="911.333" y="157" width="7.66667" height="8" rx="1" fill="white" stroke="none" stroke-width="1"/>
+<rect x="921" y="157" width="7.66667" height="8" rx="1" fill="white" stroke="none" stroke-width="1"/>
+<rect x="930.667" y="157" width="7.66667" height="8" rx="1" fill="white" stroke="none" stroke-width="1"/>
+<rect x="940.333" y="157" width="7.66667" height="8" rx="1" fill="white" stroke="none" stroke-width="1"/>
+<text x="921" y="188" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10" fill="#111111" text-anchor="middle"><tspan font-weight="bold">new state</tspan></text>
+<path d="M861,141.9 V132 A11,11 0 0 0 839,132 V135.85" fill="none" stroke="#111111" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="839.00,144.65 833.98,134.20 844.02,134.20" fill="#111111"/>
+<text x="850" y="162" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="12" fill="#d9363e" text-anchor="middle"><tspan font-style="italic" font-weight="bold">Back</tspan></text>
+<path d="M825.05,200 L828.9,203.85 L835.5,195.6" fill="none" stroke="#2e9a57" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="842" y="204" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10" fill="#2e9a57" text-anchor="start"><tspan font-weight="bold">restored</tspan>: matches State <tspan font-style="italic">i</tspan></text>
+<rect x="816" y="222" width="176" height="58" rx="6" fill="white" stroke="#cfd5df" stroke-width="1"/>
+<text x="904" y="238" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10.5" fill="#111111" text-anchor="middle"><tspan font-weight="bold">record in graph</tspan></text>
+<text x="904" y="254" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10" fill="#3a3a3a" text-anchor="middle">List —Add Note→ Editor</text>
+<text x="904" y="269" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#3a3a3a" text-anchor="middle" font-style="italic">origin: explore · rollback ✓</text>
+<text x="816" y="300" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9" fill="#3a3a3a" text-anchor="start" font-style="italic">new probes stop when the</text>
+<text x="816" y="312" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9" fill="#3a3a3a" text-anchor="start" font-style="italic">model's action is ready</text>
+<rect x="250" y="362" width="742" height="64" rx="10" fill="#dee3f1" stroke="#aeb8d6" stroke-width="1.2"/>
+<text x="768" y="386" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="13.5" fill="#111111" text-anchor="start"><tspan font-weight="bold">Mix-Trajectory Graph</tspan></text>
+<text x="768" y="402" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#3a3a3a" text-anchor="start" font-style="italic">execution + exploration,</text>
+<text x="768" y="415" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#3a3a3a" text-anchor="start" font-style="italic">all earlier tasks</text>
+<polygon points="318.00,345.00 320.88,351.00 315.12,351.00" fill="#3c4a7a"/>
+<polyline points="318,362 318,351" fill="none" stroke="#3c4a7a" stroke-width="1.8" stroke-linecap="butt" stroke-linejoin="round"/>
+<polygon points="470.00,345.00 472.88,351.00 467.12,351.00" fill="#3c4a7a"/>
+<polyline points="470,362 470,351" fill="none" stroke="#3c4a7a" stroke-width="1.8" stroke-linecap="butt" stroke-linejoin="round"/>
+<polygon points="680.00,345.00 682.88,351.00 677.12,351.00" fill="#3c4a7a"/>
+<polyline points="680,362 680,351" fill="none" stroke="#3c4a7a" stroke-width="1.8" stroke-linecap="butt" stroke-linejoin="round"/>
+<text x="318" y="388" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10" fill="#3c4a7a" text-anchor="middle"><tspan font-weight="bold">transitions recorded</tspan></text>
+<text x="318" y="402" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10" fill="#3c4a7a" text-anchor="middle"><tspan font-weight="bold">on this page</tspan></text>
+<text x="470" y="388" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10" fill="#3c4a7a" text-anchor="middle"><tspan font-weight="bold">recovery outcomes of</tspan></text>
+<text x="470" y="402" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10" fill="#3c4a7a" text-anchor="middle"><tspan font-weight="bold">similar controls</tspan></text>
+<text x="680" y="388" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10" fill="#3c4a7a" text-anchor="middle"><tspan font-weight="bold">pages reached by</tspan></text>
+<text x="680" y="402" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="10" fill="#3c4a7a" text-anchor="middle"><tspan font-weight="bold">same-label controls</tspan></text>
+<polygon points="962.00,361.00 959.12,355.00 964.88,355.00" fill="#e8710f"/>
+<polyline points="962,281 962,355" fill="none" stroke="#e8710f" stroke-width="1.8" stroke-linecap="butt" stroke-linejoin="round" stroke-dasharray="4 2.5"/>
+<text x="954" y="334" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#e8710f" text-anchor="end"><tspan font-weight="bold">new edge +</tspan></text>
+<text x="954" y="347" font-family="'Liberation Sans', Arial, Helvetica, sans-serif" font-size="9.5" fill="#e8710f" text-anchor="end"><tspan font-weight="bold">rollback result</tspan></text>
+</svg>
