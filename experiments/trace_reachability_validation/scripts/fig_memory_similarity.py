@@ -102,6 +102,22 @@ print(json.dumps(summary, indent=1))
 plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 9, "axes.spines.top": False,
                      "axes.spines.right": False, "pdf.fonttype": 42})
 GRAY, PINK = "#b8bec6", "#d97fb4"
+MODEL_ONLY = "--model-only" in sys.argv          # recommended for the paper: memory similarity without the comparison
+if MODEL_ONLY:
+  fig, ax = plt.subplots(figsize=(2.6, 2.2))
+  for i, (lab, col, color) in enumerate((("Structure", "model_struct", GRAY), ("Content", "model_content", PINK))):
+    v, ci = res[col]
+    ax.bar(i, v, 0.5, color=color, yerr=[[v - ci[0]], [ci[1] - v]], capsize=3)
+    ax.text(i, ci[1] + 0.02, f"{v:.2f}", ha="center", fontsize=8)
+  ax.set_xticks([0, 1])
+  ax.set_xticklabels(["Structure", "Content"])
+  ax.set_ylim(0, 1.05)
+  ax.set_ylabel("Jaccard similarity to\nscreens of earlier tasks")
+  fig.tight_layout()
+  for ext in ("pdf", "png"):
+    fig.savefig(OUT / f"memory_similarity_model_only.{ext}", dpi=300, bbox_inches="tight")
+  print("saved", OUT / "memory_similarity_model_only.png")
+  sys.exit(0)
 fig, ax = plt.subplots(figsize=(3.4, 2.2))
 w = 0.36
 for i, (lab, a, b) in enumerate((("Structure", "model_struct", "all_struct"), ("Content", "model_content", "all_content"))):
