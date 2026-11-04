@@ -202,3 +202,95 @@ def plot():
 
 if __name__ == "__main__" and "--plot" in sys.argv:
   plot()
+
+
+def example():
+  """A concrete probe: same layout as a stored record from an earlier task, different content."""
+  order = open(ROOT / "reports" / f"{TAG}_task_order.txt").read().strip().split(",")
+  rank = {t: i for i, t in enumerate(order)}
+  obs = [json.loads(l) for l in open(ROOT / "graph_snapshots" / TAG / ARM / "graph.jsonl")]
+  for o in obs:
+    o["task"] = o["instance"].split("/")[0]
+  want_now, want_old = "SimpleCalendarDeleteEventsOnRelativeDay", "SimpleCalendarDeleteOneEvent"
+  probe = next(o for o in obs if o["origin"] == "explore" and o["task"] == want_now and o.get("dst")
+               and o["dst"]["activity"].endswith("EventActivity"))
+  L = lkey(probe["dst"])
+  old = None
+  for o in obs:
+    for side in ("src", "dst"):
+      if o["task"] == want_old and o.get(side) and lkey(o[side]) == L and o.get(side + "_cid"):
+        old = old or (o, side)
+  ui_now = C.load_ui(str(RAW / want_now / "p0"), probe["dst_cid"])
+  ui_old = C.load_ui(str(RAW / want_old / "p0"), old[0][old[1] + "_cid"])
+  fields = lambda ui: {n.short_rid: (n.text or "") for n in ui.app_nodes() if n.editable}  # noqa: E731
+  return {"layout_same": ui_now.layout_sig == ui_old.layout_sig, "old_task": want_old, "new_task": want_now,
+          "old_origin": old[0]["origin"], "old": fields(ui_old), "new": fields(ui_now),
+          "jaccard": jac(content(want_now, probe["dst_cid"]), content(want_old, old[0][old[1] + "_cid"]))}
+
+
+if __name__ == "__main__" and "--example" in sys.argv:
+  print(json.dumps(example(), indent=1, ensure_ascii=False))
+
+
+def plot_example():
+  """(c) one real probe vs. the stored record of the same layout; (d) what the 164 probes bring back."""
+  import matplotlib
+  matplotlib.use("Agg")
+  import matplotlib.pyplot as plt
+  from matplotlib.patches import FancyBboxPatch
+  ex = example()
+  S = json.load(open(OUT / "content_freshness.json"))["summary"]
+  plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 9, "axes.spines.top": False,
+                       "axes.spines.right": False, "pdf.fonttype": 42})
+  GRAY, PINK, INK = "#b8bec6", "#d97fb4", "#222"
+  fig, (a, b) = plt.subplots(1, 2, figsize=(6.9, 2.3), gridspec_kw={"width_ratios": [1.7, 1]})
+  a.axis("off")
+  a.set_xlim(0, 1)
+  a.set_ylim(0, 1)
+  rows = [("Title", "event_title"), ("Description", "event_description"), ("Location", "event_location")]
+
+  def card(x0, head, sub, vals, other, color):
+    a.add_patch(FancyBboxPatch((x0, 0.05), 0.40, 0.70, boxstyle="round,pad=0.01,rounding_size=0.03",
+                               fc="white", ec=color, lw=1.6))
+    a.text(x0 + 0.20, 0.86, head, ha="center", fontsize=9, weight="bold", color=INK)
+    a.text(x0 + 0.20, 0.79, sub, ha="center", fontsize=7, color="#555", style="italic")
+    for k, (lab, rid) in enumerate(rows):
+      y = 0.64 - k * 0.2
+      v = vals.get(rid, "")
+      changed = v != other.get(rid, "")
+      a.add_patch(FancyBboxPatch((x0 + 0.02, y - 0.09), 0.36, 0.15, boxstyle="round,pad=0.005,rounding_size=0.02",
+                                 fc="#fbe3ef" if changed else "#eef0f3", ec="none"))
+      a.text(x0 + 0.035, y + 0.025, lab, fontsize=6.5, color="#666")
+      short = v if len(v) <= 22 else v[:21] + "…"
+      a.text(x0 + 0.035, y - 0.05, short, fontsize=6.8, color=PINK if changed else INK,
+             weight="bold" if changed else "normal")
+  card(0.0, "Stored record", "earlier task · model step",
+       ex["old"], ex["new"], GRAY)
+  card(0.60, "Probe in a later task", "during model reasoning", ex["new"], ex["old"], PINK)
+  a.annotate("", xy=(0.595, 0.42), xytext=(0.405, 0.42), arrowprops={"arrowstyle": "<->", "color": "#555"})
+  a.text(0.5, 0.48, "same\nlayout", ha="center", fontsize=7, color="#555")
+  a.text(0.5, 0.22, f"content\nJaccard\n{ex['jaccard']:.2f}", ha="center", fontsize=7, color=PINK)
+  a.set_title("(c) Same event page, new content (Simple Calendar)", fontsize=9, loc="left")
+
+  labels = ["layout recorded by\nearlier tasks", "layout recorded earlier\nin the same task"]
+  n1, k1 = S["probes_known_layout_earlier_tasks"], S["of_which_new_content"]
+  n2, k2 = S["probes_known_layout_same_task"], S["of_which_new_content_same_task"]
+  vals = [k1 / n1, k2 / n2]
+  b.bar([0, 1], vals, width=0.5, color=[PINK, GRAY])
+  for x, (val, k, n) in enumerate(zip(vals, (k1, k2), (n1, n2))):
+    b.text(x, val + 0.02, f"{val:.0%}\n({k}/{n})", ha="center", va="bottom", fontsize=8)
+  b.set_xticks([0, 1])
+  b.set_xticklabels(labels, fontsize=7.5)
+  b.set_ylim(0, 0.85)
+  b.set_ylabel("Probes showing content\nnot in any stored record", fontsize=8)
+  b.set_title(f"(d) What probes bring back ({S['probes']} probes)", fontsize=9, loc="left")
+  b.text(1.4, 0.80, f"{S['probes_new_layout'] / S['probes']:.0%} reach a layout\nno earlier task recorded",
+         ha="right", va="top", fontsize=7.5, color="#555")
+  fig.tight_layout()
+  for ext in ("pdf", "png"):
+    fig.savefig(OUT / f"content_freshness_example.{ext}", dpi=300, bbox_inches="tight")
+  print("saved", OUT / "content_freshness_example.png")
+
+
+if __name__ == "__main__" and "--plot-example" in sys.argv:
+  plot_example()
