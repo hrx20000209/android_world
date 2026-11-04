@@ -1,0 +1,4 @@
+{"step": 0, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "E|Button||Search|Search", "count": 1, "total": 1}, "p_rev_dropped": 23, "known_index": 201, "risky_dropped": 0, "mode": "none", "window_s": 0.008}
+{"step": 1, "probes": [], "stop": "transient_state", "window_s": 0.0}
+{"step": 2, "probes": [], "stop": "", "gate": {"key": "struct", "order": 2, "top": "E|ViewGroup|||Budget Spreadsheet", "count": 1, "total": 1}, "p_rev_dropped": 15, "known_index": 201, "risky_dropped": 0, "mode": "none", "window_s": 0.006}
+{"step": 3, "probes": [], "stop": "", "gate": {"key": "layout", "order": 0, "top": "STATUS", "count": 1, "total": 1}, "p_rev_dropped": 3, "known_index": 202, "risky_dropped": 0, "mode": "none", "window_s": 0.004}

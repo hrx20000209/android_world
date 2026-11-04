@@ -1,0 +1,10 @@
+{"step": 0, "join_wait_s": 0.0, "early_latency_s": 5.275, "full_latency_s": 7.624, "hidden_s": 1.222, "mismatch": false, "summary": "任务目标是复制指定文本到剪贴板。当前在手机主屏幕，需要先打开一个可以输入文本的应用。"}
+{"step": 1, "join_wait_s": 0.0, "early_latency_s": 13.296, "full_latency_s": 15.011, "hidden_s": 2.219, "mismatch": false, "summary": "任务目标是复制指定文本。当前已打开浏览器，下一步将点击地址栏以准备输入文本。"}
+{"step": 2, "join_wait_s": 0.0, "early_latency_s": 13.343, "full_latency_s": 14.638, "hidden_s": 1.085, "mismatch": false, "summary": "任务目标是复制指定文本。当前已打开浏览器并激活了地址栏，下一步将输入文本。"}
+{"step": 3, "join_wait_s": 0.62, "early_latency_s": 5.844, "full_latency_s": 8.127, "hidden_s": 1.423, "mismatch": false, "summary": "任务目标是复制指定文本。当前在浏览器中输入文本后，遇到了连接错误页面。下一步需要解决此问题以继续任务。"}
+{"step": 4, "join_wait_s": 0.0, "early_latency_s": 17.015, "full_latency_s": 20.12, "hidden_s": 1.243, "mismatch": false, "summary": "任务目标是复制指定文本。当前在浏览器中输入文本后遇到了连接错误页面，无法继续。下一步将返回主屏幕，寻找其他可以输入和复制文本的应用。"}
+{"step": 5, "join_wait_s": 0.0, "early_latency_s": 6.673, "full_latency_s": 7.607, "hidden_s": 0.986, "mismatch": false, "summary": "任务目标是复制指定文本。当前在浏览器中输入文本后遇到了连接错误页面，无法继续。下一步将返回主屏幕，寻找其他可以输入和复制文本的应用。"}
+{"step": 6, "join_wait_s": 0.535, "early_latency_s": 3.775, "full_latency_s": 5.411, "hidden_s": 0.88, "mismatch": false, "summary": "任务目标是复制指定文本。当前在浏览器中输入文本后遇到了连接错误页面，无法继续。下一步将尝试点击“Reload”按钮以解决此问题。"}
+{"step": 7, "join_wait_s": 0.234, "early_latency_s": 3.711, "full_latency_s": 4.736, "hidden_s": 0.581, "mismatch": false, "summary": "任务目标是复制指定文本。当前在浏览器中输入文本后遇到了连接错误页面，无法继续。下一步将尝试点击“Reload”按钮以解决此问题。"}
+{"step": 8, "join_wait_s": 0.061, "early_latency_s": 3.716, "full_latency_s": 4.655, "hidden_s": 0.658, "mismatch": false, "summary": "任务目标是复制指定文本。当前在浏览器中输入文本后遇到了连接错误页面，无法继续。下一步将尝试点击“Reload”按钮以解决此问题。"}
+{"step": 10, "join_wait_s": 0.056, "early_latency_s": 6.194, "full_latency_s": 8.101, "hidden_s": 1.638, "mismatch": false, "summary": "任务目标是复制指定文本。当前在浏览器中输入文本后遇到了连接错误页面，多次尝试刷新均未成功。下一步将尝试点击搜索栏以继续任务。"}

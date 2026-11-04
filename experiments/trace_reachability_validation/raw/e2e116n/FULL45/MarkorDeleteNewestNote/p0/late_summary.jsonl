@@ -1,0 +1,3 @@
+{"step": 0, "join_wait_s": 0.0, "early_latency_s": 16.744, "full_latency_s": 18.67, "hidden_s": 2.785, "mismatch": false, "summary": "I have identified the newest note ('2023_05_12_eager_nurse.md') and am now selecting it to initiate the deletion process."}
+{"step": 1, "join_wait_s": 0.0, "early_latency_s": 14.585, "full_latency_s": 15.651, "hidden_s": 0.889, "mismatch": false, "summary": "I have successfully selected the newest note ('2023_05_12_eager_nurse.md') and am now proceeding to delete it."}
+{"step": 2, "join_wait_s": 0.759, "early_latency_s": 13.579, "full_latency_s": 15.713, "hidden_s": 1.126, "mismatch": false, "summary": "I have selected the newest note and initiated the deletion process. I am now at the confirmation step, ready to finalize the deletion."}

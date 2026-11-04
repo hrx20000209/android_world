@@ -1,0 +1,6 @@
+{"key": ["net.gsantner.markor", "L|LinearLayout|opoc_filesystem_item__root"], "instance": "MarkorMoveNote/e2e116n_FULL45", "step": 2}
+{"key": ["net.gsantner.markor", "E|ImageView||Italic|Italic"], "instance": "MarkorCreateNoteFromClipboard/e2e116n_FULL45", "step": 10, "reason": "in_place_change"}
+{"key": ["com.android.settings", "E|TextView||Fix connectivity|Fix connectivity"], "instance": "SystemWifiTurnOnVerify/e2e116n_FULL45", "step": 3, "reason": "in_place_change"}
+{"key": ["com.android.settings", "E|LinearLayout|||Internet"], "instance": "SystemWifiTurnOn/e2e116n_FULL45", "step": 4, "reason": "in_place_change"}
+{"key": ["com.android.settings", "E|LinearLayout|||Bluetooth"], "instance": "SystemBluetoothTurnOffVerify/e2e116n_FULL45", "step": 3, "reason": "in_place_change"}
+{"key": ["com.android.settings", "E|LinearLayout|||Connection preferences"], "instance": "TurnOffWifiAndTurnOnBluetooth/e2e116n_FULL45", "step": 11, "reason": "in_place_change"}

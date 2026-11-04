@@ -1,0 +1,10 @@
+{"ttft_s": 4.697, "t_action_s": 15.061, "action_chars": 482, "prompt_tokens": 2562, "completion_tokens": 172, "t_end_s": 17.221, "chars": 610, "think": true, "decode_tok_s": 13.65, "early": true}
+{"ttft_s": 4.596, "t_action_s": 6.192, "action_chars": 43, "prompt_tokens": 2598, "completion_tokens": 60, "t_end_s": 7.411, "chars": 176, "think": false, "decode_tok_s": 20.96, "early": true}
+{"ttft_s": 4.595, "t_action_s": 16.145, "action_chars": 594, "prompt_tokens": 2633, "completion_tokens": 187, "t_end_s": 18.534, "chars": 742, "think": true, "decode_tok_s": 13.34, "early": true}
+{"ttft_s": 4.642, "t_action_s": 13.373, "action_chars": 432, "prompt_tokens": 2674, "completion_tokens": 161, "t_end_s": 15.141, "chars": 594, "think": true, "decode_tok_s": 15.24, "early": true}
+{"ttft_s": 4.807, "t_action_s": 5.919, "action_chars": 26, "prompt_tokens": 2797, "completion_tokens": 44, "t_end_s": 7.518, "chars": 134, "think": false, "decode_tok_s": 15.86, "early": true}
+{"ttft_s": 4.623, "t_action_s": 14.662, "action_chars": 512, "prompt_tokens": 2828, "completion_tokens": 162, "t_end_s": 16.699, "chars": 662, "think": true, "decode_tok_s": 13.33, "early": true}
+{"ttft_s": 4.932, "t_action_s": 11.164, "action_chars": 421, "prompt_tokens": 2852, "completion_tokens": 138, "t_end_s": 11.99, "chars": 571, "think": true, "decode_tok_s": 19.41, "early": true}
+{"ttft_s": 4.556, "t_action_s": 5.435, "action_chars": 59, "prompt_tokens": 2852, "completion_tokens": 56, "t_end_s": 6.253, "chars": 209, "think": false, "decode_tok_s": 32.41, "early": true}
+{"ttft_s": 5.12, "prompt_tokens": 2855, "completion_tokens": 14, "t_end_s": 6.138, "chars": 27, "think": false, "decode_tok_s": 12.77, "early": true}
+{"ttft_s": 4.953, "prompt_tokens": 2845, "completion_tokens": 155, "t_end_s": 13.783, "chars": 598, "think": true, "decode_tok_s": 17.44, "early": true}

@@ -1,0 +1,6 @@
+{"step": 0, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "L|FrameLayout|conversation_frame", "count": 2, "total": 3}, "p_rev_dropped": 0, "known_index": 354, "risky_dropped": 2, "mode": "none", "window_s": 0.006}
+{"step": 2, "probes": [], "stop": "transient_state", "window_s": 0.0}
+{"step": 3, "probes": [], "stop": "transient_state", "window_s": 0.0}
+{"step": 4, "probes": [], "stop": "transient_state", "window_s": 0.0}
+{"step": 5, "probes": [], "stop": "transient_state", "window_s": 0.0}
+{"step": 6, "probes": [], "stop": "transient_state", "window_s": 0.0}

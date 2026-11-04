@@ -1,0 +1,11 @@
+{"ttft_s": 4.574, "t_action_s": 13.829, "action_chars": 509, "prompt_tokens": 2548, "completion_tokens": 182, "t_end_s": 16.11, "chars": 720, "think": true, "decode_tok_s": 15.69, "early": true}
+{"ttft_s": 4.547, "t_action_s": 14.74, "action_chars": 522, "prompt_tokens": 2598, "completion_tokens": 186, "t_end_s": 17.354, "chars": 716, "think": true, "decode_tok_s": 14.45, "early": true}
+{"ttft_s": 4.57, "t_action_s": 16.629, "action_chars": 641, "prompt_tokens": 2641, "completion_tokens": 193, "t_end_s": 18.526, "chars": 812, "think": true, "decode_tok_s": 13.76, "early": true}
+{"ttft_s": 4.65, "t_action_s": 12.589, "action_chars": 402, "prompt_tokens": 2681, "completion_tokens": 136, "t_end_s": 14.354, "chars": 550, "think": true, "decode_tok_s": 13.91, "early": true}
+{"ttft_s": 4.551, "t_action_s": 13.581, "action_chars": 506, "prompt_tokens": 2713, "completion_tokens": 170, "t_end_s": 16.154, "chars": 693, "think": true, "decode_tok_s": 14.57, "early": true}
+{"ttft_s": 4.449, "t_action_s": 12.436, "action_chars": 402, "prompt_tokens": 2713, "completion_tokens": 136, "t_end_s": 13.233, "chars": 550, "think": true, "decode_tok_s": 15.37, "early": true}
+{"ttft_s": 4.756, "t_action_s": 13.989, "action_chars": 520, "prompt_tokens": 2745, "completion_tokens": 172, "t_end_s": 16.569, "chars": 707, "think": true, "decode_tok_s": 14.48, "early": true}
+{"ttft_s": 4.462, "t_action_s": 11.944, "action_chars": 464, "prompt_tokens": 2787, "completion_tokens": 150, "t_end_s": 12.822, "chars": 644, "think": true, "decode_tok_s": 17.82, "early": true}
+{"ttft_s": 4.598, "t_action_s": 5.676, "action_chars": 26, "prompt_tokens": 2827, "completion_tokens": 55, "t_end_s": 6.8, "chars": 222, "think": false, "decode_tok_s": 24.52, "early": true}
+{"ttft_s": 5.072, "t_action_s": 6.168, "action_chars": 26, "prompt_tokens": 2818, "completion_tokens": 53, "t_end_s": 6.985, "chars": 212, "think": false, "decode_tok_s": 27.18, "early": true}
+{"ttft_s": 4.95, "prompt_tokens": 2816, "completion_tokens": 39, "t_end_s": 7.492, "chars": 105, "think": false, "decode_tok_s": 14.95, "early": true}

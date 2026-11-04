@@ -1,0 +1,9 @@
+{"step": 0, "probes": [], "stop": "", "gate": {"order": -1}, "p_rev_dropped": 0, "known_index": 13, "risky_dropped": 0, "mode": "none", "window_s": 0.002}
+{"step": 1, "probes": [], "stop": "", "gate": {"order": -1}, "p_rev_dropped": 21, "known_index": 13, "risky_dropped": 0, "mode": "none", "window_s": 0.007}
+{"step": 2, "probes": [], "stop": "", "gate": {"order": -1}, "p_rev_dropped": 1, "known_index": 13, "risky_dropped": 0, "mode": "none", "window_s": 0.001}
+{"step": 3, "probes": [], "stop": "", "gate": {"order": -1}, "p_rev_dropped": 2, "known_index": 13, "risky_dropped": 0, "mode": "none", "window_s": 0.001}
+{"step": 4, "probes": [], "stop": "", "gate": {"order": -1}, "p_rev_dropped": 2, "known_index": 13, "risky_dropped": 0, "mode": "none", "window_s": 0.001}
+{"step": 5, "probes": [], "stop": "", "gate": {"order": -1}, "p_rev_dropped": 2, "known_index": 13, "risky_dropped": 0, "mode": "none", "window_s": 0.001}
+{"step": 6, "probes": [], "stop": "", "gate": {"order": -1}, "p_rev_dropped": 2, "known_index": 14, "risky_dropped": 0, "mode": "none", "window_s": 0.001}
+{"step": 7, "probes": [], "stop": "dialog_state", "window_s": 0.0}
+{"step": 8, "probes": [], "stop": "", "gate": {"order": -1}, "p_rev_dropped": 2, "known_index": 16, "risky_dropped": 0, "mode": "none", "window_s": 0.001}

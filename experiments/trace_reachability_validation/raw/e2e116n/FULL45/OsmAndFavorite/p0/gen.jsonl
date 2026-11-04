@@ -1,0 +1,12 @@
+{"ttft_s": 2.445, "t_action_s": 3.209, "action_chars": 25, "prompt_tokens": 2536, "completion_tokens": 36, "t_end_s": 5.041, "chars": 127, "think": false, "decode_tok_s": 13.48, "early": true}
+{"ttft_s": 4.575, "t_action_s": 12.675, "action_chars": 455, "prompt_tokens": 2559, "completion_tokens": 154, "t_end_s": 15.149, "chars": 682, "think": true, "decode_tok_s": 14.47, "early": true}
+{"ttft_s": 4.681, "t_action_s": 14.321, "action_chars": 483, "prompt_tokens": 2607, "completion_tokens": 170, "t_end_s": 16.232, "chars": 651, "think": true, "decode_tok_s": 14.63, "early": true}
+{"ttft_s": 4.587, "t_action_s": 12.248, "action_chars": 483, "prompt_tokens": 2650, "completion_tokens": 164, "t_end_s": 14.257, "chars": 658, "think": true, "decode_tok_s": 16.86, "early": true}
+{"ttft_s": 4.609, "t_action_s": 12.906, "action_chars": 414, "prompt_tokens": 2692, "completion_tokens": 160, "t_end_s": 14.873, "chars": 614, "think": true, "decode_tok_s": 15.49, "early": true}
+{"ttft_s": 4.657, "t_action_s": 14.737, "action_chars": 537, "prompt_tokens": 2742, "completion_tokens": 195, "t_end_s": 16.733, "chars": 801, "think": true, "decode_tok_s": 16.06, "early": true}
+{"ttft_s": 4.629, "t_action_s": 16.014, "action_chars": 540, "prompt_tokens": 2805, "completion_tokens": 187, "t_end_s": 18.547, "chars": 749, "think": true, "decode_tok_s": 13.36, "early": true}
+{"ttft_s": 4.644, "t_action_s": 12.848, "action_chars": 429, "prompt_tokens": 2851, "completion_tokens": 156, "t_end_s": 14.475, "chars": 620, "think": true, "decode_tok_s": 15.77, "early": true}
+{"ttft_s": 4.694, "t_action_s": 5.801, "action_chars": 26, "prompt_tokens": 2895, "completion_tokens": 58, "t_end_s": 6.945, "chars": 218, "think": false, "decode_tok_s": 25.32, "early": true}
+{"ttft_s": 4.954, "t_action_s": 13.302, "action_chars": 482, "prompt_tokens": 2914, "completion_tokens": 178, "t_end_s": 15.663, "chars": 684, "think": true, "decode_tok_s": 16.53, "early": true}
+{"ttft_s": 4.786, "t_action_s": 5.889, "action_chars": 26, "prompt_tokens": 2919, "completion_tokens": 71, "t_end_s": 8.279, "chars": 266, "think": false, "decode_tok_s": 20.04, "early": true}
+{"ttft_s": 4.94, "prompt_tokens": 2935, "completion_tokens": 25, "t_end_s": 6.518, "chars": 60, "think": false, "decode_tok_s": 15.21, "early": true}

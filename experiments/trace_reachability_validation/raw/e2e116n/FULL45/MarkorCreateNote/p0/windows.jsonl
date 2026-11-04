@@ -1,0 +1,16 @@
+{"step": 0, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "LONG_PRESS:L|LinearLayout|opoc_filesystem_item__root", "count": 3, "total": 7}, "p_rev_dropped": 3, "known_index": 140, "risky_dropped": 3, "mode": "none", "window_s": 0.005}
+{"step": 2, "probes": [], "stop": "transient_state", "window_s": 0.0}
+{"step": 3, "probes": [], "stop": "transient_state", "window_s": 0.0}
+{"step": 4, "probes": [], "stop": "transient_state", "window_s": 0.0}
+{"step": 5, "probes": [], "stop": "transient_state", "window_s": 0.0}
+{"step": 6, "probes": [], "stop": "transient_state", "window_s": 0.0}
+{"step": 7, "probes": [], "stop": "transient_state", "window_s": 0.0}
+{"step": 8, "probes": [], "stop": "transient_state", "window_s": 0.0}
+{"step": 9, "probes": [], "stop": "transient_state", "window_s": 0.0}
+{"step": 10, "probes": [], "stop": "transient_state", "window_s": 0.0}
+{"step": 11, "probes": [], "stop": "transient_state", "window_s": 0.0}
+{"step": 12, "probes": [], "stop": "transient_state", "window_s": 0.0}
+{"step": 13, "probes": [], "stop": "transient_state", "window_s": 0.0}
+{"step": 14, "probes": [], "stop": "transient_state", "window_s": 0.0}
+{"step": 15, "probes": [], "stop": "transient_state", "window_s": 0.0}
+{"step": 16, "probes": [], "stop": "transient_state", "window_s": 0.0}

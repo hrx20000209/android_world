@@ -1,0 +1,11 @@
+{"ttft_s": 4.717, "prompt_tokens": 2564, "completion_tokens": 21, "t_end_s": 5.667, "chars": 96, "think": false, "decode_tok_s": 21.05, "early": false}
+{"ttft_s": 5.076, "t_action_s": 13.32, "action_chars": 406, "prompt_tokens": 2576, "completion_tokens": 138, "t_end_s": 15.865, "chars": 603, "think": true, "decode_tok_s": 12.7, "early": false}
+{"ttft_s": 4.522, "t_action_s": 12.717, "action_chars": 363, "prompt_tokens": 2617, "completion_tokens": 129, "t_end_s": 14.188, "chars": 513, "think": true, "decode_tok_s": 13.24, "early": false}
+{"ttft_s": 4.769, "t_action_s": 5.439, "action_chars": 22, "prompt_tokens": 2649, "completion_tokens": 39, "t_end_s": 6.122, "chars": 172, "think": false, "decode_tok_s": 28.09, "early": false}
+{"ttft_s": 4.804, "t_action_s": 13.846, "action_chars": 447, "prompt_tokens": 2681, "completion_tokens": 148, "t_end_s": 15.983, "chars": 598, "think": true, "decode_tok_s": 13.15, "early": false}
+{"ttft_s": 4.828, "t_action_s": 14.781, "action_chars": 520, "prompt_tokens": 2716, "completion_tokens": 176, "t_end_s": 17.133, "chars": 708, "think": true, "decode_tok_s": 14.22, "early": false}
+{"ttft_s": 4.752, "t_action_s": 13.57, "action_chars": 427, "prompt_tokens": 2752, "completion_tokens": 147, "t_end_s": 14.887, "chars": 557, "think": true, "decode_tok_s": 14.41, "early": false}
+{"ttft_s": 4.751, "t_action_s": 5.538, "action_chars": 30, "prompt_tokens": 2778, "completion_tokens": 55, "t_end_s": 6.831, "chars": 164, "think": false, "decode_tok_s": 25.96, "early": false}
+{"ttft_s": 4.775, "t_action_s": 13.819, "action_chars": 445, "prompt_tokens": 2815, "completion_tokens": 158, "t_end_s": 15.919, "chars": 615, "think": true, "decode_tok_s": 14.09, "early": false}
+{"ttft_s": 4.971, "t_action_s": 13.489, "action_chars": 387, "prompt_tokens": 2838, "completion_tokens": 140, "t_end_s": 15.686, "chars": 567, "think": true, "decode_tok_s": 12.97, "early": false}
+{"ttft_s": 5.05, "prompt_tokens": 2838, "completion_tokens": 62, "t_end_s": 8.288, "chars": 142, "think": false, "decode_tok_s": 18.84, "early": false}

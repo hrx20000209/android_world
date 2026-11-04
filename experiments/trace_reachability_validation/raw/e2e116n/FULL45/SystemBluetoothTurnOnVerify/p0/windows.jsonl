@@ -1,0 +1,5 @@
+{"step": 0, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "OPEN_APP:Clock", "count": 2, "total": 14}, "p_rev_dropped": 0, "known_index": 386, "risky_dropped": 0, "mode": "none", "window_s": 0.005}
+{"step": 1, "probes": [], "stop": "", "gate": {"key": "struct", "order": 1, "top": "E|LinearLayout|||Network & internet", "count": 1, "total": 2}, "p_rev_dropped": 2, "known_index": 386, "risky_dropped": 0, "mode": "none", "window_s": 0.006}
+{"step": 2, "probes": [], "stop": "", "gate": {"key": "struct", "order": 2, "top": "E|LinearLayout|||Pair new device", "count": 1, "total": 1}, "p_rev_dropped": 0, "known_index": 386, "risky_dropped": 0, "mode": "none", "window_s": 0.004}
+{"step": 3, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "STATUS", "count": 2, "total": 4}, "p_rev_dropped": 0, "known_index": 387, "risky_dropped": 0, "mode": "none", "window_s": 0.003}
+{"step": 4, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "STATUS", "count": 2, "total": 4}, "p_rev_dropped": 1, "known_index": 388, "risky_dropped": 0, "mode": "none", "window_s": 0.004}

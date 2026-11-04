@@ -1,0 +1,11 @@
+{"ttft_s": 4.871, "prompt_tokens": 2551, "completion_tokens": 23, "t_end_s": 6.009, "chars": 108, "think": false, "decode_tok_s": 19.33, "early": false}
+{"ttft_s": 4.686, "t_action_s": 15.343, "action_chars": 501, "prompt_tokens": 2565, "completion_tokens": 175, "t_end_s": 17.329, "chars": 642, "think": true, "decode_tok_s": 13.76, "early": false}
+{"ttft_s": 4.703, "t_action_s": 6.304, "action_chars": 43, "prompt_tokens": 2602, "completion_tokens": 60, "t_end_s": 7.62, "chars": 176, "think": false, "decode_tok_s": 20.23, "early": false}
+{"ttft_s": 4.629, "t_action_s": 16.154, "action_chars": 594, "prompt_tokens": 2637, "completion_tokens": 188, "t_end_s": 18.557, "chars": 751, "think": true, "decode_tok_s": 13.43, "early": false}
+{"ttft_s": 4.719, "t_action_s": 13.387, "action_chars": 450, "prompt_tokens": 2679, "completion_tokens": 170, "t_end_s": 14.679, "chars": 601, "think": true, "decode_tok_s": 16.97, "early": false}
+{"ttft_s": 4.719, "t_action_s": 12.314, "action_chars": 381, "prompt_tokens": 2721, "completion_tokens": 150, "t_end_s": 14.059, "chars": 556, "think": true, "decode_tok_s": 15.95, "early": false}
+{"ttft_s": 4.56, "t_action_s": 5.671, "action_chars": 26, "prompt_tokens": 2757, "completion_tokens": 50, "t_end_s": 7.743, "chars": 165, "think": false, "decode_tok_s": 15.39, "early": false}
+{"ttft_s": 4.735, "t_action_s": 12.847, "action_chars": 435, "prompt_tokens": 2794, "completion_tokens": 154, "t_end_s": 15.211, "chars": 592, "think": true, "decode_tok_s": 14.6, "early": false}
+{"ttft_s": 4.752, "t_action_s": 5.629, "action_chars": 59, "prompt_tokens": 2833, "completion_tokens": 59, "t_end_s": 6.854, "chars": 226, "think": false, "decode_tok_s": 27.59, "early": false}
+{"ttft_s": 5.053, "t_action_s": 6.175, "action_chars": 26, "prompt_tokens": 2857, "completion_tokens": 50, "t_end_s": 7.973, "chars": 192, "think": false, "decode_tok_s": 16.78, "early": false}
+{"ttft_s": 4.967, "t_action_s": 6.76, "action_chars": 86, "prompt_tokens": 2858, "completion_tokens": 77, "t_end_s": 8.397, "chars": 169, "think": false, "decode_tok_s": 22.16, "early": false}

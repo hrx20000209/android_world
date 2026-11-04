@@ -1,0 +1,3 @@
+{"ttft_s": 4.678, "t_action_s": 12.999, "action_chars": 441, "prompt_tokens": 2564, "completion_tokens": 124, "t_end_s": 13.742, "chars": 524, "think": true, "decode_tok_s": 13.57, "early": true}
+{"ttft_s": 4.65, "t_action_s": 5.375, "action_chars": 30, "prompt_tokens": 2584, "completion_tokens": 33, "t_end_s": 7.018, "chars": 126, "think": false, "decode_tok_s": 13.51, "early": true}
+{"ttft_s": 4.575, "t_action_s": 14.085, "action_chars": 582, "prompt_tokens": 2607, "completion_tokens": 144, "t_end_s": 15.041, "chars": 680, "think": true, "decode_tok_s": 13.66, "early": true}

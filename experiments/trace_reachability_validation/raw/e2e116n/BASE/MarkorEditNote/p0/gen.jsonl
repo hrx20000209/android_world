@@ -1,0 +1,6 @@
+{"ttft_s": 4.692, "prompt_tokens": 2538, "completion_tokens": 29, "t_end_s": 6.288, "chars": 101, "think": false, "decode_tok_s": 17.54, "early": false}
+{"ttft_s": 4.755, "prompt_tokens": 2541, "completion_tokens": 36, "t_end_s": 7.133, "chars": 153, "think": false, "decode_tok_s": 14.72, "early": false}
+{"ttft_s": 4.709, "t_action_s": 13.67, "action_chars": 356, "prompt_tokens": 2554, "completion_tokens": 154, "t_end_s": 15.781, "chars": 465, "think": true, "decode_tok_s": 13.82, "early": false}
+{"ttft_s": 4.681, "t_action_s": 16.355, "action_chars": 495, "prompt_tokens": 2583, "completion_tokens": 170, "t_end_s": 17.551, "chars": 618, "think": true, "decode_tok_s": 13.13, "early": false}
+{"ttft_s": 4.754, "t_action_s": 12.643, "action_chars": 439, "prompt_tokens": 2619, "completion_tokens": 153, "t_end_s": 13.349, "chars": 562, "think": true, "decode_tok_s": 17.68, "early": false}
+{"ttft_s": 4.742, "t_action_s": 10.072, "action_chars": 376, "prompt_tokens": 2655, "completion_tokens": 126, "t_end_s": 11.153, "chars": 502, "think": true, "decode_tok_s": 19.5, "early": false}

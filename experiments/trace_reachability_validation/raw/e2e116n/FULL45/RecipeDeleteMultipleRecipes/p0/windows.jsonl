@@ -1,0 +1,5 @@
+{"step": 1, "probes": [], "stop": "", "gate": {"key": "struct", "order": 1, "top": "E|LinearLayout|||Delete", "count": 1, "total": 1}, "p_rev_dropped": 1, "known_index": 237, "risky_dropped": 0, "mode": "none", "window_s": 0.005}
+{"step": 2, "probes": [], "stop": "dialog_state", "window_s": 0.0}
+{"step": 4, "probes": [], "stop": "", "gate": {"key": "struct", "order": 1, "top": "E|LinearLayout|||Delete", "count": 1, "total": 1}, "p_rev_dropped": 1, "known_index": 237, "risky_dropped": 0, "mode": "none", "window_s": 0.002}
+{"step": 7, "probes": [], "stop": "", "gate": {"key": "struct", "order": 1, "top": "E|LinearLayout|||Delete", "count": 1, "total": 1}, "p_rev_dropped": 1, "known_index": 237, "risky_dropped": 0, "mode": "none", "window_s": 0.002}
+{"step": 9, "probes": [], "stop": "transient_state", "window_s": 0.0}

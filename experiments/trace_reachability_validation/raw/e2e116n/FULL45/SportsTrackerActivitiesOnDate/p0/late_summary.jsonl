@@ -1,0 +1,3 @@
+{"step": 0, "join_wait_s": 0.0, "early_latency_s": 12.999, "full_latency_s": 13.742, "hidden_s": 1.015, "mismatch": false, "summary": "Opened the OpenTracks app. Now need to find activities from September 26."}
+{"step": 1, "join_wait_s": 0.074, "early_latency_s": 5.376, "full_latency_s": 7.019, "hidden_s": 0.868, "mismatch": false, "summary": "The OpenTracks app is open. The next step is to search for activities on September 26."}
+{"step": 2, "join_wait_s": 0.0, "early_latency_s": 14.085, "full_latency_s": 15.041, "hidden_s": 1.48, "mismatch": false, "summary": "The task is complete. The OpenTracks app shows no recorded activities for September 26."}

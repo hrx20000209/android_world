@@ -1,0 +1,9 @@
+{"step": 0, "join_wait_s": 0.0, "early_latency_s": 5.577, "full_latency_s": 7.502, "hidden_s": 1.793, "mismatch": false, "summary": "任务目标是删除指定文件。当前在手机主屏幕，需要先打开文件管理器应用。"}
+{"step": 1, "join_wait_s": 0.383, "early_latency_s": 16.144, "full_latency_s": 18.127, "hidden_s": 1.322, "mismatch": false, "summary": "任务目标是删除指定文件。目前已成功打开文件管理器，但当前位于“Downloads”文件夹。下一步需要导航到“Pictures”文件夹。"}
+{"step": 2, "join_wait_s": 0.433, "early_latency_s": 15.682, "full_latency_s": 17.612, "hidden_s": 1.226, "mismatch": false, "summary": "任务目标是删除指定文件。目前已打开文件管理器，正准备进入 'sdk_gphone64_arm64' 存储设备以查找目标文件夹。"}
+{"step": 3, "join_wait_s": 0.0, "early_latency_s": 15.534, "full_latency_s": 16.912, "hidden_s": 1.089, "mismatch": false, "summary": "任务目标是删除指定文件。目前已成功打开文件管理器并进入了 'sdk_gphone64_arm64' 存储设备。下一步需要找到 'Pictures' 文件夹。"}
+{"step": 4, "join_wait_s": 0.093, "early_latency_s": 13.992, "full_latency_s": 15.812, "hidden_s": 1.457, "mismatch": false, "summary": "任务目标是删除指定文件。目前已成功打开文件管理器并导航到 'sdk_gphone64_arm64' 存储设备。下一步是进入 'Pictures' 文件夹以查找目标文件。"}
+{"step": 5, "join_wait_s": 0.0, "early_latency_s": 13.287, "full_latency_s": 15.853, "hidden_s": 2.642, "mismatch": false, "summary": "任务目标是删除指定文件。目前已成功导航到 'Pictures' 文件夹，并找到了目标文件 '2023_05_12_eager_nurse.jpg'。下一步是选中该文件以进行删除。"}
+{"step": 6, "join_wait_s": 0.941, "early_latency_s": 14.925, "full_latency_s": 16.922, "hidden_s": 0.75, "mismatch": false, "summary": "任务目标是删除指定文件。目前已成功打开文件管理器，导航到 'Pictures' 文件夹，并选中了目标文件 '2023_05_12_eager_nurse.jpg'。下一步是执行删除操作。"}
+{"step": 7, "join_wait_s": 0.393, "early_latency_s": 13.328, "full_latency_s": 15.828, "hidden_s": 1.838, "mismatch": false, "summary": "任务目标是删除指定文件。目前已成功导航到文件位置，选中了目标文件，并触发了删除操作。当前界面显示了删除确认对话框，等待确认。"}
+{"step": 8, "join_wait_s": 0.0, "early_latency_s": 12.352, "full_latency_s": 13.911, "hidden_s": 1.724, "mismatch": false, "summary": "任务目标是删除指定文件。所有步骤均已完成，文件 '2023_05_12_eager_nurse.jpg' 已成功删除。"}

@@ -1,0 +1,12 @@
+{"ttft_s": 4.86, "prompt_tokens": 2541, "completion_tokens": 29, "t_end_s": 6.529, "chars": 101, "think": false, "decode_tok_s": 16.78, "early": false}
+{"ttft_s": 4.808, "prompt_tokens": 2544, "completion_tokens": 10, "t_end_s": 5.366, "chars": 34, "think": false, "decode_tok_s": 16.13, "early": false}
+{"ttft_s": 4.59, "t_action_s": 12.608, "action_chars": 426, "prompt_tokens": 2560, "completion_tokens": 142, "t_end_s": 15.489, "chars": 626, "think": true, "decode_tok_s": 12.94, "early": false}
+{"ttft_s": 4.731, "t_action_s": 12.69, "action_chars": 455, "prompt_tokens": 2601, "completion_tokens": 151, "t_end_s": 14.239, "chars": 670, "think": true, "decode_tok_s": 15.78, "early": false}
+{"ttft_s": 4.795, "t_action_s": 5.886, "action_chars": 26, "prompt_tokens": 2645, "completion_tokens": 60, "t_end_s": 8.305, "chars": 269, "think": false, "decode_tok_s": 16.81, "early": false}
+{"ttft_s": 4.756, "t_action_s": 13.354, "action_chars": 426, "prompt_tokens": 2692, "completion_tokens": 141, "t_end_s": 14.706, "chars": 613, "think": true, "decode_tok_s": 14.07, "early": false}
+{"ttft_s": 4.805, "t_action_s": 16.608, "action_chars": 600, "prompt_tokens": 2731, "completion_tokens": 176, "t_end_s": 18.829, "chars": 797, "think": true, "decode_tok_s": 12.48, "early": false}
+{"ttft_s": 4.761, "t_action_s": 14.632, "action_chars": 484, "prompt_tokens": 2772, "completion_tokens": 175, "t_end_s": 16.642, "chars": 701, "think": true, "decode_tok_s": 14.65, "early": false}
+{"ttft_s": 4.766, "t_action_s": 14.124, "action_chars": 500, "prompt_tokens": 2826, "completion_tokens": 190, "t_end_s": 17.065, "chars": 728, "think": true, "decode_tok_s": 15.37, "early": false}
+{"ttft_s": 5.051, "t_action_s": 6.796, "action_chars": 53, "prompt_tokens": 2879, "completion_tokens": 82, "t_end_s": 8.154, "chars": 280, "think": false, "decode_tok_s": 26.1, "early": false}
+{"ttft_s": 5.057, "t_action_s": 6.24, "action_chars": 26, "prompt_tokens": 2922, "completion_tokens": 57, "t_end_s": 7.878, "chars": 213, "think": false, "decode_tok_s": 19.85, "early": false}
+{"ttft_s": 4.966, "prompt_tokens": 2926, "completion_tokens": 33, "t_end_s": 7.078, "chars": 84, "think": false, "decode_tok_s": 15.15, "early": false}

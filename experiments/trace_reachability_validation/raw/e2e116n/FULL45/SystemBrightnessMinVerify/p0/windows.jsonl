@@ -1,0 +1,4 @@
+{"step": 0, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "E|TextView||Predicted app: Settings|Settings", "count": 4, "total": 16}, "p_rev_dropped": 0, "known_index": 389, "risky_dropped": 0, "mode": "none", "window_s": 0.004}
+{"step": 1, "probes": [], "stop": "", "gate": {"key": "struct", "order": 1, "top": "E|LinearLayout|||Network & internet", "count": 2, "total": 4}, "p_rev_dropped": 2, "known_index": 389, "risky_dropped": 0, "mode": "none", "window_s": 0.008}
+{"step": 2, "probes": [], "stop": "", "gate": {"order": -1}, "p_rev_dropped": 0, "known_index": 390, "risky_dropped": 1, "mode": "none", "window_s": 0.005}
+{"step": 3, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "STATUS", "count": 4, "total": 10}, "p_rev_dropped": 0, "known_index": 391, "risky_dropped": 0, "mode": "none", "window_s": 0.004}

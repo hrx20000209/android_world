@@ -1,0 +1,2 @@
+{"ttft_s": 4.921, "prompt_tokens": 2550, "completion_tokens": 36, "t_end_s": 7.074, "chars": 166, "think": false, "decode_tok_s": 16.26, "early": false}
+{"ttft_s": 4.615, "prompt_tokens": 2560, "completion_tokens": 144, "t_end_s": 15.538, "chars": 662, "think": true, "decode_tok_s": 13.09, "early": false}

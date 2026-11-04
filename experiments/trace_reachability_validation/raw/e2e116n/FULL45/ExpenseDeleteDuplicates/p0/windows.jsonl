@@ -1,0 +1,6 @@
+{"step": 0, "probes": [], "stop": "", "gate": {"order": -1}, "p_rev_dropped": 4, "known_index": 71, "risky_dropped": 0, "mode": "none", "window_s": 0.004}
+{"step": 1, "probes": [], "stop": "transient_state", "window_s": 0.0}
+{"step": 2, "probes": [], "stop": "", "gate": {"order": -1}, "p_rev_dropped": 7, "known_index": 72, "risky_dropped": 1, "mode": "none", "window_s": 0.004}
+{"step": 3, "probes": [], "stop": "", "gate": {"key": "layout", "order": 0, "top": "E|ImageView|btn_delete||", "count": 1, "total": 1}, "p_rev_dropped": 0, "known_index": 73, "risky_dropped": 1, "mode": "none", "window_s": 0.001}
+{"step": 4, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "E|Button|btn_confirm||CONFIRM", "count": 1, "total": 1}, "p_rev_dropped": 0, "known_index": 73, "risky_dropped": 0, "mode": "none", "window_s": 0.001}
+{"step": 5, "probes": [], "stop": "", "gate": {"order": -1}, "p_rev_dropped": 0, "known_index": 73, "risky_dropped": 1, "mode": "none", "window_s": 0.005}

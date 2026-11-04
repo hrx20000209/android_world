@@ -1,0 +1,5 @@
+{"step": 0, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "OPEN_APP:Clock", "count": 1, "total": 1}, "p_rev_dropped": 0, "known_index": 49, "risky_dropped": 0, "mode": "none", "window_s": 0.003}
+{"step": 1, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "OPEN_APP:Clock", "count": 1, "total": 1}, "p_rev_dropped": 0, "known_index": 49, "risky_dropped": 0, "mode": "none", "window_s": 0.001}
+{"step": 2, "probes": [], "stop": "transient_state", "window_s": 0.0}
+{"step": 3, "probes": [], "stop": "", "gate": {"key": "struct", "order": 2, "top": "E|Button|fab|Start|Start", "count": 1, "total": 1}, "p_rev_dropped": 5, "known_index": 49, "risky_dropped": 0, "mode": "none", "window_s": 0.005}
+{"step": 4, "probes": [], "stop": "", "gate": {"key": "struct", "order": 3, "top": "E|Button|fab|Pause|Pause", "count": 1, "total": 1}, "p_rev_dropped": 5, "known_index": 49, "risky_dropped": 0, "mode": "none", "window_s": 0.002}

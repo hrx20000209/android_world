@@ -1,0 +1,13 @@
+{"step": 0, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "E|TextView||Predicted app: Settings|Settings", "count": 10, "total": 22}, "p_rev_dropped": 0, "known_index": 422, "risky_dropped": 0, "mode": "none", "window_s": 0.004}
+{"step": 1, "probes": [], "stop": "", "gate": {"key": "struct", "order": 1, "top": "SWIPE:down", "count": 4, "total": 9}, "p_rev_dropped": 2, "known_index": 422, "risky_dropped": 0, "mode": "none", "window_s": 0.005}
+{"step": 2, "probes": [], "stop": "", "gate": {"key": "struct", "order": 2, "top": "E|LinearLayout|||Internet", "count": 2, "total": 2}, "p_rev_dropped": 0, "known_index": 422, "risky_dropped": 0, "mode": "none", "window_s": 0.007}
+{"step": 3, "probes": [], "stop": "", "gate": {"key": "struct", "order": 3, "top": "STATUS", "count": 1, "total": 2}, "p_rev_dropped": 1, "known_index": 422, "risky_dropped": 0, "mode": "none", "window_s": 0.005}
+{"step": 4, "probes": [], "stop": "", "gate": {"key": "struct", "order": 3, "top": "STATUS", "count": 1, "total": 1}, "p_rev_dropped": 2, "known_index": 422, "risky_dropped": 0, "mode": "none", "window_s": 0.007}
+{"step": 5, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "STATUS", "count": 7, "total": 21}, "p_rev_dropped": 0, "known_index": 422, "risky_dropped": 0, "mode": "none", "window_s": 0.004}
+{"step": 6, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "SWIPE:down", "count": 4, "total": 9}, "p_rev_dropped": 2, "known_index": 422, "risky_dropped": 0, "mode": "none", "window_s": 0.005}
+{"step": 7, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "STATUS", "count": 7, "total": 21}, "p_rev_dropped": 0, "known_index": 423, "risky_dropped": 0, "mode": "none", "window_s": 0.005}
+{"step": 8, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "STATUS", "count": 7, "total": 21}, "p_rev_dropped": 9, "known_index": 424, "risky_dropped": 0, "mode": "none", "window_s": 0.005}
+{"step": 9, "probes": [], "stop": "transient_state", "window_s": 0.0}
+{"step": 10, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "STATUS", "count": 7, "total": 21}, "p_rev_dropped": 0, "known_index": 426, "risky_dropped": 0, "mode": "none", "window_s": 0.004}
+{"step": 11, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "STATUS", "count": 7, "total": 21}, "p_rev_dropped": 0, "known_index": 426, "risky_dropped": 0, "mode": "none", "window_s": 0.004}
+{"step": 12, "probes": [], "stop": "", "gate": {"key": "struct", "order": 0, "top": "STATUS", "count": 7, "total": 21}, "p_rev_dropped": 0, "known_index": 427, "risky_dropped": 0, "mode": "none", "window_s": 0.004}

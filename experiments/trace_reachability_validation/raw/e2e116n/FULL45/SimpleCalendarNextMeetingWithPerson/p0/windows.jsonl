@@ -1,0 +1,4 @@
+{"step": 0, "probes": [], "stop": "dialog_state", "window_s": 0.0}
+{"step": 1, "probes": [], "stop": "", "gate": {"key": "struct", "order": 1, "top": "L|View|month_view_background", "count": 5, "total": 5}, "p_rev_dropped": 1, "known_index": 294, "risky_dropped": 3, "mode": "none", "window_s": 0.02}
+{"step": 2, "probes": [], "stop": "transient_state", "window_s": 0.0}
+{"step": 3, "probes": [], "stop": "transient_state", "window_s": 0.0}

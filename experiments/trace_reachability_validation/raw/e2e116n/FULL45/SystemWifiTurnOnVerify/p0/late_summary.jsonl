@@ -1,0 +1,3 @@
+{"step": 0, "join_wait_s": 0.0, "early_latency_s": 5.573, "full_latency_s": 7.282, "hidden_s": 3.067, "mismatch": false, "summary": "The task is to turn on Wi-Fi. The first step is to open the Settings app."}
+{"step": 1, "join_wait_s": 0.0, "early_latency_s": 12.54, "full_latency_s": 14.117, "hidden_s": 1.705, "mismatch": false, "summary": "The task is to turn on Wi-Fi. I have successfully opened the Settings app and am now navigating to the network settings."}
+{"step": 2, "join_wait_s": 0.001, "early_latency_s": 12.46, "full_latency_s": 14.631, "hidden_s": 1.85, "mismatch": false, "summary": "I have successfully navigated to the 'Network & internet' settings. The next step is to enter the 'Internet' section to find the Wi-Fi toggle."}

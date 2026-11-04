@@ -1,0 +1,5 @@
+{"step": 0, "probes": [], "stop": "transient_state", "window_s": 0.0}
+{"step": 1, "probes": [], "stop": "transient_state", "window_s": 0.0}
+{"step": 3, "probes": [], "stop": "", "gate": {"key": "struct", "order": 1, "top": "E|LinearLayout|||Delete", "count": 4, "total": 4}, "p_rev_dropped": 1, "known_index": 237, "risky_dropped": 0, "mode": "none", "window_s": 0.004}
+{"step": 4, "probes": [], "stop": "dialog_state", "window_s": 0.0}
+{"step": 5, "probes": [], "stop": "transient_state", "window_s": 0.0}
