@@ -52,6 +52,10 @@ for o in obs:
         org = "explore" if side == "dst" and o["origin"] == "explore" else "agent"
         mem[s["package"]].append((rank[o["task"]], org, sk, ct))
 
+probed = collections.defaultdict(list)       # layout -> (rank, origin) of probe destinations
+for o in obs:
+  if o["origin"] == "explore" and o.get("dst") and "launcher" not in o["dst"]["package"]:
+    probed[F.lkey(o["dst"])].append((rank[o["task"]], "explore"))
 rows, seen = [], set()
 for o in obs:
   if o["origin"] != "agent" or not o.get("src_cid") or "launcher" in o["src"]["package"]:
@@ -64,7 +68,8 @@ for o in obs:
   if sk is None or ct is None:
     continue
   prev = [x for x in mem[o["src"]["package"]] if x[0] < rank[o["task"]]]
-  r = {"task": o["task"]}
+  r = {"task": o["task"], "probed_before": any(x[1] == "explore" and x[0] < rank[o["task"]]
+                                               for x in probed.get(L, ()))}
   for k in ("model", "all"):
     pool = [x for x in prev if k == "all" or x[1] == "agent"]
     r[k + "_struct"] = max([F.jac(sk, x[2]) for x in pool], default=0.0)
