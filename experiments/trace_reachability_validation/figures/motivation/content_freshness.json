@@ -1,0 +1,5763 @@
+{
+ "summary": {
+  "model_steps_on_recorded_layouts": 573,
+  "steps_whose_layout_was_probed_earlier_in_task": 101,
+  "mean_sim_history": 0.796,
+  "mean_sim_history_plus_exploration": 0.824,
+  "subset_mean_sim_history": 0.777,
+  "subset_mean_sim_history_plus_exploration": 0.935,
+  "subset_mean_sim_history_own": 0.983,
+  "subset_mean_sim_history_own_expl": 0.989,
+  "subset_exact_match_history_own": 96,
+  "subset_exact_match_history_own_expl": 97,
+  "subset_tasks": 30,
+  "subset_exact_match_history": 51,
+  "subset_exact_match_history_plus_exploration": 84,
+  "first_visits": 87,
+  "first_visits_probed_before": 5,
+  "first_probed_mean_hist": 0.845,
+  "first_probed_mean_hist_expl": 0.969,
+  "first_probed_exact_hist": 2,
+  "first_probed_exact_hist_expl": 3,
+  "first_probed_tasks": 5,
+  "first_unprobed_mean_hist": 0.817,
+  "probes": 164,
+  "probes_new_layout": 81,
+  "probes_known_layout_earlier_tasks": 82,
+  "of_which_new_content": 43,
+  "probes_known_layout_same_task": 69,
+  "of_which_new_content_same_task": 10
+ },
+ "steps": [
+  {
+   "task": "AudioRecorderRecordAudio",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "AudioRecorderRecordAudio",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "AudioRecorderRecordAudio",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "AudioRecorderRecordAudio",
+   "step": 3,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "AudioRecorderRecordAudio",
+   "step": 4,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "AudioRecorderRecordAudio",
+   "step": 5,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "AudioRecorderRecordAudio",
+   "step": 8,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "BrowserMaze",
+   "step": 0,
+   "hist": 0.5,
+   "hist_own": 0.5,
+   "hist_own_expl": 0.5,
+   "hist_expl": 0.5,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "BrowserMaze",
+   "step": 1,
+   "hist": 0.4,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.4,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "BrowserMaze",
+   "step": 4,
+   "hist": 0.8260869565217391,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.8260869565217391,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "BrowserMaze",
+   "step": 10,
+   "hist": 0.8260869565217391,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.8260869565217391,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "BrowserMaze",
+   "step": 12,
+   "hist": 0.8260869565217391,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.8260869565217391,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "BrowserMultiply",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "BrowserMultiply",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "BrowserMultiply",
+   "step": 2,
+   "hist": 0.8260869565217391,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.8260869565217391,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "CameraTakePhoto",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "CameraTakePhoto",
+   "step": 3,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "CameraTakePhoto",
+   "step": 5,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "CameraTakePhoto",
+   "step": 7,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "CameraTakePhoto",
+   "step": 9,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ClockStopWatchRunning",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ClockStopWatchRunning",
+   "step": 3,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ClockStopWatchRunning",
+   "step": 4,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ClockTimerEntry",
+   "step": 3,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ContactsNewContactDraft",
+   "step": 4,
+   "hist": 0.6571428571428571,
+   "hist_own": 0.6571428571428571,
+   "hist_own_expl": 0.6571428571428571,
+   "hist_expl": 0.6571428571428571,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "ContactsNewContactDraft",
+   "step": 6,
+   "hist": 0.5428571428571428,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.5428571428571428,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseDeleteDuplicates",
+   "step": 3,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseDeleteDuplicates",
+   "step": 4,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseAddMultipleFromMarkor",
+   "step": 8,
+   "hist": 0.41379310344827586,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.41379310344827586,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseAddMultipleFromMarkor",
+   "step": 9,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseAddMultipleFromMarkor",
+   "step": 10,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseAddMultipleFromMarkor",
+   "step": 15,
+   "hist": 0.4482758620689655,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.4482758620689655,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseAddSingle",
+   "step": 0,
+   "hist": 0.8260869565217391,
+   "hist_own": 0.8260869565217391,
+   "hist_own_expl": 0.8260869565217391,
+   "hist_expl": 0.8260869565217391,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "ExpenseAddSingle",
+   "step": 0,
+   "hist": 0.8260869565217391,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.8260869565217391,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseAddSingle",
+   "step": 2,
+   "hist": 0.1111111111111111,
+   "hist_own": 0.1111111111111111,
+   "hist_own_expl": 0.1111111111111111,
+   "hist_expl": 0.1111111111111111,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "ExpenseAddSingle",
+   "step": 3,
+   "hist": 0.72,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.72,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseDeleteDuplicates2",
+   "step": 1,
+   "hist": 0.6470588235294118,
+   "hist_own": 0.6470588235294118,
+   "hist_own_expl": 0.6470588235294118,
+   "hist_expl": 0.6470588235294118,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "ExpenseDeleteDuplicates2",
+   "step": 5,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseDeleteMultiple",
+   "step": 0,
+   "hist": 0.625,
+   "hist_own": 0.625,
+   "hist_own_expl": 0.625,
+   "hist_expl": 0.625,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "ExpenseDeleteMultiple",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseDeleteMultiple",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseDeleteMultiple",
+   "step": 4,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseDeleteMultiple",
+   "step": 5,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseDeleteMultiple",
+   "step": 7,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseDeleteMultiple",
+   "step": 8,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseDeleteMultiple",
+   "step": 9,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseDeleteMultiple2",
+   "step": 0,
+   "hist": 0.5555555555555556,
+   "hist_own": 0.5555555555555556,
+   "hist_own_expl": 0.5555555555555556,
+   "hist_expl": 0.5555555555555556,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "ExpenseDeleteMultiple2",
+   "step": 1,
+   "hist": 0.7575757575757576,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseDeleteMultiple2",
+   "step": 2,
+   "hist": 0.6666666666666666,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.6666666666666666,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseDeleteMultiple2",
+   "step": 3,
+   "hist": 0.4444444444444444,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.4444444444444444,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseDeleteMultiple2",
+   "step": 4,
+   "hist": 0.03225806451612903,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.03225806451612903,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseDeleteMultiple2",
+   "step": 5,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseDeleteMultiple2",
+   "step": 6,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseDeleteMultiple2",
+   "step": 8,
+   "hist": 0.6666666666666666,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.6666666666666666,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseDeleteMultiple2",
+   "step": 9,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseDeleteMultiple2",
+   "step": 10,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseDeleteMultiple2",
+   "step": 12,
+   "hist": 0.6428571428571429,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.6428571428571429,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseDeleteMultiple2",
+   "step": 13,
+   "hist": 0.3541666666666667,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.3541666666666667,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseDeleteMultiple2",
+   "step": 15,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseDeleteMultiple2",
+   "step": 17,
+   "hist": 0.6428571428571429,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.6428571428571429,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseAddMultiple",
+   "step": 0,
+   "hist": 0.75,
+   "hist_own": 0.75,
+   "hist_own_expl": 0.75,
+   "hist_expl": 0.75,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "ExpenseAddMultiple",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "ExpenseAddMultiple",
+   "step": 3,
+   "hist": 0.76,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.76,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseAddMultiple",
+   "step": 5,
+   "hist": 0.5384615384615384,
+   "hist_own": 0.5384615384615384,
+   "hist_own_expl": 0.5384615384615384,
+   "hist_expl": 0.5384615384615384,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseAddMultiple",
+   "step": 6,
+   "hist": 0.8333333333333334,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.8333333333333334,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseAddMultiple",
+   "step": 8,
+   "hist": 0.6666666666666666,
+   "hist_own": 0.6666666666666666,
+   "hist_own_expl": 0.6666666666666666,
+   "hist_expl": 0.6666666666666666,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "ExpenseAddMultiple",
+   "step": 9,
+   "hist": 0.6153846153846154,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.6153846153846154,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "FilesDeleteFile",
+   "step": 1,
+   "hist": 0.8181818181818182,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.8181818181818182,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "FilesDeleteFile",
+   "step": 3,
+   "hist": 0.42857142857142855,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.42857142857142855,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "FilesDeleteFile",
+   "step": 4,
+   "hist": 0.40540540540540543,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.40540540540540543,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "FilesDeleteFile",
+   "step": 5,
+   "hist": 0.39473684210526316,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.39473684210526316,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "FilesDeleteFile",
+   "step": 8,
+   "hist": 0.38461538461538464,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.38461538461538464,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "FilesMoveFile",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "FilesMoveFile",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "FilesMoveFile",
+   "step": 3,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "FilesMoveFile",
+   "step": 4,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "FilesMoveFile",
+   "step": 5,
+   "hist": 0.6666666666666666,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.6666666666666666,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "FilesMoveFile",
+   "step": 6,
+   "hist": 0.625,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.625,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "FilesMoveFile",
+   "step": 9,
+   "hist": 0.6666666666666666,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.6666666666666666,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateFolder",
+   "step": 0,
+   "hist": 0.6829268292682927,
+   "hist_own": 0.6829268292682927,
+   "hist_own_expl": 0.6829268292682927,
+   "hist_expl": 0.6829268292682927,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "MarkorDeleteAllNotes",
+   "step": 0,
+   "hist": 0.9032258064516129,
+   "hist_own": 0.9032258064516129,
+   "hist_own_expl": 0.9032258064516129,
+   "hist_expl": 0.9032258064516129,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "MarkorDeleteAllNotes",
+   "step": 3,
+   "hist": 0.8852459016393442,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.8852459016393442,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorDeleteNewestNote",
+   "step": 0,
+   "hist": 0.75,
+   "hist_own": 0.75,
+   "hist_own_expl": 0.75,
+   "hist_expl": 0.75,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "MarkorDeleteNewestNote",
+   "step": 1,
+   "hist": 0.75,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.75,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorDeleteNewestNote",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorDeleteNewestNote",
+   "step": 3,
+   "hist": 0.7397260273972602,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.7397260273972602,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorDeleteNote",
+   "step": 0,
+   "hist": 0.7362637362637363,
+   "hist_own": 0.7362637362637363,
+   "hist_own_expl": 0.7362637362637363,
+   "hist_expl": 0.7362637362637363,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "MarkorDeleteNote",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorDeleteNote",
+   "step": 3,
+   "hist": 0.7752808988764045,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.7752808988764045,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorEditNote",
+   "step": 0,
+   "hist": 0.7037037037037037,
+   "hist_own": 0.7037037037037037,
+   "hist_own_expl": 0.7037037037037037,
+   "hist_expl": 0.7037037037037037,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "MarkorCreateNote",
+   "step": 0,
+   "hist": 0.9491525423728814,
+   "hist_own": 0.9491525423728814,
+   "hist_own_expl": 0.9491525423728814,
+   "hist_expl": 0.9491525423728814,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "MarkorCreateNote",
+   "step": 2,
+   "hist": 0.6,
+   "hist_own": 0.6,
+   "hist_own_expl": 0.6,
+   "hist_expl": 0.6,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "MarkorCreateNote",
+   "step": 3,
+   "hist": 0.5172413793103449,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.5172413793103449,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNote",
+   "step": 4,
+   "hist": 0.5172413793103449,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.5172413793103449,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNote",
+   "step": 5,
+   "hist": 0.5172413793103449,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.5172413793103449,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNote",
+   "step": 6,
+   "hist": 0.5172413793103449,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.5172413793103449,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNote",
+   "step": 7,
+   "hist": 0.5172413793103449,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.5172413793103449,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNote",
+   "step": 8,
+   "hist": 0.5172413793103449,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.5172413793103449,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNote",
+   "step": 9,
+   "hist": 0.5172413793103449,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.5172413793103449,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNote",
+   "step": 10,
+   "hist": 0.5172413793103449,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.5172413793103449,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNote",
+   "step": 11,
+   "hist": 0.5172413793103449,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.5172413793103449,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNote",
+   "step": 12,
+   "hist": 0.5172413793103449,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.5172413793103449,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNote",
+   "step": 13,
+   "hist": 0.5172413793103449,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.5172413793103449,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNote",
+   "step": 14,
+   "hist": 0.5172413793103449,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.5172413793103449,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNote",
+   "step": 15,
+   "hist": 0.5172413793103449,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.5172413793103449,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNote",
+   "step": 16,
+   "hist": 0.5172413793103449,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.5172413793103449,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorTranscribeReceipt",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": true
+  },
+  {
+   "task": "MarkorTranscribeReceipt",
+   "step": 2,
+   "hist": 0.6,
+   "hist_own": 0.6,
+   "hist_own_expl": 0.6,
+   "hist_expl": 0.6,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorTranscribeReceipt",
+   "step": 3,
+   "hist": 0.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorTranscribeReceipt",
+   "step": 4,
+   "hist": 0.5172413793103449,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.5172413793103449,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorTranscribeReceipt",
+   "step": 5,
+   "hist": 0.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorTranscribeReceipt",
+   "step": 6,
+   "hist": 0.9491525423728814,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9491525423728814,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorTranscribeReceipt",
+   "step": 7,
+   "hist": 0.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorTranscribeReceipt",
+   "step": 8,
+   "hist": 0.5172413793103449,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorTranscribeReceipt",
+   "step": 9,
+   "hist": 0.5172413793103449,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.5172413793103449,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorTranscribeReceipt",
+   "step": 12,
+   "hist": 0.4,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.4,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorTranscribeReceipt",
+   "step": 14,
+   "hist": 0.4,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.4,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorMoveNote",
+   "step": 0,
+   "hist": 0.9180327868852459,
+   "hist_own": 0.9180327868852459,
+   "hist_own_expl": 0.9180327868852459,
+   "hist_expl": 0.9180327868852459,
+   "explored_before": true,
+   "first_visit": true
+  },
+  {
+   "task": "MarkorMoveNote",
+   "step": 1,
+   "hist": 0.7444444444444445,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorMoveNote",
+   "step": 2,
+   "hist": 0.611764705882353,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.611764705882353,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorMoveNote",
+   "step": 9,
+   "hist": 0.9180327868852459,
+   "hist_own": 0.967741935483871,
+   "hist_own_expl": 0.967741935483871,
+   "hist_expl": 0.9180327868852459,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorMoveNote",
+   "step": 10,
+   "hist": 0.9,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNoteFromClipboard",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "MarkorCreateNoteFromClipboard",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "MarkorCreateNoteFromClipboard",
+   "step": 3,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNoteFromClipboard",
+   "step": 5,
+   "hist": 0.9285714285714286,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9285714285714286,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNoteFromClipboard",
+   "step": 6,
+   "hist": 0.9285714285714286,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9285714285714286,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNoteFromClipboard",
+   "step": 7,
+   "hist": 0.9285714285714286,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9285714285714286,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNoteFromClipboard",
+   "step": 8,
+   "hist": 0.9285714285714286,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9285714285714286,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNoteFromClipboard",
+   "step": 10,
+   "hist": 0.9285714285714286,
+   "hist_own": 0.9285714285714286,
+   "hist_own_expl": 0.9285714285714286,
+   "hist_expl": 0.9285714285714286,
+   "explored_before": true,
+   "first_visit": true
+  },
+  {
+   "task": "MarkorCreateNoteFromClipboard",
+   "step": 11,
+   "hist": 0.9285714285714286,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9285714285714286,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNoteFromClipboard",
+   "step": 12,
+   "hist": 0.9285714285714286,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9285714285714286,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNoteFromClipboard",
+   "step": 13,
+   "hist": 0.9285714285714286,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9285714285714286,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorAddNoteHeader",
+   "step": 0,
+   "hist": 0.8160919540229885,
+   "hist_own": 0.8160919540229885,
+   "hist_own_expl": 0.8160919540229885,
+   "hist_expl": 0.8160919540229885,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "MarkorChangeNoteContent",
+   "step": 0,
+   "hist": 0.797752808988764,
+   "hist_own": 0.797752808988764,
+   "hist_own_expl": 0.797752808988764,
+   "hist_expl": 0.797752808988764,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "MarkorChangeNoteContent",
+   "step": 1,
+   "hist": 0.9285714285714286,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9285714285714286,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorChangeNoteContent",
+   "step": 4,
+   "hist": 0.9285714285714286,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9285714285714286,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorChangeNoteContent",
+   "step": 5,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorChangeNoteContent",
+   "step": 7,
+   "hist": 0.9285714285714286,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9285714285714286,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorChangeNoteContent",
+   "step": 8,
+   "hist": 0.9285714285714286,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9285714285714286,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorChangeNoteContent",
+   "step": 9,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNoteAndSms",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "MarkorCreateNoteAndSms",
+   "step": 3,
+   "hist": 0.6,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.6,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNoteAndSms",
+   "step": 4,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNoteAndSms",
+   "step": 5,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNoteAndSms",
+   "step": 6,
+   "hist": 0.9285714285714286,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9285714285714286,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNoteAndSms",
+   "step": 7,
+   "hist": 0.9285714285714286,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9285714285714286,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNoteAndSms",
+   "step": 8,
+   "hist": 0.9285714285714286,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9285714285714286,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNoteAndSms",
+   "step": 9,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNoteAndSms",
+   "step": 12,
+   "hist": 0.9285714285714286,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9285714285714286,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNoteAndSms",
+   "step": 13,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNoteAndSms",
+   "step": 15,
+   "hist": 0.4375,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.4375,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorCreateNoteAndSms",
+   "step": 16,
+   "hist": 0.4375,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.4375,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorMergeNotes",
+   "step": 0,
+   "hist": 0.8888888888888888,
+   "hist_own": 0.8888888888888888,
+   "hist_own_expl": 0.8888888888888888,
+   "hist_expl": 0.8888888888888888,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "MarkorMergeNotes",
+   "step": 1,
+   "hist": 0.9285714285714286,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9285714285714286,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorMergeNotes",
+   "step": 2,
+   "hist": 0.9285714285714286,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9285714285714286,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorMergeNotes",
+   "step": 5,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorMergeNotes",
+   "step": 7,
+   "hist": 0.9285714285714286,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9285714285714286,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorMergeNotes",
+   "step": 8,
+   "hist": 0.9285714285714286,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9285714285714286,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorMergeNotes",
+   "step": 9,
+   "hist": 0.9285714285714286,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9285714285714286,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorMergeNotes",
+   "step": 11,
+   "hist": 0.9285714285714286,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9285714285714286,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorMergeNotes",
+   "step": 12,
+   "hist": 0.8888888888888888,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.8888888888888888,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "MarkorMergeNotes",
+   "step": 13,
+   "hist": 0.8888888888888888,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "NotesIsTodo",
+   "step": 0,
+   "hist": 0.37735849056603776,
+   "hist_own": 0.37735849056603776,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": true
+  },
+  {
+   "task": "NotesIsTodo",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "NotesMeetingAttendeeCount",
+   "step": 0,
+   "hist": 0.9142857142857143,
+   "hist_own": 0.9142857142857143,
+   "hist_own_expl": 0.9142857142857143,
+   "hist_expl": 0.9142857142857143,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "NotesMeetingAttendeeCount",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "NotesMeetingAttendeeCount",
+   "step": 2,
+   "hist": 0.6923076923076923,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.6923076923076923,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "NotesMeetingAttendeeCount",
+   "step": 3,
+   "hist": 0.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "NotesRecipeIngredientCount",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "NotesRecipeIngredientCount",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "NotesRecipeIngredientCount",
+   "step": 2,
+   "hist": 0.8181818181818182,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.8181818181818182,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "NotesRecipeIngredientCount",
+   "step": 3,
+   "hist": 0.03225806451612903,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.03225806451612903,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "OsmAndMarker",
+   "step": 1,
+   "hist": 0.3333333333333333,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.3333333333333333,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "OsmAndMarker",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "OsmAndMarker",
+   "step": 3,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "OsmAndMarker",
+   "step": 4,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "OsmAndMarker",
+   "step": 5,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "OsmAndMarker",
+   "step": 6,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "OsmAndMarker",
+   "step": 7,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "OsmAndMarker",
+   "step": 8,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "OsmAndMarker",
+   "step": 9,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "OsmAndMarker",
+   "step": 10,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "OsmAndMarker",
+   "step": 12,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "OsmAndMarker",
+   "step": 13,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "OsmAndMarker",
+   "step": 14,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "OsmAndMarker",
+   "step": 17,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "OsmAndMarker",
+   "step": 18,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "OsmAndMarker",
+   "step": 20,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "OsmAndMarker",
+   "step": 21,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "OsmAndTrack",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "OsmAndTrack",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "OsmAndTrack",
+   "step": 2,
+   "hist": 0.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes",
+   "step": 0,
+   "hist": 0.38461538461538464,
+   "hist_own": 0.38461538461538464,
+   "hist_own_expl": 0.38461538461538464,
+   "hist_expl": 0.38461538461538464,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes",
+   "step": 4,
+   "hist": 0.35714285714285715,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.35714285714285715,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes3",
+   "step": 0,
+   "hist": 0.5,
+   "hist_own": 0.5,
+   "hist_own_expl": 0.5,
+   "hist_expl": 0.5,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes3",
+   "step": 1,
+   "hist": 0.4782608695652174,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes3",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes3",
+   "step": 3,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes3",
+   "step": 4,
+   "hist": 0.5,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.5,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes3",
+   "step": 5,
+   "hist": 0.4782608695652174,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes3",
+   "step": 6,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes3",
+   "step": 8,
+   "hist": 0.5,
+   "hist_own": 0.8,
+   "hist_own_expl": 0.8,
+   "hist_expl": 0.5,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes3",
+   "step": 9,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes3",
+   "step": 10,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes3",
+   "step": 12,
+   "hist": 0.5833333333333334,
+   "hist_own": 0.9,
+   "hist_own_expl": 0.9,
+   "hist_expl": 0.5833333333333334,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes3",
+   "step": 13,
+   "hist": 0.4782608695652174,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes3",
+   "step": 14,
+   "hist": 0.5833333333333334,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.5833333333333334,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes3",
+   "step": 15,
+   "hist": 0.4782608695652174,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes3",
+   "step": 16,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes3",
+   "step": 18,
+   "hist": 0.6666666666666666,
+   "hist_own": 0.9090909090909091,
+   "hist_own_expl": 0.9090909090909091,
+   "hist_expl": 0.6666666666666666,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteSingleRecipe",
+   "step": 1,
+   "hist": 0.5454545454545454,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteSingleRecipe",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteSingleRecipe",
+   "step": 3,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeAddSingleRecipe",
+   "step": 0,
+   "hist": 0.9,
+   "hist_own": 0.9,
+   "hist_own_expl": 0.9,
+   "hist_expl": 0.9,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "RecipeAddSingleRecipe",
+   "step": 3,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteMultipleRecipes",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "RecipeDeleteMultipleRecipes",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteMultipleRecipes",
+   "step": 4,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteMultipleRecipes",
+   "step": 7,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteMultipleRecipes",
+   "step": 9,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "RecipeDeleteSingleWithRecipeWithNoise",
+   "step": 0,
+   "hist": 0.7272727272727273,
+   "hist_own": 0.7272727272727273,
+   "hist_own_expl": 0.7272727272727273,
+   "hist_expl": 0.7272727272727273,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "RecipeDeleteSingleWithRecipeWithNoise",
+   "step": 1,
+   "hist": 0.36363636363636365,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.36363636363636365,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteSingleWithRecipeWithNoise",
+   "step": 3,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "RecipeDeleteSingleWithRecipeWithNoise",
+   "step": 4,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeAddMultipleRecipes",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "RecipeAddMultipleRecipes",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "RecipeAddMultipleRecipes",
+   "step": 3,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeAddMultipleRecipes",
+   "step": 4,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeAddMultipleRecipes",
+   "step": 6,
+   "hist": 0.42857142857142855,
+   "hist_own": 0.42857142857142855,
+   "hist_own_expl": 0.42857142857142855,
+   "hist_expl": 0.42857142857142855,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeAddMultipleRecipes",
+   "step": 7,
+   "hist": 0.6190476190476191,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeAddMultipleRecipes",
+   "step": 8,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeAddMultipleRecipes",
+   "step": 10,
+   "hist": 0.3333333333333333,
+   "hist_own": 0.3333333333333333,
+   "hist_own_expl": 0.3333333333333333,
+   "hist_expl": 0.3333333333333333,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeAddMultipleRecipes",
+   "step": 11,
+   "hist": 0.6190476190476191,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeAddMultipleRecipesFromImage",
+   "step": 0,
+   "hist": 0.8,
+   "hist_own": 0.8,
+   "hist_own_expl": 0.8,
+   "hist_expl": 0.8,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "RecipeAddMultipleRecipesFromImage",
+   "step": 1,
+   "hist": 0.8,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeAddMultipleRecipesFromImage",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeAddMultipleRecipesFromImage",
+   "step": 5,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeAddMultipleRecipesFromImage",
+   "step": 8,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeAddMultipleRecipesFromImage",
+   "step": 9,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeAddMultipleRecipesFromImage",
+   "step": 10,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeAddMultipleRecipesFromImage",
+   "step": 11,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeAddMultipleRecipesFromImage",
+   "step": 12,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeAddMultipleRecipesFromImage",
+   "step": 14,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeAddMultipleRecipesFromImage",
+   "step": 15,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeAddMultipleRecipesFromImage",
+   "step": 16,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeAddMultipleRecipesFromImage",
+   "step": 17,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeAddMultipleRecipesFromImage",
+   "step": 18,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeAddMultipleRecipesFromImage",
+   "step": 19,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeAddMultipleRecipesFromMarkor",
+   "step": 0,
+   "hist": 0.9491525423728814,
+   "hist_own": 0.9491525423728814,
+   "hist_own_expl": 0.9491525423728814,
+   "hist_expl": 0.9491525423728814,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "RecipeAddMultipleRecipesFromMarkor",
+   "step": 1,
+   "hist": 0.8888888888888888,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeAddMultipleRecipesFromMarkor",
+   "step": 5,
+   "hist": 0.9166666666666666,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9166666666666666,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeAddMultipleRecipesFromMarkor",
+   "step": 6,
+   "hist": 0.9166666666666666,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9166666666666666,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeAddMultipleRecipesFromMarkor2",
+   "step": 0,
+   "hist": 0.9666666666666667,
+   "hist_own": 0.9666666666666667,
+   "hist_own_expl": 0.9666666666666667,
+   "hist_expl": 0.9666666666666667,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "RecipeAddMultipleRecipesFromMarkor2",
+   "step": 1,
+   "hist": 0.9666666666666667,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9666666666666667,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes2",
+   "step": 0,
+   "hist": 0.7,
+   "hist_own": 0.7,
+   "hist_own_expl": 0.7,
+   "hist_expl": 0.7,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes2",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes2",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes2",
+   "step": 3,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes2",
+   "step": 4,
+   "hist": 0.7,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.7,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes2",
+   "step": 5,
+   "hist": 0.5454545454545454,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes2",
+   "step": 6,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes2",
+   "step": 8,
+   "hist": 0.7,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.7,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes2",
+   "step": 9,
+   "hist": 0.6190476190476191,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes2",
+   "step": 10,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes2",
+   "step": 12,
+   "hist": 0.7,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.7,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes2",
+   "step": 13,
+   "hist": 0.7,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes2",
+   "step": 14,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes2",
+   "step": 16,
+   "hist": 0.8,
+   "hist_own": 0.8888888888888888,
+   "hist_own_expl": 0.8888888888888888,
+   "hist_expl": 0.8,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes2",
+   "step": 17,
+   "hist": 0.5454545454545454,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes2",
+   "step": 18,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes2",
+   "step": 20,
+   "hist": 0.9,
+   "hist_own": 0.9,
+   "hist_own_expl": 0.9,
+   "hist_expl": 0.9,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes2",
+   "step": 21,
+   "hist": 0.5454545454545454,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes2",
+   "step": 22,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteDuplicateRecipes2",
+   "step": 24,
+   "hist": 0.9090909090909091,
+   "hist_own": 0.9090909090909091,
+   "hist_own_expl": 0.9090909090909091,
+   "hist_expl": 0.9090909090909091,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteMultipleRecipesWithNoise",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "RecipeDeleteMultipleRecipesWithNoise",
+   "step": 2,
+   "hist": 0.6190476190476191,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteMultipleRecipesWithNoise",
+   "step": 3,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteMultipleRecipesWithNoise",
+   "step": 4,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteMultipleRecipesWithNoise",
+   "step": 5,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteMultipleRecipesWithNoise",
+   "step": 6,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RecipeDeleteMultipleRecipesWithNoise",
+   "step": 7,
+   "hist": 0.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RetroPlayingQueue",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RetroPlayingQueue",
+   "step": 3,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RetroPlayingQueue",
+   "step": 5,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RetroPlayingQueue",
+   "step": 13,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RetroPlaylistDuration",
+   "step": 0,
+   "hist": 0.39473684210526316,
+   "hist_own": 0.39473684210526316,
+   "hist_own_expl": 0.39473684210526316,
+   "hist_expl": 0.39473684210526316,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "RetroPlaylistDuration",
+   "step": 4,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "RetroPlaylistDuration",
+   "step": 9,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RetroSavePlaylist",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "RetroSavePlaylist",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RetroSavePlaylist",
+   "step": 3,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "RetroSavePlaylist",
+   "step": 4,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RetroSavePlaylist",
+   "step": 5,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RetroSavePlaylist",
+   "step": 6,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RetroSavePlaylist",
+   "step": 7,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RetroSavePlaylist",
+   "step": 8,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RetroSavePlaylist",
+   "step": 9,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RetroSavePlaylist",
+   "step": 10,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RetroSavePlaylist",
+   "step": 11,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RetroSavePlaylist",
+   "step": 12,
+   "hist": 0.6666666666666666,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.6666666666666666,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RetroSavePlaylist",
+   "step": 13,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RetroSavePlaylist",
+   "step": 15,
+   "hist": 0.6666666666666666,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.6666666666666666,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RetroSavePlaylist",
+   "step": 16,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RetroSavePlaylist",
+   "step": 18,
+   "hist": 0.6666666666666666,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.6666666666666666,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RetroSavePlaylist",
+   "step": 19,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RetroSavePlaylist",
+   "step": 21,
+   "hist": 0.6666666666666666,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.6666666666666666,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RetroSavePlaylist",
+   "step": 22,
+   "hist": 0.6666666666666666,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.6666666666666666,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "RetroSavePlaylist",
+   "step": 23,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SaveCopyOfReceiptTaskEval",
+   "step": 0,
+   "hist": 0.8,
+   "hist_own": 0.8,
+   "hist_own_expl": 0.8,
+   "hist_expl": 0.8,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SaveCopyOfReceiptTaskEval",
+   "step": 6,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SimpleCalendarAnyEventsOnDate",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SimpleCalendarAnyEventsOnDate",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAnyEventsOnDate",
+   "step": 2,
+   "hist": 0.08823529411764706,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.08823529411764706,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarEventsInTimeRange",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SimpleCalendarEventsInTimeRange",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarEventsInTimeRange",
+   "step": 2,
+   "hist": 0.26666666666666666,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.26666666666666666,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarEventsOnDate",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SimpleCalendarEventsOnDate",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarEventsOnDate",
+   "step": 2,
+   "hist": 0.6666666666666666,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.6666666666666666,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarNextEvent",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SimpleCalendarNextEvent",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarLocationOfEvent",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SimpleCalendarLocationOfEvent",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarLocationOfEvent",
+   "step": 2,
+   "hist": 0.40384615384615385,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.40384615384615385,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarDeleteOneEvent",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SimpleCalendarDeleteOneEvent",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarDeleteOneEvent",
+   "step": 2,
+   "hist": 0.2222222222222222,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.2222222222222222,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarDeleteOneEvent",
+   "step": 3,
+   "hist": 0.14285714285714285,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.14285714285714285,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarDeleteOneEvent",
+   "step": 6,
+   "hist": 0.25,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.25,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarNextMeetingWithPerson",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SimpleCalendarNextMeetingWithPerson",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarDeleteEventsOnRelativeDay",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SimpleCalendarDeleteEventsOnRelativeDay",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarDeleteEventsOnRelativeDay",
+   "step": 2,
+   "hist": 0.4666666666666667,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.4666666666666667,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarDeleteEventsOnRelativeDay",
+   "step": 7,
+   "hist": 0.7777777777777778,
+   "hist_own": 0.7777777777777778,
+   "hist_own_expl": 0.7777777777777778,
+   "hist_expl": 0.7777777777777778,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarDeleteEvents",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SimpleCalendarDeleteEvents",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarDeleteEvents",
+   "step": 2,
+   "hist": 0.5909090909090909,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.5909090909090909,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarDeleteEvents",
+   "step": 3,
+   "hist": 0.4,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.4,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarDeleteEvents",
+   "step": 4,
+   "hist": 0.4,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.4,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarDeleteEvents",
+   "step": 5,
+   "hist": 0.4,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.4,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarDeleteEvents",
+   "step": 7,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarEventOnDateAtTime",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SimpleCalendarEventOnDateAtTime",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarEventOnDateAtTime",
+   "step": 2,
+   "hist": 0.2857142857142857,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.2857142857142857,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarEventOnDateAtTime",
+   "step": 3,
+   "hist": 0.1724137931034483,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarEventOnDateAtTime",
+   "step": 4,
+   "hist": 0.25,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarEventOnDateAtTime",
+   "step": 5,
+   "hist": 0.4,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarEventOnDateAtTime",
+   "step": 6,
+   "hist": 0.4,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarEventOnDateAtTime",
+   "step": 7,
+   "hist": 0.4,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarEventOnDateAtTime",
+   "step": 8,
+   "hist": 0.4,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarEventOnDateAtTime",
+   "step": 9,
+   "hist": 0.4,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarFirstEventAfterStartTime",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SimpleCalendarFirstEventAfterStartTime",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarFirstEventAfterStartTime",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarFirstEventAfterStartTime",
+   "step": 3,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEvent",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SimpleCalendarAddOneEvent",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEvent",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEvent",
+   "step": 17,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventRelativeDay",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SimpleCalendarAddOneEventRelativeDay",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventRelativeDay",
+   "step": 2,
+   "hist": 0.7,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.7,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventRelativeDay",
+   "step": 3,
+   "hist": 0.21052631578947367,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.21052631578947367,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventRelativeDay",
+   "step": 4,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventRelativeDay",
+   "step": 6,
+   "hist": 0.875,
+   "hist_own": 0.875,
+   "hist_own_expl": 0.875,
+   "hist_expl": 0.875,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventRelativeDay",
+   "step": 9,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventRelativeDay",
+   "step": 10,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventRelativeDay",
+   "step": 11,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventRelativeDay",
+   "step": 12,
+   "hist": 0.3333333333333333,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.3333333333333333,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventRelativeDay",
+   "step": 13,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventRelativeDay",
+   "step": 14,
+   "hist": 0.3333333333333333,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.3333333333333333,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventRelativeDay",
+   "step": 15,
+   "hist": 0.3333333333333333,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.3333333333333333,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventRelativeDay",
+   "step": 16,
+   "hist": 0.3333333333333333,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.3333333333333333,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventRelativeDay",
+   "step": 17,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventRelativeDay",
+   "step": 18,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventInTwoWeeks",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SimpleCalendarAddOneEventInTwoWeeks",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventInTwoWeeks",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventInTwoWeeks",
+   "step": 4,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventInTwoWeeks",
+   "step": 5,
+   "hist": 0.7142857142857143,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.7142857142857143,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventInTwoWeeks",
+   "step": 6,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventInTwoWeeks",
+   "step": 8,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventTomorrow",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SimpleCalendarAddOneEventTomorrow",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventTomorrow",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventTomorrow",
+   "step": 4,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventTomorrow",
+   "step": 5,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventTomorrow",
+   "step": 6,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventTomorrow",
+   "step": 7,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventTomorrow",
+   "step": 8,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventTomorrow",
+   "step": 9,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventTomorrow",
+   "step": 10,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventTomorrow",
+   "step": 11,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventTomorrow",
+   "step": 12,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventTomorrow",
+   "step": 13,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventTomorrow",
+   "step": 14,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddOneEventTomorrow",
+   "step": 15,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddRepeatingEvent",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SimpleCalendarAddRepeatingEvent",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddRepeatingEvent",
+   "step": 2,
+   "hist": 0.5384615384615384,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.5384615384615384,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddRepeatingEvent",
+   "step": 3,
+   "hist": 0.5384615384615384,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.5384615384615384,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddRepeatingEvent",
+   "step": 5,
+   "hist": 0.7647058823529411,
+   "hist_own": 0.7647058823529411,
+   "hist_own_expl": 0.7647058823529411,
+   "hist_expl": 0.7647058823529411,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddRepeatingEvent",
+   "step": 6,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddRepeatingEvent",
+   "step": 7,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddRepeatingEvent",
+   "step": 8,
+   "hist": 0.6,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.6,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddRepeatingEvent",
+   "step": 9,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddRepeatingEvent",
+   "step": 10,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddRepeatingEvent",
+   "step": 11,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddRepeatingEvent",
+   "step": 12,
+   "hist": 0.6,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.6,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddRepeatingEvent",
+   "step": 15,
+   "hist": 0.5,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.5,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddRepeatingEvent",
+   "step": 16,
+   "hist": 0.65,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.65,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleCalendarAddRepeatingEvent",
+   "step": 17,
+   "hist": 0.6666666666666666,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.6666666666666666,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleDrawProCreateDrawing",
+   "step": 10,
+   "hist": 0.25,
+   "hist_own": 0.25,
+   "hist_own_expl": 0.25,
+   "hist_expl": 0.25,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SimpleSmsReplyMostRecent",
+   "step": 0,
+   "hist": 0.3888888888888889,
+   "hist_own": 0.3888888888888889,
+   "hist_own_expl": 0.3888888888888889,
+   "hist_expl": 0.3888888888888889,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SimpleSmsSend",
+   "step": 0,
+   "hist": 0.45454545454545453,
+   "hist_own": 0.45454545454545453,
+   "hist_own_expl": 0.45454545454545453,
+   "hist_expl": 0.45454545454545453,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SimpleSmsSendClipboardContent",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SimpleSmsSendClipboardContent",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SimpleSmsSendClipboardContent",
+   "step": 3,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleSmsSendClipboardContent",
+   "step": 4,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleSmsSendClipboardContent",
+   "step": 5,
+   "hist": 0.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleSmsSendClipboardContent",
+   "step": 6,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleSmsReply",
+   "step": 0,
+   "hist": 0.4,
+   "hist_own": 0.4,
+   "hist_own_expl": 0.4,
+   "hist_expl": 0.4,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SimpleSmsReply",
+   "step": 3,
+   "hist": 0.4,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.4,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleSmsReply",
+   "step": 6,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleSmsReply",
+   "step": 8,
+   "hist": 0.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleSmsReply",
+   "step": 9,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleSmsSendReceivedAddress",
+   "step": 0,
+   "hist": 0.6363636363636364,
+   "hist_own": 0.6363636363636364,
+   "hist_own_expl": 0.6363636363636364,
+   "hist_expl": 0.6363636363636364,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SimpleSmsSendReceivedAddress",
+   "step": 10,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleSmsSendReceivedAddress",
+   "step": 12,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleSmsSendReceivedAddress",
+   "step": 14,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SimpleSmsSendReceivedAddress",
+   "step": 16,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SportsTrackerActivityDuration",
+   "step": 0,
+   "hist": 0.36923076923076925,
+   "hist_own": 0.36923076923076925,
+   "hist_own_expl": 0.36923076923076925,
+   "hist_expl": 0.36923076923076925,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SportsTrackerTotalDurationForCategoryThisWeek",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SportsTrackerTotalDurationForCategoryThisWeek",
+   "step": 1,
+   "hist": 0.36363636363636365,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.36363636363636365,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SportsTrackerActivitiesOnDate",
+   "step": 0,
+   "hist": 0.7058823529411765,
+   "hist_own": 0.7058823529411765,
+   "hist_own_expl": 0.7058823529411765,
+   "hist_expl": 0.7058823529411765,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SportsTrackerLongestDistanceActivity",
+   "step": 0,
+   "hist": 0.7115384615384616,
+   "hist_own": 0.7115384615384616,
+   "hist_own_expl": 0.7115384615384616,
+   "hist_expl": 0.7115384615384616,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SportsTrackerLongestDistanceActivity",
+   "step": 1,
+   "hist": 0.5344827586206896,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.5344827586206896,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SportsTrackerTotalDistanceForCategoryOverInterval",
+   "step": 0,
+   "hist": 0.8478260869565217,
+   "hist_own": 0.8478260869565217,
+   "hist_own_expl": 0.8478260869565217,
+   "hist_expl": 0.8478260869565217,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "SportsTrackerTotalDistanceForCategoryOverInterval",
+   "step": 1,
+   "hist": 0.5263157894736842,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.5263157894736842,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SportsTrackerTotalDistanceForCategoryOverInterval",
+   "step": 2,
+   "hist": 0.4126984126984127,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.4126984126984127,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SportsTrackerTotalDistanceForCategoryOverInterval",
+   "step": 3,
+   "hist": 0.4126984126984127,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.4126984126984127,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SportsTrackerTotalDistanceForCategoryOverInterval",
+   "step": 4,
+   "hist": 0.03508771929824561,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.03508771929824561,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SportsTrackerTotalDistanceForCategoryOverInterval",
+   "step": 6,
+   "hist": 0.275,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.275,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SportsTrackerTotalDistanceForCategoryOverInterval",
+   "step": 7,
+   "hist": 0.275,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.275,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBluetoothTurnOn",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBluetoothTurnOn",
+   "step": 2,
+   "hist": 0.04,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.04,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBluetoothTurnOn",
+   "step": 3,
+   "hist": 0.05263157894736842,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.05263157894736842,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemWifiTurnOn",
+   "step": 2,
+   "hist": 0.043478260869565216,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.043478260869565216,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemWifiTurnOn",
+   "step": 3,
+   "hist": 0.9545454545454546,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9545454545454546,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemWifiTurnOn",
+   "step": 4,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SystemWifiTurnOn",
+   "step": 5,
+   "hist": 0.13043478260869565,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.13043478260869565,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBluetoothTurnOff",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": true
+  },
+  {
+   "task": "SystemBluetoothTurnOff",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBluetoothTurnOff",
+   "step": 3,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBluetoothTurnOff",
+   "step": 4,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBluetoothTurnOff",
+   "step": 5,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBluetoothTurnOff",
+   "step": 6,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBluetoothTurnOff",
+   "step": 7,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBluetoothTurnOff",
+   "step": 8,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBluetoothTurnOnVerify",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBluetoothTurnOnVerify",
+   "step": 2,
+   "hist": 0.6363636363636364,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.6363636363636364,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBluetoothTurnOnVerify",
+   "step": 3,
+   "hist": 0.09523809523809523,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.09523809523809523,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBluetoothTurnOnVerify",
+   "step": 4,
+   "hist": 0.4,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.4,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemWifiTurnOff",
+   "step": 1,
+   "hist": 0.9545454545454546,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9545454545454546,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemWifiTurnOff",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemWifiTurnOff",
+   "step": 3,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemWifiTurnOff",
+   "step": 4,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBrightnessMinVerify",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBrightnessMinVerify",
+   "step": 3,
+   "hist": 0.05,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.05,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemWifiTurnOffVerify",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemWifiTurnOffVerify",
+   "step": 3,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemWifiTurnOffVerify",
+   "step": 4,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemWifiTurnOffVerify",
+   "step": 5,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemWifiTurnOffVerify",
+   "step": 6,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemWifiTurnOffVerify",
+   "step": 7,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemWifiTurnOffVerify",
+   "step": 8,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemWifiTurnOffVerify",
+   "step": 9,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBrightnessMin",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBrightnessMin",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBrightnessMin",
+   "step": 3,
+   "hist": 0.9166666666666666,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBrightnessMax",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBrightnessMax",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBrightnessMax",
+   "step": 3,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBrightnessMax",
+   "step": 4,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBrightnessMax",
+   "step": 5,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBluetoothTurnOffVerify",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBluetoothTurnOffVerify",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBluetoothTurnOffVerify",
+   "step": 3,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBluetoothTurnOffVerify",
+   "step": 4,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBluetoothTurnOffVerify",
+   "step": 5,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBluetoothTurnOffVerify",
+   "step": 6,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBluetoothTurnOffVerify",
+   "step": 7,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBluetoothTurnOffVerify",
+   "step": 8,
+   "hist": 0.5,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBrightnessMaxVerify",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBrightnessMaxVerify",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemBrightnessMaxVerify",
+   "step": 3,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "SystemCopyToClipboard",
+   "step": 1,
+   "hist": 0.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "SystemCopyToClipboard",
+   "step": 2,
+   "hist": 0.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TasksDueOnDate",
+   "step": 0,
+   "hist": 0.7142857142857143,
+   "hist_own": 0.7142857142857143,
+   "hist_own_expl": 0.7142857142857143,
+   "hist_expl": 0.7142857142857143,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "TasksDueOnDate",
+   "step": 1,
+   "hist": 0.3055555555555556,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.3055555555555556,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TasksHighPriorityTasks",
+   "step": 0,
+   "hist": 0.28,
+   "hist_own": 0.28,
+   "hist_own_expl": 0.28,
+   "hist_expl": 0.28,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "TasksIncompleteTasksOnDate",
+   "step": 0,
+   "hist": 0.3,
+   "hist_own": 0.3,
+   "hist_own_expl": 0.3,
+   "hist_expl": 0.3,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "TasksCompletedTasksForDate",
+   "step": 0,
+   "hist": 0.53125,
+   "hist_own": 0.53125,
+   "hist_own_expl": 0.53125,
+   "hist_expl": 0.53125,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "TasksCompletedTasksForDate",
+   "step": 2,
+   "hist": 0.53125,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.53125,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TasksCompletedTasksForDate",
+   "step": 3,
+   "hist": 0.53125,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.53125,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TasksCompletedTasksForDate",
+   "step": 5,
+   "hist": 0.53125,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.53125,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TasksCompletedTasksForDate",
+   "step": 6,
+   "hist": 0.53125,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.53125,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TasksCompletedTasksForDate",
+   "step": 7,
+   "hist": 0.53125,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.53125,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TasksCompletedTasksForDate",
+   "step": 8,
+   "hist": 0.53125,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.53125,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TasksCompletedTasksForDate",
+   "step": 9,
+   "hist": 0.53125,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.53125,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TasksHighPriorityTasksDueOnDate",
+   "step": 0,
+   "hist": 0.8461538461538461,
+   "hist_own": 0.8461538461538461,
+   "hist_own_expl": 0.8461538461538461,
+   "hist_expl": 0.8461538461538461,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "TasksHighPriorityTasksDueOnDate",
+   "step": 5,
+   "hist": 0.5142857142857142,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.5142857142857142,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TasksHighPriorityTasksDueOnDate",
+   "step": 7,
+   "hist": 0.5142857142857142,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.5142857142857142,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TasksHighPriorityTasksDueOnDate",
+   "step": 9,
+   "hist": 0.5142857142857142,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.5142857142857142,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TurnOffWifiAndTurnOnBluetooth",
+   "step": 1,
+   "hist": 0.9545454545454546,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9545454545454546,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TurnOffWifiAndTurnOnBluetooth",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TurnOffWifiAndTurnOnBluetooth",
+   "step": 3,
+   "hist": 0.17647058823529413,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.17647058823529413,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TurnOffWifiAndTurnOnBluetooth",
+   "step": 5,
+   "hist": 0.9545454545454546,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9545454545454546,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TurnOffWifiAndTurnOnBluetooth",
+   "step": 6,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TurnOffWifiAndTurnOnBluetooth",
+   "step": 7,
+   "hist": 0.17647058823529413,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.17647058823529413,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TurnOffWifiAndTurnOnBluetooth",
+   "step": 8,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TurnOffWifiAndTurnOnBluetooth",
+   "step": 9,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TurnOffWifiAndTurnOnBluetooth",
+   "step": 10,
+   "hist": 0.9545454545454546,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.9545454545454546,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TurnOffWifiAndTurnOnBluetooth",
+   "step": 11,
+   "hist": 0.11764705882352941,
+   "hist_own": 0.11764705882352941,
+   "hist_own_expl": 0.11764705882352941,
+   "hist_expl": 0.11764705882352941,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "TurnOffWifiAndTurnOnBluetooth",
+   "step": 12,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "TurnOffWifiAndTurnOnBluetooth",
+   "step": 13,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "TurnOffWifiAndTurnOnBluetooth",
+   "step": 14,
+   "hist": 0.75,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.75,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "TurnOffWifiAndTurnOnBluetooth",
+   "step": 15,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "TurnOffWifiAndTurnOnBluetooth",
+   "step": 16,
+   "hist": 0.75,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.75,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "TurnOffWifiAndTurnOnBluetooth",
+   "step": 17,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "TurnOffWifiAndTurnOnBluetooth",
+   "step": 18,
+   "hist": 0.75,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.75,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "TurnOnWifiAndOpenApp",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TurnOnWifiAndOpenApp",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TurnOnWifiAndOpenApp",
+   "step": 3,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TurnOnWifiAndOpenApp",
+   "step": 4,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TurnOnWifiAndOpenApp",
+   "step": 5,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TurnOnWifiAndOpenApp",
+   "step": 6,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TurnOnWifiAndOpenApp",
+   "step": 7,
+   "hist": 0.56,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.56,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TurnOnWifiAndOpenApp",
+   "step": 8,
+   "hist": 0.05714285714285714,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.05714285714285714,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TurnOnWifiAndOpenApp",
+   "step": 10,
+   "hist": 0.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TurnOnWifiAndOpenApp",
+   "step": 11,
+   "hist": 0.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "TurnOnWifiAndOpenApp",
+   "step": 12,
+   "hist": 0.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "VlcCreatePlaylist",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "VlcCreatePlaylist",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "VlcCreatePlaylist",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "VlcCreatePlaylist",
+   "step": 3,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "VlcCreatePlaylist",
+   "step": 4,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "VlcCreatePlaylist",
+   "step": 5,
+   "hist": 0.4838709677419355,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.4838709677419355,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "VlcCreatePlaylist",
+   "step": 6,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "VlcCreatePlaylist",
+   "step": 7,
+   "hist": 0.7692307692307693,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.7692307692307693,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "VlcCreatePlaylist",
+   "step": 14,
+   "hist": 0.7692307692307693,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 0.7692307692307693,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "VlcCreateTwoPlaylists",
+   "step": 0,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": true
+  },
+  {
+   "task": "VlcCreateTwoPlaylists",
+   "step": 1,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "VlcCreateTwoPlaylists",
+   "step": 2,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": true,
+   "first_visit": false
+  },
+  {
+   "task": "VlcCreateTwoPlaylists",
+   "step": 3,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "VlcCreateTwoPlaylists",
+   "step": 4,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "VlcCreateTwoPlaylists",
+   "step": 6,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "VlcCreateTwoPlaylists",
+   "step": 7,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "VlcCreateTwoPlaylists",
+   "step": 10,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "VlcCreateTwoPlaylists",
+   "step": 13,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "VlcCreateTwoPlaylists",
+   "step": 16,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "VlcCreateTwoPlaylists",
+   "step": 19,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "VlcCreateTwoPlaylists",
+   "step": 22,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "VlcCreateTwoPlaylists",
+   "step": 23,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "VlcCreateTwoPlaylists",
+   "step": 24,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "VlcCreateTwoPlaylists",
+   "step": 25,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "VlcCreateTwoPlaylists",
+   "step": 26,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "VlcCreateTwoPlaylists",
+   "step": 27,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "VlcCreateTwoPlaylists",
+   "step": 28,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "VlcCreateTwoPlaylists",
+   "step": 29,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  },
+  {
+   "task": "VlcCreateTwoPlaylists",
+   "step": 30,
+   "hist": 1.0,
+   "hist_own": 1.0,
+   "hist_own_expl": 1.0,
+   "hist_expl": 1.0,
+   "explored_before": false,
+   "first_visit": false
+  }
+ ]
+}
