@@ -1,0 +1,10 @@
+{
+ "transitions_model_only": 351,
+ "transitions_with_exploration": 442,
+ "model_steps": 1008,
+ "probes": 164,
+ "new_layout_per_model_step": 0.20238095238095238,
+ "new_layout_per_probe": 0.39634146341463417,
+ "new_transition_per_model_step": 0.3482142857142857,
+ "new_transition_per_probe": 0.5548780487804879
+}
